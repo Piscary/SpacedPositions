@@ -94,12 +94,18 @@ handle("list.selectall", withList((list, st) => {
 }))
 
 handle("list.open", withList((list, st) => {
-  const row = rowsOf(list)[st.cursor]
+  const row = rowsOf(list)[Math.max(0, st.cursor)] // no cursor yet: the first row
   if (!row) return false
   row.classList.remove("is-flash-row")
   void row.offsetWidth
   row.classList.add("is-flash-row")
-  status(`Open ${row.dataset.row} ${row.dataset.title}: the Analyse mode arrives in phase 3`, { timeout: 3000 })
+  if (row.dataset.position) {
+    // Positions open in Analyse; n / N there step through the rest of the list.
+    const rows = rowsOf(list).filter((r) => r.dataset.position)
+    const ids = rows.map((r) => r.dataset.position)
+    return window.SPOS.analysis.open(row.dataset.position, { node: Number(row.dataset.node) || null, list: { ids, index: rows.indexOf(row) } })
+  }
+  status(`Open ${row.dataset.row} ${row.dataset.title}: a demo row, nothing to open`, { timeout: 3000 })
 }))
 
 /** Esc steps: leave visual, then clear the selection. Returns true if it did something. */
@@ -184,7 +190,7 @@ function setSectionCursor(section) {
   sectionCursor.set(pane, section)
 }
 
-function setCollapsed(section, collapsed) {
+export function setCollapsed(section, collapsed) {
   if (section.hasAttribute("data-pinned")) return
   section.classList.toggle("is-collapsed", collapsed)
   section.querySelector(".section__header")?.setAttribute("aria-expanded", String(!collapsed))

@@ -43,6 +43,15 @@
     --disc-white: color-mix(in oklab, white 90%, var(--sq-light));
     --disc-black: color-mix(in oklab, black 85%, var(--sq-dark));
 
+    /* analysis (spec 05 · MoveTree, EvalBar) */
+    --mark-good: var(--good);
+    --mark-dubious: var(--warn);
+    --mark-bad: var(--bad);
+    --variation-edge: var(--line-strong);
+    --puzzle: var(--special);
+    --eval-white: var(--disc-white);
+    --eval-black: var(--disc-black);
+
     --group-a: var(--info);
     --group-b: var(--special);
 
@@ -88,6 +97,7 @@
     --section-header-h: var(--row-sm);
     --rail-w: var(--row-md);
     --gutter-hit: calc(var(--space) * 1.5);
+    --evalbar-w: calc(var(--space) * 4.5);
   }
 
   @media (prefers-reduced-motion: reduce) {

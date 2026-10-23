@@ -187,6 +187,9 @@ def _contexts_together(a: str, b: str) -> bool:
         return False
     if a.startswith("state.") and b.startswith("state."):
         return False  # one Train state at a time
+    for x, y in ((a, b), (b, a)):
+        if x.startswith("state.") and y.startswith("mode.") and y != "mode.train":
+            return False  # the state contexts belong to Train
     return True
 
 

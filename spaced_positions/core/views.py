@@ -121,7 +121,7 @@ def save_state(request, mode):
         subject = body["subject"]
         if not isinstance(subject, dict) or len(json.dumps(subject)) > 200_000:
             return HttpResponseBadRequest("invalid subject")
-        state.subject = subject
+        state.subject = {**(state.subject or {}), **subject}  # parts (lines, analysis) are saved separately
     if not state.layout:
         state.layout = layouts.default_layout(mode)
     state.save()

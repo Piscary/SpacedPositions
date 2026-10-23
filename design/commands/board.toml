@@ -62,14 +62,14 @@ undoable = true
 title = "Copy FEN"
 group = "Board"
 aliases = ["fen"]
-when = "view.board || view.pgn"
+when = "view.board || view.pgn || mode.analyse"
 reason = "needs a board or the PGN/FEN view"
 
 ["board.copypgn"]
 title = "Copy PGN"
 group = "Board"
 aliases = ["pgn"]
-when = "view.board || view.pgn"
+when = "view.board || view.pgn || mode.analyse"
 reason = "needs a board or the PGN/FEN view"
 
 # ── Setup layer ─────────────────────────────────────────────────────────────────────────────────────────────────
@@ -163,7 +163,6 @@ undoable = true
 ["paste.analyse"]
 title = "Paste: analyse"
 group = "Paste"
-phase = 3
 
 ["paste.collect"]
 title = "Paste: collect as positions"

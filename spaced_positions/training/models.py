@@ -40,6 +40,14 @@ class Puzzle(models.Model):
     flagged = models.BooleanField(default=False, help_text="Marked as broken in training (`!`)")
     origin = models.CharField(max_length=40, blank=True, db_index=True)
     created_at = models.DateTimeField(default=timezone.now)
+    start_node = models.ForeignKey(
+        "analysis.Node", null=True, blank=True, on_delete=models.SET_NULL, related_name="puzzles",
+        help_text="Set up in the analysis: the solution is rebuilt from the tree (analysis/puzzles.py)",
+    )
+    marks = models.JSONField(
+        default=dict, blank=True,
+        help_text='{"ends": [node ids], "also": [ids], "replies": [ids]}: where lines stop, further correct moves, further answers',
+    )
 
     def __str__(self):
         return f"Puzzle {self.pk} · {self.position}"
@@ -125,7 +133,7 @@ class Session(models.Model):
 
 
 class Attempt(models.Model):
-    card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name="attempt_log")
+    card = models.ForeignKey(Card, on_delete=models.PROTECT, related_name="attempt_log", help_text="PROTECT: trained cards can't be deleted by a cascade")
     session = models.ForeignKey(Session, null=True, blank=True, on_delete=models.SET_NULL, related_name="attempts")
     at = models.DateTimeField(default=timezone.now, db_index=True)
     success = models.BooleanField()

@@ -48,14 +48,14 @@ step to the next move       → no request for the board and the moves cursor; i
 | `core/cmdline.js` | Command line + finder (`␣ f`): fuzzy matching, argument completion, history | 300 |
 | `core/hints.js` | Hint layer labels | 100 |
 | `islands/board.js` | Wraps chessground + chess.js; layers (play, setup, entry; solving in phase 2); drawings, square tool; the PGN/FEN view | 500 |
-| `core/lines.js` | The line a board or link group shows (start, moves, ply, drawings); undo; saved with the mode's UI state. Replaced by the move tree in phase 3 | 200 |
+| `core/lines.js` | The line a board or link group shows (start, moves, ply, drawings); undo; saved with the mode's UI state. In Analyse the analysis tree owns the line (a *delegate*: moves, stepping, drawings and loading go to it) | 230 |
+| `core/analysis.js` | Analyse: the tree of each link group in the browser, the cursor, the Moves and Inspector panes, every `analysis.*` command, the journal on the undo stack, the subject saved per tab and on the server | 600 |
 | `core/san.js`, `core/keyname.js` | Pure helpers (typed-move matching, key normalisation), unit-tested with node | 120 |
 | `core/paste.js` | Paste detection and the offers in the status line | 150 |
 | `core/islands.js` | Mounts `[data-island]` elements when a workspace renders or a pane arrives | 30 |
-| `islands/movetree.js` | Cursor movement in the MoveTree/VariationGraph without requests | 200 |
 | `islands/train.js` | Session runner: states, queue in batches, judging moves against the solution tree, clock, combo, lives, attempts in the background, pause, result | 600 |
 | `islands/chart.js` | Chart cursor, read-out, table toggle | 120 |
-| `islands/engine.js` | Engine connection (WASM worker or server stream), lines, arrows | 250 |
+| `core/engine.js` | Stockfish 17.1 lite in a worker (UCI, MultiPV), the Engine pane, arrows and eval bar on the boards of the line it follows; runs only while Analyse is visible. A local binary streamed by the server follows in phase 6 | 280 |
 
 **Islands** attach to server-rendered markup by attribute (`<div data-island="board" data-fen="…" data-group="A">`)
 on `htmx:load`, and clean up on `htmx:beforeCleanupElement`. They never render HTML that the server could render.
@@ -81,9 +81,16 @@ POST /cmd/<id> ──▶ Django: registry lookup → permission/when re-check �
 
 ## 5 · Undo: the command journal
 
-- Every undoable server command returns, besides its result, an **inverse** (a command id + args that reverts it,
-  e.g. `library.untag {ids, tag}`), stored in `CommandJournal(user, command, args, inverse, created_at, undone)`.
-- `u` runs the inverse of the latest not-undone entry, `U` re-runs the original. Bulk commands are one entry.
+- Analysis changes (phase 3) are journaled as **snapshots**: `JournalEntry(user, label, position, before, after,
+  undone)` holds the position's tree (every node with its id, comment, symbols, mark, drawings) and its puzzles'
+  setup before and after the change. Undo restores `before`, redo `after`, by comparing node ids, so nodes keep
+  their ids and puzzles stay linked; puzzles made after the snapshot are deleted on undo unless they were trained
+  (then they only leave training: attempts are never deleted, `Attempt.card` is `PROTECT`). A new change drops the
+  undone entries (the redo chain ends). The client puts each entry on its undo stack, and on load the last 50
+  entries come back from `GET /journal/`, so `u` works after a reload.
+- Library commands (phase 4) store an **inverse** instead (a command id + args that reverts it, e.g.
+  `library.untag {ids, tag}`): bulk changes are too big for snapshots. `u` runs the inverse of the latest not-undone
+  entry, `U` re-runs the original. Bulk commands are one entry.
 - Client-only state (layout, folds) has its own small undo stack in memory.
 
 ## 6 · Link groups
@@ -92,8 +99,11 @@ POST /cmd/<id> ──▶ Django: registry lookup → permission/when re-check �
 - On `cursor:change` panes update **locally when they can** (board from the node's FEN, the moves cursor by
   `data-node`), otherwise re-fetch their fragment with `hx-get … hx-sync="this:replace"` (only the latest request
   wins, so fast stepping never queues requests).
-- For Analyse, the subject's move tree is sent once as compact JSON (`node id → parent, san, fen, flags`) so stepping
-  through moves needs no requests at all.
+- For Analyse, the subject's move tree is sent once as JSON (`GET /analysis/<id>/`: every node with parent, order,
+  SAN, FEN, symbols, mark, drawings) so stepping through moves needs no requests at all. Every change
+  (`POST /analysis/<id>/play|line|edit|delete|promote|reorder|position|replace|puzzle/`) answers with the whole tree,
+  the move tree as HTML for the Moves pane and the journal entry; the Inspector is a fragment fetched for the move
+  under the cursor (debounced, never replacing a comment being written).
 
 ## 7 · Training hot path
 
@@ -112,15 +122,16 @@ Nothing in the solve → next loop waits for the network.
 
 | Model | Contents |
 |---|---|
-| `UIState(user, mode)` | layout tree JSON, subject, cursor, collapsed sections, last launcher choices |
+| `UIState(user, mode)` | layout tree JSON, subject (the lines of the boards; in Analyse the position, cursor and subject list of each link group), collapsed sections, last launcher choices |
 | `NamedLayout(user, name, mode, tree)` | `:layout save` |
 | `Preferences(user)` | settings (07 §5) as validated JSON; export/import as TOML |
 | `Theme(user, name, extends, tokens)` | user themes |
 | `KeymapOverride(user, keys, command, args, context)` | user bindings |
 | `Draft(user, target, text)` | text left with `Esc` |
 
-Writes are debounced (500 ms) PATCHes. On load the shell renders from `UIState`, so the first paint is already the
-right layout.
+Writes are debounced (500–600 ms) POSTs, flushed with `keepalive` when the page goes away. On load the shell renders
+from `UIState`, so the first paint is already the right layout. The Analyse cursor is also kept in the tab's
+`sessionStorage` (written at once), so a reload right after a step returns to the same move.
 
 ## 9 · Template building blocks
 

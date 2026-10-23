@@ -504,6 +504,17 @@ handle("train.retry", () => {
   nextPuzzle()
 })
 
+// Analyse the puzzle's position at the move where the puzzle starts; Edit also opens its puzzle section.
+async function openInAnalyse(edit) {
+  if (T.state === "result") return run("list.open") // the puzzle under the result list's cursor, n / N for the others
+  const p = T.current?.p
+  if (!p) return false
+  await window.SPOS.analysis.open(p.position, { node: p.startNode })
+  if (edit) window.SPOS.analysis.focusInspector("z")
+}
+handle("train.analyse", () => openInAnalyse(false))
+handle("train.edit", () => openInAnalyse(true))
+
 handle("train.flag", async () => {
   if (!T.current) return false
   const r = await post("/train/flag/", { puzzle: T.current.p.puzzle }).then((x) => x.json()).catch(() => null)

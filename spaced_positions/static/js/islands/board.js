@@ -41,6 +41,7 @@ function brushes() {
     yellow: brush("y", "--arrow-yellow"),
     paleBlue: { key: "pb", color: css("--arrow-engine"), opacity: 0.4, lineWidth: 15 },
     paleGreen: { key: "pg", color: css("--arrow-green"), opacity: 0.4, lineWidth: 15 },
+    paleGrey: { key: "pgr", color: css("--arrow-engine"), opacity: 0.22, lineWidth: 10 },
   }
 }
 
@@ -68,6 +69,8 @@ class Board {
     this.squareTool = false
     this.entry = null
     this.setup = null
+    this.auto = {} // auto shapes by source (entry, hint, engine), shown together
+    this.evalBar = el.querySelector("[data-evalbar]")
     this.cg = Chessground(this.cgEl, {
       orientation: this.orientation,
       coordinates: tokenValue("board-coords", "inside") !== "off",
@@ -171,7 +174,7 @@ class Board {
     this.squareTool = false
     this.el.classList.toggle("is-blind", look === "blind")
     this.el.classList.toggle("is-silhouette", look === "silhouette")
-    this.cg.setAutoShapes([])
+    this.clearAuto()
     lines.load(this.key, { start: fen }, { undo: null, persist: false })
     this.refresh()
     if (look === "blind") this.enterEntry()
@@ -184,12 +187,39 @@ class Board {
     this.layer = "play"
     this.el.dataset.layer = "play"
     this.el.classList.remove("is-blind", "is-silhouette")
-    this.cg.setAutoShapes([])
+    this.clearAuto()
     this.refresh()
   }
 
   hint(shapes) {
-    this.cg.setAutoShapes(shapes)
+    this.setAuto("hint", shapes)
+  }
+
+  setAuto(source, shapes) {
+    this.auto[source] = shapes
+    this.cg.setAutoShapes(Object.values(this.auto).flat())
+  }
+
+  clearAuto() {
+    this.auto = {}
+    this.cg.setAutoShapes([])
+  }
+
+  /** The eval bar (Analyse with the engine on): {cp} or {mate} from white's side, or null to hide it. */
+  setEval(score) {
+    this.score = score
+    if (!this.evalBar) return
+    this.el.classList.toggle("has-eval", Boolean(score))
+    this.evalBar.hidden = !score
+    if (!score) return
+    const white = score.mate !== undefined ? (score.mate > 0 ? 100 : score.mate < 0 ? 0 : 50) : 50 + 50 * (2 / (1 + Math.exp(-0.00368208 * score.cp)) - 1)
+    this.evalBar.style.setProperty("--white", `${white.toFixed(1)}%`)
+    const flipped = this.orientation === "black"
+    this.evalBar.classList.toggle("is-flipped", flipped)
+    this.evalBar.classList.toggle("is-black", white < 50)
+    this.evalBar.classList.toggle("is-top", (white < 50) !== flipped)
+    this.evalBar.querySelector("[data-evaltext]").textContent = score.text
+    this.evalBar.title = `Evaluation ${score.text} (white's view)`
   }
 
   onShapes(shapes) {
@@ -294,7 +324,9 @@ class Board {
     this.setup = null
     if (this.palette) this.palette.hidden = true
     if (this.focused && ctx.layer === "setup") setLayer("normal")
-    lines.load(this.key, { start: fen }, { undo: "Set up position" })
+    const owner = lines.delegateOf(this.key) // an analysis: the correction goes to its tree (spec 06 §4)
+    if (owner) owner.setStart(fen)
+    else lines.load(this.key, { start: fen }, { undo: "Set up position" })
     this.refresh()
   }
 
@@ -328,7 +360,7 @@ class Board {
       setOverlayHandler(null)
       setLayer("normal")
     }
-    this.cg.setAutoShapes([])
+    this.setAuto("entry", [])
     this.renderStrip()
   }
 
@@ -344,7 +376,7 @@ class Board {
     entry.candidates = candidates
     entry.exact = exact
     if (token !== "tab") entry.index = exact ? candidates.indexOf(exact) : 0
-    this.cg.setAutoShapes(candidates.map((m, i) => ({ orig: m.from, dest: m.to, brush: i === entry.index ? "paleGreen" : "paleBlue" })))
+    this.setAuto("entry", candidates.map((m, i) => ({ orig: m.from, dest: m.to, brush: i === entry.index ? "paleGreen" : "paleBlue" })))
     this.renderStrip()
   }
 
@@ -361,7 +393,7 @@ class Board {
     const chess = chessOf(lines.fenAt(this.line))
     Object.assign(entry, { text: "", index: 0, candidates: [], exact: null, tabbed: false })
     this.submit(chess.move({ from: move.from, to: move.to, promotion: move.promotion }))
-    this.cg.setAutoShapes([])
+    this.setAuto("entry", [])
     this.renderStrip()
   }
 
@@ -450,6 +482,15 @@ on("focus", () => {
   else if (board && board.layer !== "setup" && ctx.layer === "setup") setLayer("normal")
 })
 
+// The engine (core/engine.js) draws its best moves and fills the eval bar of the boards showing its line.
+on("engine", ({ key, shapes, score }) => {
+  for (const board of boards) {
+    if (!board.alive || board.key !== key) continue
+    board.setAuto("engine", board.layer === "play" ? shapes : [])
+    board.setEval(score)
+  }
+})
+
 on("theme", () => {
   requestAnimationFrame(() => {
     for (const board of boards) if (board.alive) board.cg.set({ drawable: { brushes: brushes() } })
@@ -491,6 +532,7 @@ const withBoard = (fn) => (args) => {
 handle("board.flip", withBoard((b) => {
   b.orientation = b.orientation === "white" ? "black" : "white"
   b.cg.set({ orientation: b.orientation })
+  if (b.score) b.setEval(b.score)
 }))
 const notSolving = (fn) => withBoard((b, args) => (b.solving ? status("Not while solving a puzzle", { timeout: 2000 }) || false : fn(b, args)))
 handle("board.back", notSolving((b) => lines.goTo(b.key, b.line.ply - 1)))

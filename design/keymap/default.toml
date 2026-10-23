@@ -1,6 +1,6 @@
 # Default bindings by context (spec 02 §4–5, 08). Resolution order for a key press:
-#   overlay → layer.<layer> → state.<state> (Train: launcher, solving, feedback, result) → view.<view> → pane →
-#   mode.<mode> → global
+#   overlay → layer.<layer> → state.<state> (Train: launcher, solving, feedback, result) → view.<view> →
+#   mode.<mode> → pane → global
 # Keys: see spec 08 · Notation. A value is a command id, optionally followed by arguments: "pane.focus 3".
 # `design check` rejects conflicts, browser-reserved keys and keys that are both a command and a prefix.
 
@@ -14,6 +14,8 @@ accept = ["[", "]"]
 "space w" = "Window"
 "space u" = "UI toggles"
 "g" = "Go"
+"m" = "Mark"
+"p" = "Puzzle"
 
 [context.global]
 "esc" = "layer.escape"
@@ -216,3 +218,51 @@ accept = ["[", "]"]
 "down" = "list.down"
 "up" = "list.up"
 "enter" = "train.analyse"
+
+[context."mode.analyse"]
+"h" = "analysis.back"
+"l" = "analysis.forward"
+"left" = "analysis.back"
+"right" = "analysis.forward"
+"j" = "analysis.sibling next"
+"k" = "analysis.sibling prev"
+"down" = "analysis.sibling next"
+"up" = "analysis.sibling prev"
+"g g" = "analysis.start"
+"G" = "analysis.end"
+"g p" = "analysis.branch prev"
+"g n" = "analysis.branch next"
+"M" = "analysis.mainline"
+"n" = "analysis.subject next"
+"N" = "analysis.subject prev"
+"1" = "analysis.nag 1"
+"2" = "analysis.nag 2"
+"3" = "analysis.nag 3"
+"4" = "analysis.nag 4"
+"5" = "analysis.nag 5"
+"6" = "analysis.nag 6"
+"7" = "analysis.nag 7"
+"a" = "analysis.annotate"
+"m g" = "analysis.mark good"
+"m d" = "analysis.mark dubious"
+"m b" = "analysis.mark bad"
+"m c" = "analysis.mark color"
+"m x" = "analysis.mark clear"
+"c" = "analysis.comment"
+"C" = "analysis.rootcomment"
+"t" = "analysis.tags"
+"T" = "analysis.positiontags"
+"shift+up" = "analysis.moveup"
+"shift+down" = "analysis.movedown"
+"P" = "analysis.promote"
+"d" = "analysis.delete"
+"p s" = "analysis.puzzle start"
+"p x" = "analysis.puzzle end"
+"p a" = "analysis.puzzle also"
+"p o" = "analysis.puzzle answers"
+"p r" = "analysis.puzzle ready"
+"p d" = "analysis.puzzle discard"
+"e" = "engine.toggle"
+"enter" = "engine.best"
+"y" = "board.copyfen"
+"Y" = "board.copypgn"

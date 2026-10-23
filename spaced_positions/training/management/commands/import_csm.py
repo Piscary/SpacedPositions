@@ -1,10 +1,11 @@
-"""manage.py import_csm PATH: the training puzzles of a chess-study-manager database, as test data.
+"""manage.py import_csm PATH: the analysed puzzles of a chess-study-manager database, as test data.
 
-Reads a *copy* of the database (the original is never opened), rebuilds each active puzzle's solution tree from its
-analysis with the old app's rules (puzzles.py there: main move, "also correct" moves, extra answers, ends, at most
-8 solver moves), and creates Position, Puzzle and Card rows here. With --schedule (default) the cards keep their
-spaced-repetition state, so Review has real due cards. Attempts and sessions are not imported: the full migration
-is phase 7. Puzzles already imported (origin csm:<id>) are skipped.
+Reads a *copy* of the database (the original is never opened). For every active puzzle it imports the position with
+its whole analysis tree (comments, annotation symbols, drawings, marks), links the puzzle to its start node with its
+marks ("end", "also correct", further answers) mapped to the new nodes, and rebuilds the solution with the same
+walker the analysis uses (analysis/puzzles.py). With --schedule (default) the cards keep their spaced-repetition
+state. Attempts and sessions are not imported: the full migration is phase 7. Puzzles already imported (origin
+csm:<id>) are skipped.
 """
 
 import json
@@ -19,17 +20,13 @@ from django.db import transaction
 from django.utils import timezone
 
 from spaced_positions import chesslogic
+from spaced_positions.analysis import puzzles as analysis_puzzles
+from spaced_positions.analysis import tree
+from spaced_positions.analysis.models import Node
 from spaced_positions.training import puzzles
 from spaced_positions.training.models import Card, Position, Puzzle
 
-MAX_SOLVER_MOVES, HARD_CAP = 8, 40
-
-
-class Node:
-    __slots__ = ("id", "uci", "fen_after", "kids")
-
-    def __init__(self, id, uci, fen_after):
-        self.id, self.uci, self.fen_after, self.kids = id, uci, fen_after, []
+BRUSH = {"G": "green", "R": "red", "B": "blue", "Y": "yellow"}
 
 
 def _when(value):
@@ -39,8 +36,26 @@ def _when(value):
     return dt if dt.tzinfo else dt.replace(tzinfo=UTC)
 
 
+def _json(value, default):
+    if value in (None, ""):
+        return default
+    if isinstance(value, (dict, list)):
+        return value
+    try:
+        return json.loads(value)
+    except ValueError:
+        return default
+
+
+def _shapes(old: dict) -> tuple[list, dict]:
+    shapes = [{"orig": a["from"], "dest": a["to"], "brush": BRUSH.get(a.get("color"), "green")} for a in old.get("arrows", []) if a.get("from")]
+    shapes += [{"orig": c["square"], "brush": BRUSH.get(c.get("color"), "green")} for c in old.get("circles", []) if c.get("square")]
+    squares = {s["square"]: BRUSH.get(s.get("color"), "green") for s in old.get("squares", []) if s.get("square")}
+    return shapes, squares
+
+
 class Command(BaseCommand):
-    help = "Import the training puzzles of a chess-study-manager database (read from a copy)."
+    help = "Import the analysed puzzles of a chess-study-manager database (read from a copy)."
 
     def add_arguments(self, parser):
         parser.add_argument("path", help="chess-study-manager db.sqlite3")
@@ -63,8 +78,8 @@ class Command(BaseCommand):
             finally:
                 db.close()
         self.stdout.write(
-            f"imported {counts['puzzles']} puzzles ({counts['cards']} cards), skipped {counts['skipped']} already here, "
-            f"{counts['failed']} could not be read"
+            f"imported {counts['puzzles']} puzzles ({counts['cards']} cards, {counts['nodes']} analysis moves), "
+            f"skipped {counts['skipped']} already here, {counts['failed']} could not be read"
         )
 
     def run(self, db, schedule, limit):
@@ -73,7 +88,8 @@ class Command(BaseCommand):
             "join positions_variationnode n on n.id = p.node_id where p.active = 1 and n.position_id is not null order by p.id"
         ).fetchall()
         done = set(Puzzle.objects.filter(origin__startswith="csm:").values_list("origin", flat=True))
-        counts = {"puzzles": 0, "cards": 0, "skipped": 0, "failed": 0}
+        positions = {}  # old position id → (Position, {old node id: new Node})
+        counts = {"puzzles": 0, "cards": 0, "nodes": 0, "skipped": 0, "failed": 0}
         for row in rows:
             if limit and counts["puzzles"] >= limit:
                 break
@@ -83,102 +99,77 @@ class Command(BaseCommand):
                 continue
             try:
                 with transaction.atomic():
-                    counts["cards"] += self.import_puzzle(db, row, origin, schedule)
+                    if row["position_id"] not in positions:
+                        positions[row["position_id"]] = self.import_position(db, row["position_id"], counts)
+                    counts["cards"] += self.import_puzzle(db, row, origin, positions[row["position_id"]], schedule)
                 counts["puzzles"] += 1
             except (ValueError, KeyError, IndexError) as e:
+                positions.pop(row["position_id"], None)
                 counts["failed"] += 1
                 self.stderr.write(f"puzzle {row['id']}: {e}")
         return counts
 
-    def tree_nodes(self, db, position_id):
-        nodes = {}
-        for r in db.execute(
-            "select id, parent_id, uci, fen_after from positions_variationnode where position_id = ? order by sort_order, id",
-            (position_id,),
-        ):
-            nodes[r["id"]] = (Node(r["id"], r["uci"], r["fen_after"]), r["parent_id"])
-        for node, parent in nodes.values():
-            if parent in nodes:
-                nodes[parent][0].kids.append(node)
-        return {k: v[0] for k, v in nodes.items()}
+    def import_position(self, db, old_id, counts):
+        origin = f"csm-position:{old_id}"
+        position = Position.objects.filter(origin=origin).first()
+        if position is None:
+            pos = db.execute("select * from positions_position where id = ?", (old_id,)).fetchone()
+            check = chesslogic.check_fen(pos["fen"])
+            position = Position.objects.create(
+                fen=pos["fen"],
+                canonical=check["canonical"] or chesslogic.canonical_fen(pos["fen"]),
+                title=pos["title"] or f"Position {pos['id']}",
+                source=self.source_text(db, pos),
+                objective=self.objective(db, pos["id"]),
+                difficulty=pos["difficulty"],
+                tag_names=self.tag_names(db, pos["id"]),
+                origin=origin,
+            )
+        mapping = {}
+        old_nodes = db.execute(
+            "select * from positions_variationnode where position_id = ? order by ply, sort_order, id", (old_id,)
+        ).fetchall()
+        existing_root = position.nodes.filter(parent=None).first()
+        for old in old_nodes:
+            shapes, squares = _shapes(_json(old["shapes"], {}))
+            fields = {
+                "comment": old["comment"] or "",
+                "nags": [int(n) for n in _json(old["nags"], []) if str(n).isdigit()],
+                "mark": old["quality"] if old["quality"] in ("good", "dubious", "bad") else "",
+                "color": old["color"] or "",
+                "shapes": shapes,
+                "squares": squares,
+            }
+            if old["parent_id"] is None:
+                node = existing_root or Node(position=position, fen=position.fen)
+            else:
+                parent = mapping[old["parent_id"]]
+                node = Node(position=position, parent=parent, order=old["sort_order"], uci=old["uci"], san=old["san"],
+                            ply=old["ply"], fen=old["fen_after"])
+                counts["nodes"] += 1
+            for k, v in fields.items():
+                setattr(node, k, v)
+            node.save()
+            mapping[old["id"]] = node
+        return position, mapping
 
-    def solution(self, start, sol):
-        ends, also, extra = set(sol.get("ends", [])), set(sol.get("also", [])), set(sol.get("replies", []))
-
-        def end_below(node):
-            stack = [node]
-            while stack:
-                cur = stack.pop()
-                if cur.id in ends:
-                    return True
-                stack.extend(k for i, k in enumerate(cur.kids) if i == 0 or k.id in also or k.id in extra)
-            return False
-
-        def point(pos, count):
-            options = []
-            for mv in [pos.kids[0]] + [k for k in pos.kids[1:] if k.id in also]:
-                limit = HARD_CAP if end_below(mv) else MAX_SOLVER_MOVES
-                stop = mv.id in ends or not mv.kids or count + 1 >= limit
-                replies = []
-                if not stop:
-                    for i, r in enumerate(mv.kids):
-                        if (i == 0 or r.id in extra) and r.kids and r.id not in ends:
-                            replies.append({"uci": r.uci, "next": point(r, count + 1)})
-                options.append({"uci": mv.uci, "replies": replies})
-            return {"moves": options}
-
-        return point(start, 0)
-
-    def old_line(self, start, sol, chosen_ids):
-        """The UCI moves of an old card's line (its non-main answers by node id), as the old app walked it."""
-        tree = self.solution(start, sol)
-        nodes = {}
-
-        def index(n):
-            nodes[n.id] = n
-            for k in n.kids:
-                index(k)
-
-        index(start)
-        chosen = {nodes[i].uci for i in chosen_ids if i in nodes}
-        out, p = [], tree
-        while True:
-            main = p["moves"][0]
-            out.append(main["uci"])
-            if not main["replies"]:
-                return out
-            reply = next((r for r in main["replies"] if r["uci"] in chosen), main["replies"][0])
-            out.append(reply["uci"])
-            p = reply["next"]
-
-    def import_puzzle(self, db, row, origin, schedule):
-        nodes = self.tree_nodes(db, row["position_id"])
-        start = nodes[row["node_id"]]
-        if not start.kids:
-            raise ValueError("nothing to solve")
-        pos = db.execute("select * from positions_position where id = ?", (row["position_id"],)).fetchone()
-        start_fen = start.fen_after
-        sol = json.loads(row["solution"] or "{}") if isinstance(row["solution"], str) else (row["solution"] or {})
-        tree = self.solution(start, sol)
-        puzzles.validate(start_fen, tree)
-        check = chesslogic.check_fen(pos["fen"])
-        position = Position.objects.create(
-            fen=pos["fen"],
-            canonical=check["canonical"] or chesslogic.canonical_fen(pos["fen"]),
-            title=pos["title"] or f"Position {pos['id']}",
-            source=self.source_text(db, pos),
-            objective=self.objective(db, pos["id"]),
-            difficulty=pos["difficulty"],
-            tag_names=self.tag_names(db, pos["id"]),
-            origin=f"csm-position:{pos['id']}",
-        )
-        puzzle = Puzzle.objects.create(position=position, start_fen=start_fen, solution=tree, origin=origin)
-        cards = puzzles.sync_cards(puzzle)
+    def import_puzzle(self, db, row, origin, imported, schedule):
+        position, mapping = imported
+        start = mapping[row["node_id"]]
+        sol = _json(row["solution"], {})
+        marks = {key: [mapping[i].id for i in sol.get(key, []) if i in mapping] for key in ("ends", "also", "replies")}
+        puzzle = Puzzle.objects.create(position=position, start_node=start, start_fen=start.fen, marks=marks,
+                                       solution={"moves": []}, origin=origin)
+        analysis_puzzles.rebuild(puzzle)
+        puzzle.refresh_from_db()
+        puzzles.validate(puzzle.start_fen, puzzle.solution)
+        cards = list(puzzle.cards.filter(in_solution=True))
         if schedule:
+            kids = tree.kids_map(tree.nodes(position))
             by_key = {c.line_key: c for c in cards}
             for old in db.execute("select * from training_trainingcard where puzzle_id = ? and in_solution = 1", (row["id"],)):
-                chosen = [int(x) for x in (old["line"] or "").split(",") if x.isdigit()]
-                card = by_key.get(" ".join(self.old_line(start, sol, chosen)))
+                chosen = {mapping[int(x)].id for x in (old["line"] or "").split(",") if x.isdigit() and int(x) in mapping}
+                card = by_key.get(" ".join(self.line(start, kids, puzzle.solution, chosen)))
                 if card is None:
                     continue
                 for field in ("state", "interval_days", "ease", "step", "reps", "lapses", "success_streak", "attempts", "successes", "total_ms", "best_ms"):
@@ -189,6 +180,20 @@ class Command(BaseCommand):
                 card.introduced_at = card.last_seen if card.state != Card.State.NEW else None
                 card.save()
         return len(cards)
+
+    def line(self, start, kids, solution, chosen):
+        """The UCI moves of an old card's line: main solver moves, the chosen answers (by node id) where offered."""
+        out, point, node = [], solution, start
+        while True:
+            main = point["moves"][0]
+            out.append(main["uci"])
+            if not main["replies"]:
+                return out
+            mv = next(k for k in kids.get(node.id, []) if k.uci == main["uci"])
+            answers = {k.uci: k for k in kids.get(mv.id, [])}
+            reply = next((r for r in main["replies"] if answers.get(r["uci"]) and answers[r["uci"]].id in chosen), main["replies"][0])
+            out.append(reply["uci"])
+            node, point = answers[reply["uci"]], reply["next"]
 
     def source_text(self, db, pos):
         parts = []

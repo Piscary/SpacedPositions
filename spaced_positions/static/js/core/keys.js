@@ -24,9 +24,10 @@ export function activeContexts() {
   if (ctx.pane) {
     chain.push(`view.${ctx.pane.view}`)
     if (window.SPOS.views[ctx.pane.view]?.list) chain.push("view.list")
-    chain.push("pane")
   }
-  chain.push(`mode.${ctx.mode}`, "global")
+  chain.push(`mode.${ctx.mode}`) // mode keys before the generic pane keys: in Analyse, j/k switch variations
+  if (ctx.pane) chain.push("pane")
+  chain.push("global")
   return chain
 }
 

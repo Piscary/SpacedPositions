@@ -286,7 +286,7 @@ COMMAND_FIELDS = {
     "title", "group", "aliases", "args", "when", "reason", "handler", "undoable", "repeatable",
     "sticky", "danger", "hidden", "phase", "file",
 }
-ARG_TYPES = {"int", "enum", "text", "view", "buffer", "theme", "token", "tokenname", "layout", "pieceset"}
+ARG_TYPES = {"int", "enum", "text", "view", "buffer", "theme", "token", "tokenname", "layout", "pieceset", "position"}
 
 
 def keymap_json(sources: Sources) -> dict:

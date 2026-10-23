@@ -151,7 +151,7 @@ context per Train state, checked after layers and before the focused view (02 §
 | `← →` / `h l` | Replay the solution |
 | `r` | Retry (not scored) |
 | `!` | Flag the puzzle as broken |
-| `a` · `t` · `e` | Analyse (phase 3) · tag (phase 4) · edit (phase 3) |
+| `a` · `t` · `e` | Analyse the position at the puzzle's start · tag (phase 4) · edit (Analyse with the Puzzle section open) |
 | `⎋` | `↵` next · `q` end the session and see the result |
 
 **Result**
@@ -160,7 +160,7 @@ context per Train state, checked after layers and before the focused view (02 §
 |---|---|
 | `r` | Run the same session again |
 | `j k` | Puzzles of the session (the linked board shows each) |
-| `↵` | Open the puzzle in Analyse (phase 3) |
+| `↵` | Open the puzzle under the cursor in Analyse (`n`/`N` there step through the session's puzzles) |
 | `m` | Review the missed ones |
 | `l` | Back to the launcher |
 | `y` | Copy the result as text |
@@ -183,22 +183,25 @@ Mode-level: these work whether the board, the moves or the inspector pane has fo
 | `a` | Annotation menu: all move, position and evaluation symbols (`+−  ±  ⩲  =  ∞  ⩱  ∓  −+` …) |
 | `m` | Mark: `g` good · `d` dubious · `b` bad · `c` colour · `x` clear |
 | `c` / `C` | Comment on this move / on the position (root) |
-| `t` / `T` | Move tags / position tags |
+| `t` / `T` | Move tags / position tags (phase 4) |
 | `⇧↑ ⇧↓` | Move the variation up / down |
 | `P` | Promote to main line |
 | `d` | Delete from here (undoable) |
 | `p` | Puzzle: `s` start here · `x` solution ends here · `a` also correct · `o` all answers count · `r` ready for training · `d` discard puzzle |
-| `f` | Flip |
 | `e` | Engine on / off |
 | `↵` | Play the engine's best move |
-| `S` | Setup (correct the position) |
-| `i` | Type a move |
-| `q` | Square-drawing tool on/off |
-| `⌫` | Clear the drawings on this move |
 | `y` / `Y` | Copy FEN / PGN |
+| `u` / `U` | Undo / redo: every change of the analysis, also after a reload (the journal, 09 §5) |
 
-Without a key, command line only: `:detect` (detect tags), `:lichess` (open in lichess), `:new position` (position
-from this move of a game), `:paste pgn`.
+With the board pane focused, its own keys (06): `f` flip · `S` setup (correcting the position keeps the analysis when
+its moves stay legal, else asks `y / n` before dropping them) · `i` type a move · `q` square tool · `⌫` clear the
+drawings on this move. In the comment field (Insert): `⌥K Q R B N P` insert ♔ ♕ ♖ ♗ ♘ ♙ (with `⇧` the black
+pieces), `mod+↵` saves and leaves the field (leaving it saves too). In the Engine pane, clicking a move adds the
+line up to it to the analysis.
+
+Without a key, command line only: `:analyse <title>` (open a position; the completions search titles and sources),
+`:engine.lines <1–5>`. Later: `:detect` (detect tags, phase 4), `:new position` (a position from this move of a
+game, phase 4), `:lichess` (open in lichess, phase 6).
 
 ## Collect
 
@@ -276,7 +279,7 @@ from this move of a game), `:paste pgn`.
 
 ## Paste offers (after a paste, in the status line)
 
-`b` show on a board · `a` analyse (phase 3) · `c` collect (phase 4) · `i` import (phase 4) · `Esc` dismiss. Any other
+`b` show on a board · `a` analyse (a new position; a game's moves become its main line) · `c` collect (phase 4) · `i` import (phase 4) · `Esc` dismiss. Any other
 key dismisses the offer and does what it always does.
 
 See 06 for the board layers: Setup §4, Move entry §5, Solving §1.

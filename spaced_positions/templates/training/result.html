@@ -26,7 +26,7 @@
 
   <div class="list" data-list role="listbox" aria-label="Puzzles of this session">
     {% for a in attempts %}
-    <div class="list__row" role="option" data-row="{{ forloop.counter }}" data-title="{{ a.card.puzzle.position.title }}" data-fen="{{ a.card.puzzle.start_fen }}" aria-selected="false">
+    <div class="list__row" role="option" data-row="{{ forloop.counter }}" data-title="{{ a.card.puzzle.position.title }}" data-fen="{{ a.card.puzzle.start_fen }}" data-position="{{ a.card.puzzle.position.uuid }}" data-node="{{ a.card.puzzle.start_node_id|default:'' }}" aria-selected="false">
       <span class="result__mark{% if a.success %} is-good{% else %} is-bad{% endif %}" aria-hidden="true">{% if a.success %}✓{% else %}✗{% endif %}</span>
       <span class="list__id">{{ a.seconds }}s</span>
       <span class="list__title">{{ a.card.puzzle.position.title|default:"Puzzle" }}</span>

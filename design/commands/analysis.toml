@@ -1,0 +1,159 @@
+# Analyse mode (spec 04 · Analyse). Mode-level keys: they work from the board, the moves and the inspector.
+
+["analysis.open"]
+title = "Analyse a position"
+group = "Analyse"
+aliases = ["analyse", "open"]
+args = [{ name = "position", type = "position", optional = true }]
+
+["analysis.back"]
+title = "Back one move"
+group = "Analyse"
+when = "analysis.loaded"
+reason = "no position open: :analyse"
+
+["analysis.forward"]
+title = "Forward (main continuation)"
+group = "Analyse"
+when = "analysis.loaded"
+reason = "no position open: :analyse"
+
+["analysis.start"]
+title = "To the start position"
+group = "Analyse"
+when = "analysis.loaded"
+reason = "no position open: :analyse"
+
+["analysis.end"]
+title = "To the end of the line"
+group = "Analyse"
+when = "analysis.loaded"
+reason = "no position open: :analyse"
+
+["analysis.sibling"]
+title = "Other variation at this move"
+group = "Analyse"
+args = [{ name = "step", type = "enum", values = ["next", "prev"] }]
+when = "analysis.loaded"
+reason = "no position open: :analyse"
+
+["analysis.branch"]
+title = "Previous / next branch point"
+group = "Analyse"
+args = [{ name = "step", type = "enum", values = ["next", "prev"] }]
+when = "analysis.loaded"
+reason = "no position open: :analyse"
+
+["analysis.mainline"]
+title = "Back to the main line"
+group = "Analyse"
+when = "analysis.loaded"
+reason = "no position open: :analyse"
+
+["analysis.subject"]
+title = "Next / previous position of the list"
+group = "Analyse"
+args = [{ name = "step", type = "enum", values = ["next", "prev"] }]
+when = "analysis.hasList"
+reason = "Analyse wasn't opened from a list"
+
+["analysis.nag"]
+title = "Annotation symbol"
+group = "Analyse"
+args = [{ name = "nag", type = "enum", values = ["1", "2", "3", "4", "5", "6", "7"] }]
+when = "analysis.onMove"
+reason = "go to a move first"
+undoable = true
+repeatable = true
+
+["analysis.annotate"]
+title = "All annotation and evaluation symbols"
+group = "Analyse"
+when = "analysis.onMove"
+reason = "go to a move first"
+undoable = true
+
+["analysis.mark"]
+title = "Mark the move"
+group = "Analyse"
+args = [{ name = "mark", type = "enum", values = ["good", "dubious", "bad", "color", "clear"] }]
+when = "analysis.onMove"
+reason = "go to a move first"
+undoable = true
+repeatable = true
+
+["analysis.comment"]
+title = "Comment on this move"
+group = "Analyse"
+when = "analysis.loaded"
+reason = "no position open: :analyse"
+
+["analysis.rootcomment"]
+title = "Comment on the start position"
+group = "Analyse"
+when = "analysis.loaded"
+reason = "no position open: :analyse"
+
+["analysis.moveup"]
+title = "Move the variation up"
+group = "Analyse"
+when = "analysis.onMove"
+reason = "go to a move first"
+undoable = true
+
+["analysis.movedown"]
+title = "Move the variation down"
+group = "Analyse"
+when = "analysis.onMove"
+reason = "go to a move first"
+undoable = true
+
+["analysis.promote"]
+title = "Make this the main line"
+group = "Analyse"
+when = "analysis.onMove"
+reason = "go to a move first"
+undoable = true
+
+["analysis.delete"]
+title = "Delete from here"
+group = "Analyse"
+when = "analysis.onMove"
+reason = "go to a move first"
+undoable = true
+danger = true
+
+["analysis.puzzle"]
+title = "Puzzle"
+group = "Analyse"
+args = [{ name = "action", type = "enum", values = ["start", "end", "also", "answers", "ready", "discard"] }]
+when = "analysis.loaded"
+reason = "no position open: :analyse"
+undoable = true
+
+["analysis.tags"]
+title = "Move tags"
+group = "Analyse"
+phase = 4
+
+["analysis.positiontags"]
+title = "Position tags"
+group = "Analyse"
+phase = 4
+
+["engine.toggle"]
+title = "Engine on / off"
+group = "Engine"
+aliases = ["engine"]
+
+["engine.best"]
+title = "Play the engine's best move"
+group = "Engine"
+when = "engine.ready"
+reason = "the engine is off (e)"
+undoable = true
+
+["engine.lines"]
+title = "Engine lines"
+group = "Engine"
+args = [{ name = "count", type = "enum", values = ["1", "2", "3", "4", "5"], optional = true }]

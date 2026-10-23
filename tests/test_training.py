@@ -199,7 +199,9 @@ def make_old_db(path):
     db = sqlite3.connect(path)
     db.executescript(
         """
-        create table positions_variationnode (id integer primary key, sort_order int, uci text, fen_after text, position_id int, parent_id int);
+        create table positions_variationnode (id integer primary key, sort_order int, uci text, san text, ply int, fen_after text,
+            position_id int, parent_id int, comment text default '', nags text default '[]', quality text default '',
+            color text default '', shapes text default '{}');
         create table positions_position (id integer primary key, fen text, title text, difficulty int, book_id int, website_id int, source_ref text, source_page text);
         create table training_trainingpuzzle (id integer primary key, active bool, solution text, node_id int);
         create table training_trainingcard (id integer primary key, puzzle_id int, line text, in_solution bool, state text, due text,
@@ -212,9 +214,13 @@ def make_old_db(path):
         create table positions_positiontag (id integer primary key, position_id int, tag_id int);
         insert into positions_position values (1, '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1', 'Back rank', 2, 1, null, '7', '3');
         insert into sources_book values (1, 'Mating Patterns', 'A. Author');
-        insert into positions_variationnode values (10, 0, '', '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1', 1, null);
-        insert into positions_variationnode values (11, 0, 'd1d8', '3R2k1/5ppp/8/8/8/8/5PPP/6K1 b - - 1 1', 1, 10);
-        insert into positions_variationnode values (12, 1, 'd1e1', '6k1/5ppp/8/8/8/8/5PPP/4R1K1 b - - 1 1', 1, 10);
+        insert into positions_variationnode (id, sort_order, uci, san, ply, fen_after, position_id, parent_id, comment)
+            values (10, 0, '', '', 0, '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1', 1, null, 'Back rank!');
+        insert into positions_variationnode (id, sort_order, uci, san, ply, fen_after, position_id, parent_id, nags, quality, shapes)
+            values (11, 0, 'd1d8', 'Rd8#', 1, '3R2k1/5ppp/8/8/8/8/5PPP/6K1 b - - 1 1', 1, 10, '[3]', 'good',
+                    '{"arrows": [{"from": "d1", "to": "d8", "color": "R"}], "circles": [], "squares": [{"square": "g8", "color": "G"}]}');
+        insert into positions_variationnode (id, sort_order, uci, san, ply, fen_after, position_id, parent_id)
+            values (12, 1, 'd1e1', 'Re1', 1, '6k1/5ppp/8/8/8/8/5PPP/4R1K1 b - - 1 1', 1, 10);
         insert into training_trainingpuzzle values (5, 1, '{"also": [12]}', 10);
         insert into training_trainingcard values (1, 5, '', 1, 'review', '2026-01-01 10:00:00', 12.5, 2.4, 0, 4, 1, 2, 6, 5, 30000, 2500, 1, '2025-12-20 10:00:00');
         insert into positions_tagfield values (1, 'goal', 1), (2, 'mate', 2);
@@ -239,5 +245,11 @@ def test_import_csm(tmp_path):
     assert position.source == "A. Author, Mating Patterns · Nr. 7 · p. 3"
     card = puzzle.cards.get()
     assert (card.state, card.interval_days, card.lapses, card.attempts) == ("review", 12.5, 1, 6)
+    root = position.nodes.get(parent=None)
+    rd8 = position.nodes.get(uci="d1d8")
+    assert root.comment == "Back rank!" and puzzle.start_node == root
+    assert (rd8.nags, rd8.mark, rd8.squares) == ([3], "good", {"g8": "green"})
+    assert rd8.shapes == [{"orig": "d1", "dest": "d8", "brush": "red"}]
+    assert puzzle.marks == {"ends": [], "also": [position.nodes.get(uci="d1e1").id], "replies": []}
     call_command("import_csm", str(path))  # again: skipped
     assert Puzzle.objects.count() == 1

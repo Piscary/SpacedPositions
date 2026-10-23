@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "spaced_positions.core",
     "spaced_positions.design",
     "spaced_positions.training",
+    "spaced_positions.analysis",
 ]
 
 MIDDLEWARE = [

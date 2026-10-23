@@ -1,0 +1,48 @@
+<div class="inspector" data-inspector data-node="{{ node.id }}">
+  {% if node.parent_id %}
+  {% section node.san key="v" summary="move · annotation · mark" %}
+    <div class="actionbar" aria-label="Annotation symbols">
+      {% for n, symbol, on in nags %}<button type="button" class="keybutton keybutton--secondary keybutton--sm keybutton--full" data-cmd="analysis.nag" data-args="{{ n }}" aria-pressed="{% if on %}true{% else %}false{% endif %}"><span class="keybutton__label">{{ symbol }}</span>{% keycap n|stringformat:"s" %}</button>{% endfor %}
+      {% cmd "analysis.annotate" label="More…" size="sm" %}
+    </div>
+    <div class="actionbar inspector__marks">
+      <button type="button" class="keybutton keybutton--secondary keybutton--sm keybutton--full mark-good" data-cmd="analysis.mark" data-args="good" aria-pressed="{% if node.mark == 'good' %}true{% else %}false{% endif %}"><span class="keybutton__label">Good</span>{% keycap "m g" %}</button>
+      <button type="button" class="keybutton keybutton--secondary keybutton--sm keybutton--full mark-dubious" data-cmd="analysis.mark" data-args="dubious" aria-pressed="{% if node.mark == 'dubious' %}true{% else %}false{% endif %}"><span class="keybutton__label">Dubious</span>{% keycap "m d" %}</button>
+      <button type="button" class="keybutton keybutton--secondary keybutton--sm keybutton--full mark-bad" data-cmd="analysis.mark" data-args="bad" aria-pressed="{% if node.mark == 'bad' %}true{% else %}false{% endif %}"><span class="keybutton__label">Bad</span>{% keycap "m b" %}</button>
+      {% cmd "analysis.mark" args="clear" label="Clear" size="sm" %}
+    </div>
+    <div class="actionbar">{% cmd "analysis.promote" size="sm" %}{% cmd "analysis.moveup" size="sm" %}{% cmd "analysis.movedown" size="sm" %}{% cmd "analysis.delete" size="sm" %}</div>
+  {% endsection %}
+  {% endif %}
+
+  {% section "Comment" key="c" summary=node.comment|default:"none"|truncatechars:60 %}
+    <form class="inspector__comment" data-comment-form data-node="{{ node.id }}">
+      <textarea class="field" name="comment" aria-label="Comment on {{ node.san|default:'the position' }}" placeholder="{% if node.parent_id %}A comment on {{ node.san }}{% else %}An introduction to the position{% endif %} · Alt+K Q R B N P insert ♔ ♕ ♖ ♗ ♘ ♙ (⇧ for black) · {% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵ saves">{{ node.comment }}</textarea>
+    </form>
+  {% endsection %}
+
+  {% section "Puzzle" key="z" summary=puzzle|yesno:"set up,none" %}
+    {% if puzzle %}
+      <p class="inspector__puzzle">{% if puzzle.active %}<span class="chip chip--good">in training</span>{% else %}<span class="chip">draft</span>{% endif %}
+        {{ puzzle_cards }} card{{ puzzle_cards|pluralize }}{% if is_start %} · it starts here{% else %} · starts at {{ puzzle.start_node.san|default:"the start" }}{% endif %}</p>
+      <div class="actionbar">
+        {% cmd "analysis.puzzle" args="end" label="Solution ends here" size="sm" %}
+        {% cmd "analysis.puzzle" args="also" label="Also correct" size="sm" %}
+        {% cmd "analysis.puzzle" args="answers" label="All answers count" size="sm" %}
+        {% cmd "analysis.puzzle" args="ready" label=puzzle.active|yesno:"Take out of training,Ready for training" size="sm" %}
+        {% cmd "analysis.puzzle" args="discard" label="Discard" size="sm" %}
+      </div>
+    {% else %}
+      <p class="muted">No puzzle here. Go to the move after which the puzzle starts (or the start position) and set one up: its solution is the analysis from there.</p>
+      <div class="actionbar">{% cmd "analysis.puzzle" args="start" label="Set up a puzzle from here" size="sm" %}</div>
+    {% endif %}
+  {% endsection %}
+
+  {% section position.title|default:"Position" key="i" summary="source · objective · FEN" collapsed=True %}
+    <div class="formrow"><span class="formrow__label">Source</span><span>{{ position.source|default:"—" }}</span></div>
+    <div class="formrow"><span class="formrow__label">Objective</span><span>{{ position.objective|default:"—" }}</span></div>
+    <div class="formrow"><span class="formrow__label">Tags</span><span class="train__tags">{% for t in position.tag_names %}<span class="chip chip--tag">{{ t }}</span>{% empty %}—{% endfor %}</span></div>
+    <div class="formrow"><span class="formrow__label">FEN</span><code class="line-text__fen">{{ node.fen }}</code></div>
+    <div class="formrow"><span class="formrow__label">Analysis</span><span>{{ move_count }} move{{ move_count|pluralize }}</span></div>
+  {% endsection %}
+</div>

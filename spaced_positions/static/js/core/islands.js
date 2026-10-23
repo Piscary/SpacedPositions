@@ -4,11 +4,16 @@
 import { on } from "./context.js"
 import { mountBoard, renderLineText } from "../islands/board.js"
 import { mountTrain } from "../islands/train.js"
+import { mountInspector, mountMoves } from "./analysis.js"
+import { mountEngine } from "./engine.js"
 
 const MOUNT = {
   board: mountBoard,
   "line-text": renderLineText,
   train: mountTrain,
+  moves: mountMoves,
+  inspector: mountInspector,
+  engine: mountEngine,
 }
 
 export function mountIslands(root = document) {

@@ -34,6 +34,10 @@ const derived = {
   "train.running": () => ctx.mode === "train" && ["solving", "feedback"].includes(ctx.trainState),
   "train.hasLast": () => Boolean(window.SPOS?.train?.hasLast()),
   "train.hasMissed": () => Boolean(window.SPOS?.train?.hasMissed()),
+  "analysis.loaded": () => ctx.mode === "analyse" && Boolean(window.SPOS?.analysis?.loaded()),
+  "analysis.onMove": () => ctx.mode === "analyse" && Boolean(window.SPOS?.analysis?.onMove()),
+  "analysis.hasList": () => ctx.mode === "analyse" && Boolean(window.SPOS?.analysis?.hasList()),
+  "engine.ready": () => ctx.mode === "analyse" && Boolean(window.SPOS?.engine?.ready()),
 }
 
 export function lookup(name) {

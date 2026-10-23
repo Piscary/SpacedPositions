@@ -91,3 +91,11 @@ label = "Papercut"
 author = "Nikolay Anzarov"
 licence = "CC BY 4.0"
 source = "lichess-org/lila public/piece/papercut · https://nikoichu.itch.io/"
+
+[vendor."stockfish-17.1-lite-single-03e3232.js"]
+licence = "GPL-3.0"
+source = "stockfish.js 17.1.0 (Nathan Rugg, Chess.com; Stockfish developers), https://github.com/nmrugg/stockfish.js · licences/stockfish.COPYING"
+
+[vendor."stockfish-17.1-lite-single-03e3232.wasm"]
+licence = "GPL-3.0"
+source = "stockfish.js 17.1.0, lite single-threaded build"

@@ -221,7 +221,7 @@ reference is `spec/08-keymap.md`.
 | `!` | Flag the puzzle as broken | `train.flag` |
 | `a` | Analyse this puzzle | `train.analyse` |
 | `t` | Tag the position | `train.tag` |
-| `e` | Edit the puzzle | `train.edit` |
+| `e` | Edit the puzzle in Analyse | `train.edit` |
 
 ## state.result
 
@@ -236,3 +236,54 @@ reference is `spec/08-keymap.md`.
 | `↓` | Cursor down | `list.down` |
 | `↑` | Cursor up | `list.up` |
 | `↵` | Analyse this puzzle | `train.analyse` |
+
+## mode.analyse
+
+| Keys | Command | Id |
+|---|---|---|
+| `h` | Back one move | `analysis.back` |
+| `l` | Forward (main continuation) | `analysis.forward` |
+| `←` | Back one move | `analysis.back` |
+| `→` | Forward (main continuation) | `analysis.forward` |
+| `j` | Other variation at this move next | `analysis.sibling` |
+| `k` | Other variation at this move prev | `analysis.sibling` |
+| `↓` | Other variation at this move next | `analysis.sibling` |
+| `↑` | Other variation at this move prev | `analysis.sibling` |
+| `g` `g` | To the start position | `analysis.start` |
+| `G` | To the end of the line | `analysis.end` |
+| `g` `p` | Previous / next branch point prev | `analysis.branch` |
+| `g` `n` | Previous / next branch point next | `analysis.branch` |
+| `M` | Back to the main line | `analysis.mainline` |
+| `n` | Next / previous position of the list next | `analysis.subject` |
+| `N` | Next / previous position of the list prev | `analysis.subject` |
+| `1` | Annotation symbol 1 | `analysis.nag` |
+| `2` | Annotation symbol 2 | `analysis.nag` |
+| `3` | Annotation symbol 3 | `analysis.nag` |
+| `4` | Annotation symbol 4 | `analysis.nag` |
+| `5` | Annotation symbol 5 | `analysis.nag` |
+| `6` | Annotation symbol 6 | `analysis.nag` |
+| `7` | Annotation symbol 7 | `analysis.nag` |
+| `a` | All annotation and evaluation symbols | `analysis.annotate` |
+| `m` `g` | Mark the move good | `analysis.mark` |
+| `m` `d` | Mark the move dubious | `analysis.mark` |
+| `m` `b` | Mark the move bad | `analysis.mark` |
+| `m` `c` | Mark the move color | `analysis.mark` |
+| `m` `x` | Mark the move clear | `analysis.mark` |
+| `c` | Comment on this move | `analysis.comment` |
+| `C` | Comment on the start position | `analysis.rootcomment` |
+| `t` | Move tags | `analysis.tags` |
+| `T` | Position tags | `analysis.positiontags` |
+| `⇧↑` | Move the variation up | `analysis.moveup` |
+| `⇧↓` | Move the variation down | `analysis.movedown` |
+| `P` | Make this the main line | `analysis.promote` |
+| `d` | Delete from here | `analysis.delete` |
+| `p` `s` | Puzzle start | `analysis.puzzle` |
+| `p` `x` | Puzzle end | `analysis.puzzle` |
+| `p` `a` | Puzzle also | `analysis.puzzle` |
+| `p` `o` | Puzzle answers | `analysis.puzzle` |
+| `p` `r` | Puzzle ready | `analysis.puzzle` |
+| `p` `d` | Puzzle discard | `analysis.puzzle` |
+| `e` | Engine on / off | `engine.toggle` |
+| `↵` | Play the engine's best move | `engine.best` |
+| `y` | Copy FEN | `board.copyfen` |
+| `Y` | Copy PGN | `board.copypgn` |

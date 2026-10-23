@@ -11,6 +11,17 @@ import { ctx, emit, on, status } from "./context.js"
 export const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 const lines = new Map() // "mode:key" → line
 const saveTimers = new Map()
+const delegates = new Map() // "mode:key" → an analysis tree that owns this line (core/analysis.js)
+
+/**
+ * Hand a line over to an owner (the analysis tree): moves, stepping, drawings and loading then go to it, and it
+ * sets the line (the path to its cursor) with setLine. null gives the line back.
+ */
+export function setDelegate(key, delegate) {
+  if (delegate) delegates.set(key, delegate)
+  else delegates.delete(key)
+}
+export const delegateOf = (key) => delegates.get(key) || null
 
 const clone = (line) => JSON.parse(JSON.stringify(line))
 
@@ -44,6 +55,7 @@ export function setLine(key, next, { undo = null, persist = true } = {}) {
 
 /** Play a move (chess.js verbose move) at the line's current ply. */
 export function play(key, move) {
+  if (delegates.has(key)) return delegates.get(key).play(move)
   const line = clone(getLine(key))
   const replaced = line.moves.length - line.ply
   line.moves = line.moves.slice(0, line.ply)
@@ -54,6 +66,7 @@ export function play(key, move) {
 }
 
 export function goTo(key, ply) {
+  if (delegates.has(key)) return delegates.get(key).goTo(ply)
   const line = getLine(key)
   const target = Math.max(0, Math.min(line.moves.length, ply))
   if (target === line.ply) return false
@@ -63,6 +76,7 @@ export function goTo(key, ply) {
 }
 
 export function setShapes(key, shapes) {
+  if (delegates.has(key)) return delegates.get(key).setShapes(shapes)
   const line = getLine(key)
   if (shapes.length) line.shapes[line.ply] = shapes
   else delete line.shapes[line.ply]
@@ -72,6 +86,7 @@ export function setShapes(key, shapes) {
 
 /** Square highlights (the square tool) at the current ply: {e4: "green", …}. */
 export function setSquares(key, squares) {
+  if (delegates.has(key)) return delegates.get(key).setSquares(squares)
   const line = getLine(key)
   line.squares ||= {}
   if (Object.keys(squares).length) line.squares[line.ply] = squares
@@ -82,6 +97,7 @@ export function setSquares(key, squares) {
 
 /** Load a position or a game (from paste detection or the library cursor). */
 export function load(key, { start = START_FEN, moves = [], title = "" }, { undo = "Load position", persist = true } = {}) {
+  if (delegates.has(key) && persist !== "local") return delegates.get(key).load({ start, moves, title })
   const line = emptyLine(start)
   line.title = title
   try {
@@ -123,21 +139,29 @@ const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content ||
 function save(key) {
   const mode = key.split(":")[0]
   clearTimeout(saveTimers.get(mode))
-  saveTimers.set(mode, setTimeout(() => {
-    const payload = {}
-    for (const [k, line] of lines) {
-      if (!k.startsWith(`${mode}:`)) continue
-      payload[k.slice(mode.length + 1)] = {
-        start: line.start, moves: line.moves.map((m) => m.uci), ply: line.ply, shapes: line.shapes, squares: line.squares, title: line.title,
-      }
-    }
-    fetch(`/state/${mode}/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() },
-      body: JSON.stringify({ subject: { lines: payload } }),
-    }).catch(() => {})
-  }, 600))
+  saveTimers.set(mode, setTimeout(() => flush(mode), 600))
 }
+
+function flush(mode) {
+  clearTimeout(saveTimers.get(mode))
+  saveTimers.delete(mode)
+  const payload = {}
+  for (const [k, line] of lines) {
+    if (!k.startsWith(`${mode}:`) || delegates.has(k)) continue // an analysis saves itself
+    payload[k.slice(mode.length + 1)] = {
+      start: line.start, moves: line.moves.map((m) => m.uci), ply: line.ply, shapes: line.shapes, squares: line.squares, title: line.title,
+    }
+  }
+  fetch(`/state/${mode}/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() },
+    body: JSON.stringify({ subject: { lines: payload } }),
+    keepalive: true, // also when the page is going away
+  }).catch(() => {})
+}
+
+// A reload right after a move still keeps it.
+for (const type of ["beforeunload", "pagehide"]) addEventListener(type, () => { for (const mode of [...saveTimers.keys()]) flush(mode) })
 
 /** Restore a mode's lines from the subject the server rendered into its workspace. */
 on("workspace", ({ mode, el }) => {

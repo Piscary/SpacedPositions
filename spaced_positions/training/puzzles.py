@@ -158,6 +158,8 @@ def payload(card: Card, *, mirrored: bool = False, first_only: bool = False) -> 
     return {
         "card": str(card.uuid),
         "puzzle": str(puzzle.uuid),
+        "position": str(position.uuid),
+        "startNode": puzzle.start_node_id,
         "fen": fen,
         "solver": side,
         "tree": tree,

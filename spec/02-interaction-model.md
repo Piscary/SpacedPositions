@@ -150,8 +150,8 @@ The `when` conditions read a small, flat context object kept up to date on the c
 ```
 mode = "analyse"            layer = "normal"           overlay = null | "cmdline" | "menu" | "help" | ...
 pane.view = "moves"         pane.linked = true         subject.kind = "position" | "game" | "puzzle" | ...
-cursor.isMove = true        cursor.isRoot = false      selection.count = 0
-train.state = "solving"     board.layer = "play" | "setup" | "entry"
+analysis.loaded = true      analysis.onMove = true     analysis.hasList = false     engine.ready = true
+selection.count = 0         train.state = "solving"    board.layer = "play" | "setup" | "entry"
 ```
 
 Condition syntax: `view.moves && cursor.isMove`, `mode.train && train.state == 'feedback'`, `!selection.empty`.
@@ -162,12 +162,14 @@ Condition syntax: `view.moves && cursor.isMove`, `mode.train && train.state == '
 2. **Layer** (Insert takes all keys except its escapes; Pending takes the next key; Hint takes labels).
 3. **State** of a mode with states (Train: launcher, solving, feedback, result), so `r` can be "review" in the
    launcher, "retry" in feedback and "again" on the result.
-4. **Focused pane's view** bindings, then the generic **pane** bindings (scrolling, sections, `i`).
-5. **Mode** bindings.
-6. **Global** bindings (leader sequences, `?`, `:`, `/`, `F`, `u`, `U`, `.`).
+4. **Focused pane's view** bindings.
+5. **Mode** bindings, before the generic pane keys: in Analyse `j`/`k` switch variations and `g g`/`G` go to the
+   start/end from every pane.
+6. The generic **pane** bindings (scrolling, sections, `i`).
+7. **Global** bindings (leader sequences, `?`, `:`, `/`, `F`, `u`, `U`, `.`).
 
 The same key can therefore mean different things in different views (`d` deletes a move in Moves and moves a row to
-the trash in Library), but never two things in the same view. Global keys (6) are *reserved*: a view may not rebind
+the trash in Library), but never two things in the same view. Global keys (7) are *reserved*: a view may not rebind
 `␣ : / ? F Esc u U .`.
 
 ## 6 · Focus

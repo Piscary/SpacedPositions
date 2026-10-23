@@ -1,6 +1,278 @@
 {
  "version": 1,
  "commands": {
+  "analysis.open": {
+   "title": "Analyse a position",
+   "group": "Analyse",
+   "aliases": [
+    "analyse",
+    "open"
+   ],
+   "args": [
+    {
+     "name": "position",
+     "type": "position",
+     "optional": true
+    }
+   ],
+   "handler": "client"
+  },
+  "analysis.back": {
+   "title": "Back one move",
+   "group": "Analyse",
+   "when": "analysis.loaded",
+   "reason": "no position open: :analyse",
+   "handler": "client"
+  },
+  "analysis.forward": {
+   "title": "Forward (main continuation)",
+   "group": "Analyse",
+   "when": "analysis.loaded",
+   "reason": "no position open: :analyse",
+   "handler": "client"
+  },
+  "analysis.start": {
+   "title": "To the start position",
+   "group": "Analyse",
+   "when": "analysis.loaded",
+   "reason": "no position open: :analyse",
+   "handler": "client"
+  },
+  "analysis.end": {
+   "title": "To the end of the line",
+   "group": "Analyse",
+   "when": "analysis.loaded",
+   "reason": "no position open: :analyse",
+   "handler": "client"
+  },
+  "analysis.sibling": {
+   "title": "Other variation at this move",
+   "group": "Analyse",
+   "args": [
+    {
+     "name": "step",
+     "type": "enum",
+     "values": [
+      "next",
+      "prev"
+     ]
+    }
+   ],
+   "when": "analysis.loaded",
+   "reason": "no position open: :analyse",
+   "handler": "client"
+  },
+  "analysis.branch": {
+   "title": "Previous / next branch point",
+   "group": "Analyse",
+   "args": [
+    {
+     "name": "step",
+     "type": "enum",
+     "values": [
+      "next",
+      "prev"
+     ]
+    }
+   ],
+   "when": "analysis.loaded",
+   "reason": "no position open: :analyse",
+   "handler": "client"
+  },
+  "analysis.mainline": {
+   "title": "Back to the main line",
+   "group": "Analyse",
+   "when": "analysis.loaded",
+   "reason": "no position open: :analyse",
+   "handler": "client"
+  },
+  "analysis.subject": {
+   "title": "Next / previous position of the list",
+   "group": "Analyse",
+   "args": [
+    {
+     "name": "step",
+     "type": "enum",
+     "values": [
+      "next",
+      "prev"
+     ]
+    }
+   ],
+   "when": "analysis.hasList",
+   "reason": "Analyse wasn't opened from a list",
+   "handler": "client"
+  },
+  "analysis.nag": {
+   "title": "Annotation symbol",
+   "group": "Analyse",
+   "args": [
+    {
+     "name": "nag",
+     "type": "enum",
+     "values": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+     ]
+    }
+   ],
+   "when": "analysis.onMove",
+   "reason": "go to a move first",
+   "undoable": true,
+   "repeatable": true,
+   "handler": "client"
+  },
+  "analysis.annotate": {
+   "title": "All annotation and evaluation symbols",
+   "group": "Analyse",
+   "when": "analysis.onMove",
+   "reason": "go to a move first",
+   "undoable": true,
+   "handler": "client"
+  },
+  "analysis.mark": {
+   "title": "Mark the move",
+   "group": "Analyse",
+   "args": [
+    {
+     "name": "mark",
+     "type": "enum",
+     "values": [
+      "good",
+      "dubious",
+      "bad",
+      "color",
+      "clear"
+     ]
+    }
+   ],
+   "when": "analysis.onMove",
+   "reason": "go to a move first",
+   "undoable": true,
+   "repeatable": true,
+   "handler": "client"
+  },
+  "analysis.comment": {
+   "title": "Comment on this move",
+   "group": "Analyse",
+   "when": "analysis.loaded",
+   "reason": "no position open: :analyse",
+   "handler": "client"
+  },
+  "analysis.rootcomment": {
+   "title": "Comment on the start position",
+   "group": "Analyse",
+   "when": "analysis.loaded",
+   "reason": "no position open: :analyse",
+   "handler": "client"
+  },
+  "analysis.moveup": {
+   "title": "Move the variation up",
+   "group": "Analyse",
+   "when": "analysis.onMove",
+   "reason": "go to a move first",
+   "undoable": true,
+   "handler": "client"
+  },
+  "analysis.movedown": {
+   "title": "Move the variation down",
+   "group": "Analyse",
+   "when": "analysis.onMove",
+   "reason": "go to a move first",
+   "undoable": true,
+   "handler": "client"
+  },
+  "analysis.promote": {
+   "title": "Make this the main line",
+   "group": "Analyse",
+   "when": "analysis.onMove",
+   "reason": "go to a move first",
+   "undoable": true,
+   "handler": "client"
+  },
+  "analysis.delete": {
+   "title": "Delete from here",
+   "group": "Analyse",
+   "when": "analysis.onMove",
+   "reason": "go to a move first",
+   "undoable": true,
+   "danger": true,
+   "handler": "client"
+  },
+  "analysis.puzzle": {
+   "title": "Puzzle",
+   "group": "Analyse",
+   "args": [
+    {
+     "name": "action",
+     "type": "enum",
+     "values": [
+      "start",
+      "end",
+      "also",
+      "answers",
+      "ready",
+      "discard"
+     ]
+    }
+   ],
+   "when": "analysis.loaded",
+   "reason": "no position open: :analyse",
+   "undoable": true,
+   "handler": "client"
+  },
+  "analysis.tags": {
+   "title": "Move tags",
+   "group": "Analyse",
+   "phase": 4,
+   "handler": "client"
+  },
+  "analysis.positiontags": {
+   "title": "Position tags",
+   "group": "Analyse",
+   "phase": 4,
+   "handler": "client"
+  },
+  "engine.toggle": {
+   "title": "Engine on / off",
+   "group": "Engine",
+   "aliases": [
+    "engine"
+   ],
+   "handler": "client"
+  },
+  "engine.best": {
+   "title": "Play the engine's best move",
+   "group": "Engine",
+   "when": "engine.ready",
+   "reason": "the engine is off (e)",
+   "undoable": true,
+   "handler": "client"
+  },
+  "engine.lines": {
+   "title": "Engine lines",
+   "group": "Engine",
+   "args": [
+    {
+     "name": "count",
+     "type": "enum",
+     "values": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ],
+     "optional": true
+    }
+   ],
+   "handler": "client"
+  },
   "board.flip": {
    "title": "Flip the board",
    "group": "Board",
@@ -79,7 +351,7 @@
    "aliases": [
     "fen"
    ],
-   "when": "view.board || view.pgn",
+   "when": "view.board || view.pgn || mode.analyse",
    "reason": "needs a board or the PGN/FEN view",
    "handler": "client"
   },
@@ -89,7 +361,7 @@
    "aliases": [
     "pgn"
    ],
-   "when": "view.board || view.pgn",
+   "when": "view.board || view.pgn || mode.analyse",
    "reason": "needs a board or the PGN/FEN view",
    "handler": "client"
   },
@@ -217,7 +489,6 @@
   "paste.analyse": {
    "title": "Paste: analyse",
    "group": "Paste",
-   "phase": 3,
    "handler": "client"
   },
   "paste.collect": {
@@ -833,7 +1104,6 @@
   "train.analyse": {
    "title": "Analyse this puzzle",
    "group": "Train",
-   "phase": 3,
    "handler": "client"
   },
   "train.tag": {
@@ -843,9 +1113,8 @@
    "handler": "client"
   },
   "train.edit": {
-   "title": "Edit the puzzle",
+   "title": "Edit the puzzle in Analyse",
    "group": "Train",
-   "phase": 3,
    "handler": "client"
   },
   "train.missed": {
@@ -1867,13 +2136,253 @@
     "command": "train.analyse",
     "args": []
    }
+  },
+  "mode.analyse": {
+   "h": {
+    "command": "analysis.back",
+    "args": []
+   },
+   "l": {
+    "command": "analysis.forward",
+    "args": []
+   },
+   "left": {
+    "command": "analysis.back",
+    "args": []
+   },
+   "right": {
+    "command": "analysis.forward",
+    "args": []
+   },
+   "j": {
+    "command": "analysis.sibling",
+    "args": [
+     "next"
+    ]
+   },
+   "k": {
+    "command": "analysis.sibling",
+    "args": [
+     "prev"
+    ]
+   },
+   "down": {
+    "command": "analysis.sibling",
+    "args": [
+     "next"
+    ]
+   },
+   "up": {
+    "command": "analysis.sibling",
+    "args": [
+     "prev"
+    ]
+   },
+   "g g": {
+    "command": "analysis.start",
+    "args": []
+   },
+   "G": {
+    "command": "analysis.end",
+    "args": []
+   },
+   "g p": {
+    "command": "analysis.branch",
+    "args": [
+     "prev"
+    ]
+   },
+   "g n": {
+    "command": "analysis.branch",
+    "args": [
+     "next"
+    ]
+   },
+   "M": {
+    "command": "analysis.mainline",
+    "args": []
+   },
+   "n": {
+    "command": "analysis.subject",
+    "args": [
+     "next"
+    ]
+   },
+   "N": {
+    "command": "analysis.subject",
+    "args": [
+     "prev"
+    ]
+   },
+   "1": {
+    "command": "analysis.nag",
+    "args": [
+     "1"
+    ]
+   },
+   "2": {
+    "command": "analysis.nag",
+    "args": [
+     "2"
+    ]
+   },
+   "3": {
+    "command": "analysis.nag",
+    "args": [
+     "3"
+    ]
+   },
+   "4": {
+    "command": "analysis.nag",
+    "args": [
+     "4"
+    ]
+   },
+   "5": {
+    "command": "analysis.nag",
+    "args": [
+     "5"
+    ]
+   },
+   "6": {
+    "command": "analysis.nag",
+    "args": [
+     "6"
+    ]
+   },
+   "7": {
+    "command": "analysis.nag",
+    "args": [
+     "7"
+    ]
+   },
+   "a": {
+    "command": "analysis.annotate",
+    "args": []
+   },
+   "m g": {
+    "command": "analysis.mark",
+    "args": [
+     "good"
+    ]
+   },
+   "m d": {
+    "command": "analysis.mark",
+    "args": [
+     "dubious"
+    ]
+   },
+   "m b": {
+    "command": "analysis.mark",
+    "args": [
+     "bad"
+    ]
+   },
+   "m c": {
+    "command": "analysis.mark",
+    "args": [
+     "color"
+    ]
+   },
+   "m x": {
+    "command": "analysis.mark",
+    "args": [
+     "clear"
+    ]
+   },
+   "c": {
+    "command": "analysis.comment",
+    "args": []
+   },
+   "C": {
+    "command": "analysis.rootcomment",
+    "args": []
+   },
+   "t": {
+    "command": "analysis.tags",
+    "args": []
+   },
+   "T": {
+    "command": "analysis.positiontags",
+    "args": []
+   },
+   "shift+up": {
+    "command": "analysis.moveup",
+    "args": []
+   },
+   "shift+down": {
+    "command": "analysis.movedown",
+    "args": []
+   },
+   "P": {
+    "command": "analysis.promote",
+    "args": []
+   },
+   "d": {
+    "command": "analysis.delete",
+    "args": []
+   },
+   "p s": {
+    "command": "analysis.puzzle",
+    "args": [
+     "start"
+    ]
+   },
+   "p x": {
+    "command": "analysis.puzzle",
+    "args": [
+     "end"
+    ]
+   },
+   "p a": {
+    "command": "analysis.puzzle",
+    "args": [
+     "also"
+    ]
+   },
+   "p o": {
+    "command": "analysis.puzzle",
+    "args": [
+     "answers"
+    ]
+   },
+   "p r": {
+    "command": "analysis.puzzle",
+    "args": [
+     "ready"
+    ]
+   },
+   "p d": {
+    "command": "analysis.puzzle",
+    "args": [
+     "discard"
+    ]
+   },
+   "e": {
+    "command": "engine.toggle",
+    "args": []
+   },
+   "enter": {
+    "command": "engine.best",
+    "args": []
+   },
+   "y": {
+    "command": "board.copyfen",
+    "args": []
+   },
+   "Y": {
+    "command": "board.copypgn",
+    "args": []
+   }
   }
  },
  "prefixes": {
   "space": "Leader",
   "space w": "Window",
   "space u": "UI toggles",
-  "g": "Go"
+  "g": "Go",
+  "m": "Mark",
+  "p": "Puzzle"
  },
  "order": [
   "overlay",

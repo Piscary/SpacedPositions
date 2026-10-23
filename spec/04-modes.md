@@ -114,10 +114,10 @@ The side pane switches to the result of this puzzle; the board stays.
 │  [Next  Enter] [Analyse  a] [Retry  r] [Flag  !] [Edit  e]        │
 ```
 
-- `Enter` next, `← →` replay the solution on the board, `a` opens the analysis **in a split to the right, linked
-  to the board** (stays in Train; `Esc` closes it), `A` jumps to Analyse mode at this position.
-- `t` tag the position, `!` flag the puzzle as broken (shows up in `Library · is:flagged`), `e` edit the puzzle
-  setup in Analyse, `r` retry (not scored).
+- `Enter` next, `← →` replay the solution on the board, `a` jumps to Analyse at the move where the puzzle starts
+  (the session waits in Train: `␣ t` goes back to it).
+- `t` tag the position (phase 4), `!` flag the puzzle as broken (shows up in `Library · is:flagged`), `e` edit the
+  puzzle setup in Analyse (its Puzzle section open), `r` retry (not scored).
 
 ### Result
 
@@ -137,8 +137,10 @@ Like monkeytype's result screen: big numbers, one chart, everything clickable.
   r again · Enter open puzzle · m review the missed · a analyse missed · l launcher · y copy result
 ```
 
-- `j/k` through the puzzles (the board pane follows), `Enter` opens one in Analyse.
-- `m` starts a Review of the missed ones, `a` opens Analyse with the missed ones as its *subject list* (`n`/`N`).
+- `j/k` through the puzzles (the board pane follows), `Enter` opens one in Analyse with the session's puzzles as its
+  *subject list* (`n`/`N`).
+- `m` starts a Review of the missed ones; `a` (Analyse with only the missed ones as the subject list) follows with
+  the library's subject lists in phase 4.
 - Records, milestones and level-ups reached in this session are listed at the top as **achievement chips**.
 
 ---
@@ -159,23 +161,32 @@ One position or game, board-centred. All panes in link group A.
 ├──────────────────────────────────────────┤                                                   │
 │ var B instead of 12…Nf6 · M main line    ├─ 4 Inspector ─────────────────────────────────────┤
 │ right-drag arrow · right-click circle    │ ▾ Move 12…Nf6   ?! · −0.4 · dubious      1–7  m   │
-├─ 5 Eval graph (games only) ──────────────┤ ▾ Comment                                   c     │
+├─ 5 Eval graph (games only, phase 5) ─────┤ ▾ Comment                                   c     │
 │ ▁▂▂▃▂▂▁▁▂▅▇▆▅▃▂▁ ▁▂▃▃▂                  │   Threatens e4, but …                             │
-└──────────────────────────────────────────┤ ▾ Tags   #zwischenzug                         t     │
+└──────────────────────────────────────────┤ ▾ Tags   #zwischenzug (phase 4)              t     │
                                            │ ▸ Puzzle  not set up                        p     │
                                            │ ▸ Position p123 · Polgár 5334 Nr. 102 · diff 3     │
                                            └───────────────────────────────────────────────────┘
 ```
 
 - **Navigation**: `h/l` or `← →` back/forward, `j/k` or `↓ ↑` other variation at this move, `g g` / `G` start/end,
-  `g p` parent branch point, `M` back to the main line.
+  `g p` / `g n` previous / next branch point, `M` back to the main line. Stepping needs no request: the whole tree
+  is in the browser; the cursor survives reloads.
 - **Edit the current move**: `1`–`7` annotation symbols, `m` mark menu (`m g` good, `m d` dubious, `m b` bad,
-  `m c` colour, `m x` clear), `c` comment, `t` move tag, `Shift+↑/↓` reorder variation, `P` promote to main line,
-  `d` delete from here (undoable).
-- **Board**: `f` flip, `e` engine on/off, `Enter` play the engine's best move, `S` setup (edit position), `i`
-  type a move, `y` copy FEN, `Y` copy PGN, `Mod+V` paste.
+  `m c` colour, `m x` clear), `c` comment, `t` move tag (phase 4), `Shift+↑/↓` reorder variation, `P` promote to
+  main line, `d` delete from here. Every change is a journal entry: `u`/`U` undo and redo it, also after a reload.
+- **Board**: `f` flip, `e` engine on/off, `Enter` play the engine's best move, `S` setup (correct the position: the
+  analysis stays when its moves are still legal, otherwise `y / n` before they go), `i` type a move, `y` copy FEN,
+  `Y` copy PGN, `Mod+V` paste (`a` makes a new position to analyse; on an open analysis, loading a pasted game asks
+  before it replaces the moves).
+- **Engine**: Stockfish 17.1 lite (WASM, one thread) runs in the browser while Analyse is on screen: MultiPV lines
+  (`:engine.lines 1–5`, 3 by default) to depth 24, the best moves as arrows, the eval bar left of the board. Clicking
+  a move of a line adds the line up to it.
 - **Puzzle**: `p` puzzle menu (which-key): `p s` start here, `p x` solution ends here, `p a` also correct,
-  `p o` all answers count, `p r` ready for training.
+  `p o` all answers count, `p r` ready for training, `p d` discard. The solution is the analysis from the start
+  move (the old app's walker: main moves, also-correct moves, answer lines, at most 8 solver moves unless an end is
+  marked); it is rebuilt after every change, one card per answer line. The move tree shows it: the start framed,
+  solver moves underlined, answers dotted, ends with a small square, drafts grey.
 - **Subject list**: `n`/`N` next/previous subject when Analyse was opened from a list (library results, missed
   puzzles). The status line shows `3 / 38`.
 

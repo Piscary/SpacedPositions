@@ -65,6 +65,17 @@ BOARD_HINTS = (
     ("board.copypgn", "PGN"),
 )
 
+MOVES_HINTS = (
+    ("analysis.back", "back"),
+    ("analysis.forward", "forward"),
+    ("analysis.sibling next", "variation"),
+    ("analysis.nag 1", "!"),
+    ("analysis.mark good", "mark"),
+    ("analysis.comment", "comment"),
+    ("analysis.promote", "main line"),
+    ("analysis.delete", "delete"),
+)
+
 VIEWS = {
     v.key: v
     for v in [
@@ -72,11 +83,22 @@ VIEWS = {
             "board", "Board", "b", 0, "The interactive board: moves, drawings, setup, typed moves.", "views/board.html",
             hints=BOARD_HINTS,
         ),
-        View("moves", "Moves", "m", 3, "The analysis as a book-style move tree."),
-        View("engine", "Engine", "e", 3, "Stockfish lines and evaluation."),
-        View("inspector", "Inspector", "i", 3, "The current move and position: comment, tags, marks, puzzle setup."),
-        View("evalgraph", "Eval graph", "g", 3, "Evaluation over a game."),
-        View("vargraph", "Variation graph", "r", 3, "The move tree as a graph."),
+        View(
+            "moves", "Moves", "m", 0, "The analysis as a book-style move tree.", "views/moves.html",
+            hints=MOVES_HINTS,
+        ),
+        View(
+            "engine", "Engine", "e", 0, "Stockfish lines and evaluation.", "views/engine.html",
+            hints=(("engine.toggle", "on / off"), ("engine.best", "play best"), ("engine.lines", "lines")),
+        ),
+        View(
+            "inspector", "Inspector", "i", 0, "The current move and position: comment, marks, puzzle setup.",
+            "views/inspector.html",
+            hints=(("analysis.comment", "comment"), ("analysis.annotate", "annotate"), ("analysis.puzzle start", "puzzle"),
+                   ("section.next", "next section"), ("section.toggle", "fold")),
+        ),
+        View("evalgraph", "Eval graph", "g", 5, "Evaluation over a game (games arrive with the library)."),
+        View("vargraph", "Variation graph", "r", 5, "The move tree as a graph."),
         View("library", "Library", "l", 4, "Positions, games, puzzles and more, with the query bar."),
         View("filters", "Filters", None, 4, "Facets that write into the library query."),
         View(
@@ -127,8 +149,8 @@ DEFAULTS = {
     "analyse": split(
         "row",
         [50, 50],
-        split("col", [78, 22], pane("board", "A"), pane("evalgraph", "A")),
-        split("col", [16, 50, 34], pane("engine", "A"), pane("moves", "A"), pane("inspector", "A")),
+        pane("board", "A"),
+        split("col", [18, 46, 36], pane("engine", "A"), pane("moves", "A"), pane("inspector", "A")),
     ),
     "collect": split("row", [55, 45], pane("board", "A"), split("col", [55, 45], pane("entry"), pane("pgn", "A"))),
     "library": split("row", [18, 44, 38], pane("filters"), pane("demo", "A"), pane("board", "A")),

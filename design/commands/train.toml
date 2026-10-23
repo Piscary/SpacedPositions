@@ -70,7 +70,6 @@ group = "Train"
 ["train.analyse"]
 title = "Analyse this puzzle"
 group = "Train"
-phase = 3
 
 ["train.tag"]
 title = "Tag the position"
@@ -78,9 +77,8 @@ group = "Train"
 phase = 4
 
 ["train.edit"]
-title = "Edit the puzzle"
+title = "Edit the puzzle in Analyse"
 group = "Train"
-phase = 3
 
 ["train.missed"]
 title = "Review the missed ones"

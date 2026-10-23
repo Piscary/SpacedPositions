@@ -1,8 +1,9 @@
 // Paste anything anywhere (spec 06 §6): ⌘V outside a text field, `:paste`, or the PGN/FEN view's field. The server
 // says what the text is (FEN, several FENs, PGN, lichess link); the status line offers what fits, each offer with
-// its key: b show on a board, a analyse (phase 3), c collect (phase 4), i import (phase 4).
+// its key: b show on a board, a analyse, c collect (phase 4), i import (phase 4).
 
 import { focusedBoard, focusedKey } from "../islands/board.js"
+import { analyseNew } from "./analysis.js"
 import { command, enabled, handle, run } from "./commands.js"
 import { ctx, keycaps, status } from "./context.js"
 import { setOverlayHandler } from "./keys.js"
@@ -122,6 +123,19 @@ handle("paste.board", async () => {
     lines.load(key, { start: fen }, { undo: "Paste position" })
   }
   focusedBoard()?.refresh()
+})
+
+// A new position to analyse: the pasted game's moves become its main line.
+handle("paste.analyse", async () => {
+  if (!detected) return false
+  if (detected.kind === "pgn") {
+    return analyseNew({ start: detected.start, moves: detected.moves.map((m) => m.uci), title: detected.title, origin: "paste" })
+  }
+  const fen = detected.kind === "fen" ? detected.fen : detected.fens[0]
+  if (detected.kind === "fen" && !detected.check.ok) {
+    return status("Not a legal position: show it on a board (b) and fix it in the board editor first", { kind: "error" }) || false
+  }
+  return analyseNew({ start: fen, origin: "paste" })
 })
 
 // ⌘V outside text fields. In a field, pasting types as usual.

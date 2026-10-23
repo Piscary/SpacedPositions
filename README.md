@@ -2,11 +2,13 @@
 
 Collect, solve and train chess puzzles: keyboard first, with spaced repetition. Free software (GPL-3.0-or-later).
 
-**Status: phase 2 (train).** Phase 0 built the shell, panes and splits, the command and key system, the design
+**Status: phase 3 (analyse).** Phase 0 built the shell, panes and splits, the command and key system, the design
 tokens and themes, the style guide and the launcher. Phase 1 added the board (moves, drawings, typed moves, the board
-editor), MiniBoards, paste detection and piece sets. Phase 2 adds puzzles, cards with spaced repetition, and the Train
-mode: Review, Storm and Streak. The other modes are laid out with placeholder panes that name their phase. The
-specification is in [spec/](spec/README.md).
+editor), MiniBoards, paste detection and piece sets. Phase 2 added puzzles, cards with spaced repetition, and the
+Train mode: Review, Storm and Streak. Phase 3 adds the Analyse mode: a book-style move tree with variations, comments,
+annotation symbols and marks, the Inspector, Stockfish in the browser with lines, arrows and an eval bar, puzzles set
+up from the analysis, and undo of every change (also after a reload). The other modes are laid out with placeholder
+panes that name their phase. The specification is in [spec/](spec/README.md).
 
 ## Start it
 
@@ -21,7 +23,7 @@ browser at the running instance. `spos list` shows where it runs; `--no-browser`
 are the options. Data lives in the platform's user-data folder (`~/Library/Application Support/Spaced Positions/`
 on macOS), with a backup before every migration.
 
-## Try in phase 0
+## Try it
 
 | Keys | |
 |---|---|
@@ -34,13 +36,15 @@ on macOS), with a backup before every migration.
 | `␣ w <` `>` `+` `-` | Resize (sticky: keep pressing, `Esc` ends) · or drag a gutter |
 | `:` | Command line: `:vsplit notes`, `:theme ink`, `:set main=#e2b714`, `:set density=compact`, `:layout-save study` |
 | `F` | Hint labels: click anything by keyboard |
-| `u` / `U` | Undo / redo (layout and settings) |
+| `u` / `U` | Undo / redo (layout, settings, every change of an analysis) |
 | `?` | Every key that works here |
 | `:ui` | The style guide: every component, plus a demo list linked to a board |
 | On a board | Click/drag to move · right-drag arrows (⇧ red, ⌥ blue) · `i` type a move (`Nf3`, `Sf3`, `g1f3`) · `S` board editor · `h`/`l` step · `f` flip · `q` square tool · `y`/`Y` copy FEN/PGN |
-| `⌘V` | Paste a FEN, PGN or lichess link anywhere (not in a text field): the status line offers `b` show on a board |
+| `⌘V` | Paste a FEN, PGN or lichess link anywhere (not in a text field): the status line offers `b` show on a board, `a` analyse |
 | `␣ t` Train | `r` Review · `1` `2` `3` Storm 3′/5′/10′ · `4` Streak · `5` Streak ♥3 · `6` blind · while solving `h` hint, `s` solution, `Esc` pause |
 | `:puzzle` | On any board: the line played so far becomes a puzzle |
+| `␣ a` Analyse | `:analyse <title>` opens a position · `h`/`l` step · `j`/`k` other variation · `1`–`7` `! ? !! ?? !? ?! □` · `m g/d/b` mark · `c` comment · `P` main line · `d` delete · `e` engine, `↵` its best move · `p s` puzzle from here, `p x` ends here, `p r` ready |
+| From Train | Feedback: `a` analyse, `e` edit the puzzle · Result: `↵` opens the puzzle under the cursor (`n`/`N` the others) |
 
 ## Puzzles to train with
 
@@ -79,14 +83,16 @@ spaced_positions/
   chesslogic.py          all chess rules on the server (python-chess): FEN checks and fixes, paste parsing, SVG boards
   core/                  shell views, layouts, server commands, chess endpoints, token middleware, template tags
   training/              positions, puzzles (solution trees), cards, scheduler (srs.py), Storm pace, selection, API
+  analysis/              the move tree (nodes), its journal (undo), puzzles from the analysis, the book renderer, API
   static/design/         generated: tokens.css, themes.json, commands.json (committed)
   static/css/            components (cascade layers; no literal colours or sizes)
-  static/js/core/        keys, commands, layout, command line, hints, help, lists, menu, lines, paste, san
+  static/js/core/        keys, commands, layout, command line, hints, help, lists, menu, lines, paste, san,
+                         analysis (tree, Moves and Inspector panes), engine (Stockfish worker, lines, eval bar)
   static/js/islands/     the board (chessground + chess.js), the PGN/FEN view, the trainer
-  static/vendor/         htmx, chessground, chess.js (licences in licences/ and design/licences.toml)
+  static/vendor/         htmx, chessground, chess.js, Stockfish 17.1 lite (licences in licences/ and design/licences.toml)
   templates/             shell, components, views
 docs/keymap.md           generated keymap reference
-tests/                   pytest (design, shell, chess, launcher, browser and board journeys, axe) and tests/js (node)
+tests/                   pytest (design, shell, chess, launcher, training, analysis, browser journeys, axe) and tests/js (node)
 ```
 
 Rules the lint enforces: every command has a client or server handler; every `{% cmd %}` and `data-cmd` names a

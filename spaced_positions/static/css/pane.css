@@ -59,7 +59,7 @@
 }
 .pane__title { font-weight: 600; }
 .pane__subject { color: var(--text-sub); overflow: hidden; text-overflow: ellipsis; }
-.pane.is-focused .pane__subject { color: inherit; opacity: 0.8; }
+.pane.is-focused .pane__subject { color: inherit; } /* full contrast on the accent: the title is set apart by weight */
 .pane__actions { display: flex; align-items: center; gap: var(--s-half); margin-left: auto; }
 .pane__link {
   display: inline-flex;

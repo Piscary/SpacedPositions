@@ -14,5 +14,6 @@
 @import url("data.css") layer(components);
 @import url("forms.css") layer(components);
 @import url("board.css") layer(components);
+@import url("analysis.css") layer(components);
 @import url("views.css") layer(views);
 @import url("utilities.css") layer(utilities);

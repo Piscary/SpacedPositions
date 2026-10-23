@@ -1,5 +1,8 @@
 <div class="board" data-island="board" data-layer="play"{% if mode.key == "collect" %} data-start-layer="setup"{% endif %}>
-  <div class="board__area"><div class="board__frame"><div class="board__cg"></div></div></div>
+  <div class="board__area"><div class="board__frame">
+    {% if mode.key == "analyse" %}<div class="evalbar" data-evalbar data-cmd="engine.toggle" hidden aria-hidden="true"><span class="evalbar__text" data-evaltext></span></div>{% endif %}
+    <div class="board__cg"></div>
+  </div></div>
   <div class="board__palette" data-palette hidden>
     <span class="actionbar">
       {% cmd "board.piece" args="pawn" display="compact" icon="♙" variant="ghost" size="sm" %}

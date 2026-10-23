@@ -101,9 +101,29 @@ function completions(type) {
       return Object.entries(themes.pieces || {}).map(([k, v]) => ({ value: k, label: `${v.label} · ${v.author} · ${v.licence}` }))
     case "buffer":
       return bufferIds().map((id) => ({ value: id, label: "hidden buffer" }))
+    case "position":
+      return positions(parse().rest || "")
     default:
       return []
   }
+}
+
+// Positions come from the server (the library and its query language arrive in phase 4): the rows follow the text.
+let positionRows = []
+let positionQuery = null
+let positionTimer
+function positions(q) {
+  if (q !== positionQuery) {
+    positionQuery = q
+    clearTimeout(positionTimer)
+    positionTimer = setTimeout(async () => {
+      const data = await fetch(`/positions/search/?q=${encodeURIComponent(q)}`).then((r) => r.json()).catch(() => ({ positions: [] }))
+      if (positionQuery !== q || !input) return
+      positionRows = data.positions.map((p) => ({ value: p.id, title: p.title, label: p.source || "", server: true }))
+      refresh()
+    }, 120)
+  }
+  return positionRows
 }
 
 function parse() {
@@ -126,7 +146,7 @@ function refresh() {
     hint.textContent = arg ? `${spec.title} · ${arg.name}${arg.optional ? " (optional)" : ""}` : spec.title
     const values = arg ? (arg.type === "enum" ? arg.values.map((v) => ({ value: v, label: v })) : completions(arg.type)) : []
     rows = values
-      .map((c) => ({ ...c, match: fuzzy(rest, c.value) }))
+      .map((c) => ({ ...c, match: c.server ? { score: 0 } : fuzzy(rest, c.value) }))
       .filter((c) => c.match)
       .sort((a, b) => b.match.score - a.match.score)
       .slice(0, MAX_ROWS)
@@ -182,7 +202,7 @@ function completionRow(c, i) {
   row.className = "cmdline__row"
   const title = document.createElement("span")
   title.className = "cmdline__title"
-  title.textContent = c.value
+  title.textContent = c.title || c.value
   const label = document.createElement("span")
   label.className = "cmdline__reason"
   label.textContent = c.label
@@ -242,7 +262,7 @@ async function accept() {
   } else {
     // A closed argument type (a theme, a view …) takes the highlighted completion unless the typed word is exact.
     const arg = commands()[id].args?.[0]
-    const closed = arg && ["enum", "theme", "view", "tokenname", "layout", "buffer", "pieceset"].includes(arg.type)
+    const closed = arg && ["enum", "theme", "view", "tokenname", "layout", "buffer", "pieceset", "position"].includes(arg.type)
     const choice = rows[cursor]
     if (closed && choice && "value" in choice && !rows.some((r) => r.value === args[0])) args = [choice.value]
   }

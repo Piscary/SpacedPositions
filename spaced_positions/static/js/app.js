@@ -11,6 +11,7 @@ import "./core/hints.js"
 import "./core/islands.js"
 import "./core/scroll.js"
 import { detect } from "./core/paste.js"
+import { loadJournal } from "./core/analysis.js"
 
 const boot = JSON.parse(document.getElementById("boot").textContent)
 // Modules may have added to window.SPOS while they loaded (imports run first): add, don't replace.
@@ -44,6 +45,11 @@ handle("form.submit", () => {
     document.activeElement?.blur()
     setLayer("normal")
     detect(field.value)
+    return
+  }
+  if (form.hasAttribute("data-comment-form")) {
+    document.activeElement?.blur() // leaving the field saves the comment (core/analysis.js)
+    setLayer("normal")
     return
   }
   if (form.hasAttribute("data-notes")) {
@@ -85,4 +91,5 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => { c
 restoreToggles()
 initKeys()
 initWorkspace(document.querySelector(".workspace"))
+loadJournal() // undo reaches analysis changes made before a reload (spec 09 §5)
 history.replaceState({ mode: ctx.mode }, "", location.pathname + location.search)

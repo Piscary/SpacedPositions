@@ -1,0 +1,116 @@
+/* Analyse (spec 04 · Analyse, 05 · MoveTree): the move tree as a book, the inspector, engine lines, the eval bar. */
+
+/* ── Move tree ─────────────────────────────────────────────────────────────────────────────────────────────── */
+.movetree { padding: var(--s-1) var(--s-2) var(--s-4); font-family: var(--font-moves); line-height: 1.75; }
+.mt-move {
+  display: inline-block;
+  padding: 0 var(--s-half);
+  border-radius: var(--radius);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.mt-move:hover { background: var(--surface-hover); }
+.mt-move.is-path { background: var(--cursor-row); }
+.mt-move.is-cursor { background: var(--main); color: var(--main-text); }
+.mt-move.is-cursor .mt-num, .mt-move.is-cursor .mt-nag { color: inherit; }
+.mt-num { margin-right: var(--s-half); color: var(--text-muted); font-weight: 400; }
+.mt-num:empty { display: none; }
+.mt-nag { color: var(--main); }
+
+/* Marks: a coloured edge under the move, and on the variation it starts. */
+.mt-move.is-good { box-shadow: inset 0 calc(var(--rule) * -2) 0 var(--mark-good); }
+.mt-move.is-dubious { box-shadow: inset 0 calc(var(--rule) * -2) 0 var(--mark-dubious); }
+.mt-move.is-bad { box-shadow: inset 0 calc(var(--rule) * -2) 0 var(--mark-bad); }
+
+.mt-comment { color: var(--text-sub); font-family: var(--font-ui); font-size: var(--fs-sm); white-space: pre-wrap; }
+.mt-comment--root { display: block; margin: 0 0 var(--s-1); }
+.mt-empty { font-family: var(--font-ui); }
+
+.mt-variations { display: block; margin: var(--s-half) 0 var(--s-half) var(--s-1); }
+.mt-variation {
+  display: block;
+  padding-left: var(--s-2);
+  border-left: calc(var(--rule) * 2) solid var(--edge, var(--variation-edge));
+  font-size: var(--fs-sm);
+}
+.mt-variation .mt-move { font-weight: 400; }
+.mt-variation.is-good { --edge: var(--mark-good); }
+.mt-variation.is-dubious { --edge: var(--mark-dubious); }
+.mt-variation.is-bad { --edge: var(--mark-bad); }
+.mt-label { margin-right: var(--s-1); color: var(--text-muted); font-family: var(--font-mono); font-size: var(--fs-xs); }
+
+/* Puzzles: the start framed, solver moves underlined, answers dotted, the ends with a small square. */
+.mt-puzzle { margin-bottom: var(--s-1); color: var(--puzzle); font-family: var(--font-ui); font-size: var(--fs-sm); }
+.mt-puzzle.is-draft { color: var(--text-muted); }
+.mt-move.pz-start { outline: calc(var(--rule) * 2) solid var(--puzzle); outline-offset: calc(var(--rule) * -1); }
+.mt-move.pz-solver, .mt-move.pz-also {
+  text-decoration: underline var(--puzzle) calc(var(--rule) * 2);
+  text-underline-offset: calc(var(--rule) * 3);
+}
+.mt-move.pz-also { text-decoration-style: double; }
+.mt-move.pz-answer { text-decoration: underline dotted var(--puzzle) calc(var(--rule) * 2); text-underline-offset: calc(var(--rule) * 3); }
+.mt-move.pz-end::after { content: "▪"; margin-left: var(--s-half); color: var(--puzzle); }
+.mt-move.pz-draft { --puzzle: var(--text-muted); }
+
+/* ── Inspector ─────────────────────────────────────────────────────────────────────────────────────────────── */
+.inspector-pane { min-height: 100%; }
+.inspector__none { padding: var(--s-2); }
+.inspector .actionbar { flex-wrap: wrap; padding: var(--s-half) 0; }
+.inspector__comment textarea { width: 100%; min-height: calc(var(--row-md) * 4); resize: vertical; font-family: var(--font-ui); }
+.inspector__puzzle { display: flex; flex-wrap: wrap; gap: var(--s-1); align-items: center; margin: 0 0 var(--s-1); }
+.inspector .keybutton[aria-pressed="true"] { background: var(--selection); border-color: var(--main); }
+.inspector__marks .mark-good { border-bottom: calc(var(--rule) * 2) solid var(--mark-good); }
+.inspector__marks .mark-dubious { border-bottom: calc(var(--rule) * 2) solid var(--mark-dubious); }
+.inspector__marks .mark-bad { border-bottom: calc(var(--rule) * 2) solid var(--mark-bad); }
+
+/* ── Engine ────────────────────────────────────────────────────────────────────────────────────────────────── */
+.engine { display: grid; gap: var(--s-1); padding: var(--s-1) var(--s-2); }
+.engine__head { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-2); align-items: center; font-size: var(--fs-sm); }
+.engine__head .actionbar { margin-left: auto; }
+.engine__state { padding: 0 var(--s-1); border-radius: var(--radius); background: var(--bg-alt); color: var(--text-sub); }
+.engine__state[data-state="on"] { color: var(--good); }
+.engine__state[data-state="busy"] { color: var(--info); }
+.engine__info { font-size: var(--fs-xs); }
+.engine__lines { display: grid; gap: var(--s-half); }
+.engine__line { display: grid; grid-template-columns: calc(var(--font-size) * 4) minmax(0, 1fr); gap: var(--s-1); align-items: baseline; }
+.engine__score { font-family: var(--font-mono); font-weight: 600; text-align: right; }
+.engine__moves { overflow: hidden; font-family: var(--font-moves); text-overflow: ellipsis; white-space: nowrap; }
+.engine__move { padding: 0 var(--s-half); border-radius: var(--radius); cursor: pointer; }
+.engine__move:hover { background: var(--surface-hover); }
+.engine__off { margin: 0; font-size: var(--fs-sm); }
+
+@property --white { syntax: "<percentage>"; inherits: false; initial-value: 50%; }
+
+/* ── Eval bar: left of the board, white from the bottom (from the top when the board is flipped) ───────────── */
+.board.has-eval { --eval-space: calc(var(--evalbar-w) + var(--s-1)); }
+.board.has-eval .board__frame { width: min(calc(100cqw - var(--eval-space) * 2), 100cqh); }
+.evalbar {
+  position: absolute;
+  top: 0;
+  right: calc(100% + var(--s-1));
+  bottom: 0;
+  width: var(--evalbar-w);
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: linear-gradient(to top, var(--eval-white) var(--white, 50%), var(--eval-black) var(--white, 50%));
+  box-shadow: 0 0 0 var(--rule) var(--line);
+  cursor: pointer; /* a click turns the engine off */
+  transition: --white var(--dur-slow);
+}
+.evalbar.is-flipped { background: linear-gradient(to bottom, var(--eval-white) var(--white, 50%), var(--eval-black) var(--white, 50%)); }
+.evalbar[hidden] { display: none; }
+/* The number sits at the end of the side that is better, in the other side's colour. */
+.evalbar__text {
+  position: absolute;
+  inset: auto 0 var(--s-half);
+  color: var(--eval-black);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  writing-mode: vertical-rl;
+}
+.evalbar.is-top .evalbar__text { inset: var(--s-half) 0 auto; }
+.evalbar.is-black .evalbar__text { color: var(--eval-white); }

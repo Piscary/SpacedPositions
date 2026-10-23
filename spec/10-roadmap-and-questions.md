@@ -77,6 +77,33 @@ Moved on:
 - Analyse/edit a puzzle from feedback or the result → phase 3.
 - Choosing the Storm pace in the launcher (medium for now) → phase 6 (settings).
 
+### Phase 3 status (2026-10-24)
+
+Built: the analysis of a position as a tree of nodes (`analysis/`), with comments, annotation symbols (move and
+evaluation NAGs), marks, line colours and drawings per move; the operations play (an existing move is reused, a new
+one becomes a variation), add a line, delete, promote, reorder and correcting the start position (the analysis is
+kept when its moves stay legal). Every change is a journal entry with snapshots before and after: `u`/`U` undo and
+redo it, also after a reload. The Analyse mode: board, Engine, Moves and Inspector linked in group A; the move tree
+as a book (main line as text, lettered variation blocks, comments in place, marks as coloured edges); stepping
+without requests; the Inspector (move, annotation, mark, comment with figurine keys, puzzle, position); Stockfish
+17.1 lite in a worker (MultiPV lines, arrows, eval bar, best move on `↵`, clicking a line adds it); puzzles set up
+from the analysis with the old app's walker (start, ends, also correct, all answers, ready, discard), rebuilt into
+cards after every change and shown in the move tree. Ways in: `:analyse` with live search, paste → `a`, Train
+feedback `a`/`e`, the result list `↵` (with `n`/`N` through the session). Safeguards: attempts are never deleted
+through a cascade (`Attempt.card` is `PROTECT`); undo takes a trained puzzle out of training instead of deleting it.
+Tests: tree operations, journal, puzzles, rendering and endpoints (17), 10 Analyse journeys incl. axe.
+
+Moved on:
+- Move tags and position tags (`t`, `T`, the Tags section of the Inspector) → phase 4 (the tag vocabulary).
+- Eval graph and variation graph → phase 5 (the eval graph needs games, which arrive with the library).
+- Analysing a puzzle in a split inside Train (instead of switching to Analyse), and `a` on the result (Analyse the
+  missed ones as a subject list) → phase 4, with subject lists from the library.
+- Puzzles made with `:puzzle` from a board line keep their own solution and have no analysis: Analyse opens their
+  position at the start. Making them through the analysis → phase 4, with Collect.
+- A local Stockfish binary (more threads, deeper) streamed by the server → phase 6 (settings); engine depth and
+  line count settings → phase 6.
+- Fold carets for variations and figurines in the move tree (`figurines` token) → phase 6.
+
 ## Out of scope for now
 
 - **Publishing** (documents, print, PDF): the old app's document editor. The Diagram renderer is shared, so it can
