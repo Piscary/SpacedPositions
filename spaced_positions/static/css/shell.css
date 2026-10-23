@@ -7,6 +7,10 @@
   height: 100dvh;
 }
 .shell.is-zen .appbar, .shell.no-appbar .appbar { display: none; }
+/* Fixed rows, so hiding the app bar doesn't shift the workspace and the status line up a row. */
+.shell > .appbar { grid-row: 1; }
+.shell > .workspaces { grid-row: 2; }
+.shell > .statusline { grid-row: 3; }
 
 /* ── App bar ─────────────────────────────────────────────────────────────────────────────────────────────────── */
 .appbar {

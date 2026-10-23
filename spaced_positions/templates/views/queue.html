@@ -1,0 +1,39 @@
+<div class="train" data-island="train">
+  <div class="train__launcher" data-train-launcher>{% train_launcher %}</div>
+
+  <div class="train__hud" data-train-hud hidden>
+    <div class="train__head"><span class="train__label" data-hud-label></span><span class="muted" data-hud-progress></span></div>
+    <div class="train__clock" data-hud-clock hidden><span data-hud-time>0:00</span><span class="train__delta" data-hud-delta></span></div>
+    <div class="train__combo meter" data-hud-combo hidden>
+      <div class="meter__top"><span data-hud-combo-level>×1</span><span class="mono" data-hud-combo-next></span></div>
+      <div class="meter__track"><div class="meter__fill" data-hud-combo-fill></div></div>
+    </div>
+    <div class="train__lives" data-hud-lives hidden></div>
+    <div class="stats-row train__score">
+      <div class="stat"><span class="stat__label">Solved</span><span class="stat__value" data-hud-solved>0</span></div>
+      <div class="stat"><span class="stat__label">Missed</span><span class="stat__value" data-hud-failed>0</span></div>
+    </div>
+    <div class="train__prompt">
+      <div class="train__side" data-hud-side></div>
+      <div class="train__objective" data-hud-objective></div>
+      <div class="train__pieces mono" data-hud-pieces hidden></div>
+    </div>
+    <div class="train__last muted" data-hud-last></div>
+    <div class="actionbar">{% cmd "train.hint" keys_in="state.solving" %}{% cmd "train.giveup" keys_in="state.solving" %}{% cmd "board.entry" %}</div>
+  </div>
+
+  <div class="train__feedback" data-train-feedback hidden>
+    <div class="train__verdict" data-fb-verdict></div>
+    <div class="train__schedule muted" data-fb-schedule></div>
+    <div class="train__solution mono" data-fb-solution></div>
+    <div class="train__tags" data-fb-tags></div>
+    <div class="train__title" data-fb-title></div>
+    <div class="muted" data-fb-source></div>
+    <div class="actionbar">
+      {% cmd "train.next" variant="primary" keys_in="state.feedback" %}{% cmd "train.replay" args="back" display="compact" icon="←" keys_in="state.feedback" %}{% cmd "train.replay" args="forward" display="compact" icon="→" keys_in="state.feedback" %}
+      {% cmd "train.retry" keys_in="state.feedback" %}{% cmd "train.flag" keys_in="state.feedback" %}{% cmd "train.analyse" keys_in="state.feedback" %}{% cmd "train.tag" keys_in="state.feedback" %}
+    </div>
+  </div>
+
+  <div class="train__result" data-train-result hidden></div>
+</div>

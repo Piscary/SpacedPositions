@@ -124,10 +124,13 @@ graph · `l` library · `q` queue · `c` chart · `n` notes · `p` PGN/FEN text 
 
 ## Train
 
-**Launcher**, pane *Sessions*: `r` Review · `1` `2` `3` Storm 3′/5′/10′ · `4` Streak · `5` Streak ♥3 · `6` Blind
-streak · `7` Weakest motifs · `8` Again.
-**Launcher**, pane *Custom* (rows mirror keyboard rows): Mode `1 2 3` · Look `q w e` · Side `a s d f` · Lives
-`z x c v` · `o` first move only · `/` filter · `↵` start.
+The Train keys live in state contexts (`state.launcher`, `state.solving`, `state.feedback`, `state.result`): one
+context per Train state, checked after layers and before the focused view (02 §5).
+
+**Launcher** · Sessions: `r` Review · `1` `2` `3` Storm 3′/5′/10′ · `4` Streak · `5` Streak ♥3 · `6` Blind streak ·
+`7` Weakest motifs (phase 5) · `8` Again. Global: `␣ r` starts a Review from anywhere.
+**Launcher** · Custom (rows mirror keyboard rows): Mode `b n m` (Review, Storm, Streak) · Look `q w e` · Side
+`a s d f` · Lives `z x c v` · `o` first move only · `↵` start. (Mode moved from `1 2 3`, which start Storms.)
 
 **Solving**
 
@@ -135,7 +138,7 @@ streak · `7` Weakest motifs · `8` Again.
 |---|---|
 | mouse | Play the move |
 | `i` | Type the move (on by default in blind) |
-| `h` | Hint (1st: piece, 2nd: move); counts as missed |
+| `h` | Hint (1st: the piece, 2nd: the move); counts as missed |
 | `s` | Show the solution (give up) |
 | `f` | Flip |
 | `⎋` | Pause line: `↵` resume · `q` quit · `r` restart (Storm: `quit? y / n`) |
@@ -145,23 +148,24 @@ streak · `7` Weakest motifs · `8` Again.
 | Key | Command |
 |---|---|
 | `↵` | Next puzzle |
-| `← →` | Replay the solution |
-| `a` / `A` | Analysis in a linked split / go to Analyse mode |
-| `t` | Tag the position |
-| `!` | Flag the puzzle as broken |
-| `e` | Edit the puzzle in Analyse |
+| `← →` / `h l` | Replay the solution |
 | `r` | Retry (not scored) |
+| `!` | Flag the puzzle as broken |
+| `a` · `t` · `e` | Analyse (phase 3) · tag (phase 4) · edit (phase 3) |
+| `⎋` | `↵` next · `q` end the session and see the result |
 
 **Result**
 
 | Key | Command |
 |---|---|
 | `r` | Run the same session again |
-| `j k`, `↵` | Puzzles of the session, open one in Analyse |
+| `j k` | Puzzles of the session (the linked board shows each) |
+| `↵` | Open the puzzle in Analyse (phase 3) |
 | `m` | Review the missed ones |
-| `a` | Analyse the missed ones (subject list) |
 | `l` | Back to the launcher |
 | `y` | Copy the result as text |
+
+`:puzzle` (on any board) makes a puzzle from the line played so far: the side to move at the start solves.
 
 ## Analyse
 

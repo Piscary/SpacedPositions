@@ -3,10 +3,12 @@
 
 import { on } from "./context.js"
 import { mountBoard, renderLineText } from "../islands/board.js"
+import { mountTrain } from "../islands/train.js"
 
 const MOUNT = {
   board: mountBoard,
   "line-text": renderLineText,
+  train: mountTrain,
 }
 
 export function mountIslands(root = document) {

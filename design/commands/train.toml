@@ -1,0 +1,111 @@
+# Train mode (spec 04 · Train). Keys live in the state contexts state.launcher / solving / feedback / result.
+
+["train.review"]
+title = "Review: due and new cards"
+group = "Train"
+aliases = ["review"]
+
+["train.storm"]
+title = "Storm"
+group = "Train"
+aliases = ["storm"]
+args = [{ name = "minutes", type = "enum", values = ["3", "5", "10"] }]
+
+["train.streak"]
+title = "Streak"
+group = "Train"
+aliases = ["streak"]
+args = [{ name = "lives", type = "enum", values = ["0", "1", "3", "5"] }, { name = "look", type = "enum", values = ["normal", "silhouette", "blind"], optional = true }]
+
+["train.weakest"]
+title = "Streak on your weakest motifs"
+group = "Train"
+phase = 5
+
+["train.again"]
+title = "The same session again"
+group = "Train"
+aliases = ["again"]
+when = "train.hasLast"
+reason = "no session yet"
+
+["train.set"]
+title = "Session option"
+group = "Train"
+args = [{ name = "option", type = "enum", values = ["mode", "look", "side", "lives", "first"] }, { name = "value", type = "text", optional = true }]
+
+["train.custom"]
+title = "Start the custom session"
+group = "Train"
+
+["train.hint"]
+title = "Hint (the puzzle counts as missed)"
+group = "Train"
+when = "train.solving"
+reason = "only while solving"
+
+["train.giveup"]
+title = "Show the solution (give up)"
+group = "Train"
+when = "train.solving"
+reason = "only while solving"
+
+["train.next"]
+title = "Next puzzle"
+group = "Train"
+
+["train.replay"]
+title = "Replay the solution"
+group = "Train"
+args = [{ name = "step", type = "enum", values = ["back", "forward"] }]
+
+["train.retry"]
+title = "Retry this puzzle (not scored)"
+group = "Train"
+
+["train.flag"]
+title = "Flag the puzzle as broken"
+group = "Train"
+
+["train.analyse"]
+title = "Analyse this puzzle"
+group = "Train"
+phase = 3
+
+["train.tag"]
+title = "Tag the position"
+group = "Train"
+phase = 4
+
+["train.edit"]
+title = "Edit the puzzle"
+group = "Train"
+phase = 3
+
+["train.missed"]
+title = "Review the missed ones"
+group = "Train"
+when = "train.hasMissed"
+reason = "nothing missed"
+
+["train.launcher"]
+title = "Back to the sessions"
+group = "Train"
+
+["train.copy"]
+title = "Copy the result"
+group = "Train"
+
+["train.quit"]
+title = "Quit the session"
+group = "Train"
+aliases = ["quit-session"]
+when = "train.running"
+reason = "no session running"
+
+["puzzle.create"]
+title = "Make a puzzle from the line on this board"
+group = "Train"
+aliases = ["puzzle"]
+when = "view.board"
+reason = "needs a board with moves played"

@@ -48,3 +48,54 @@
 .pieceset__pieces img { width: calc(var(--row-md) * 1.15); height: auto; }
 .pieceset__credit { color: var(--text-sub); font-size: var(--fs-xs); }
 .pieceset[aria-pressed="true"] { border-color: var(--main); box-shadow: inset 0 0 0 var(--rule) var(--main); }
+
+/* Train (spec 04 · Train): launcher, heads-up display while solving, feedback, result. */
+.train { display: grid; align-content: start; }
+.train__sessions { display: grid; gap: var(--s-2); }
+.train__session { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-1) var(--s-2); }
+.train__session-name { min-width: 4.5em; font-weight: 650; }
+.train__session-info { color: var(--text-sub); font-size: var(--fs-sm); }
+.train__pool { margin-top: var(--s-3); font-size: var(--fs-sm); }
+.train__custom { display: grid; gap: var(--s-2); }
+
+.train__hud, .train__feedback { display: grid; gap: var(--s-3); padding: var(--s-3); align-content: start; }
+.train__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-2); }
+.train__label { font-size: var(--fs-lg); font-weight: 700; letter-spacing: 0.02em; }
+.train__clock { display: flex; align-items: baseline; gap: var(--s-3); font-family: var(--font-mono); font-size: calc(var(--fs-2xl) * 1.6); font-weight: 700; line-height: 1; }
+.train__clock.is-low { color: var(--warn); }
+.train__delta { font-size: var(--fs-lg); opacity: 0; transition: opacity var(--dur-slow); }
+.train__delta.is-shown { opacity: 1; }
+.train__delta.is-good { color: var(--good); }
+.train__delta.is-bad { color: var(--bad); }
+.train__score { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.train__lives { font-size: var(--fs-xl); letter-spacing: 0.15em; color: var(--bad); }
+.train__lives.is-hit { animation: shake var(--dur-slow); }
+@keyframes shake { 25% { transform: translateX(calc(var(--space) * -1)); } 75% { transform: translateX(var(--space)); } }
+.train__prompt { display: grid; gap: var(--s-1); padding: var(--s-2) var(--s-3); border-left: calc(var(--rule) * 3) solid var(--main); background: var(--bg-alt); }
+.train__side { font-size: var(--fs-xl); font-weight: 700; }
+.train__objective { font-size: var(--fs-lg); }
+.train__pieces { font-size: var(--fs-sm); white-space: pre-wrap; }
+.train__last { font-size: var(--fs-sm); }
+.train__verdict { font-size: var(--fs-xl); font-weight: 700; }
+.train__verdict.is-good { color: var(--good); }
+.train__verdict.is-bad { color: var(--bad); }
+.train__solution { font-family: var(--font-moves); font-size: var(--fs-lg); }
+.train__solution .is-here { background: var(--selection); border-radius: var(--radius); }
+.train__tags { display: flex; flex-wrap: wrap; gap: var(--s-1); }
+.train__title { font-weight: 650; }
+
+.result { display: grid; gap: var(--s-3); padding: var(--s-3); align-content: start; }
+.result__head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); }
+.result__label { font-size: var(--fs-xl); font-weight: 700; }
+.result__mark { font-weight: 700; }
+.result__mark.is-good { color: var(--good); }
+.result__mark.is-bad { color: var(--bad); }
+
+/* Bar chart (spec 05 · G): bars as percentages of the tallest, colours from tokens. */
+.barchart { margin: 0; display: grid; gap: var(--s-1); }
+.barchart figcaption { font-size: var(--fs-xs); }
+.barchart__bars { display: flex; align-items: flex-end; gap: calc(var(--rule) * 2); height: calc(var(--row-lg) * 3); padding-bottom: var(--rule); border-bottom: var(--rule) solid var(--line); }
+.barchart__bar { flex: 1 1 0; min-width: var(--rule); max-width: var(--s-4); background: var(--good); border-radius: var(--radius) var(--radius) 0 0; }
+.barchart__bar.is-bad { background: var(--bad); }
+
+.shell.is-solving .appbar { display: none; }

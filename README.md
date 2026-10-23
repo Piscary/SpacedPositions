@@ -2,10 +2,11 @@
 
 Collect, solve and train chess puzzles: keyboard first, with spaced repetition. Free software (GPL-3.0-or-later).
 
-**Status: phase 1 (board).** Phase 0 built the shell, panes and splits, the command and key system, the design
-tokens and themes, the style guide and the launcher. Phase 1 adds the board (moves, drawings, typed moves, the board
-editor), MiniBoards and paste detection. The chess modes (Train, Analyse, Collect, Library, Stats) are laid out with
-real boards where they need one and placeholder panes for the rest. The specification is in [spec/](spec/README.md).
+**Status: phase 2 (train).** Phase 0 built the shell, panes and splits, the command and key system, the design
+tokens and themes, the style guide and the launcher. Phase 1 added the board (moves, drawings, typed moves, the board
+editor), MiniBoards, paste detection and piece sets. Phase 2 adds puzzles, cards with spaced repetition, and the Train
+mode: Review, Storm and Streak. The other modes are laid out with placeholder panes that name their phase. The
+specification is in [spec/](spec/README.md).
 
 ## Start it
 
@@ -38,6 +39,17 @@ on macOS), with a backup before every migration.
 | `:ui` | The style guide: every component, plus a demo list linked to a board |
 | On a board | Click/drag to move · right-drag arrows (⇧ red, ⌥ blue) · `i` type a move (`Nf3`, `Sf3`, `g1f3`) · `S` board editor · `h`/`l` step · `f` flip · `q` square tool · `y`/`Y` copy FEN/PGN |
 | `⌘V` | Paste a FEN, PGN or lichess link anywhere (not in a text field): the status line offers `b` show on a board |
+| `␣ t` Train | `r` Review · `1` `2` `3` Storm 3′/5′/10′ · `4` Streak · `5` Streak ♥3 · `6` blind · while solving `h` hint, `s` solution, `Esc` pause |
+| `:puzzle` | On any board: the line played so far becomes a puzzle |
+
+## Puzzles to train with
+
+Make puzzles from any board with `:puzzle`, or import the training puzzles of a chess-study-manager database (it reads
+a copy; the original is never opened):
+
+```bash
+.venv/bin/python manage.py import_csm ../chess-study-manager/db.sqlite3
+```
 
 ## Develop
 
@@ -66,10 +78,11 @@ spaced_positions/
   design/                build + lint (`manage.py design build|check`)
   chesslogic.py          all chess rules on the server (python-chess): FEN checks and fixes, paste parsing, SVG boards
   core/                  shell views, layouts, server commands, chess endpoints, token middleware, template tags
+  training/              positions, puzzles (solution trees), cards, scheduler (srs.py), Storm pace, selection, API
   static/design/         generated: tokens.css, themes.json, commands.json (committed)
   static/css/            components (cascade layers; no literal colours or sizes)
   static/js/core/        keys, commands, layout, command line, hints, help, lists, menu, lines, paste, san
-  static/js/islands/     the board (chessground + chess.js) and the PGN/FEN view
+  static/js/islands/     the board (chessground + chess.js), the PGN/FEN view, the trainer
   static/vendor/         htmx, chessground, chess.js (licences in licences/ and design/licences.toml)
   templates/             shell, components, views
 docs/keymap.md           generated keymap reference

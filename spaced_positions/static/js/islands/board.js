@@ -110,7 +110,7 @@ class Board {
       turnColor: turn,
       lastMove: last ? [last.slice(0, 2), last.slice(2, 4)] : [],
       check: Boolean(chess?.inCheck()),
-      movable: { free: false, color: chess && this.layer !== "readonly" ? turn : undefined, dests },
+      movable: { free: false, color: chess && this.layer !== "readonly" && (this.layer !== "solving" || turn === this.solver) ? turn : undefined, dests },
       draggable: { deleteOnDropOff: false },
       drawable: { enabled: true, shapes: line.shapes[line.ply] || [] },
       highlight: { custom: new Map(Object.entries(line.squares?.[line.ply] || {}).map(([k, b]) => [k, `hl-${b}`])) },
@@ -132,7 +132,64 @@ class Board {
       })
       if (!promotion) return this.refresh()
     }
-    lines.play(this.key, chess.move({ from: orig, to: dest, promotion }))
+    this.submit(chess.move({ from: orig, to: dest, promotion }))
+  }
+
+  /** A move made on the board (click, drag or typed): played, or judged by the trainer while solving. */
+  submit(move) {
+    if (this.layer === "solving" || (this.layer === "entry" && this.solving)) {
+      const verdict = this.solving.onMove(move)
+      if (verdict === "wrong") {
+        this.flash("bad")
+        this.refresh()
+      }
+      return
+    }
+    lines.play(this.key, move)
+  }
+
+  flash(kind) {
+    this.el.classList.remove("is-good", "is-bad")
+    void this.el.offsetWidth
+    this.el.classList.add(`is-${kind}`)
+    clearTimeout(this.flashTimer)
+    this.flashTimer = setTimeout(() => this.el.classList.remove(`is-${kind}`), 450)
+  }
+
+  // ── Solving (Train) ──────────────────────────────────────────────────────────────────────────────────────
+
+  /** Show a puzzle. onMove(move) returns "ok" (the trainer plays it) or "wrong" (the board snaps back). */
+  startSolving({ fen, orientation, look = "normal", onMove }) {
+    this.leaveEntry()
+    this.setup = null
+    if (this.palette) this.palette.hidden = true
+    this.solving = { onMove }
+    this.solver = fen.split(" ")[1] === "b" ? "black" : "white"
+    this.layer = "solving"
+    this.el.dataset.layer = "solving"
+    this.orientation = orientation
+    this.squareTool = false
+    this.el.classList.toggle("is-blind", look === "blind")
+    this.el.classList.toggle("is-silhouette", look === "silhouette")
+    this.cg.setAutoShapes([])
+    lines.load(this.key, { start: fen }, { undo: null, persist: false })
+    this.refresh()
+    if (look === "blind") this.enterEntry()
+  }
+
+  /** Back to an ordinary board (feedback, result): the line stays, the trainer no longer judges moves. */
+  stopSolving() {
+    this.leaveEntry()
+    this.solving = null
+    this.layer = "play"
+    this.el.dataset.layer = "play"
+    this.el.classList.remove("is-blind", "is-silhouette")
+    this.cg.setAutoShapes([])
+    this.refresh()
+  }
+
+  hint(shapes) {
+    this.cg.setAutoShapes(shapes)
   }
 
   onShapes(shapes) {
@@ -264,8 +321,8 @@ class Board {
   leaveEntry() {
     if (!this.entry) return
     this.entry = null
-    this.layer = "play"
-    this.el.dataset.layer = "play"
+    this.layer = this.solving ? "solving" : "play"
+    this.el.dataset.layer = this.layer
     if (ctx.overlay === "entry") {
       ctx.overlay = null
       setOverlayHandler(null)
@@ -302,8 +359,8 @@ class Board {
       return status(entry.text ? `No legal move matches “${entry.text}”` : "Type a move, e.g. Nf3, Sf3 or g1f3", { kind: "error", timeout: 3000 })
     }
     const chess = chessOf(lines.fenAt(this.line))
-    lines.play(this.key, chess.move({ from: move.from, to: move.to, promotion: move.promotion }))
     Object.assign(entry, { text: "", index: 0, candidates: [], exact: null, tabbed: false })
+    this.submit(chess.move({ from: move.from, to: move.to, promotion: move.promotion }))
     this.cg.setAutoShapes([])
     this.renderStrip()
   }
@@ -340,6 +397,8 @@ class Board {
       parts.push(text("Type a move: "), span("board__entry mono", `${e.text}▏`))
       if (e.candidates.length) parts.push(text(" · " + e.candidates.map((m, i) => (i === e.index ? `[${m.san}]` : m.san)).join(" ")))
       parts.push(text(" · ↵ play · ⇥ next · Esc done"))
+    } else if (this.layer === "solving") {
+      parts.push(text(`Solve as ${this.solver} · click/drag or i to type the move · h hint · s solution`))
     } else {
       const fen = lines.fenAt(line)
       parts.push(text(this.chess ? `${fen.split(" ")[1] === "b" ? "Black" : "White"} to move` : "Diagram: not playable"))
@@ -433,10 +492,11 @@ handle("board.flip", withBoard((b) => {
   b.orientation = b.orientation === "white" ? "black" : "white"
   b.cg.set({ orientation: b.orientation })
 }))
-handle("board.back", withBoard((b) => lines.goTo(b.key, b.line.ply - 1)))
-handle("board.forward", withBoard((b) => lines.goTo(b.key, b.line.ply + 1)))
-handle("board.start", withBoard((b) => lines.goTo(b.key, 0)))
-handle("board.end", withBoard((b) => lines.goTo(b.key, b.line.moves.length)))
+const notSolving = (fn) => withBoard((b, args) => (b.solving ? status("Not while solving a puzzle", { timeout: 2000 }) || false : fn(b, args)))
+handle("board.back", notSolving((b) => lines.goTo(b.key, b.line.ply - 1)))
+handle("board.forward", notSolving((b) => lines.goTo(b.key, b.line.ply + 1)))
+handle("board.start", notSolving((b) => lines.goTo(b.key, 0)))
+handle("board.end", notSolving((b) => lines.goTo(b.key, b.line.moves.length)))
 handle("board.squaretool", withBoard((b) => {
   b.squareTool = !b.squareTool
   b.renderStrip()
@@ -447,7 +507,29 @@ handle("board.cleardrawings", withBoard((b) => {
   lines.setSquares(b.key, {})
 }))
 handle("board.entry", withBoard((b) => (b.entry ? b.leaveEntry() : b.enterEntry())))
-handle("board.setup", withBoard((b) => (b.layer === "setup" ? b.leaveSetup() : b.enterSetup())))
+
+/** The board of the Train workspace (its first board pane). */
+export function trainBoard() {
+  return document.querySelector("#ws-train [data-island='board']")?.board || null
+}
+
+// `:puzzle`: the line on the focused board, up to the move shown, becomes a puzzle.
+handle("puzzle.create", async () => {
+  const board = focusedBoard()
+  if (!board) return false
+  const line = board.line
+  const moves = line.moves.slice(0, line.ply).map((m) => m.uci)
+  if (!moves.length) return status("Play the solution on the board first, then :puzzle", { kind: "error" }) || false
+  const response = await fetch("/puzzles/from-line/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content },
+    body: JSON.stringify({ start: line.start, moves, title: line.title }),
+  })
+  const data = await response.json().catch(() => ({ message: "failed" }))
+  status(data.message, { kind: data.ok ? "good" : "error" })
+  return Boolean(data.ok)
+})
+handle("board.setup", notSolving((b) => (b.layer === "setup" ? b.leaveSetup() : b.enterSetup())))
 
 async function copy(text, what) {
   try {

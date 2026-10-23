@@ -185,6 +185,8 @@ def _contexts_together(a: str, b: str) -> bool:
         return False  # one view per focused pane
     if a.startswith("mode.") and b.startswith("mode."):
         return False
+    if a.startswith("state.") and b.startswith("state."):
+        return False  # one Train state at a time
     return True
 
 
@@ -192,7 +194,7 @@ def check_keymap(sources: lib.Sources) -> list[Problem]:
     problems = []
     parsed: dict[str, dict[tuple, tuple[str, list[str]]]] = {}
     for context, bindings in sources.keymap.items():
-        if not re.fullmatch(r"global|pane|(mode|view|layer|overlay)\.[a-z]+", context):
+        if not re.fullmatch(r"global|pane|(mode|view|layer|overlay|state)\.[a-z]+", context):
             problems.append(err("keymap", f"unknown context '{context}'"))
         parsed[context] = {}
         for seq, value in bindings.items():

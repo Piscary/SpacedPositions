@@ -16,6 +16,7 @@ export const ctx = {
   undoDepth: 0,
   redoDepth: 0,
   lastRepeat: null,
+  trainState: null, // launcher | solving | feedback | result (spec 04 · Train)
   prefersDark: matchMedia("(prefers-color-scheme: dark)").matches,
 }
 
@@ -29,6 +30,10 @@ const derived = {
   "pane.sections": () => Boolean(ctx.pane?.sections),
   "pane.search": () => Boolean(ctx.pane?.search),
   "pane.fields": () => Boolean(ctx.pane?.el?.querySelector(FIELDS)),
+  "train.solving": () => ctx.mode === "train" && ctx.trainState === "solving",
+  "train.running": () => ctx.mode === "train" && ["solving", "feedback"].includes(ctx.trainState),
+  "train.hasLast": () => Boolean(window.SPOS?.train?.hasLast()),
+  "train.hasMissed": () => Boolean(window.SPOS?.train?.hasMissed()),
 }
 
 export function lookup(name) {

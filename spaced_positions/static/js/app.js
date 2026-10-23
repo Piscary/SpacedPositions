@@ -13,7 +13,8 @@ import "./core/scroll.js"
 import { detect } from "./core/paste.js"
 
 const boot = JSON.parse(document.getElementById("boot").textContent)
-window.SPOS = { views: boot.views, modes: boot.modes, themes: boot.themes, tokens: boot.tokens, keyPerf, ctx }
+// Modules may have added to window.SPOS while they loaded (imports run first): add, don't replace.
+Object.assign((window.SPOS ||= {}), { views: boot.views, modes: boot.modes, themes: boot.themes, tokens: boot.tokens, keyPerf, ctx })
 
 setRegistry(boot.registry)
 ctx.mode = boot.mode
@@ -30,6 +31,7 @@ handle("layer.escape", () => {
     return
   }
   if (escapeSelection()) return
+  if (window.SPOS.trainEscape?.()) return
   setLayer("normal")
   status("", { timeout: 1 })
 })

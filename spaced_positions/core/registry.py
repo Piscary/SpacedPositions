@@ -35,9 +35,15 @@ def command(cid: str) -> dict:
         raise KeyError(f"unknown command '{cid}' (see design/commands/)") from None
 
 
-def primary_keys(cid: str, args: list[str] | None = None) -> list[str] | None:
-    """The first binding of a command (as key tokens), in keymap order, matching `args` if given."""
-    for bindings in commands()["keymap"].values():
+def primary_keys(cid: str, args: list[str] | None = None, context: str | None = None) -> list[str] | None:
+    """The first binding of a command (as key tokens), in keymap order, matching `args` if given; with `context`,
+    that context's binding first (a button on the result screen shows the result screen's key)."""
+    keymap = commands()["keymap"]
+    if context and context in keymap:
+        for seq, binding in keymap[context].items():
+            if binding["command"] == cid and (args is None or binding["args"] == args):
+                return seq.split(" ")
+    for bindings in keymap.values():
         for seq, binding in bindings.items():
             if binding["command"] == cid and (args is None or binding["args"] == args):
                 return seq.split(" ")

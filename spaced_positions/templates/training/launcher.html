@@ -1,0 +1,45 @@
+{% section "Sessions" key="s" summary="one key starts a session" pinned=True %}
+  <div class="train__sessions">
+    <div class="train__session">
+      {% cmd "train.review" variant="primary" label="Review" %}
+      <span class="train__session-info">{% if due or counts.new %}<b>{{ due }}</b> due · <b>{{ counts.new }}</b> new{% else %}nothing due{% if next_due %} · next {{ next_due }}{% endif %}{% endif %}</span>
+    </div>
+    <div class="train__session">
+      <span class="train__session-name">Storm</span>
+      {% cmd "train.storm" args="3" label="3′" %}{% cmd "train.storm" args="5" label="5′" %}{% cmd "train.storm" args="10" label="10′" %}
+      <span class="train__session-info">best {{ storm_best.3 }} · {{ storm_best.5 }} · {{ storm_best.10 }}</span>
+    </div>
+    <div class="train__session">
+      <span class="train__session-name">Streak</span>
+      {% cmd "train.streak" args="0" label="Streak" %}{% cmd "train.streak" args="3" label="♥3" %}{% cmd "train.streak" args="0 blind" label="Blind" %}
+      <span class="train__session-info">best {{ streak_best }}</span>
+    </div>
+    <div class="train__session">
+      {% cmd "train.weakest" label="Weakest motifs" %}
+      {% cmd "train.again" label="Again" %}
+      <span class="train__session-info" data-again-label>{% if again %}{{ again.mode }}{% if again.minutes %} {{ again.minutes }}′{% endif %}{% if again.lives %} ♥{{ again.lives }}{% endif %}{% if again.look and again.look != "normal" %} · {{ again.look }}{% endif %}{% endif %}</span>
+    </div>
+  </div>
+  <p class="muted train__pool">{{ counts.cards }} cards in {{ counts.puzzles }} puzzles · make a puzzle from any board line with <span class="mono">:puzzle</span></p>
+  <script type="application/json" data-again>{% if again %}{{ again|safe_json }}{% else %}null{% endif %}</script>
+{% endsection %}
+
+{% section "Custom session" key="c" summary="mode · look · side · lives · first move" pinned=True %}
+  <div class="train__custom" data-custom>
+    <div class="segmented" data-segmented><span class="segmented__label">Mode</span><span class="segmented__options" role="radiogroup">
+      {% for value, label, key in custom_modes %}<button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="train.set" data-args="mode {{ value }}">{{ label }} {% keycap key %}</button>{% endfor %}
+    </span></div>
+    <div class="segmented" data-segmented><span class="segmented__label">Look</span><span class="segmented__options" role="radiogroup">
+      {% for value, label, key in custom_looks %}<button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="train.set" data-args="look {{ value }}">{{ label }} {% keycap key %}</button>{% endfor %}
+    </span></div>
+    <div class="segmented" data-segmented><span class="segmented__label">Side</span><span class="segmented__options" role="radiogroup">
+      {% for value, label, key in custom_sides %}<button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="train.set" data-args="side {{ value }}">{{ label }} {% keycap key %}</button>{% endfor %}
+    </span></div>
+    <div class="segmented" data-segmented><span class="segmented__label">Lives</span><span class="segmented__options" role="radiogroup">
+      {% for value, label, key in custom_lives %}<button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="train.set" data-args="lives {{ value }}">{{ label }} {% keycap key %}</button>{% endfor %}
+    </span></div>
+    <button type="button" class="toggle" aria-pressed="false" data-cmd="train.set" data-args="first"><span class="toggle__switch"></span>First move only {% keycap "o" %}</button>
+    <p class="muted">Filters (motifs, difficulty, source) arrive with the library in phase 4.</p>
+    <div class="actionbar">{% cmd "train.custom" variant="primary" label="Start" %}</div>
+  </div>
+{% endsection %}

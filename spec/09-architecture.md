@@ -53,7 +53,7 @@ step to the next move       → no request for the board and the moves cursor; i
 | `core/paste.js` | Paste detection and the offers in the status line | 150 |
 | `core/islands.js` | Mounts `[data-island]` elements when a workspace renders or a pane arrives | 30 |
 | `islands/movetree.js` | Cursor movement in the MoveTree/VariationGraph without requests | 200 |
-| `islands/train.js` | Session runner: queue, clock, combo, lives, scoring, result posting | 400 |
+| `islands/train.js` | Session runner: states, queue in batches, judging moves against the solution tree, clock, combo, lives, attempts in the background, pause, result | 600 |
 | `islands/chart.js` | Chart cursor, read-out, table toggle | 120 |
 | `islands/engine.js` | Engine connection (WASM worker or server stream), lines, arrows | 250 |
 

@@ -27,6 +27,9 @@
   --chart-5: var(--warn);
   --chart-6: var(--text-sub);
 
+  --disc-white: color-mix(in oklab, white 90%, var(--sq-light));
+  --disc-black: color-mix(in oklab, black 85%, var(--sq-dark));
+
   --group-a: var(--info);
   --group-b: var(--special);
 

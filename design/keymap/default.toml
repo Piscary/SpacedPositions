@@ -1,5 +1,6 @@
 # Default bindings by context (spec 02 §4–5, 08). Resolution order for a key press:
-#   overlay → layer.<layer> → view.<view> → pane → mode.<mode> → global
+#   overlay → layer.<layer> → state.<state> (Train: launcher, solving, feedback, result) → view.<view> → pane →
+#   mode.<mode> → global
 # Keys: see spec 08 · Notation. A value is a command id, optionally followed by arguments: "pane.focus 3".
 # `design check` rejects conflicts, browser-reserved keys and keys that are both a command and a prefix.
 
@@ -35,6 +36,7 @@ accept = ["[", "]"]
 "space l" = "mode.library"
 "space s" = "mode.stats"
 "space ," = "mode.settings"
+"space r" = "train.review"
 "space space" = "mode.previous"
 
 "space 1" = "pane.focus 1"
@@ -160,3 +162,57 @@ accept = ["[", "]"]
 "a" = "board.fix"
 "S" = "board.setup"
 "esc" = "board.setup"
+
+[context."state.launcher"]
+"r" = "train.review"
+"1" = "train.storm 3"
+"2" = "train.storm 5"
+"3" = "train.storm 10"
+"4" = "train.streak 0"
+"5" = "train.streak 3"
+"6" = "train.streak 0 blind"
+"7" = "train.weakest"
+"8" = "train.again"
+"b" = "train.set mode review"
+"n" = "train.set mode storm"
+"m" = "train.set mode streak"
+"q" = "train.set look normal"
+"w" = "train.set look silhouette"
+"e" = "train.set look blind"
+"a" = "train.set side move"
+"s" = "train.set side white"
+"d" = "train.set side black"
+"f" = "train.set side random"
+"z" = "train.set lives 0"
+"x" = "train.set lives 1"
+"c" = "train.set lives 3"
+"v" = "train.set lives 5"
+"o" = "train.set first"
+"enter" = "train.custom"
+
+[context."state.solving"]
+"h" = "train.hint"
+"s" = "train.giveup"
+
+[context."state.feedback"]
+"enter" = "train.next"
+"left" = "train.replay back"
+"right" = "train.replay forward"
+"h" = "train.replay back"
+"l" = "train.replay forward"
+"r" = "train.retry"
+"!" = "train.flag"
+"a" = "train.analyse"
+"t" = "train.tag"
+"e" = "train.edit"
+
+[context."state.result"]
+"r" = "train.again"
+"m" = "train.missed"
+"l" = "train.launcher"
+"y" = "train.copy"
+"j" = "list.down"
+"k" = "list.up"
+"down" = "list.down"
+"up" = "list.up"
+"enter" = "train.analyse"

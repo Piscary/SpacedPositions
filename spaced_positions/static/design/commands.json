@@ -685,6 +685,206 @@
    "reason": "only when started with spos",
    "danger": true
   },
+  "train.review": {
+   "title": "Review: due and new cards",
+   "group": "Train",
+   "aliases": [
+    "review"
+   ],
+   "handler": "client"
+  },
+  "train.storm": {
+   "title": "Storm",
+   "group": "Train",
+   "aliases": [
+    "storm"
+   ],
+   "args": [
+    {
+     "name": "minutes",
+     "type": "enum",
+     "values": [
+      "3",
+      "5",
+      "10"
+     ]
+    }
+   ],
+   "handler": "client"
+  },
+  "train.streak": {
+   "title": "Streak",
+   "group": "Train",
+   "aliases": [
+    "streak"
+   ],
+   "args": [
+    {
+     "name": "lives",
+     "type": "enum",
+     "values": [
+      "0",
+      "1",
+      "3",
+      "5"
+     ]
+    },
+    {
+     "name": "look",
+     "type": "enum",
+     "values": [
+      "normal",
+      "silhouette",
+      "blind"
+     ],
+     "optional": true
+    }
+   ],
+   "handler": "client"
+  },
+  "train.weakest": {
+   "title": "Streak on your weakest motifs",
+   "group": "Train",
+   "phase": 5,
+   "handler": "client"
+  },
+  "train.again": {
+   "title": "The same session again",
+   "group": "Train",
+   "aliases": [
+    "again"
+   ],
+   "when": "train.hasLast",
+   "reason": "no session yet",
+   "handler": "client"
+  },
+  "train.set": {
+   "title": "Session option",
+   "group": "Train",
+   "args": [
+    {
+     "name": "option",
+     "type": "enum",
+     "values": [
+      "mode",
+      "look",
+      "side",
+      "lives",
+      "first"
+     ]
+    },
+    {
+     "name": "value",
+     "type": "text",
+     "optional": true
+    }
+   ],
+   "handler": "client"
+  },
+  "train.custom": {
+   "title": "Start the custom session",
+   "group": "Train",
+   "handler": "client"
+  },
+  "train.hint": {
+   "title": "Hint (the puzzle counts as missed)",
+   "group": "Train",
+   "when": "train.solving",
+   "reason": "only while solving",
+   "handler": "client"
+  },
+  "train.giveup": {
+   "title": "Show the solution (give up)",
+   "group": "Train",
+   "when": "train.solving",
+   "reason": "only while solving",
+   "handler": "client"
+  },
+  "train.next": {
+   "title": "Next puzzle",
+   "group": "Train",
+   "handler": "client"
+  },
+  "train.replay": {
+   "title": "Replay the solution",
+   "group": "Train",
+   "args": [
+    {
+     "name": "step",
+     "type": "enum",
+     "values": [
+      "back",
+      "forward"
+     ]
+    }
+   ],
+   "handler": "client"
+  },
+  "train.retry": {
+   "title": "Retry this puzzle (not scored)",
+   "group": "Train",
+   "handler": "client"
+  },
+  "train.flag": {
+   "title": "Flag the puzzle as broken",
+   "group": "Train",
+   "handler": "client"
+  },
+  "train.analyse": {
+   "title": "Analyse this puzzle",
+   "group": "Train",
+   "phase": 3,
+   "handler": "client"
+  },
+  "train.tag": {
+   "title": "Tag the position",
+   "group": "Train",
+   "phase": 4,
+   "handler": "client"
+  },
+  "train.edit": {
+   "title": "Edit the puzzle",
+   "group": "Train",
+   "phase": 3,
+   "handler": "client"
+  },
+  "train.missed": {
+   "title": "Review the missed ones",
+   "group": "Train",
+   "when": "train.hasMissed",
+   "reason": "nothing missed",
+   "handler": "client"
+  },
+  "train.launcher": {
+   "title": "Back to the sessions",
+   "group": "Train",
+   "handler": "client"
+  },
+  "train.copy": {
+   "title": "Copy the result",
+   "group": "Train",
+   "handler": "client"
+  },
+  "train.quit": {
+   "title": "Quit the session",
+   "group": "Train",
+   "aliases": [
+    "quit-session"
+   ],
+   "when": "train.running",
+   "reason": "no session running",
+   "handler": "client"
+  },
+  "puzzle.create": {
+   "title": "Make a puzzle from the line on this board",
+   "group": "Train",
+   "aliases": [
+    "puzzle"
+   ],
+   "when": "view.board",
+   "reason": "needs a board with moves played",
+   "handler": "client"
+  },
   "ui.appbar": {
    "title": "Show / hide the app bar",
    "group": "UI",
@@ -876,6 +1076,10 @@
    },
    "space ,": {
     "command": "mode.settings",
+    "args": []
+   },
+   "space r": {
+    "command": "train.review",
     "args": []
    },
    "space space": {
@@ -1404,6 +1608,263 @@
    },
    "esc": {
     "command": "board.setup",
+    "args": []
+   }
+  },
+  "state.launcher": {
+   "r": {
+    "command": "train.review",
+    "args": []
+   },
+   "1": {
+    "command": "train.storm",
+    "args": [
+     "3"
+    ]
+   },
+   "2": {
+    "command": "train.storm",
+    "args": [
+     "5"
+    ]
+   },
+   "3": {
+    "command": "train.storm",
+    "args": [
+     "10"
+    ]
+   },
+   "4": {
+    "command": "train.streak",
+    "args": [
+     "0"
+    ]
+   },
+   "5": {
+    "command": "train.streak",
+    "args": [
+     "3"
+    ]
+   },
+   "6": {
+    "command": "train.streak",
+    "args": [
+     "0",
+     "blind"
+    ]
+   },
+   "7": {
+    "command": "train.weakest",
+    "args": []
+   },
+   "8": {
+    "command": "train.again",
+    "args": []
+   },
+   "b": {
+    "command": "train.set",
+    "args": [
+     "mode",
+     "review"
+    ]
+   },
+   "n": {
+    "command": "train.set",
+    "args": [
+     "mode",
+     "storm"
+    ]
+   },
+   "m": {
+    "command": "train.set",
+    "args": [
+     "mode",
+     "streak"
+    ]
+   },
+   "q": {
+    "command": "train.set",
+    "args": [
+     "look",
+     "normal"
+    ]
+   },
+   "w": {
+    "command": "train.set",
+    "args": [
+     "look",
+     "silhouette"
+    ]
+   },
+   "e": {
+    "command": "train.set",
+    "args": [
+     "look",
+     "blind"
+    ]
+   },
+   "a": {
+    "command": "train.set",
+    "args": [
+     "side",
+     "move"
+    ]
+   },
+   "s": {
+    "command": "train.set",
+    "args": [
+     "side",
+     "white"
+    ]
+   },
+   "d": {
+    "command": "train.set",
+    "args": [
+     "side",
+     "black"
+    ]
+   },
+   "f": {
+    "command": "train.set",
+    "args": [
+     "side",
+     "random"
+    ]
+   },
+   "z": {
+    "command": "train.set",
+    "args": [
+     "lives",
+     "0"
+    ]
+   },
+   "x": {
+    "command": "train.set",
+    "args": [
+     "lives",
+     "1"
+    ]
+   },
+   "c": {
+    "command": "train.set",
+    "args": [
+     "lives",
+     "3"
+    ]
+   },
+   "v": {
+    "command": "train.set",
+    "args": [
+     "lives",
+     "5"
+    ]
+   },
+   "o": {
+    "command": "train.set",
+    "args": [
+     "first"
+    ]
+   },
+   "enter": {
+    "command": "train.custom",
+    "args": []
+   }
+  },
+  "state.solving": {
+   "h": {
+    "command": "train.hint",
+    "args": []
+   },
+   "s": {
+    "command": "train.giveup",
+    "args": []
+   }
+  },
+  "state.feedback": {
+   "enter": {
+    "command": "train.next",
+    "args": []
+   },
+   "left": {
+    "command": "train.replay",
+    "args": [
+     "back"
+    ]
+   },
+   "right": {
+    "command": "train.replay",
+    "args": [
+     "forward"
+    ]
+   },
+   "h": {
+    "command": "train.replay",
+    "args": [
+     "back"
+    ]
+   },
+   "l": {
+    "command": "train.replay",
+    "args": [
+     "forward"
+    ]
+   },
+   "r": {
+    "command": "train.retry",
+    "args": []
+   },
+   "!": {
+    "command": "train.flag",
+    "args": []
+   },
+   "a": {
+    "command": "train.analyse",
+    "args": []
+   },
+   "t": {
+    "command": "train.tag",
+    "args": []
+   },
+   "e": {
+    "command": "train.edit",
+    "args": []
+   }
+  },
+  "state.result": {
+   "r": {
+    "command": "train.again",
+    "args": []
+   },
+   "m": {
+    "command": "train.missed",
+    "args": []
+   },
+   "l": {
+    "command": "train.launcher",
+    "args": []
+   },
+   "y": {
+    "command": "train.copy",
+    "args": []
+   },
+   "j": {
+    "command": "list.down",
+    "args": []
+   },
+   "k": {
+    "command": "list.up",
+    "args": []
+   },
+   "down": {
+    "command": "list.down",
+    "args": []
+   },
+   "up": {
+    "command": "list.up",
+    "args": []
+   },
+   "enter": {
+    "command": "train.analyse",
     "args": []
    }
   }

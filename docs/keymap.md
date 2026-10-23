@@ -26,6 +26,7 @@ reference is `spec/08-keymap.md`.
 | `␣` `l` | Library | `mode.library` |
 | `␣` `s` | Stats | `mode.stats` |
 | `␣` `,` | Settings | `mode.settings` |
+| `␣` `r` | Review: due and new cards | `train.review` |
 | `␣` `␣` | Previous mode | `mode.previous` |
 | `␣` `1` | Focus pane N 1 | `pane.focus` |
 | `␣` `2` | Focus pane N 2 | `pane.focus` |
@@ -169,3 +170,69 @@ reference is `spec/08-keymap.md`.
 | `a` | Fix what can be fixed | `board.fix` |
 | `S` | Set up the position (board editor) | `board.setup` |
 | `Esc` | Set up the position (board editor) | `board.setup` |
+
+## state.launcher
+
+| Keys | Command | Id |
+|---|---|---|
+| `r` | Review: due and new cards | `train.review` |
+| `1` | Storm 3 | `train.storm` |
+| `2` | Storm 5 | `train.storm` |
+| `3` | Storm 10 | `train.storm` |
+| `4` | Streak 0 | `train.streak` |
+| `5` | Streak 3 | `train.streak` |
+| `6` | Streak 0 blind | `train.streak` |
+| `7` | Streak on your weakest motifs | `train.weakest` |
+| `8` | The same session again | `train.again` |
+| `b` | Session option mode review | `train.set` |
+| `n` | Session option mode storm | `train.set` |
+| `m` | Session option mode streak | `train.set` |
+| `q` | Session option look normal | `train.set` |
+| `w` | Session option look silhouette | `train.set` |
+| `e` | Session option look blind | `train.set` |
+| `a` | Session option side move | `train.set` |
+| `s` | Session option side white | `train.set` |
+| `d` | Session option side black | `train.set` |
+| `f` | Session option side random | `train.set` |
+| `z` | Session option lives 0 | `train.set` |
+| `x` | Session option lives 1 | `train.set` |
+| `c` | Session option lives 3 | `train.set` |
+| `v` | Session option lives 5 | `train.set` |
+| `o` | Session option first | `train.set` |
+| `↵` | Start the custom session | `train.custom` |
+
+## state.solving
+
+| Keys | Command | Id |
+|---|---|---|
+| `h` | Hint (the puzzle counts as missed) | `train.hint` |
+| `s` | Show the solution (give up) | `train.giveup` |
+
+## state.feedback
+
+| Keys | Command | Id |
+|---|---|---|
+| `↵` | Next puzzle | `train.next` |
+| `←` | Replay the solution back | `train.replay` |
+| `→` | Replay the solution forward | `train.replay` |
+| `h` | Replay the solution back | `train.replay` |
+| `l` | Replay the solution forward | `train.replay` |
+| `r` | Retry this puzzle (not scored) | `train.retry` |
+| `!` | Flag the puzzle as broken | `train.flag` |
+| `a` | Analyse this puzzle | `train.analyse` |
+| `t` | Tag the position | `train.tag` |
+| `e` | Edit the puzzle | `train.edit` |
+
+## state.result
+
+| Keys | Command | Id |
+|---|---|---|
+| `r` | The same session again | `train.again` |
+| `m` | Review the missed ones | `train.missed` |
+| `l` | Back to the sessions | `train.launcher` |
+| `y` | Copy the result | `train.copy` |
+| `j` | Cursor down | `list.down` |
+| `k` | Cursor up | `list.up` |
+| `↓` | Cursor down | `list.down` |
+| `↑` | Cursor up | `list.up` |
+| `↵` | Analyse this puzzle | `train.analyse` |

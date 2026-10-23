@@ -20,6 +20,7 @@ const isEditable = (el) =>
 export function activeContexts() {
   const chain = []
   if (!["normal", "insert", "pending", "command"].includes(ctx.layer)) chain.push(`layer.${ctx.layer}`)
+  if (ctx.mode === "train" && ctx.trainState) chain.push(`state.${ctx.trainState}`)
   if (ctx.pane) {
     chain.push(`view.${ctx.pane.view}`)
     if (window.SPOS.views[ctx.pane.view]?.list) chain.push("view.list")

@@ -176,8 +176,10 @@ def test_flip_keeps_moves_working(board):
     assert until(board, "b.line.moves.length === 1")["moves"] == ["e4"]
 
 
-def test_accessibility_of_the_style_guide(page):
-    """axe-core (spec 07 §8, test 6): no serious or critical violations on the style guide."""
+@pytest.mark.parametrize("mode", ["ui", "train"])
+def test_accessibility(page, mode):
+    """axe-core (spec 07 §8, test 6): no serious or critical violations on the style guide and the Train launcher."""
+    open_mode(page, mode)
     page.add_script_tag(path=str(AXE))
     result = page.evaluate(
         """async () => {

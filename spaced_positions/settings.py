@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "spaced_positions.core",
     "spaced_positions.design",
+    "spaced_positions.training",
 ]
 
 MIDDLEWARE = [

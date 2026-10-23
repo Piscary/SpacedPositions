@@ -14,6 +14,15 @@
 .board[data-layer="entry"] .board__frame { box-shadow: 0 0 0 calc(var(--rule) * 3) var(--layer-entry); }
 .board[data-layer="readonly"] .board__frame { outline: calc(var(--rule) * 2) dashed var(--line-strong); outline-offset: calc(var(--rule) * 2); }
 .board__cg { width: 100%; height: 100%; }
+.board .board__frame { transition: box-shadow var(--dur); }
+.board.is-good .board__frame { box-shadow: 0 0 0 calc(var(--rule) * 4) var(--good); }
+.board.is-bad .board__frame { box-shadow: 0 0 0 calc(var(--rule) * 4) var(--bad); }
+
+/* Training looks (spec 06 §8): blind hides the pieces; silhouette shows each piece as a disc of its colour. */
+.board.is-blind .cg-wrap piece { visibility: hidden; }
+.board.is-silhouette .cg-wrap piece { background-image: none !important; }
+.board.is-silhouette .cg-wrap piece.white { background: radial-gradient(circle, var(--disc-white) 0 34%, var(--disc-black) 35% 38%, transparent 39%); }
+.board.is-silhouette .cg-wrap piece.black { background: radial-gradient(circle, var(--disc-black) 0 38%, transparent 39%); }
 
 .board__palette {
   display: flex;

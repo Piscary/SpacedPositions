@@ -47,7 +47,9 @@ What to do now. Opens on start.
 
 ## Train  `␣ t`
 
-The heart of the app. Four states:
+The heart of the app. Four states. (As built in phase 2: one layout, Board + Session; the Session pane shows the
+launcher, the heads-up display while solving, the feedback and the result, and the board follows the result list.
+The app bar hides while solving and during feedback.)
 
 ```
 Launcher ──Enter/key──▶ Solving ──answer──▶ Feedback ──Enter──▶ Solving … ──end──▶ Result

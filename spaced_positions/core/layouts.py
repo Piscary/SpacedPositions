@@ -79,7 +79,10 @@ VIEWS = {
         View("vargraph", "Variation graph", "r", 3, "The move tree as a graph."),
         View("library", "Library", "l", 4, "Positions, games, puzzles and more, with the query bar."),
         View("filters", "Filters", None, 4, "Facets that write into the library query."),
-        View("queue", "Session", "q", 2, "The running training session: clock, combo, lives, prompt."),
+        View(
+            "queue", "Session", "q", 0, "Sessions to start, the running session (clock, combo, lives, prompt), the result.",
+            "views/queue.html",
+        ),
         View("entry", "Entry session", None, 4, "Source, page, diagram number and presets for rapid entry."),
         View("chart", "Chart", "c", 5, "Statistics charts."),
         View(
@@ -120,7 +123,7 @@ def split(direction, sizes, *children):
 
 DEFAULTS = {
     "home": split("row", [55, 45], pane("welcome"), pane("demo", "A")),
-    "train": split("row", [64, 36], pane("board", "A"), pane("queue", "A")),
+    "train": split("row", [60, 40], pane("board", "A"), pane("queue", "A")),
     "analyse": split(
         "row",
         [50, 50],

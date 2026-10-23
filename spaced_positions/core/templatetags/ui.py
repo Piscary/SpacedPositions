@@ -34,11 +34,12 @@ def keycap(context, seq: str, on_accent=False):
 
 
 @register.simple_tag(takes_context=True)
-def cmd(context, cid: str, display="full", variant="secondary", label="", args="", size="md", icon="", extra=""):
-    """A KeyButton. Label, keys and disabled reason come from the registry, so a button and its key can't differ."""
+def cmd(context, cid: str, display="full", variant="secondary", label="", args="", size="md", icon="", extra="", keys_in=""):
+    """A KeyButton. Label, keys and disabled reason come from the registry, so a button and its key can't differ.
+    keys_in: show the key of that context (e.g. "state.result") when the command has several."""
     spec = registry.command(cid)
     arg_list = args.split() if args else []
-    keys = registry.primary_keys(cid, arg_list or None) or registry.primary_keys(cid)
+    keys = registry.primary_keys(cid, arg_list or None, keys_in or None) or registry.primary_keys(cid)
     title = label or spec["title"]
     classes = [f"keybutton keybutton--{variant} keybutton--{size} keybutton--{display}"]
     if spec.get("danger"):
@@ -143,6 +144,13 @@ def miniboard(fen: str, size: int = 120, flip: bool = False, extra: str = ""):
     )
 
 
+@register.inclusion_tag("training/launcher.html", takes_context=True)
+def train_launcher(context):
+    from spaced_positions.training.views import launcher_context
+
+    return launcher_context() | {"is_mac": context.get("is_mac", True)}
+
+
 @register.simple_tag
 def piece_codes():
     return ["wK", "wQ", "wR", "wB", "wN", "wP", "bK", "bQ", "bR", "bB", "bN", "bP"]
@@ -165,6 +173,14 @@ def demo_rows():
 def color_tokens():
     """Names of the colour tokens, for the style guide's swatches."""
     return [name for name, spec in registry.themes()["schema"].items() if spec["type"] == "color"]
+
+
+@register.filter
+def safe_json(value):
+    """JSON for a <script type="application/json"> block (escapes <, > and &)."""
+    import json
+
+    return mark_safe(json.dumps(value).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"))
 
 
 @register.filter

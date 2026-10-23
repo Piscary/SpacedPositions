@@ -56,6 +56,27 @@ Moved on:
 - Icon sprite → when the first icon is needed (none so far: the UI uses text glyphs).
 - Variations instead of replacing the rest of a line → phase 3 (move tree).
 
+### Phase 2 status (2026-10-23)
+
+Built: Position, Puzzle (a self-contained solution tree: main move, also-correct moves, answer lines), Card (one
+answer line, with the spaced-repetition state), Session and Attempt (`training/`). The scheduler and the Storm pace
+keep the old app's rules (solved/missed only; hints count as missed; early solves don't push a card out). Selection:
+Review (due learning, due reviews, then up to 20 new a day), Storm and Streak (one card per puzzle, easy → hard).
+The Train mode: launcher with one-key sessions and a custom builder (mode, look, side, lives, first move), solving with
+a judged board (any mating move counts when the main move mates; the opponent answers along the card's line), a
+heads-up display (clock with bonus/penalty, combo meter, lives, prompt, blind piece list), feedback with the solution
+replayed, retry, flag, pause, and a server-rendered result (stats, records, a time-per-puzzle chart, the puzzle list
+linked to the board). Looks: normal, silhouette, blind; solving as either colour (mirroring). `:puzzle` makes a puzzle
+from any board line; `manage.py import_csm <db>` imports the old app's puzzles and schedules as test data (from a
+copy; history and the rest follow in phase 7). Tests: scheduler, trees, selection, API, import, 7 Train journeys,
+accessibility of the launcher.
+
+Moved on:
+- Weakest motifs, milestones, achievements beyond records, mastery → phase 5 (needs tags and statistics).
+- Filters in the custom builder and objectives from tags → phase 4 (library, tags).
+- Analyse/edit a puzzle from feedback or the result → phase 3.
+- Choosing the Storm pace in the launcher (medium for now) → phase 6 (settings).
+
 ## Out of scope for now
 
 - **Publishing** (documents, print, PDF): the old app's document editor. The Diagram renderer is shared, so it can
