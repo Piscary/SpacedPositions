@@ -1,5 +1,5 @@
 {% load static %}<!doctype html>
-<html lang="en">
+<html lang="en" data-pieces="{{ piece_set }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,7 +21,7 @@
       </button>
       {% endif %}{% endfor %}
     </nav>
-    <div class="appbar__pulse"><span>phase 0 · foundation</span></div>
+    <div class="appbar__pulse"><span>phase 1 · board</span></div>
     <div class="appbar__end">
       {% cmd "mode.ui" display="compact" variant="ghost" icon="◧" %}
       {% cmd "cmdline.open" display="compact" variant="ghost" icon="⌘" %}

@@ -1,6 +1,254 @@
 {
  "version": 1,
  "commands": {
+  "board.flip": {
+   "title": "Flip the board",
+   "group": "Board",
+   "aliases": [
+    "flip"
+   ],
+   "when": "view.board",
+   "reason": "needs a board",
+   "handler": "client"
+  },
+  "board.back": {
+   "title": "Back one move",
+   "group": "Board",
+   "when": "view.board",
+   "reason": "needs a board",
+   "handler": "client"
+  },
+  "board.forward": {
+   "title": "Forward one move",
+   "group": "Board",
+   "when": "view.board",
+   "reason": "needs a board",
+   "handler": "client"
+  },
+  "board.start": {
+   "title": "To the start position",
+   "group": "Board",
+   "when": "view.board",
+   "reason": "needs a board",
+   "handler": "client"
+  },
+  "board.end": {
+   "title": "To the last move",
+   "group": "Board",
+   "when": "view.board",
+   "reason": "needs a board",
+   "handler": "client"
+  },
+  "board.squaretool": {
+   "title": "Square tool: right-click fills a square",
+   "group": "Board",
+   "when": "view.board && !layer.setup",
+   "reason": "needs a board in play",
+   "handler": "client"
+  },
+  "board.cleardrawings": {
+   "title": "Clear the drawings of this move",
+   "group": "Board",
+   "when": "view.board && !layer.setup",
+   "reason": "needs a board in play",
+   "undoable": true,
+   "handler": "client"
+  },
+  "board.entry": {
+   "title": "Type a move",
+   "group": "Board",
+   "when": "view.board && !layer.setup",
+   "reason": "needs a board in play",
+   "handler": "client"
+  },
+  "board.setup": {
+   "title": "Set up the position (board editor)",
+   "group": "Board",
+   "aliases": [
+    "setup",
+    "editor"
+   ],
+   "when": "view.board",
+   "reason": "needs a board",
+   "undoable": true,
+   "handler": "client"
+  },
+  "board.copyfen": {
+   "title": "Copy FEN",
+   "group": "Board",
+   "aliases": [
+    "fen"
+   ],
+   "when": "view.board || view.pgn",
+   "reason": "needs a board or the PGN/FEN view",
+   "handler": "client"
+  },
+  "board.copypgn": {
+   "title": "Copy PGN",
+   "group": "Board",
+   "aliases": [
+    "pgn"
+   ],
+   "when": "view.board || view.pgn",
+   "reason": "needs a board or the PGN/FEN view",
+   "handler": "client"
+  },
+  "board.piece": {
+   "title": "Piece to place",
+   "group": "Setup",
+   "args": [
+    {
+     "name": "piece",
+     "type": "enum",
+     "values": [
+      "pawn",
+      "knight",
+      "bishop",
+      "rook",
+      "queen",
+      "king",
+      "p",
+      "n",
+      "b",
+      "r",
+      "q",
+      "k"
+     ]
+    }
+   ],
+   "when": "layer.setup",
+   "reason": "only in the board editor (S)",
+   "handler": "client"
+  },
+  "board.color": {
+   "title": "Switch the colour to place",
+   "group": "Setup",
+   "when": "layer.setup",
+   "reason": "only in the board editor (S)",
+   "handler": "client"
+  },
+  "board.eraser": {
+   "title": "Eraser",
+   "group": "Setup",
+   "when": "layer.setup",
+   "reason": "only in the board editor (S)",
+   "handler": "client"
+  },
+  "board.hand": {
+   "title": "Hand: drag pieces freely",
+   "group": "Setup",
+   "when": "layer.setup",
+   "reason": "only in the board editor (S)",
+   "handler": "client"
+  },
+  "board.clear": {
+   "title": "Clear the board",
+   "group": "Setup",
+   "when": "layer.setup",
+   "reason": "only in the board editor (S)",
+   "handler": "client"
+  },
+  "board.initial": {
+   "title": "Initial position",
+   "group": "Setup",
+   "when": "layer.setup",
+   "reason": "only in the board editor (S)",
+   "handler": "client"
+  },
+  "board.side": {
+   "title": "Side to move",
+   "group": "Setup",
+   "when": "layer.setup",
+   "reason": "only in the board editor (S)",
+   "handler": "client"
+  },
+  "board.castling": {
+   "title": "Castling rights",
+   "group": "Setup",
+   "when": "layer.setup",
+   "reason": "only in the board editor (S)",
+   "handler": "client"
+  },
+  "board.ep": {
+   "title": "En passant square",
+   "group": "Setup",
+   "when": "layer.setup",
+   "reason": "only in the board editor (S)",
+   "handler": "client"
+  },
+  "board.mirror": {
+   "title": "Mirror: swap the colours",
+   "group": "Setup",
+   "when": "layer.setup",
+   "reason": "only in the board editor (S)",
+   "handler": "client"
+  },
+  "board.diagram": {
+   "title": "Diagram: allow an illegal position",
+   "group": "Setup",
+   "when": "layer.setup",
+   "reason": "only in the board editor (S)",
+   "handler": "client"
+  },
+  "board.fix": {
+   "title": "Fix what can be fixed",
+   "group": "Setup",
+   "when": "layer.setup",
+   "reason": "only in the board editor (S)",
+   "handler": "client"
+  },
+  "paste.detect": {
+   "title": "Paste a FEN, PGN or lichess link",
+   "group": "Paste",
+   "aliases": [
+    "paste"
+   ],
+   "handler": "client"
+  },
+  "paste.board": {
+   "title": "Paste: show on a board",
+   "group": "Paste",
+   "aliases": [
+    "paste-board"
+   ],
+   "undoable": true,
+   "handler": "client"
+  },
+  "paste.analyse": {
+   "title": "Paste: analyse",
+   "group": "Paste",
+   "phase": 3,
+   "handler": "client"
+  },
+  "paste.collect": {
+   "title": "Paste: collect as positions",
+   "group": "Paste",
+   "phase": 4,
+   "handler": "client"
+  },
+  "paste.import": {
+   "title": "Paste: import the games",
+   "group": "Paste",
+   "phase": 4,
+   "handler": "client"
+  },
+  "board.pieces": {
+   "title": "Piece set",
+   "group": "Board",
+   "aliases": [
+    "pieces",
+    "pieceset"
+   ],
+   "args": [
+    {
+     "name": "set",
+     "type": "pieceset",
+     "optional": true
+    }
+   ],
+   "undoable": true,
+   "handler": "client"
+  },
   "pane.focus.next": {
    "title": "Focus the next pane",
    "group": "Panes",
@@ -263,6 +511,48 @@
   },
   "section.all": {
    "title": "Fold / unfold all sections",
+   "group": "Sections",
+   "when": "pane.sections",
+   "reason": "this pane has no sections",
+   "handler": "client"
+  },
+  "pane.scroll": {
+   "title": "Scroll the pane",
+   "group": "Panes",
+   "args": [
+    {
+     "name": "by",
+     "type": "enum",
+     "values": [
+      "down",
+      "up",
+      "halfdown",
+      "halfup",
+      "pagedown",
+      "pageup",
+      "top",
+      "bottom"
+     ]
+    }
+   ],
+   "handler": "client"
+  },
+  "pane.insert": {
+   "title": "Edit: focus the pane's text field (Insert layer)",
+   "group": "Panes",
+   "when": "pane.fields",
+   "reason": "this pane has no text field",
+   "handler": "client"
+  },
+  "section.next": {
+   "title": "Next section",
+   "group": "Sections",
+   "when": "pane.sections",
+   "reason": "this pane has no sections",
+   "handler": "client"
+  },
+  "section.prev": {
+   "title": "Previous section",
    "group": "Sections",
    "when": "pane.sections",
    "reason": "this pane has no sections",
@@ -765,6 +1055,10 @@
    "space u t": {
     "command": "ui.themepair",
     "args": []
+   },
+   "space u p": {
+    "command": "board.pieces",
+    "args": []
    }
   },
   "pane": {
@@ -774,6 +1068,90 @@
    },
    "Z": {
     "command": "section.all",
+    "args": []
+   },
+   "]": {
+    "command": "section.next",
+    "args": []
+   },
+   "[": {
+    "command": "section.prev",
+    "args": []
+   },
+   "j": {
+    "command": "pane.scroll",
+    "args": [
+     "down"
+    ]
+   },
+   "k": {
+    "command": "pane.scroll",
+    "args": [
+     "up"
+    ]
+   },
+   "down": {
+    "command": "pane.scroll",
+    "args": [
+     "down"
+    ]
+   },
+   "up": {
+    "command": "pane.scroll",
+    "args": [
+     "up"
+    ]
+   },
+   "J": {
+    "command": "pane.scroll",
+    "args": [
+     "halfdown"
+    ]
+   },
+   "K": {
+    "command": "pane.scroll",
+    "args": [
+     "halfup"
+    ]
+   },
+   "pagedown": {
+    "command": "pane.scroll",
+    "args": [
+     "pagedown"
+    ]
+   },
+   "pageup": {
+    "command": "pane.scroll",
+    "args": [
+     "pageup"
+    ]
+   },
+   "g g": {
+    "command": "pane.scroll",
+    "args": [
+     "top"
+    ]
+   },
+   "G": {
+    "command": "pane.scroll",
+    "args": [
+     "bottom"
+    ]
+   },
+   "home": {
+    "command": "pane.scroll",
+    "args": [
+     "top"
+    ]
+   },
+   "end": {
+    "command": "pane.scroll",
+    "args": [
+     "bottom"
+    ]
+   },
+   "i": {
+    "command": "pane.insert",
     "args": []
    }
   },
@@ -832,6 +1210,200 @@
    },
    "mod+enter": {
     "command": "form.submit",
+    "args": []
+   }
+  },
+  "view.board": {
+   "f": {
+    "command": "board.flip",
+    "args": []
+   },
+   "i": {
+    "command": "board.entry",
+    "args": []
+   },
+   "S": {
+    "command": "board.setup",
+    "args": []
+   },
+   "y": {
+    "command": "board.copyfen",
+    "args": []
+   },
+   "Y": {
+    "command": "board.copypgn",
+    "args": []
+   },
+   "h": {
+    "command": "board.back",
+    "args": []
+   },
+   "l": {
+    "command": "board.forward",
+    "args": []
+   },
+   "left": {
+    "command": "board.back",
+    "args": []
+   },
+   "right": {
+    "command": "board.forward",
+    "args": []
+   },
+   "g g": {
+    "command": "board.start",
+    "args": []
+   },
+   "G": {
+    "command": "board.end",
+    "args": []
+   },
+   "q": {
+    "command": "board.squaretool",
+    "args": []
+   },
+   "backspace": {
+    "command": "board.cleardrawings",
+    "args": []
+   }
+  },
+  "view.pgn": {
+   "y": {
+    "command": "board.copyfen",
+    "args": []
+   },
+   "Y": {
+    "command": "board.copypgn",
+    "args": []
+   }
+  },
+  "layer.setup": {
+   "1": {
+    "command": "board.piece",
+    "args": [
+     "pawn"
+    ]
+   },
+   "2": {
+    "command": "board.piece",
+    "args": [
+     "knight"
+    ]
+   },
+   "3": {
+    "command": "board.piece",
+    "args": [
+     "bishop"
+    ]
+   },
+   "4": {
+    "command": "board.piece",
+    "args": [
+     "rook"
+    ]
+   },
+   "5": {
+    "command": "board.piece",
+    "args": [
+     "queen"
+    ]
+   },
+   "6": {
+    "command": "board.piece",
+    "args": [
+     "king"
+    ]
+   },
+   "p": {
+    "command": "board.piece",
+    "args": [
+     "pawn"
+    ]
+   },
+   "n": {
+    "command": "board.piece",
+    "args": [
+     "knight"
+    ]
+   },
+   "b": {
+    "command": "board.piece",
+    "args": [
+     "bishop"
+    ]
+   },
+   "r": {
+    "command": "board.piece",
+    "args": [
+     "rook"
+    ]
+   },
+   "q": {
+    "command": "board.piece",
+    "args": [
+     "queen"
+    ]
+   },
+   "k": {
+    "command": "board.piece",
+    "args": [
+     "king"
+    ]
+   },
+   "c": {
+    "command": "board.color",
+    "args": []
+   },
+   "x": {
+    "command": "board.eraser",
+    "args": []
+   },
+   "h": {
+    "command": "board.hand",
+    "args": []
+   },
+   "X": {
+    "command": "board.clear",
+    "args": []
+   },
+   "I": {
+    "command": "board.initial",
+    "args": []
+   },
+   "w": {
+    "command": "board.side",
+    "args": []
+   },
+   "o": {
+    "command": "board.castling",
+    "args": []
+   },
+   "e": {
+    "command": "board.ep",
+    "args": []
+   },
+   "f": {
+    "command": "board.flip",
+    "args": []
+   },
+   "M": {
+    "command": "board.mirror",
+    "args": []
+   },
+   "D": {
+    "command": "board.diagram",
+    "args": []
+   },
+   "a": {
+    "command": "board.fix",
+    "args": []
+   },
+   "S": {
+    "command": "board.setup",
+    "args": []
+   },
+   "esc": {
+    "command": "board.setup",
     "args": []
    }
   }

@@ -1,0 +1,183 @@
+# The board (spec 06) and paste detection (spec 06 §6).
+
+["board.flip"]
+title = "Flip the board"
+group = "Board"
+aliases = ["flip"]
+when = "view.board"
+reason = "needs a board"
+
+["board.back"]
+title = "Back one move"
+group = "Board"
+when = "view.board"
+reason = "needs a board"
+
+["board.forward"]
+title = "Forward one move"
+group = "Board"
+when = "view.board"
+reason = "needs a board"
+
+["board.start"]
+title = "To the start position"
+group = "Board"
+when = "view.board"
+reason = "needs a board"
+
+["board.end"]
+title = "To the last move"
+group = "Board"
+when = "view.board"
+reason = "needs a board"
+
+["board.squaretool"]
+title = "Square tool: right-click fills a square"
+group = "Board"
+when = "view.board && !layer.setup"
+reason = "needs a board in play"
+
+["board.cleardrawings"]
+title = "Clear the drawings of this move"
+group = "Board"
+when = "view.board && !layer.setup"
+reason = "needs a board in play"
+undoable = true
+
+["board.entry"]
+title = "Type a move"
+group = "Board"
+when = "view.board && !layer.setup"
+reason = "needs a board in play"
+
+["board.setup"]
+title = "Set up the position (board editor)"
+group = "Board"
+aliases = ["setup", "editor"]
+when = "view.board"
+reason = "needs a board"
+undoable = true
+
+["board.copyfen"]
+title = "Copy FEN"
+group = "Board"
+aliases = ["fen"]
+when = "view.board || view.pgn"
+reason = "needs a board or the PGN/FEN view"
+
+["board.copypgn"]
+title = "Copy PGN"
+group = "Board"
+aliases = ["pgn"]
+when = "view.board || view.pgn"
+reason = "needs a board or the PGN/FEN view"
+
+# ── Setup layer ─────────────────────────────────────────────────────────────────────────────────────────────────
+
+["board.piece"]
+title = "Piece to place"
+group = "Setup"
+args = [{ name = "piece", type = "enum", values = ["pawn", "knight", "bishop", "rook", "queen", "king", "p", "n", "b", "r", "q", "k"] }]
+when = "layer.setup"
+reason = "only in the board editor (S)"
+
+["board.color"]
+title = "Switch the colour to place"
+group = "Setup"
+when = "layer.setup"
+reason = "only in the board editor (S)"
+
+["board.eraser"]
+title = "Eraser"
+group = "Setup"
+when = "layer.setup"
+reason = "only in the board editor (S)"
+
+["board.hand"]
+title = "Hand: drag pieces freely"
+group = "Setup"
+when = "layer.setup"
+reason = "only in the board editor (S)"
+
+["board.clear"]
+title = "Clear the board"
+group = "Setup"
+when = "layer.setup"
+reason = "only in the board editor (S)"
+
+["board.initial"]
+title = "Initial position"
+group = "Setup"
+when = "layer.setup"
+reason = "only in the board editor (S)"
+
+["board.side"]
+title = "Side to move"
+group = "Setup"
+when = "layer.setup"
+reason = "only in the board editor (S)"
+
+["board.castling"]
+title = "Castling rights"
+group = "Setup"
+when = "layer.setup"
+reason = "only in the board editor (S)"
+
+["board.ep"]
+title = "En passant square"
+group = "Setup"
+when = "layer.setup"
+reason = "only in the board editor (S)"
+
+["board.mirror"]
+title = "Mirror: swap the colours"
+group = "Setup"
+when = "layer.setup"
+reason = "only in the board editor (S)"
+
+["board.diagram"]
+title = "Diagram: allow an illegal position"
+group = "Setup"
+when = "layer.setup"
+reason = "only in the board editor (S)"
+
+["board.fix"]
+title = "Fix what can be fixed"
+group = "Setup"
+when = "layer.setup"
+reason = "only in the board editor (S)"
+
+# ── Paste ───────────────────────────────────────────────────────────────────────────────────────────────────────
+
+["paste.detect"]
+title = "Paste a FEN, PGN or lichess link"
+group = "Paste"
+aliases = ["paste"]
+
+["paste.board"]
+title = "Paste: show on a board"
+group = "Paste"
+aliases = ["paste-board"]
+undoable = true
+
+["paste.analyse"]
+title = "Paste: analyse"
+group = "Paste"
+phase = 3
+
+["paste.collect"]
+title = "Paste: collect as positions"
+group = "Paste"
+phase = 4
+
+["paste.import"]
+title = "Paste: import the games"
+group = "Paste"
+phase = 4
+
+["board.pieces"]
+title = "Piece set"
+group = "Board"
+aliases = ["pieces", "pieceset"]
+args = [{ name = "set", type = "pieceset", optional = true }]
+undoable = true

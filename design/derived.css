@@ -2,6 +2,9 @@
    This file is copied into static/design/tokens.css by `manage.py design build`. */
 :root {
   --text-muted: color-mix(in oklab, var(--text) 62%, var(--bg));
+  --scroll-thumb: color-mix(in oklab, var(--line-strong) 55%, transparent);
+  --scroll-thumb-hover: var(--text-sub);
+  --scrollbar: calc(var(--space) * 1.5);
   --surface-hover: color-mix(in oklab, var(--surface) 86%, var(--text));
   --selection: color-mix(in oklab, var(--main) 24%, var(--bg));
   --cursor-row: color-mix(in oklab, var(--main) 13%, var(--bg));

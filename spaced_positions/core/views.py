@@ -44,6 +44,8 @@ def _workspace_context(mode: str) -> dict:
         "layout_id": f"layout-{mode}",
         "tree": layouts.for_template(state.layout),
         "focus": focus,
+        "subject": state.subject or {},
+        "subject_id": f"subject-{mode}",
         "views": layouts.VIEWS,
         "placeholder_hints": layouts.PLACEHOLDER_HINTS,
     }
@@ -55,6 +57,7 @@ def mode_page(request, mode):
     context = _workspace_context(mode)
     context |= {
         "theme_css": registry.theme_css(prefs.theme, prefs.tokens),
+        "piece_set": prefs.tokens.get("piece-set", "cburnett"),
         "modes": layouts.MODES,
         "boot": {
             "mode": mode,
@@ -108,12 +111,20 @@ def save_state(request, mode):
         body = json.loads(request.body)
     except ValueError:
         return HttpResponseBadRequest("not JSON")
-    layout = body.get("layout")
-    if not layouts.valid_layout(layout):
-        return HttpResponseBadRequest("invalid layout")
-    UIState.objects.update_or_create(
-        user=LOCAL_USER, mode=mode, defaults={"layout": layout, "focus": str(body.get("focus", ""))[:24]}
-    )
+    state = UIState.objects.filter(user=LOCAL_USER, mode=mode).first() or UIState(user=LOCAL_USER, mode=mode)
+    if "layout" in body:
+        if not layouts.valid_layout(body["layout"]):
+            return HttpResponseBadRequest("invalid layout")
+        state.layout = body["layout"]
+        state.focus = str(body.get("focus", ""))[:24]
+    if "subject" in body:
+        subject = body["subject"]
+        if not isinstance(subject, dict) or len(json.dumps(subject)) > 200_000:
+            return HttpResponseBadRequest("invalid subject")
+        state.subject = subject
+    if not state.layout:
+        state.layout = layouts.default_layout(mode)
+    state.save()
     return JsonResponse({"ok": True})
 
 

@@ -155,3 +155,26 @@ title = "Fold / unfold all sections"
 group = "Sections"
 when = "pane.sections"
 reason = "this pane has no sections"
+
+["pane.scroll"]
+title = "Scroll the pane"
+group = "Panes"
+args = [{ name = "by", type = "enum", values = ["down", "up", "halfdown", "halfup", "pagedown", "pageup", "top", "bottom"] }]
+
+["pane.insert"]
+title = "Edit: focus the pane's text field (Insert layer)"
+group = "Panes"
+when = "pane.fields"
+reason = "this pane has no text field"
+
+["section.next"]
+title = "Next section"
+group = "Sections"
+when = "pane.sections"
+reason = "this pane has no sections"
+
+["section.prev"]
+title = "Previous section"
+group = "Sections"
+when = "pane.sections"
+reason = "this pane has no sections"

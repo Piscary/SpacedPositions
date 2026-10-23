@@ -51,17 +51,21 @@ Used in Collect, and in Analyse to correct a position (`S`).
 
 | Key | Action |
 |---|---|
-| `1`–`6` or `p n b r q k` | choose pawn, knight, bishop, rook, queen, king (also German `b s l t d k`, setting) |
+| `1`–`6` or `p n b r q k` | choose pawn, knight, bishop, rook, queen, king (German `b s l t d k`: later, as a setting) |
 | `c` | switch the colour of the chosen piece |
-| `x` | eraser; `Shift+X` clear board; `Shift+I` initial position |
+| `x` | eraser · `h` hand (drag pieces freely) |
+| `X` | clear the board · `I` initial position |
 | `w` | side to move (white/black) |
-| `o` | castling rights menu (`K Q k q` toggles; impossible rights are greyed with the reason) |
-| `e` | en passant square (only legal candidates are offered) |
-| `f` | flip; `Shift+M` mirror (swap colours and sides: train the same idea as the other colour) |
-| `S`, `Esc` | leave Setup |
+| `o` | castling rights menu (`K Q k q` toggle one right each) |
+| `e` | en passant square (only plausible squares are offered) |
+| `f` | flip · `M` mirror (swap colours and sides: train the same idea as the other colour) |
+| `D` | diagram: allow an illegal position |
+| `a` | apply the automatic fixes (impossible castling rights, impossible en passant, side to move) |
+| `S`, `Esc` | leave Setup (refused while the position is illegal and not a diagram) |
 
 - **Live validation**: the FenField under the board shows the FEN and any problem (`two white kings`, `side not to
-  move is in check`, `castling KQ: rook not on h1 · fix f`). One key fixes what can be fixed.
+  move is in check`, `castling K (rook not on h1) impossible · a: fix`). `a` fixes what can be fixed. (The fix key
+  is `a`, not `f`: `f` flips.)
 - **Diagrams** (illustrations) may be illegal; a toggle `Diagram` (`D`) turns validation into warnings.
 - **Duplicates** are checked live against the library (canonical FEN incl. legal en passant only). The status line
   shows `duplicate of p1873 · g d go there`.
@@ -85,9 +89,11 @@ Used in Collect, and in Analyse to correct a position (`S`).
 | `y` | board, Analyse, library cursor | copy FEN of the shown position |
 | `Y` | Analyse, game rows | copy PGN (with comments, NAGs, drawings as `[%cal]`/`[%csl]`, and the root comment) |
 | `:lichess` | Analyse | open the position in lichess (no key) |
-| `Mod+C` | board focused, nothing selected as text | same as `y` |
-| `Mod+V` | anywhere in Normal | **paste detection**: FEN, lichess analysis/editor/game link, PGN (one or many games), a list of FENs. The status line offers what fits: `Analyse a · Collect c · Import g · Replace moves r` |
-| `:paste fen …`, `:paste pgn` | anywhere | explicit |
+| `Mod+V` | anywhere outside a text field | **paste detection**: FEN (also a bare placement), lichess analysis/editor link, PGN (one or many games), a list of FENs. The status line describes it and offers what fits, each with its key: `b show on a board · a analyse · c collect · i import` (offers of later phases are shown, disabled with their phase). This is the browser's own paste event, not a key binding, so the clipboard needs no permission. |
+| `:paste` | anywhere | the same, reading the clipboard (the browser may ask for permission) |
+| the PGN/FEN view | its field + `Mod+Enter` | the same, for text you type or edit first |
+
+A lichess **game** link can't be read without the network: the app says so and asks for the PGN.
 
 PGN paste into an existing analysis that would replace moves needs an inline confirmation (it is undoable, but
 large).
@@ -108,6 +114,11 @@ large).
 All tokens, see 07 · Board tokens: square colours, highlight colours, arrow colours, coordinates (inside / outside /
 off), piece set, board border, animation speed, legal-move dots on/off, last-move highlight on/off, annotation badges
 on/off, blindfold (pieces invisible), silhouette (all pieces of one colour look the same, for training).
+
+As built in phase 1: the squares are a CSS conic gradient of `sq-light`/`sq-dark` (a theme change needs no image);
+coordinates sit inside the board (ranks on the right edge, files along the bottom) in the colour of the other
+square; `board-coords = off` hides them (`outside` comes with the board settings in phase 6). Square highlights from
+the square tool are chessground custom square classes (under the pieces), not SVG shapes.
 
 ## 9 · Library choice
 

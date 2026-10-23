@@ -52,7 +52,7 @@ function moveTo(list, index) {
   paint(list)
   rows[st.cursor].scrollIntoView({ block: "nearest" })
   const row = rows[st.cursor]
-  if (ctx.pane?.group) emit("cursor", { group: ctx.pane.group, from: ctx.pane.id, id: row.dataset.row, title: row.dataset.title })
+  if (ctx.pane?.group) emit("cursor", { group: ctx.pane.group, from: ctx.pane.id, id: row.dataset.row, title: row.dataset.title, fen: row.dataset.fen })
 }
 
 const withList = (fn) => (args) => {
@@ -143,7 +143,7 @@ on("focus", () => {
 
 // ── Link groups: previews follow the cursor of their group ─────────────────────────────────────────────────────
 
-on("cursor", ({ group, from, id, title }) => {
+on("cursor", ({ group, from, id, title, fen }) => {
   for (const pane of document.querySelectorAll(".workspace:not([hidden]) [data-pane]")) {
     if (pane.dataset.pane === from) continue
     const link = pane.querySelector("[data-pane-link]")
@@ -152,6 +152,14 @@ on("cursor", ({ group, from, id, title }) => {
     if (!preview) continue
     preview.querySelector("[data-preview-title]").textContent = title
     preview.querySelector("[data-preview-id]").textContent = id
+    const board = preview.querySelector("[data-preview-board]")
+    if (board) {
+      board.hidden = !fen
+      if (fen) {
+        board.src = `/svg/board/?${new URLSearchParams({ fen, size: 256 })}`
+        board.alt = `Position ${fen}`
+      }
+    }
   }
 })
 
@@ -179,7 +187,7 @@ function setSectionCursor(section) {
 function setCollapsed(section, collapsed) {
   if (section.hasAttribute("data-pinned")) return
   section.classList.toggle("is-collapsed", collapsed)
-  section.setAttribute("aria-expanded", String(!collapsed))
+  section.querySelector(".section__header")?.setAttribute("aria-expanded", String(!collapsed))
 }
 
 handle("section.toggle", () => {
@@ -188,6 +196,18 @@ handle("section.toggle", () => {
   setSectionCursor(section)
   setCollapsed(section, !section.classList.contains("is-collapsed"))
 })
+
+function moveSection(step) {
+  const sections = [...(ctx.pane?.el?.querySelectorAll("[data-section]") || [])]
+  if (!sections.length) return false
+  const current = currentSection()
+  const index = current ? sections.indexOf(current) : -1
+  const next = sections[Math.max(0, Math.min(sections.length - 1, index + step))]
+  setSectionCursor(next)
+  next.scrollIntoView({ block: "start" })
+}
+handle("section.next", () => moveSection(1))
+handle("section.prev", () => moveSection(-1))
 
 handle("section.all", () => {
   const sections = [...(ctx.pane?.el?.querySelectorAll("[data-section]") || [])]

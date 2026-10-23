@@ -26,6 +26,7 @@ export function handle(id, fn) {
 export function enabled(id) {
   const spec = registry.commands[id]
   if (!spec) return { ok: false, reason: "unknown command" }
+  if (spec.phase) return { ok: false, reason: `arrives in phase ${spec.phase}` }
   try {
     if (!evaluate(spec.when, lookup)) return { ok: false, reason: spec.reason || "not available here" }
   } catch (err) {

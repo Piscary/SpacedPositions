@@ -54,10 +54,24 @@ LIST_HINTS = (
     ("list.first", "first"),
 )
 
+BOARD_HINTS = (
+    ("board.flip", "flip"),
+    ("board.back", "back"),
+    ("board.forward", "forward"),
+    ("board.entry", "type a move"),
+    ("board.setup", "set up"),
+    ("board.squaretool", "square tool"),
+    ("board.copyfen", "FEN"),
+    ("board.copypgn", "PGN"),
+)
+
 VIEWS = {
     v.key: v
     for v in [
-        View("board", "Board", "b", 1, "The interactive board: moves, drawings, setup, typed moves."),
+        View(
+            "board", "Board", "b", 0, "The interactive board: moves, drawings, setup, typed moves.", "views/board.html",
+            hints=BOARD_HINTS,
+        ),
         View("moves", "Moves", "m", 3, "The analysis as a book-style move tree."),
         View("engine", "Engine", "e", 3, "Stockfish lines and evaluation."),
         View("inspector", "Inspector", "i", 3, "The current move and position: comment, tags, marks, puzzle setup."),
@@ -68,23 +82,29 @@ VIEWS = {
         View("queue", "Session", "q", 2, "The running training session: clock, combo, lives, prompt."),
         View("entry", "Entry session", None, 4, "Source, page, diagram number and presets for rapid entry."),
         View("chart", "Chart", "c", 5, "Statistics charts."),
-        View("pgn", "PGN / FEN", "p", 1, "The position or game as text."),
+        View(
+            "pgn", "PGN / FEN", "p", 0, "The position or game as text; paste to load.", "views/pgn.html",
+            hints=(("pane.insert", "edit"), ("board.copyfen", "copy FEN"), ("board.copypgn", "copy PGN"), ("form.submit", "show what you pasted")),
+        ),
         View("tags", "Tags", "t", 4, "The tag vocabulary."),
         View("settings", "Settings", None, 6, "Every setting, searchable."),
         View(
             "welcome", "About this mode", None, 0, "What this mode is for.", "views/welcome.html",
-            hints=(("mode.ui", "style guide"), ("cmdline.open", "commands"), ("help.context", "keys")),
+            hints=(("pane.scroll down", "scroll"), ("mode.ui", "style guide"), ("cmdline.open", "commands"), ("help.context", "keys")),
         ),
         View(
             "notes", "Notes", "n", 0, "A text field: try the Insert layer.", "views/notes.html",
-            hints=(("form.submit", "submit"), ("layer.escape", "leave the field")),
+            hints=(("pane.insert", "edit"), ("form.submit", "submit"), ("layer.escape", "leave the field")),
         ),
         View("demo", "Demo list", "d", 0, "A keyboard list: j/k, x, v, Enter.", "views/demo_list.html", True, LIST_HINTS),
         View("preview", "Linked preview", "v", 0, "Follows the cursor of its link group.", "views/preview.html",
              hints=(("pane.group", "link group"), ("pane.pin", "pin"))),
         View(
             "components", "Components", "k", 0, "Every component in every state.", "views/components.html",
-            hints=(("section.toggle", "fold"), ("section.all", "fold all"), ("demo.flash", "flash demo")),
+            hints=(
+                ("pane.scroll down", "scroll"), ("pane.scroll halfdown", "half page"), ("section.next", "next section"),
+                ("section.toggle", "fold"), ("section.all", "fold all"), ("pane.insert", "edit a field"), ("demo.flash", "flash demo"),
+            ),
         ),
     ]
 }
@@ -107,11 +127,11 @@ DEFAULTS = {
         split("col", [78, 22], pane("board", "A"), pane("evalgraph", "A")),
         split("col", [16, 50, 34], pane("engine", "A"), pane("moves", "A"), pane("inspector", "A")),
     ),
-    "collect": split("row", [55, 45], pane("board", "A"), split("col", [60, 40], pane("entry"), pane("notes"))),
-    "library": split("row", [20, 52, 28], pane("filters"), pane("library", "A"), pane("board", "A")),
+    "collect": split("row", [55, 45], pane("board", "A"), split("col", [55, 45], pane("entry"), pane("pgn", "A"))),
+    "library": split("row", [18, 44, 38], pane("filters"), pane("demo", "A"), pane("board", "A")),
     "stats": split("row", [60, 40], pane("chart"), pane("welcome")),
     "settings": split("row", [65, 35], pane("settings"), pane("welcome")),
-    "ui": split("row", [62, 38], pane("components"), split("col", [55, 45], pane("demo", "A"), pane("preview", "A"))),
+    "ui": split("row", [56, 44], pane("components"), split("col", [42, 58], pane("demo", "A"), pane("board", "A"))),
 }
 
 

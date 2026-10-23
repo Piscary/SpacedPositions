@@ -97,6 +97,8 @@ function completions(type) {
       return Object.entries(themes.schema).map(([k, v]) => ({ value: type === "token" ? `${k}=` : k, label: v.description }))
     case "layout":
       return layoutCache.map((name) => ({ value: name, label: "saved layout" }))
+    case "pieceset":
+      return Object.entries(themes.pieces || {}).map(([k, v]) => ({ value: k, label: `${v.label} · ${v.author} · ${v.licence}` }))
     case "buffer":
       return bufferIds().map((id) => ({ value: id, label: "hidden buffer" }))
     default:
@@ -240,7 +242,7 @@ async function accept() {
   } else {
     // A closed argument type (a theme, a view …) takes the highlighted completion unless the typed word is exact.
     const arg = commands()[id].args?.[0]
-    const closed = arg && ["enum", "theme", "view", "tokenname", "layout", "buffer"].includes(arg.type)
+    const closed = arg && ["enum", "theme", "view", "tokenname", "layout", "buffer", "pieceset"].includes(arg.type)
     const choice = rows[cursor]
     if (closed && choice && "value" in choice && !rows.some((r) => r.value === args[0])) args = [choice.value]
   }

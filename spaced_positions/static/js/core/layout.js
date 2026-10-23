@@ -182,8 +182,7 @@ function render(ws, { persist = true } = {}) {
   if (!panes.some((p) => p.id === ws.focus)) ws.focus = panes[0].id
   if (ws.max && !panes.some((p) => p.id === ws.max)) ws.max = null
   const root = ws.max ? paneEl(ws, panes.find((p) => p.id === ws.max)) : buildNode(ws, ws.tree)
-  const script = ws.el.querySelector(":scope > script")
-  ws.el.replaceChildren(...(script ? [script] : []), root)
+  ws.el.replaceChildren(...ws.el.querySelectorAll(":scope > script"), root)
   panes.forEach((p) => decorate(ws, p))
   for (const [id, top] of scrolls) {
     const body = ws.els.get(id)?.querySelector(".pane__body")
@@ -191,6 +190,15 @@ function render(ws, { persist = true } = {}) {
   }
   applyFocus(ws)
   if (persist) save(ws)
+  emit("layout", { mode: ws.mode, el: ws.el })
+}
+
+/** The layout node of a pane element (its view, link group, pinned state). */
+export function nodeOf(paneEl) {
+  const ws = workspaces.get(paneEl.closest(".workspace")?.dataset.mode)
+  if (!ws) return null
+  const id = paneEl.dataset.pane
+  return find(ws.tree, id)?.node || ws.buffers.find((b) => b.id === id) || null
 }
 
 function paneInfo(ws, node) {
@@ -261,7 +269,7 @@ export function initWorkspace(el) {
   const ws = {
     mode,
     el,
-    tree: JSON.parse(el.querySelector(":scope > script").textContent),
+    tree: JSON.parse(el.querySelector(`:scope > script#layout-${mode}`).textContent),
     focus: el.dataset.focus,
     max: null,
     buffers: [],
@@ -272,6 +280,7 @@ export function initWorkspace(el) {
   touch(mode)
   el.addEventListener("pointerdown", (e) => onPointerDown(ws, e))
   el.addEventListener("contextmenu", (e) => onContextMenu(ws, e))
+  emit("workspace", { mode, el })
   render(ws, { persist: false })
   return ws
 }

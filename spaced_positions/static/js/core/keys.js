@@ -6,7 +6,7 @@ import { ctx, displayKey, emit, isMac, keycaps, setLayer, status } from "./conte
 import { tokenFromEvent as toToken } from "./keyname.js"
 
 let pending = []
-let overlayHandler = null // set by overlays (cmdline, help, menu, hints): (event, token) => "handled" | "pass"
+let overlayHandler = null // set by overlays: (event, token) => "pass" (browser) | "fallthrough" (keymap) | anything else (handled)
 let dynamicPrefixes = [] // providers of extra which-key entries, e.g. sections for "g <letter>"
 const perf = [] // handler latencies of the last key presses (spec 01 · P5), read by the journey tests
 
@@ -53,11 +53,12 @@ function onKeyDown(e) {
 
   if (overlayHandler) {
     const result = overlayHandler(e, token)
-    if (result !== "pass") {
+    if (result === "pass") return // the browser handles it (typing in an overlay's field)
+    if (result !== "fallthrough") {
       e.preventDefault()
       e.stopPropagation()
-    }
-    return
+      return
+    } // fallthrough: the overlay ignores the key, the keymap gets it
   }
 
   if (isEditable(e.target)) {

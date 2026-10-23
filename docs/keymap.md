@@ -62,6 +62,7 @@ reference is `spec/08-keymap.md`.
 | `␣` `u` `k` | Show / hide key strips in pane footers | `ui.keystrips` |
 | `␣` `u` `z` | Zen: hide app bar and footers | `ui.zen` |
 | `␣` `u` `t` | Switch between the light and dark theme | `ui.themepair` |
+| `␣` `u` `p` | Piece set | `board.pieces` |
 
 ## pane
 
@@ -69,6 +70,21 @@ reference is `spec/08-keymap.md`.
 |---|---|---|
 | `z` | Fold / unfold the section | `section.toggle` |
 | `Z` | Fold / unfold all sections | `section.all` |
+| `]` | Next section | `section.next` |
+| `[` | Previous section | `section.prev` |
+| `j` | Scroll the pane down | `pane.scroll` |
+| `k` | Scroll the pane up | `pane.scroll` |
+| `↓` | Scroll the pane down | `pane.scroll` |
+| `↑` | Scroll the pane up | `pane.scroll` |
+| `J` | Scroll the pane halfdown | `pane.scroll` |
+| `K` | Scroll the pane halfup | `pane.scroll` |
+| `PgDn` | Scroll the pane pagedown | `pane.scroll` |
+| `PgUp` | Scroll the pane pageup | `pane.scroll` |
+| `g` `g` | Scroll the pane top | `pane.scroll` |
+| `G` | Scroll the pane bottom | `pane.scroll` |
+| `Home` | Scroll the pane top | `pane.scroll` |
+| `End` | Scroll the pane bottom | `pane.scroll` |
+| `i` | Edit: focus the pane's text field (Insert layer) | `pane.insert` |
 
 ## view.list
 
@@ -97,3 +113,59 @@ reference is `spec/08-keymap.md`.
 |---|---|---|
 | `Esc` | Back to Normal | `layer.escape` |
 | `⌘↵` | Submit the field | `form.submit` |
+
+## view.board
+
+| Keys | Command | Id |
+|---|---|---|
+| `f` | Flip the board | `board.flip` |
+| `i` | Type a move | `board.entry` |
+| `S` | Set up the position (board editor) | `board.setup` |
+| `y` | Copy FEN | `board.copyfen` |
+| `Y` | Copy PGN | `board.copypgn` |
+| `h` | Back one move | `board.back` |
+| `l` | Forward one move | `board.forward` |
+| `←` | Back one move | `board.back` |
+| `→` | Forward one move | `board.forward` |
+| `g` `g` | To the start position | `board.start` |
+| `G` | To the last move | `board.end` |
+| `q` | Square tool: right-click fills a square | `board.squaretool` |
+| `⌫` | Clear the drawings of this move | `board.cleardrawings` |
+
+## view.pgn
+
+| Keys | Command | Id |
+|---|---|---|
+| `y` | Copy FEN | `board.copyfen` |
+| `Y` | Copy PGN | `board.copypgn` |
+
+## layer.setup
+
+| Keys | Command | Id |
+|---|---|---|
+| `1` | Piece to place pawn | `board.piece` |
+| `2` | Piece to place knight | `board.piece` |
+| `3` | Piece to place bishop | `board.piece` |
+| `4` | Piece to place rook | `board.piece` |
+| `5` | Piece to place queen | `board.piece` |
+| `6` | Piece to place king | `board.piece` |
+| `p` | Piece to place pawn | `board.piece` |
+| `n` | Piece to place knight | `board.piece` |
+| `b` | Piece to place bishop | `board.piece` |
+| `r` | Piece to place rook | `board.piece` |
+| `q` | Piece to place queen | `board.piece` |
+| `k` | Piece to place king | `board.piece` |
+| `c` | Switch the colour to place | `board.color` |
+| `x` | Eraser | `board.eraser` |
+| `h` | Hand: drag pieces freely | `board.hand` |
+| `X` | Clear the board | `board.clear` |
+| `I` | Initial position | `board.initial` |
+| `w` | Side to move | `board.side` |
+| `o` | Castling rights | `board.castling` |
+| `e` | En passant square | `board.ep` |
+| `f` | Flip the board | `board.flip` |
+| `M` | Mirror: swap the colours | `board.mirror` |
+| `D` | Diagram: allow an illegal position | `board.diagram` |
+| `a` | Fix what can be fixed | `board.fix` |
+| `S` | Set up the position (board editor) | `board.setup` |
+| `Esc` | Set up the position (board editor) | `board.setup` |

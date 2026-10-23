@@ -8,9 +8,12 @@ import { escapeSelection } from "./core/lists.js"
 import "./core/cmdline.js"
 import "./core/help.js"
 import "./core/hints.js"
+import "./core/islands.js"
+import "./core/scroll.js"
+import { detect } from "./core/paste.js"
 
 const boot = JSON.parse(document.getElementById("boot").textContent)
-window.SPOS = { views: boot.views, modes: boot.modes, themes: boot.themes, keyPerf, ctx }
+window.SPOS = { views: boot.views, modes: boot.modes, themes: boot.themes, tokens: boot.tokens, keyPerf, ctx }
 
 setRegistry(boot.registry)
 ctx.mode = boot.mode
@@ -34,6 +37,13 @@ handle("layer.escape", () => {
 handle("form.submit", () => {
   const form = document.activeElement?.closest("form") || ctx.pane?.el?.querySelector("form")
   if (!form) return false
+  if (form.hasAttribute("data-paste-form")) {
+    const field = form.querySelector("textarea")
+    document.activeElement?.blur()
+    setLayer("normal")
+    detect(field.value)
+    return
+  }
   if (form.hasAttribute("data-notes")) {
     document.activeElement?.blur()
     setLayer("normal")
@@ -47,6 +57,13 @@ on("effects", (effects) => {
   if (effects.theme) {
     document.getElementById("theme").textContent = effects.theme.css
     ctx.theme = effects.theme.name
+    window.SPOS.tokens = effects.theme.tokens
+    document.documentElement.dataset.pieces = effects.theme.tokens["piece-set"] || "cburnett"
+    for (const img of document.querySelectorAll("img.miniboard")) {
+      const url = new URL(img.src)
+      url.searchParams.set("t", effects.theme.boardHash)
+      img.src = url.pathname + url.search
+    }
     emit("theme", effects.theme)
   }
   if (effects.quit) {

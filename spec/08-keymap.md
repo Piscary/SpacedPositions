@@ -34,7 +34,7 @@ Keymap overrides use the same notation: `"space o" = "train.start storm 5"` (a c
 | `u` / `U` | `undo` / `redo` | Also `mod+z` / `mod+shift+z` |
 | `.` | `repeat` | Repeat the last repeatable command |
 | `⇥` / `⇧⇥` | `pane.focus.next` / `.prev` | Cycle pane focus (inside a form: next field) |
-| `mod+v` | `paste.detect` | Paste FEN / PGN / link anywhere in Normal |
+| `mod+v` | (the browser's paste event) | Paste FEN / PGN / link anywhere outside a text field (06 §6); not bound, so the browser's paste still fires |
 | `␣` | leader | Opens the leader menu (which-key) |
 
 ## Leader `␣`
@@ -48,7 +48,7 @@ Keymap overrides use the same notation: `"space o" = "train.start storm 5"` (a c
 | `␣ f` | **Find anything**: fuzzy finder over positions, games, tags, sources, players, saved queries, commands |
 | `␣ n` | New … : `p` position (Collect) · `g` import PGN · `t` tag · `s` source |
 | `␣ w` | Window menu (below) |
-| `␣ u` | UI toggles: `b` app bar · `k` key strips · `v` library display (table/list/grid) · `m` move list style (book/table) · `z` zen (hide app bar and footers) · `t` light/dark pair of the theme |
+| `␣ u` | UI toggles: `b` app bar · `k` key strips · `v` library display (table/list/grid) · `m` move list style (book/table) · `z` zen (hide app bar and footers) · `t` light/dark pair of the theme · `p` piece set (live preview, `↵` keeps, `Esc` back; also `:pieces <set>`) |
 
 ## Window `␣ w`
 
@@ -95,12 +95,20 @@ graph · `l` library · `q` queue · `c` chart · `n` notes · `p` PGN/FEN text 
 | `s` | Sort: then the column's key shown in the header |
 | `z` / `Z` | Fold the group under the cursor / all groups |
 
-## Sections (any pane with sections)
+## Any pane (context `pane`)
 
 | Key | Command |
 |---|---|
+| `j k` / `↓ ↑` | Scroll a little (lists: cursor) |
+| `J K` | Half a page |
+| `PgDn PgUp` | A page |
+| `g g` / `G`, `Home` / `End` | Top / bottom (lists: first / last item) |
+| `]` / `[` | Next / previous section |
 | `z` / `Z` | Fold the section under the cursor / all |
 | `g` + letter | Jump to a section (its letter is in its header) |
+| `i` | Edit the pane's text field (Insert layer) |
+
+`[` and `]` need AltGr on QWERTZ: accepted because QWERTY is the primary layout (`[layout] accept` in the keymap).
 
 ---
 
@@ -235,6 +243,36 @@ from this move of a game), `:paste pgn`.
 | `/` | Filter settings |
 | `K` | Keymap editor |
 
-## Board layers
+## Board (any board pane)
 
-See 06: Setup §4, Move entry §5, Solving §1.
+| Key | Command |
+|---|---|
+| `h l` / `← →` | Back / forward through the line |
+| `g g` / `G` | Start position / last move |
+| `f` | Flip |
+| `i` | Type a move (Move entry layer: `↵` play, `⇥` next candidate, `⌫` edit, `Esc` done) |
+| `S` | Board editor (Setup layer) |
+| `q` | Square tool: right-click fills a square |
+| `⌫` | Clear the drawings of this move |
+| `y` / `Y` | Copy FEN / PGN (also in the PGN/FEN view) |
+
+## Board editor (layer `setup`)
+
+| Key | Command |
+|---|---|
+| `1`–`6` · `p n b r q k` | Piece to place |
+| `c` | Switch colour · Shift+click places the other colour |
+| `x` / `h` | Eraser / hand |
+| `X` / `I` | Clear / initial position |
+| `w` · `o` · `e` | Side to move · castling rights · en passant square |
+| `f` / `M` | Flip / mirror |
+| `D` | Diagram (allow an illegal position) |
+| `a` | Fix what can be fixed |
+| `S` / `Esc` | Done |
+
+## Paste offers (after a paste, in the status line)
+
+`b` show on a board · `a` analyse (phase 3) · `c` collect (phase 4) · `i` import (phase 4) · `Esc` dismiss. Any other
+key dismisses the offer and does what it always does.
+
+See 06 for the board layers: Setup §4, Move entry §5, Solving §1.

@@ -6,7 +6,7 @@ import { setOverlayHandler } from "./keys.js"
 
 let open = null
 
-export function openMenu({ title, items, anchor = null }) {
+export function openMenu({ title, items, anchor = null, onCursor = null, start = 0 }) {
   close(null)
   return new Promise((resolve) => {
     const el = document.createElement("div")
@@ -51,6 +51,7 @@ export function openMenu({ title, items, anchor = null }) {
       cursor = (i + rows.length) % rows.length
       rows.forEach((r, j) => r.classList.toggle("is-cursor", j === cursor))
       rows[cursor]?.scrollIntoView({ block: "nearest" })
+      onCursor?.(items.filter((x) => !x.separator)[cursor]?.value) // live preview (theme, piece set)
     }
     const choose = (i) => {
       const item = items.filter((x) => !x.separator)[i]
@@ -60,7 +61,7 @@ export function openMenu({ title, items, anchor = null }) {
     const previousLayer = ctx.layer
     open = { el, resolve, previousLayer }
     ctx.overlay = "menu"
-    setCursor(0)
+    setCursor(start)
     setOverlayHandler((e, token) => {
       if (token === "esc") return close(null)
       if (token === "j" || token === "down") return setCursor(cursor + 1)

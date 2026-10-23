@@ -3,6 +3,11 @@
 # Keys: see spec 08 · Notation. A value is a command id, optionally followed by arguments: "pane.focus 3".
 # `design check` rejects conflicts, browser-reserved keys and keys that are both a command and a prefix.
 
+# Keys that need AltGr/Option on QWERTZ or AZERTY but are accepted for the defaults, because the primary layout is
+# QWERTY (spec 10 · decision 1). Each still has a way in through the command line.
+[layout]
+accept = ["[", "]"]
+
 [prefixes]
 "space" = "Leader"
 "space w" = "Window"
@@ -69,10 +74,26 @@
 "space u k" = "ui.keystrips"
 "space u z" = "ui.zen"
 "space u t" = "ui.themepair"
+"space u p" = "board.pieces"
 
 [context.pane]
 "z" = "section.toggle"
 "Z" = "section.all"
+"]" = "section.next"
+"[" = "section.prev"
+"j" = "pane.scroll down"
+"k" = "pane.scroll up"
+"down" = "pane.scroll down"
+"up" = "pane.scroll up"
+"J" = "pane.scroll halfdown"
+"K" = "pane.scroll halfup"
+"pagedown" = "pane.scroll pagedown"
+"pageup" = "pane.scroll pageup"
+"g g" = "pane.scroll top"
+"G" = "pane.scroll bottom"
+"home" = "pane.scroll top"
+"end" = "pane.scroll bottom"
+"i" = "pane.insert"
 
 [context."view.list"]
 "j" = "list.down"
@@ -92,3 +113,50 @@
 [context."layer.insert"]
 "esc" = "layer.escape"
 "mod+enter" = "form.submit"
+
+[context."view.board"]
+"f" = "board.flip"
+"i" = "board.entry"
+"S" = "board.setup"
+"y" = "board.copyfen"
+"Y" = "board.copypgn"
+"h" = "board.back"
+"l" = "board.forward"
+"left" = "board.back"
+"right" = "board.forward"
+"g g" = "board.start"
+"G" = "board.end"
+"q" = "board.squaretool"
+"backspace" = "board.cleardrawings"
+
+[context."view.pgn"]
+"y" = "board.copyfen"
+"Y" = "board.copypgn"
+
+[context."layer.setup"]
+"1" = "board.piece pawn"
+"2" = "board.piece knight"
+"3" = "board.piece bishop"
+"4" = "board.piece rook"
+"5" = "board.piece queen"
+"6" = "board.piece king"
+"p" = "board.piece pawn"
+"n" = "board.piece knight"
+"b" = "board.piece bishop"
+"r" = "board.piece rook"
+"q" = "board.piece queen"
+"k" = "board.piece king"
+"c" = "board.color"
+"x" = "board.eraser"
+"h" = "board.hand"
+"X" = "board.clear"
+"I" = "board.initial"
+"w" = "board.side"
+"o" = "board.castling"
+"e" = "board.ep"
+"f" = "board.flip"
+"M" = "board.mirror"
+"D" = "board.diagram"
+"a" = "board.fix"
+"S" = "board.setup"
+"esc" = "board.setup"

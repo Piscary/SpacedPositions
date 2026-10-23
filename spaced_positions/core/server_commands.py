@@ -29,7 +29,16 @@ def command(cid: str):
 
 
 def _theme_effects(prefs: Preferences) -> dict:
-    return {"theme": {"name": prefs.theme, "css": registry.theme_css(prefs.theme, prefs.tokens), "tokens": prefs.tokens}}
+    from .chess_views import colors_hash
+
+    return {
+        "theme": {
+            "name": prefs.theme,
+            "css": registry.theme_css(prefs.theme, prefs.tokens),
+            "tokens": prefs.tokens,
+            "boardHash": colors_hash(),
+        }
+    }
 
 
 @command("theme.set")

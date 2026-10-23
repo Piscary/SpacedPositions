@@ -11,57 +11,12 @@ from pathlib import Path
 
 import pytest
 
-os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")  # Playwright's sync API runs an event loop
-
-playwright = pytest.importorskip("playwright.sync_api")
+from tests.browser import keys, layer, open_mode, panes
 
 pytestmark = [pytest.mark.browser, pytest.mark.django_db(transaction=True)]
 
 SHOTS = Path(__file__).parent / "screenshots"
 LATENCY_BUDGET_MS = 16 * 1.5  # spec 01 · P5: key → reaction within a frame, CI tolerance × 1.5
-
-
-@pytest.fixture(scope="module")
-def browser():
-    with playwright.sync_playwright() as p:
-        try:
-            browser = p.chromium.launch()
-        except Exception as e:  # noqa: BLE001
-            pytest.skip(f"Chromium not installed: {e}")
-        yield browser
-        browser.close()
-
-
-@pytest.fixture
-def page(browser, live_server):
-    context = browser.new_context(viewport={"width": 1440, "height": 900}, color_scheme="light")
-    page = context.new_page()
-    errors = []
-    page.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
-    page.on("pageerror", lambda e: errors.append(str(e)))
-    page.base = live_server.url
-    open_mode(page, "ui")
-    yield page
-    context.close()
-    assert errors == [], errors
-
-
-def open_mode(page, mode):
-    page.goto(f"{page.base}/{mode}/")
-    page.wait_for_function("window.SPOS && window.SPOS.ctx && window.SPOS.ctx.pane")
-
-
-def keys(page, *sequence):
-    for key in sequence:
-        page.keyboard.press(key)
-
-
-def panes(page):
-    return page.eval_on_selector_all(".workspace:not([hidden]) [data-pane]", "els => els.map(e => e.dataset.view)")
-
-
-def layer(page):
-    return page.get_attribute("#shell", "data-layer")
 
 
 def test_which_key_lists_the_window_commands(page):
@@ -78,15 +33,15 @@ def test_split_pick_close_undo_redo(page):
     page.wait_for_selector(".menu")
     keys(page, "n")  # view picker: notes
     page.wait_for_selector('.workspace:not([hidden]) [data-view="notes"] form')
-    assert panes(page) == ["components", "notes", "demo", "preview"]
+    assert panes(page) == ["components", "notes", "demo", "board"]
     assert page.inner_text("#status-pane").startswith("2")  # the new pane has focus
     keys(page, "Space", "w", "q")
-    assert panes(page) == ["components", "demo", "preview"]
+    assert panes(page) == ["components", "demo", "board"]
     keys(page, "u")
-    assert panes(page) == ["components", "notes", "demo", "preview"]
+    assert panes(page) == ["components", "notes", "demo", "board"]
     assert "Undone" in page.inner_text("#status-message")
     keys(page, "U")
-    assert panes(page) == ["components", "demo", "preview"]
+    assert panes(page) == ["components", "demo", "board"]
 
 
 def test_focus_and_resize_by_keys(page):
@@ -102,12 +57,13 @@ def test_focus_and_resize_by_keys(page):
     assert layer(page) == "normal"
 
 
-def test_list_selection_and_linked_preview(page):
+def test_list_selection_and_linked_board(page):
     keys(page, "Space", "2", "j", "j", "j", "x", "v", "j", "j")
     assert layer(page) == "visual"
     assert page.inner_text("#status-subject") == "3 selected"
-    cursor_title = page.get_attribute(".workspace:not([hidden]) [data-row].is-cursor", "data-title")
-    assert page.inner_text("[data-preview-title]") == cursor_title
+    cursor = page.eval_on_selector(".workspace:not([hidden]) [data-row].is-cursor", "e => [e.dataset.title, e.dataset.fen]")
+    board = page.evaluate("(() => { const b = document.querySelector('[data-island=board]').board; return [b.line.title, b.line.start] })()")
+    assert board == cursor  # the board in the same link group shows the row under the cursor
     keys(page, "Escape", "Escape")
     assert layer(page) == "normal" and page.inner_text("#status-subject") != "3 selected"
 
@@ -141,13 +97,14 @@ def test_modes_switch_and_stay_alive(page):
 
 def test_insert_layer(page):
     open_mode(page, "collect")
-    page.click('[name="title"]')
+    field = '.workspace:not([hidden]) [data-view="pgn"] textarea'
+    page.click(field)
     assert layer(page) == "insert"
     page.keyboard.type("jk u")
-    assert page.input_value('[name="title"]') == "jk u"
+    assert page.input_value(field) == "jk u"
     keys(page, "Escape")
     assert layer(page) == "normal"
-    assert page.input_value('[name="title"]') == "jk u"
+    assert page.input_value(field) == "jk u"
 
 
 def test_hint_labels_click_by_keyboard(page):
@@ -208,3 +165,31 @@ def test_style_guide_screenshots(page, theme, density):
     diff = ImageChops.difference(a, b).convert("L").point(lambda v: 255 if v > 16 else 0)
     changed = sum(diff.histogram()[255:]) / (a.size[0] * a.size[1])
     assert changed < 0.005, f"{name}: {changed:.2%} of pixels changed (see tests/screenshots/current/)"
+
+
+def test_scroll_and_sections_by_keyboard(page):
+    keys(page, "Space", "1")
+    body = ".workspace:not([hidden]) [data-view=components] .pane__body"
+    top = lambda: page.eval_on_selector(body, "e => e.scrollTop")  # noqa: E731
+    keys(page, "j", "j")
+    assert top() > 0
+    keys(page, "G")
+    assert top() == page.eval_on_selector(body, "e => e.scrollHeight - e.clientHeight")
+    keys(page, "g", "g")
+    assert top() == 0
+    keys(page, "J")
+    assert top() == pytest.approx(page.eval_on_selector(body, "e => e.clientHeight / 2"), abs=2)
+    keys(page, "g", "g", "]", "]")
+    assert page.inner_text(".workspace:not([hidden]) .section.is-cursor .section__title") == "Piece sets"
+    keys(page, "[")
+    assert page.inner_text(".workspace:not([hidden]) .section.is-cursor .section__title") == "MiniBoard"
+
+
+def test_i_edits_the_panes_field(page):
+    keys(page, "Space", "1", "i")
+    assert layer(page) == "insert" and page.evaluate("document.activeElement.id") == "gallery-field"
+    page.keyboard.type("Polgár")
+    keys(page, "Escape")
+    assert layer(page) == "normal"
+    keys(page, "Space", "2", "i")  # the demo list has no field
+    assert layer(page) == "normal" and "no text field" in page.inner_text("#status-message")

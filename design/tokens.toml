@@ -106,7 +106,7 @@ css = false
 [tokens.piece-set]
 type = "enum"
 description = "Piece set"
-values = ["cburnett"]
+values = ["cburnett", "merida", "chessnut", "fantasy", "spatial", "celtic", "mpchess", "shapes", "rhosgfx", "kiwen-suwi", "totoy", "papercut"]
 default = "cburnett"
 css = false
 

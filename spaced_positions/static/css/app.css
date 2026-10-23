@@ -4,6 +4,8 @@
 @layer tokens, base, components, views, utilities;
 
 @import url("../design/tokens.css");
+@import url("../vendor/chessground.base.css") layer(base);
+@import url("../design/pieces.css");
 @import url("base.css") layer(base);
 @import url("shell.css") layer(components);
 @import url("pane.css") layer(components);
@@ -11,5 +13,6 @@
 @import url("overlays.css") layer(components);
 @import url("data.css") layer(components);
 @import url("forms.css") layer(components);
+@import url("board.css") layer(components);
 @import url("views.css") layer(views);
 @import url("utilities.css") layer(utilities);

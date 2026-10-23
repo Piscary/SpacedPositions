@@ -1,4 +1,5 @@
 <section class="workspace" id="ws-{{ mode.key }}" data-mode="{{ mode.key }}" data-focus="{{ focus }}" aria-label="{{ mode.label }}">
   {{ layout|json_script:layout_id }}
+  {{ subject|json_script:subject_id }}
   {% include "components/layout_node.html" with node=tree %}
 </section>

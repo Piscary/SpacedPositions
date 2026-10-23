@@ -283,7 +283,18 @@
    "type": "enum",
    "description": "Piece set",
    "values": [
-    "cburnett"
+    "cburnett",
+    "merida",
+    "chessnut",
+    "fantasy",
+    "spatial",
+    "celtic",
+    "mpchess",
+    "shapes",
+    "rhosgfx",
+    "kiwen-suwi",
+    "totoy",
+    "papercut"
    ],
    "css": false
   },
@@ -354,6 +365,68 @@
    "type": "bool",
    "description": "Moves as figurines (♘f3) instead of letters (Nf3)",
    "css": false
+  }
+ },
+ "pieces": {
+  "cburnett": {
+   "label": "Cburnett",
+   "author": "Colin M.L. Burnett",
+   "licence": "GPL-2.0-or-later"
+  },
+  "merida": {
+   "label": "Merida",
+   "author": "Armando Hernandez Marroquin",
+   "licence": "GPL-2.0-or-later"
+  },
+  "chessnut": {
+   "label": "Chessnut",
+   "author": "Alexis Luengas",
+   "licence": "Apache-2.0"
+  },
+  "fantasy": {
+   "label": "Fantasy",
+   "author": "Maurizio Monge",
+   "licence": "MIT"
+  },
+  "spatial": {
+   "label": "Spatial",
+   "author": "Maurizio Monge",
+   "licence": "MIT"
+  },
+  "celtic": {
+   "label": "Celtic",
+   "author": "Maurizio Monge",
+   "licence": "MIT"
+  },
+  "mpchess": {
+   "label": "MPChess",
+   "author": "Maxime Chupin",
+   "licence": "GPL-3.0-or-later"
+  },
+  "shapes": {
+   "label": "Shapes",
+   "author": "flugsio",
+   "licence": "CC BY-SA 4.0"
+  },
+  "rhosgfx": {
+   "label": "RhosGFX",
+   "author": "RhosGFX",
+   "licence": "CC0 1.0"
+  },
+  "kiwen-suwi": {
+   "label": "Kiwen-suwi",
+   "author": "neverRare",
+   "licence": "CC BY 4.0"
+  },
+  "totoy": {
+   "label": "Totoy",
+   "author": "Kosal Sen",
+   "licence": "CC BY 4.0"
+  },
+  "papercut": {
+   "label": "Papercut",
+   "author": "Nikolay Anzarov",
+   "licence": "CC BY 4.0"
   }
  }
 }

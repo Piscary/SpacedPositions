@@ -1,6 +1,6 @@
-{% demo_rows as demo_rows %}<div class="list" data-list role="listbox" aria-multiselectable="true">
-  {% for id, title, tags, solved in demo_rows %}
-  <div class="list__row" role="option" data-row="{{ id }}" data-title="{{ title }}" aria-selected="false">
+{% demo_rows as demo_rows %}<div class="list" data-list role="listbox" aria-multiselectable="true" aria-label="Demo positions">
+  {% for id, title, tags, solved, fen in demo_rows %}
+  <div class="list__row" role="option" data-row="{{ id }}" data-title="{{ title }}"{% if fen %} data-fen="{{ fen }}"{% endif %} aria-selected="false">
     <span class="list__mark" aria-hidden="true">▢</span>
     <span class="list__id">{{ id }}</span>
     <span class="list__title">{{ title }}</span>

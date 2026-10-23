@@ -35,6 +35,27 @@ Not yet done from the phase-0 list, moved on:
 - Undo of server data through a persistent command journal → phase 3; phase 0 undo covers layout and settings, in
   memory.
 
+### Phase 1 status (2026-10-23)
+
+Built: the board island on chessground 9.2.1 + chess.js 1.4.0 (vendored, licences recorded): click and drag moves
+with legal-move dots, promotion menu, last-move and check highlights, lichess drawing (right-drag arrows, right-click
+circles, Shift/Alt colours), the square tool, typed moves (SAN, German letters, UCI, with arrow previews), the board
+editor (palette, side, castling, en passant, mirror, diagram, live validation with python-chess and one-key fixes),
+flip, stepping, copy FEN/PGN, undo of moves and setups. Boards in a link group share a *line* that survives reloads;
+browsing a list moves its linked board. The PGN/FEN view. MiniBoards (cached server SVG). Paste anything anywhere
+(FEN, placement, lichess links, PGN, FEN lists) with offers in the status line. Tests: chess module and endpoints,
+the move matcher (node), 13 board journeys, and the axe-core accessibility check (moved here from phase 0).
+
+After trying it (same day): thin token-coloured scrollbars in every browser; keyboard movement inside any pane
+(`j k J K PgDn PgUp g g G ] [`) and `i` to edit a pane's field; 12 free piece sets with a live-preview picker
+(`␣ u p`, `:pieces`), MiniBoards drawn in the chosen set.
+
+Moved on:
+- Live duplicate check in the editor → phase 4 (needs the library).
+- German letters for the setup palette and `board-coords = outside` → phase 6 (settings).
+- Icon sprite → when the first icon is needed (none so far: the UI uses text glyphs).
+- Variations instead of replacing the rest of a line → phase 3 (move tree).
+
 ## Out of scope for now
 
 - **Publishing** (documents, print, PDF): the old app's document editor. The Diagram renderer is shared, so it can

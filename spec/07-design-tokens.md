@@ -165,10 +165,18 @@ coords = "outside"
 
 - Fonts: a short list of bundled, self-hosted fonts (Inter, IBM Plex Sans, JetBrains Mono, Fira Code, Noto Sans
   Symbols 2 for figurines), plus "any installed font by name". No external font CDN at runtime.
-- Piece sets: SVG sets in `static/pieces/<name>/` (`wK.svg` … `bP.svg`), one sprite per set. Each set's licence is
-  recorded in `static/pieces/<name>/LICENSE` and shown in Settings. Several lichess sets are free to use but under
-  different licences (GPL, CC BY-SA, CC BY-NC-SA). Bundled sets must allow free redistribution of the app; non-commercial
-  sets are an optional download (09 §13). Users can add any set they own to their data folder (`pieces/`).
+- Piece sets: SVG sets in `static/pieces/<name>/` (`wK.svg` … `bP.svg` + `LICENSE`). The `piece-set` token lists
+  them; `design build` writes `static/design/pieces.css`, which switches chessground's piece images by
+  `<html data-pieces="…">`, so changing the set needs no reload. MiniBoards are drawn server-side in the same set
+  (each piece a `<symbol>` with its internal ids prefixed) and their URL hash includes the set.
+- **Bundled (phase 1)**, all from lichess with the licences listed in lila's `COPYING.md`: Cburnett, Merida (GPLv2+),
+  MPChess (GPLv3+), Chessnut (Apache 2.0), Fantasy, Spatial, Celtic (MIT), Shapes (CC BY-SA 4.0), RhosGFX (CC0),
+  Kiwen-suwi, Totoy, Papercut (CC BY 4.0). Not bundled: the many CC BY-NC-SA sets (staunty, california, maestro,
+  cardinal …) and "freeware" sets (alpha, companion, leipzig): their licences don't let anyone redistribute the app.
+  AGPL sets (pixel, pirouetti, letter) would be allowed but are left out to keep the licence picture simple.
+- `design check` fails for a set without all 12 pieces, without `LICENSE`, without an allowed licence in
+  `design/licences.toml`, with scripts or external references in an SVG, or for a folder the token doesn't list.
+- Later (phase 6): users can add any set they own to their data folder (`pieces/`).
 - Silhouette and blind modes are board *looks* (CSS classes on the board), not piece sets.
 
 ## 7 · Rules every theme must pass

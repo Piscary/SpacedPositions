@@ -1,7 +1,7 @@
 """UI state that survives reloads (spec 09 §8). The app is local and single-user for now, but every row has a
 `user` key so hosting later needs no redesign; locally it is always "local"."""
 
-from django.db import models
+from django.db import IntegrityError, models
 
 LOCAL_USER = "local"
 
@@ -45,4 +45,7 @@ class Preferences(models.Model):
 
     @classmethod
     def current(cls) -> "Preferences":
-        return cls.objects.get_or_create(user=LOCAL_USER)[0]
+        try:
+            return cls.objects.get_or_create(user=LOCAL_USER)[0]
+        except IntegrityError:  # created by a concurrent request (many MiniBoards load at once)
+            return cls.objects.get(user=LOCAL_USER)

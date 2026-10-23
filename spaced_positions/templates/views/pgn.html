@@ -1,0 +1,11 @@
+<form class="view-stack line-text" data-island="line-text" data-paste-form>
+  <div class="formrow"><span class="formrow__label">Title</span><span data-line-title></span></div>
+  <div class="formrow"><span class="formrow__label">FEN</span><code class="line-text__fen" data-line-fen></code></div>
+  <div class="formrow"><span class="formrow__label">PGN</span><pre class="line-text__pgn" data-line-pgn></pre></div>
+  <div class="formrow">
+    <label class="formrow__label" for="{{ node.id }}-paste">Paste</label>
+    <textarea class="field field--mono" id="{{ node.id }}-paste" name="text" placeholder="A FEN, a PGN or a lichess link, then {% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵"></textarea>
+    <div class="formrow__help"><span>Or press {% if is_mac %}⌘{% else %}Ctrl+{% endif %}V anywhere outside a text field.</span></div>
+  </div>
+  <div class="actionbar">{% cmd "form.submit" label="Show" variant="primary" %}{% cmd "board.copyfen" %}{% cmd "board.copypgn" %}</div>
+</form>

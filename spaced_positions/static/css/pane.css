@@ -87,6 +87,7 @@
   opacity: 0.8;
 }
 
+.pane__body:focus-visible { outline: 0; }
 .pane__body { position: relative; min-height: 0; overflow: auto; container-type: inline-size; }
 .pane__body--pad { padding: var(--s-3); }
 .pane__footer {

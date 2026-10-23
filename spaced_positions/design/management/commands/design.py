@@ -35,6 +35,7 @@ class Command(BaseCommand):
             pyproject=settings.REPO_DIR / "pyproject.toml",
             vendor_dir=package / "static" / "vendor",
             server_handlers=set(server_commands.HANDLERS),
+            pieces_dir=package / "static" / "pieces",
         )
         for problem in problems:
             self.stdout.write(str(problem))

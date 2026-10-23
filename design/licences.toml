@@ -4,3 +4,90 @@
 [vendor."htmx.min.js"]
 licence = "0BSD (Zero-Clause BSD)"
 source = "htmx.org 2.0.11, https://htmx.org"
+
+[vendor."chessground.min.js"]
+licence = "GPL-3.0-or-later"
+source = "chessground 9.2.1 (lichess), https://github.com/lichess-org/chessground · licences/chessground.LICENSE"
+
+[vendor."chessground.base.css"]
+licence = "GPL-3.0-or-later"
+source = "chessground 9.2.1 assets"
+
+[vendor."chess.js"]
+licence = "BSD-2-Clause"
+source = "chess.js 1.4.0, https://github.com/jhlywa/chess.js · licences/chess.js.LICENSE"
+
+# Piece sets in spaced_positions/static/pieces/ (spec 07 §6). Taken from lichess (lila/public/piece), licences as
+# listed in lila's COPYING.md. Only sets whose licence lets anyone redistribute the app are bundled.
+
+[pieces.cburnett]
+label = "Cburnett"
+author = "Colin M.L. Burnett"
+licence = "GPL-2.0-or-later"
+source = "lichess-org/lila public/piece/cburnett · https://en.wikipedia.org/wiki/User:Cburnett"
+
+[pieces.merida]
+label = "Merida"
+author = "Armando Hernandez Marroquin"
+licence = "GPL-2.0-or-later"
+source = "lichess-org/lila public/piece/merida"
+
+[pieces.chessnut]
+label = "Chessnut"
+author = "Alexis Luengas"
+licence = "Apache-2.0"
+source = "lichess-org/lila public/piece/chessnut · https://github.com/LexLuengas/chessnut-pieces"
+
+[pieces.fantasy]
+label = "Fantasy"
+author = "Maurizio Monge"
+licence = "MIT"
+source = "lichess-org/lila public/piece/fantasy · https://github.com/maurimo/chess-art"
+
+[pieces.spatial]
+label = "Spatial"
+author = "Maurizio Monge"
+licence = "MIT"
+source = "lichess-org/lila public/piece/spatial · https://github.com/maurimo/chess-art"
+
+[pieces.celtic]
+label = "Celtic"
+author = "Maurizio Monge"
+licence = "MIT"
+source = "lichess-org/lila public/piece/celtic · https://github.com/maurimo/chess-art"
+
+[pieces.mpchess]
+label = "MPChess"
+author = "Maxime Chupin"
+licence = "GPL-3.0-or-later"
+source = "lichess-org/lila public/piece/mpchess · https://github.com/chupinmaxime"
+
+[pieces.shapes]
+label = "Shapes"
+author = "flugsio"
+licence = "CC BY-SA 4.0"
+source = "lichess-org/lila public/piece/shapes · https://github.com/flugsio/chess_shapes"
+
+[pieces.rhosgfx]
+label = "RhosGFX"
+author = "RhosGFX"
+licence = "CC0 1.0"
+source = "lichess-org/lila public/piece/rhosgfx · https://rhosgfx.itch.io/"
+
+[pieces.kiwen-suwi]
+label = "Kiwen-suwi"
+author = "neverRare"
+licence = "CC BY 4.0"
+source = "lichess-org/lila public/piece/kiwen-suwi · https://github.com/neverRare"
+
+[pieces.totoy]
+label = "Totoy"
+author = "Kosal Sen"
+licence = "CC BY 4.0"
+source = "lichess-org/lila public/piece/totoy"
+
+[pieces.papercut]
+label = "Papercut"
+author = "Nikolay Anzarov"
+licence = "CC BY 4.0"
+source = "lichess-org/lila public/piece/papercut · https://nikoichu.itch.io/"

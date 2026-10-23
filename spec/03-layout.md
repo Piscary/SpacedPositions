@@ -109,7 +109,29 @@ summary, its own key and a collapse caret; the body below.
 - A collapsed section still shows its summary: `▸ Tags (5) · Gabel, Opfer, Matt in 2 …`.
 - Sections can be *pinned open* by the view (e.g. the puzzle prompt in Train) so they can't be collapsed.
 - `␣ 1`–`␣ 9` are panes; inside a pane, sections are reached with `g` + their letter (`g t` tags, `g c` comment),
-  shown in their header.
+  shown in their header, and stepped through with `]` / `[` (next / previous section).
+
+### Moving inside the focused pane
+
+Every pane can be read and used without the mouse. These keys belong to the `pane` context, so a view can give them
+a more specific meaning (a list moves its cursor with `j k`, a board steps through moves with `h l`):
+
+| Keys | Does |
+|---|---|
+| `j k` / `↓ ↑` | Scroll a little (three lines) |
+| `J K` | Half a page |
+| `PgDn PgUp` | A page |
+| `g g` / `G` (`Home` / `End`) | Top / bottom |
+| `]` / `[` | Next / previous section |
+| `i` | Edit: focus the pane's text field (the one edited last, else the first) and enter Insert; `Esc` leaves it |
+| `F` | Hint labels: reach any button or link in the pane |
+
+Scrolling is instant, as in a terminal: the key's effect shows in the same frame.
+
+### Scrollbars
+
+As thin as the platform allows (`--scrollbar`, 1.5 × the spacing unit, in Chromium and Safari; `thin` in Firefox;
+nothing on macOS with overlay scrollbars), in `--scroll-thumb`, brighter while the pointer is over the scroll area.
 
 ## 6 · Persistence
 

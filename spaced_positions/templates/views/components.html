@@ -1,4 +1,4 @@
-{% color_tokens as color_names %}
+{% color_tokens as color_names %}{% piece_codes as piece_codes %}
 <div class="gallery">
   {% section "Colour tokens" key="c" summary="tier 1, from the theme · :theme, :set main=#…" %}
     <div class="gallery__swatches">
@@ -9,6 +9,30 @@
     <div class="gallery__row" style="margin-top: var(--s-3)">
       <span class="gallery__label">Board squares</span>
       <div class="gallery__board" aria-hidden="true">{% for i in "0123456701234567" %}<span class="{% cycle '' 'd' '' 'd' '' 'd' '' 'd' 'd' '' 'd' '' 'd' '' 'd' '' %}"></span>{% endfor %}</div>
+    </div>
+  {% endsection %}
+
+  {% section "MiniBoard" key="i" summary="static boards for cards, rows and previews · server-rendered SVG, cached, in the theme's colours" %}
+    {% demo_rows as rows %}
+    <div class="gallery__row">
+      {% for id, title, tags, solved, fen in rows|slice:":4" %}
+      <figure class="gallery__mini">{% miniboard fen size=120 %}<figcaption class="muted">{{ id }} · {{ title|truncatechars:22 }}</figcaption></figure>
+      {% endfor %}
+      <figure class="gallery__mini">{% miniboard rows.6.4 size=64 %}<figcaption class="muted">64 px</figcaption></figure>
+      <figure class="gallery__mini">{% miniboard rows.6.4 size=64 flip=True %}<figcaption class="muted">flipped</figcaption></figure>
+    </div>
+  {% endsection %}
+
+  {% section "Piece sets" key="p" summary="free sets only (GPL, MIT, Apache, CC0, CC BY, CC BY-SA) · click or ␣ u p · :pieces <set>" %}
+    {% piece_sets as sets %}
+    <div class="piecesets">
+      {% for set in sets %}
+      <button type="button" class="pieceset" data-cmd="board.pieces" data-args="{{ set.key }}">
+        <span class="pieceset__name">{{ set.label }}</span>
+        <span class="pieceset__pieces" aria-hidden="true">{% for c in piece_codes %}<img src="/static/pieces/{{ set.key }}/{{ c }}.svg" alt="" width="28" height="28" loading="lazy">{% endfor %}</span>
+        <span class="pieceset__credit">{{ set.author }} · {{ set.licence }}</span>
+      </button>
+      {% endfor %}
     </div>
   {% endsection %}
 

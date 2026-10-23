@@ -1,0 +1,28 @@
+<div class="board" data-island="board" data-layer="play"{% if mode.key == "collect" %} data-start-layer="setup"{% endif %}>
+  <div class="board__area"><div class="board__frame"><div class="board__cg"></div></div></div>
+  <div class="board__palette" data-palette hidden>
+    <span class="actionbar">
+      {% cmd "board.piece" args="pawn" display="compact" icon="♙" variant="ghost" size="sm" %}
+      {% cmd "board.piece" args="knight" display="compact" icon="♘" variant="ghost" size="sm" %}
+      {% cmd "board.piece" args="bishop" display="compact" icon="♗" variant="ghost" size="sm" %}
+      {% cmd "board.piece" args="rook" display="compact" icon="♖" variant="ghost" size="sm" %}
+      {% cmd "board.piece" args="queen" display="compact" icon="♕" variant="ghost" size="sm" %}
+      {% cmd "board.piece" args="king" display="compact" icon="♔" variant="ghost" size="sm" %}
+      {% cmd "board.color" display="compact" icon="◐" variant="ghost" size="sm" %}
+      {% cmd "board.eraser" display="compact" icon="⌫" variant="ghost" size="sm" %}
+      {% cmd "board.hand" display="compact" icon="✥" variant="ghost" size="sm" %}
+    </span>
+    <span class="actionbar">
+      {% cmd "board.side" label="Side" size="sm" %}
+      {% cmd "board.castling" label="Castling" size="sm" %}
+      {% cmd "board.ep" label="E.p." size="sm" %}
+      {% cmd "board.mirror" label="Mirror" size="sm" %}
+      {% cmd "board.clear" label="Clear" size="sm" %}
+      {% cmd "board.initial" label="Initial" size="sm" %}
+      {% cmd "board.diagram" label="Diagram" size="sm" %}
+      {% cmd "board.fix" label="Fix" size="sm" %}
+      {% cmd "board.setup" label="Done" variant="primary" size="sm" %}
+    </span>
+  </div>
+  <div class="board__status" data-board-status aria-live="polite"></div>
+</div>

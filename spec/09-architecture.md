@@ -47,7 +47,11 @@ step to the next move       → no request for the board and the moves cursor; i
 | `core/layout.js` | Split tree, gutters, focus, maximise/collapse, link groups, pane drag, persistence | 500 |
 | `core/cmdline.js` | Command line + finder (`␣ f`): fuzzy matching, argument completion, history | 300 |
 | `core/hints.js` | Hint layer labels | 100 |
-| `islands/board.js` | Wraps the board library + chess.js; layers (play, setup, entry, solving); drawings; emits moves | 500 |
+| `islands/board.js` | Wraps chessground + chess.js; layers (play, setup, entry; solving in phase 2); drawings, square tool; the PGN/FEN view | 500 |
+| `core/lines.js` | The line a board or link group shows (start, moves, ply, drawings); undo; saved with the mode's UI state. Replaced by the move tree in phase 3 | 200 |
+| `core/san.js`, `core/keyname.js` | Pure helpers (typed-move matching, key normalisation), unit-tested with node | 120 |
+| `core/paste.js` | Paste detection and the offers in the status line | 150 |
+| `core/islands.js` | Mounts `[data-island]` elements when a workspace renders or a pane arrives | 30 |
 | `islands/movetree.js` | Cursor movement in the MoveTree/VariationGraph without requests | 200 |
 | `islands/train.js` | Session runner: queue, clock, combo, lives, scoring, result posting | 400 |
 | `islands/chart.js` | Chart cursor, read-out, table toggle | 120 |

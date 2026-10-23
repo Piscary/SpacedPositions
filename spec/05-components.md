@@ -110,7 +110,7 @@ Details of the board's behaviour are in 06. These are the visual components.
 | Component | Purpose | Notes |
 |---|---|---|
 | **Board** | The interactive board | Sizes: `fill` (fit pane, square), `md`, `sm`. Layers: play · setup · entry (06). Overlays: last move, check, legal-move dots, selection, drawings (arrows, circles, squares in 4 colours), engine arrows (fading by rank), annotation badges on squares, hint highlight, result flash (good/bad). Frame colour shows the board layer (setup = indigo, variation = amber, solving = none). |
-| **MiniBoard** | Static small board | Server-rendered SVG (or cached PNG), 64–160px; used in cards, previews, hover. No JS. |
+| **MiniBoard** | Static small board | Server-rendered SVG (python-chess renderer) as an `<img>`: `{% miniboard fen size=120 %}`. Its URL carries a hash of the theme's square colours, so it is cached forever and switching the theme only swaps URLs. 64–256px; used in cards, previews, hover. No JS. |
 | **Diagram** | Static board for print/export | Same renderer as MiniBoard, any size, with caption. (Publishing is out of scope for now; the renderer is shared.) |
 | **EvalBar** | Engine evaluation next to the board | Vertical, white/black split, value label, mate shown as `M3`. Click = toggle engine. Hidden while solving. |
 | **EngineLines** | Best lines | Per line: eval · depth · moves (each move an ObjectRef-like token: click adds the line up to it). Header: engine name, depth, nodes/s, settings ⚙. |

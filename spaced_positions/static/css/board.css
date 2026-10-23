@@ -1,0 +1,90 @@
+/* The board (spec 05 · F, 06): chessground styled by the board tokens. The squares are a conic gradient of
+   sq-light / sq-dark, so a theme change needs no image. The frame shows the board layer. */
+
+.board { display: grid; grid-template-rows: minmax(0, 1fr) auto auto; height: 100%; }
+.board__area { container-type: size; display: grid; place-items: center; min-height: 0; padding: var(--s-2); }
+.board__frame {
+  position: relative;
+  width: min(100cqw, 100cqh);
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+  box-shadow: 0 0 0 var(--board-border) var(--line);
+}
+.board[data-layer="setup"] .board__frame { box-shadow: 0 0 0 calc(var(--rule) * 3) var(--layer-setup); }
+.board[data-layer="entry"] .board__frame { box-shadow: 0 0 0 calc(var(--rule) * 3) var(--layer-entry); }
+.board[data-layer="readonly"] .board__frame { outline: calc(var(--rule) * 2) dashed var(--line-strong); outline-offset: calc(var(--rule) * 2); }
+.board__cg { width: 100%; height: 100%; }
+
+.board__palette {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s-1) var(--s-3);
+  padding: var(--s-1) var(--s-2);
+  border-top: var(--rule) solid var(--line);
+  background: var(--bg-alt);
+}
+.board__palette .keybutton__icon { font-size: var(--fs-lg); }
+.board__status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-half) var(--s-2);
+  min-height: var(--row-sm);
+  padding: var(--s-1) var(--s-2);
+  border-top: var(--rule) solid var(--line);
+  font-size: var(--fs-xs);
+  color: var(--text-sub);
+}
+.board__fen { color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.board__problems { color: var(--warn); }
+.board__problems.is-error { color: var(--bad); font-weight: 600; }
+.board__entry { color: var(--text); font-weight: 700; }
+
+/* chessground */
+.board .cg-wrap { width: 100%; height: 100%; }
+.board cg-board {
+  background: repeating-conic-gradient(var(--sq-dark) 0 25%, var(--sq-light) 0 50%) 0 0 / 25% 25%;
+  border-radius: var(--radius);
+}
+.board cg-board square.last-move { background-color: var(--sq-lastmove); }
+.board cg-board square.selected { background-color: var(--sq-selected); }
+.board cg-board square.move-dest { background: radial-gradient(var(--sq-selected) 19%, transparent 20%); }
+.board cg-board square.oc.move-dest { background: radial-gradient(transparent 79%, var(--sq-selected) 80%); }
+.board cg-board square.move-dest:hover { background: var(--sq-selected); }
+.board cg-board square.check { background: radial-gradient(ellipse at center, var(--sq-check) 0%, transparent 72%); }
+.board cg-board square.hl-green { background-color: color-mix(in oklab, var(--arrow-green) 55%, transparent); }
+.board cg-board square.hl-red { background-color: color-mix(in oklab, var(--arrow-red) 55%, transparent); }
+.board cg-board square.hl-blue { background-color: color-mix(in oklab, var(--arrow-blue) 55%, transparent); }
+.board cg-board square.hl-yellow { background-color: color-mix(in oklab, var(--arrow-yellow) 55%, transparent); }
+.board piece { transition: none; }
+/* Coordinates inside the board (lichess style): ranks along the right edge, files along the bottom, each in the
+   colour of the other square so it reads on both. */
+.board .cg-wrap coords {
+  position: absolute;
+  display: flex;
+  pointer-events: none;
+  opacity: 1;
+  font-family: var(--font-ui);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  line-height: 1;
+  text-transform: lowercase;
+}
+.board .cg-wrap coords.ranks { inset: 0 0 0 auto; left: auto; top: 0; width: auto; height: 100%; flex-flow: column-reverse; }
+.board .cg-wrap coords.ranks.black { flex-flow: column; }
+.board .cg-wrap coords.ranks coord { flex: 1 1 0; padding: var(--s-half) var(--s-half) 0 0; text-align: right; transform: none; }
+.board .cg-wrap coords.files { inset: auto 0 0 0; top: auto; width: 100%; height: auto; flex-flow: row; text-align: left; }
+.board .cg-wrap coords.files.black { flex-flow: row-reverse; }
+.board .cg-wrap coords.files coord { flex: 1 1 0; padding: 0 0 var(--s-half) var(--s-half); transform: none; }
+.board .cg-wrap coords.ranks coord:nth-child(odd), .board .cg-wrap coords.files coord:nth-child(even) { color: var(--sq-dark); }
+.board .cg-wrap coords.ranks coord:nth-child(even), .board .cg-wrap coords.files coord:nth-child(odd) { color: var(--sq-light); }
+/* Flipped, the right edge is the a-file and the bottom edge rank 8: the square colours run the other way. */
+.board .cg-wrap coords.ranks.black coord:nth-child(odd), .board .cg-wrap coords.files.black coord:nth-child(even) { color: var(--sq-light); }
+.board .cg-wrap coords.ranks.black coord:nth-child(even), .board .cg-wrap coords.files.black coord:nth-child(odd) { color: var(--sq-dark); }
+
+/* PGN / FEN view */
+.line-text__fen { font-family: var(--font-mono); font-size: var(--fs-sm); word-break: break-all; padding-top: var(--s-1); }
+.line-text__pgn { margin: 0; padding-top: var(--s-1); font-family: var(--font-moves); white-space: pre-wrap; word-break: break-word; max-height: 40vh; overflow: auto; }
+
+/* MiniBoard */
+.miniboard { display: block; border-radius: var(--radius); background: var(--sq-light); }

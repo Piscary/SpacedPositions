@@ -78,8 +78,8 @@ class SectionNode(template.Node):
         body = self.nodelist.render(context)
         key_html = keycaps_html(["g", key], _is_mac(context)) if key else ""
         return format_html(
-            '<section class="section{}" data-section{}{} aria-expanded="{}">'
-            '<header class="section__header" data-section-toggle>'
+            '<section class="section{}" data-section{}{}>'
+            '<header class="section__header" data-section-toggle role="button" aria-expanded="{}">'
             '<span class="section__caret" aria-hidden="true"></span>'
             '<span class="section__title">{}</span>'
             '<span class="section__summary">{}</span>'
@@ -127,6 +127,31 @@ def keyhint(context, binding: str, label: str):
         keycaps_html(keys, _is_mac(context)),
         label,
     )
+
+
+@register.simple_tag
+def miniboard(fen: str, size: int = 120, flip: bool = False, extra: str = ""):
+    """A static board (spec 05 · MiniBoard): a cached SVG image, theme colours in its URL."""
+    from urllib.parse import urlencode
+
+    from spaced_positions.core.chess_views import colors_hash
+
+    query = urlencode({"fen": fen, "size": size, "flip": "1" if flip else "", "t": colors_hash()})
+    return format_html(
+        '<img class="miniboard {}" src="/svg/board/?{}" width="{}" height="{}" alt="Position {}" loading="lazy" data-fen="{}">',
+        extra, query, size, size, fen, fen,
+    )
+
+
+@register.simple_tag
+def piece_codes():
+    return ["wK", "wQ", "wR", "wB", "wN", "wP", "bK", "bQ", "bR", "bB", "bN", "bP"]
+
+
+@register.simple_tag
+def piece_sets():
+    """The bundled piece sets with their credits (style guide, settings)."""
+    return [{"key": k} | v for k, v in registry.themes().get("pieces", {}).items()]
 
 
 @register.simple_tag

@@ -213,7 +213,7 @@ def check_keymap(sources: lib.Sources) -> list[Problem]:
             for key in keys:
                 if key in lib.BROWSER_RESERVED:
                     problems.append(err("reserved", f"{context} '{seq}': the browser owns '{key}'"))
-                if key in lib.ALTGR_CHARS:
+                if key in lib.ALTGR_CHARS and key not in sources.layout_accept:
                     problems.append(warn("layout", f"{context} '{seq}': '{key}' needs AltGr/Option on QWERTZ or AZERTY"))
 
     # A key is a command or a prefix, never both (no timeouts), within one context and across active contexts.
@@ -357,8 +357,8 @@ def check_licences(sources: lib.Sources, pyproject: Path, vendor_dir: Path) -> l
             problems.append(err("licences", f"{name}: licence '{licence or 'unknown'}' is not on the allowlist"))
     vendored = sources.licences.get("vendor", {})
     for path in sorted(vendor_dir.glob("*")):
-        if path.name.startswith("."):
-            continue
+        if path.name.startswith(".") or not path.is_file():
+            continue  # licences/ holds the licence texts
         entry = vendored.get(path.name)
         if not entry:
             problems.append(err("licences", f"static/vendor/{path.name}: not listed in design/licences.toml"))
@@ -367,7 +367,34 @@ def check_licences(sources: lib.Sources, pyproject: Path, vendor_dir: Path) -> l
     return problems
 
 
-def run_all(*, design_dir, out_dir, docs_dir, templates_dir, js_dir, css_dir, pyproject, vendor_dir, server_handlers):
+def check_piece_sets(sources: lib.Sources, pieces_dir: Path) -> list[Problem]:
+    """Every piece set of the token exists with all 12 pieces, a LICENSE and an allowed licence; nothing extra."""
+    problems = []
+    names = lib.piece_sets(sources)
+    listed = sources.licences.get("pieces", {})
+    for name in names:
+        folder = pieces_dir / name
+        missing = [code for code in lib.PIECE_CODES if not (folder / f"{code}.svg").exists()]
+        if missing:
+            problems.append(err("pieces", f"{name}: missing {', '.join(missing) or 'folder'}"))
+        if not (folder / "LICENSE").exists():
+            problems.append(err("pieces", f"{name}: no LICENSE file"))
+        licence = listed.get(name, {}).get("licence", "")
+        if not licence:
+            problems.append(err("pieces", f"{name}: not listed in design/licences.toml [pieces]"))
+        elif not any(a.lower() in licence.lower() for a in ALLOWED_LICENCES):
+            problems.append(err("pieces", f"{name}: licence '{licence}' doesn't allow redistributing the app"))
+        for svg in folder.glob("*.svg"):
+            text = svg.read_text()
+            if re.search(r"<script|javascript:|\bon[a-z]+\s*=|<foreignObject|href=\"(?!#)", text, re.I):
+                problems.append(err("pieces", f"{name}/{svg.name}: scripts or external references are not allowed"))
+    for folder in pieces_dir.iterdir() if pieces_dir.exists() else []:
+        if folder.is_dir() and folder.name not in names:
+            problems.append(err("pieces", f"{folder.name}: a piece set folder that the piece-set token doesn't list"))
+    return problems
+
+
+def run_all(*, design_dir, out_dir, docs_dir, templates_dir, js_dir, css_dir, pyproject, vendor_dir, server_handlers, pieces_dir=None):
     sources = lib.load(design_dir)
     problems = []
     problems += check_themes(sources)
@@ -377,6 +404,8 @@ def run_all(*, design_dir, out_dir, docs_dir, templates_dir, js_dir, css_dir, py
     problems += check_references(sources, templates_dir, js_dir, server_handlers)
     problems += check_css_literals(css_dir)
     problems += check_licences(sources, pyproject, vendor_dir)
+    if pieces_dir is not None:
+        problems += check_piece_sets(sources, pieces_dir)
     stale = lib.generated_is_current(design_dir, out_dir, docs_dir)
     if stale:
         problems.append(err("generated", f"out of date: {', '.join(stale)} — run `manage.py design build`"))

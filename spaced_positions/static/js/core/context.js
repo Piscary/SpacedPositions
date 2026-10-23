@@ -28,6 +28,7 @@ const derived = {
   "app.launched": () => ctx.launched,
   "pane.sections": () => Boolean(ctx.pane?.sections),
   "pane.search": () => Boolean(ctx.pane?.search),
+  "pane.fields": () => Boolean(ctx.pane?.el?.querySelector(FIELDS)),
 }
 
 export function lookup(name) {
@@ -37,6 +38,9 @@ export function lookup(name) {
   if (name.startsWith("layer.")) return ctx.layer === name.slice(6)
   return name.split(".").reduce((value, part) => (value == null ? undefined : value[part]), ctx)
 }
+
+/** Text fields a pane can be edited through (`i`). */
+export const FIELDS = "input:not([type=hidden]):not([disabled]):not([type=button]):not([type=checkbox]):not([type=radio]), textarea:not([disabled]), select:not([disabled])"
 
 const bus = new EventTarget()
 export const on = (type, fn) => bus.addEventListener(type, (e) => fn(e.detail))

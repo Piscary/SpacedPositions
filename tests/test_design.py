@@ -32,6 +32,7 @@ def test_design_check_has_no_errors():
         pyproject=settings.REPO_DIR / "pyproject.toml",
         vendor_dir=package / "static" / "vendor",
         server_handlers=set(server_commands.HANDLERS),
+        pieces_dir=package / "static" / "pieces",
     )
     assert [str(p) for p in problems if p.level == "error"] == []
 
@@ -111,3 +112,25 @@ def test_css_literal_lint(tmp_path):
     (tmp_path / "y.css").write_text(".b { width: 3px; } /* lint-allow */\n.c { padding: var(--s-2); }\n")
     found = [p.message for p in check.check_css_literals(tmp_path)]
     assert len(found) == 3 and all(m.startswith("x.css") for m in found)
+
+
+def test_piece_set_lint(sources, tmp_path):
+    pieces = tmp_path / "pieces"
+    (pieces / "cburnett").mkdir(parents=True)
+    for code in lib.PIECE_CODES:
+        (pieces / "cburnett" / f"{code}.svg").write_text('<svg viewBox="0 0 45 45"><path d="M0 0"/></svg>')
+    (pieces / "cburnett" / "LICENSE").write_text("GPL")
+    (pieces / "cburnett" / "wK.svg").write_text('<svg><script>alert(1)</script></svg>')
+    (pieces / "stray").mkdir()
+    one = copy.deepcopy(sources)
+    one.schema["piece-set"]["values"] = ["cburnett", "merida"]
+    messages = [p.message for p in check.check_piece_sets(one, pieces)]
+    assert any("cburnett/wK.svg: scripts" in m for m in messages)
+    assert any(m.startswith("merida: missing") for m in messages)
+    assert any(m.startswith("stray:") for m in messages)
+
+
+def test_pieces_css_switches_by_attribute(sources):
+    css = lib.pieces_css(sources)
+    assert '.cg-wrap piece.king.white { background-image: url("../pieces/cburnett/wK.svg"); }' in css
+    assert ':root[data-pieces="merida"] .cg-wrap piece.pawn.black { background-image: url("../pieces/merida/bP.svg"); }' in css
