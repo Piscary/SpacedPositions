@@ -1,7 +1,7 @@
 # 09 · Architecture of the UI system
 
 How 01–08 map onto Django + HTMX + a few small JavaScript islands. This covers only what the UI system needs. The
-chess data model gets its own spec.
+chess data model and the query language are in 11.
 
 ## 1 · Stack
 

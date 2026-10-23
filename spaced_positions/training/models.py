@@ -1,7 +1,7 @@
 """Positions, puzzles and the training history (spec 04 · objects, Train).
 
-Position   a FEN with what identifies and describes it. Minimal in phase 2: phase 4 adds tags, sources and the
-           library; phase 3 adds the analysis (move tree).
+Position   a FEN with what identifies and describes it, and its analysis (analysis.Node, the move tree). Phase 4
+           adds tags, sources and the library.
 Puzzle     a trainable problem: a start position and a solution tree (puzzles.py). Self-contained, so a puzzle
            doesn't depend on an analysis staying as it is.
 Card       one answer line of a puzzle, the unit of spaced repetition (srs.py): a puzzle whose solution lets the

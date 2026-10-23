@@ -10,7 +10,7 @@ Each phase ends with something usable and with its components in the `/_ui/` sty
 | **1 · Board** | Board island (play, drawing, setup, move entry), MiniBoard renderer, FEN/PGN copy-paste detection | Board parity with lichess for moving and drawing; paste anything anywhere works |
 | **2 · Train** | Puzzle/card model, scheduler, Launcher, Solving, Feedback, Result, Storm/Streak/Review, training hot path | A full Storm and a Review run without a single blocking request; keyboard journey test passes |
 | **3 · Analyse** | MoveTree, Inspector, EngineLines/EvalBar, link groups, puzzle setup from the analysis, undo journal | The old app's analysis workflow is possible keys-only |
-| **4 · Library + Collect** | QueryBar and search language, List/Table/CardGrid, selection + bulk, filters, rapid entry, PGN import | Find → select → tag → train in under 10 keystrokes |
+| **4 · Library + Collect** | The data model of 11 (games, tags, sources, players, saved queries, trash), QueryBar and search language, List/Table/CardGrid, selection + bulk, filters, rapid entry, PGN import, and the items moved here from phases 1–3 | Find → select → tag → train in under 10 keystrokes |
 | **5 · Stats + rewards** | Charts island, Stats sections, milestones, records, AchievementChips, mastery | Every number drills down |
 | **6 · Customisation** | Settings mode, theme editor, keymap editor, settings export/import, more themes and piece sets | A user theme and a remapped key survive export → import on a fresh install |
 | **7 · Migration** | Import from `chess-study-manager/db.sqlite3` (read-only) | Positions, games, trees, tags, cards with history arrive intact |
@@ -119,7 +119,7 @@ Moved on:
 
 ## Decided
 
-All decisions were taken on 2026-10-23.
+Decisions 1–17 were taken on 2026-10-23, 18–20 on 2026-10-24.
 
 | # | Question | Decision | Consequence in the spec |
 |---|---|---|---|
@@ -140,7 +140,10 @@ All decisions were taken on 2026-10-23.
 | 15 | **GPL dependencies** | **Accepted**: python-chess and Stockfish are used freely, since the app itself is GPL-3.0 | No swap needed, but chess code still goes through one module for structure. |
 | 16 | **Student onboarding** | **Starter pack + import**: a small public-domain starter pack on first run, *import a pack* as the second choice on the first-run screen | Phase 8 (first-run screen, starter pack from CC0 sources). |
 | 17 | **Where the source lives** | **A public repository** (GitHub or Codeberg) | Meets the GPL for everyone who gets the app; also the update channel and issue tracker (09 §11 *Updates*, 09 §13 Licences page). |
+| 18 | **Starter tag vocabulary** (2026-10-24) | **The old app's vocabulary**: 10 fields, 205 German tags with English names and the motif hierarchy, built in from phase 4 | 11 §1 Tags. Read once from the old database (read-only) into a data file in the repository; phase 7 needs no tag mapping. |
+| 19 | **Trash** (2026-10-24) | **Emptied by hand only** (`:trash empty`, with a confirmation); nothing disappears on its own | 11 (rules for every model). |
+| 20 | **Puzzles in PGN files** (2026-10-24) | A `FEN` header with a short line and no players is imported **as a draft puzzle**; `r` in the import list puts them into training at once | 11 §4. |
 
 ## Open questions
 
-None at the moment. Questions that come up while building go here, numbered from 18.
+None at the moment. Questions that come up while building go here, numbered from 21.

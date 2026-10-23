@@ -1,6 +1,6 @@
 // Lines: what a board (or a whole link group) is looking at: a start FEN, the moves played from it, the ply shown,
-// and the drawings per ply. Panes in one link group share a line (spec 03 §4). Phase 3 replaces the line with the
-// move tree; until then a new move after a step back replaces the rest of the line.
+// and the drawings per ply. Panes in one link group share a line (spec 03 §4). In Analyse the analysis tree owns the
+// line (a delegate); elsewhere a new move after a step back replaces the rest of the line.
 //
 // Lines are kept per mode and saved with the mode's UI state, so a reload shows the same position.
 
@@ -62,7 +62,7 @@ export function play(key, move) {
   line.moves.push({ uci: move.from + move.to + (move.promotion || ""), san: move.san, fen: move.after })
   line.ply = line.moves.length
   setLine(key, line, { undo: `Move ${move.san}` })
-  if (replaced > 0) status(`${move.san} replaced ${replaced} move${replaced > 1 ? "s" : ""} (variations arrive in phase 3)`, { timeout: 4000 })
+  if (replaced > 0) status(`${move.san} replaced ${replaced} move${replaced > 1 ? "s" : ""} (Analyse keeps variations)`, { timeout: 4000 })
 }
 
 export function goTo(key, ply) {

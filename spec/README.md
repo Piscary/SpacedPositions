@@ -1,7 +1,7 @@
 # Spaced Positions: UI/UX System Specification
 
-Status: **draft 1** (2026-10-23). Nothing is built yet. This folder is the contract that the design system,
-the front-end and the first screens get built against.
+Status: **draft 1** (2026-10-23), kept in step with the build: phases 0–3 are built (see 10 for the status of
+each phase). This folder is the contract that the design system, the front-end and the screens get built against.
 
 This is a new, independent project. `chess-study-manager/` served as inspiration, and its database is read-only
 test data. We do not copy its data model one to one.
@@ -37,7 +37,9 @@ The UI system follows four ideas:
 | 8 | [08-keymap.md](08-keymap.md) | The full default keymap, with the rules it has to follow |
 | 9 | [09-architecture.md](09-architecture.md) | How the system maps onto Django + HTMX + small JS islands; Jupyter-style launch, puzzle packs, licences |
 | 10 | [10-roadmap-and-questions.md](10-roadmap-and-questions.md) | Build order, what is out of scope, decisions taken, open questions |
+| 11 | [11-data-model.md](11-data-model.md) | Positions, games, tags, sources, players, saved queries; duplicates; the query language; PGN import |
 
 ## Reading order
 
-For the overall picture, read 01 → 02 → 03 → 04. To build components, read 05 → 07 → 09. 08 is a reference.
+For the overall picture, read 01 → 02 → 03 → 04. To build components, read 05 → 07 → 09. For the Library and
+Collect, read 11. 08 is a reference.
