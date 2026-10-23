@@ -1,0 +1,102 @@
+# Commands of the shell: layers, overlays, modes, undo (spec 02 §3).
+# Keys live in keymap/default.toml. Fields: title, group, aliases, args, when, handler (client|server|both),
+# undoable, repeatable, sticky, danger, hidden, phase (> 0: shown but disabled until that build phase).
+
+["layer.escape"]
+title = "Back to Normal"
+group = "Global"
+
+["cmdline.open"]
+title = "Command line"
+group = "Global"
+
+["search.open"]
+title = "Search in this view"
+group = "Global"
+when = "pane.search"
+reason = "this view has no search yet"
+
+["help.context"]
+title = "Keys of this context"
+group = "Global"
+aliases = ["keys"]
+
+["help.all"]
+title = "All keys of every context"
+group = "Global"
+aliases = ["help"]
+
+["hint.open"]
+title = "Hint labels: click anything by keyboard"
+group = "Global"
+
+["undo"]
+title = "Undo"
+group = "Global"
+when = "undo.available"
+reason = "nothing to undo"
+
+["redo"]
+title = "Redo"
+group = "Global"
+when = "redo.available"
+reason = "nothing to redo"
+
+["repeat"]
+title = "Repeat the last command"
+group = "Global"
+when = "repeat.available"
+reason = "nothing to repeat yet"
+
+["form.submit"]
+title = "Submit the field"
+group = "Global"
+hidden = true
+
+["mode.home"]
+title = "Home"
+group = "Modes"
+
+["mode.train"]
+title = "Train"
+group = "Modes"
+
+["mode.analyse"]
+title = "Analyse"
+group = "Modes"
+
+["mode.collect"]
+title = "Collect"
+group = "Modes"
+
+["mode.library"]
+title = "Library"
+group = "Modes"
+
+["mode.stats"]
+title = "Stats"
+group = "Modes"
+
+["mode.settings"]
+title = "Settings"
+group = "Modes"
+
+["mode.ui"]
+title = "Style guide"
+group = "Modes"
+aliases = ["ui", "styleguide"]
+
+["mode.previous"]
+title = "Previous mode"
+group = "Modes"
+when = "mode.hasPrevious"
+reason = "no previous mode yet"
+
+["app.quit"]
+title = "Quit Spaced Positions (stop the server)"
+group = "App"
+aliases = ["quit"]
+handler = "server"
+when = "app.launched"
+reason = "only when started with spos"
+danger = true

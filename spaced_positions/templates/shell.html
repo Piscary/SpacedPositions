@@ -1,0 +1,50 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>{{ mode.label }} · Spaced Positions</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}?v={{ app_version }}">
+  <style id="theme">{{ theme_css|safe }}</style>
+  <script src="{% static 'vendor/htmx.min.js' %}" defer></script>
+  <script type="module" src="{% static 'js/app.js' %}?v={{ app_version }}"></script>
+</head>
+<body>
+<div class="shell" id="shell" data-layer="normal">
+  <header class="appbar">
+    <div class="appbar__logo"><span class="appbar__logo-mark" aria-hidden="true">♞</span><span>Spaced Positions</span></div>
+    <nav class="appbar__modes" aria-label="Modes">
+      {% for m in modes %}{% if m.in_appbar %}
+      <button type="button" class="modetab{% if m.key == mode.key %} is-active{% endif %}" data-cmd="mode.{{ m.key }}" data-mode-tab="{{ m.key }}">
+        <span class="modetab__label">{{ m.label }}</span>{% keycap "space "|add:m.leader %}
+      </button>
+      {% endif %}{% endfor %}
+    </nav>
+    <div class="appbar__pulse"><span>phase 0 · foundation</span></div>
+    <div class="appbar__end">
+      {% cmd "mode.ui" display="compact" variant="ghost" icon="◧" %}
+      {% cmd "cmdline.open" display="compact" variant="ghost" icon="⌘" %}
+      {% cmd "help.context" display="compact" variant="ghost" icon="?" %}
+    </div>
+  </header>
+
+  <main class="workspaces" id="workspaces">
+    {% include "components/workspace.html" %}
+  </main>
+
+  <footer class="statusline" id="statusline" aria-live="polite">
+    <span class="status__mode" id="status-mode">{{ mode.label }}</span>
+    <span class="status__layer" id="status-layer">Normal</span>
+    <span class="status__pending" id="status-pending"></span>
+    <span class="status__pane" id="status-pane"></span>
+    <span class="status__subject" id="status-subject"></span>
+    <span class="status__message" id="status-message"></span>
+    <span class="status__activity" id="status-activity"></span>
+    <span class="status__help">{% keycap "space" %}<span>leader</span>{% keycap ":" %}<span>commands</span>{% keycap "?" %}<span>keys</span></span>
+  </footer>
+</div>
+<div class="toasts" id="toasts"></div>
+{{ boot|json_script:"boot" }}
+</body>
+</html>

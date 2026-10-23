@@ -1,0 +1,23 @@
+name = "paper"
+label = "Paper"
+dark = false
+pair = "ink"   # `␣ u t` switches to this theme
+
+[color]
+bg = "#f7f6f2"
+bg-alt = "#ecebe5"
+surface = "#ffffff"
+line = "#d6d3ca"
+text = "#23252a"
+text-sub = "#62666f"
+main = "#2f5bd3"
+main-text = "#ffffff"
+good = "#1f7a6a"
+bad = "#c23b32"
+warn = "#9a6412"
+info = "#2a6fa8"
+special = "#8243b8"
+
+[board]
+sq-light = "#f0d9b5"
+sq-dark = "#b58863"

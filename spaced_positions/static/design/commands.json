@@ -1,0 +1,853 @@
+{
+ "version": 1,
+ "commands": {
+  "pane.focus.next": {
+   "title": "Focus the next pane",
+   "group": "Panes",
+   "handler": "client"
+  },
+  "pane.focus.prev": {
+   "title": "Focus the previous pane",
+   "group": "Panes",
+   "handler": "client"
+  },
+  "pane.focus": {
+   "title": "Focus pane N",
+   "group": "Panes",
+   "args": [
+    {
+     "name": "n",
+     "type": "int"
+    }
+   ],
+   "handler": "client"
+  },
+  "pane.focus.dir": {
+   "title": "Focus the pane in a direction",
+   "group": "Panes",
+   "args": [
+    {
+     "name": "dir",
+     "type": "enum",
+     "values": [
+      "left",
+      "down",
+      "up",
+      "right"
+     ]
+    }
+   ],
+   "handler": "client"
+  },
+  "pane.split.vertical": {
+   "title": "Split vertically (side by side)",
+   "group": "Panes",
+   "aliases": [
+    "vsplit",
+    "vs"
+   ],
+   "args": [
+    {
+     "name": "view",
+     "type": "view",
+     "optional": true
+    }
+   ],
+   "undoable": true,
+   "handler": "client"
+  },
+  "pane.split.horizontal": {
+   "title": "Split horizontally (above / below)",
+   "group": "Panes",
+   "aliases": [
+    "split",
+    "sp"
+   ],
+   "args": [
+    {
+     "name": "view",
+     "type": "view",
+     "optional": true
+    }
+   ],
+   "undoable": true,
+   "handler": "client"
+  },
+  "pane.close": {
+   "title": "Close pane",
+   "group": "Panes",
+   "aliases": [
+    "close"
+   ],
+   "when": "panes > 1",
+   "reason": "the last pane can't be closed",
+   "undoable": true,
+   "handler": "client"
+  },
+  "pane.only": {
+   "title": "Only this pane (others become hidden buffers)",
+   "group": "Panes",
+   "aliases": [
+    "only"
+   ],
+   "when": "panes > 1",
+   "reason": "it is already the only pane",
+   "undoable": true,
+   "handler": "client"
+  },
+  "pane.buffers": {
+   "title": "Hidden buffers",
+   "group": "Panes",
+   "aliases": [
+    "buffers",
+    "ls"
+   ],
+   "when": "buffers > 0",
+   "reason": "no hidden buffers",
+   "handler": "client"
+  },
+  "pane.buffer": {
+   "title": "Show a hidden buffer in a split",
+   "group": "Panes",
+   "aliases": [
+    "buffer",
+    "b"
+   ],
+   "args": [
+    {
+     "name": "buffer",
+     "type": "buffer"
+    }
+   ],
+   "when": "buffers > 0",
+   "reason": "no hidden buffers",
+   "undoable": true,
+   "hidden": true,
+   "handler": "client"
+  },
+  "pane.view": {
+   "title": "Change this pane's view",
+   "group": "Panes",
+   "aliases": [
+    "view",
+    "e"
+   ],
+   "args": [
+    {
+     "name": "view",
+     "type": "view",
+     "optional": true
+    }
+   ],
+   "undoable": true,
+   "handler": "client"
+  },
+  "pane.maximize": {
+   "title": "Maximise / restore pane",
+   "group": "Panes",
+   "aliases": [
+    "max"
+   ],
+   "handler": "client"
+  },
+  "pane.collapse": {
+   "title": "Collapse / expand pane",
+   "group": "Panes",
+   "undoable": true,
+   "handler": "client"
+  },
+  "pane.swap": {
+   "title": "Swap with the next pane",
+   "group": "Panes",
+   "when": "panes > 1",
+   "reason": "needs two panes",
+   "undoable": true,
+   "handler": "client"
+  },
+  "pane.rotate": {
+   "title": "Rotate the split",
+   "group": "Panes",
+   "when": "panes > 1",
+   "reason": "needs two panes",
+   "undoable": true,
+   "handler": "client"
+  },
+  "pane.equalize": {
+   "title": "Equal sizes",
+   "group": "Panes",
+   "when": "panes > 1",
+   "reason": "needs two panes",
+   "undoable": true,
+   "handler": "client"
+  },
+  "pane.resize": {
+   "title": "Resize pane",
+   "group": "Panes",
+   "args": [
+    {
+     "name": "dir",
+     "type": "enum",
+     "values": [
+      "<",
+      ">",
+      "+",
+      "-"
+     ]
+    }
+   ],
+   "sticky": true,
+   "undoable": true,
+   "handler": "client"
+  },
+  "pane.group": {
+   "title": "Cycle link group (A → B → none)",
+   "group": "Panes",
+   "undoable": true,
+   "handler": "client"
+  },
+  "pane.pin": {
+   "title": "Pin / unpin pane",
+   "group": "Panes",
+   "undoable": true,
+   "handler": "client"
+  },
+  "layout.menu": {
+   "title": "Layouts: save, load, reset",
+   "group": "Panes",
+   "handler": "client"
+  },
+  "layout.save": {
+   "title": "Save this layout",
+   "group": "Panes",
+   "aliases": [
+    "layout-save"
+   ],
+   "args": [
+    {
+     "name": "name",
+     "type": "text"
+    }
+   ],
+   "handler": "both"
+  },
+  "layout.load": {
+   "title": "Load a saved layout",
+   "group": "Panes",
+   "aliases": [
+    "layout-load"
+   ],
+   "args": [
+    {
+     "name": "name",
+     "type": "layout"
+    }
+   ],
+   "undoable": true,
+   "handler": "client"
+  },
+  "layout.reset": {
+   "title": "Reset this mode's layout",
+   "group": "Panes",
+   "aliases": [
+    "layout-reset"
+   ],
+   "undoable": true,
+   "handler": "client"
+  },
+  "section.toggle": {
+   "title": "Fold / unfold the section",
+   "group": "Sections",
+   "when": "pane.sections",
+   "reason": "this pane has no sections",
+   "handler": "client"
+  },
+  "section.all": {
+   "title": "Fold / unfold all sections",
+   "group": "Sections",
+   "when": "pane.sections",
+   "reason": "this pane has no sections",
+   "handler": "client"
+  },
+  "layer.escape": {
+   "title": "Back to Normal",
+   "group": "Global",
+   "handler": "client"
+  },
+  "cmdline.open": {
+   "title": "Command line",
+   "group": "Global",
+   "handler": "client"
+  },
+  "search.open": {
+   "title": "Search in this view",
+   "group": "Global",
+   "when": "pane.search",
+   "reason": "this view has no search yet",
+   "handler": "client"
+  },
+  "help.context": {
+   "title": "Keys of this context",
+   "group": "Global",
+   "aliases": [
+    "keys"
+   ],
+   "handler": "client"
+  },
+  "help.all": {
+   "title": "All keys of every context",
+   "group": "Global",
+   "aliases": [
+    "help"
+   ],
+   "handler": "client"
+  },
+  "hint.open": {
+   "title": "Hint labels: click anything by keyboard",
+   "group": "Global",
+   "handler": "client"
+  },
+  "undo": {
+   "title": "Undo",
+   "group": "Global",
+   "when": "undo.available",
+   "reason": "nothing to undo",
+   "handler": "client"
+  },
+  "redo": {
+   "title": "Redo",
+   "group": "Global",
+   "when": "redo.available",
+   "reason": "nothing to redo",
+   "handler": "client"
+  },
+  "repeat": {
+   "title": "Repeat the last command",
+   "group": "Global",
+   "when": "repeat.available",
+   "reason": "nothing to repeat yet",
+   "handler": "client"
+  },
+  "form.submit": {
+   "title": "Submit the field",
+   "group": "Global",
+   "hidden": true,
+   "handler": "client"
+  },
+  "mode.home": {
+   "title": "Home",
+   "group": "Modes",
+   "handler": "client"
+  },
+  "mode.train": {
+   "title": "Train",
+   "group": "Modes",
+   "handler": "client"
+  },
+  "mode.analyse": {
+   "title": "Analyse",
+   "group": "Modes",
+   "handler": "client"
+  },
+  "mode.collect": {
+   "title": "Collect",
+   "group": "Modes",
+   "handler": "client"
+  },
+  "mode.library": {
+   "title": "Library",
+   "group": "Modes",
+   "handler": "client"
+  },
+  "mode.stats": {
+   "title": "Stats",
+   "group": "Modes",
+   "handler": "client"
+  },
+  "mode.settings": {
+   "title": "Settings",
+   "group": "Modes",
+   "handler": "client"
+  },
+  "mode.ui": {
+   "title": "Style guide",
+   "group": "Modes",
+   "aliases": [
+    "ui",
+    "styleguide"
+   ],
+   "handler": "client"
+  },
+  "mode.previous": {
+   "title": "Previous mode",
+   "group": "Modes",
+   "when": "mode.hasPrevious",
+   "reason": "no previous mode yet",
+   "handler": "client"
+  },
+  "app.quit": {
+   "title": "Quit Spaced Positions (stop the server)",
+   "group": "App",
+   "aliases": [
+    "quit"
+   ],
+   "handler": "server",
+   "when": "app.launched",
+   "reason": "only when started with spos",
+   "danger": true
+  },
+  "ui.appbar": {
+   "title": "Show / hide the app bar",
+   "group": "UI",
+   "handler": "client"
+  },
+  "ui.keystrips": {
+   "title": "Show / hide key strips in pane footers",
+   "group": "UI",
+   "handler": "client"
+  },
+  "ui.zen": {
+   "title": "Zen: hide app bar and footers",
+   "group": "UI",
+   "handler": "client"
+  },
+  "ui.themepair": {
+   "title": "Switch between the light and dark theme",
+   "group": "UI",
+   "handler": "server",
+   "undoable": true
+  },
+  "theme.set": {
+   "title": "Theme",
+   "group": "UI",
+   "aliases": [
+    "theme",
+    "colorscheme"
+   ],
+   "args": [
+    {
+     "name": "theme",
+     "type": "theme"
+    }
+   ],
+   "handler": "server",
+   "undoable": true
+  },
+  "pref.set": {
+   "title": "Set a token (e.g. main=#e2b714, font-size=14, density=compact)",
+   "group": "UI",
+   "aliases": [
+    "set"
+   ],
+   "args": [
+    {
+     "name": "assignment",
+     "type": "token"
+    }
+   ],
+   "handler": "server",
+   "undoable": true,
+   "repeatable": true
+  },
+  "pref.reset": {
+   "title": "Reset a token to the theme's value",
+   "group": "UI",
+   "aliases": [
+    "unset"
+   ],
+   "args": [
+    {
+     "name": "token",
+     "type": "tokenname"
+    }
+   ],
+   "handler": "server",
+   "undoable": true
+  },
+  "list.down": {
+   "title": "Cursor down",
+   "group": "Lists",
+   "handler": "client"
+  },
+  "list.up": {
+   "title": "Cursor up",
+   "group": "Lists",
+   "handler": "client"
+  },
+  "list.first": {
+   "title": "First item",
+   "group": "Lists",
+   "handler": "client"
+  },
+  "list.last": {
+   "title": "Last item",
+   "group": "Lists",
+   "handler": "client"
+  },
+  "list.open": {
+   "title": "Open the item",
+   "group": "Lists",
+   "handler": "client"
+  },
+  "list.select": {
+   "title": "Select / deselect the item",
+   "group": "Lists",
+   "handler": "client"
+  },
+  "list.visual": {
+   "title": "Visual (range) selection",
+   "group": "Lists",
+   "handler": "client"
+  },
+  "list.selectall": {
+   "title": "Select all",
+   "group": "Lists",
+   "handler": "client"
+  },
+  "demo.flash": {
+   "title": "Demo: a button with a key (flashes when the key is pressed)",
+   "group": "Style guide",
+   "repeatable": true,
+   "handler": "client"
+  }
+ },
+ "keymap": {
+  "global": {
+   "esc": {
+    "command": "layer.escape",
+    "args": []
+   },
+   ":": {
+    "command": "cmdline.open",
+    "args": []
+   },
+   "/": {
+    "command": "search.open",
+    "args": []
+   },
+   "?": {
+    "command": "help.context",
+    "args": []
+   },
+   "F": {
+    "command": "hint.open",
+    "args": []
+   },
+   "u": {
+    "command": "undo",
+    "args": []
+   },
+   "U": {
+    "command": "redo",
+    "args": []
+   },
+   "mod+z": {
+    "command": "undo",
+    "args": []
+   },
+   "mod+shift+z": {
+    "command": "redo",
+    "args": []
+   },
+   ".": {
+    "command": "repeat",
+    "args": []
+   },
+   "tab": {
+    "command": "pane.focus.next",
+    "args": []
+   },
+   "shift+tab": {
+    "command": "pane.focus.prev",
+    "args": []
+   },
+   "space h": {
+    "command": "mode.home",
+    "args": []
+   },
+   "space t": {
+    "command": "mode.train",
+    "args": []
+   },
+   "space a": {
+    "command": "mode.analyse",
+    "args": []
+   },
+   "space c": {
+    "command": "mode.collect",
+    "args": []
+   },
+   "space l": {
+    "command": "mode.library",
+    "args": []
+   },
+   "space s": {
+    "command": "mode.stats",
+    "args": []
+   },
+   "space ,": {
+    "command": "mode.settings",
+    "args": []
+   },
+   "space space": {
+    "command": "mode.previous",
+    "args": []
+   },
+   "space 1": {
+    "command": "pane.focus",
+    "args": [
+     "1"
+    ]
+   },
+   "space 2": {
+    "command": "pane.focus",
+    "args": [
+     "2"
+    ]
+   },
+   "space 3": {
+    "command": "pane.focus",
+    "args": [
+     "3"
+    ]
+   },
+   "space 4": {
+    "command": "pane.focus",
+    "args": [
+     "4"
+    ]
+   },
+   "space 5": {
+    "command": "pane.focus",
+    "args": [
+     "5"
+    ]
+   },
+   "space 6": {
+    "command": "pane.focus",
+    "args": [
+     "6"
+    ]
+   },
+   "space 7": {
+    "command": "pane.focus",
+    "args": [
+     "7"
+    ]
+   },
+   "space 8": {
+    "command": "pane.focus",
+    "args": [
+     "8"
+    ]
+   },
+   "space 9": {
+    "command": "pane.focus",
+    "args": [
+     "9"
+    ]
+   },
+   "space w v": {
+    "command": "pane.split.vertical",
+    "args": []
+   },
+   "space w s": {
+    "command": "pane.split.horizontal",
+    "args": []
+   },
+   "space w h": {
+    "command": "pane.focus.dir",
+    "args": [
+     "left"
+    ]
+   },
+   "space w j": {
+    "command": "pane.focus.dir",
+    "args": [
+     "down"
+    ]
+   },
+   "space w k": {
+    "command": "pane.focus.dir",
+    "args": [
+     "up"
+    ]
+   },
+   "space w l": {
+    "command": "pane.focus.dir",
+    "args": [
+     "right"
+    ]
+   },
+   "space w q": {
+    "command": "pane.close",
+    "args": []
+   },
+   "space w o": {
+    "command": "pane.only",
+    "args": []
+   },
+   "space w b": {
+    "command": "pane.buffers",
+    "args": []
+   },
+   "space w e": {
+    "command": "pane.view",
+    "args": []
+   },
+   "space w m": {
+    "command": "pane.maximize",
+    "args": []
+   },
+   "space w c": {
+    "command": "pane.collapse",
+    "args": []
+   },
+   "space w x": {
+    "command": "pane.swap",
+    "args": []
+   },
+   "space w r": {
+    "command": "pane.rotate",
+    "args": []
+   },
+   "space w =": {
+    "command": "pane.equalize",
+    "args": []
+   },
+   "space w <": {
+    "command": "pane.resize",
+    "args": [
+     "<"
+    ]
+   },
+   "space w >": {
+    "command": "pane.resize",
+    "args": [
+     ">"
+    ]
+   },
+   "space w +": {
+    "command": "pane.resize",
+    "args": [
+     "+"
+    ]
+   },
+   "space w -": {
+    "command": "pane.resize",
+    "args": [
+     "-"
+    ]
+   },
+   "space w g": {
+    "command": "pane.group",
+    "args": []
+   },
+   "space w p": {
+    "command": "pane.pin",
+    "args": []
+   },
+   "space w L": {
+    "command": "layout.menu",
+    "args": []
+   },
+   "space u b": {
+    "command": "ui.appbar",
+    "args": []
+   },
+   "space u k": {
+    "command": "ui.keystrips",
+    "args": []
+   },
+   "space u z": {
+    "command": "ui.zen",
+    "args": []
+   },
+   "space u t": {
+    "command": "ui.themepair",
+    "args": []
+   }
+  },
+  "pane": {
+   "z": {
+    "command": "section.toggle",
+    "args": []
+   },
+   "Z": {
+    "command": "section.all",
+    "args": []
+   }
+  },
+  "view.list": {
+   "j": {
+    "command": "list.down",
+    "args": []
+   },
+   "k": {
+    "command": "list.up",
+    "args": []
+   },
+   "down": {
+    "command": "list.down",
+    "args": []
+   },
+   "up": {
+    "command": "list.up",
+    "args": []
+   },
+   "g g": {
+    "command": "list.first",
+    "args": []
+   },
+   "G": {
+    "command": "list.last",
+    "args": []
+   },
+   "enter": {
+    "command": "list.open",
+    "args": []
+   },
+   "x": {
+    "command": "list.select",
+    "args": []
+   },
+   "v": {
+    "command": "list.visual",
+    "args": []
+   },
+   "mod+a": {
+    "command": "list.selectall",
+    "args": []
+   }
+  },
+  "view.components": {
+   "d": {
+    "command": "demo.flash",
+    "args": []
+   }
+  },
+  "layer.insert": {
+   "esc": {
+    "command": "layer.escape",
+    "args": []
+   },
+   "mod+enter": {
+    "command": "form.submit",
+    "args": []
+   }
+  }
+ },
+ "prefixes": {
+  "space": "Leader",
+  "space w": "Window",
+  "space u": "UI toggles",
+  "g": "Go"
+ },
+ "order": [
+  "overlay",
+  "layer",
+  "view",
+  "pane",
+  "mode",
+  "global"
+ ]
+}

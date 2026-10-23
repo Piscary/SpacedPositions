@@ -1,0 +1,101 @@
+/* Shell: app bar, workspace area, status line (spec 03 §1, 05 · A). */
+
+.shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
+  height: 100dvh;
+}
+.shell.is-zen .appbar, .shell.no-appbar .appbar { display: none; }
+
+/* ── App bar ─────────────────────────────────────────────────────────────────────────────────────────────────── */
+.appbar {
+  display: flex;
+  align-items: stretch;
+  height: var(--appbar-h);
+  background: var(--bg-alt);
+  border-bottom: var(--rule) solid var(--line);
+  font-size: var(--fs-sm);
+}
+.appbar__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+  padding: 0 var(--s-3);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-right: var(--rule) solid var(--line);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+.appbar__logo-mark {
+  display: grid;
+  place-items: center;
+  width: var(--row-sm);
+  height: var(--row-sm);
+  border-radius: var(--radius);
+  background: var(--main);
+  color: var(--main-text);
+  font-size: var(--fs-md);
+}
+.appbar__modes { display: flex; align-items: stretch; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.appbar__pulse { display: flex; align-items: center; gap: var(--s-3); margin-left: auto; padding: 0 var(--s-3); color: var(--text-sub); white-space: nowrap; }
+.appbar__end { flex: 0 0 auto; display: flex; align-items: center; gap: var(--s-1); padding: 0 var(--s-2); border-left: var(--rule) solid var(--line); }
+
+.modetab {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 0 var(--s-3);
+  border: 0;
+  border-right: var(--rule) solid var(--line);
+  background: transparent;
+  color: var(--text-sub);
+  white-space: nowrap;
+}
+.modetab:hover { background: var(--surface-hover); color: var(--text); }
+.modetab.is-active { background: var(--bg); color: var(--text); box-shadow: inset 0 calc(var(--rule) * -2) 0 var(--main); }
+.modetab__label { font-weight: 600; }
+
+/* ── Workspace ───────────────────────────────────────────────────────────────────────────────────────────────── */
+.workspaces { position: relative; min-height: 0; overflow: auto; }
+.workspace { position: absolute; inset: 0; display: flex; min-width: 64rem; }
+.workspace > .split, .workspace > .pane { flex: 1 1 auto; }
+
+/* ── Status line ─────────────────────────────────────────────────────────────────────────────────────────────── */
+.statusline {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  height: var(--statusline-h);
+  background: var(--bg-alt);
+  border-top: var(--rule) solid var(--line);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+  z-index: var(--z-bottom-overlay);
+}
+.statusline > * { display: flex; align-items: center; padding: 0 var(--s-2); }
+.statusline > .bottom-overlay { align-items: stretch; padding: 0; }
+.statusline > .bottom-overlay[hidden] { display: none; }
+.status__mode { background: var(--main); color: var(--main-text); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.status__layer { background: var(--layer-normal); color: var(--bg); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+[data-layer="insert"] .status__layer { background: var(--layer-insert); }
+[data-layer="visual"] .status__layer { background: var(--layer-visual); }
+[data-layer="command"] .status__layer { background: var(--layer-command); }
+[data-layer="pending"] .status__layer { background: var(--layer-pending); }
+[data-layer="hint"] .status__layer { background: var(--layer-hint); }
+[data-layer="setup"] .status__layer { background: var(--layer-setup); }
+[data-layer="entry"] .status__layer { background: var(--layer-entry); }
+.status__pending { gap: var(--s-half); color: var(--layer-pending); }
+.status__pending:empty { display: none; }
+.status__pane { border-right: var(--rule) solid var(--line); color: var(--text-sub); gap: var(--s-1); }
+.status__pane b { color: var(--text); }
+.status__subject { color: var(--text-sub); border-right: var(--rule) solid var(--line); }
+.status__subject:empty { display: none; }
+.status__message { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; gap: var(--s-2); }
+.status__message[data-kind="error"] { color: var(--bad); }
+.status__message[data-kind="good"] { color: var(--good); }
+.status__message[data-kind="tip"] { color: var(--info); }
+.status__activity { color: var(--text-sub); gap: var(--s-2); }
+.status__activity:empty { display: none; }
+.status__help { color: var(--text-sub); gap: var(--s-2); border-left: var(--rule) solid var(--line); }

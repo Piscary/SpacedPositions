@@ -1,0 +1,94 @@
+# Default bindings by context (spec 02 §4–5, 08). Resolution order for a key press:
+#   overlay → layer.<layer> → view.<view> → pane → mode.<mode> → global
+# Keys: see spec 08 · Notation. A value is a command id, optionally followed by arguments: "pane.focus 3".
+# `design check` rejects conflicts, browser-reserved keys and keys that are both a command and a prefix.
+
+[prefixes]
+"space" = "Leader"
+"space w" = "Window"
+"space u" = "UI toggles"
+"g" = "Go"
+
+[context.global]
+"esc" = "layer.escape"
+":" = "cmdline.open"
+"/" = "search.open"
+"?" = "help.context"
+"F" = "hint.open"
+"u" = "undo"
+"U" = "redo"
+"mod+z" = "undo"
+"mod+shift+z" = "redo"
+"." = "repeat"
+"tab" = "pane.focus.next"
+"shift+tab" = "pane.focus.prev"
+
+"space h" = "mode.home"
+"space t" = "mode.train"
+"space a" = "mode.analyse"
+"space c" = "mode.collect"
+"space l" = "mode.library"
+"space s" = "mode.stats"
+"space ," = "mode.settings"
+"space space" = "mode.previous"
+
+"space 1" = "pane.focus 1"
+"space 2" = "pane.focus 2"
+"space 3" = "pane.focus 3"
+"space 4" = "pane.focus 4"
+"space 5" = "pane.focus 5"
+"space 6" = "pane.focus 6"
+"space 7" = "pane.focus 7"
+"space 8" = "pane.focus 8"
+"space 9" = "pane.focus 9"
+
+"space w v" = "pane.split.vertical"
+"space w s" = "pane.split.horizontal"
+"space w h" = "pane.focus.dir left"
+"space w j" = "pane.focus.dir down"
+"space w k" = "pane.focus.dir up"
+"space w l" = "pane.focus.dir right"
+"space w q" = "pane.close"
+"space w o" = "pane.only"
+"space w b" = "pane.buffers"
+"space w e" = "pane.view"
+"space w m" = "pane.maximize"
+"space w c" = "pane.collapse"
+"space w x" = "pane.swap"
+"space w r" = "pane.rotate"
+"space w =" = "pane.equalize"
+"space w <" = "pane.resize <"
+"space w >" = "pane.resize >"
+"space w +" = "pane.resize +"
+"space w -" = "pane.resize -"
+"space w g" = "pane.group"
+"space w p" = "pane.pin"
+"space w L" = "layout.menu"
+
+"space u b" = "ui.appbar"
+"space u k" = "ui.keystrips"
+"space u z" = "ui.zen"
+"space u t" = "ui.themepair"
+
+[context.pane]
+"z" = "section.toggle"
+"Z" = "section.all"
+
+[context."view.list"]
+"j" = "list.down"
+"k" = "list.up"
+"down" = "list.down"
+"up" = "list.up"
+"g g" = "list.first"
+"G" = "list.last"
+"enter" = "list.open"
+"x" = "list.select"
+"v" = "list.visual"
+"mod+a" = "list.selectall"
+
+[context."view.components"]
+"d" = "demo.flash"
+
+[context."layer.insert"]
+"esc" = "layer.escape"
+"mod+enter" = "form.submit"

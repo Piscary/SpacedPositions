@@ -1,0 +1,35 @@
+{% with view=views|get:node.view %}
+<section class="pane{% if node.collapsed %} is-collapsed{% endif %}" id="pane-{{ node.id }}" data-pane="{{ node.id }}" data-view="{{ node.view }}" aria-label="{{ view.label }}">
+  <header class="pane__header" data-pane-header>
+    <span class="pane__n" data-pane-n>{{ node.n }}</span>
+    <span class="pane__title">{{ view.label }}</span>
+    <span class="pane__subject" data-pane-subject></span>
+    <span class="pane__link" data-pane-link{% if node.group %} data-group="{{ node.group }}"{% endif %}{% if not node.group and not node.pinned %} hidden{% endif %}>{% if node.pinned %}⊙ pinned{% else %}⛓ {{ node.group }}{% endif %}</span>
+    <span class="pane__tabs" data-pane-tabs></span>
+    <span class="pane__actions">
+      {% cmd "pane.split.vertical" display="key" variant="ghost" size="sm" icon="◫" %}
+      {% cmd "pane.maximize" display="key" variant="ghost" size="sm" icon="▢" %}
+      {% cmd "pane.close" display="key" variant="ghost" size="sm" icon="×" %}
+    </span>
+  </header>
+  <div class="pane__body" data-pane-body>
+    {% if view.phase %}
+      <div class="placeholder">
+        <div class="placeholder__card">
+          <span class="chip chip--tag empty__phase">phase {{ view.phase }}</span>
+          <div class="placeholder__title">{{ view.label }}</div>
+          <p class="placeholder__text">{{ view.summary }}</p>
+          <p class="placeholder__text">This pane is a placeholder in the {{ mode.label }} layout. The layout itself already works: split, resize, collapse, swap or close it.</p>
+          <div class="actionbar">{% cmd "pane.view" %}{% cmd "pane.split.vertical" %}</div>
+        </div>
+      </div>
+    {% else %}
+      {% include view.template %}
+    {% endif %}
+  </div>
+  <footer class="pane__footer">
+    {% if view.phase %}{% for binding, label in placeholder_hints %}{% keyhint binding label %}{% endfor %}
+    {% else %}{% for binding, label in view.hints %}{% keyhint binding label %}{% endfor %}{% endif %}
+  </footer>
+</section>
+{% endwith %}

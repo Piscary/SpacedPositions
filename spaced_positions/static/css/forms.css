@@ -1,0 +1,29 @@
+/* Input: TextField, TextArea, FormRow (spec 05 · D). Focusing any of them enters the Insert layer. */
+
+.field {
+  width: 100%;
+  min-height: var(--row-md);
+  padding: var(--s-1) var(--s-2);
+  border: var(--rule) solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+}
+.field:hover { border-color: var(--line-strong); }
+.field:focus { outline: 0; border-color: var(--layer-insert); box-shadow: 0 0 0 var(--rule) var(--layer-insert); }
+.field--mono { font-family: var(--font-mono); }
+textarea.field { resize: vertical; min-height: calc(var(--row-md) * 4); line-height: var(--leading); }
+.field::placeholder { color: var(--text-muted); }
+
+.formrow { display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: var(--s-1) var(--s-3); align-items: start; padding: var(--s-1) 0; }
+.formrow__label { padding-top: var(--s-1); color: var(--text-sub); font-size: var(--fs-sm); }
+.formrow__help { grid-column: 2; color: var(--text-sub); font-size: var(--fs-xs); display: flex; gap: var(--s-2); }
+.formrow__set { font-family: var(--font-mono); }
+.formrow__error { grid-column: 2; color: var(--bad); font-size: var(--fs-xs); }
+
+/* Narrow panes: label above the control (spec 05 · Columns). */
+@container (max-width: 30rem) {
+  .formrow { grid-template-columns: minmax(0, 1fr); }
+  .formrow__label { padding-top: 0; }
+  .formrow__help, .formrow__error { grid-column: 1; }
+}

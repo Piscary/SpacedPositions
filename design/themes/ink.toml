@@ -1,0 +1,23 @@
+name = "ink"
+label = "Ink"
+dark = true
+pair = "paper"
+
+[color]
+bg = "#16181d"
+bg-alt = "#1d2027"
+surface = "#262a33"
+line = "#30353f"
+text = "#d7dae0"
+text-sub = "#8b929c"
+main = "#e2b714"
+main-text = "#16181d"
+good = "#4fb8a4"
+bad = "#e0696b"
+warn = "#e0a050"
+info = "#61afef"
+special = "#c678dd"
+
+[board]
+sq-light = "#dee3e6"
+sq-dark = "#8ca2ad"

@@ -1,0 +1,173 @@
+# Tier 1 (base) tokens: what a theme or the user sets (spec 07 §2).
+# Colours and board colours come from the theme; the rest have defaults here and can be overridden by a theme or
+# by the user (`:set font-size=14`). Components never read these directly but through tier 2 (derived.css).
+#
+# type: color | px | number | ms | font | enum | bool
+# css:  false = not a CSS custom property (read by JavaScript from themes.json instead)
+
+version = 1
+
+# ── Colours (required in every theme, after `extends`) ─────────────────────────────────────────────────────────
+[tokens.bg]
+type = "color"
+description = "Workspace background"
+[tokens.bg-alt]
+type = "color"
+description = "Pane headers, status line, app bar"
+[tokens.surface]
+type = "color"
+description = "Inputs and raised elements: keycaps, chips"
+[tokens.line]
+type = "color"
+description = "Rules between panes, borders"
+[tokens.text]
+type = "color"
+description = "Main text"
+[tokens.text-sub]
+type = "color"
+description = "Secondary text, labels, axes"
+[tokens.main]
+type = "color"
+description = "Accent: focus, cursor, primary buttons, current mode"
+[tokens.main-text]
+type = "color"
+description = "Text on the accent colour"
+[tokens.good]
+type = "color"
+description = "Correct, good move, positive delta"
+[tokens.bad]
+type = "color"
+description = "Wrong, bad move, negative delta"
+[tokens.warn]
+type = "color"
+description = "Dubious move, warnings"
+[tokens.info]
+type = "color"
+description = "Neutral highlights, links"
+[tokens.special]
+type = "color"
+description = "Rewards: records, milestones, level-ups"
+
+# ── Board ──────────────────────────────────────────────────────────────────────────────────────────────────────
+[tokens.sq-light]
+type = "color"
+description = "Light squares"
+[tokens.sq-dark]
+type = "color"
+description = "Dark squares"
+[tokens.sq-lastmove]
+type = "color"
+description = "Last-move overlay (with alpha)"
+default = "#9bc70069"
+[tokens.sq-selected]
+type = "color"
+description = "Selected-piece overlay (with alpha)"
+default = "#14551e80"
+[tokens.sq-check]
+type = "color"
+description = "King-in-check overlay (with alpha)"
+default = "#ff000066"
+[tokens.sq-hint]
+type = "color"
+description = "Hint overlay (with alpha)"
+default = "#3b82f666"
+[tokens.arrow-green]
+type = "color"
+description = "Drawn arrows and circles: default colour"
+default = "#15781b"
+[tokens.arrow-red]
+type = "color"
+description = "Drawn arrows and circles with Shift"
+default = "#882020"
+[tokens.arrow-blue]
+type = "color"
+description = "Drawn arrows and circles with Alt"
+default = "#003088"
+[tokens.arrow-yellow]
+type = "color"
+description = "Drawn arrows and circles with Shift+Alt"
+default = "#e68f00"
+[tokens.arrow-engine]
+type = "color"
+description = "Engine arrows (fade by rank)"
+default = "#1e6fd9"
+[tokens.board-border]
+type = "px"
+description = "Board frame width"
+default = 0
+min = 0
+max = 12
+[tokens.board-coords]
+type = "enum"
+description = "Coordinates"
+values = ["inside", "outside", "off"]
+default = "inside"
+css = false
+[tokens.piece-set]
+type = "enum"
+description = "Piece set"
+values = ["cburnett"]
+default = "cburnett"
+css = false
+
+# ── Type, space, shape, motion ─────────────────────────────────────────────────────────────────────────────────
+[tokens.font-ui]
+type = "font"
+description = "Interface font"
+default = "Inter, system-ui, -apple-system, 'Segoe UI', sans-serif"
+[tokens.font-mono]
+type = "font"
+description = "Keycaps, ids, FEN/PGN, clocks"
+default = "'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace"
+[tokens.font-moves]
+type = "font"
+description = "Move lists (allows a figurine font)"
+default = "var(--font-ui)"
+[tokens.font-size]
+type = "px"
+description = "Base font size"
+default = 13
+min = 10
+max = 20
+[tokens.type-ratio]
+type = "number"
+description = "Modular scale for headings and big numbers"
+default = 1.2
+min = 1.05
+max = 1.6
+[tokens.density]
+type = "enum"
+description = "Spacing unit: compact 3px, cozy 4px, comfortable 5px"
+values = ["compact", "cozy", "comfortable"]
+default = "cozy"
+var = "space"
+css-values = { compact = "3px", cozy = "4px", comfortable = "5px" }
+[tokens.radius]
+type = "px"
+description = "Corner radius"
+default = 3
+min = 0
+max = 10
+[tokens.rule]
+type = "px"
+description = "Border width"
+default = 1
+min = 1
+max = 3
+[tokens.motion]
+type = "number"
+description = "Animation speed factor: 0 = off, 1 = default"
+default = 1
+min = 0
+max = 1.5
+[tokens.board-motion]
+type = "ms"
+description = "Piece animation"
+default = 150
+min = 0
+max = 600
+[tokens.figurines]
+type = "bool"
+description = "Moves as figurines (♘f3) instead of letters (Nf3)"
+default = false
+css = false

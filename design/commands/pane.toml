@@ -1,0 +1,157 @@
+# Panes, splits, link groups, layouts, sections (spec 03).
+
+["pane.focus.next"]
+title = "Focus the next pane"
+group = "Panes"
+
+["pane.focus.prev"]
+title = "Focus the previous pane"
+group = "Panes"
+
+["pane.focus"]
+title = "Focus pane N"
+group = "Panes"
+args = [{ name = "n", type = "int" }]
+
+["pane.focus.dir"]
+title = "Focus the pane in a direction"
+group = "Panes"
+args = [{ name = "dir", type = "enum", values = ["left", "down", "up", "right"] }]
+
+["pane.split.vertical"]
+title = "Split vertically (side by side)"
+group = "Panes"
+aliases = ["vsplit", "vs"]
+args = [{ name = "view", type = "view", optional = true }]
+undoable = true
+
+["pane.split.horizontal"]
+title = "Split horizontally (above / below)"
+group = "Panes"
+aliases = ["split", "sp"]
+args = [{ name = "view", type = "view", optional = true }]
+undoable = true
+
+["pane.close"]
+title = "Close pane"
+group = "Panes"
+aliases = ["close"]
+when = "panes > 1"
+reason = "the last pane can't be closed"
+undoable = true
+
+["pane.only"]
+title = "Only this pane (others become hidden buffers)"
+group = "Panes"
+aliases = ["only"]
+when = "panes > 1"
+reason = "it is already the only pane"
+undoable = true
+
+["pane.buffers"]
+title = "Hidden buffers"
+group = "Panes"
+aliases = ["buffers", "ls"]
+when = "buffers > 0"
+reason = "no hidden buffers"
+
+["pane.buffer"]
+title = "Show a hidden buffer in a split"
+group = "Panes"
+aliases = ["buffer", "b"]
+args = [{ name = "buffer", type = "buffer" }]
+when = "buffers > 0"
+reason = "no hidden buffers"
+undoable = true
+hidden = true
+
+["pane.view"]
+title = "Change this pane's view"
+group = "Panes"
+aliases = ["view", "e"]
+args = [{ name = "view", type = "view", optional = true }]
+undoable = true
+
+["pane.maximize"]
+title = "Maximise / restore pane"
+group = "Panes"
+aliases = ["max"]
+
+["pane.collapse"]
+title = "Collapse / expand pane"
+group = "Panes"
+undoable = true
+
+["pane.swap"]
+title = "Swap with the next pane"
+group = "Panes"
+when = "panes > 1"
+reason = "needs two panes"
+undoable = true
+
+["pane.rotate"]
+title = "Rotate the split"
+group = "Panes"
+when = "panes > 1"
+reason = "needs two panes"
+undoable = true
+
+["pane.equalize"]
+title = "Equal sizes"
+group = "Panes"
+when = "panes > 1"
+reason = "needs two panes"
+undoable = true
+
+["pane.resize"]
+title = "Resize pane"
+group = "Panes"
+args = [{ name = "dir", type = "enum", values = ["<", ">", "+", "-"] }]
+sticky = true
+undoable = true
+
+["pane.group"]
+title = "Cycle link group (A → B → none)"
+group = "Panes"
+undoable = true
+
+["pane.pin"]
+title = "Pin / unpin pane"
+group = "Panes"
+undoable = true
+
+["layout.menu"]
+title = "Layouts: save, load, reset"
+group = "Panes"
+
+["layout.save"]
+title = "Save this layout"
+group = "Panes"
+aliases = ["layout-save"]
+args = [{ name = "name", type = "text" }]
+handler = "both"  # the client sends the layout tree along
+
+["layout.load"]
+title = "Load a saved layout"
+group = "Panes"
+aliases = ["layout-load"]
+args = [{ name = "name", type = "layout" }]
+undoable = true
+
+["layout.reset"]
+title = "Reset this mode's layout"
+group = "Panes"
+aliases = ["layout-reset"]
+undoable = true
+
+["section.toggle"]
+title = "Fold / unfold the section"
+group = "Sections"
+when = "pane.sections"
+reason = "this pane has no sections"
+
+["section.all"]
+title = "Fold / unfold all sections"
+group = "Sections"
+when = "pane.sections"
+reason = "this pane has no sections"

@@ -1,0 +1,81 @@
+# Look and settings (spec 07 §5) and the generic list commands (spec 08 · Lists).
+
+["ui.appbar"]
+title = "Show / hide the app bar"
+group = "UI"
+
+["ui.keystrips"]
+title = "Show / hide key strips in pane footers"
+group = "UI"
+
+["ui.zen"]
+title = "Zen: hide app bar and footers"
+group = "UI"
+
+["ui.themepair"]
+title = "Switch between the light and dark theme"
+group = "UI"
+handler = "server"
+undoable = true
+
+["theme.set"]
+title = "Theme"
+group = "UI"
+aliases = ["theme", "colorscheme"]
+args = [{ name = "theme", type = "theme" }]
+handler = "server"
+undoable = true
+
+["pref.set"]
+title = "Set a token (e.g. main=#e2b714, font-size=14, density=compact)"
+group = "UI"
+aliases = ["set"]
+args = [{ name = "assignment", type = "token" }]
+handler = "server"
+undoable = true
+repeatable = true
+
+["pref.reset"]
+title = "Reset a token to the theme's value"
+group = "UI"
+aliases = ["unset"]
+args = [{ name = "token", type = "tokenname" }]
+handler = "server"
+undoable = true
+
+["list.down"]
+title = "Cursor down"
+group = "Lists"
+
+["list.up"]
+title = "Cursor up"
+group = "Lists"
+
+["list.first"]
+title = "First item"
+group = "Lists"
+
+["list.last"]
+title = "Last item"
+group = "Lists"
+
+["list.open"]
+title = "Open the item"
+group = "Lists"
+
+["list.select"]
+title = "Select / deselect the item"
+group = "Lists"
+
+["list.visual"]
+title = "Visual (range) selection"
+group = "Lists"
+
+["list.selectall"]
+title = "Select all"
+group = "Lists"
+
+["demo.flash"]
+title = "Demo: a button with a key (flashes when the key is pressed)"
+group = "Style guide"
+repeatable = true

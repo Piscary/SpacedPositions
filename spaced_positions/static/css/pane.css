@@ -1,0 +1,154 @@
+/* Layout: split, gutter, pane, rail, section (spec 03 §2–5, 05 · B). */
+
+.split { display: flex; min-width: 0; min-height: 0; }
+.split--row { flex-direction: row; }
+.split--col { flex-direction: column; }
+.split__child { position: relative; display: flex; min-width: 0; min-height: 0; }
+.split__child > * { flex: 1 1 auto; }
+.split--row > .split__child { min-width: 10rem; }
+.split--col > .split__child { min-height: calc(var(--pane-header-h) * 3); }
+.split__child.is-collapsed { flex: 0 0 auto !important; min-width: 0; min-height: 0; }
+
+.gutter { position: relative; flex: 0 0 var(--rule); background: var(--line); z-index: var(--z-gutter); }
+.gutter::after { content: ""; position: absolute; inset: 0; }
+.split--row > .gutter { cursor: col-resize; }
+.split--row > .gutter::after { left: calc(var(--gutter-hit) * -1); right: calc(var(--gutter-hit) * -1); }
+.split--col > .gutter { cursor: row-resize; }
+.split--col > .gutter::after { top: calc(var(--gutter-hit) * -1); bottom: calc(var(--gutter-hit) * -1); }
+.gutter:hover, .gutter.is-dragging { background: var(--main); }
+.is-resizing, .is-resizing * { user-select: none; }
+
+/* ── Pane ────────────────────────────────────────────────────────────────────────────────────────────────────── */
+.pane {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-width: 0;
+  min-height: 0;
+  background: var(--bg);
+}
+.pane::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: calc(var(--rule) * 2) solid transparent;
+  z-index: 1;
+}
+.pane.is-focused::after { border-color: var(--focus); }
+
+.pane__header {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  height: var(--pane-header-h);
+  padding: 0 var(--s-1) 0 var(--s-2);
+  background: var(--bg-alt);
+  border-bottom: var(--rule) solid var(--line);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: default;
+}
+.pane.is-focused .pane__header { background: var(--main); color: var(--main-text); border-bottom-color: var(--main); }
+.pane__n {
+  min-width: calc(var(--font-size) * 1.2);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-align: center;
+}
+.pane__title { font-weight: 600; }
+.pane__subject { color: var(--text-sub); overflow: hidden; text-overflow: ellipsis; }
+.pane.is-focused .pane__subject { color: inherit; opacity: 0.8; }
+.pane__actions { display: flex; align-items: center; gap: var(--s-half); margin-left: auto; }
+.pane__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-half);
+  padding: 0 var(--s-1);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--bg);
+  background: var(--text-sub);
+}
+.pane__link[data-group="A"] { background: var(--group-a); }
+.pane__link[data-group="B"] { background: var(--group-b); }
+.pane__header .pane__link { border: var(--rule) solid transparent; }
+.pane.is-focused .pane__link { border-color: var(--main-text); }
+.pane__tabs { display: flex; gap: var(--s-half); }
+.pane__tab {
+  border: var(--rule) solid currentColor;
+  border-radius: var(--radius);
+  padding: 0 var(--s-1);
+  background: transparent;
+  font-size: var(--fs-xs);
+  opacity: 0.8;
+}
+
+.pane__body { position: relative; min-height: 0; overflow: auto; container-type: inline-size; }
+.pane__body--pad { padding: var(--s-3); }
+.pane__footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-1) var(--s-3);
+  min-height: var(--row-sm);
+  padding: var(--s-half) var(--s-2);
+  border-top: var(--rule) solid var(--line);
+  background: var(--bg-alt);
+  font-size: var(--fs-xs);
+  color: var(--text-sub);
+}
+.shell.no-keystrips .pane__footer, .shell.is-zen .pane__footer { display: none; }
+
+/* Collapsed: header only (in a column split) or a vertical rail (in a row split). */
+.pane.is-collapsed { grid-template-rows: auto; }
+.pane.is-collapsed .pane__body, .pane.is-collapsed .pane__footer { display: none; }
+.split--row > .split__child > .pane.is-collapsed { width: var(--rail-w); }
+.split--row > .split__child > .pane.is-collapsed .pane__header {
+  height: 100%;
+  writing-mode: vertical-rl;
+  padding: var(--s-2) 0;
+  border-bottom: 0;
+}
+.split--row > .split__child > .pane.is-collapsed .pane__actions { display: none; }
+
+.pane__loading {
+  position: absolute;
+  top: var(--pane-header-h);
+  left: 0;
+  right: 0;
+  height: calc(var(--rule) * 2);
+  background: var(--main);
+  animation: loading calc(var(--dur-slow) * 4) ease-in-out infinite;
+  transform-origin: left;
+}
+@keyframes loading {
+  0% { transform: scaleX(0); }
+  60% { transform: scaleX(0.9); }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+
+/* ── Section ─────────────────────────────────────────────────────────────────────────────────────────────────── */
+.section + .section { border-top: var(--rule) solid var(--line); }
+.section__header {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: var(--section-header-h);
+  padding: 0 var(--s-2);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  user-select: none;
+}
+.section__header:hover { background: var(--surface-hover); }
+.section.is-cursor > .section__header { background: var(--cursor-row); box-shadow: inset calc(var(--rule) * 3) 0 0 var(--main); }
+.section__caret::before { content: "▾"; display: inline-block; width: 1em; color: var(--text-sub); transition: transform var(--dur-fast); }
+.section.is-collapsed .section__caret::before { transform: rotate(-90deg); }
+.section[data-pinned] .section__caret::before { content: "•"; }
+.section__title { font-weight: 650; }
+.section__summary { color: var(--text-sub); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1 1 auto; min-width: 0; }
+.section.is-collapsed > .section__body { display: none; }
+.section__body { padding: var(--s-2) var(--s-3) var(--s-3); }

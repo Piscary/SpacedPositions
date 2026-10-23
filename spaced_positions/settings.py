@@ -1,0 +1,90 @@
+"""Django settings. Everything that differs per run comes from environment variables set by the launcher
+(`spos`) or by `manage.py` for development."""
+
+import os
+from pathlib import Path
+
+from spaced_positions import paths
+
+PACKAGE_DIR = Path(__file__).resolve().parent
+REPO_DIR = PACKAGE_DIR.parent
+DATA_DIR = paths.data_dir()
+
+DEBUG = os.environ.get("SPOS_DEBUG") == "1"
+SECRET_KEY = paths.secret_key()
+
+# The launcher sets a random token; requests need it once (as ?token=) and then carry a cookie (core.middleware).
+SPOS_TOKEN = os.environ.get("SPOS_TOKEN", "")
+SPOS_LAUNCHED = os.environ.get("SPOS_LAUNCHED") == "1"
+ALLOWED_HOSTS = os.environ.get("SPOS_ALLOWED_HOSTS", "127.0.0.1,localhost,testserver").split(",")
+
+INSTALLED_APPS = [
+    "django.contrib.contenttypes",
+    "whitenoise.runserver_nostatic",  # WhiteNoise serves static files in development too
+    "django.contrib.staticfiles",
+    "spaced_positions.core",
+    "spaced_positions.design",
+]
+
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "spaced_positions.core.middleware.TokenMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+ROOT_URLCONF = "spaced_positions.urls"
+WSGI_APPLICATION = "spaced_positions.wsgi.application"
+
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [PACKAGE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "spaced_positions.core.context_processors.shell",
+            ],
+            "builtins": ["spaced_positions.core.templatetags.ui"],
+            "string_if_invalid": "",
+        },
+    },
+]
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": DATA_DIR / "db.sqlite3",
+        "OPTIONS": {"init_command": "PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL;"},
+    }
+}
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LANGUAGE_CODE = "en"
+USE_I18N = True
+TIME_ZONE = "UTC"
+USE_TZ = True
+
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [PACKAGE_DIR / "static"]
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = DEBUG
+WHITENOISE_MAX_AGE = 0 if DEBUG else 3600  # @import-ed CSS isn't versioned, so keep caching short
+
+CSRF_COOKIE_SAMESITE = "Strict"
+SESSION_COOKIE_SAMESITE = "Strict"
+X_FRAME_OPTIONS = "DENY"
+
+# Design system sources (repository only; an installed app uses the generated files in static/design).
+DESIGN_DIR = REPO_DIR / "design"
+DESIGN_OUT = PACKAGE_DIR / "static" / "design"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "root": {"handlers": ["console"], "level": "WARNING"},
+}

@@ -1,0 +1,93 @@
+/* Data display and feedback: list, chip, badge, stat, meter, empty state, skeleton, inline message, flash,
+   achievement chip (spec 05 · E, H). */
+
+/* ── List ────────────────────────────────────────────────────────────────────────────────────────────────────── */
+.list { display: flex; flex-direction: column; }
+.list__row {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: var(--row-md);
+  padding: 0 var(--s-2);
+  border-bottom: var(--rule) solid var(--line);
+  cursor: pointer;
+}
+.list__row:hover { background: var(--surface-hover); }
+.list__row.is-selected { background: var(--selection); }
+.list__row.is-cursor { background: var(--cursor-row); box-shadow: inset calc(var(--rule) * 3) 0 0 var(--main); }
+.list__row.is-selected.is-cursor { background: color-mix(in oklab, var(--selection) 70%, var(--main)); }
+.list__mark { font-family: var(--font-mono); color: var(--text-sub); }
+.list__row.is-selected .list__mark { color: var(--main); }
+.list__id { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-sub); }
+.list__title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.list__meta { display: flex; align-items: center; gap: var(--s-1); color: var(--text-sub); font-size: var(--fs-xs); }
+
+/* ── Chip, badge ─────────────────────────────────────────────────────────────────────────────────────────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  height: calc(var(--font-size) * 1.45);
+  padding: 0 var(--s-1);
+  border: var(--rule) solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+}
+.chip--tag { border-left: calc(var(--rule) * 3) solid var(--info); }
+.chip--auto::before { content: "◇"; color: var(--text-sub); }
+.chip--suggested { border-style: dashed; }
+.chip--good { color: var(--good); border-color: currentColor; }
+.chip--bad { color: var(--bad); border-color: currentColor; }
+.chip__remove { border: 0; background: transparent; padding: 0; color: var(--text-sub); }
+
+.badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: calc(var(--font-size) * 1.35);
+  height: calc(var(--font-size) * 1.35);
+  padding: 0 var(--s-1);
+  border-radius: var(--font-size);
+  background: var(--main);
+  color: var(--main-text);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+
+/* ── Stat, meter ─────────────────────────────────────────────────────────────────────────────────────────────── */
+.stats-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: var(--rule); background: var(--line); border: var(--rule) solid var(--line); }
+.stat { display: grid; gap: var(--s-half); padding: var(--s-2) var(--s-3); background: var(--bg); cursor: pointer; }
+.stat:hover { background: var(--surface-hover); }
+.stat__label { color: var(--text-sub); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; }
+.stat__value { font-size: var(--fs-2xl); font-weight: 650; line-height: 1.1; }
+.stat__delta { font-size: var(--fs-xs); color: var(--text-sub); }
+.stat__delta.is-up { color: var(--good); }
+.stat__delta.is-down { color: var(--bad); }
+
+.meter { display: grid; gap: var(--s-1); }
+.meter__top { display: flex; justify-content: space-between; font-size: var(--fs-sm); }
+.meter__track { position: relative; height: calc(var(--space) * 2); border-radius: var(--radius); background: var(--surface); border: var(--rule) solid var(--line); overflow: hidden; }
+.meter__fill { position: absolute; inset: 0 auto 0 0; background: var(--main); }
+
+/* ── Empty, skeleton, inline message ─────────────────────────────────────────────────────────────────────────── */
+.empty { display: grid; gap: var(--s-3); align-content: start; max-width: 40rem; padding: var(--s-4); }
+.empty__phase { justify-self: start; }
+.empty__title { font-size: var(--fs-lg); font-weight: 650; }
+.empty__text { color: var(--text-sub); }
+
+.skeleton { border-radius: var(--radius); background: linear-gradient(90deg, var(--surface) 25%, var(--surface-hover) 50%, var(--surface) 75%); background-size: 200% 100%; animation: skeleton calc(var(--dur-slow) * 5) linear infinite; }
+@keyframes skeleton { to { background-position: -200% 0; } }
+
+.inline-message { display: flex; align-items: center; gap: var(--s-2); padding: var(--s-2) var(--s-3); border: var(--rule) solid var(--line); border-left: calc(var(--rule) * 3) solid var(--info); border-radius: var(--radius); background: var(--bg-alt); font-size: var(--fs-sm); }
+.inline-message[data-kind="warn"] { border-left-color: var(--warn); }
+.inline-message[data-kind="error"] { border-left-color: var(--bad); }
+.inline-message[data-kind="good"] { border-left-color: var(--good); }
+
+/* ── Feedback ────────────────────────────────────────────────────────────────────────────────────────────────── */
+.is-flash-row { animation: flash-row var(--dur-slow) ease-out; }
+@keyframes flash-row { from { background: var(--selection); } }
+
+.achievement { display: inline-flex; align-items: center; gap: var(--s-1); padding: 0 var(--s-2); height: var(--row-sm); border-radius: var(--radius); border: var(--rule) solid var(--special); color: var(--special); font-size: var(--fs-xs); font-weight: 650; }
+.achievement::before { content: "▲"; }

@@ -1,0 +1,21 @@
+<div class="welcome">
+  <h1>{{ mode.label }}</h1>
+  <p class="welcome__lead">{{ mode.summary }}</p>
+  {% if mode.phase %}
+  <div class="inline-message">This mode is built in phase {{ mode.phase }}. Phase 0 is the foundation: the shell, panes and splits, the command system and the keys. Everything you see here already works with keys and mouse.</div>
+  {% endif %}
+  <h2>Try</h2>
+  <div class="welcome__keys">
+    {% keycap "space" %}<span>Leader: the which-key panel shows what can follow</span>
+    {% keycap "space t" %}<span>Switch mode (h t a c l s ,) · <kbd class="keycap">␣</kbd><kbd class="keycap">␣</kbd> back to the previous one</span>
+    {% keycap "tab" %}<span>Focus the next pane · {% keycap "space 2" %} pane number 2</span>
+    {% keycap "space w v" %}<span>Split vertically, then pick a view</span>
+    {% keycap "space w <" %}<span>Resize (keep pressing <kbd class="keycap">&lt;</kbd> <kbd class="keycap">&gt;</kbd> <kbd class="keycap">+</kbd> <kbd class="keycap">-</kbd>, Esc ends)</span>
+    {% keycap "space w m" %}<span>Maximise the pane · {% keycap "space w c" %} collapse it</span>
+    {% keycap ":" %}<span>Command line: <span class="mono">:vsplit notes</span>, <span class="mono">:theme ink</span>, <span class="mono">:set main=#e2b714</span></span>
+    {% keycap "F" %}<span>Hint labels: click anything by keyboard</span>
+    {% keycap "u" %}<span>Undo (layout and settings) · {% keycap "U" %} redo</span>
+    {% keycap "?" %}<span>Every key that works right now</span>
+  </div>
+  <div class="actionbar">{% cmd "mode.ui" variant="primary" %}{% cmd "cmdline.open" %}{% cmd "help.context" %}</div>
+</div>

@@ -1,0 +1,6 @@
+# Licences of files in spaced_positions/static/vendor/ (spec 09 §13). `design check` fails for a vendored file
+# that isn't listed here or whose licence is not GPL-3.0-compatible.
+
+[vendor."htmx.min.js"]
+licence = "0BSD (Zero-Clause BSD)"
+source = "htmx.org 2.0.11, https://htmx.org"

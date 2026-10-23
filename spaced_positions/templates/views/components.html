@@ -1,0 +1,116 @@
+{% color_tokens as color_names %}
+<div class="gallery">
+  {% section "Colour tokens" key="c" summary="tier 1, from the theme · :theme, :set main=#…" %}
+    <div class="gallery__swatches">
+      {% for name in color_names %}
+      <div class="swatch"><span class="swatch__chip" style="background: var(--{{ name }})"></span><span class="swatch__name">{{ name }}</span></div>
+      {% endfor %}
+    </div>
+    <div class="gallery__row" style="margin-top: var(--s-3)">
+      <span class="gallery__label">Board squares</span>
+      <div class="gallery__board" aria-hidden="true">{% for i in "0123456701234567" %}<span class="{% cycle '' 'd' '' 'd' '' 'd' '' 'd' 'd' '' 'd' '' 'd' '' 'd' '' %}"></span>{% endfor %}</div>
+    </div>
+  {% endsection %}
+
+  {% section "Type" key="y" summary="font-ui, font-mono, scale from font-size × type-ratio" %}
+    <div class="gallery__type">
+      <span style="font-size: var(--fs-2xl); font-weight: 650">2xl · 47 puzzles</span>
+      <span style="font-size: var(--fs-xl); font-weight: 650">xl · Storm 5′</span>
+      <span style="font-size: var(--fs-lg)">lg · White to play, mate in 2</span>
+      <span>md · The quick brown fox jumps over the lazy dog. 1.e4 e5 2.Nf3 Nc6</span>
+      <span style="font-size: var(--fs-sm)" class="muted">sm · secondary text</span>
+      <span style="font-size: var(--fs-xs)" class="muted">xs · labels and keycaps</span>
+      <span class="mono">mono · 6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1</span>
+    </div>
+  {% endsection %}
+
+  {% section "Keycap" key="k" summary="every key as it appears in buttons, hints and help" %}
+    <div class="gallery__row">
+      {% keycap "f" %}{% keycap "G" %}{% keycap "space w v" %}{% keycap "mod+enter" %}{% keycap "mod+shift+z" %}{% keycap "esc" %}{% keycap "tab" %}{% keycap "shift+tab" %}{% keycap "up" %}{% keycap "backspace" %}{% keycap "?" %}
+    </div>
+  {% endsection %}
+
+  {% section "KeyButton" key="b" summary="primary, secondary, ghost, danger · sm, md, lg · full, compact, key" %}
+    <div class="gallery__row"><span class="gallery__label">Variants</span>
+      {% cmd "demo.flash" variant="primary" label="Primary" %}{% cmd "demo.flash" label="Secondary" %}{% cmd "demo.flash" variant="ghost" label="Ghost" %}{% cmd "app.quit" variant="secondary" %}
+    </div>
+    <div class="gallery__row"><span class="gallery__label">Sizes</span>
+      {% cmd "demo.flash" size="sm" label="Small" %}{% cmd "demo.flash" label="Medium" %}{% cmd "demo.flash" size="lg" label="Large" %}
+    </div>
+    <div class="gallery__row"><span class="gallery__label">Display</span>
+      {% cmd "pane.split.vertical" icon="◫" %}{% cmd "pane.split.vertical" display="compact" icon="◫" %}{% cmd "pane.split.vertical" display="key" icon="◫" %}
+    </div>
+    <div class="gallery__row"><span class="gallery__label">Disabled</span>
+      <button type="button" class="keybutton keybutton--secondary keybutton--md keybutton--full" aria-disabled="true" title="Undo: nothing to undo"><span class="keybutton__label">Undo</span>{% keycap "u" %}</button>
+      <span class="muted">a disabled button keeps its key; the reason is in its title and in the command line</span>
+    </div>
+    <p class="muted">Press <kbd class="keycap">d</kbd> while this pane has focus: every “demo” button flashes, so you see which button a key belongs to.</p>
+  {% endsection %}
+
+  {% section "SegmentedControl and Toggle" key="s" summary="rows of options, each row on its own keyboard row" %}
+    <div class="view-stack" style="padding: 0">
+      <div class="segmented" data-segmented><span class="segmented__label">Look</span><span class="segmented__options" role="radiogroup">
+        <button type="button" class="segmented__option" role="radio" aria-checked="true">Normal <kbd class="keycap">q</kbd></button>
+        <button type="button" class="segmented__option" role="radio" aria-checked="false">Silhouette <kbd class="keycap">w</kbd></button>
+        <button type="button" class="segmented__option" role="radio" aria-checked="false">Blind <kbd class="keycap">e</kbd></button>
+      </span></div>
+      <div class="segmented" data-segmented><span class="segmented__label">Side</span><span class="segmented__options" role="radiogroup">
+        <button type="button" class="segmented__option" role="radio" aria-checked="true">To move <kbd class="keycap">a</kbd></button>
+        <button type="button" class="segmented__option" role="radio" aria-checked="false">White <kbd class="keycap">s</kbd></button>
+        <button type="button" class="segmented__option" role="radio" aria-checked="false">Black <kbd class="keycap">d</kbd></button>
+        <button type="button" class="segmented__option" role="radio" aria-checked="false">Random <kbd class="keycap">f</kbd></button>
+      </span></div>
+      <button type="button" class="toggle" aria-pressed="true" data-toggle><span class="toggle__switch"></span>First move only <kbd class="keycap">o</kbd></button>
+    </div>
+  {% endsection %}
+
+  {% section "Chip, badge, achievement" key="h" summary="tags with field colour and provenance, states" %}
+    <div class="gallery__row">
+      <span class="chip chip--tag">Gabel</span><span class="chip chip--tag chip--auto">Fesselung</span><span class="chip chip--tag chip--suggested">Zwischenzug?</span>
+      <span class="chip chip--good">✓ solved</span><span class="chip chip--bad">✗ missed</span><span class="chip">new</span>
+      <span class="badge">14</span>
+      <span class="achievement">new best Storm 5′: 47</span>
+    </div>
+  {% endsection %}
+
+  {% section "Stat and meter" key="m" summary="KPI tiles, progress towards a goal" %}
+    <div class="stats-row">
+      <div class="stat"><span class="stat__label">Pattern library</span><span class="stat__value">212</span><span class="stat__delta is-up">▲ 12 this week</span></div>
+      <div class="stat"><span class="stat__label">Retention 30d</span><span class="stat__value">88%</span><span class="stat__delta is-down">▼ 2 pts</span></div>
+      <div class="stat"><span class="stat__label">Streak</span><span class="stat__value">9</span><span class="stat__delta">days in a row</span></div>
+    </div>
+    <div class="meter" style="margin-top: var(--s-3)">
+      <div class="meter__top"><span>Next milestone</span><span class="mono">212 / 250</span></div>
+      <div class="meter__track"><div class="meter__fill" style="width: 84.8%"></div></div>
+    </div>
+  {% endsection %}
+
+  {% section "Inline message, empty state, skeleton" key="e" summary="info, warning, error, success" %}
+    <div class="view-stack" style="padding: 0">
+      <div class="inline-message">Info: the engine is analysing at depth 24.</div>
+      <div class="inline-message" data-kind="warn">Warning: castling KQ is impossible, rook not on h1 · <kbd class="keycap">f</kbd> fix</div>
+      <div class="inline-message" data-kind="error">Error: 1 change not saved · <kbd class="keycap">r</kbd> retry</div>
+      <div class="inline-message" data-kind="good">Saved Polgár Nr. 102.</div>
+      <div class="empty"><div class="empty__title">No positions match</div><p class="empty__text">Try fewer filters, or collect new positions.</p><div class="actionbar">{% cmd "mode.collect" %}{% cmd "cmdline.open" %}</div></div>
+      <div class="skeleton" style="height: var(--row-md)"></div>
+      <div class="skeleton" style="height: var(--row-md); width: 60%"></div>
+    </div>
+  {% endsection %}
+
+  {% section "TextField and TextArea" key="f" summary="focusing a field enters the Insert layer" %}
+    <div class="formrow">
+      <label class="formrow__label" for="gallery-field">Source</label>
+      <input class="field" id="gallery-field" placeholder="Polgár: 5334 Problems">
+      <div class="formrow__help"><span>A FormRow with help text.</span><span class="formrow__set">:set source=…</span></div>
+    </div>
+    <div class="formrow">
+      <label class="formrow__label" for="gallery-fen">FEN</label>
+      <input class="field field--mono" id="gallery-fen" value="6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1">
+      <div class="formrow__error">castling KQ: rook not on h1</div>
+    </div>
+  {% endsection %}
+
+  {% section "Nested section, collapsed" key="n" summary="a collapsed section keeps its one-line summary" collapsed=True %}
+    <p>Collapsed sections stay visible as one line, with their summary. <kbd class="keycap">z</kbd> folds the section under the cursor, <kbd class="keycap">Z</kbd> all of them.</p>
+  {% endsection %}
+</div>

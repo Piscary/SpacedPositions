@@ -1,0 +1,359 @@
+{
+ "version": 1,
+ "themes": {
+  "ink": {
+   "label": "Ink",
+   "dark": true,
+   "pair": "paper",
+   "values": {
+    "sq-lastmove": "#9bc70069",
+    "sq-selected": "#14551e80",
+    "sq-check": "#ff000066",
+    "sq-hint": "#3b82f666",
+    "arrow-green": "#15781b",
+    "arrow-red": "#882020",
+    "arrow-blue": "#003088",
+    "arrow-yellow": "#e68f00",
+    "arrow-engine": "#1e6fd9",
+    "board-border": 0,
+    "board-coords": "inside",
+    "piece-set": "cburnett",
+    "font-ui": "Inter, system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "font-mono": "'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
+    "font-moves": "var(--font-ui)",
+    "font-size": 13,
+    "type-ratio": 1.2,
+    "density": "cozy",
+    "radius": 3,
+    "rule": 1,
+    "motion": 1,
+    "board-motion": 150,
+    "figurines": false,
+    "bg": "#16181d",
+    "bg-alt": "#1d2027",
+    "surface": "#262a33",
+    "line": "#30353f",
+    "text": "#d7dae0",
+    "text-sub": "#8b929c",
+    "main": "#e2b714",
+    "main-text": "#16181d",
+    "good": "#4fb8a4",
+    "bad": "#e0696b",
+    "warn": "#e0a050",
+    "info": "#61afef",
+    "special": "#c678dd",
+    "sq-light": "#dee3e6",
+    "sq-dark": "#8ca2ad"
+   },
+   "css": {
+    "--sq-lastmove": "#9bc70069",
+    "--sq-selected": "#14551e80",
+    "--sq-check": "#ff000066",
+    "--sq-hint": "#3b82f666",
+    "--arrow-green": "#15781b",
+    "--arrow-red": "#882020",
+    "--arrow-blue": "#003088",
+    "--arrow-yellow": "#e68f00",
+    "--arrow-engine": "#1e6fd9",
+    "--board-border": "0px",
+    "--font-ui": "Inter, system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "--font-mono": "'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
+    "--font-moves": "var(--font-ui)",
+    "--font-size": "13px",
+    "--type-ratio": "1.2",
+    "--space": "4px",
+    "--radius": "3px",
+    "--rule": "1px",
+    "--motion": "1",
+    "--board-motion": "150ms",
+    "--bg": "#16181d",
+    "--bg-alt": "#1d2027",
+    "--surface": "#262a33",
+    "--line": "#30353f",
+    "--text": "#d7dae0",
+    "--text-sub": "#8b929c",
+    "--main": "#e2b714",
+    "--main-text": "#16181d",
+    "--good": "#4fb8a4",
+    "--bad": "#e0696b",
+    "--warn": "#e0a050",
+    "--info": "#61afef",
+    "--special": "#c678dd",
+    "--sq-light": "#dee3e6",
+    "--sq-dark": "#8ca2ad"
+   }
+  },
+  "paper": {
+   "label": "Paper",
+   "dark": false,
+   "pair": "ink",
+   "values": {
+    "sq-lastmove": "#9bc70069",
+    "sq-selected": "#14551e80",
+    "sq-check": "#ff000066",
+    "sq-hint": "#3b82f666",
+    "arrow-green": "#15781b",
+    "arrow-red": "#882020",
+    "arrow-blue": "#003088",
+    "arrow-yellow": "#e68f00",
+    "arrow-engine": "#1e6fd9",
+    "board-border": 0,
+    "board-coords": "inside",
+    "piece-set": "cburnett",
+    "font-ui": "Inter, system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "font-mono": "'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
+    "font-moves": "var(--font-ui)",
+    "font-size": 13,
+    "type-ratio": 1.2,
+    "density": "cozy",
+    "radius": 3,
+    "rule": 1,
+    "motion": 1,
+    "board-motion": 150,
+    "figurines": false,
+    "bg": "#f7f6f2",
+    "bg-alt": "#ecebe5",
+    "surface": "#ffffff",
+    "line": "#d6d3ca",
+    "text": "#23252a",
+    "text-sub": "#62666f",
+    "main": "#2f5bd3",
+    "main-text": "#ffffff",
+    "good": "#1f7a6a",
+    "bad": "#c23b32",
+    "warn": "#9a6412",
+    "info": "#2a6fa8",
+    "special": "#8243b8",
+    "sq-light": "#f0d9b5",
+    "sq-dark": "#b58863"
+   },
+   "css": {
+    "--sq-lastmove": "#9bc70069",
+    "--sq-selected": "#14551e80",
+    "--sq-check": "#ff000066",
+    "--sq-hint": "#3b82f666",
+    "--arrow-green": "#15781b",
+    "--arrow-red": "#882020",
+    "--arrow-blue": "#003088",
+    "--arrow-yellow": "#e68f00",
+    "--arrow-engine": "#1e6fd9",
+    "--board-border": "0px",
+    "--font-ui": "Inter, system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "--font-mono": "'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
+    "--font-moves": "var(--font-ui)",
+    "--font-size": "13px",
+    "--type-ratio": "1.2",
+    "--space": "4px",
+    "--radius": "3px",
+    "--rule": "1px",
+    "--motion": "1",
+    "--board-motion": "150ms",
+    "--bg": "#f7f6f2",
+    "--bg-alt": "#ecebe5",
+    "--surface": "#ffffff",
+    "--line": "#d6d3ca",
+    "--text": "#23252a",
+    "--text-sub": "#62666f",
+    "--main": "#2f5bd3",
+    "--main-text": "#ffffff",
+    "--good": "#1f7a6a",
+    "--bad": "#c23b32",
+    "--warn": "#9a6412",
+    "--info": "#2a6fa8",
+    "--special": "#8243b8",
+    "--sq-light": "#f0d9b5",
+    "--sq-dark": "#b58863"
+   }
+  }
+ },
+ "schema": {
+  "bg": {
+   "type": "color",
+   "description": "Workspace background"
+  },
+  "bg-alt": {
+   "type": "color",
+   "description": "Pane headers, status line, app bar"
+  },
+  "surface": {
+   "type": "color",
+   "description": "Inputs and raised elements: keycaps, chips"
+  },
+  "line": {
+   "type": "color",
+   "description": "Rules between panes, borders"
+  },
+  "text": {
+   "type": "color",
+   "description": "Main text"
+  },
+  "text-sub": {
+   "type": "color",
+   "description": "Secondary text, labels, axes"
+  },
+  "main": {
+   "type": "color",
+   "description": "Accent: focus, cursor, primary buttons, current mode"
+  },
+  "main-text": {
+   "type": "color",
+   "description": "Text on the accent colour"
+  },
+  "good": {
+   "type": "color",
+   "description": "Correct, good move, positive delta"
+  },
+  "bad": {
+   "type": "color",
+   "description": "Wrong, bad move, negative delta"
+  },
+  "warn": {
+   "type": "color",
+   "description": "Dubious move, warnings"
+  },
+  "info": {
+   "type": "color",
+   "description": "Neutral highlights, links"
+  },
+  "special": {
+   "type": "color",
+   "description": "Rewards: records, milestones, level-ups"
+  },
+  "sq-light": {
+   "type": "color",
+   "description": "Light squares"
+  },
+  "sq-dark": {
+   "type": "color",
+   "description": "Dark squares"
+  },
+  "sq-lastmove": {
+   "type": "color",
+   "description": "Last-move overlay (with alpha)"
+  },
+  "sq-selected": {
+   "type": "color",
+   "description": "Selected-piece overlay (with alpha)"
+  },
+  "sq-check": {
+   "type": "color",
+   "description": "King-in-check overlay (with alpha)"
+  },
+  "sq-hint": {
+   "type": "color",
+   "description": "Hint overlay (with alpha)"
+  },
+  "arrow-green": {
+   "type": "color",
+   "description": "Drawn arrows and circles: default colour"
+  },
+  "arrow-red": {
+   "type": "color",
+   "description": "Drawn arrows and circles with Shift"
+  },
+  "arrow-blue": {
+   "type": "color",
+   "description": "Drawn arrows and circles with Alt"
+  },
+  "arrow-yellow": {
+   "type": "color",
+   "description": "Drawn arrows and circles with Shift+Alt"
+  },
+  "arrow-engine": {
+   "type": "color",
+   "description": "Engine arrows (fade by rank)"
+  },
+  "board-border": {
+   "type": "px",
+   "description": "Board frame width",
+   "min": 0,
+   "max": 12
+  },
+  "board-coords": {
+   "type": "enum",
+   "description": "Coordinates",
+   "values": [
+    "inside",
+    "outside",
+    "off"
+   ],
+   "css": false
+  },
+  "piece-set": {
+   "type": "enum",
+   "description": "Piece set",
+   "values": [
+    "cburnett"
+   ],
+   "css": false
+  },
+  "font-ui": {
+   "type": "font",
+   "description": "Interface font"
+  },
+  "font-mono": {
+   "type": "font",
+   "description": "Keycaps, ids, FEN/PGN, clocks"
+  },
+  "font-moves": {
+   "type": "font",
+   "description": "Move lists (allows a figurine font)"
+  },
+  "font-size": {
+   "type": "px",
+   "description": "Base font size",
+   "min": 10,
+   "max": 20
+  },
+  "type-ratio": {
+   "type": "number",
+   "description": "Modular scale for headings and big numbers",
+   "min": 1.05,
+   "max": 1.6
+  },
+  "density": {
+   "type": "enum",
+   "description": "Spacing unit: compact 3px, cozy 4px, comfortable 5px",
+   "values": [
+    "compact",
+    "cozy",
+    "comfortable"
+   ],
+   "var": "space",
+   "css-values": {
+    "compact": "3px",
+    "cozy": "4px",
+    "comfortable": "5px"
+   }
+  },
+  "radius": {
+   "type": "px",
+   "description": "Corner radius",
+   "min": 0,
+   "max": 10
+  },
+  "rule": {
+   "type": "px",
+   "description": "Border width",
+   "min": 1,
+   "max": 3
+  },
+  "motion": {
+   "type": "number",
+   "description": "Animation speed factor: 0 = off, 1 = default",
+   "min": 0,
+   "max": 1.5
+  },
+  "board-motion": {
+   "type": "ms",
+   "description": "Piece animation",
+   "min": 0,
+   "max": 600
+  },
+  "figurines": {
+   "type": "bool",
+   "description": "Moves as figurines (♘f3) instead of letters (Nf3)",
+   "css": false
+  }
+ }
+}

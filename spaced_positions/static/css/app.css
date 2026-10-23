@@ -1,0 +1,15 @@
+/* Spaced Positions: the stylesheet entry point (spec 09 §1). Cascade layers keep the order explicit:
+   tokens (generated) → base → components → views → utilities. The theme block in the page is unlayered and
+   therefore wins over the token defaults. */
+@layer tokens, base, components, views, utilities;
+
+@import url("../design/tokens.css");
+@import url("base.css") layer(base);
+@import url("shell.css") layer(components);
+@import url("pane.css") layer(components);
+@import url("keys.css") layer(components);
+@import url("overlays.css") layer(components);
+@import url("data.css") layer(components);
+@import url("forms.css") layer(components);
+@import url("views.css") layer(views);
+@import url("utilities.css") layer(utilities);

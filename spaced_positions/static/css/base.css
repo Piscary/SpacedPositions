@@ -1,0 +1,34 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: var(--fs-md);
+  line-height: var(--leading);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
+h1 { font-size: var(--fs-xl); font-weight: 650; }
+h2 { font-size: var(--fs-lg); font-weight: 650; }
+h3 { font-size: var(--fs-md); font-weight: 650; }
+p + p { margin-top: var(--s-2); }
+
+a { color: var(--info); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+code, kbd, samp, pre { font-family: var(--font-mono); font-size: var(--fs-sm); }
+
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+
+::selection { background: var(--selection); }
+
+:focus-visible { outline: calc(var(--rule) * 2) solid var(--focus); outline-offset: calc(var(--rule) * -2); }
+
+[hidden] { display: none !important; }
