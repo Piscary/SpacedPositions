@@ -64,6 +64,7 @@ reference is `spec/08-keymap.md`.
 | `␣` `u` `z` | Zen: hide app bar and footers | `ui.zen` |
 | `␣` `u` `t` | Switch between the light and dark theme | `ui.themepair` |
 | `␣` `u` `p` | Piece set | `board.pieces` |
+| `␣` `u` `v` | Results as table · list · grid | `library.display` |
 
 ## pane
 
@@ -229,6 +230,7 @@ reference is `spec/08-keymap.md`.
 |---|---|---|
 | `r` | The same session again | `train.again` |
 | `m` | Review the missed ones | `train.missed` |
+| `a` | Analyse the missed ones (n / N in Analyse) | `train.analysemissed` |
 | `l` | Back to the sessions | `train.launcher` |
 | `y` | Copy the result | `train.copy` |
 | `j` | Cursor down | `list.down` |
@@ -271,8 +273,8 @@ reference is `spec/08-keymap.md`.
 | `m` `x` | Mark the move clear | `analysis.mark` |
 | `c` | Comment on this move | `analysis.comment` |
 | `C` | Comment on the start position | `analysis.rootcomment` |
-| `t` | Move tags | `analysis.tags` |
-| `T` | Position tags | `analysis.positiontags` |
+| `t` | Tag the move | `analysis.tags` |
+| `T` | Tag the position | `analysis.positiontags` |
 | `⇧↑` | Move the variation up | `analysis.moveup` |
 | `⇧↓` | Move the variation down | `analysis.movedown` |
 | `P` | Make this the main line | `analysis.promote` |
@@ -287,3 +289,57 @@ reference is `spec/08-keymap.md`.
 | `↵` | Play the engine's best move | `engine.best` |
 | `y` | Copy FEN | `board.copyfen` |
 | `Y` | Copy PGN | `board.copypgn` |
+
+## view.library
+
+| Keys | Command | Id |
+|---|---|---|
+| `1` | Collection positions | `library.collection` |
+| `2` | Collection games | `library.collection` |
+| `3` | Collection puzzles | `library.collection` |
+| `4` | Collection players | `library.collection` |
+| `5` | Collection sources | `library.collection` |
+| `6` | Collection tags | `library.collection` |
+| `t` | Tag the selection | `library.tag` |
+| `T` | Train these | `library.train` |
+| `d` | Move to the trash | `library.trash` |
+| `r` | Restore from the trash | `library.restore` |
+| `a` | Analyse these (n / N in Analyse) | `library.analyse` |
+| `y` | Copy the FENs | `library.copyfen` |
+| `e` | Export as PGN | `library.export` |
+
+## mode.collect
+
+| Keys | Command | Id |
+|---|---|---|
+| `⌘↵` | Save & next | `collect.save` |
+| `⌘⇧↵` | Save & open in Analyse | `collect.saveopen` |
+| `g` `d` | Go to the duplicate | `collect.duplicate` |
+
+## view.entry
+
+| Keys | Command | Id |
+|---|---|---|
+| `s` | Source of the entry session | `collect.source` |
+| `+` | Page + / − up | `collect.page` |
+| `-` | Page + / − down | `collect.page` |
+| `↑` | Diagram number + / − up | `collect.diagram` |
+| `↓` | Diagram number + / − down | `collect.diagram` |
+| `t` | Tag the next positions | `collect.tag` |
+| `⌫` | Remove the last tag of the entry session | `collect.untag` |
+| `r` | Ready for training on / off | `collect.ready` |
+| `1` | Tag preset on / off 1 | `collect.preset` |
+| `2` | Tag preset on / off 2 | `collect.preset` |
+| `3` | Tag preset on / off 3 | `collect.preset` |
+| `4` | Tag preset on / off 4 | `collect.preset` |
+| `5` | Tag preset on / off 5 | `collect.preset` |
+| `6` | Tag preset on / off 6 | `collect.preset` |
+| `7` | Tag preset on / off 7 | `collect.preset` |
+| `8` | Tag preset on / off 8 | `collect.preset` |
+| `9` | Tag preset on / off 9 | `collect.preset` |
+
+## view.filters
+
+| Keys | Command | Id |
+|---|---|---|
+| `-` | Exclude the facet (-term) | `library.exclude` |

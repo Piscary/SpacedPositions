@@ -30,8 +30,13 @@ def colors_hash() -> str:
 
 @require_GET
 def fen_check(request):
+    from spaced_positions.library.collect import describe, duplicate_of
+
     fen = request.GET.get("fen", "")
-    return JsonResponse(chesslogic.check_fen(fen, diagram=request.GET.get("diagram") == "1"))
+    result = chesslogic.check_fen(fen, diagram=request.GET.get("diagram") == "1")
+    found = duplicate_of(result.get("canonical") or "")
+    result["duplicate"] = describe(found) if found else None  # the live duplicate check of the board editor (spec 11 §2)
+    return JsonResponse(result)
 
 
 @require_POST

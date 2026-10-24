@@ -4,6 +4,8 @@
 
 import { focusedBoard, focusedKey } from "../islands/board.js"
 import { analyseNew } from "./analysis.js"
+import { collectPaste } from "./collect.js"
+import { chooseFile, openImport } from "./importer.js"
 import { command, enabled, handle, run } from "./commands.js"
 import { ctx, keycaps, status } from "./context.js"
 import { setOverlayHandler } from "./keys.js"
@@ -11,10 +13,12 @@ import { nodeOf } from "./layout.js"
 import * as lines from "./lines.js"
 
 let detected = null // the last detected paste, for the offer commands
+let pasted = "" // its text (the import reads it again)
 
 const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content || ""
 
 export async function detect(text) {
+  pasted = text
   let result
   try {
     result = await fetch("/chess/paste/", {
@@ -137,6 +141,10 @@ handle("paste.analyse", async () => {
   }
   return analyseNew({ start: fen, origin: "paste" })
 })
+
+handle("paste.collect", () => (detected ? collectPaste(detected) : false))
+handle("paste.import", () => (detected?.kind === "pgn" ? openImport(pasted) : false))
+handle("library.import", () => chooseFile())
 
 // ⌘V outside text fields. In a field, pasting types as usual.
 document.addEventListener("paste", (e) => {

@@ -23,6 +23,7 @@ from spaced_positions import chesslogic
 from spaced_positions.analysis import puzzles as analysis_puzzles
 from spaced_positions.analysis import tree
 from spaced_positions.analysis.models import Node
+from spaced_positions.library.models import PositionTag, Source, Tag
 from spaced_positions.training import puzzles
 from spaced_positions.training.models import Card, Position, Puzzle
 
@@ -119,12 +120,14 @@ class Command(BaseCommand):
                 fen=pos["fen"],
                 canonical=check["canonical"] or chesslogic.canonical_fen(pos["fen"]),
                 title=pos["title"] or f"Position {pos['id']}",
-                source=self.source_text(db, pos),
+                source=self.source(db, pos),
+                source_page=(pos["source_page"] or "")[:40],
+                source_ref=(f"Nr. {pos['source_ref']}" if pos["source_ref"] else "")[:300],
                 objective=self.objective(db, pos["id"]),
-                difficulty=pos["difficulty"],
-                tag_names=self.tag_names(db, pos["id"]),
+                difficulty_override=pos["difficulty"],
                 origin=origin,
             )
+            self.tag(db, position, pos["id"])
         mapping = {}
         old_nodes = db.execute(
             "select * from positions_variationnode where position_id = ? order by ply, sort_order, id", (old_id,)
@@ -195,21 +198,22 @@ class Command(BaseCommand):
             out.append(reply["uci"])
             node, point = answers[reply["uci"]], reply["next"]
 
-    def source_text(self, db, pos):
-        parts = []
+    def source(self, db, pos):
+        """The old book or website as a Source (matched by title, so a second import reuses it)."""
         if pos["book_id"]:
-            book = db.execute("select title, authors from sources_book where id = ?", (pos["book_id"],)).fetchone()
+            book = db.execute("select * from sources_book where id = ?", (pos["book_id"],)).fetchone()
             if book:
-                parts.append(", ".join(x for x in (book["authors"], book["title"]) if x))
+                found = Source.objects.filter(kind=Source.Kind.BOOK, title=book["title"]).first()
+                return found or Source.objects.create(
+                    kind=Source.Kind.BOOK, title=book["title"], authors=book["authors"] or "", year=book["year"],
+                    publisher=book["publisher"] or "", isbn=book["isbn"] or "", notes=book["notes"] or "",
+                )
         if pos["website_id"]:
-            site = db.execute("select name from sources_website where id = ?", (pos["website_id"],)).fetchone()
+            site = db.execute("select * from sources_website where id = ?", (pos["website_id"],)).fetchone()
             if site:
-                parts.append(site["name"])
-        if pos["source_ref"]:
-            parts.append(f"Nr. {pos['source_ref']}")
-        if pos["source_page"]:
-            parts.append(f"p. {pos['source_page']}")
-        return " · ".join(parts)
+                found = Source.objects.filter(kind=Source.Kind.WEBSITE, title=site["name"]).first()
+                return found or Source.objects.create(kind=Source.Kind.WEBSITE, title=site["name"], url=site["base_url"] or "")
+        return None
 
     def objective(self, db, position_id):
         row = db.execute(
@@ -219,11 +223,14 @@ class Command(BaseCommand):
         ).fetchone()
         return (row["name_en"] or row["name"]) if row else ""
 
-    def tag_names(self, db, position_id):
+    def tag(self, db, position, position_id):
+        """The old tags by key (the vocabulary came from the old app, decision 18); unknown keys are skipped."""
+        tags = {t.key: t for t in Tag.objects.all()}
         rows = db.execute(
-            "select t.name from positions_positiontag pt join positions_tag t on t.id = pt.tag_id "
-            "join positions_tagfield f on f.id = t.field_id where pt.position_id = ? and f.key not in ('phase', 'level', 'custom', 'goal') "
-            "order by f.\"order\", t.\"order\"",
+            "select t.slug, pt.source from positions_positiontag pt join positions_tag t on t.id = pt.tag_id where pt.position_id = ?",
             (position_id,),
         )
-        return [r["name"] for r in rows][:8]
+        for row in rows:
+            if row["slug"] in tags:
+                origin = PositionTag.Origin.AUTO if row["source"] == "auto" else PositionTag.Origin.MANUAL
+                PositionTag.objects.get_or_create(position=position, tag=tags[row["slug"]], defaults={"origin": origin})

@@ -12,7 +12,7 @@ import { trainBoard } from "./board.js"
 
 const REPLY_MS = 280
 const BATCH_LEFT = 5
-const DEFAULT_CUSTOM = { mode: "review", look: "normal", side: "move", lives: "0", first: false }
+const DEFAULT_CUSTOM = { mode: "review", look: "normal", side: "move", lives: "0", first: false, filter: "" }
 
 const T = {
   el: null,
@@ -38,6 +38,7 @@ const T = {
 
 window.SPOS ||= {}
 window.SPOS.train = {
+  start: (params) => start(params),
   hasLast: () => Boolean(T.params || lastFromLauncher()),
   hasMissed: () => T.results.some((r) => !r.success && !r.retry),
   // read-only views for the journey tests and the status line
@@ -123,7 +124,7 @@ handle("train.again", () => {
 })
 handle("train.custom", () => {
   const c = T.custom
-  return start({ mode: c.mode, look: c.look, side: c.side, lives: Number(c.lives), first_move: c.first, minutes: 3, pace: "medium" })
+  return start({ mode: c.mode, look: c.look, side: c.side, lives: Number(c.lives), first_move: c.first, minutes: 3, pace: "medium", filter: c.filter })
 })
 handle("train.set", ([option, value]) => {
   if (option === "first") T.custom.first = !T.custom.first
@@ -132,9 +133,38 @@ handle("train.set", ([option, value]) => {
   renderCustom()
 })
 
+// The filter of a custom session: a Library query (spec 11 §3); the chips put in a saved query.
+document.addEventListener("input", (e) => {
+  if (!e.target.matches?.("[data-train-filter]")) return
+  T.custom.filter = e.target.value
+  storage("train.custom", T.custom)
+  countMatches()
+})
+
+let matchTimer
+function countMatches() {
+  clearTimeout(matchTimer)
+  matchTimer = setTimeout(async () => {
+    const el = T.el?.querySelector("[data-train-match]")
+    if (!el) return
+    const data = await post("/lib/cards/", { c: "puzzles", q: T.custom.filter || "", count: true }).then((r) => r.json()).catch(() => null)
+    el.textContent = data ? `${data.count} card${data.count === 1 ? "" : "s"} match` : ""
+  }, 250)
+}
+document.addEventListener("click", (e) => {
+  const chip = e.target.closest?.("[data-train-query]")
+  if (!chip) return
+  T.custom.filter = chip.dataset.trainQuery
+  storage("train.custom", T.custom)
+  renderCustom()
+})
+
 function renderCustom() {
   const box = T.el?.querySelector("[data-custom]")
   if (!box) return
+  const field = box.querySelector("[data-train-filter]")
+  if (field && document.activeElement !== field) field.value = T.custom.filter || ""
+  countMatches()
   for (const el of box.querySelectorAll("[data-cmd='train.set']")) {
     const [option, value] = el.dataset.args.split(" ")
     if (option === "first") el.setAttribute("aria-pressed", String(T.custom.first))
@@ -554,6 +584,14 @@ handle("train.launcher", async () => {
   if (html) $("[data-train-launcher]").innerHTML = html
   T.session = null
   setState("launcher")
+})
+
+handle("train.analysemissed", () => {
+  // The result's rows marked missed, as Analyse's subject list.
+  const rows = [...(T.el?.querySelectorAll("[data-train-result] [data-row][data-position]") || [])].filter((r) => r.querySelector(".result__mark.is-bad"))
+  const ids = [...new Set(rows.map((r) => r.dataset.position))]
+  if (!ids.length) return false
+  return window.SPOS.analysis.open(ids[0], { node: Number(rows[0].dataset.node) || null, list: { ids, index: 0 } })
 })
 
 handle("train.missed", () => {

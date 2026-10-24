@@ -203,9 +203,10 @@ def test_result_list_opens_its_puzzles_in_analyse(page, ruy):
     page.wait_for_function("window.SPOS.train.state().state === 'feedback'")
     keys(page, "Escape", "q")  # end the session
     page.wait_for_function("window.SPOS.train.state().state === 'result'")
-    keys(page, "Enter")
+    keys(page, "a")  # the missed ones as a subject list
     page.wait_for_function("window.SPOS.ctx.mode === 'analyse'")
     page.wait_for_selector("#ws-analyse [data-movetree] .mt-puzzle")
+    assert page.evaluate("window.SPOS.analysis.current().list.ids.length") == 1
 
 
 def test_accessibility_with_a_position_open(page, ruy):

@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "spaced_positions.design",
     "spaced_positions.training",
     "spaced_positions.analysis",
+    "spaced_positions.library",
 ]
 
 MIDDLEWARE = [
@@ -60,7 +61,13 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": DATA_DIR / "db.sqlite3",
-        "OPTIONS": {"init_command": "PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL;"},
+        # IMMEDIATE: a transaction takes the write lock when it starts, so saves that arrive together queue (up to
+        # `timeout` seconds) instead of one overwriting what the other just read.
+        "OPTIONS": {
+            "init_command": "PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL;",
+            "transaction_mode": "IMMEDIATE",
+            "timeout": 20,
+        },
     }
 }
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

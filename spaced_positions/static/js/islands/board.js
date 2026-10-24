@@ -5,7 +5,7 @@
 import { Chessground } from "../../vendor/chessground.min.js"
 import { Chess } from "../../vendor/chess.js"
 import { handle, run } from "../core/commands.js"
-import { ctx, on, setLayer, status } from "../core/context.js"
+import { ctx, emit, on, setLayer, status } from "../core/context.js"
 import { setOverlayHandler } from "../core/keys.js"
 import { nodeOf } from "../core/layout.js"
 import * as lines from "../core/lines.js"
@@ -303,13 +303,18 @@ class Board {
   async validate() {
     const fen = this.fullFen()
     const params = new URLSearchParams({ fen, diagram: this.setup.diagram ? "1" : "" })
+    let check = null
     try {
-      this.setup.check = await fetch(`/chess/fen/?${params}`).then((r) => r.json())
+      check = await fetch(`/chess/fen/?${params}`).then((r) => r.json())
     } catch {
-      this.setup.check = null
+      check = null
     }
+    if (!this.setup) return check // left the editor meanwhile
+    this.setup.check = check
+    this.duplicate = check?.duplicate || null // the live duplicate check (spec 11 §2)
+    emit("duplicate", { board: this, duplicate: this.duplicate })
     this.renderStrip()
-    return this.setup.check
+    return check
   }
 
   async leaveSetup() {
@@ -416,6 +421,7 @@ class Board {
         if (check.fixed) problems.append(text(" · a: fix"))
         parts.push(problems)
       }
+      if (this.duplicate) parts.push(span("board__problems", ` · duplicate of ${this.duplicate.short} ${this.duplicate.title}`))
       this.palette?.querySelectorAll("[data-cmd='board.piece']").forEach((b) => {
         b.setAttribute("aria-pressed", String(s.tool === "piece" && b.dataset.args === s.role))
         const icon = b.querySelector(".keybutton__icon")

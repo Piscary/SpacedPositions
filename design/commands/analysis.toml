@@ -132,14 +132,33 @@ reason = "no position open: :analyse"
 undoable = true
 
 ["analysis.tags"]
-title = "Move tags"
+title = "Tag the move"
 group = "Analyse"
-phase = 4
+when = "analysis.onMove"
+reason = "go to a move first"
+
+["analysis.untag"]
+title = "Remove a tag from the move"
+group = "Analyse"
+aliases = ["untag-move"]
+args = [{ name = "tag", type = "tag" }]
+when = "analysis.onMove"
+reason = "go to a move first"
+undoable = true
+
+["analysis.newposition"]
+title = "New position from this move"
+group = "Analyse"
+aliases = ["new-position"]
+args = [{ name = "moves", type = "enum", values = ["moves"], optional = true }]
+when = "analysis.loaded"
+reason = "no position or game open"
 
 ["analysis.positiontags"]
-title = "Position tags"
+title = "Tag the position"
 group = "Analyse"
-phase = 4
+when = "analysis.loaded"
+reason = "no position open: :analyse"
 
 ["engine.toggle"]
 title = "Engine on / off"

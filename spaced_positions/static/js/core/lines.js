@@ -101,7 +101,7 @@ export function load(key, { start = START_FEN, moves = [], title = "" }, { undo 
   const line = emptyLine(start)
   line.title = title
   try {
-    const chess = new Chess(start)
+    const chess = moves.length ? new Chess(start) : null // a diagram or an empty board has nothing to replay
     for (const uci of moves) {
       const move = chess.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] })
       line.moves.push({ uci, san: move.san, fen: move.after })

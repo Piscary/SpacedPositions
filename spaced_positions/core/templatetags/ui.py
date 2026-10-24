@@ -163,6 +163,13 @@ def piece_sets():
 
 
 @register.simple_tag
+def tag_presets():
+    from spaced_positions.library.collect import presets
+
+    return presets()
+
+
+@register.simple_tag
 def demo_rows():
     from spaced_positions.core.demo import DEMO_ROWS
 
@@ -186,3 +193,13 @@ def safe_json(value):
 @register.filter
 def get(mapping, key):
     return mapping.get(key) if hasattr(mapping, "get") else None
+
+
+@register.filter
+def stars(n) -> str:
+    """Difficulty 1–5 as ★★★☆☆."""
+    try:
+        n = max(0, min(5, int(n)))
+    except (TypeError, ValueError):
+        return ""
+    return "★" * n + "☆" * (5 - n)

@@ -24,7 +24,7 @@
   <script type="application/json" data-again>{% if again %}{{ again|safe_json }}{% else %}null{% endif %}</script>
 {% endsection %}
 
-{% section "Custom session" key="c" summary="mode · look · side · lives · first move" pinned=True %}
+{% section "Custom session" key="c" summary="mode · look · side · lives · first move · filter" pinned=True %}
   <div class="train__custom" data-custom>
     <div class="segmented" data-segmented><span class="segmented__label">Mode</span><span class="segmented__options" role="radiogroup">
       {% for value, label, key in custom_modes %}<button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="train.set" data-args="mode {{ value }}">{{ label }} {% keycap key %}</button>{% endfor %}
@@ -39,7 +39,11 @@
       {% for value, label, key in custom_lives %}<button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="train.set" data-args="lives {{ value }}">{{ label }} {% keycap key %}</button>{% endfor %}
     </span></div>
     <button type="button" class="toggle" aria-pressed="false" data-cmd="train.set" data-args="first"><span class="toggle__switch"></span>First move only {% keycap "o" %}</button>
-    <p class="muted">Filters (motifs, difficulty, source) arrive with the library in phase 4.</p>
+    <label class="train__filter"><span class="segmented__label">Filter</span>
+      <input class="field mono" type="text" data-train-filter data-search spellcheck="false" autocomplete="off" aria-label="Filter: a Library query"
+             placeholder="/ motif:gabel diff:<=3 · empty: all puzzles"></label>
+    <span class="muted train__match" data-train-match aria-live="polite"></span>
+    {% if saved_queries %}<div class="train__queries">{% for sq in saved_queries %}<button type="button" class="chip" data-train-query="in:q:{{ sq.key }}" title="{{ sq.query }}">q:{{ sq.key }}</button>{% endfor %}</div>{% endif %}
     <div class="actionbar">{% cmd "train.custom" variant="primary" label="Start" %}</div>
   </div>
 {% endsection %}

@@ -264,7 +264,7 @@ def test_edit_line_reorder_promote_delete_endpoints(client, ruy):
 def test_correcting_the_position_asks_before_dropping_moves(client, ruy):
     without = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKB1R w KQkq - 0 1"
     conflict = post(client, f"/analysis/{ruy.uuid}/position/", {"fen": without})
-    assert conflict.status_code == 409 and conflict.json()["conflict"]
+    assert conflict.status_code == 200 and conflict.json()["conflict"] and not conflict.json()["ok"]
     forced = post(client, f"/analysis/{ruy.uuid}/position/", {"fen": without, "force": True}).json()
     assert forced["message"] == "Position corrected; 5 moves of the analysis were dropped"
 

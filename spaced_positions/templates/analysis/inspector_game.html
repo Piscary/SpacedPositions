@@ -1,0 +1,23 @@
+<div class="inspector" data-inspector data-node="{{ node.id }}">
+  {% if node.parent_id %}
+  {% section node.san key="v" summary="move · annotation · mark" %}
+    <div class="actionbar" aria-label="Annotation symbols">
+      {% for n, symbol, on in nags %}<button type="button" class="keybutton keybutton--secondary keybutton--sm keybutton--full" data-cmd="analysis.nag" data-args="{{ n }}" aria-pressed="{% if on %}true{% else %}false{% endif %}"><span class="keybutton__label">{{ symbol }}</span>{% keycap n|stringformat:"s" %}</button>{% endfor %}
+      {% cmd "analysis.annotate" label="More…" size="sm" %}
+    </div>
+    <div class="actionbar">{% cmd "analysis.newposition" size="sm" %}{% cmd "analysis.promote" size="sm" %}{% cmd "analysis.delete" size="sm" %}</div>
+  {% endsection %}
+  {% endif %}
+
+  {% section "Comment" key="c" summary=node.comment|default:"none"|truncatechars:60 %}
+    <form class="inspector__comment" data-comment-form data-node="{{ node.id }}">
+      <textarea class="field" name="comment" aria-label="Comment on {{ node.san|default:'the game' }}" placeholder="{% if node.parent_id %}A comment on {{ node.san }}{% else %}About the game{% endif %} · Alt+K Q R B N P insert ♔ ♕ ♖ ♗ ♘ ♙ (⇧ for black) · {% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵ saves">{{ node.comment }}</textarea>
+    </form>
+  {% endsection %}
+
+  {% section "Game" key="i" summary=game.title %}
+    {% for k, v in headers %}<div class="formrow"><span class="formrow__label">{{ k }}</span><span>{{ v }}</span></div>{% endfor %}
+    {% if positions %}<div class="formrow"><span class="formrow__label">Positions</span><span class="inspector__tags">{% for p in positions %}<span class="chip">{{ p.short_id }} {{ p.title|truncatechars:30 }}</span>{% endfor %}</span></div>{% endif %}
+    <p class="muted">Puzzles come from positions: {% keycap ":" %}<code>new-position</code> takes the position after this move out of the game.</p>
+  {% endsection %}
+</div>

@@ -139,13 +139,6 @@ def test_paste_pgn_lichess_and_rubbish(board):
     board.wait_for_function("document.getElementById('status-message').dataset.kind === 'error'")
 
 
-def test_offer_keys_for_later_phases_are_disabled(board):
-    paste(board, "8/8/1KP5/3r4/8/8/8/k7 w - - 0 1")
-    board.wait_for_selector("#status-message .keyhint")
-    keys(board, "c")  # collect: phase 4
-    assert "arrives in phase 4" in board.inner_text("#status-message")
-
-
 def test_copy_fen_and_pgn(board):
     click_square(board, "d2")
     click_square(board, "d4")

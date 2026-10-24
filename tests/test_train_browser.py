@@ -6,6 +6,7 @@ import pytest
 from spaced_positions.training import puzzles
 from spaced_positions.training.models import Attempt, Puzzle, Session
 from tests.browser import keys, layer, open_mode
+from tests.factories import back_rank, opening_line
 
 pytestmark = [pytest.mark.browser, pytest.mark.django_db(transaction=True)]
 
@@ -16,8 +17,9 @@ OPEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 @pytest.fixture
 def train(page):
     for i in range(3):
-        puzzles.create_from_line(MATE, ["d1d8"], title=f"Back rank {i}")
-        puzzles.create_from_line(OPEN, ["e2e4", "e7e5", "g1f3"], title=f"Opening {i}")
+        puzzles.create_from_line(back_rank(i), ["d1d8"], title=f"Back rank {i}")
+        fen, line = opening_line(i)
+        puzzles.create_from_line(fen, line, title=f"Opening {i}")
     open_mode(page, "train")
     page.wait_for_function("window.SPOS.train && document.querySelector('[data-train-launcher]:not([hidden])')")
     return page

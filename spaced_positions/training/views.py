@@ -9,6 +9,8 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views.decorators.http import require_GET, require_POST
 
+from spaced_positions.library.models import SavedQuery
+
 from . import pace, puzzles, selection, srs
 from .models import Attempt, Card, Puzzle, Session
 
@@ -45,6 +47,8 @@ def _options(data: dict) -> tuple[str, dict]:
         options["pace"] = data.get("pace") if data.get("pace") in pace.PACES else "medium"
     if mode == Session.Mode.STREAK:
         options["lives"] = int(data.get("lives") or 0) if int(data.get("lives") or 0) in (0, 1, 3, 5) else 0
+    if str(data.get("filter") or "").strip():
+        options["filter"] = str(data["filter"]).strip()[:500]
     cards = data.get("cards")
     if isinstance(cards, list) and cards:
         options["cards"] = [str(c) for c in cards][:200]
@@ -62,6 +66,8 @@ def start(request):
     if not queue:
         session.delete()
         message = "Nothing due right now." if mode == Session.Mode.REVIEW else "No puzzles yet: make one from a board with :puzzle"
+        if options.get("filter"):
+            message = f"No puzzles in training match “{options['filter']}”" + (" that are due" if mode == Session.Mode.REVIEW else "")
         return JsonResponse({"ok": False, "empty": True, "message": message}, status=200)
     return JsonResponse(
         {
@@ -210,6 +216,7 @@ def launcher_context() -> dict:
         "storm_best": {m: records["storm"].get(m, 0) for m in (3, 5, 10)},
         "streak_best": records["streak"].get(0, 0),
         "again": selection.last_options(),
+        "saved_queries": SavedQuery.objects.filter(collection__in=["positions", "puzzles"])[:9],
         "custom_modes": [("review", "Review", "b"), ("storm", "Storm 3′", "n"), ("streak", "Streak", "m")],
         "custom_looks": [("normal", "Normal", "q"), ("silhouette", "Silhouette", "w"), ("blind", "Blind", "e")],
         "custom_sides": [("move", "To move", "a"), ("white", "White", "s"), ("black", "Black", "d"), ("random", "Random", "f")],

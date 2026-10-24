@@ -31,7 +31,7 @@ def test_design_check_has_no_errors():
         css_dir=package / "static" / "css",
         pyproject=settings.REPO_DIR / "pyproject.toml",
         vendor_dir=package / "static" / "vendor",
-        server_handlers=set(server_commands.HANDLERS),
+        server_handlers=set(server_commands.handlers()),
         pieces_dir=package / "static" / "pieces",
     )
     assert [str(p) for p in problems if p.level == "error"] == []

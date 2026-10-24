@@ -10,6 +10,7 @@ from django.utils import timezone
 
 from spaced_positions.training import puzzles, selection, srs
 from spaced_positions.training.models import Attempt, Card, Puzzle, Session
+from tests.factories import back_rank, opening_line
 
 START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 MATE_IN_2 = "6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1"  # 1.Rd8#
@@ -103,10 +104,13 @@ def test_sync_cards_keeps_history_of_removed_lines():
 
 
 @pytest.mark.django_db
-def test_create_from_line_reuses_the_position():
-    a = puzzles.create_from_line(MATE_IN_2, ["d1d8"])
-    b = puzzles.create_from_line(MATE_IN_2, ["d1d8"])
-    assert a.position_id == b.position_id
+def test_create_from_line_goes_through_the_analysis():
+    a = puzzles.create_from_line(START, ["e2e4", "e7e5", "g1f3"])
+    assert a.start_node == a.position.nodes.get(parent=None) and a.active
+    assert [n.san for n in a.position.nodes.exclude(parent=None).order_by("ply")] == ["e4", "e5", "Nf3"]
+    assert puzzles.create_from_line(START, ["e2e4", "e7e5", "g1f3"]).pk == a.pk  # the same puzzle again
+    with pytest.raises(ValueError, match="already has a puzzle"):
+        puzzles.create_from_line(START, ["d2d4"])
     with pytest.raises(ValueError):
         puzzles.create_from_line("8/8/8/8/8/8/8/8 w - - 0 1", ["a1a2"])
 
@@ -121,7 +125,7 @@ def test_review_queue_order_and_new_limit():
     learning = p.cards.get()
     Card.objects.filter(pk=learning.pk).update(state="learning", due=now - timedelta(minutes=1))
     for i in range(25):
-        puzzles.create_from_line(START, ["e2e4", "e7e5", ["g1f3", "f1c4", "d2d4", "b1c3", "f2f4"][i % 5]], title=f"n{i}")
+        puzzles.create_from_line(back_rank(i + 1), ["d1d8"], title=f"n{i}")
     queue = selection.review_queue(now)
     assert queue[0].pk == learning.pk
     assert len([c for c in queue if c.state == "new"]) == srs.NEW_PER_DAY
@@ -156,7 +160,8 @@ class TestApi:
 
     def test_a_whole_session(self, client):
         for i in range(12):
-            puzzles.create_from_line(MATE_IN_2 if i % 2 else START, ["d1d8"] if i % 2 else ["e2e4", "e7e5", "g1f3"], title=f"p{i}")
+            fen, line = (back_rank(i), ["d1d8"]) if i % 2 else opening_line(i)
+            puzzles.create_from_line(fen, line, title=f"p{i}")
         start = post(client, "/train/start/", {"mode": "storm", "minutes": 5, "pace": "fast"}).json()
         assert start["ok"] and start["total"] == 12 and len(start["puzzles"]) == 10
         assert start["clock"]["factor"] == 0.5 and start["clock"]["typical"] == 8000
@@ -207,13 +212,13 @@ def make_old_db(path):
         create table training_trainingcard (id integer primary key, puzzle_id int, line text, in_solution bool, state text, due text,
             interval_days real, ease real, step int, reps int, lapses int, success_streak int, attempts int, successes int,
             total_ms int, best_ms int, last_result bool, last_seen text);
-        create table sources_book (id integer primary key, title text, authors text);
-        create table sources_website (id integer primary key, name text);
+        create table sources_book (id integer primary key, title text, authors text, year int, publisher text, isbn text, notes text);
+        create table sources_website (id integer primary key, name text, base_url text);
         create table positions_tagfield (id integer primary key, key text, "order" int);
-        create table positions_tag (id integer primary key, name text, name_en text, field_id int, "order" int);
-        create table positions_positiontag (id integer primary key, position_id int, tag_id int);
+        create table positions_tag (id integer primary key, name text, name_en text, field_id int, "order" int, slug text);
+        create table positions_positiontag (id integer primary key, position_id int, tag_id int, source text);
         insert into positions_position values (1, '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1', 'Back rank', 2, 1, null, '7', '3');
-        insert into sources_book values (1, 'Mating Patterns', 'A. Author');
+        insert into sources_book values (1, 'Mating Patterns', 'A. Author', 1999, '', '', '');
         insert into positions_variationnode (id, sort_order, uci, san, ply, fen_after, position_id, parent_id, comment)
             values (10, 0, '', '', 0, '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1', 1, null, 'Back rank!');
         insert into positions_variationnode (id, sort_order, uci, san, ply, fen_after, position_id, parent_id, nags, quality, shapes)
@@ -224,8 +229,8 @@ def make_old_db(path):
         insert into training_trainingpuzzle values (5, 1, '{"also": [12]}', 10);
         insert into training_trainingcard values (1, 5, '', 1, 'review', '2026-01-01 10:00:00', 12.5, 2.4, 0, 4, 1, 2, 6, 5, 30000, 2500, 1, '2025-12-20 10:00:00');
         insert into positions_tagfield values (1, 'goal', 1), (2, 'mate', 2);
-        insert into positions_tag values (1, 'Matt in 1', 'Mate in 1', 1, 1), (2, 'Grundreihenmatt', 'Back-rank mate', 2, 1);
-        insert into positions_positiontag values (1, 1, 1), (2, 1, 2);
+        insert into positions_tag values (1, 'Matt in 1', 'Mate in 1', 1, 1, 'mate-in-1'), (2, 'Grundreihenmatt', 'Back-rank mate', 2, 1, 'back-rank-mate');
+        insert into positions_positiontag values (1, 1, 1, 'manual'), (2, 1, 2, 'auto'), (3, 1, 99, 'manual');
         """
     )
     db.commit()
@@ -241,8 +246,10 @@ def test_import_csm(tmp_path):
     assert puzzle.origin == "csm:5"
     assert puzzle.solution == {"moves": [{"uci": "d1d8", "replies": []}, {"uci": "d1e1", "replies": []}]}
     position = puzzle.position
-    assert (position.title, position.objective, position.tag_names) == ("Back rank", "Mate in 1", ["Grundreihenmatt"])
-    assert position.source == "A. Author, Mating Patterns · Nr. 7 · p. 3"
+    assert (position.title, position.objective, position.tag_names) == ("Back rank", "Mate in 1", ["Matt in 1", "Grundreihenmatt"])
+    assert position.tag_links.get(tag__key="back-rank-mate").origin == "auto"  # an unknown old tag (99) is skipped
+    assert (position.source.title, position.source.authors, position.source.year) == ("Mating Patterns", "A. Author", 1999)
+    assert position.citation == "Mating Patterns · p. 3 · Nr. 7" and position.difficulty == 2
     card = puzzle.cards.get()
     assert (card.state, card.interval_days, card.lapses, card.attempts) == ("review", 12.5, 1, 6)
     root = position.nodes.get(parent=None)

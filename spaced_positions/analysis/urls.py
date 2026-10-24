@@ -17,6 +17,7 @@ urlpatterns = [
     path("analysis/<str:pid>/replace/", views.replace, name="replace"),
     path("analysis/<str:pid>/puzzle/", views.puzzle, name="puzzle"),
     path("analysis/<str:pid>/inspector/", views.inspector, name="inspector"),
+    path("analysis/<str:pid>/new-position/", views.new_position, name="new_position"),
     path("positions/search/", views.search, name="search"),
     path("journal/", views.journal, name="journal"),
     path("journal/<int:eid>/undo/", views.undo, name="undo"),

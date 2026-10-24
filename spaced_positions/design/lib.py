@@ -283,10 +283,10 @@ def check_when(expr: str) -> str | None:
 # ── Build ─────────────────────────────────────────────────────────────────────────────────────────────────────────
 
 COMMAND_FIELDS = {
-    "title", "group", "aliases", "args", "when", "reason", "handler", "undoable", "repeatable",
+    "title", "group", "aliases", "args", "when", "reason", "handler", "undoable", "repeatable", "internal",
     "sticky", "danger", "hidden", "phase", "file",
 }
-ARG_TYPES = {"int", "enum", "text", "view", "buffer", "theme", "token", "tokenname", "layout", "pieceset", "position"}
+ARG_TYPES = {"int", "enum", "text", "view", "buffer", "theme", "token", "tokenname", "layout", "pieceset", "position", "tag", "source"}
 
 
 def keymap_json(sources: Sources) -> dict:

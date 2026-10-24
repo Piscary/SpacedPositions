@@ -14,7 +14,8 @@ from django.db import transaction
 
 from spaced_positions import chesslogic
 from spaced_positions.core.models import LOCAL_USER
-from spaced_positions.training.models import Position
+from spaced_positions.library.models import Game
+from spaced_positions.training.models import Position, Puzzle
 
 from .models import JournalEntry, Node
 
@@ -27,10 +28,25 @@ class TreeError(ValueError):
     """Shown to the user in the status line."""
 
 
-def root(position: Position) -> Node:
+def is_game(owner) -> bool:
+    """A tree belongs to a position or a game (spec 11 §1 Game); games have no puzzles and a fixed start."""
+    return isinstance(owner, Game)
+
+
+def owner_of(**kwargs) -> dict:
+    """{'position': p} or {'game': g}: the owner fields of a node or journal entry."""
+    owner = kwargs["owner"]
+    return {"game": owner} if is_game(owner) else {"position": owner}
+
+
+def puzzles_of(owner):
+    return Puzzle.objects.none() if is_game(owner) else owner.puzzles.all()
+
+
+def root(position) -> Node:
     node = position.nodes.filter(parent=None).first()
     if node is None:
-        node = Node.objects.create(position=position, fen=position.fen)
+        node = Node.objects.create(**owner_of(owner=position), fen=position.fen)
     return node
 
 
@@ -55,15 +71,22 @@ def node_json(n: Node) -> dict:
     }
 
 
-def tree_json(position: Position) -> dict:
+def tree_json(position) -> dict:
     r = root(position)
     puzzles = [
         {"id": str(p.uuid), "start": p.start_node_id, "active": p.active, "marks": p.marks, "cards": p.cards.filter(in_solution=True).count()}
-        for p in position.puzzles.exclude(start_node=None)
+        for p in puzzles_of(position).exclude(start_node=None)
     ]
+    if is_game(position):
+        about = {"id": str(position.uuid), "kind": "game", "title": position.title, "fen": position.fen,
+                 "source": " · ".join(x for x in [position.event, position.site, position.date] if x), "objective": "",
+                 "difficulty": None, "tags": []}
+    else:
+        about = {"id": str(position.uuid), "kind": "position", "title": position.title, "fen": position.fen,
+                 "source": position.citation, "objective": position.task, "difficulty": position.difficulty,
+                 "tags": position.tag_names}
     return {
-        "position": {"id": str(position.uuid), "title": position.title, "fen": position.fen, "source": position.source,
-                     "objective": position.objective, "difficulty": position.difficulty, "tags": position.tag_names},
+        "position": about,
         "root": r.id,
         "nodes": [node_json(n) for n in nodes(position)],
         "puzzles": puzzles,
@@ -79,7 +102,7 @@ def snapshot(position: Position) -> dict:
         "nodes": [{"id": n.id, **{f: getattr(n, f) for f in NODE_FIELDS}} for n in nodes(position)],
         "puzzles": [
             {"id": p.id, "start_node_id": p.start_node_id, "marks": p.marks, "active": p.active}
-            for p in position.puzzles.all()
+            for p in puzzles_of(position)
         ],
     }
 
@@ -88,18 +111,19 @@ def snapshot(position: Position) -> dict:
 def restore(position: Position, snap: dict) -> None:
     from . import puzzles as analysis_puzzles
 
-    position.fen = snap["fen"]
-    position.save(update_fields=["fen"])
+    if not is_game(position):
+        position.fen = snap["fen"]
+        position.save(update_fields=["fen"])
     wanted = {n["id"]: n for n in snap["nodes"]}
     current = {n.id: n for n in position.nodes.all()}
     position.nodes.exclude(id__in=wanted).delete()
     for data in sorted(snap["nodes"], key=lambda n: n["ply"]):
-        node = current.get(data["id"]) or Node(id=data["id"], position=position)
+        node = current.get(data["id"]) or Node(id=data["id"], **owner_of(owner=position))
         for f in NODE_FIELDS:
             setattr(node, f, data[f])
         node.save()
     known = {p["id"]: p for p in snap["puzzles"]}
-    for puzzle in position.puzzles.all():
+    for puzzle in puzzles_of(position):
         if puzzle.id in known:
             p = known[puzzle.id]
             puzzle.start_node_id, puzzle.marks, puzzle.active = p["start_node_id"], p["marks"], p["active"]
@@ -124,7 +148,7 @@ def change(position: Position, label: str):
         after = snapshot(position)
         if after != before:
             JournalEntry.objects.filter(user=LOCAL_USER, undone=True).delete()  # a new change ends the redo chain
-            JournalEntry.objects.create(user=LOCAL_USER, label=label[:120], position=position, before=before, after=after)
+            JournalEntry.objects.create(user=LOCAL_USER, label=label[:120], before=before, after=after, **owner_of(owner=position))
 
 
 # ── Moves ─────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -151,7 +175,7 @@ def play(parent: Node, uci: str) -> tuple[Node, bool]:
     board.push(move)
     order = parent.kids.count()
     node = Node.objects.create(
-        position=parent.position, parent=parent, order=order, uci=uci, san=san, ply=parent.ply + 1, fen=board.fen(),
+        position=parent.position, game=parent.game, parent=parent, order=order, uci=uci, san=san, ply=parent.ply + 1, fen=board.fen(),
     )
     return node, True
 
@@ -241,6 +265,8 @@ def _hex(value) -> str:
 def change_root(position: Position, fen: str, force: bool = False) -> int:
     """Correct the position (spec 06 §4): the analysis is kept when every move is still legal; otherwise, with
     `force`, the moves are dropped. Returns the number of moves dropped."""
+    if is_game(position):
+        raise TreeError("a game's start position can't be changed")
     check = chesslogic.check_fen(fen)
     if not check["readable"]:
         raise TreeError("not a FEN")

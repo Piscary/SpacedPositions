@@ -21,6 +21,15 @@
     </form>
   {% endsection %}
 
+  {% section "Tags" key="t" summary=position.tag_names|join:", "|default:"none"|truncatechars:60 %}
+    <div class="formrow"><span class="formrow__label">Position</span><span class="inspector__tags">
+      {% for link in position_tags %}<button type="button" class="chip chip--tag{% if link.origin == 'suggested' %} chip--suggested{% elif link.origin == 'auto' %} chip--auto{% endif %}" style="--tag: var(--{{ link.tag.field.color }})" data-cmd="library.untag" data-args="{{ link.tag.key }}" title="{{ link.tag.field.name }} · click removes it">{{ link.tag.name }}</button>{% empty %}<span class="muted">none</span>{% endfor %}
+      {% cmd "analysis.positiontags" label="Add" size="sm" %}</span></div>
+    {% if node.parent_id %}<div class="formrow"><span class="formrow__label">Move {{ node.san }}</span><span class="inspector__tags">
+      {% for link in move_tags %}<button type="button" class="chip chip--tag" style="--tag: var(--{{ link.tag.field.color }})" data-cmd="analysis.untag" data-args="{{ link.tag.key }}" title="{{ link.tag.field.name }} · click removes it">{{ link.tag.name }}</button>{% empty %}<span class="muted">none</span>{% endfor %}
+      {% cmd "analysis.tags" label="Add" size="sm" %}</span></div>{% endif %}
+  {% endsection %}
+
   {% section "Puzzle" key="z" summary=puzzle|yesno:"set up,none" %}
     {% if puzzle %}
       <p class="inspector__puzzle">{% if puzzle.active %}<span class="chip chip--good">in training</span>{% else %}<span class="chip">draft</span>{% endif %}
@@ -39,9 +48,9 @@
   {% endsection %}
 
   {% section position.title|default:"Position" key="i" summary="source · objective · FEN" collapsed=True %}
-    <div class="formrow"><span class="formrow__label">Source</span><span>{{ position.source|default:"—" }}</span></div>
+    <div class="formrow"><span class="formrow__label">Source</span><span>{{ position.citation|default:"—" }}</span></div>
     <div class="formrow"><span class="formrow__label">Objective</span><span>{{ position.objective|default:"—" }}</span></div>
-    <div class="formrow"><span class="formrow__label">Tags</span><span class="train__tags">{% for t in position.tag_names %}<span class="chip chip--tag">{{ t }}</span>{% empty %}—{% endfor %}</span></div>
+    <div class="formrow"><span class="formrow__label">Difficulty</span><span>{{ position.difficulty|stars|default:"—" }}</span></div>
     <div class="formrow"><span class="formrow__label">FEN</span><code class="line-text__fen">{{ node.fen }}</code></div>
     <div class="formrow"><span class="formrow__label">Analysis</span><span>{{ move_count }} move{{ move_count|pluralize }}</span></div>
   {% endsection %}

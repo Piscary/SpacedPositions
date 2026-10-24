@@ -1,0 +1,11 @@
+<div class="filters__total muted">{{ total }} position{{ total|pluralize }}</div>
+{% for group in groups %}
+  <div class="filters__group">{{ group.label }}</div>
+  {% for item in group.items %}
+  <div class="list__row filters__row{% if item.on %} is-on{% endif %}" role="option" aria-selected="false" data-row="{{ item.term }}" data-term="{{ item.term }}" data-title="{{ item.label }}">
+    <span class="filters__check" aria-hidden="true">{% if item.on %}●{% else %}○{% endif %}</span>
+    <span class="list__title">{{ item.label }}</span>
+    <span class="list__meta mono">{{ item.count }}</span>
+  </div>
+  {% endfor %}
+{% endfor %}

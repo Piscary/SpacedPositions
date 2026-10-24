@@ -4,7 +4,7 @@
 
 import { handle, pushUndo } from "./commands.js"
 import { ctx, emit, on, setLayer, status } from "./context.js"
-import { setOverlayHandler } from "./keys.js"
+import { offer } from "./confirm.js"
 import { focusPane, nodeOf, switchMode } from "./layout.js"
 import * as lines from "./lines.js"
 import { openMenu } from "./menu.js"
@@ -199,18 +199,6 @@ function loadIntoAnalysis(key, game) {
   })
 }
 
-function offer(text, actions) {
-  status(text, { timeout: 0 })
-  ctx.overlay = "confirm"
-  setOverlayHandler((e, token) => {
-    if (!actions[token] && token !== "n" && token !== "esc") return
-    ctx.overlay = null
-    setOverlayHandler(null)
-    status("", { timeout: 1 })
-    actions[token]?.()
-  })
-}
-
 /** Correcting the position in the board editor (spec 06 §4): keep the analysis if its moves stay legal. */
 export async function correctPosition(key, fen) {
   const t = trees.get(key)
@@ -329,6 +317,14 @@ document.addEventListener("keydown", (e) => {
   const symbol = FIGURINES[letter][e.shiftKey ? 1 : 0]
   area.setRangeText(symbol, area.selectionStart, area.selectionEnd, "end")
 }, true)
+
+// Tags changed (the Library, :tag): the move tree shows move tags, the inspector both kinds.
+on("library:changed", async () => {
+  for (const [key, t] of trees) {
+    const data = await fetch(`/analysis/${t.position.id}/`).then((r) => r.json()).catch(() => null)
+    if (data?.ok && trees.get(key)?.position.id === t.position.id) apply(key, data)
+  }
+})
 
 // ── Subject (what Analyse shows) survives reloads ─────────────────────────────────────────────────────────────
 
@@ -514,6 +510,13 @@ handle("analysis.rootcomment", withTree((key, t) => {
   return focusComment(key)
 }))
 
+handle("analysis.newposition", withTree(async (key, t, [moves]) => {
+  const { data } = await post(`/analysis/${t.position.id}/new-position/`, { node: t.cursor, moves: moves === "moves" })
+  if (!data.ok) return status(data.message, { kind: "error" }) || false
+  await openPosition(data.position, { key })
+  status(`${data.message} · its own analysis${moves ? ", with the continuation" : ""}`, { kind: "good", timeout: 4000 })
+}))
+
 handle("analysis.open", async ([pid]) => {
   if (!pid) return openCmdline("analyse ")
   return openPosition(pid)
@@ -541,6 +544,8 @@ Object.assign((window.SPOS ||= {}), {
     onMove: () => Boolean(current() && current().cursor !== current().root),
     hasList: () => Boolean(current()?.list),
     open: openPosition,
+    openGame: (id, options = {}) => openPosition(id, options), // a game opens like a position (its tree, no puzzles)
+    current,
     focusInspector,
     analyseNew,
   },

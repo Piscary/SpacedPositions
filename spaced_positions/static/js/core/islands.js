@@ -6,6 +6,8 @@ import { mountBoard, renderLineText } from "../islands/board.js"
 import { mountTrain } from "../islands/train.js"
 import { mountInspector, mountMoves } from "./analysis.js"
 import { mountEngine } from "./engine.js"
+import { mountFilters, mountLibrary } from "./library.js"
+import { mountEntry } from "./collect.js"
 
 const MOUNT = {
   board: mountBoard,
@@ -14,6 +16,9 @@ const MOUNT = {
   moves: mountMoves,
   inspector: mountInspector,
   engine: mountEngine,
+  library: mountLibrary,
+  filters: mountFilters,
+  entry: mountEntry,
 }
 
 export function mountIslands(root = document) {

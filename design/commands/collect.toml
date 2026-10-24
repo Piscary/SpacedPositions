@@ -1,0 +1,76 @@
+# Collect (spec 04 · Collect): entering positions from a book, diagram after diagram. Save works from any pane of
+# the mode; the entry session's keys work when its pane has focus (the board's Setup layer uses letters and digits).
+
+["collect.save"]
+title = "Save & next"
+group = "Collect"
+when = "mode.collect"
+reason = "in Collect"
+
+["collect.saveopen"]
+title = "Save & open in Analyse"
+group = "Collect"
+when = "mode.collect"
+reason = "in Collect"
+
+["collect.source"]
+title = "Source of the entry session"
+group = "Collect"
+aliases = ["source"]
+args = [{ name = "source", type = "source" }]
+when = "mode.collect"
+reason = "in Collect"
+
+["collect.page"]
+title = "Page + / −"
+group = "Collect"
+args = [{ name = "step", type = "enum", values = ["up", "down"] }]
+when = "mode.collect"
+reason = "in Collect"
+
+["collect.diagram"]
+title = "Diagram number + / −"
+group = "Collect"
+args = [{ name = "step", type = "enum", values = ["up", "down"] }]
+when = "mode.collect"
+reason = "in Collect"
+
+["collect.tag"]
+title = "Tag the next positions"
+group = "Collect"
+args = [{ name = "tag", type = "tag" }]
+when = "mode.collect"
+reason = "in Collect"
+
+["collect.untag"]
+title = "Remove the last tag of the entry session"
+group = "Collect"
+when = "mode.collect"
+reason = "in Collect"
+
+["collect.preset"]
+title = "Tag preset on / off"
+group = "Collect"
+args = [{ name = "preset", type = "enum", values = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] }]
+when = "mode.collect"
+reason = "in Collect"
+
+["collect.presetsave"]
+title = "Save the session's tags as a preset"
+group = "Collect"
+aliases = ["preset-save"]
+args = [{ name = "name", type = "text" }]
+when = "mode.collect"
+reason = "in Collect"
+
+["collect.ready"]
+title = "Ready for training on / off"
+group = "Collect"
+when = "mode.collect"
+reason = "in Collect"
+
+["collect.duplicate"]
+title = "Go to the duplicate"
+group = "Collect"
+when = "collect.hasDuplicate"
+reason = "no duplicate of the board's position"

@@ -7,7 +7,7 @@ chess data model and the query language are in 11.
 
 | Layer | Choice | Why |
 |---|---|---|
-| Server | Django ≥ 6.0, SQLite (WAL), python-chess | Template partials are built into 6.0 (`{% partialdef %}`), a natural fit for HTMX. python-chess is the authority on legality and the source of PGN/FEN handling. |
+| Server | Django ≥ 6.0, SQLite (WAL, `transaction_mode = IMMEDIATE`), python-chess | Template partials are built into 6.0 (`{% partialdef %}`), a natural fit for HTMX. python-chess is the authority on legality and the source of PGN/FEN handling. IMMEDIATE transactions take the write lock when they start, so saves that arrive together queue (20 s timeout) instead of one overwriting what the other just read. |
 | Server ↔ client | HTMX 2 | Panes, sections and command results are server-rendered HTML partials. |
 | Styling | Plain CSS with cascade layers (`@layer tokens, base, components, views, utilities`) | Components map 1:1 onto classes; tokens are custom properties; no build step. (Tailwind is the alternative, see 10.) |
 | Board | chessground + chess.js | Exactly the lichess feel; GPL-3.0 like the app (§13); client-side legality for instant moves. |
@@ -55,7 +55,17 @@ step to the next move       → no request for the board and the moves cursor; i
 | `core/islands.js` | Mounts `[data-island]` elements when a workspace renders or a pane arrives | 30 |
 | `islands/train.js` | Session runner: states, queue in batches, judging moves against the solution tree, clock, combo, lives, attempts in the background, pause, result | 600 |
 | `islands/chart.js` | Chart cursor, read-out, table toggle | 120 |
+| `core/library.js` | The Library: QueryBar (completion, problems, live count), results in three displays, collections, bulk commands with undo (the server's inverse is replayed, never the client side), the filter pane; `:tag` targets in Analyse and Train | 450 |
+| `core/collect.js` | Collect's entry session (source, page, number, title pattern, tags, presets, ready), save & next, duplicates, pasting into Collect | 250 |
+| `core/importer.js` | The PGN import list (from a paste or a file) | 160 |
+| `core/confirm.js` | A one-key question in the status line (`y / n`, `m / s`) | 20 |
 | `core/engine.js` | Stockfish 17.1 lite in a worker (UCI, MultiPV), the Engine pane, arrows and eval bar on the boards of the line it follows; runs only while Analyse is visible. A local binary streamed by the server follows in phase 6 | 280 |
+
+Server side, the apps are `core` (shell, layouts, UI state, server commands), `training` (positions, puzzles,
+cards, sessions, scheduler), `analysis` (move trees of positions and games, journal, puzzles from the analysis, PGN
+in and out) and `library` (sources, players, tags, saved queries, games; the query language `library/query.py`;
+Collect's saving; the PGN importer; bulk commands in `library/commands.py`, registered through
+`core.server_commands.MODULES`).
 
 **Islands** attach to server-rendered markup by attribute (`<div data-island="board" data-fen="…" data-group="A">`)
 on `htmx:load`, and clean up on `htmx:beforeCleanupElement`. They never render HTML that the server could render.

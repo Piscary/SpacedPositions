@@ -17,8 +17,17 @@ from .models import Card, Session
 QUEUE_SIZE = 150
 
 
-def pool():
-    return Card.objects.filter(in_solution=True, puzzle__active=True).select_related("puzzle__position")
+def pool(filter_query: str = ""):
+    """Cards in training: in a solution, of an active puzzle, of a position that is neither in the trash nor a diagram;
+    with a filter (a Library query on puzzles, spec 11 §3), only the cards of the puzzles it finds."""
+    cards = Card.objects.filter(
+        in_solution=True, puzzle__active=True, puzzle__position__deleted_at=None, puzzle__position__diagram=False,
+    ).select_related("puzzle__position__source")
+    if filter_query.strip():
+        from spaced_positions.library.query import run
+
+        cards = cards.filter(puzzle__in=run(filter_query, "puzzles").queryset.order_by().values("pk"))
+    return cards
 
 
 def new_left_today(now=None) -> int:
@@ -42,19 +51,19 @@ def counts(now=None) -> dict:
     }
 
 
-def review_queue(now=None) -> list[Card]:
+def review_queue(now=None, filter_query: str = "") -> list[Card]:
     now = now or timezone.now()
-    cards = pool()
+    cards = pool(filter_query)
     learning = list(cards.filter(state__in=["learning", "relearning"], due__lte=now).order_by("due"))
     reviews = list(cards.filter(state="review", due__lte=now).order_by("due"))
     new = list(cards.filter(state="new").order_by("created_at", "id")[: new_left_today(now)])
     return (learning + reviews + new)[:QUEUE_SIZE]
 
 
-def run_queue(rng: random.Random) -> list[Card]:
+def run_queue(rng: random.Random, filter_query: str = "") -> list[Card]:
     """One random card per puzzle, easy to hard (Storm, Streak)."""
     by_puzzle = {}
-    for card in pool().order_by("?")[: QUEUE_SIZE * 3]:
+    for card in pool(filter_query).order_by("?")[: QUEUE_SIZE * 3]:
         by_puzzle.setdefault(card.puzzle_id, card)
     cards = list(by_puzzle.values())[:QUEUE_SIZE]
     rng.shuffle(cards)
@@ -79,9 +88,9 @@ def start(mode: str, options: dict) -> Session:
         found = {str(c.uuid): c for c in pool().filter(uuid__in=options["cards"])}
         queue = [found[i] for i in options.pop("cards") if i in found]
     elif mode == Session.Mode.REVIEW:
-        queue = review_queue()
+        queue = review_queue(filter_query=options.get("filter", ""))
     else:
-        queue = run_queue(rng)
+        queue = run_queue(rng, options.get("filter", ""))
     side = options.get("side", "move")
     options = options | {
         "queue": [str(c.uuid) for c in queue],
@@ -93,7 +102,7 @@ def start(mode: str, options: dict) -> Session:
 def batch(session: Session, offset: int, size: int = 10) -> list[dict]:
     ids = session.options.get("queue", [])[offset : offset + size]
     mirrored = set(session.options.get("mirror", []))
-    cards = {str(c.uuid): c for c in pool().filter(uuid__in=ids)}
+    cards = {str(c.uuid): c for c in pool().filter(uuid__in=ids).prefetch_related("puzzle__position__tag_links__tag__field")}
     first_only = bool(session.options.get("first_move"))
     return [puzzles.payload(cards[i], mirrored=i in mirrored, first_only=first_only) for i in ids if i in cards]
 

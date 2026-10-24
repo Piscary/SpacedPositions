@@ -1,6 +1,6 @@
 # Spaced Positions: UI/UX System Specification
 
-Status: **draft 1** (2026-10-23), kept in step with the build: phases 0–3 are built (see 10 for the status of
+Status: **draft 1** (2026-10-23), kept in step with the build: phases 0–4 are built (see 10 for the status of
 each phase). This folder is the contract that the design system, the front-end and the screens get built against.
 
 This is a new, independent project. `chess-study-manager/` served as inspiration, and its database is read-only

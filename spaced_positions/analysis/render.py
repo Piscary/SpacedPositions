@@ -5,6 +5,8 @@ under the move it replaces, comments in place, annotation symbols, marks as a co
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 
+from spaced_positions.library.models import NodeTag
+
 from . import puzzles as analysis_puzzles
 from . import tree
 
@@ -27,6 +29,9 @@ def render(position) -> str:
     root = next(n for n in all_nodes if n.parent_id is None)
     fens = {n.id: n.fen for n in all_nodes}
     roles = analysis_puzzles.roles(position, kids)
+    move_tags = {}
+    for node_id, name in NodeTag.objects.filter(node__in=[n.id for n in all_nodes]).order_by("tag__field__order").values_list("node_id", "tag__name"):
+        move_tags.setdefault(node_id, []).append(name)
     parts = []
     start_role = roles.get(root.id)
     if start_role:
@@ -34,13 +39,13 @@ def render(position) -> str:
     if root.comment:
         parts.append(format_html('<p class="mt-comment mt-comment--root" data-comment="{}">{}</p>', root.id, root.comment))
     if kids.get(root.id):
-        parts.append(_line(kids[root.id][0], kids, roles, fens, force_number=True, siblings=kids[root.id][1:], depth=0))
+        parts.append(_line(kids[root.id][0], kids, roles, fens, force_number=True, siblings=kids[root.id][1:], depth=0, tags=move_tags))
     else:
         parts.append(mark_safe('<p class="muted mt-empty">No moves yet: play one on the board, paste a PGN, or let the engine suggest one.</p>'))
     return format_html('<div class="movetree" data-movetree data-root="{}">{}</div>', root.id, mark_safe("".join(str(p) for p in parts)))
 
 
-def _token(node, roles, fens, force_number):
+def _token(node, roles, fens, force_number, tags):
     role = roles.get(node.id, {})
     classes = ["mt-move"]
     if node.mark:
@@ -52,18 +57,19 @@ def _token(node, roles, fens, force_number):
         if role.get("end"):
             classes.append("pz-end")
     nags = "".join(tree.NAGS.get(n, "") for n in node.nags)
+    chips = mark_safe("".join(str(format_html('<span class="mt-tag">{}</span>', t)) for t in tags.get(node.id, [])))
     return format_html(
-        '<span class="{}" data-node="{}" role="button" tabindex="-1"><span class="mt-num">{}</span>{}<span class="mt-nag">{}</span></span>',
-        " ".join(classes), node.id, _number(fens[node.parent_id], force_number), node.san, nags,
+        '<span class="{}" data-node="{}" role="button" tabindex="-1"><span class="mt-num">{}</span>{}<span class="mt-nag">{}</span></span>{}',
+        " ".join(classes), node.id, _number(fens[node.parent_id], force_number), node.san, nags, chips,
     )
 
 
-def _line(start, kids, roles, fens, force_number, siblings, depth):
+def _line(start, kids, roles, fens, force_number, siblings, depth, tags):
     """One line from `start` on; the siblings of `start` (alternatives to it) follow it as variation blocks."""
     out = []
     node, alternatives, force = start, siblings, force_number
     while node is not None:
-        out.append(str(_token(node, roles, fens, force)))
+        out.append(str(_token(node, roles, fens, force, tags)))
         force = False
         if node.comment:
             out.append(str(format_html('<span class="mt-comment" data-comment="{}">{}</span>', node.id, node.comment)))
@@ -79,7 +85,7 @@ def _line(start, kids, roles, fens, force_number, siblings, depth):
                         f"--edge: {escape(edge)}" if edge else "",
                         alt.id,
                         _label(depth, i),
-                        mark_safe(_line(alt, kids, roles, fens, True, [], depth + 1)),
+                        mark_safe(_line(alt, kids, roles, fens, True, [], depth + 1, tags)),
                     )
                 )
             out.append(str(format_html('<div class="mt-variations">{}</div>', mark_safe("".join(str(b) for b in blocks)))))

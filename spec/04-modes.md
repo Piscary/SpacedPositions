@@ -116,7 +116,7 @@ The side pane switches to the result of this puzzle; the board stays.
 
 - `Enter` next, `← →` replay the solution on the board, `a` jumps to Analyse at the move where the puzzle starts
   (the session waits in Train: `␣ t` goes back to it).
-- `t` tag the position (phase 4), `!` flag the puzzle as broken (shows up in `Library · is:flagged`), `e` edit the
+- `t` tag the position, `!` flag the puzzle as broken (shows up in `Library · is:flagged`), `e` edit the
   puzzle setup in Analyse (its Puzzle section open), `r` retry (not scored).
 
 ### Result
@@ -139,8 +139,7 @@ Like monkeytype's result screen: big numbers, one chart, everything clickable.
 
 - `j/k` through the puzzles (the board pane follows), `Enter` opens one in Analyse with the session's puzzles as its
   *subject list* (`n`/`N`).
-- `m` starts a Review of the missed ones; `a` (Analyse with only the missed ones as the subject list) follows with
-  the library's subject lists in phase 4.
+- `m` starts a Review of the missed ones; `a` opens Analyse with only the missed ones as the subject list.
 - Records, milestones and level-ups reached in this session are listed at the top as **achievement chips**.
 
 ---
@@ -212,12 +211,17 @@ Getting material in, fast. Built for entering a book diagram after diagram (as i
 
 - Board layers: **Setup** (place pieces) ↔ **Solution** (play the solution as the main line), switched with `S`.
 - `Mod+Enter` save & next (clears the board, diagram +1), `Mod+Shift+Enter` save & open in Analyse. Both work
-  from any pane in Collect.
-- The entry-session keys (`s`, `+ −`, `↑ ↓`, `1`–`9`, `r`) work when that pane has focus (`Tab`), because the board's
-  Setup layer uses letters and digits for pieces.
-- Paste (`Mod+V`) a FEN, lichess link or PGN at any time; a PGN with many games or puzzles opens the **Import**
-  state: a list of what was found, duplicates marked, `x` to (de)select, `Enter` imports.
-- Duplicates are detected live: the status line says `duplicate of p1873 · g d go there`.
+  from any pane in Collect. A save makes the position with its source, page, diagram number, title (the pattern
+  filled in) and tags; when a solution was played, it becomes the analysis and a puzzle from the start (in training
+  when *Ready* is on, else a draft).
+- The entry-session keys (`s`, `+ −`, `↑ ↓`, `t ⌫`, `1`–`9`, `r`) work when that pane has focus (`Tab`), because the
+  board's Setup layer uses letters and digits for pieces. The session (source, page, number, title, tags, ready) and
+  the *Just saved* list survive reloads.
+- Paste (`Mod+V`) a FEN, lichess link or PGN at any time: `c` puts one position on the board (a list of FENs is saved
+  at once), `i` opens the **Import** list for a PGN: games and puzzles found, duplicates marked and left out, `x` to
+  (de)select, `r` puzzles into training, `Enter` imports. `:import` does the same with a file.
+- Duplicates are detected live while setting up: the board's strip and the entry session say `duplicate of p1873`
+  and `g d` goes there; saving it anyway asks `m` merge · `s` save anyway.
 
 ---
 
@@ -241,14 +245,20 @@ Find, filter, organise, start training from any search.
 └───────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-- `1`–`6` switch collection (positions, games, puzzles/cards, players, sources, tags), `/` query, `j/k` cursor,
-  `Enter` open in Analyse, `o` open in a split, `x` select, `v` range, `Mod+A` all results.
+- `1`–`6` switch collection (positions, games, puzzles, players, sources, tags), `/` query (11 §3: completion with
+  `⇥`, problems underlined below the bar, the count live), `j/k` cursor (the linked board shows the row),
+  `Enter` open in Analyse (games too; a player, source or tag opens its games or positions), `x` select, `v` range,
+  `Mod+A` all results. `o` open in a split follows in phase 6.
 - `␣ u v` cycles the result display: **table** (dense rows) · **list** (row with a mini board) · **grid** (cards
   with boards). All three share cursor, selection and keys.
 - The filter pane writes into the query (and the query updates the filters): one source of truth, the query string.
 - Bulk commands act on the selection, or on the cursor row if nothing is selected. A bulk bar appears as the pane
   footer while something is selected.
-- `T` starts a training session with the puzzles in the results; `:save query <name>` saves the search.
+- `T` starts a training session with the puzzles in the results; `:save-query <name>` saves the search (usable as
+  `in:q:<name>` and as the filter of a custom training session); `d` moves to the trash, `is:trash` shows it, `r`
+  restores, `:trash-empty` deletes for good (positions with training history stay).
+- Every bulk change is one step of the undo stack (`u`), replayed exactly: tagging and untagging put back the links
+  they changed, trashing restores.
 
 ---
 

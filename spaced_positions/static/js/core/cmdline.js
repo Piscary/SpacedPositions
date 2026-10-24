@@ -102,28 +102,39 @@ function completions(type) {
     case "buffer":
       return bufferIds().map((id) => ({ value: id, label: "hidden buffer" }))
     case "position":
-      return positions(parse().rest || "")
+    case "tag":
+    case "source":
+      return fromServer(type, parse().rest || "")
     default:
       return []
   }
 }
 
-// Positions come from the server (the library and its query language arrive in phase 4): the rows follow the text.
-let positionRows = []
-let positionQuery = null
-let positionTimer
-function positions(q) {
-  if (q !== positionQuery) {
-    positionQuery = q
-    clearTimeout(positionTimer)
-    positionTimer = setTimeout(async () => {
-      const data = await fetch(`/positions/search/?q=${encodeURIComponent(q)}`).then((r) => r.json()).catch(() => ({ positions: [] }))
-      if (positionQuery !== q || !input) return
-      positionRows = data.positions.map((p) => ({ value: p.id, title: p.title, label: p.source || "", server: true }))
+// Positions and tags come from the server (the rows follow the text as it is typed).
+const SERVER = {
+  position: (q) => fetch(`/positions/search/?q=${encodeURIComponent(q)}`).then((r) => r.json())
+    .then((data) => data.positions.map((p) => ({ value: p.id, title: p.title, label: p.source || "", server: true }))),
+  tag: (q) => fetch(`/lib/complete/?kind=tag&q=${encodeURIComponent(q)}`).then((r) => r.json())
+    .then((data) => data.items.map((t) => ({ value: t.value, title: t.label, label: `${t.value} · ${t.note}`, server: true }))),
+  source: (q) => fetch(`/lib/complete/?kind=source&q=${encodeURIComponent(q)}`).then((r) => r.json())
+    .then((data) => data.items.map((s) => ({ value: s.value, title: s.label, label: s.note || "", server: true }))),
+}
+let serverRows = []
+let serverQuery = null
+let serverTimer
+function fromServer(type, q) {
+  const key = `${type}:${q}`
+  if (key !== serverQuery) {
+    serverQuery = key
+    clearTimeout(serverTimer)
+    serverTimer = setTimeout(async () => {
+      const rows = await SERVER[type](q).catch(() => [])
+      if (serverQuery !== key || !input) return
+      serverRows = rows
       refresh()
     }, 120)
   }
-  return positionRows
+  return serverRows
 }
 
 function parse() {
@@ -223,7 +234,7 @@ function argsFor(id, rest) {
   const spec = commands()[id]
   const text = (rest || "").trim()
   if (!text) return []
-  if (spec.args?.length === 1 && ["text", "token", "layout"].includes(spec.args[0].type)) return [text]
+  if (spec.args?.length === 1 && ["text", "token", "layout", "source"].includes(spec.args[0].type)) return [text]
   return text.split(/\s+/)
 }
 
@@ -262,7 +273,7 @@ async function accept() {
   } else {
     // A closed argument type (a theme, a view …) takes the highlighted completion unless the typed word is exact.
     const arg = commands()[id].args?.[0]
-    const closed = arg && ["enum", "theme", "view", "tokenname", "layout", "buffer", "pieceset", "position"].includes(arg.type)
+    const closed = arg && ["enum", "theme", "view", "tokenname", "layout", "buffer", "pieceset", "position", "tag", "source"].includes(arg.type)
     const choice = rows[cursor]
     if (closed && choice && "value" in choice && !rows.some((r) => r.value === args[0])) args = [choice.value]
   }

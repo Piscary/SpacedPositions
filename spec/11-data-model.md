@@ -29,12 +29,13 @@ What phase 2 built, plus:
 | `difficulty_override`, `difficulty_auto`, `difficulty` | 1–5. `difficulty` is the override, else the automatic value (the highest `base_difficulty` of its objective and motif tags; phase 5 adds how hard it was to solve) |
 | `diagram` | An illustration: shown, never trained, may be illegal |
 | `game` → Game, `game_node` → Node | When it was taken from a game, the move it was taken at |
-| `flagged` | Flagged as broken in Train (`!`) |
 | `deleted_at` | In the trash |
 | `updated_at` | |
 
-Derived, indexed for the query language: `side` (w/b), `material` (e.g. `KQRvKR`), `pieces` (count),
-`has_analysis` (the tree has moves), `has_puzzle`, `has_comment`.
+Derived on save, indexed for the query language: `side` (w/b), `material` (e.g. `KQRvKR`), `pieces` (count).
+`has:analysis`, `has:puzzle`, `has:comment` and `is:flagged` (a puzzle flagged in Train) are subqueries, so they are
+never out of date. `task` is the objective line: `objective` when set, else the task of its objective tag for the
+side that solves (`White to play and mate in 2`).
 
 The analysis tree (Node) and `canonical` stay as built in phase 3.
 
@@ -65,10 +66,12 @@ German names with English names and aliases for search (decision 6: English UI, 
 | Model | Fields |
 |---|---|
 | `TagField` | `key` (`motif`, `mate`, `goal`, `phase`, `strategy`, `endgame`, `technique`, `level`, `moment`, `custom`), `name`, `name_en`, `selection` (single: one tag of the field per object · multi), `on_positions`, `on_moves`, `color` (a chart/chip token, `--chart-1` … `--chart-6`), `order` |
-| `Tag` | `field`, `key` (slug, unique: `gabel`, `springergabel`), `name` (German: `Gabel`), `name_en` (`Fork`), `aliases` (more search terms, any language), `parent` → Tag (hierarchy: Doppelangriff → Gabel → Springergabel), `description`, `task` and `task_en` (for objective tags: the printed task, `{side}` = the side to move), `base_difficulty` (1–5), `order` |
+| `Tag` | `field`, `key` (slug, unique, from the old app: `fork`, `knight-fork`), `name` (German: `Gabel`), `name_en` (`Fork`), `aliases` (more search terms, any language), `parent` → Tag (hierarchy: Doppelangriff → Gabel → Springergabel), `description`, `task` and `task_en` (for objective tags: the printed task, `{side}` = the side to move), `base_difficulty` (1–5), `order` |
 | `PositionTag`, `NodeTag`, `GameTag` | the link, plus `origin` (`manual` · `auto` · `suggested`), `detector` (which detector set it), `evidence` (`Ne5 forks Kg8, Qd7`), `created_at` |
 | `TagPreset` | A named set of tags for Collect (`1`–`9` in the entry session): `name`, `tags`, `order` |
 
+- **Names**: a query or `:tag` takes the key, the German or English name or an alias (`motif:gabel`, `motif:fork`);
+  completions put exact matches first.
 - **Hierarchy**: a query for a tag matches its descendants (`motif:gabel` finds Springergabel too); `=` matches the
   tag alone (`motif:=gabel`). Chips show the tag's name; the path shows on hover and in the completion.
 - `single` fields: setting a tag replaces the other tag of that field (Phase: Opening → Endgame).
@@ -104,8 +107,9 @@ training session, and in other queries (`in:q:gabel-hard`).
 ## 2 · Duplicates
 
 - **Positions** are the same when their `canonical` FENs are equal (placement, side, castling, legal en passant).
-  Collect checks while you set up (status line `duplicate of p1873 · g d go there`); saving a duplicate asks
-  `merge into p1873 / save anyway / cancel`. Merging adds tags, source refs and the new solution as a variation.
+  Collect checks while you set up (the board's strip and the entry session say `duplicate of p1873`, `g d` goes
+  there); saving a duplicate asks `m` merge · `s` save anyway · `g` go there · `Esc` (a question, answered with
+  HTTP 200, not an error). Merging adds tags, the source (if the position has none) and the new solution as a line.
 - **Games** are the same when the players' names, the result and the first 40 plies agree (a hash), or when the PGN
   is identical. Import marks them and skips them unless chosen.
 - **Puzzles** in an import are duplicates when their position is and their main line starts with the same move.
@@ -172,15 +176,19 @@ come from the same compiled query without the facet's own term.
   Position with the FEN, the line as its analysis, and a puzzle starting at the root (a draft unless `r` marks the
   import ready for training).
 - Headers map onto Game fields; `Annotator`, `PlyCount` and others stay in `headers`. Players are matched (§1).
-- Large imports run in the background (a thread in the local server), with progress in the status line; the
-  Library shows imported games as they arrive. An import is one journal entry: `u` removes what it added, unless
-  it was trained since.
+- An import runs while the status line says *Importing…* (up to 5,000 games or 20 MB per import; a bigger file
+  is split). Afterwards the Library shows what arrived (`created:<1d`). An import is one step of the undo stack:
+  `u` moves what it added to the trash (`U` brings it back).
+- Text that holds neither moves nor a `FEN` header isn't a game and is skipped.
 
 ## 5 · From the current models (phase 4 migrations)
 
 - `Position.source` (text) → `source_text`; `Position.tag_names` → real tags, matched by name or alias against the
   vocabulary (unmatched names become `custom` tags).
-- Puzzles made with `:puzzle` (no analysis) get one: the line becomes the position's main line and the puzzle's
-  start node its root, so every puzzle is editable in Analyse.
+- `:puzzle` now makes its puzzle through the analysis (the line becomes the main line from the start, the solution
+  ends where the line ends); the same line again returns the same puzzle, a different line on a position that has
+  a puzzle is refused (edit it in Analyse). There were no older `:puzzle` puzzles to convert.
+- Untouched default layouts move to the new defaults (`core/layouts.OLD_DEFAULTS`): a saved layout that is exactly
+  an earlier default (the Library with its demo list) becomes the current one; changed layouts stay.
 - Node and JournalEntry get the `game` owner (§1 Game).
 - All migrations are additive; `spos` backs up the database before migrating (09 §11).

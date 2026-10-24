@@ -15,17 +15,102 @@ from django.db import models
 from django.utils import timezone
 
 
+class AliveManager(models.Manager):
+    """Without the trash (spec 11: deleting moves to the trash)."""
+
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted_at=None)
+
+
+PIECE_ORDER = "KQRBNP"
+
+
+def material_of(fen: str) -> tuple[str, int]:
+    """('KQRvKR', 5): white's pieces, 'v', black's, strongest first; and the number of pieces."""
+    placement = fen.split()[0] if fen else ""
+    white = sorted((c for c in placement if c in PIECE_ORDER), key=PIECE_ORDER.index)
+    black = sorted((c.upper() for c in placement if c in PIECE_ORDER.lower()), key=PIECE_ORDER.index)
+    return f"{''.join(white)}v{''.join(black)}", len(white) + len(black)
+
+
 class Position(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     fen = models.CharField(max_length=100)
     canonical = models.CharField(max_length=90, db_index=True, help_text="placement, side, castling, legal e.p.")
     title = models.CharField(max_length=200, blank=True)
-    source = models.CharField(max_length=300, blank=True, help_text="Citation as text (phase 4: a Source)")
+    description = models.TextField(blank=True, help_text="The task as shown with the diagram (Markdown)")
+    notes = models.TextField(blank=True, help_text="Private working notes (Markdown)")
+    source = models.ForeignKey("library.Source", null=True, blank=True, on_delete=models.SET_NULL, related_name="positions")
+    source_page = models.CharField(max_length=40, blank=True)
+    source_ref = models.CharField(max_length=300, blank=True, help_text="Diagram number, puzzle id or URL path")
+    source_text = models.CharField(max_length=300, blank=True, help_text="The citation as text (imports; unmatched)")
     objective = models.CharField(max_length=120, blank=True, help_text="Task line, e.g. 'Mate in 2'")
-    difficulty = models.PositiveSmallIntegerField(null=True, blank=True, help_text="1–5")
-    tag_names = models.JSONField(default=list, blank=True, help_text="Shown in feedback until phase 4 brings tags")
+    difficulty = models.PositiveSmallIntegerField(null=True, blank=True, db_index=True, help_text="1–5: the override, else the automatic value")
+    difficulty_override = models.PositiveSmallIntegerField(null=True, blank=True)
+    difficulty_auto = models.PositiveSmallIntegerField(null=True, blank=True)
+    tags = models.ManyToManyField("library.Tag", through="library.PositionTag", related_name="positions", blank=True)
+    diagram = models.BooleanField(default=False, help_text="An illustration: shown, never trained, may be illegal")
+    game = models.ForeignKey("library.Game", null=True, blank=True, on_delete=models.SET_NULL, related_name="positions")
+    game_node = models.ForeignKey("analysis.Node", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
+    side = models.CharField(max_length=1, default="w", editable=False)
+    material = models.CharField(max_length=40, blank=True, db_index=True, editable=False)
+    pieces = models.PositiveSmallIntegerField(default=0, editable=False)
     origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: board, csm:<id> …")
+    deleted_at = models.DateTimeField(null=True, blank=True, db_index=True)
     created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager()
+    alive = AliveManager()
+
+    class Meta:
+        base_manager_name = "objects"
+
+    def save(self, *args, **kwargs):
+        parts = (self.fen or "").split()
+        self.side = parts[1] if len(parts) > 1 and parts[1] in "wb" else "w"
+        self.material, self.pieces = material_of(self.fen)
+        self.difficulty = self.difficulty_override or self.difficulty_auto
+        fields = kwargs.get("update_fields")
+        if fields is not None:
+            fields = set(fields)
+            if "fen" in fields:
+                fields |= {"side", "material", "pieces"}
+            if fields & {"difficulty_override", "difficulty_auto"}:
+                fields.add("difficulty")
+            kwargs["update_fields"] = fields | {"updated_at"}
+        super().save(*args, **kwargs)
+
+    @property
+    def short_id(self) -> str:
+        return f"p{self.pk}"
+
+    @property
+    def tag_names(self) -> list[str]:
+        """Names of its tags in field order (prefetch `tag_links__tag__field` for lists)."""
+        links = sorted(self.tag_links.all(), key=lambda link: (link.tag.field.order, link.tag.order, link.tag.id))
+        return [link.tag.name for link in links if link.origin != "suggested"]
+
+    @property
+    def task(self) -> str:
+        return self.task_for(self.side)
+
+    def task_for(self, side: str) -> str:
+        """The objective line: set by hand, else the task of its objective tag ('White to play and mate in 2'), for
+        the side that solves (a mirrored puzzle is solved by the other colour)."""
+        if self.objective:
+            return self.objective
+        for link in self.tag_links.all():
+            if link.tag.field.key == "goal" and link.tag.task_en and link.origin != "suggested":
+                return link.tag.task_en.replace("{side}", "White" if side == "w" else "Black")
+        return ""
+
+    @property
+    def citation(self) -> str:
+        if self.source_id:
+            ref = " · ".join(x for x in [f"p. {self.source_page}" if self.source_page else "", self.source_ref] if x)
+            return " · ".join(x for x in [self.source.label, ref] if x)
+        return self.source_text
 
     def __str__(self):
         return self.title or self.fen

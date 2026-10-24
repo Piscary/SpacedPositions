@@ -227,15 +227,54 @@
    "handler": "client"
   },
   "analysis.tags": {
-   "title": "Move tags",
+   "title": "Tag the move",
    "group": "Analyse",
-   "phase": 4,
+   "when": "analysis.onMove",
+   "reason": "go to a move first",
+   "handler": "client"
+  },
+  "analysis.untag": {
+   "title": "Remove a tag from the move",
+   "group": "Analyse",
+   "aliases": [
+    "untag-move"
+   ],
+   "args": [
+    {
+     "name": "tag",
+     "type": "tag"
+    }
+   ],
+   "when": "analysis.onMove",
+   "reason": "go to a move first",
+   "undoable": true,
+   "handler": "client"
+  },
+  "analysis.newposition": {
+   "title": "New position from this move",
+   "group": "Analyse",
+   "aliases": [
+    "new-position"
+   ],
+   "args": [
+    {
+     "name": "moves",
+     "type": "enum",
+     "values": [
+      "moves"
+     ],
+     "optional": true
+    }
+   ],
+   "when": "analysis.loaded",
+   "reason": "no position or game open",
    "handler": "client"
   },
   "analysis.positiontags": {
-   "title": "Position tags",
+   "title": "Tag the position",
    "group": "Analyse",
-   "phase": 4,
+   "when": "analysis.loaded",
+   "reason": "no position open: :analyse",
    "handler": "client"
   },
   "engine.toggle": {
@@ -494,13 +533,11 @@
   "paste.collect": {
    "title": "Paste: collect as positions",
    "group": "Paste",
-   "phase": 4,
    "handler": "client"
   },
   "paste.import": {
    "title": "Paste: import the games",
    "group": "Paste",
-   "phase": 4,
    "handler": "client"
   },
   "board.pieces": {
@@ -518,6 +555,357 @@
     }
    ],
    "undoable": true,
+   "handler": "client"
+  },
+  "collect.save": {
+   "title": "Save & next",
+   "group": "Collect",
+   "when": "mode.collect",
+   "reason": "in Collect",
+   "handler": "client"
+  },
+  "collect.saveopen": {
+   "title": "Save & open in Analyse",
+   "group": "Collect",
+   "when": "mode.collect",
+   "reason": "in Collect",
+   "handler": "client"
+  },
+  "collect.source": {
+   "title": "Source of the entry session",
+   "group": "Collect",
+   "aliases": [
+    "source"
+   ],
+   "args": [
+    {
+     "name": "source",
+     "type": "source"
+    }
+   ],
+   "when": "mode.collect",
+   "reason": "in Collect",
+   "handler": "client"
+  },
+  "collect.page": {
+   "title": "Page + / −",
+   "group": "Collect",
+   "args": [
+    {
+     "name": "step",
+     "type": "enum",
+     "values": [
+      "up",
+      "down"
+     ]
+    }
+   ],
+   "when": "mode.collect",
+   "reason": "in Collect",
+   "handler": "client"
+  },
+  "collect.diagram": {
+   "title": "Diagram number + / −",
+   "group": "Collect",
+   "args": [
+    {
+     "name": "step",
+     "type": "enum",
+     "values": [
+      "up",
+      "down"
+     ]
+    }
+   ],
+   "when": "mode.collect",
+   "reason": "in Collect",
+   "handler": "client"
+  },
+  "collect.tag": {
+   "title": "Tag the next positions",
+   "group": "Collect",
+   "args": [
+    {
+     "name": "tag",
+     "type": "tag"
+    }
+   ],
+   "when": "mode.collect",
+   "reason": "in Collect",
+   "handler": "client"
+  },
+  "collect.untag": {
+   "title": "Remove the last tag of the entry session",
+   "group": "Collect",
+   "when": "mode.collect",
+   "reason": "in Collect",
+   "handler": "client"
+  },
+  "collect.preset": {
+   "title": "Tag preset on / off",
+   "group": "Collect",
+   "args": [
+    {
+     "name": "preset",
+     "type": "enum",
+     "values": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+     ]
+    }
+   ],
+   "when": "mode.collect",
+   "reason": "in Collect",
+   "handler": "client"
+  },
+  "collect.presetsave": {
+   "title": "Save the session's tags as a preset",
+   "group": "Collect",
+   "aliases": [
+    "preset-save"
+   ],
+   "args": [
+    {
+     "name": "name",
+     "type": "text"
+    }
+   ],
+   "when": "mode.collect",
+   "reason": "in Collect",
+   "handler": "client"
+  },
+  "collect.ready": {
+   "title": "Ready for training on / off",
+   "group": "Collect",
+   "when": "mode.collect",
+   "reason": "in Collect",
+   "handler": "client"
+  },
+  "collect.duplicate": {
+   "title": "Go to the duplicate",
+   "group": "Collect",
+   "when": "collect.hasDuplicate",
+   "reason": "no duplicate of the board's position",
+   "handler": "client"
+  },
+  "library.collection": {
+   "title": "Collection",
+   "group": "Library",
+   "args": [
+    {
+     "name": "collection",
+     "type": "enum",
+     "values": [
+      "positions",
+      "games",
+      "puzzles",
+      "players",
+      "sources",
+      "tags"
+     ]
+    }
+   ],
+   "when": "view.library",
+   "reason": "in the Library's results",
+   "handler": "client"
+  },
+  "library.display": {
+   "title": "Results as table · list · grid",
+   "group": "Library",
+   "aliases": [
+    "display"
+   ],
+   "args": [
+    {
+     "name": "display",
+     "type": "enum",
+     "values": [
+      "table",
+      "list",
+      "grid"
+     ],
+     "optional": true
+    }
+   ],
+   "when": "view.library",
+   "reason": "in the Library's results",
+   "handler": "client"
+  },
+  "library.tag": {
+   "title": "Tag the selection",
+   "group": "Library",
+   "aliases": [
+    "tag"
+   ],
+   "args": [
+    {
+     "name": "tag",
+     "type": "tag"
+    }
+   ],
+   "handler": "both",
+   "when": "library.hasTarget",
+   "reason": "select something in the Library, or open a position in Analyse",
+   "undoable": true,
+   "repeatable": true
+  },
+  "library.untag": {
+   "title": "Remove a tag from the selection",
+   "group": "Library",
+   "aliases": [
+    "untag"
+   ],
+   "args": [
+    {
+     "name": "tag",
+     "type": "tag"
+    }
+   ],
+   "handler": "both",
+   "when": "library.hasTarget",
+   "reason": "select something in the Library, or open a position in Analyse",
+   "undoable": true
+  },
+  "library.relink": {
+   "title": "Put tags back (undo)",
+   "group": "Library",
+   "args": [
+    {
+     "name": "change",
+     "type": "text"
+    }
+   ],
+   "handler": "server",
+   "hidden": true,
+   "internal": true
+  },
+  "library.trash": {
+   "title": "Move to the trash",
+   "group": "Library",
+   "aliases": [
+    "trash"
+   ],
+   "handler": "both",
+   "when": "view.library",
+   "reason": "in the Library's results",
+   "undoable": true
+  },
+  "library.restore": {
+   "title": "Restore from the trash",
+   "group": "Library",
+   "aliases": [
+    "restore"
+   ],
+   "handler": "both",
+   "when": "view.library",
+   "reason": "in the Library's results (is:trash)",
+   "undoable": true
+  },
+  "library.emptytrash": {
+   "title": "Empty the trash (deletes for good)",
+   "group": "Library",
+   "aliases": [
+    "trash-empty"
+   ],
+   "handler": "both",
+   "danger": true
+  },
+  "library.savequery": {
+   "title": "Save the query",
+   "group": "Library",
+   "aliases": [
+    "save-query"
+   ],
+   "args": [
+    {
+     "name": "name",
+     "type": "text"
+    }
+   ],
+   "handler": "both",
+   "when": "view.library",
+   "reason": "in the Library's results"
+  },
+  "library.train": {
+   "title": "Train these",
+   "group": "Library",
+   "when": "view.library",
+   "reason": "in the Library's results",
+   "handler": "client"
+  },
+  "library.analyse": {
+   "title": "Analyse these (n / N in Analyse)",
+   "group": "Library",
+   "when": "view.library",
+   "reason": "in the Library's results",
+   "handler": "client"
+  },
+  "library.copyfen": {
+   "title": "Copy the FENs",
+   "group": "Library",
+   "when": "view.library",
+   "reason": "in the Library's results",
+   "handler": "client"
+  },
+  "library.export": {
+   "title": "Export as PGN",
+   "group": "Library",
+   "aliases": [
+    "export"
+   ],
+   "when": "view.library",
+   "reason": "in the Library's results",
+   "handler": "client"
+  },
+  "library.query": {
+   "title": "Search the Library",
+   "group": "Library",
+   "aliases": [
+    "find",
+    "library"
+   ],
+   "args": [
+    {
+     "name": "query",
+     "type": "text",
+     "optional": true
+    }
+   ],
+   "handler": "client"
+  },
+  "library.trashmany": {
+   "title": "Undo or redo an import",
+   "group": "Library",
+   "args": [
+    {
+     "name": "change",
+     "type": "text"
+    }
+   ],
+   "handler": "server",
+   "hidden": true,
+   "internal": true
+  },
+  "library.import": {
+   "title": "Import a PGN file",
+   "group": "Library",
+   "aliases": [
+    "import"
+   ],
+   "handler": "client"
+  },
+  "library.exclude": {
+   "title": "Exclude the facet (-term)",
+   "group": "Library",
+   "when": "view.filters",
+   "reason": "in the filter pane",
    "handler": "client"
   },
   "pane.focus.next": {
@@ -1109,12 +1497,18 @@
   "train.tag": {
    "title": "Tag the position",
    "group": "Train",
-   "phase": 4,
    "handler": "client"
   },
   "train.edit": {
    "title": "Edit the puzzle in Analyse",
    "group": "Train",
+   "handler": "client"
+  },
+  "train.analysemissed": {
+   "title": "Analyse the missed ones (n / N in Analyse)",
+   "group": "Train",
+   "when": "train.hasMissed",
+   "reason": "nothing missed",
    "handler": "client"
   },
   "train.missed": {
@@ -1531,6 +1925,10 @@
    },
    "space u p": {
     "command": "board.pieces",
+    "args": []
+   },
+   "space u v": {
+    "command": "library.display",
     "args": []
    }
   },
@@ -2108,6 +2506,10 @@
     "command": "train.missed",
     "args": []
    },
+   "a": {
+    "command": "train.analysemissed",
+    "args": []
+   },
    "l": {
     "command": "train.launcher",
     "args": []
@@ -2372,6 +2774,188 @@
    },
    "Y": {
     "command": "board.copypgn",
+    "args": []
+   }
+  },
+  "view.library": {
+   "1": {
+    "command": "library.collection",
+    "args": [
+     "positions"
+    ]
+   },
+   "2": {
+    "command": "library.collection",
+    "args": [
+     "games"
+    ]
+   },
+   "3": {
+    "command": "library.collection",
+    "args": [
+     "puzzles"
+    ]
+   },
+   "4": {
+    "command": "library.collection",
+    "args": [
+     "players"
+    ]
+   },
+   "5": {
+    "command": "library.collection",
+    "args": [
+     "sources"
+    ]
+   },
+   "6": {
+    "command": "library.collection",
+    "args": [
+     "tags"
+    ]
+   },
+   "t": {
+    "command": "library.tag",
+    "args": []
+   },
+   "T": {
+    "command": "library.train",
+    "args": []
+   },
+   "d": {
+    "command": "library.trash",
+    "args": []
+   },
+   "r": {
+    "command": "library.restore",
+    "args": []
+   },
+   "a": {
+    "command": "library.analyse",
+    "args": []
+   },
+   "y": {
+    "command": "library.copyfen",
+    "args": []
+   },
+   "e": {
+    "command": "library.export",
+    "args": []
+   }
+  },
+  "mode.collect": {
+   "mod+enter": {
+    "command": "collect.save",
+    "args": []
+   },
+   "mod+shift+enter": {
+    "command": "collect.saveopen",
+    "args": []
+   },
+   "g d": {
+    "command": "collect.duplicate",
+    "args": []
+   }
+  },
+  "view.entry": {
+   "s": {
+    "command": "collect.source",
+    "args": []
+   },
+   "+": {
+    "command": "collect.page",
+    "args": [
+     "up"
+    ]
+   },
+   "-": {
+    "command": "collect.page",
+    "args": [
+     "down"
+    ]
+   },
+   "up": {
+    "command": "collect.diagram",
+    "args": [
+     "up"
+    ]
+   },
+   "down": {
+    "command": "collect.diagram",
+    "args": [
+     "down"
+    ]
+   },
+   "t": {
+    "command": "collect.tag",
+    "args": []
+   },
+   "backspace": {
+    "command": "collect.untag",
+    "args": []
+   },
+   "r": {
+    "command": "collect.ready",
+    "args": []
+   },
+   "1": {
+    "command": "collect.preset",
+    "args": [
+     "1"
+    ]
+   },
+   "2": {
+    "command": "collect.preset",
+    "args": [
+     "2"
+    ]
+   },
+   "3": {
+    "command": "collect.preset",
+    "args": [
+     "3"
+    ]
+   },
+   "4": {
+    "command": "collect.preset",
+    "args": [
+     "4"
+    ]
+   },
+   "5": {
+    "command": "collect.preset",
+    "args": [
+     "5"
+    ]
+   },
+   "6": {
+    "command": "collect.preset",
+    "args": [
+     "6"
+    ]
+   },
+   "7": {
+    "command": "collect.preset",
+    "args": [
+     "7"
+    ]
+   },
+   "8": {
+    "command": "collect.preset",
+    "args": [
+     "8"
+    ]
+   },
+   "9": {
+    "command": "collect.preset",
+    "args": [
+     "9"
+    ]
+   }
+  },
+  "view.filters": {
+   "-": {
+    "command": "library.exclude",
     "args": []
    }
   }

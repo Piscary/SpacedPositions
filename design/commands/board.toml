@@ -167,12 +167,10 @@ group = "Paste"
 ["paste.collect"]
 title = "Paste: collect as positions"
 group = "Paste"
-phase = 4
 
 ["paste.import"]
 title = "Paste: import the games"
 group = "Paste"
-phase = 4
 
 ["board.pieces"]
 title = "Piece set"

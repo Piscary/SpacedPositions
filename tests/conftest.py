@@ -33,3 +33,18 @@ def page(browser, live_server):
     yield page
     context.close()
     assert errors == [], errors
+
+
+@pytest.fixture(autouse=True)
+def vocabulary(request):
+    """The starter tags (a data migration) for every test with a database: tests that empty the database between
+    tests (the browser ones) would otherwise lose them."""
+    marker = request.node.get_closest_marker("django_db")
+    if marker is None and not {"db", "transactional_db", "live_server"} & set(request.fixturenames):
+        return
+    request.getfixturevalue("transactional_db" if (marker and marker.kwargs.get("transaction")) or "live_server" in request.fixturenames else "db")
+    from spaced_positions.library import vocabulary as vocab
+    from spaced_positions.library.models import Tag, TagField
+
+    if not Tag.objects.exists():
+        vocab.load(TagField, Tag)

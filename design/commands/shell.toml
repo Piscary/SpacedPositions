@@ -1,6 +1,6 @@
 # Commands of the shell: layers, overlays, modes, undo (spec 02 §3).
 # Keys live in keymap/default.toml. Fields: title, group, aliases, args, when, handler (client|server|both),
-# undoable, repeatable, sticky, danger, hidden, phase (> 0: shown but disabled until that build phase).
+# undoable, repeatable, sticky, danger, hidden, internal (run only by undo/redo), phase (> 0: shown but disabled until that build phase).
 
 ["layer.escape"]
 title = "Back to Normal"

@@ -1,0 +1,130 @@
+# Library (spec 04 · Library, 11 §3). The results view binds the bulk keys; they act on the selection, or on the
+# cursor row when nothing is selected.
+
+["library.collection"]
+title = "Collection"
+group = "Library"
+args = [{ name = "collection", type = "enum", values = ["positions", "games", "puzzles", "players", "sources", "tags"] }]
+when = "view.library"
+reason = "in the Library's results"
+
+["library.display"]
+title = "Results as table · list · grid"
+group = "Library"
+aliases = ["display"]
+args = [{ name = "display", type = "enum", values = ["table", "list", "grid"], optional = true }]
+when = "view.library"
+reason = "in the Library's results"
+
+["library.tag"]
+title = "Tag the selection"
+group = "Library"
+aliases = ["tag"]
+args = [{ name = "tag", type = "tag" }]
+handler = "both"
+when = "library.hasTarget"
+reason = "select something in the Library, or open a position in Analyse"
+undoable = true
+repeatable = true
+
+["library.untag"]
+title = "Remove a tag from the selection"
+group = "Library"
+aliases = ["untag"]
+args = [{ name = "tag", type = "tag" }]
+handler = "both"
+when = "library.hasTarget"
+reason = "select something in the Library, or open a position in Analyse"
+undoable = true
+
+["library.relink"]
+title = "Put tags back (undo)"
+group = "Library"
+args = [{ name = "change", type = "text" }]
+handler = "server"
+hidden = true
+internal = true  # only undo and redo run it
+
+["library.trash"]
+title = "Move to the trash"
+group = "Library"
+aliases = ["trash"]
+handler = "both"
+when = "view.library"
+reason = "in the Library's results"
+undoable = true
+
+["library.restore"]
+title = "Restore from the trash"
+group = "Library"
+aliases = ["restore"]
+handler = "both"
+when = "view.library"
+reason = "in the Library's results (is:trash)"
+undoable = true
+
+["library.emptytrash"]
+title = "Empty the trash (deletes for good)"
+group = "Library"
+aliases = ["trash-empty"]
+handler = "both"
+danger = true
+
+["library.savequery"]
+title = "Save the query"
+group = "Library"
+aliases = ["save-query"]
+args = [{ name = "name", type = "text" }]
+handler = "both"
+when = "view.library"
+reason = "in the Library's results"
+
+["library.train"]
+title = "Train these"
+group = "Library"
+when = "view.library"
+reason = "in the Library's results"
+
+["library.analyse"]
+title = "Analyse these (n / N in Analyse)"
+group = "Library"
+when = "view.library"
+reason = "in the Library's results"
+
+["library.copyfen"]
+title = "Copy the FENs"
+group = "Library"
+when = "view.library"
+reason = "in the Library's results"
+
+["library.export"]
+title = "Export as PGN"
+group = "Library"
+aliases = ["export"]
+when = "view.library"
+reason = "in the Library's results"
+
+["library.query"]
+title = "Search the Library"
+group = "Library"
+aliases = ["find", "library"]
+args = [{ name = "query", type = "text", optional = true }]
+
+["library.trashmany"]
+title = "Undo or redo an import"
+group = "Library"
+args = [{ name = "change", type = "text" }]
+handler = "server"
+hidden = true
+internal = true  # only undo and redo run it
+
+["library.import"]
+title = "Import a PGN file"
+group = "Library"
+aliases = ["import"]
+
+["library.exclude"]
+title = "Exclude the facet (-term)"
+group = "Library"
+when = "view.filters"
+reason = "in the filter pane"

@@ -34,6 +34,7 @@ function paint(list) {
 function syncSelection(list) {
   const st = listState(list)
   ctx.selection = { count: st.selected.size, visual: st.anchor !== null }
+  emit("selection", { list, count: st.selected.size })
   const row = rowsOf(list)[st.cursor]
   if (ctx.pane) ctx.pane.subject = row ? `${row.dataset.row} ${row.dataset.title || ""}`.trim() : ""
   updateStatus()
@@ -53,6 +54,28 @@ function moveTo(list, index) {
   rows[st.cursor].scrollIntoView({ block: "nearest" })
   const row = rows[st.cursor]
   if (ctx.pane?.group) emit("cursor", { group: ctx.pane.group, from: ctx.pane.id, id: row.dataset.row, title: row.dataset.title, fen: row.dataset.fen })
+}
+
+/** The rows a bulk command acts on: the selected ones, else the row under the cursor. */
+export function targetRows(list) {
+  const st = listState(list)
+  const rows = rowsOf(list)
+  if (st.selected.size) return { ids: [...st.selected], selected: true }
+  const row = rows[Math.max(0, st.cursor)]
+  return { ids: row ? [row.dataset.row] : [], selected: false }
+}
+
+/** After a list's rows were replaced: cursor back to `index` (selection kept unless `clear`). */
+export function resetList(list, { index = 0, clear = false } = {}) {
+  const st = listState(list)
+  if (clear) st.selected.clear()
+  st.anchor = null
+  st.cursor = rowsOf(list).length ? Math.min(index, rowsOf(list).length - 1) : -1
+  paint(list)
+}
+
+export function cursorIndex(list) {
+  return listState(list).cursor
 }
 
 const withList = (fn) => (args) => {
@@ -99,6 +122,9 @@ handle("list.open", withList((list, st) => {
   row.classList.remove("is-flash-row")
   void row.offsetWidth
   row.classList.add("is-flash-row")
+  if (row.dataset.term) return window.SPOS.library.toggleTerm(row.dataset.term, row) // a facet of the filter pane
+  if (row.dataset.query) return window.SPOS.library.setQuery(row.dataset.query, row.dataset.queryCollection) // a player, source or tag
+  if (row.dataset.game) return window.SPOS.analysis.openGame?.(row.dataset.game)
   if (row.dataset.position) {
     // Positions open in Analyse; n / N there step through the rest of the list.
     const rows = rowsOf(list).filter((r) => r.dataset.position)

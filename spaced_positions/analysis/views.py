@@ -10,6 +10,8 @@ from django.shortcuts import render as render_template
 from django.views.decorators.http import require_GET, require_POST
 
 from spaced_positions.core.models import LOCAL_USER
+from spaced_positions.library.text import fold
+from spaced_positions.library.models import Game
 from spaced_positions.training.models import Position
 
 from . import puzzles as analysis_puzzles
@@ -25,11 +27,12 @@ def _json(request) -> dict:
     return data if isinstance(data, dict) else {}
 
 
-def _position(pid) -> Position:
+def _position(pid):
+    """The owner of a tree: a position, or a game (spec 11 §1)."""
     try:
-        return Position.objects.get(uuid=pid)
-    except (Position.DoesNotExist, ValueError, ValidationError):
-        raise Http404("no such position") from None
+        return Position.objects.filter(uuid=pid).first() or Game.objects.get(uuid=pid)
+    except (Game.DoesNotExist, ValueError, ValidationError):
+        raise Http404("no such position or game") from None
 
 
 def _node(position, nid) -> Node:
@@ -40,7 +43,7 @@ def _node(position, nid) -> Node:
 
 
 def _state(position, **extra) -> JsonResponse:
-    entry = JournalEntry.objects.filter(user=LOCAL_USER, position=position, undone=False).first()
+    entry = JournalEntry.objects.filter(user=LOCAL_USER, undone=False, **tree.owner_of(owner=position)).first()
     return JsonResponse({"ok": True, "tree": tree.tree_json(position), "html": render.render(position),
                          "journal": {"id": entry.id, "label": entry.label} if entry and extra.pop("journaled", False) else None,
                          **extra})
@@ -136,7 +139,8 @@ def set_position(request, pid):
         with tree.change(position, "Correct the position"):
             dropped = tree.change_root(position, str(data.get("fen", "")), force=bool(data.get("force")))
     except tree.TreeError as e:
-        return JsonResponse({"ok": False, "message": str(e), "conflict": "moves would go" in str(e)}, status=409)
+        # a conflict is a question for the user (drop the moves?), not an error
+        return JsonResponse({"ok": False, "message": str(e), "conflict": "moves would go" in str(e)}, status=200 if "moves would go" in str(e) else 422)
     message = f"Position corrected; {dropped} moves of the analysis were dropped" if dropped else "Position corrected; the analysis is kept"
     return _state(position, node=tree.root(position).id, message=message, journaled=True)
 
@@ -187,6 +191,16 @@ def inspector(request, pid):
     position = _position(pid)
     node = _node(position, request.GET.get("node")) if request.GET.get("node") else tree.root(position)
     p = analysis_puzzles.puzzle_at(node)
+    if tree.is_game(position):
+        return render_template(request, "analysis/inspector_game.html", {
+            "game": position, "node": node,
+            "nags": [(n, s, n in node.nags) for n, s in tree.NAGS.items() if n in tree.MOVE_NAGS],
+            "headers": [(k, v) for k, v in [("White", position.white_name), ("Black", position.black_name), ("Result", position.result),
+                        ("Date", position.date), ("Event", position.event), ("Site", position.site), ("Round", position.round),
+                        ("ECO", position.eco), ("White Elo", position.white_elo), ("Black Elo", position.black_elo),
+                        *position.headers.items()] if v],
+            "positions": position.positions.filter(deleted_at=None)[:20],
+        })
     context = {
         "position": position,
         "node": node,
@@ -195,6 +209,8 @@ def inspector(request, pid):
         "puzzle_cards": p.cards.filter(in_solution=True).count() if p else 0,
         "is_start": bool(p and p.start_node_id == node.id),
         "move_count": position.nodes.exclude(parent=None).count(),
+        "position_tags": position.tag_links.select_related("tag__field").order_by("tag__field__order", "tag__order"),
+        "move_tags": node.tag_links.select_related("tag__field").order_by("tag__field__order", "tag__order") if node.parent_id else [],
     }
     return render_template(request, "analysis/inspector.html", context)
 
@@ -203,30 +219,32 @@ def inspector(request, pid):
 def search(request):
     """Positions for `:analyse <text>` (the library and its query language arrive in phase 4)."""
     q = request.GET.get("q", "").strip()
-    rows = Position.objects.all()
+    rows = Position.alive.all()
     if q:
-        rows = rows.filter(Q(title__icontains=q) | Q(source__icontains=q) | Q(fen__startswith=q))
-    rows = rows.order_by("-created_at")[:20]
-    return JsonResponse({"positions": [{"id": str(p.uuid), "title": p.title or p.fen, "source": p.source} for p in rows]})
+        rows = rows.filter(Q(title__icontains=q) | Q(source_text__icontains=q) | Q(source__search__contains=fold(q)) | Q(fen__startswith=q))
+    rows = rows.select_related("source").order_by("-created_at")[:20]
+    return JsonResponse({"positions": [{"id": str(p.uuid), "title": p.title or p.fen, "source": p.citation} for p in rows]})
 
 
 @require_GET
 def journal(request):
-    rows = JournalEntry.objects.filter(user=LOCAL_USER, undone=False).select_related("position").order_by("-id")[:50]
-    return JsonResponse({"entries": [{"id": e.id, "label": e.label, "position": str(e.position.uuid) if e.position else None} for e in reversed(rows)]})
+    rows = JournalEntry.objects.filter(user=LOCAL_USER, undone=False).select_related("position", "game").order_by("-id")[:50]
+    return JsonResponse({"entries": [{"id": e.id, "label": e.label, "position": str((e.position or e.game).uuid) if (e.position or e.game) else None}
+                                     for e in reversed(rows)]})
 
 
 def _apply(request, eid, undo: bool):
     try:
-        entry = JournalEntry.objects.select_related("position").get(id=eid, user=LOCAL_USER)
+        entry = JournalEntry.objects.select_related("position", "game").get(id=eid, user=LOCAL_USER)
     except JournalEntry.DoesNotExist:
         raise Http404("no such journal entry") from None
     if entry.undone == undo:
         return _fail("already " + ("undone" if undo else "redone"), status=409)
-    tree.restore(entry.position, entry.before if undo else entry.after)
+    owner = entry.position or entry.game
+    tree.restore(owner, entry.before if undo else entry.after)
     entry.undone = undo
     entry.save(update_fields=["undone"])
-    return _state(entry.position, message=("Undone: " if undo else "Redone: ") + entry.label)
+    return _state(owner, message=("Undone: " if undo else "Redone: ") + entry.label)
 
 
 @require_POST
@@ -237,3 +255,29 @@ def undo(request, eid):
 @require_POST
 def redo(request, eid):
     return _apply(request, eid, False)
+
+
+@require_POST
+def new_position(request, pid):
+    """`:new-position`: the position after this move becomes a position of its own (linked to the game it came from);
+    with `moves`, the continuation (the main line, up to 40 plies) becomes its main line."""
+    owner, data = _position(pid), _json(request)
+    node = _node(owner, data.get("node"))
+    ucis = []
+    if data.get("moves"):
+        n = node
+        while len(ucis) < 40:
+            kid = n.kids.order_by("order", "id").first()
+            if kid is None:
+                break
+            ucis.append(kid.uci)
+            n = kid
+    title = f"{owner.title}, after {node.ply // 2 + node.ply % 2}{'.' if node.ply % 2 else '…'}{node.san}" if node.parent_id else owner.title
+    try:
+        position = tree.create_position(node.fen, ucis, title=title, origin="game" if tree.is_game(owner) else "position")
+    except tree.TreeError as e:
+        return _fail(str(e))
+    if tree.is_game(owner):
+        position.game, position.game_node = owner, node
+        position.save(update_fields=["game", "game_node"])
+    return JsonResponse({"ok": True, "position": str(position.uuid), "message": f"New position {position.short_id}"})

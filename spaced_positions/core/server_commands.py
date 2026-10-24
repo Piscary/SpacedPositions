@@ -12,6 +12,16 @@ from . import registry
 from .models import LOCAL_USER, NamedLayout, Preferences
 
 HANDLERS = {}
+MODULES = ("spaced_positions.library.commands",)  # other apps' server commands
+
+
+def handlers() -> dict:
+    """Every server handler, with the other apps' command modules loaded."""
+    import importlib
+
+    for name in MODULES:
+        importlib.import_module(name)
+    return HANDLERS
 
 
 class CommandError(Exception):

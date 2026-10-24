@@ -82,18 +82,20 @@ graph · `l` library · `q` queue · `c` chart · `n` notes · `p` PGN/FEN text 
 | `j k` / `↓ ↑` | Cursor down / up (grids: `h l` / `← →` too) |
 | `g g` / `G` | First / last |
 | `↵` | Open (default command of the object, see 05 matrix) |
-| `o` | Open in a split to the right (linked) |
+| `o` | Open in a split to the right (linked) (phase 6, with layout presets) |
 | `x` | Toggle selection of the cursor row |
 | `v` | Visual (range) selection |
 | `mod+a` | Select all results |
 | `t` | Tag (selection or cursor row) |
-| `d` | Move to trash / delete (undoable) |
-| `y` | Copy (FEN for positions, PGN for games) |
+| `d` | Move to the trash (undoable); `r` restores (in `is:trash`) |
+| `y` | Copy the FENs (positions, puzzles); games copy as PGN with `e` |
 | `T` | Train these |
 | `a` | Analyse these (as a subject list, `n`/`N` in Analyse) |
-| `e` | Export |
-| `s` | Sort: then the column's key shown in the header |
-| `z` / `Z` | Fold the group under the cursor / all groups |
+| `e` | Export as PGN (a download): the selection, or everything the query found |
+| `␣ u v` | Results as table · list (with boards) · grid |
+
+Sorting is a query term (`sort:-difficulty`); sorting by a column key and folding groups follow when the table gets
+column headers (phase 6). Grids move with `j k` in reading order.
 
 ## Any pane (context `pane`)
 
@@ -162,10 +164,15 @@ context per Train state, checked after layers and before the focused view (02 §
 | `j k` | Puzzles of the session (the linked board shows each) |
 | `↵` | Open the puzzle under the cursor in Analyse (`n`/`N` there step through the session's puzzles) |
 | `m` | Review the missed ones |
+| `a` | Analyse the missed ones (a subject list) |
 | `l` | Back to the launcher |
 | `y` | Copy the result as text |
 
-`:puzzle` (on any board) makes a puzzle from the line played so far: the side to move at the start solves.
+`:puzzle` (on any board) makes a puzzle from the line played so far: the side to move at the start solves. It is made
+through the analysis of the position (the line becomes its main line), so it can be edited in Analyse.
+
+**Tags**: `t` in feedback tags the puzzle's position (`:tag` with completion). In Analyse `T` tags the position,
+`t` the move; the Inspector's Tags section shows both (a click on a chip removes it).
 
 ## Analyse
 
@@ -200,8 +207,9 @@ pieces), `mod+↵` saves and leaves the field (leaving it saves too). In the Eng
 line up to it to the analysis.
 
 Without a key, command line only: `:analyse <title>` (open a position; the completions search titles and sources),
-`:engine.lines <1–5>`. Later: `:detect` (detect tags, phase 4), `:new position` (a position from this move of a
-game, phase 4), `:lichess` (open in lichess, phase 6).
+`:engine.lines <1–5>`, `:new-position` (the position after this move becomes a position of its own, linked to its
+game; `:new-position moves` takes the continuation along), `:untag-move`. Later: `:detect` (detect tags, phase 5,
+with the detectors), `:lichess` (open in lichess, phase 6).
 
 ## Collect
 
@@ -209,16 +217,25 @@ game, phase 4), `:lichess` (open in lichess, phase 6).
 |---|---|---|
 | `S` | board | Switch Setup ↔ Solution |
 | Setup keys | board, Setup | 06 §4 |
-| `⌫` | board, Solution | Take back the last solution move |
-| `mod+↵` | anywhere in Collect | Save & next |
+| `h` | board, Solution | Back a move (a new move replaces the rest of the line) |
+| `mod+↵` | anywhere in Collect | Save & next (diagram + 1, an empty board in Setup) |
 | `mod+shift+↵` | anywhere in Collect | Save & open in Analyse |
-| `g d` | board | Go to the duplicate |
-| `s` | session pane | Source (combobox) |
+| `g d` | anywhere in Collect | Go to the duplicate |
+| `s` | session pane | Source: completion from the sources; a new name makes a new source |
 | `+` / `-` | session pane | Page up / down |
 | `↑ ↓` | session pane | Diagram number |
-| `t` | session pane | Title pattern |
-| `1`–`9` | session pane | Toggle tag preset N |
+| `i` | session pane | Edit page, diagram number or the title pattern (`{source} Nr. {n}`, `{page}`) |
+| `t` / `⌫` | session pane | Add a tag for the next positions / remove the last one |
+| `1`–`9` | session pane | Toggle tag preset N (`:preset-save <name>` keeps the session's tags) |
 | `r` | session pane | Ready for training on/off |
+
+A save of a duplicate asks: `m` merge into it (tags, source, the solution as a variation) · `s` save anyway · `g` go
+there · `Esc`. Pasting (`mod+v`) offers `c`: one FEN goes onto the board in Setup, a list of FENs is saved at once
+with the session's source and tags, `i` imports a PGN (below).
+
+**Import** (a pasted PGN, `i`; or `:import` with a file): `j k` move · `x` (de)select · `a` all / none · `r` puzzles
+straight into training · `↵` import · `Esc` cancel. Duplicates are marked and left out. `u` afterwards moves what
+was imported to the trash.
 
 ## Library
 
@@ -227,8 +244,14 @@ game, phase 4), `:lichess` (open in lichess, phase 6).
 | `1`–`6` | Positions · Games · Puzzles/cards · Players · Sources · Tags |
 | `/` | Query bar |
 | all list keys | above |
+| `t T d r a y e` | Bulk keys (lists above) |
+| `↵` | Positions and puzzles open in Analyse (the results are the subject list), games too; a player, source or tag shows its positions or games |
 | Filters pane: `↵` | Toggle the facet (adds/removes the query term) |
-| Filters pane: `-` | Exclude the facet (`-tag:…`) |
+| Filters pane: `-` | Exclude the facet (`-motif:…`) |
+
+In the query bar: `⇥` takes the completion (keys, tags with their place in the hierarchy, sources, players, saved
+queries), `↑ ↓` choose one, `↵` goes to the results, `Esc` leaves the bar. `:save-query <name>`, `:trash-empty`,
+`:import`.
 
 ## Stats
 

@@ -76,6 +76,8 @@ def rebuild(puzzle: Puzzle, kids: dict | None = None) -> None:
 
 
 def rebuild_all(position) -> None:
+    if tree.is_game(position):
+        return
     kids = tree.kids_map(tree.nodes(position))
     for puzzle in position.puzzles.exclude(start_node=None).select_related("start_node"):
         rebuild(puzzle, kids)
@@ -86,6 +88,8 @@ def rebuild_all(position) -> None:
 
 def puzzle_at(node: Node) -> Puzzle | None:
     """The puzzle a node belongs to: the nearest start at the node or above it."""
+    if node.game_id:
+        return None
     starts = {p.start_node_id: p for p in node.position.puzzles.exclude(start_node=None)}
     for n in reversed(tree.path(node)):
         if n.id in starts:
@@ -110,6 +114,8 @@ def _toggle(puzzle: Puzzle, key: str, node_id: int) -> bool:
 @transaction.atomic
 def act(node: Node, action: str) -> str:
     """Apply one puzzle action at `node`; returns a message for the status line."""
+    if node.game_id:
+        raise tree.TreeError("puzzles come from positions: :new-position takes this move's position out of the game")
     if action == "start":
         existing = node.position.puzzles.filter(start_node=node).first()
         if existing:
@@ -162,6 +168,8 @@ def act(node: Node, action: str) -> str:
 def roles(position, kids) -> dict:
     """For the move tree: {node id: role} where role is start · solver · answer · end · also, and drafts."""
     out = {}
+    if tree.is_game(position):
+        return out
     for p in position.puzzles.exclude(start_node=None).select_related("start_node"):
         draft = not p.active
         out[p.start_node_id] = {"role": "start", "draft": draft}

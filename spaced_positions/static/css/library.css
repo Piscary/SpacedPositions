@@ -1,0 +1,173 @@
+/* Library (spec 04 · Library, 05 · QueryBar, List/Table/CardGrid): query bar, results in three displays, bulk bar,
+   and the filter pane. */
+
+.library {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto; /* bar, problems, tabs, results, bulk bar */
+  height: 100%;
+  container-type: inline-size;
+}
+
+/* ── QueryBar ──────────────────────────────────────────────────────────────────────────────────────────────── */
+.querybar {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+  margin: var(--s-1) var(--s-2) 0;
+  padding: 0 var(--s-1);
+  border: var(--rule) solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg-alt);
+}
+.querybar:focus-within { border-color: var(--focus); box-shadow: 0 0 0 var(--rule) var(--focus); }
+.querybar__slash { color: var(--text-muted); font-family: var(--font-mono); }
+.querybar__input {
+  flex: 1;
+  min-width: 0;
+  height: var(--row-md);
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-md);
+}
+.querybar__count { color: var(--text-sub); font-size: var(--fs-xs); white-space: nowrap; }
+.querybar__problems { display: flex; flex-wrap: wrap; gap: var(--s-half); margin: 0 var(--s-2); }
+.querybar__problems:not(:empty) { margin-top: var(--s-half); }
+.querybar__problem { text-decoration: underline wavy var(--bad); text-underline-offset: calc(var(--rule) * 2); }
+.querybar__complete {
+  position: absolute;
+  z-index: var(--z-pane-overlay);
+  top: calc(var(--row-md) + var(--s-2));
+  right: var(--s-2);
+  left: var(--s-2);
+  max-height: calc(var(--row-sm) * 12);
+  overflow: auto;
+  border: var(--rule) solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 var(--s-1) var(--s-3) color-mix(in oklab, var(--text) 18%, transparent);
+}
+.querybar__option {
+  display: grid;
+  grid-template-columns: minmax(10em, auto) minmax(0, 1fr) auto;
+  gap: var(--s-2);
+  align-items: center;
+  min-height: var(--row-sm);
+  padding: 0 var(--s-2);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+.querybar__option.is-cursor { background: var(--cursor-row); box-shadow: inset calc(var(--rule) * 3) 0 0 var(--main); }
+.querybar__label { overflow: hidden; color: var(--text-sub); text-overflow: ellipsis; white-space: nowrap; }
+
+.library__tabs { margin: var(--s-1) var(--s-2); }
+.library__tabs .segmented__option { font-size: var(--fs-sm); }
+
+/* ── Results ───────────────────────────────────────────────────────────────────────────────────────────────── */
+.library__results { min-height: 0; overflow: auto; border-top: var(--rule) solid var(--line); }
+.library__results > * { flex-shrink: 0; } /* rows keep their height; the list scrolls */
+.library__row--table { grid-template-columns: auto 4.5em minmax(10em, 2fr) minmax(0, 1.2fr) auto minmax(0, 1fr) auto; }
+@container (width < 44rem) {
+  .library__row--table { grid-template-columns: auto 4.5em minmax(0, 1fr) auto auto; }
+  .library__row--table .library__tags, .library__row--table .library__src { display: none; }
+}
+.library__tags { overflow: hidden; flex-wrap: nowrap; }
+.library__src { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.library__diff { color: var(--warn); letter-spacing: calc(var(--rule) * -1); }
+.library__more, .library__empty { padding: var(--s-2); }
+
+.library__row--list {
+  grid-template-columns: auto auto 4.5em minmax(0, 1fr) auto;
+  grid-template-areas: "board mark id title diff" "board mark id tags status" "board mark id src status";
+  padding-block: var(--s-1);
+}
+.library__row--list .library__board { grid-area: board; width: calc(var(--row-md) * 3); height: auto; }
+.library__row--list .list__mark { grid-area: mark; }
+.library__row--list .list__id { grid-area: id; }
+.library__row--list .list__title { grid-area: title; }
+.library__row--list .library__tags { grid-area: tags; }
+.library__row--list .library__diff { grid-area: diff; }
+.library__row--list .library__src { grid-area: src; }
+.library__row--list .library__status { grid-area: status; }
+
+.library__results[data-display="grid"] {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(calc(var(--row-md) * 7), 1fr));
+  align-content: start;
+  gap: var(--s-2);
+  padding: var(--s-2);
+}
+.library__row--grid {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s-half);
+  padding: var(--s-1);
+  border: var(--rule) solid var(--line);
+  border-radius: var(--radius);
+}
+.library__row--grid .library__board { width: 100%; height: auto; }
+.library__row--grid .list__mark, .library__row--grid .library__src { display: none; }
+.library__row--grid .list__title { font-size: var(--fs-sm); }
+.library__results[data-display="grid"] > :not(.library__row) { grid-column: 1 / -1; }
+
+/* ── Bulk bar ──────────────────────────────────────────────────────────────────────────────────────────────── */
+.library__bulk {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-1) var(--s-3);
+  padding: var(--s-1) var(--s-2);
+  border-top: var(--rule) solid var(--main);
+  background: var(--selection);
+  font-size: var(--fs-sm);
+}
+.library__bulk[hidden] { display: none; }
+
+/* ── Filters ───────────────────────────────────────────────────────────────────────────────────────────────── */
+.filters__total { padding: var(--s-1) var(--s-2); font-size: var(--fs-xs); }
+.filters__group {
+  padding: var(--s-2) var(--s-2) var(--s-half);
+  color: var(--text-sub);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.filters__row { grid-template-columns: auto minmax(0, 1fr) auto; min-height: var(--row-sm); font-size: var(--fs-sm); }
+.filters__check { color: var(--text-muted); }
+.filters__row.is-on .filters__check, .filters__row.is-on .list__title { color: var(--main); font-weight: 600; }
+.filters__empty { padding: var(--s-2); font-size: var(--fs-sm); }
+
+/* ── Collect: the entry session ───────────────────────────────────────────────────────────────────────────── */
+.entry { display: flex; flex-direction: column; gap: var(--s-1); padding: var(--s-1) var(--s-2); }
+.entry .formrow { grid-template-columns: 7rem minmax(0, 1fr); padding: 0; }
+.entry .formrow__help { padding-left: 7rem; }
+.entry__number { width: 8ch; }
+.entry__source, .entry__tags, .entry__presets { display: flex; flex-wrap: wrap; gap: var(--s-1); align-items: center; }
+.entry__preset[aria-pressed="true"] { background: var(--main); color: var(--main-text); }
+.entry__state { color: var(--text-sub); font-size: var(--fs-sm); }
+.entry__state.is-duplicate { color: var(--warn); font-weight: 600; }
+.entry__saved { margin-top: var(--s-2); }
+
+/* ── Import (PGN) ──────────────────────────────────────────────────────────────────────────────────────────── */
+.importer {
+  position: fixed;
+  z-index: var(--z-menu);
+  inset: 10vh 15vw auto;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  max-height: 75vh;
+  border: var(--rule) solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 var(--s-2) var(--s-6) color-mix(in oklab, var(--text) 25%, transparent);
+}
+.importer__head { padding: var(--s-2); border-bottom: var(--rule) solid var(--line); font-weight: 600; }
+.importer__list { min-height: 0; overflow: auto; }
+.importer__row { grid-template-columns: auto 4.5em minmax(0, 1fr) auto; }
+.importer__warn { color: var(--warn); }
+.importer__foot { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-3); padding: var(--s-1) var(--s-2); border-top: var(--rule) solid var(--line); font-size: var(--fs-sm); }

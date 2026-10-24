@@ -281,7 +281,7 @@ def check_reachability(sources: lib.Sources) -> list[Problem]:
     return [
         err("reachability", f"{cid}: no key and hidden from the command line")
         for cid, spec in sources.commands.items()
-        if spec.get("hidden") and cid not in bound and not spec.get("aliases")
+        if spec.get("hidden") and not spec.get("internal") and cid not in bound and not spec.get("aliases")
     ]
 
 
@@ -313,7 +313,7 @@ def check_references(sources: lib.Sources, templates_dir: Path, js_dir: Path, se
         if handler in ("client", "both") and cid not in client_handlers:
             problems.append(err("implemented", f"{cid}: no client handler (handle('{cid}', …) in static/js)"))
         if handler in ("server", "both") and cid not in server_handlers:
-            problems.append(err("implemented", f"{cid}: no server handler (@command('{cid}') in core/server_commands.py)"))
+            problems.append(err("implemented", f"{cid}: no server handler (@command('{cid}') in core/server_commands.py or a module in its MODULES)"))
     return problems
 
 

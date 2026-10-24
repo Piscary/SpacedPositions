@@ -1,6 +1,7 @@
 import json
 
 from django.conf import settings
+from django.db import IntegrityError, transaction
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_GET, require_POST
@@ -26,7 +27,7 @@ def _mode(mode: str) -> layouts.Mode:
 
 def _state(mode: str) -> UIState:
     state = UIState.objects.filter(user=LOCAL_USER, mode=mode).first()
-    if state is None or not layouts.valid_layout(state.layout):
+    if state is None or not layouts.valid_layout(state.layout) or layouts.is_old_default(mode, state.layout):
         state = state or UIState(user=LOCAL_USER, mode=mode)
         state.layout = layouts.default_layout(mode)
     layouts.number_panes(state.layout)
@@ -111,20 +112,28 @@ def save_state(request, mode):
         body = json.loads(request.body)
     except ValueError:
         return HttpResponseBadRequest("not JSON")
-    state = UIState.objects.filter(user=LOCAL_USER, mode=mode).first() or UIState(user=LOCAL_USER, mode=mode)
-    if "layout" in body:
-        if not layouts.valid_layout(body["layout"]):
-            return HttpResponseBadRequest("invalid layout")
-        state.layout = body["layout"]
-        state.focus = str(body.get("focus", ""))[:24]
+    if "layout" in body and not layouts.valid_layout(body["layout"]):
+        return HttpResponseBadRequest("invalid layout")
     if "subject" in body:
         subject = body["subject"]
         if not isinstance(subject, dict) or len(json.dumps(subject)) > 200_000:
             return HttpResponseBadRequest("invalid subject")
-        state.subject = {**(state.subject or {}), **subject}  # parts (lines, analysis) are saved separately
-    if not state.layout:
-        state.layout = layouts.default_layout(mode)
-    state.save()
+    # Saves arrive together (layout, lines, the library query): the first one creates the row, the others update it.
+    for _attempt in range(3):
+        try:
+            with transaction.atomic():
+                state, _ = UIState.objects.get_or_create(user=LOCAL_USER, mode=mode, defaults={"layout": layouts.default_layout(mode)})
+                if "layout" in body:
+                    state.layout = body["layout"]
+                    state.focus = str(body.get("focus", ""))[:24]
+                if "subject" in body:
+                    state.subject = {**(state.subject or {}), **body["subject"]}  # parts (lines, analysis) are saved separately
+                if not state.layout:
+                    state.layout = layouts.default_layout(mode)
+                state.save()
+            break
+        except IntegrityError:
+            continue
     return JsonResponse({"ok": True})
 
 
@@ -136,7 +145,7 @@ def named_layouts(request):
 
 @require_POST
 def run_command(request, cid):
-    handler = server_commands.HANDLERS.get(cid)
+    handler = server_commands.handlers().get(cid)
     if handler is None:
         raise Http404(f"no server command '{cid}'")
     try:

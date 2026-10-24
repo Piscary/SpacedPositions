@@ -79,6 +79,7 @@ accept = ["[", "]"]
 "space u z" = "ui.zen"
 "space u t" = "ui.themepair"
 "space u p" = "board.pieces"
+"space u v" = "library.display"
 
 [context.pane]
 "z" = "section.toggle"
@@ -211,6 +212,7 @@ accept = ["[", "]"]
 [context."state.result"]
 "r" = "train.again"
 "m" = "train.missed"
+"a" = "train.analysemissed"
 "l" = "train.launcher"
 "y" = "train.copy"
 "j" = "list.down"
@@ -266,3 +268,45 @@ accept = ["[", "]"]
 "enter" = "engine.best"
 "y" = "board.copyfen"
 "Y" = "board.copypgn"
+
+[context."view.library"]
+"1" = "library.collection positions"
+"2" = "library.collection games"
+"3" = "library.collection puzzles"
+"4" = "library.collection players"
+"5" = "library.collection sources"
+"6" = "library.collection tags"
+"t" = "library.tag"
+"T" = "library.train"
+"d" = "library.trash"
+"r" = "library.restore"
+"a" = "library.analyse"
+"y" = "library.copyfen"
+"e" = "library.export"
+
+[context."mode.collect"]
+"mod+enter" = "collect.save"
+"mod+shift+enter" = "collect.saveopen"
+"g d" = "collect.duplicate"
+
+[context."view.entry"]
+"s" = "collect.source"
+"+" = "collect.page up"
+"-" = "collect.page down"
+"up" = "collect.diagram up"
+"down" = "collect.diagram down"
+"t" = "collect.tag"
+"backspace" = "collect.untag"
+"r" = "collect.ready"
+"1" = "collect.preset 1"
+"2" = "collect.preset 2"
+"3" = "collect.preset 3"
+"4" = "collect.preset 4"
+"5" = "collect.preset 5"
+"6" = "collect.preset 6"
+"7" = "collect.preset 7"
+"8" = "collect.preset 8"
+"9" = "collect.preset 9"
+
+[context."view.filters"]
+"-" = "library.exclude"

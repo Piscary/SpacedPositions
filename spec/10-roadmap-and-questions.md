@@ -104,6 +104,35 @@ Moved on:
   line count settings → phase 6.
 - Fold carets for variations and figurines in the move tree (`figurines` token) → phase 6.
 
+### Phase 4 status (2026-10-24)
+
+Built: the data model of 11 in a `library` app: sources, players, tag fields with the old app's 205 tags (decision
+18, a data file loaded by a migration), position, move and game tags with their origin, tag presets, saved queries,
+games with their own move tree (Node and the journal have a position or a game as owner), and the trash. Positions
+gained description, notes, source with page and reference, difficulty override, diagram flag, game link, derived
+side and material. Your positions were migrated additively: citations became sources with page and diagram number
+(the text is kept), tag names became tags (665 of 665). The query language (`library/query.py`: parser with
+problems and spans, compiler for six collections, saved queries inside queries). The Library mode: QueryBar with
+completion, results as table, list or grid, collections 1–6, the filter pane with live facets (`↵` toggles, `-`
+excludes), selection and bulk commands (tag, untag, trash, restore, train, analyse, copy FENs, export PGN) with
+exact undo, `:save-query`, `:trash-empty` (keeps positions with training history). Tags in Analyse (`T` position,
+`t` move, the Inspector's Tags section, chips in the move tree) and Train (`t` in feedback); objectives from goal
+tags; custom sessions filtered by a query (`/`, saved-query chips, a live match count); `a` on the Train result
+analyses the missed ones. Collect: the entry session, save & next, live duplicates with merge, pasting FENs.
+PGN import (games with variations, comments, NAGs and drawings; short set-up lines as puzzles; player matching;
+duplicates) with undo, PGN export, games in Analyse with `:new-position`. `:puzzle` now goes through the analysis.
+Untouched default layouts move to the new defaults. SQLite transactions are IMMEDIATE (saves that arrive together
+queue). Tests: the query language (8), the library on the server (13), 12 Library/Collect/import journeys incl. axe.
+
+Moved on:
+- Imports bigger than 5,000 games or 20 MB (in the background, with progress) → phase 7, with the migration of the
+  old database.
+- Editing the vocabulary (new tags, renaming, the hierarchy), sources and players, `:player link` for names that
+  match nobody → phase 6 (Settings); the old app's players → phase 7.
+- Tag detectors and suggested tags (`:detect`) → phase 5.
+- `o` open in a split, sorting by a column key, folding groups in the table, analysing a puzzle in a split inside
+  Train → phase 6 (layouts).
+
 ## Out of scope for now
 
 - **Publishing** (documents, print, PDF): the old app's document editor. The Diagram renderer is shared, so it can

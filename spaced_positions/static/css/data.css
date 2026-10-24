@@ -22,6 +22,8 @@
 .list__id { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-sub); }
 .list__title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .list__meta { display: flex; align-items: center; gap: var(--s-1); color: var(--text-sub); font-size: var(--fs-xs); }
+/* on the tinted cursor and selection rows the secondary text needs more contrast */
+.list__row:is(.is-cursor, .is-selected) :is(.list__id, .list__meta) { color: color-mix(in oklab, var(--text) 82%, var(--cursor-row)); }
 
 /* ── Chip, badge ─────────────────────────────────────────────────────────────────────────────────────────────── */
 .chip {
@@ -36,7 +38,7 @@
   font-size: var(--fs-xs);
   white-space: nowrap;
 }
-.chip--tag { border-left: calc(var(--rule) * 3) solid var(--info); }
+.chip--tag { border-left: calc(var(--rule) * 3) solid var(--tag, var(--info)); } /* --tag: the field's chart colour */
 .chip--auto::before { content: "◇"; color: var(--text-sub); }
 .chip--suggested { border-style: dashed; }
 .chip--good { color: var(--good); border-color: currentColor; }

@@ -99,13 +99,25 @@ VIEWS = {
         ),
         View("evalgraph", "Eval graph", "g", 5, "Evaluation over a game (games arrive with the library)."),
         View("vargraph", "Variation graph", "r", 5, "The move tree as a graph."),
-        View("library", "Library", "l", 4, "Positions, games, puzzles and more, with the query bar."),
-        View("filters", "Filters", None, 4, "Facets that write into the library query."),
+        View(
+            "library", "Library", "l", 0, "Positions, games, puzzles and more, with the query bar.", "views/library.html",
+            list_view=True,
+            hints=(("search.open", "query"), ("list.select", "select"), ("library.tag", "tag"), ("library.train", "train"),
+                   ("library.analyse", "analyse"), ("library.trash", "trash"), ("library.display", "display")),
+        ),
+        View(
+            "filters", "Filters", "f", 0, "Facets that write into the library query.", "views/filters.html", list_view=True,
+            hints=(("list.down", "down"), ("list.open", "add / remove"), ("library.exclude", "exclude")),
+        ),
         View(
             "queue", "Session", "q", 0, "Sessions to start, the running session (clock, combo, lives, prompt), the result.",
             "views/queue.html",
         ),
-        View("entry", "Entry session", None, 4, "Source, page, diagram number and presets for rapid entry."),
+        View(
+            "entry", "Entry session", "s", 0, "Source, page, diagram number and presets for rapid entry.", "views/entry.html",
+            hints=(("collect.save", "save & next"), ("collect.source", "source"), ("collect.diagram up", "diagram +1"),
+                   ("collect.tag", "tag"), ("collect.ready", "ready")),
+        ),
         View("chart", "Chart", "c", 5, "Statistics charts."),
         View(
             "pgn", "PGN / FEN", "p", 0, "The position or game as text; paste to load.", "views/pgn.html",
@@ -153,11 +165,34 @@ DEFAULTS = {
         split("col", [18, 46, 36], pane("engine", "A"), pane("moves", "A"), pane("inspector", "A")),
     ),
     "collect": split("row", [55, 45], pane("board", "A"), split("col", [55, 45], pane("entry"), pane("pgn", "A"))),
-    "library": split("row", [18, 44, 38], pane("filters"), pane("demo", "A"), pane("board", "A")),
+    "library": split("row", [20, 50, 30], pane("filters", "A"), pane("library", "A"), pane("board", "A")),
     "stats": split("row", [60, 40], pane("chart"), pane("welcome")),
     "settings": split("row", [65, 35], pane("settings"), pane("welcome")),
     "ui": split("row", [56, 44], pane("components"), split("col", [42, 58], pane("demo", "A"), pane("board", "A"))),
 }
+
+
+# Defaults of earlier versions: a saved layout that is still exactly one of them was never changed by the user, so
+# it moves to the current default (the placeholders of a mode become its real views).
+OLD_DEFAULTS = {
+    "library": [split("row", [18, 44, 38], pane("filters"), pane("demo", "A"), pane("board", "A"))],
+    "analyse": [split(
+        "row", [50, 50],
+        split("col", [78, 22], pane("board", "A"), pane("evalgraph", "A")),
+        split("col", [16, 50, 34], pane("engine", "A"), pane("moves", "A"), pane("inspector", "A")),
+    )],
+    "collect": [],
+}
+
+
+def _shape(node: dict):
+    if node["type"] == "pane":
+        return ("pane", node.get("view"), node.get("group"), bool(node.get("pinned")), bool(node.get("collapsed")))
+    return ("split", node["dir"], tuple(round(s) for s in node["sizes"]), tuple(_shape(c) for c in node["children"]))
+
+
+def is_old_default(mode: str, layout: dict) -> bool:
+    return any(_shape(layout) == _shape(old) for old in OLD_DEFAULTS.get(mode, []))
 
 
 def default_layout(mode: str) -> dict:

@@ -129,17 +129,35 @@ def sync_cards(puzzle: Puzzle) -> list[Card]:
 
 @transaction.atomic
 def create_from_line(start_fen: str, ucis: list[str], title: str = "", origin: str = "board") -> Puzzle:
-    """A puzzle from a line played on a board (`:puzzle`): the side to move solves, the moves alternate."""
+    """A puzzle from a line played on a board (`:puzzle`): the side to move solves, the moves alternate. It is made
+    through the analysis (the line becomes the main line from the start, the solution ends where the line ends), so
+    every puzzle can be edited in Analyse."""
+    from spaced_positions.analysis import puzzles as analysis_puzzles
+    from spaced_positions.analysis import tree
+
     check = chesslogic.check_fen(start_fen)
     if not check["ok"]:
         raise ValueError("the start position isn't legal: " + "; ".join(p["message"] for p in check["problems"]))
-    tree = from_line(ucis)
-    validate(check["fen"], tree)
-    position = Position.objects.filter(canonical=check["canonical"]).first()
+    validate(check["fen"], from_line(ucis))
+    position = Position.alive.filter(canonical=check["canonical"]).first()
     if position is None:
-        position = Position.objects.create(fen=check["fen"], canonical=check["canonical"], title=title, origin=origin)
-    puzzle = Puzzle.objects.create(position=position, start_fen=check["fen"], solution=tree, origin=origin)
-    sync_cards(puzzle)
+        position = tree.create_position(check["fen"], [], title=title, origin=origin)
+    root = tree.root(position)
+    existing = position.puzzles.filter(start_node=root).first()
+    if existing is not None:
+        if any(line[: len(ucis)] == list(ucis) for line in lines(existing.solution)):
+            return existing  # the same puzzle again
+        raise ValueError(f"{position.short_id} already has a puzzle from this position: edit it in Analyse (p a, p o)")
+    with tree.change(position, "Puzzle from a board line"):
+        end = tree.add_line(root, ucis)
+        tree.promote(end)
+        analysis_puzzles.act(root, "start")
+        puzzle = position.puzzles.get(start_node=root)
+        puzzle.marks = {"ends": [end.id], "also": [], "replies": []}
+        puzzle.active = True
+        puzzle.origin = origin
+        puzzle.save(update_fields=["marks", "active", "origin"])
+    puzzle.refresh_from_db()
     return puzzle
 
 
@@ -168,8 +186,8 @@ def payload(card: Card, *, mirrored: bool = False, first_only: bool = False) -> 
         "firstOnly": first_only,
         "stage": card.stage,
         "title": position.title,
-        "source": position.source,
-        "objective": position.objective,
+        "source": position.citation,
+        "objective": position.task_for(side),
         "tags": position.tag_names,
         "difficulty": position.difficulty,
     }

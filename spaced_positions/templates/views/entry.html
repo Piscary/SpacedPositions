@@ -1,0 +1,24 @@
+{% tag_presets as presets %}<div class="entry" data-island="entry">
+  <div class="formrow"><span class="formrow__label">Source {% keycap "s" %}</span>
+    <span class="entry__source"><b data-entry-source>— none —</b> {% cmd "collect.source" label="Choose" size="sm" %}</span></div>
+  <div class="formrow"><span class="formrow__label">Page {% keycap "+" %}{% keycap "-" %}</span>
+    <input class="field mono entry__number" type="text" data-entry="page" aria-label="Page" inputmode="numeric"></div>
+  <div class="formrow"><span class="formrow__label">Diagram {% keycap "up" %}{% keycap "down" %}</span>
+    <input class="field mono entry__number" type="text" data-entry="ref" aria-label="Diagram number" inputmode="numeric"></div>
+  <div class="formrow"><span class="formrow__label">Title</span>
+    <input class="field" type="text" data-entry="title" aria-label="Title template" placeholder="{source} Nr. {n}"></div>
+  <div class="formrow__help"><span>{source} {page} {n} are filled in · now: <b data-entry-title-now></b></span></div>
+  <div class="formrow"><span class="formrow__label">Tags {% keycap "t" %}</span>
+    <span class="entry__tags" data-entry-tags></span></div>
+  <div class="formrow"><span class="formrow__label">Presets</span>
+    <span class="entry__presets" data-entry-presets>
+      {% for p in presets %}<button type="button" class="segmented__option entry__preset" aria-pressed="false" data-cmd="collect.preset" data-args="{{ forloop.counter }}" data-keys="{{ p.keys }}" data-names="{{ p.names }}" title="{{ p.names }}">{{ p.name }} {% keycap forloop.counter|stringformat:"s" %}</button>{% empty %}<span class="muted">none yet · :preset-save &lt;name&gt; keeps the session's tags</span>{% endfor %}
+    </span></div>
+  <button type="button" class="toggle" aria-pressed="false" data-cmd="collect.ready" data-entry-ready><span class="toggle__switch"></span>Ready for training {% keycap "r" %}</button>
+  <div class="entry__state" data-entry-state aria-live="polite"></div>
+  <div class="actionbar">{% cmd "collect.save" variant="primary" %}{% cmd "collect.saveopen" %}</div>
+  <div class="entry__saved">
+    <div class="filters__group">Just saved</div>
+    <div class="list" data-list data-entry-saved role="listbox" aria-label="Just saved"></div>
+  </div>
+</div>

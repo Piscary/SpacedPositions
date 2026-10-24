@@ -74,11 +74,16 @@ group = "Train"
 ["train.tag"]
 title = "Tag the position"
 group = "Train"
-phase = 4
 
 ["train.edit"]
 title = "Edit the puzzle in Analyse"
 group = "Train"
+
+["train.analysemissed"]
+title = "Analyse the missed ones (n / N in Analyse)"
+group = "Train"
+when = "train.hasMissed"
+reason = "nothing missed"
 
 ["train.missed"]
 title = "Review the missed ones"

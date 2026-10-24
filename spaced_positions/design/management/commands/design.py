@@ -34,7 +34,7 @@ class Command(BaseCommand):
             css_dir=package / "static" / "css",
             pyproject=settings.REPO_DIR / "pyproject.toml",
             vendor_dir=package / "static" / "vendor",
-            server_handlers=set(server_commands.HANDLERS),
+            server_handlers=set(server_commands.handlers()),
             pieces_dir=package / "static" / "pieces",
         )
         for problem in problems:

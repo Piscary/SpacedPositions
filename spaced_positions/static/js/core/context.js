@@ -37,6 +37,8 @@ const derived = {
   "analysis.loaded": () => ctx.mode === "analyse" && Boolean(window.SPOS?.analysis?.loaded()),
   "analysis.onMove": () => ctx.mode === "analyse" && Boolean(window.SPOS?.analysis?.onMove()),
   "analysis.hasList": () => ctx.mode === "analyse" && Boolean(window.SPOS?.analysis?.hasList()),
+  "collect.hasDuplicate": () => ctx.mode === "collect" && Boolean(window.SPOS?.collect?.hasDuplicate()),
+  "library.hasTarget": () => Boolean(window.SPOS?.library?.hasTarget()),
   "engine.ready": () => ctx.mode === "analyse" && Boolean(window.SPOS?.engine?.ready()),
 }
 

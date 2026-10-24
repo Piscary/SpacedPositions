@@ -2,13 +2,15 @@
 
 Collect, solve and train chess puzzles: keyboard first, with spaced repetition. Free software (GPL-3.0-or-later).
 
-**Status: phase 3 (analyse).** Phase 0 built the shell, panes and splits, the command and key system, the design
+**Status: phase 4 (library + collect).** Phase 0 built the shell, panes and splits, the command and key system, the design
 tokens and themes, the style guide and the launcher. Phase 1 added the board (moves, drawings, typed moves, the board
 editor), MiniBoards, paste detection and piece sets. Phase 2 added puzzles, cards with spaced repetition, and the
 Train mode: Review, Storm and Streak. Phase 3 adds the Analyse mode: a book-style move tree with variations, comments,
 annotation symbols and marks, the Inspector, Stockfish in the browser with lines, arrows and an eval bar, puzzles set
-up from the analysis, and undo of every change (also after a reload). The other modes are laid out with placeholder
-panes that name their phase. The specification is in [spec/](spec/README.md).
+up from the analysis, and undo of every change (also after a reload). Phase 4 adds the Library (a query language
+with completion, results as table, list or grid, a filter pane, bulk tagging and training with undo), tags in
+Analyse and Train, Collect for entering book diagrams fast, and PGN import and export with games in Analyse. Stats
+and Settings are laid out with placeholder panes that name their phase. The specification is in [spec/](spec/README.md).
 
 ## Start it
 
@@ -44,7 +46,10 @@ on macOS), with a backup before every migration.
 | `␣ t` Train | `r` Review · `1` `2` `3` Storm 3′/5′/10′ · `4` Streak · `5` Streak ♥3 · `6` blind · while solving `h` hint, `s` solution, `Esc` pause |
 | `:puzzle` | On any board: the line played so far becomes a puzzle |
 | `␣ a` Analyse | `:analyse <title>` opens a position · `h`/`l` step · `j`/`k` other variation · `1`–`7` `! ? !! ?? !? ?! □` · `m g/d/b` mark · `c` comment · `P` main line · `d` delete · `e` engine, `↵` its best move · `p s` puzzle from here, `p x` ends here, `p r` ready |
-| From Train | Feedback: `a` analyse, `e` edit the puzzle · Result: `↵` opens the puzzle under the cursor (`n`/`N` the others) |
+| From Train | Feedback: `a` analyse, `e` edit the puzzle, `t` tag · Result: `↵` opens the puzzle under the cursor, `a` the missed ones (`n`/`N` the others) |
+| `␣ l` Library | `/` query (`motif:gabel diff:>=3 -is:diagram sort:-difficulty`, `⇥` completes) · `1`–`6` collections · `x` select · `t` tag · `T` train · `a` analyse · `d` trash · `e` PGN · `␣ u v` table/list/grid · `u` undoes any of it |
+| `␣ c` Collect | Paste a FEN and `c`, or set up with `S` · `⌘↵` save & next · in the entry pane: `s` source, `↑↓` diagram, `t` tags, `1`–`9` presets |
+| `:import` | A PGN file: games, and short set-up lines as puzzles (`r` into training) |
 
 ## Puzzles to train with
 
@@ -83,11 +88,14 @@ spaced_positions/
   chesslogic.py          all chess rules on the server (python-chess): FEN checks and fixes, paste parsing, SVG boards
   core/                  shell views, layouts, server commands, chess endpoints, token middleware, template tags
   training/              positions, puzzles (solution trees), cards, scheduler (srs.py), Storm pace, selection, API
-  analysis/              the move tree (nodes), its journal (undo), puzzles from the analysis, the book renderer, API
+  analysis/              move trees of positions and games, the journal (undo), puzzles from the analysis, PGN, API
+  library/               sources, players, tags (data/tags.json: the starter vocabulary), games, saved queries,
+                         the query language (query.py), Collect, the PGN importer, bulk commands
   static/design/         generated: tokens.css, themes.json, commands.json (committed)
   static/css/            components (cascade layers; no literal colours or sizes)
   static/js/core/        keys, commands, layout, command line, hints, help, lists, menu, lines, paste, san,
-                         analysis (tree, Moves and Inspector panes), engine (Stockfish worker, lines, eval bar)
+                         analysis (tree, Moves and Inspector panes), engine (Stockfish worker, lines, eval bar),
+                         library (QueryBar, results, bulk), collect (entry session), importer, confirm
   static/js/islands/     the board (chessground + chess.js), the PGN/FEN view, the trainer
   static/vendor/         htmx, chessground, chess.js, Stockfish 17.1 lite (licences in licences/ and design/licences.toml)
   templates/             shell, components, views

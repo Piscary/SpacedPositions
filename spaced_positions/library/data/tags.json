@@ -1,0 +1,3515 @@
+{
+ "source": "chess-study-manager tag vocabulary (decision 18), exported 2026-10-24",
+ "fields": [
+  {
+   "key": "phase",
+   "name": "Partiephase",
+   "name_en": "Game phase",
+   "selection": "single",
+   "on_positions": true,
+   "on_moves": false,
+   "color": "chart-6",
+   "description": "Eröffnung, Mittelspiel oder Endspiel. Wird aus dem Material vorgeschlagen."
+  },
+  {
+   "key": "goal",
+   "name": "Aufgabe",
+   "name_en": "Objective",
+   "selection": "single",
+   "on_positions": true,
+   "on_moves": false,
+   "color": "chart-2",
+   "description": "Was gefunden werden soll. Die Aufgabe ersetzt im Druck die Zeile „Weiß am Zug“."
+  },
+  {
+   "key": "motif",
+   "name": "Taktische Motive",
+   "name_en": "Tactical motifs",
+   "selection": "multi",
+   "on_positions": true,
+   "on_moves": true,
+   "color": "chart-1",
+   "description": "Die taktischen Mittel der Lösung. Viele werden aus der Lösung erkannt."
+  },
+  {
+   "key": "mate",
+   "name": "Mattbilder",
+   "name_en": "Mating patterns",
+   "selection": "multi",
+   "on_positions": true,
+   "on_moves": true,
+   "color": "chart-5",
+   "description": "Benannte Mattbilder mit typischer Figurenstellung. Werden aus der Mattstellung erkannt."
+  },
+  {
+   "key": "strategy",
+   "name": "Strategische Themen",
+   "name_en": "Positional themes",
+   "selection": "multi",
+   "on_positions": true,
+   "on_moves": true,
+   "color": "chart-2",
+   "description": "Positionelle Merkmale und Pläne: Bauernstruktur, schwache Felder, Figurenaktivität …"
+  },
+  {
+   "key": "endgame",
+   "name": "Endspieltyp",
+   "name_en": "Endgame type",
+   "selection": "single",
+   "on_positions": true,
+   "on_moves": false,
+   "color": "chart-3",
+   "description": "Die Materialverteilung im Endspiel. Wird aus dem Material erkannt."
+  },
+  {
+   "key": "technique",
+   "name": "Endspieltechnik",
+   "name_en": "Endgame technique",
+   "selection": "multi",
+   "on_positions": true,
+   "on_moves": true,
+   "color": "chart-3",
+   "description": "Techniken und theoretische Stellungen des Endspiels."
+  },
+  {
+   "key": "level",
+   "name": "Zielgruppe",
+   "name_en": "Audience",
+   "selection": "multi",
+   "on_positions": true,
+   "on_moves": false,
+   "color": "chart-4",
+   "description": "Für wen sich die Stellung eignet."
+  },
+  {
+   "key": "moment",
+   "name": "Momente",
+   "name_en": "Moments",
+   "selection": "multi",
+   "on_positions": false,
+   "on_moves": true,
+   "color": "chart-4",
+   "description": "Schlüsselmomente einer Partie: brillante und einzige Züge, Fehler, Wendepunkte, taktische Explosionen. Aus den Annotationszeichen, mit python-chess und (optional) mit einer Engine erkannt."
+  },
+  {
+   "key": "custom",
+   "name": "Freie Tags",
+   "name_en": "Free tags",
+   "selection": "multi",
+   "on_positions": true,
+   "on_moves": true,
+   "color": "chart-5",
+   "description": "Alles andere. Neue Tags landen hier, wenn kein Feld gewählt ist."
+  }
+ ],
+ "tags": [
+  {
+   "key": "opening",
+   "field": "phase",
+   "name": "Eröffnung",
+   "name_en": "Opening",
+   "aliases": [
+    "Eröffnungsphase",
+    "Eroeffnung"
+   ],
+   "parent": null,
+   "description": "Die ersten Züge: Entwicklung, Zentrum, Rochade, Eröffnungsfallen.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "middlegame",
+   "field": "phase",
+   "name": "Mittelspiel",
+   "name_en": "Middlegame",
+   "aliases": [
+    "middle game",
+    "Mittelspielphase"
+   ],
+   "parent": null,
+   "description": "Die meisten Figuren sind noch auf dem Brett; Angriff, Pläne und Kombinationen.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "endgame",
+   "field": "phase",
+   "name": "Endspiel",
+   "name_en": "Endgame",
+   "aliases": [
+    "ending",
+    "Endphase",
+    "Endspielphase"
+   ],
+   "parent": null,
+   "description": "Wenige Figuren: Königsaktivität, Freibauern und Technik entscheiden.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "mate-in-1",
+   "field": "goal",
+   "name": "Matt in 1",
+   "name_en": "Mate in 1",
+   "aliases": [
+    "mate in one",
+    "#1",
+    "m1",
+    "Matt in einem Zug",
+    "Einzüger",
+    "Einzueger"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "{side} setzt in einem Zug matt",
+   "task_en": "{side} to play and mate in 1",
+   "base_difficulty": 1
+  },
+  {
+   "key": "mate-in-2",
+   "field": "goal",
+   "name": "Matt in 2",
+   "name_en": "Mate in 2",
+   "aliases": [
+    "mate in two",
+    "#2",
+    "m2",
+    "Zweizüger",
+    "Zweizueger"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "{side} setzt in 2 Zügen matt",
+   "task_en": "{side} to play and mate in 2",
+   "base_difficulty": 2
+  },
+  {
+   "key": "mate-in-3",
+   "field": "goal",
+   "name": "Matt in 3",
+   "name_en": "Mate in 3",
+   "aliases": [
+    "mate in three",
+    "#3",
+    "m3",
+    "Dreizüger",
+    "Dreizueger"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "{side} setzt in 3 Zügen matt",
+   "task_en": "{side} to play and mate in 3",
+   "base_difficulty": 3
+  },
+  {
+   "key": "mate-in-4-plus",
+   "field": "goal",
+   "name": "Matt in 4+",
+   "name_en": "Mate in 4+",
+   "aliases": [
+    "mate in 4",
+    "mate in 5",
+    "#4",
+    "#5",
+    "Mehrzüger",
+    "Mehrzueger",
+    "long mate",
+    "langes Matt"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "{side} setzt matt",
+   "task_en": "{side} to play and mate",
+   "base_difficulty": 4
+  },
+  {
+   "key": "best-move",
+   "field": "goal",
+   "name": "Finde den besten Zug",
+   "name_en": "Find the best move",
+   "aliases": [
+    "best move",
+    "bester Zug",
+    "was spielt",
+    "what to play"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "{side} am Zug – finde den besten Zug",
+   "task_en": "{side} to move – find the best move",
+   "base_difficulty": 2
+  },
+  {
+   "key": "win-material",
+   "field": "goal",
+   "name": "Gewinne Material",
+   "name_en": "Win material",
+   "aliases": [
+    "Materialgewinn",
+    "gain material",
+    "win a piece",
+    "Figurengewinn"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "{side} am Zug gewinnt Material",
+   "task_en": "{side} to move and win material",
+   "base_difficulty": 2
+  },
+  {
+   "key": "winning-continuation",
+   "field": "goal",
+   "name": "Finde den Gewinnweg",
+   "name_en": "Find the winning continuation",
+   "aliases": [
+    "winning continuation",
+    "find the win",
+    "play and win",
+    "zieht und gewinnt",
+    "Gewinnfortsetzung",
+    "Gewinnweg",
+    "Studie gewinnt"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "{side} zieht und gewinnt",
+   "task_en": "{side} to play and win",
+   "base_difficulty": 3
+  },
+  {
+   "key": "draw",
+   "field": "goal",
+   "name": "Halte Remis",
+   "name_en": "Hold the draw",
+   "aliases": [
+    "draw",
+    "play and draw",
+    "zieht und hält remis",
+    "Remis halten",
+    "Remis erzwingen",
+    "save the game",
+    "Remis"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "{side} zieht und hält remis",
+   "task_en": "{side} to play and draw",
+   "base_difficulty": 3
+  },
+  {
+   "key": "defend",
+   "field": "goal",
+   "name": "Verteidige dich",
+   "name_en": "Defend",
+   "aliases": [
+    "defence",
+    "defense",
+    "defend",
+    "Verteidigung",
+    "save the position",
+    "Rettung",
+    "Verteidigen"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "{side} am Zug – verteidige dich",
+   "task_en": "{side} to move – defend",
+   "base_difficulty": 3
+  },
+  {
+   "key": "find-threat",
+   "field": "goal",
+   "name": "Erkenne die Drohung",
+   "name_en": "Find the threat",
+   "aliases": [
+    "threat",
+    "what is the threat",
+    "was droht",
+    "Drohung"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "Was droht? ({side} am Zug)",
+   "task_en": "What is the threat? ({side} to move)",
+   "base_difficulty": 1
+  },
+  {
+   "key": "find-mistake",
+   "field": "goal",
+   "name": "Finde den Fehler",
+   "name_en": "Find the mistake",
+   "aliases": [
+    "mistake",
+    "blunder",
+    "Fehler",
+    "Fehlzug",
+    "blunder check"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "Welcher Zug war ein Fehler?",
+   "task_en": "Which move was a mistake?",
+   "base_difficulty": 2
+  },
+  {
+   "key": "evaluate",
+   "field": "goal",
+   "name": "Bewerte die Stellung",
+   "name_en": "Evaluate the position",
+   "aliases": [
+    "evaluate",
+    "evaluation",
+    "assessment",
+    "Bewertung",
+    "Einschätzung",
+    "Einschaetzung"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "Bewerte die Stellung ({side} am Zug)",
+   "task_en": "Evaluate the position ({side} to move)",
+   "base_difficulty": 3
+  },
+  {
+   "key": "plan",
+   "field": "goal",
+   "name": "Finde einen Plan",
+   "name_en": "Find a plan",
+   "aliases": [
+    "plan",
+    "planning",
+    "Planfindung",
+    "Plan"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "{side} am Zug – finde einen Plan",
+   "task_en": "{side} to move – find a plan",
+   "base_difficulty": 3
+  },
+  {
+   "key": "calculate",
+   "field": "goal",
+   "name": "Berechne die Varianten",
+   "name_en": "Calculate the variations",
+   "aliases": [
+    "calculation",
+    "calculate",
+    "Rechnen",
+    "Variantenberechnung",
+    "Berechnung",
+    "Rechenaufgabe"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "{side} am Zug – berechne die Varianten",
+   "task_en": "{side} to move – calculate the variations",
+   "base_difficulty": 4
+  },
+  {
+   "key": "pin",
+   "field": "motif",
+   "name": "Fesselung",
+   "name_en": "Pin",
+   "aliases": [
+    "pin",
+    "gefesselt",
+    "fesseln",
+    "pinned"
+   ],
+   "parent": null,
+   "description": "Eine Figur kann nicht (sinnvoll) ziehen, weil dahinter eine wertvollere Figur oder der König steht.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "absolute-pin",
+   "field": "motif",
+   "name": "Absolute Fesselung",
+   "name_en": "Absolute pin",
+   "aliases": [
+    "absolute pin",
+    "Fesselung an den König"
+   ],
+   "parent": "pin",
+   "description": "Hinter der gefesselten Figur steht der König: sie darf gar nicht ziehen.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "relative-pin",
+   "field": "motif",
+   "name": "Relative Fesselung",
+   "name_en": "Relative pin",
+   "aliases": [
+    "relative pin",
+    "Fesselung an die Dame"
+   ],
+   "parent": "pin",
+   "description": "Hinter der gefesselten Figur steht eine wertvollere Figur: Ziehen kostet Material.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "skewer",
+   "field": "motif",
+   "name": "Spieß",
+   "name_en": "Skewer",
+   "aliases": [
+    "skewer",
+    "Spiess",
+    "Spießen",
+    "Spiessen",
+    "Durchspießen",
+    "Spieß-Angriff"
+   ],
+   "parent": null,
+   "description": "Umgekehrte Fesselung: die wertvollere Figur wird angegriffen, weicht aus, und die dahinter fällt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "double-attack",
+   "field": "motif",
+   "name": "Doppelangriff",
+   "name_en": "Double attack",
+   "aliases": [
+    "double attack",
+    "Doppeldrohung",
+    "double threat",
+    "zwei Drohungen"
+   ],
+   "parent": null,
+   "description": "Ein Zug droht zwei Dinge zugleich; der Gegner kann nur eines abwehren.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "fork",
+   "field": "motif",
+   "name": "Gabel",
+   "name_en": "Fork",
+   "aliases": [
+    "fork",
+    "Gabelangriff"
+   ],
+   "parent": "double-attack",
+   "description": "Eine Figur greift zwei oder mehr gegnerische Figuren gleichzeitig an.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "knight-fork",
+   "field": "motif",
+   "name": "Springergabel",
+   "name_en": "Knight fork",
+   "aliases": [
+    "knight fork",
+    "Springer-Gabel",
+    "Rösselsprung-Gabel"
+   ],
+   "parent": "fork",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "family-fork",
+   "field": "motif",
+   "name": "Familiengabel",
+   "name_en": "Family fork",
+   "aliases": [
+    "family fork",
+    "royal fork",
+    "Königsgabel",
+    "Koenigsgabel",
+    "Familienschach"
+   ],
+   "parent": "knight-fork",
+   "description": "Springergabel auf König, Dame und Turm.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "pawn-fork",
+   "field": "motif",
+   "name": "Bauerngabel",
+   "name_en": "Pawn fork",
+   "aliases": [
+    "pawn fork",
+    "Bauern-Gabel"
+   ],
+   "parent": "fork",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "queen-fork",
+   "field": "motif",
+   "name": "Damengabel",
+   "name_en": "Queen fork",
+   "aliases": [
+    "queen fork",
+    "Damen-Gabel"
+   ],
+   "parent": "fork",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "discovered-attack",
+   "field": "motif",
+   "name": "Abzugsangriff",
+   "name_en": "Discovered attack",
+   "aliases": [
+    "discovered attack",
+    "Abzug",
+    "Abzugsdrohung",
+    "Abzugsangriff"
+   ],
+   "parent": null,
+   "description": "Eine Figur zieht weg und gibt die Linie einer Langschrittler-Figur frei, die nun angreift.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "discovered-check",
+   "field": "motif",
+   "name": "Abzugsschach",
+   "name_en": "Discovered check",
+   "aliases": [
+    "discovered check",
+    "Abzugschach"
+   ],
+   "parent": "discovered-attack",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "double-check",
+   "field": "motif",
+   "name": "Doppelschach",
+   "name_en": "Double check",
+   "aliases": [
+    "double check",
+    "Doppel-Schach"
+   ],
+   "parent": "discovered-attack",
+   "description": "Zwei Figuren geben gleichzeitig Schach; nur ein Königszug hilft.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "windmill",
+   "field": "motif",
+   "name": "Zwickmühle",
+   "name_en": "Windmill",
+   "aliases": [
+    "windmill",
+    "seesaw",
+    "Schaukel",
+    "Zwickmuehle"
+   ],
+   "parent": "discovered-check",
+   "description": "Abwechselnd Abzugsschach und einfaches Schach; bei jedem Abzug wird Material abgeräumt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "battery",
+   "field": "motif",
+   "name": "Batterie",
+   "name_en": "Battery",
+   "aliases": [
+    "battery",
+    "Dame und Läufer",
+    "Turmbatterie",
+    "Doppelung"
+   ],
+   "parent": null,
+   "description": "Zwei Figuren auf derselben Linie verstärken sich gegenseitig (z. B. Dame vor Läufer).",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "x-ray",
+   "field": "motif",
+   "name": "Röntgenangriff",
+   "name_en": "X-ray",
+   "aliases": [
+    "x-ray",
+    "x ray",
+    "xray",
+    "Röntgen",
+    "Roentgen",
+    "Durchschlag",
+    "Röntgenwirkung"
+   ],
+   "parent": null,
+   "description": "Eine Figur wirkt durch eine andere hindurch auf ein Feld oder eine Figur dahinter.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "deflection",
+   "field": "motif",
+   "name": "Ablenkung",
+   "name_en": "Deflection",
+   "aliases": [
+    "deflection",
+    "weglenken",
+    "Weglenkung",
+    "ablenken"
+   ],
+   "parent": null,
+   "description": "Ein Verteidiger wird von seiner Aufgabe weggelockt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "decoy",
+   "field": "motif",
+   "name": "Hinlenkung",
+   "name_en": "Decoy",
+   "aliases": [
+    "decoy",
+    "attraction",
+    "lure",
+    "Lenkung",
+    "hinlenken",
+    "Hinlenkungsopfer"
+   ],
+   "parent": null,
+   "description": "Eine gegnerische Figur (oft der König) wird auf ein ungünstiges Feld gezogen.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "interference",
+   "field": "motif",
+   "name": "Verstellung",
+   "name_en": "Interference",
+   "aliases": [
+    "interference",
+    "Unterbrechung",
+    "Linienunterbrechung",
+    "verstellen"
+   ],
+   "parent": null,
+   "description": "Eine Figur wird zwischen gegnerische Figuren gestellt und unterbricht deren Verbindung.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "self-block",
+   "field": "motif",
+   "name": "Selbstblockade",
+   "name_en": "Self-block",
+   "aliases": [
+    "self-block",
+    "self-interference",
+    "Selbstverstellung"
+   ],
+   "parent": null,
+   "description": "Der Gegner wird gezwungen, sich selbst Felder oder Linien zu verstellen.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "clearance",
+   "field": "motif",
+   "name": "Räumung",
+   "name_en": "Clearance",
+   "aliases": [
+    "clearance",
+    "Raeumung",
+    "Räumungsopfer",
+    "Raeumungsopfer"
+   ],
+   "parent": null,
+   "description": "Eine Figur macht Platz – ein Feld oder eine Linie wird für eine andere Figur geräumt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "line-clearance",
+   "field": "motif",
+   "name": "Linienräumung",
+   "name_en": "Line clearance",
+   "aliases": [
+    "line clearance",
+    "Linienoeffnung",
+    "Linienöffnung"
+   ],
+   "parent": "clearance",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "square-clearance",
+   "field": "motif",
+   "name": "Feldräumung",
+   "name_en": "Square clearance",
+   "aliases": [
+    "square clearance",
+    "Feldraeumung"
+   ],
+   "parent": "clearance",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "overloading",
+   "field": "motif",
+   "name": "Überlastung",
+   "name_en": "Overloading",
+   "aliases": [
+    "overloading",
+    "overload",
+    "Ueberlastung",
+    "Überladung",
+    "ueberlastet",
+    "überlastet"
+   ],
+   "parent": null,
+   "description": "Eine Figur hat zu viele Verteidigungsaufgaben und kann nicht alle erfüllen.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "removal-of-guard",
+   "field": "motif",
+   "name": "Beseitigung des Verteidigers",
+   "name_en": "Removal of the guard",
+   "aliases": [
+    "removal of the guard",
+    "removing the defender",
+    "capturing the defender",
+    "undermining",
+    "Deckungsbeseitigung",
+    "Unterminierung",
+    "Schlagen des Verteidigers"
+   ],
+   "parent": null,
+   "description": "Der Verteidiger wird geschlagen (oder vertrieben), danach fällt, was er gedeckt hat.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "zwischenzug",
+   "field": "motif",
+   "name": "Zwischenzug",
+   "name_en": "Zwischenzug",
+   "aliases": [
+    "intermezzo",
+    "in-between move",
+    "intermediate move",
+    "zwischen-zug"
+   ],
+   "parent": null,
+   "description": "Statt der erwarteten Antwort kommt zuerst ein noch stärkerer Zug, meist mit Schach oder Drohung.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "trapped-piece",
+   "field": "motif",
+   "name": "Figurenfang",
+   "name_en": "Trapped piece",
+   "aliases": [
+    "trapped piece",
+    "gefangene Figur",
+    "eingesperrte Figur",
+    "Figur fangen"
+   ],
+   "parent": null,
+   "description": "Eine Figur hat keine sicheren Felder mehr und geht verloren.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "queen-trap",
+   "field": "motif",
+   "name": "Damenfang",
+   "name_en": "Trapped queen",
+   "aliases": [
+    "queen trap",
+    "trapped queen",
+    "Dame fangen"
+   ],
+   "parent": "trapped-piece",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "hanging-piece",
+   "field": "motif",
+   "name": "Ungedeckte Figur",
+   "name_en": "Hanging piece",
+   "aliases": [
+    "hanging piece",
+    "en prise",
+    "hängende Figur",
+    "haengende Figur",
+    "Einsteller",
+    "ungeschützt"
+   ],
+   "parent": null,
+   "description": "Eine ungedeckte oder unzureichend gedeckte Figur kann einfach geschlagen werden.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "desperado",
+   "field": "motif",
+   "name": "Desperado",
+   "name_en": "Desperado",
+   "aliases": [
+    "desperado",
+    "Verzweiflungsfigur"
+   ],
+   "parent": null,
+   "description": "Eine ohnehin verlorene Figur schlägt noch so viel wie möglich, bevor sie fällt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "quiet-move",
+   "field": "motif",
+   "name": "Stiller Zug",
+   "name_en": "Quiet move",
+   "aliases": [
+    "quiet move",
+    "leiser Zug",
+    "ruhiger Zug"
+   ],
+   "parent": null,
+   "description": "Ein Zug ohne Schach und ohne Schlagen, der trotzdem entscheidet.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "sacrifice",
+   "field": "motif",
+   "name": "Opfer",
+   "name_en": "Sacrifice",
+   "aliases": [
+    "sacrifice",
+    "sac",
+    "Opferkombination"
+   ],
+   "parent": null,
+   "description": "Material wird bewusst hergegeben, um mehr zu erreichen.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "queen-sacrifice",
+   "field": "motif",
+   "name": "Damenopfer",
+   "name_en": "Queen sacrifice",
+   "aliases": [
+    "queen sacrifice",
+    "queen sac",
+    "Damen-Opfer"
+   ],
+   "parent": "sacrifice",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "exchange-sacrifice",
+   "field": "motif",
+   "name": "Qualitätsopfer",
+   "name_en": "Exchange sacrifice",
+   "aliases": [
+    "exchange sacrifice",
+    "exchange sac",
+    "Qualitaetsopfer",
+    "Qualität geben"
+   ],
+   "parent": "sacrifice",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "greek-gift",
+   "field": "motif",
+   "name": "Läuferopfer auf h7",
+   "name_en": "Greek gift",
+   "aliases": [
+    "Greek gift",
+    "griechisches Geschenk",
+    "klassisches Läuferopfer",
+    "klassisches Laeuferopfer",
+    "Lxh7+",
+    "Bxh7+",
+    "Lxh2+",
+    "Bxh2+"
+   ],
+   "parent": "sacrifice",
+   "description": "Das klassische Läuferopfer auf h7 (h2), meist gefolgt von Sg5+ und Dh5.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "double-bishop-sacrifice",
+   "field": "motif",
+   "name": "Doppeltes Läuferopfer",
+   "name_en": "Double bishop sacrifice",
+   "aliases": [
+    "double bishop sacrifice",
+    "Lasker's double bishop sacrifice",
+    "Lasker-Opfer",
+    "Laskers Läuferopfer"
+   ],
+   "parent": "sacrifice",
+   "description": "Beide Läufer werden auf h7 und g7 geopfert, um die Königsstellung aufzureißen (Lasker–Bauer 1889).",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "mating-net",
+   "field": "motif",
+   "name": "Mattnetz",
+   "name_en": "Mating net",
+   "aliases": [
+    "mating net",
+    "Mattnetz knüpfen",
+    "mating attack"
+   ],
+   "parent": null,
+   "description": "Der König wird Schritt für Schritt eingeschnürt, bis ihm keine Felder mehr bleiben.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "mate-threat",
+   "field": "motif",
+   "name": "Mattdrohung",
+   "name_en": "Mate threat",
+   "aliases": [
+    "mate threat",
+    "threatens mate",
+    "droht Matt"
+   ],
+   "parent": null,
+   "description": "Ein Zug, der Matt droht und den Gegner zur Verteidigung zwingt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "back-rank-weakness",
+   "field": "motif",
+   "name": "Grundreihenschwäche",
+   "name_en": "Back-rank weakness",
+   "aliases": [
+    "back rank weakness",
+    "weak back rank",
+    "Grundreihenschwaeche",
+    "Grundlinienschwäche"
+   ],
+   "parent": null,
+   "description": "Der König hat kein Luftloch; Schach auf der Grundreihe ist gefährlich.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "king-hunt",
+   "field": "motif",
+   "name": "Königsjagd",
+   "name_en": "King hunt",
+   "aliases": [
+    "king hunt",
+    "Koenigsjagd",
+    "Königshatz"
+   ],
+   "parent": null,
+   "description": "Der König wird mit einer Folge von Schachs quer übers Brett getrieben.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "perpetual-check",
+   "field": "motif",
+   "name": "Dauerschach",
+   "name_en": "Perpetual check",
+   "aliases": [
+    "perpetual check",
+    "perpetual",
+    "ewiges Schach"
+   ],
+   "parent": null,
+   "description": "Endlose Schachgebote erzwingen Remis.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "stalemate-trick",
+   "field": "motif",
+   "name": "Pattfalle",
+   "name_en": "Stalemate trick",
+   "aliases": [
+    "stalemate",
+    "stalemate trick",
+    "Patt",
+    "Pattrettung",
+    "Pattwendung"
+   ],
+   "parent": null,
+   "description": "Die unterlegene Seite rettet sich durch Patt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "promotion",
+   "field": "motif",
+   "name": "Umwandlung",
+   "name_en": "Promotion",
+   "aliases": [
+    "promotion",
+    "queening",
+    "Bauernumwandlung",
+    "Damenumwandlung"
+   ],
+   "parent": null,
+   "description": "Ein Bauer erreicht die letzte Reihe und wird zur Figur.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "mad-rook",
+   "field": "motif",
+   "name": "Rasender Turm",
+   "name_en": "Mad rook",
+   "aliases": [
+    "rampant rook",
+    "desperado rook",
+    "mad rook",
+    "wilder Turm",
+    "Rasender Turm"
+   ],
+   "parent": "stalemate-trick",
+   "description": "Ein Turm gibt immer wieder Schach; schlägt man ihn, ist es Patt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "underpromotion",
+   "field": "motif",
+   "name": "Unterverwandlung",
+   "name_en": "Underpromotion",
+   "aliases": [
+    "underpromotion",
+    "minor promotion",
+    "Unterverwandlung in Springer",
+    "Unterverwandlung in Turm"
+   ],
+   "parent": "promotion",
+   "description": "Umwandlung in Turm, Läufer oder Springer statt in eine Dame.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "en-passant",
+   "field": "motif",
+   "name": "En passant",
+   "name_en": "En passant",
+   "aliases": [
+    "en passant",
+    "e.p.",
+    "ep",
+    "Schlagen im Vorbeigehen"
+   ],
+   "parent": null,
+   "description": "Ein Bauer schlägt einen Bauern, der mit Doppelschritt neben ihn gezogen ist.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "zugzwang",
+   "field": "motif",
+   "name": "Zugzwang",
+   "name_en": "Zugzwang",
+   "aliases": [
+    "zugzwang",
+    "mutual zugzwang",
+    "gegenseitiger Zugzwang"
+   ],
+   "parent": null,
+   "description": "Jeder Zug verschlechtert die eigene Stellung, aber ziehen muss man.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "counterattack",
+   "field": "motif",
+   "name": "Gegenangriff",
+   "name_en": "Counterattack",
+   "aliases": [
+    "counterattack",
+    "counter-attack",
+    "Gegenschlag",
+    "Gegendrohung"
+   ],
+   "parent": null,
+   "description": "Statt zu verteidigen wird eine eigene, stärkere Drohung aufgestellt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "liquidation",
+   "field": "motif",
+   "name": "Abwicklung",
+   "name_en": "Liquidation",
+   "aliases": [
+    "liquidation",
+    "simplification",
+    "Vereinfachung",
+    "Abtausch ins Endspiel",
+    "abwickeln"
+   ],
+   "parent": null,
+   "description": "Durch Abtausch in ein gewonnenes (oder gehaltenes) Endspiel übergehen.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "back-rank-mate",
+   "field": "mate",
+   "name": "Grundreihenmatt",
+   "name_en": "Back-rank mate",
+   "aliases": [
+    "back rank mate",
+    "back-rank mate",
+    "Grundlinienmatt",
+    "Grundreihe"
+   ],
+   "parent": null,
+   "description": "Turm oder Dame setzt den König auf der Grundreihe matt; eigene Bauern versperren die Fluchtfelder.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "corridor-mate",
+   "field": "mate",
+   "name": "Korridormatt",
+   "name_en": "Corridor mate",
+   "aliases": [
+    "corridor mate"
+   ],
+   "parent": null,
+   "description": "Der König steht in einem Korridor aus eigenen Figuren und wird von einer Schwerfigur frontal mattgesetzt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "smothered-mate",
+   "field": "mate",
+   "name": "Ersticktes Matt",
+   "name_en": "Smothered mate",
+   "aliases": [
+    "smothered mate",
+    "Erstickungsmatt",
+    "Philidors Vermächtnis",
+    "Philidor's legacy"
+   ],
+   "parent": null,
+   "description": "Ein Springer setzt matt; alle Nachbarfelder des Königs sind von eigenen Figuren besetzt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "arabian-mate",
+   "field": "mate",
+   "name": "Arabisches Matt",
+   "name_en": "Arabian mate",
+   "aliases": [
+    "Arabian mate",
+    "Araber-Matt",
+    "Arabermatt"
+   ],
+   "parent": null,
+   "description": "Turm und Springer: der Turm setzt den König in der Ecke matt, der Springer deckt den Turm.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "anastasia-mate",
+   "field": "mate",
+   "name": "Anastasia-Matt",
+   "name_en": "Anastasia's mate",
+   "aliases": [
+    "Anastasia's mate",
+    "Anastasias Matt",
+    "Anastasia mate"
+   ],
+   "parent": null,
+   "description": "Springer und Schwerfigur: der König am Rand wird vom eigenen Bauern eingesperrt und auf der Randlinie mattgesetzt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "epaulette-mate",
+   "field": "mate",
+   "name": "Epaulettenmatt",
+   "name_en": "Epaulette mate",
+   "aliases": [
+    "epaulette mate",
+    "Epaulette",
+    "Schulterstückmatt"
+   ],
+   "parent": null,
+   "description": "Frontales Matt; links und rechts neben dem König stehen eigene Figuren wie Schulterstücke.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "swallows-tail-mate",
+   "field": "mate",
+   "name": "Schwalbenschwanzmatt",
+   "name_en": "Swallow's tail mate",
+   "aliases": [
+    "swallow's tail mate",
+    "swallowtail",
+    "Guéridon mate",
+    "Gueridon"
+   ],
+   "parent": null,
+   "description": "Die gedeckte Dame setzt direkt vor dem König matt; die beiden hinteren Diagonalfelder sind von eigenen Figuren besetzt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "dovetail-mate",
+   "field": "mate",
+   "name": "Cozio-Matt",
+   "name_en": "Dovetail mate",
+   "aliases": [
+    "dovetail mate",
+    "Cozio's mate",
+    "Cozio mate",
+    "Cozios Matt"
+   ],
+   "parent": null,
+   "description": "Die gedeckte Dame setzt diagonal angrenzend matt; die zwei Felder hinter dem König sind von eigenen Figuren besetzt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "hook-mate",
+   "field": "mate",
+   "name": "Hakenmatt",
+   "name_en": "Hook mate",
+   "aliases": [
+    "hook mate",
+    "Haken-Matt"
+   ],
+   "parent": null,
+   "description": "Turm, Springer und Bauer: der Turm setzt neben dem König matt, gedeckt vom Springer, der vom Bauern gedeckt ist.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "blackburne-mate",
+   "field": "mate",
+   "name": "Blackburne-Matt",
+   "name_en": "Blackburne's mate",
+   "aliases": [
+    "Blackburne's mate",
+    "Blackburnes Matt"
+   ],
+   "parent": null,
+   "description": "Zwei Läufer und ein Springer setzen den kurz rochierten König matt; ein Läufer wirkt von weit her.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "boden-mate",
+   "field": "mate",
+   "name": "Boden-Matt",
+   "name_en": "Boden's mate",
+   "aliases": [
+    "Boden's mate",
+    "Bodens Matt",
+    "criss-cross mate",
+    "Kreuzmatt"
+   ],
+   "parent": null,
+   "description": "Zwei Läufer auf sich kreuzenden Diagonalen setzen den König matt; eigene Figuren versperren die Flucht.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "double-bishop-mate",
+   "field": "mate",
+   "name": "Läuferpaar-Matt",
+   "name_en": "Double bishop mate",
+   "aliases": [
+    "double bishop mate",
+    "two bishops mate pattern",
+    "Laeuferpaar-Matt"
+   ],
+   "parent": null,
+   "description": "Zwei Läufer auf benachbarten Diagonalen setzen den König matt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "corner-mate",
+   "field": "mate",
+   "name": "Eckmatt",
+   "name_en": "Corner mate",
+   "aliases": [
+    "corner mate",
+    "Matt in der Ecke"
+   ],
+   "parent": null,
+   "description": "Der König in der Ecke wird von einem Springer mattgesetzt, eine Schwerfigur sperrt die Randlinie.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "opera-mate",
+   "field": "mate",
+   "name": "Opernmatt",
+   "name_en": "Opera mate",
+   "aliases": [
+    "Opera mate",
+    "Opera-Matt",
+    "Morphy Oper"
+   ],
+   "parent": null,
+   "description": "Ein Turm setzt auf der Grundreihe matt, gedeckt von einem Läufer aus der Ferne (Morphy, Paris 1858).",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "mayet-mate",
+   "field": "mate",
+   "name": "Mayet-Matt",
+   "name_en": "Mayet's mate",
+   "aliases": [
+    "Mayet's mate",
+    "Mayets Matt"
+   ],
+   "parent": null,
+   "description": "Ein Turm setzt neben dem König auf der Grundreihe matt, gedeckt von einem Läufer auf der langen Diagonale.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "pillsbury-mate",
+   "field": "mate",
+   "name": "Pillsbury-Matt",
+   "name_en": "Pillsbury's mate",
+   "aliases": [
+    "Pillsbury's mate",
+    "Pillsburys Matt"
+   ],
+   "parent": null,
+   "description": "Turm auf der Springerlinie und Läufer auf der langen Diagonale setzen den König am Rand matt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "morphy-mate",
+   "field": "mate",
+   "name": "Morphy-Matt",
+   "name_en": "Morphy's mate",
+   "aliases": [
+    "Morphy's mate",
+    "Morphys Matt"
+   ],
+   "parent": null,
+   "description": "Ein Läufer setzt auf der langen Diagonale den König in der Ecke matt, ein Turm sperrt die Nachbarlinie.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "greco-mate",
+   "field": "mate",
+   "name": "Greco-Matt",
+   "name_en": "Greco's mate",
+   "aliases": [
+    "Greco's mate",
+    "Grecos Matt"
+   ],
+   "parent": null,
+   "description": "Ein Läufer sperrt das Fluchtfeld, Dame oder Turm setzen auf der Randlinie matt; der eigene Bauer blockiert.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "damiano-mate",
+   "field": "mate",
+   "name": "Damiano-Matt",
+   "name_en": "Damiano's mate",
+   "aliases": [
+    "Damiano's mate",
+    "Damianos Matt",
+    "Dh7#"
+   ],
+   "parent": null,
+   "description": "Die Dame setzt diagonal neben dem König matt, gedeckt von einem Bauern (klassisch Dh7# mit Bauer g6).",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "lolli-mate",
+   "field": "mate",
+   "name": "Lolli-Matt",
+   "name_en": "Lolli's mate",
+   "aliases": [
+    "Lolli's mate",
+    "Lollis Matt",
+    "Dg7#"
+   ],
+   "parent": null,
+   "description": "Die Dame dringt auf g7 (g2) ein und setzt matt, gedeckt von einem Bauern auf f6 (f3).",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "kiss-of-death",
+   "field": "mate",
+   "name": "Kuss des Todes",
+   "name_en": "Kiss of death",
+   "aliases": [
+    "kiss of death",
+    "Kopfmatt",
+    "Kussmatt",
+    "Damenmatt mit König"
+   ],
+   "parent": null,
+   "description": "Die Dame setzt direkt neben dem König matt und wird vom eigenen König gedeckt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "kill-box-mate",
+   "field": "mate",
+   "name": "Kill-Box-Matt",
+   "name_en": "Kill box mate",
+   "aliases": [
+    "kill box mate",
+    "killbox",
+    "Kastenmatt"
+   ],
+   "parent": null,
+   "description": "Ein Turm setzt neben dem König matt, gedeckt von der Dame, die die übrigen Felder einer 3×3-Box sperrt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "vukovic-mate",
+   "field": "mate",
+   "name": "Vuković-Matt",
+   "name_en": "Vuković mate",
+   "aliases": [
+    "Vukovic mate",
+    "Vukovic",
+    "Vuković"
+   ],
+   "parent": null,
+   "description": "Turm und Springer setzen mit Hilfe des eigenen Königs am Rand matt; der Turm wird vom König gedeckt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "max-lange-mate",
+   "field": "mate",
+   "name": "Max-Lange-Matt",
+   "name_en": "Max Lange's mate",
+   "aliases": [
+    "Max Lange's mate",
+    "Max Lange"
+   ],
+   "parent": null,
+   "description": "Dame und Läufer setzen den König am Rand gemeinsam matt; der Läufer deckt die Dame aus der Ferne.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "reti-mate",
+   "field": "mate",
+   "name": "Réti-Matt",
+   "name_en": "Réti's mate",
+   "aliases": [
+    "Réti's mate",
+    "Reti mate",
+    "Retis Matt",
+    "Réti–Tartakower"
+   ],
+   "parent": null,
+   "description": "Ein Läufer setzt matt, unterstützt von einem Turm; der König ist von eigenen Figuren eingeschlossen (Réti–Tartakower 1910).",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "balestra-mate",
+   "field": "mate",
+   "name": "Balestra-Matt",
+   "name_en": "Balestra mate",
+   "aliases": [
+    "Balestra mate",
+    "Balestra"
+   ],
+   "parent": null,
+   "description": "Ein Läufer setzt aus der Ferne matt, die Dame sperrt die übrigen Fluchtfelder.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "triangle-mate",
+   "field": "mate",
+   "name": "Dreiecksmatt",
+   "name_en": "Triangle mate",
+   "aliases": [
+    "triangle mate",
+    "Dreieck"
+   ],
+   "parent": null,
+   "description": "Dame und Turm bilden ein Dreieck um den König: die Dame setzt matt, der Turm deckt sie.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "ladder-mate",
+   "field": "mate",
+   "name": "Treppenmatt",
+   "name_en": "Ladder mate",
+   "aliases": [
+    "ladder mate",
+    "lawnmower mate",
+    "rook roller",
+    "Walze",
+    "Leitermatt",
+    "Treppe"
+   ],
+   "parent": null,
+   "description": "Zwei Schwerfiguren drängen den König im Wechsel Reihe um Reihe an den Rand.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "blind-swine-mate",
+   "field": "mate",
+   "name": "Blinde Schweine",
+   "name_en": "Blind swine mate",
+   "aliases": [
+    "blind swine mate",
+    "pigs on the seventh",
+    "Schweine auf der 7. Reihe",
+    "Schweinematt"
+   ],
+   "parent": null,
+   "description": "Zwei Türme auf der vorletzten Reihe setzen matt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "david-goliath-mate",
+   "field": "mate",
+   "name": "David-und-Goliath-Matt",
+   "name_en": "David and Goliath mate",
+   "aliases": [
+    "David and Goliath mate",
+    "pawn mate",
+    "Bauernmatt"
+   ],
+   "parent": null,
+   "description": "Ein Bauer gibt das Matt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "mirror-mate",
+   "field": "mate",
+   "name": "Spiegelmatt",
+   "name_en": "Mirror mate",
+   "aliases": [
+    "mirror mate"
+   ],
+   "parent": null,
+   "description": "Alle Nachbarfelder des mattgesetzten Königs sind leer.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "legal-mate",
+   "field": "mate",
+   "name": "Seekadettenmatt",
+   "name_en": "Légal's mate",
+   "aliases": [
+    "Légal's mate",
+    "Legal mate",
+    "Légal-Matt",
+    "Legal-Matt",
+    "Legal trap",
+    "Seekadett",
+    "Seekadettenfalle"
+   ],
+   "parent": null,
+   "description": "Eröffnungsfalle: Damenopfer, Läufer auf f7 mit Schach und Springermatt (de Légal, Paris 1750).",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "scholars-mate",
+   "field": "mate",
+   "name": "Schäfermatt",
+   "name_en": "Scholar's mate",
+   "aliases": [
+    "Scholar's mate",
+    "Schaefermatt",
+    "Schäferzug"
+   ],
+   "parent": null,
+   "description": "Dame und Läufer setzen früh auf f7 (f2) matt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "fools-mate",
+   "field": "mate",
+   "name": "Narrenmatt",
+   "name_en": "Fool's mate",
+   "aliases": [
+    "Fool's mate",
+    "Narrenmatt"
+   ],
+   "parent": null,
+   "description": "Das kürzestmögliche Matt: 1.f3 e5 2.g4 Dh4#.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "diagonal-corridor-mate",
+   "field": "mate",
+   "name": "Diagonales Korridormatt",
+   "name_en": "Diagonal Corridor Mate",
+   "aliases": [
+    "Diagonal Corridor Mate",
+    "Diagonales Korridormatt"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "weak-square",
+   "field": "strategy",
+   "name": "Schwaches Feld",
+   "name_en": "Weak square",
+   "aliases": [
+    "weak square",
+    "hole",
+    "Loch",
+    "schwache Felder"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "outpost",
+   "field": "strategy",
+   "name": "Vorposten",
+   "name_en": "Outpost",
+   "aliases": [
+    "outpost",
+    "Stützpunkt",
+    "Stuetzpunkt",
+    "Springervorposten"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "pawn-structure",
+   "field": "strategy",
+   "name": "Bauernstruktur",
+   "name_en": "Pawn structure",
+   "aliases": [
+    "pawn structure",
+    "Bauernformation",
+    "Bauernstellung"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "isolated-pawn",
+   "field": "strategy",
+   "name": "Isolani",
+   "name_en": "Isolated pawn",
+   "aliases": [
+    "isolated pawn",
+    "isolated queen's pawn",
+    "IQP",
+    "isolierter Bauer",
+    "Isolierter Damenbauer"
+   ],
+   "parent": "pawn-structure",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "doubled-pawns",
+   "field": "strategy",
+   "name": "Doppelbauer",
+   "name_en": "Doubled pawns",
+   "aliases": [
+    "doubled pawns",
+    "Doppelbauern"
+   ],
+   "parent": "pawn-structure",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "backward-pawn",
+   "field": "strategy",
+   "name": "Rückständiger Bauer",
+   "name_en": "Backward pawn",
+   "aliases": [
+    "backward pawn",
+    "rueckstaendiger Bauer"
+   ],
+   "parent": "pawn-structure",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "hanging-pawns",
+   "field": "strategy",
+   "name": "Hängende Bauern",
+   "name_en": "Hanging pawns",
+   "aliases": [
+    "hanging pawns",
+    "haengende Bauern"
+   ],
+   "parent": "pawn-structure",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "passed-pawn",
+   "field": "strategy",
+   "name": "Freibauer",
+   "name_en": "Passed pawn",
+   "aliases": [
+    "passed pawn",
+    "passer",
+    "Freibauern"
+   ],
+   "parent": "pawn-structure",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "outside-passed-pawn",
+   "field": "strategy",
+   "name": "Entfernter Freibauer",
+   "name_en": "Outside passed pawn",
+   "aliases": [
+    "outside passed pawn",
+    "distant passed pawn",
+    "entfernter Freibauer"
+   ],
+   "parent": "passed-pawn",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "protected-passed-pawn",
+   "field": "strategy",
+   "name": "Gedeckter Freibauer",
+   "name_en": "Protected passed pawn",
+   "aliases": [
+    "protected passed pawn",
+    "gedeckter Freibauer"
+   ],
+   "parent": "passed-pawn",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "connected-passed-pawns",
+   "field": "strategy",
+   "name": "Verbundene Freibauern",
+   "name_en": "Connected passed pawns",
+   "aliases": [
+    "connected passed pawns",
+    "verbundene Freibauern"
+   ],
+   "parent": "passed-pawn",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "pawn-majority",
+   "field": "strategy",
+   "name": "Bauernmehrheit",
+   "name_en": "Pawn majority",
+   "aliases": [
+    "pawn majority",
+    "Mehrheit am Damenflügel",
+    "queenside majority"
+   ],
+   "parent": "pawn-structure",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "pawn-chain",
+   "field": "strategy",
+   "name": "Bauernkette",
+   "name_en": "Pawn chain",
+   "aliases": [
+    "pawn chain",
+    "Kettenbasis"
+   ],
+   "parent": "pawn-structure",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "pawn-islands",
+   "field": "strategy",
+   "name": "Bauerninseln",
+   "name_en": "Pawn islands",
+   "aliases": [
+    "pawn islands",
+    "Bauerninsel"
+   ],
+   "parent": "pawn-structure",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "pawn-break",
+   "field": "strategy",
+   "name": "Bauernhebel",
+   "name_en": "Pawn break",
+   "aliases": [
+    "pawn break",
+    "lever",
+    "Hebel",
+    "Bauerndurchbruch im Mittelspiel"
+   ],
+   "parent": "pawn-structure",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "space-advantage",
+   "field": "strategy",
+   "name": "Raumvorteil",
+   "name_en": "Space advantage",
+   "aliases": [
+    "space advantage",
+    "space",
+    "Raum"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "piece-activity",
+   "field": "strategy",
+   "name": "Figurenaktivität",
+   "name_en": "Piece activity",
+   "aliases": [
+    "piece activity",
+    "activity",
+    "Aktivität",
+    "Figurenaktivitaet",
+    "aktive Figuren"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "king-safety",
+   "field": "strategy",
+   "name": "Königssicherheit",
+   "name_en": "King safety",
+   "aliases": [
+    "king safety",
+    "weak king",
+    "exposed king",
+    "schwacher König",
+    "offener König",
+    "Koenigssicherheit"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "king-attack",
+   "field": "strategy",
+   "name": "Königsangriff",
+   "name_en": "King attack",
+   "aliases": [
+    "king attack",
+    "attack on the king",
+    "attack",
+    "Angriff",
+    "Mattangriff",
+    "Koenigsangriff"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "prophylaxis",
+   "field": "strategy",
+   "name": "Prophylaxe",
+   "name_en": "Prophylaxis",
+   "aliases": [
+    "prophylaxis",
+    "prophylactic",
+    "Vorbeugung",
+    "vorbeugender Zug"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "blockade",
+   "field": "strategy",
+   "name": "Blockade",
+   "name_en": "Blockade",
+   "aliases": [
+    "blockade",
+    "Blockieren",
+    "Blockadefeld",
+    "Blockeur"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "opposite-bishops",
+   "field": "strategy",
+   "name": "Ungleichfarbige Läufer",
+   "name_en": "Opposite-coloured bishops",
+   "aliases": [
+    "opposite-coloured bishops",
+    "opposite colored bishops",
+    "OCB",
+    "ungleichfarbige Laeufer"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "minority-attack",
+   "field": "strategy",
+   "name": "Minoritätsangriff",
+   "name_en": "Minority attack",
+   "aliases": [
+    "minority attack",
+    "Minoritaetsangriff"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "good-bad-bishop",
+   "field": "strategy",
+   "name": "Guter und schlechter Läufer",
+   "name_en": "Good vs bad bishop",
+   "aliases": [
+    "good bishop",
+    "bad bishop",
+    "good vs bad bishop",
+    "schlechter Läufer",
+    "guter Läufer"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "bishop-pair",
+   "field": "strategy",
+   "name": "Läuferpaar",
+   "name_en": "Bishop pair",
+   "aliases": [
+    "bishop pair",
+    "two bishops",
+    "Laeuferpaar",
+    "zwei Läufer"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "open-file",
+   "field": "strategy",
+   "name": "Offene Linie",
+   "name_en": "Open file",
+   "aliases": [
+    "open file",
+    "offene Linien"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "half-open-file",
+   "field": "strategy",
+   "name": "Halboffene Linie",
+   "name_en": "Half-open file",
+   "aliases": [
+    "half-open file",
+    "semi-open file",
+    "halboffene Linien"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "seventh-rank",
+   "field": "strategy",
+   "name": "Siebte Reihe",
+   "name_en": "Seventh rank",
+   "aliases": [
+    "seventh rank",
+    "7th rank",
+    "7. Reihe",
+    "zweite Reihe",
+    "2. Reihe"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "doubled-rooks",
+   "field": "strategy",
+   "name": "Turmverdopplung",
+   "name_en": "Doubled rooks",
+   "aliases": [
+    "doubled rooks",
+    "doubling rooks",
+    "Türme verdoppeln",
+    "Tuerme verdoppeln"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "centralisation",
+   "field": "strategy",
+   "name": "Zentralisierung",
+   "name_en": "Centralisation",
+   "aliases": [
+    "centralisation",
+    "centralization",
+    "zentralisieren"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "centre",
+   "field": "strategy",
+   "name": "Zentrum",
+   "name_en": "Centre control",
+   "aliases": [
+    "center control",
+    "centre control",
+    "centre",
+    "center",
+    "Zentrumskontrolle",
+    "Zentrumsbeherrschung"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "development",
+   "field": "strategy",
+   "name": "Entwicklung",
+   "name_en": "Development",
+   "aliases": [
+    "development",
+    "lead in development",
+    "Entwicklungsvorsprung",
+    "Figurenentwicklung"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "worst-piece",
+   "field": "strategy",
+   "name": "Schlechteste Figur verbessern",
+   "name_en": "Improve the worst piece",
+   "aliases": [
+    "worst piece",
+    "improve the worst piece",
+    "schlechteste Figur"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "restriction",
+   "field": "strategy",
+   "name": "Einschränkung",
+   "name_en": "Restriction",
+   "aliases": [
+    "restriction",
+    "domination",
+    "Dominanz",
+    "Einschraenkung",
+    "Beherrschung"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "colour-complex",
+   "field": "strategy",
+   "name": "Farbkomplex",
+   "name_en": "Colour complex",
+   "aliases": [
+    "colour complex",
+    "color complex",
+    "weak colour complex",
+    "Farbschwäche",
+    "Farbschwaeche"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "initiative",
+   "field": "strategy",
+   "name": "Initiative",
+   "name_en": "Initiative",
+   "aliases": [
+    "initiative",
+    "Tempo",
+    "Tempogewinn"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "exchange",
+   "field": "strategy",
+   "name": "Richtiger Abtausch",
+   "name_en": "Good exchange",
+   "aliases": [
+    "exchanging",
+    "good exchange",
+    "trade",
+    "Abtausch",
+    "Figurentausch",
+    "tauschen"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "overprotection",
+   "field": "strategy",
+   "name": "Überdeckung",
+   "name_en": "Overprotection",
+   "aliases": [
+    "overprotection",
+    "Ueberdeckung",
+    "Nimzowitsch"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "imbalance",
+   "field": "strategy",
+   "name": "Materialungleichgewicht",
+   "name_en": "Material imbalance",
+   "aliases": [
+    "material imbalance",
+    "imbalance",
+    "ungleiches Material"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "compensation",
+   "field": "strategy",
+   "name": "Kompensation",
+   "name_en": "Compensation",
+   "aliases": [
+    "compensation",
+    "Gegenspiel",
+    "Ausgleich für Material"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "two-weaknesses",
+   "field": "strategy",
+   "name": "Prinzip der zwei Schwächen",
+   "name_en": "Principle of two weaknesses",
+   "aliases": [
+    "principle of two weaknesses",
+    "two weaknesses",
+    "zwei Schwächen",
+    "zwei Schwaechen"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "pawn-endgame",
+   "field": "endgame",
+   "name": "Bauernendspiel",
+   "name_en": "Pawn endgame",
+   "aliases": [
+    "king and pawn endgame",
+    "pawn ending",
+    "K+P",
+    "KP",
+    "Bauernendspiele"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "minor-piece-endgame",
+   "field": "endgame",
+   "name": "Leichtfigurenendspiel",
+   "name_en": "Minor piece endgame",
+   "aliases": [
+    "minor piece endgame",
+    "Leichtfiguren"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "bishop-endgame",
+   "field": "endgame",
+   "name": "Läuferendspiel",
+   "name_en": "Bishop endgame",
+   "aliases": [
+    "bishop endgame",
+    "same-coloured bishops",
+    "gleichfarbige Läufer",
+    "Laeuferendspiel"
+   ],
+   "parent": "minor-piece-endgame",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "opposite-bishop-endgame",
+   "field": "endgame",
+   "name": "Ungleichfarbiges Läuferendspiel",
+   "name_en": "Opposite-coloured bishop endgame",
+   "aliases": [
+    "opposite-coloured bishop endgame",
+    "opposite colored bishops endgame",
+    "OCB endgame"
+   ],
+   "parent": "minor-piece-endgame",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "knight-endgame",
+   "field": "endgame",
+   "name": "Springerendspiel",
+   "name_en": "Knight endgame",
+   "aliases": [
+    "knight endgame",
+    "knight ending"
+   ],
+   "parent": "minor-piece-endgame",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "bishop-vs-knight",
+   "field": "endgame",
+   "name": "Läufer gegen Springer",
+   "name_en": "Bishop vs knight",
+   "aliases": [
+    "bishop vs knight",
+    "bishop against knight",
+    "L gegen S",
+    "Laeufer gegen Springer"
+   ],
+   "parent": "minor-piece-endgame",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "minor-vs-pawns",
+   "field": "endgame",
+   "name": "Leichtfigur gegen Bauern",
+   "name_en": "Minor piece vs pawns",
+   "aliases": [
+    "minor piece vs pawns",
+    "Figur gegen Bauern"
+   ],
+   "parent": "minor-piece-endgame",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "rook-endgame",
+   "field": "endgame",
+   "name": "Turmendspiel",
+   "name_en": "Rook endgame",
+   "aliases": [
+    "rook endgame",
+    "rook ending",
+    "Turmendspiele"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "rook-pawn-vs-rook",
+   "field": "endgame",
+   "name": "Turm und Bauer gegen Turm",
+   "name_en": "Rook and pawn vs rook",
+   "aliases": [
+    "rook and pawn vs rook",
+    "R+P vs R",
+    "T+B gegen T"
+   ],
+   "parent": "rook-endgame",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "double-rook-endgame",
+   "field": "endgame",
+   "name": "Doppelturmendspiel",
+   "name_en": "Double rook endgame",
+   "aliases": [
+    "double rook endgame",
+    "two rooks each"
+   ],
+   "parent": "rook-endgame",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "rook-vs-pawns",
+   "field": "endgame",
+   "name": "Turm gegen Bauern",
+   "name_en": "Rook vs pawns",
+   "aliases": [
+    "rook vs pawn",
+    "rook against pawns",
+    "Turm gegen Bauer"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "rook-vs-minor",
+   "field": "endgame",
+   "name": "Turm gegen Leichtfigur",
+   "name_en": "Rook vs minor piece",
+   "aliases": [
+    "rook vs minor piece",
+    "rook vs bishop",
+    "rook vs knight",
+    "Turm gegen Läufer",
+    "Turm gegen Springer"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "rook-minor-endgame",
+   "field": "endgame",
+   "name": "Turm und Leichtfigur",
+   "name_en": "Rook and minor piece endgame",
+   "aliases": [
+    "rook and minor piece",
+    "R+B vs R+N",
+    "Turm plus Leichtfigur"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "queen-endgame",
+   "field": "endgame",
+   "name": "Damenendspiel",
+   "name_en": "Queen endgame",
+   "aliases": [
+    "queen endgame",
+    "queen ending"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "queen-vs-rook",
+   "field": "endgame",
+   "name": "Dame gegen Turm",
+   "name_en": "Queen vs rook",
+   "aliases": [
+    "queen vs rook",
+    "queen against rook"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "queen-vs-pawns",
+   "field": "endgame",
+   "name": "Dame gegen Bauern",
+   "name_en": "Queen vs pawns",
+   "aliases": [
+    "queen vs pawn",
+    "queen against pawn",
+    "Dame gegen Bauer"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "heavy-piece-endgame",
+   "field": "endgame",
+   "name": "Schwerfigurenendspiel",
+   "name_en": "Heavy piece endgame",
+   "aliases": [
+    "heavy piece endgame",
+    "queen and rook endgame",
+    "Dame und Turm"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "other-endgame",
+   "field": "endgame",
+   "name": "Sonstiges Endspiel",
+   "name_en": "Other endgame",
+   "aliases": [
+    "other endgame",
+    "mixed endgame",
+    "gemischtes Endspiel"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "king-activity",
+   "field": "technique",
+   "name": "Königsaktivität",
+   "name_en": "King activity",
+   "aliases": [
+    "king activity",
+    "active king",
+    "aktiver König",
+    "Koenigsaktivitaet"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "opposition",
+   "field": "technique",
+   "name": "Opposition",
+   "name_en": "Opposition",
+   "aliases": [
+    "opposition",
+    "direct opposition",
+    "direkte Opposition"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "distant-opposition",
+   "field": "technique",
+   "name": "Fernopposition",
+   "name_en": "Distant opposition",
+   "aliases": [
+    "distant opposition",
+    "Fern-Opposition"
+   ],
+   "parent": "opposition",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "key-squares",
+   "field": "technique",
+   "name": "Schlüsselfelder",
+   "name_en": "Key squares",
+   "aliases": [
+    "key squares",
+    "critical squares",
+    "kritische Felder",
+    "Schluesselfelder"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "corresponding-squares",
+   "field": "technique",
+   "name": "Korrespondierende Felder",
+   "name_en": "Corresponding squares",
+   "aliases": [
+    "corresponding squares",
+    "Feldentsprechung",
+    "relative opposition"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "triangulation",
+   "field": "technique",
+   "name": "Dreiecksmanöver",
+   "name_en": "Triangulation",
+   "aliases": [
+    "triangulation",
+    "Dreiecksmanoever",
+    "Tempoverlust"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "rule-of-square",
+   "field": "technique",
+   "name": "Quadratregel",
+   "name_en": "Rule of the square",
+   "aliases": [
+    "rule of the square",
+    "square of the pawn",
+    "Quadrat"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "shouldering",
+   "field": "technique",
+   "name": "Abdrängen",
+   "name_en": "Shouldering",
+   "aliases": [
+    "shouldering",
+    "body check",
+    "Abdraengen",
+    "Schulterstoß"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "reti-manoeuvre",
+   "field": "technique",
+   "name": "Réti-Manöver",
+   "name_en": "Réti manoeuvre",
+   "aliases": [
+    "Réti manoeuvre",
+    "Reti maneuver",
+    "Reti manoeuvre",
+    "Réti-Manoever",
+    "zwei Fliegen mit einer Klappe"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "pawn-race",
+   "field": "technique",
+   "name": "Bauernwettlauf",
+   "name_en": "Pawn race",
+   "aliases": [
+    "pawn race",
+    "Wettlauf"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "breakthrough",
+   "field": "technique",
+   "name": "Durchbruch",
+   "name_en": "Breakthrough",
+   "aliases": [
+    "breakthrough",
+    "Bauerndurchbruch",
+    "pawn breakthrough"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "wrong-rook-pawn",
+   "field": "technique",
+   "name": "Falscher Randbauer",
+   "name_en": "Wrong rook pawn",
+   "aliases": [
+    "wrong rook pawn",
+    "wrong-coloured bishop",
+    "falscher Läufer"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "fortress",
+   "field": "technique",
+   "name": "Festung",
+   "name_en": "Fortress",
+   "aliases": [
+    "fortress",
+    "Festungsstellung"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "lucena",
+   "field": "technique",
+   "name": "Lucena-Stellung",
+   "name_en": "Lucena position",
+   "aliases": [
+    "Lucena position",
+    "Lucena"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "building-bridge",
+   "field": "technique",
+   "name": "Brückenbau",
+   "name_en": "Building a bridge",
+   "aliases": [
+    "building a bridge",
+    "bridge building",
+    "Brueckenbau",
+    "Brücke bauen"
+   ],
+   "parent": "lucena",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "philidor",
+   "field": "technique",
+   "name": "Philidor-Stellung",
+   "name_en": "Philidor position",
+   "aliases": [
+    "Philidor position",
+    "third-rank defence",
+    "Philidor-Verteidigung",
+    "Drittreihenverteidigung"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "vancura",
+   "field": "technique",
+   "name": "Vančura-Stellung",
+   "name_en": "Vančura position",
+   "aliases": [
+    "Vancura position",
+    "Vancura",
+    "Vančura"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "short-side",
+   "field": "technique",
+   "name": "Kurze Seite",
+   "name_en": "Short side",
+   "aliases": [
+    "short side",
+    "long side defence",
+    "lange Seite",
+    "Seitenschach"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "rook-behind-passer",
+   "field": "technique",
+   "name": "Turm hinter den Freibauern",
+   "name_en": "Rook behind the passed pawn",
+   "aliases": [
+    "rook behind passed pawn",
+    "rook behind the passed pawn",
+    "Tarrasch rule",
+    "Tarrasch-Regel"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "cutting-off",
+   "field": "technique",
+   "name": "Abschneiden des Königs",
+   "name_en": "Cutting off the king",
+   "aliases": [
+    "cutting off the king",
+    "cut off",
+    "König abschneiden"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "basic-mate",
+   "field": "technique",
+   "name": "Elementares Matt",
+   "name_en": "Basic checkmate",
+   "aliases": [
+    "basic checkmate",
+    "elementary mate",
+    "Mattführung",
+    "Grundmatt"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "mate-queen",
+   "field": "technique",
+   "name": "Matt mit Dame",
+   "name_en": "Queen mate",
+   "aliases": [
+    "queen mate",
+    "KQ vs K",
+    "Damenmatt"
+   ],
+   "parent": "basic-mate",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "mate-rook",
+   "field": "technique",
+   "name": "Matt mit Turm",
+   "name_en": "Rook mate",
+   "aliases": [
+    "rook mate",
+    "KR vs K",
+    "Turmmatt"
+   ],
+   "parent": "basic-mate",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "mate-two-bishops",
+   "field": "technique",
+   "name": "Matt mit zwei Läufern",
+   "name_en": "Two bishops mate",
+   "aliases": [
+    "two bishops mate",
+    "KBB vs K",
+    "Läufermatt"
+   ],
+   "parent": "basic-mate",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "mate-bishop-knight",
+   "field": "technique",
+   "name": "Läufer-Springer-Matt",
+   "name_en": "Bishop and knight mate",
+   "aliases": [
+    "bishop and knight mate",
+    "KBN vs K",
+    "Delétang",
+    "W-Manöver",
+    "W manoeuvre"
+   ],
+   "parent": "basic-mate",
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "kids",
+   "field": "level",
+   "name": "Für Kinder",
+   "name_en": "For kids",
+   "aliases": [
+    "for kids",
+    "kids",
+    "children",
+    "Kinder",
+    "junior",
+    "Jugend",
+    "Schüler"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "brilliant",
+   "field": "moment",
+   "name": "Brillanter Zug",
+   "name_en": "Brilliant move",
+   "aliases": [
+    "brilliant",
+    "!!",
+    "Glanzzug",
+    "brillant"
+   ],
+   "parent": null,
+   "description": "Ein überraschender, starker Zug – oft ein Opfer.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "beginner",
+   "field": "level",
+   "name": "Anfänger",
+   "name_en": "Beginner",
+   "aliases": [
+    "beginner",
+    "novice",
+    "Einsteiger",
+    "Anfaenger"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "good-move",
+   "field": "moment",
+   "name": "Starker Zug",
+   "name_en": "Good move",
+   "aliases": [
+    "good move",
+    "great move",
+    "!",
+    "guter Zug"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "intermediate",
+   "field": "level",
+   "name": "Fortgeschrittene",
+   "name_en": "Intermediate",
+   "aliases": [
+    "intermediate",
+    "Fortgeschritten"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "interesting-move",
+   "field": "moment",
+   "name": "Interessanter Zug",
+   "name_en": "Interesting move",
+   "aliases": [
+    "interesting",
+    "!?",
+    "interessant"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "club",
+   "field": "level",
+   "name": "Klubspieler",
+   "name_en": "Club player",
+   "aliases": [
+    "club player",
+    "club",
+    "Vereinsspieler",
+    "Klub"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "only-move",
+   "field": "moment",
+   "name": "Einziger Zug",
+   "name_en": "Only move",
+   "aliases": [
+    "only move",
+    "forced",
+    "□",
+    "einzig",
+    "erzwungen"
+   ],
+   "parent": null,
+   "description": "Nur dieser Zug hält die Stellung bzw. gewinnt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "advanced",
+   "field": "level",
+   "name": "Turnierspieler",
+   "name_en": "Advanced",
+   "aliases": [
+    "advanced",
+    "expert",
+    "Experte",
+    "Meister",
+    "strong players",
+    "Turnier"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  },
+  {
+   "key": "critical-moment",
+   "field": "moment",
+   "name": "Kritischer Moment",
+   "name_en": "Critical moment",
+   "aliases": [
+    "critical",
+    "kritisch",
+    "Schlüsselmoment",
+    "key moment"
+   ],
+   "parent": null,
+   "description": "Ein Zug, bei dem es nur eine gute Fortsetzung gibt.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "turning-point",
+   "field": "moment",
+   "name": "Wendepunkt",
+   "name_en": "Turning point",
+   "aliases": [
+    "turning point",
+    "Wende",
+    "Umschwung"
+   ],
+   "parent": null,
+   "description": "Der Vorteil wechselt die Seite.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "tactical-explosion",
+   "field": "moment",
+   "name": "Taktische Explosion",
+   "name_en": "Tactical explosion",
+   "aliases": [
+    "explosion",
+    "Schlagabtausch",
+    "Abtauschorgie",
+    "melee"
+   ],
+   "parent": null,
+   "description": "Viele Schlagzüge hintereinander.",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 3
+  },
+  {
+   "key": "inaccuracy",
+   "field": "moment",
+   "name": "Ungenauigkeit",
+   "name_en": "Inaccuracy",
+   "aliases": [
+    "inaccuracy",
+    "?!",
+    "ungenau",
+    "zweifelhaft",
+    "dubious"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "mistake",
+   "field": "moment",
+   "name": "Fehler",
+   "name_en": "Mistake",
+   "aliases": [
+    "mistake",
+    "?",
+    "Fehler"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "blunder",
+   "field": "moment",
+   "name": "Grober Fehler",
+   "name_en": "Blunder",
+   "aliases": [
+    "blunder",
+    "??",
+    "Patzer",
+    "grober Fehler"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "missed-win",
+   "field": "moment",
+   "name": "Verpasster Gewinn",
+   "name_en": "Missed win",
+   "aliases": [
+    "missed win",
+    "verpasst",
+    "Gewinn vergeben"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "missed-mate",
+   "field": "moment",
+   "name": "Verpasstes Matt",
+   "name_en": "Missed mate",
+   "aliases": [
+    "missed mate",
+    "Matt übersehen",
+    "verpasstes Matt"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "allows-mate",
+   "field": "moment",
+   "name": "Erlaubt Matt",
+   "name_en": "Allows mate",
+   "aliases": [
+    "allows mate",
+    "lässt Matt zu",
+    "Matt zugelassen"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 1
+  },
+  {
+   "key": "classic",
+   "field": "custom",
+   "name": "Klassiker",
+   "name_en": "Classic",
+   "aliases": [
+    "classic",
+    "berühmt",
+    "famous",
+    "historisch"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 2
+  },
+  {
+   "key": "composed-study",
+   "field": "custom",
+   "name": "Komponierte Studie",
+   "name_en": "Composed study",
+   "aliases": [
+    "study",
+    "composed study",
+    "Studie",
+    "Komposition",
+    "endgame study",
+    "Endspielstudie"
+   ],
+   "parent": null,
+   "description": "",
+   "task": "",
+   "task_en": "",
+   "base_difficulty": 4
+  }
+ ]
+}
