@@ -205,9 +205,11 @@ accept = ["[", "]"]
 [context."state.solving"]
 "h" = "train.hint"
 "s" = "train.giveup"
+"Q" = "train.quit"
 
 [context."state.feedback"]
 "enter" = "train.next"
+"Q" = "train.quit"
 "left" = "train.replay back"
 "right" = "train.replay forward"
 "h" = "train.replay back"

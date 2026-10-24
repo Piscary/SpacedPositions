@@ -1846,10 +1846,11 @@
    "handler": "client"
   },
   "train.quit": {
-   "title": "Quit the session",
+   "title": "Stop the session and see the result",
    "group": "Train",
    "aliases": [
-    "quit-session"
+    "quit-session",
+    "stop"
    ],
    "when": "train.running",
    "reason": "no session running",
@@ -2881,11 +2882,19 @@
    "s": {
     "command": "train.giveup",
     "args": []
+   },
+   "Q": {
+    "command": "train.quit",
+    "args": []
    }
   },
   "state.feedback": {
    "enter": {
     "command": "train.next",
+    "args": []
+   },
+   "Q": {
+    "command": "train.quit",
     "args": []
    },
    "left": {

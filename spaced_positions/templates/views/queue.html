@@ -19,7 +19,7 @@
       <div class="train__pieces mono" data-hud-pieces hidden></div>
     </div>
     <div class="train__last muted" data-hud-last></div>
-    <div class="actionbar">{% cmd "train.hint" keys_in="state.solving" %}{% cmd "train.giveup" keys_in="state.solving" %}{% cmd "board.entry" %}</div>
+    <div class="actionbar">{% cmd "train.hint" keys_in="state.solving" %}{% cmd "train.giveup" keys_in="state.solving" %}{% cmd "board.entry" %}{% cmd "train.quit" label="Stop" variant="ghost" keys_in="state.solving" %}</div>
   </div>
 
   <div class="train__feedback" data-train-feedback hidden>
@@ -31,7 +31,7 @@
     <div class="muted" data-fb-source></div>
     <div class="actionbar">
       {% cmd "train.next" variant="primary" keys_in="state.feedback" %}{% cmd "train.replay" args="back" display="compact" icon="←" keys_in="state.feedback" %}{% cmd "train.replay" args="forward" display="compact" icon="→" keys_in="state.feedback" %}
-      {% cmd "train.retry" keys_in="state.feedback" %}{% cmd "train.flag" keys_in="state.feedback" %}{% cmd "train.analyse" keys_in="state.feedback" %}{% cmd "train.tag" keys_in="state.feedback" %}
+      {% cmd "train.retry" keys_in="state.feedback" %}{% cmd "train.flag" keys_in="state.feedback" %}{% cmd "train.analyse" keys_in="state.feedback" %}{% cmd "train.tag" keys_in="state.feedback" %}{% cmd "train.quit" label="Stop" variant="ghost" keys_in="state.feedback" %}
     </div>
   </div>
 

@@ -219,12 +219,14 @@ reference is `spec/08-keymap.md`.
 |---|---|---|
 | `h` | Hint (the puzzle counts as missed) | `train.hint` |
 | `s` | Show the solution (give up) | `train.giveup` |
+| `Q` | Stop the session and see the result | `train.quit` |
 
 ## state.feedback
 
 | Keys | Command | Id |
 |---|---|---|
 | `↵` | Next puzzle | `train.next` |
+| `Q` | Stop the session and see the result | `train.quit` |
 | `←` | Replay the solution back | `train.replay` |
 | `→` | Replay the solution forward | `train.replay` |
 | `h` | Replay the solution back | `train.replay` |

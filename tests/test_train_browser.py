@@ -157,3 +157,27 @@ def test_make_a_puzzle_from_a_board_line(page):
     keys(page, "Enter")
     page.wait_for_function("document.getElementById('status-message').textContent.startsWith('Puzzle saved')")
     assert Puzzle.objects.get().cards.get().line == ["e2e4", "e7e5", "g1f3"]
+
+
+def test_stop_a_review_after_a_few_cards(train):
+    """Q (or the Stop button) ends a session at once: what was done counts, the rest stays due."""
+    from spaced_positions.training.models import Card
+
+    keys(train, "r")
+    wait_state(train, "solving")
+    solve_typed(train)
+    wait_state(train, "feedback")
+    keys(train, "Shift+Q")  # on the feedback screen
+    wait_state(train, "result")
+    train.wait_for_function("document.getElementById('status-message').textContent.startsWith('Stopped after 1 puzzle')")
+    assert "not reached stay due" in train.inner_text("#status-message")
+    assert Attempt.objects.count() == 1 and Session.objects.get().ended_at is not None
+    # again, stopping while solving, with the button
+    keys(train, "l")
+    wait_state(train, "launcher")
+    keys(train, "r")
+    wait_state(train, "solving")
+    train.click("[data-train-hud] [data-cmd='train.quit']")
+    wait_state(train, "result")
+    assert Attempt.objects.count() == 1  # the card on the board was not counted
+    assert Card.objects.filter(attempt_log__isnull=True).exists()  # the rest stays as it was

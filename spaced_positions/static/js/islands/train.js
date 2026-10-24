@@ -584,7 +584,14 @@ async function finish({ quiet = false } = {}) {
   focusPane(T.el.closest("[data-pane]").dataset.pane)
 }
 
-handle("train.quit", () => finish())
+handle("train.quit", () => {
+  if (!T.session || !["solving", "feedback"].includes(T.state)) return false
+  const done = T.results.filter((r) => !r.retry).length
+  const left = T.session.mode === "review" ? Math.max(0, T.session.total - done) : 0
+  T.paused = null
+  status(`Stopped after ${done} puzzle${done === 1 ? "" : "s"}${left ? ` · the ${left} not reached stay due` : ""}`, { timeout: 5000 })
+  return finish()
+})
 
 handle("train.launcher", async () => {
   const html = await fetch("/train/launcher/").then((r) => r.text()).catch(() => null)

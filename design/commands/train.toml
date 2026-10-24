@@ -99,9 +99,9 @@ title = "Copy the result"
 group = "Train"
 
 ["train.quit"]
-title = "Quit the session"
+title = "Stop the session and see the result"
 group = "Train"
-aliases = ["quit-session"]
+aliases = ["quit-session", "stop"]
 when = "train.running"
 reason = "no session running"
 

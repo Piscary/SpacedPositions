@@ -145,6 +145,7 @@ context per Train state, checked after layers and before the focused view (02 §
 | `h` | Hint (1st: the piece, 2nd: the move); counts as missed |
 | `s` | Show the solution (give up) |
 | `f` | Flip |
+| `Q` | Stop the session now and see the result (also the Stop button, `:stop`); the card on the board isn't counted, the cards not reached stay due |
 | `⎋` | Pause line: `↵` resume · `q` quit · `r` restart (Storm: `quit? y / n`) |
 
 **Feedback**
@@ -156,6 +157,7 @@ context per Train state, checked after layers and before the focused view (02 §
 | `r` | Retry (not scored) |
 | `!` | Flag the puzzle as broken |
 | `a` · `t` · `e` | Analyse the position at the puzzle's start · tag (phase 4) · edit (Analyse with the Puzzle section open) |
+| `Q` | Stop the session and see the result (also the Stop button) |
 | `⎋` | `↵` next · `q` end the session and see the result |
 
 **Result**

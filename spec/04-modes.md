@@ -104,6 +104,9 @@ Fullscreen by default (app bar hidden, status line stays). Nothing on screen tha
   scheduling and ends the combo (honest data).
 - `s` show solution (= give up), `f` flip, `Esc` opens the **pause line** in the status line:
   `Paused · Enter resume · q quit · r restart` (Storm's clock cannot be paused, `Esc` there asks `quit? y / n`).
+- `Q` (or the Stop button next to Hint and Solution, and on the feedback screen) stops the session at once: a few
+  cards and done. What was solved counts and the result shows it; the card on the board is not counted and the
+  cards not reached stay due.
 
 ### Feedback (Review, Streak, custom)
 
