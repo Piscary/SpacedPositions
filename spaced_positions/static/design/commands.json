@@ -79,6 +79,36 @@
    "reason": "no position open: :analyse",
    "handler": "client"
   },
+  "analysis.moments": {
+   "title": "Find the key moments (engine, python-chess, annotations)",
+   "group": "Analyse",
+   "aliases": [
+    "moments"
+   ],
+   "handler": "client",
+   "when": "analysis.loaded",
+   "reason": "no position open: :analyse"
+  },
+  "analysis.fold": {
+   "title": "Fold or open the variation",
+   "group": "Analyse",
+   "aliases": [
+    "fold"
+   ],
+   "when": "analysis.loaded",
+   "reason": "no position open: :analyse",
+   "handler": "client"
+  },
+  "analysis.foldall": {
+   "title": "Fold or open all variations",
+   "group": "Analyse",
+   "aliases": [
+    "fold-all"
+   ],
+   "when": "analysis.loaded",
+   "reason": "no position open: :analyse",
+   "handler": "client"
+  },
   "analysis.mainline": {
    "title": "Back to the main line",
    "group": "Analyse",
@@ -399,6 +429,16 @@
    "when": "view.board",
    "reason": "needs a board",
    "undoable": true,
+   "handler": "client"
+  },
+  "board.lichess": {
+   "title": "Open the position in lichess",
+   "group": "Board",
+   "aliases": [
+    "lichess"
+   ],
+   "when": "view.board || mode.analyse",
+   "reason": "needs a board",
    "handler": "client"
   },
   "board.copyfen": {
@@ -935,6 +975,110 @@
    "when": "library.hasTarget",
    "reason": "select positions in the Library, or open one in Analyse"
   },
+  "library.edit": {
+   "title": "Edit the selected players, sources or tags",
+   "group": "Library",
+   "aliases": [
+    "edit"
+   ],
+   "args": [
+    {
+     "name": "values",
+     "type": "text"
+    }
+   ],
+   "handler": "both",
+   "undoable": true
+  },
+  "tag.new": {
+   "title": "New tag",
+   "group": "Library",
+   "aliases": [
+    "new-tag"
+   ],
+   "args": [
+    {
+     "name": "name",
+     "type": "text"
+    }
+   ],
+   "handler": "server",
+   "undoable": true
+  },
+  "player.new": {
+   "title": "New player",
+   "group": "Library",
+   "aliases": [
+    "new-player"
+   ],
+   "args": [
+    {
+     "name": "name",
+     "type": "text"
+    }
+   ],
+   "handler": "server",
+   "undoable": true
+  },
+  "source.new": {
+   "title": "New source",
+   "group": "Library",
+   "aliases": [
+    "new-source"
+   ],
+   "args": [
+    {
+     "name": "title",
+     "type": "text"
+    }
+   ],
+   "handler": "server",
+   "undoable": true
+  },
+  "library.delete": {
+   "title": "Delete the selected players, sources or tags nothing uses",
+   "group": "Library",
+   "aliases": [
+    "delete"
+   ],
+   "args": [
+    {
+     "name": "which",
+     "type": "text",
+     "optional": true
+    }
+   ],
+   "handler": "both",
+   "undoable": true
+  },
+  "library.recreate": {
+   "title": "Bring deleted players, sources or tags back (undo)",
+   "group": "Library",
+   "args": [
+    {
+     "name": "change",
+     "type": "text"
+    }
+   ],
+   "handler": "server",
+   "hidden": true,
+   "internal": true
+  },
+  "player.link": {
+   "title": "Link a name on games to a player",
+   "group": "Library",
+   "aliases": [
+    "player-link"
+   ],
+   "args": [
+    {
+     "name": "link",
+     "type": "text"
+    }
+   ],
+   "handler": "server",
+   "undoable": true
+  },
   "pane.focus.next": {
    "title": "Focus the next pane",
    "group": "Panes",
@@ -1242,6 +1386,67 @@
    "group": "Sections",
    "when": "pane.sections",
    "reason": "this pane has no sections",
+   "handler": "client"
+  },
+  "settings.step": {
+   "title": "Change the setting (next / previous value)",
+   "group": "Settings",
+   "args": [
+    {
+     "name": "step",
+     "type": "enum",
+     "values": [
+      "next",
+      "prev"
+     ]
+    }
+   ],
+   "when": "view.settings",
+   "reason": "in the Settings pane",
+   "handler": "client"
+  },
+  "settings.edit": {
+   "title": "Edit the setting (or choose the theme)",
+   "group": "Settings",
+   "when": "view.settings",
+   "reason": "in the Settings pane",
+   "handler": "client"
+  },
+  "settings.reset": {
+   "title": "Back to the default",
+   "group": "Settings",
+   "when": "view.settings",
+   "reason": "in the Settings pane",
+   "handler": "client"
+  },
+  "settings.keymap": {
+   "title": "Edit the keymap",
+   "group": "Settings",
+   "aliases": [
+    "keymap"
+   ],
+   "handler": "client"
+  },
+  "settings.export": {
+   "title": "Export the settings (TOML)",
+   "group": "Settings",
+   "aliases": [
+    "settings-export"
+   ],
+   "handler": "client"
+  },
+  "keymap.bind": {
+   "title": "New keys for this command",
+   "group": "Settings",
+   "when": "view.keymap",
+   "reason": "in the Keymap pane",
+   "handler": "client"
+  },
+  "keymap.unbind": {
+   "title": "Remove the keys (yours: back to the default)",
+   "group": "Settings",
+   "when": "view.keymap",
+   "reason": "in the Keymap pane",
    "handler": "client"
   },
   "layer.escape": {
@@ -1773,6 +1978,87 @@
    "group": "Style guide",
    "repeatable": true,
    "handler": "client"
+  },
+  "theme.save": {
+   "title": "Save the current colours as a theme",
+   "group": "Settings",
+   "aliases": [
+    "theme-save"
+   ],
+   "args": [
+    {
+     "name": "name",
+     "type": "text"
+    }
+   ],
+   "handler": "server"
+  },
+  "theme.delete": {
+   "title": "Delete one of your themes",
+   "group": "Settings",
+   "aliases": [
+    "theme-delete"
+   ],
+   "args": [
+    {
+     "name": "theme",
+     "type": "theme"
+    }
+   ],
+   "handler": "server"
+  },
+  "theme.export": {
+   "title": "Copy the theme as TOML",
+   "group": "Settings",
+   "aliases": [
+    "theme-export"
+   ],
+   "handler": "server"
+  },
+  "key.map": {
+   "title": "Bind keys to a command",
+   "group": "Settings",
+   "aliases": [
+    "map"
+   ],
+   "args": [
+    {
+     "name": "binding",
+     "type": "text"
+    }
+   ],
+   "handler": "server",
+   "undoable": true
+  },
+  "key.unmap": {
+   "title": "Unbind keys",
+   "group": "Settings",
+   "aliases": [
+    "unmap"
+   ],
+   "args": [
+    {
+     "name": "keys",
+     "type": "text"
+    }
+   ],
+   "handler": "server",
+   "undoable": true
+  },
+  "key.reset": {
+   "title": "Key bindings back to the defaults",
+   "group": "Settings",
+   "aliases": [
+    "map-reset"
+   ],
+   "args": [
+    {
+     "name": "keys",
+     "type": "text",
+     "optional": true
+    }
+   ],
+   "handler": "server"
   }
  },
  "keymap": {
@@ -2390,6 +2676,44 @@
     "args": []
    }
   },
+  "layer.setup-de": {
+   "b": {
+    "command": "board.piece",
+    "args": [
+     "pawn"
+    ]
+   },
+   "s": {
+    "command": "board.piece",
+    "args": [
+     "knight"
+    ]
+   },
+   "l": {
+    "command": "board.piece",
+    "args": [
+     "bishop"
+    ]
+   },
+   "t": {
+    "command": "board.piece",
+    "args": [
+     "rook"
+    ]
+   },
+   "d": {
+    "command": "board.piece",
+    "args": [
+     "queen"
+    ]
+   },
+   "k": {
+    "command": "board.piece",
+    "args": [
+     "king"
+    ]
+   }
+  },
   "state.launcher": {
    "r": {
     "command": "train.review",
@@ -2716,6 +3040,14 @@
     "command": "analysis.mainline",
     "args": []
    },
+   "z": {
+    "command": "analysis.fold",
+    "args": []
+   },
+   "Z": {
+    "command": "analysis.foldall",
+    "args": []
+   },
    "n": {
     "command": "analysis.subject",
     "args": [
@@ -2952,6 +3284,10 @@
    },
    "e": {
     "command": "library.export",
+    "args": []
+   },
+   "c": {
+    "command": "library.edit",
     "args": []
    }
   },
@@ -3220,6 +3556,54 @@
    },
    "c": {
     "command": "home.collect",
+    "args": []
+   }
+  },
+  "view.settings": {
+   "h": {
+    "command": "settings.step",
+    "args": [
+     "prev"
+    ]
+   },
+   "l": {
+    "command": "settings.step",
+    "args": [
+     "next"
+    ]
+   },
+   "left": {
+    "command": "settings.step",
+    "args": [
+     "prev"
+    ]
+   },
+   "right": {
+    "command": "settings.step",
+    "args": [
+     "next"
+    ]
+   },
+   "enter": {
+    "command": "settings.edit",
+    "args": []
+   },
+   "backspace": {
+    "command": "settings.reset",
+    "args": []
+   },
+   "K": {
+    "command": "settings.keymap",
+    "args": []
+   }
+  },
+  "view.keymap": {
+   "enter": {
+    "command": "keymap.bind",
+    "args": []
+   },
+   "backspace": {
+    "command": "keymap.unbind",
     "args": []
    }
   }

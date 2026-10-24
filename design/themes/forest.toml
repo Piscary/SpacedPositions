@@ -1,0 +1,24 @@
+name = "forest"
+label = "Forest"
+dark = true
+extends = "ink"
+pair = "sepia"
+
+[color]
+bg = "#18211b"
+bg-alt = "#1f2a22"
+surface = "#28362c"
+line = "#334437"
+text = "#dfe8dc"
+text-sub = "#93a690"
+main = "#c7d36f"
+main-text = "#18211b"
+good = "#5bd6c5"
+bad = "#ef7b6b"
+warn = "#e3b45c"
+info = "#7fb6d9"
+special = "#d7a0e0"
+
+[board]
+sq-light = "#e8ead0"
+sq-dark = "#7b9a6a"

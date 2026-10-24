@@ -8,6 +8,8 @@ import { ctx, on, status, storage, updateStatus } from "../core/context.js"
 import { setOverlayHandler } from "../core/keys.js"
 import { focusPane, switchMode } from "../core/layout.js"
 import * as lines from "../core/lines.js"
+import { sound } from "../core/sound.js"
+import { setNumber } from "../core/ticker.js"
 import { trainBoard } from "./board.js"
 
 const REPLY_MS = 280
@@ -115,7 +117,8 @@ async function start(params) {
 }
 
 handle("train.review", () => start({ mode: "review", look: "normal", side: "move" }))
-handle("train.storm", ([minutes]) => start({ mode: "storm", minutes: Number(minutes || 3), look: "normal", side: "move", pace: "medium" }))
+const pace = () => window.SPOS.settings?.["training.storm-pace"] || "medium"
+handle("train.storm", ([minutes]) => start({ mode: "storm", minutes: Number(minutes || 3), look: "normal", side: "move", pace: pace() }))
 handle("train.streak", ([lives, look]) => start({ mode: "streak", lives: Number(lives || 0), look: look || "normal", side: "move" }))
 handle("train.weakest", () => start({ mode: "streak", lives: 0, look: "normal", side: "move", weakest: true }))
 handle("train.again", () => {
@@ -125,7 +128,7 @@ handle("train.again", () => {
 })
 handle("train.custom", () => {
   const c = T.custom
-  return start({ mode: c.mode, look: c.look, side: c.side, lives: Number(c.lives), first_move: c.first, minutes: 3, pace: "medium", filter: c.filter })
+  return start({ mode: c.mode, look: c.look, side: c.side, lives: Number(c.lives), first_move: c.first, minutes: 3, pace: pace(), filter: c.filter })
 })
 handle("train.set", ([option, value]) => {
   if (option === "first") T.custom.first = !T.custom.first
@@ -259,6 +262,7 @@ function solved() {
   const ms = elapsed(c)
   const success = !c.hinted
   trainBoard().flash("good")
+  sound(success ? "good" : "bad")
   record(c, success, ms)
   if (c.p.retry) return feedback(c, success, ms)
   if (success) {
@@ -286,6 +290,7 @@ function miss({ wrong = "", gaveUp = false }) {
   c.gaveUp = gaveUp
   const ms = elapsed(c)
   record(c, false, ms)
+  sound("bad")
   if (c.p.retry) return feedback(c, false, ms)
   T.failed++
   T.combo = 0
@@ -352,8 +357,8 @@ function pieceList(fen) {
 function renderHud() {
   if (!T.session || !T.el) return
   const c = T.current
-  $("[data-hud-solved]").textContent = T.session.mode === "streak" ? T.streak : T.solved
-  $("[data-hud-failed]").textContent = T.failed
+  setNumber($("[data-hud-solved]"), T.session.mode === "streak" ? T.streak : T.solved)
+  setNumber($("[data-hud-failed]"), T.failed)
   $("[data-hud-progress]").textContent = T.session.mode === "review" ? `${T.results.length + (c ? 1 : 0)} / ${T.session.total}` : ""
   if (T.session.mode === "streak") $("[data-hud-lives]").textContent = "♥".repeat(T.lives) + "♡".repeat(Math.max(0, Number(T.session.options.lives || 0) - T.lives))
   if (T.session.mode === "storm") {
@@ -573,6 +578,7 @@ async function finish({ quiet = false } = {}) {
   const html = await fetch(`/train/r/${session.session}/result/`).then((r) => r.text()).catch(() => "")
   const box = $("[data-train-result]")
   box.innerHTML = html
+  if (box.querySelector(".achievement")) sound("record")
   window.htmx?.process(box)
   setState("result")
   focusPane(T.el.closest("[data-pane]").dataset.pane)

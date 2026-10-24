@@ -39,7 +39,7 @@ def focus(page, view):
 
 def cursor_san(page):
     return page.evaluate("""(() => { const el = document.querySelector('#ws-analyse .mt-move.is-cursor')
-      return el ? el.childNodes[1].textContent : null })()""")
+      return el ? el.querySelector('.mt-san').textContent : null })()""")
 
 
 def board_ply(page):

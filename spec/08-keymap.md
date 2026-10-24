@@ -187,6 +187,7 @@ Mode-level: these work whether the board, the moves or the inspector pane has fo
 | `g g` / `G` | Start position / end of the line |
 | `g p` / `g n` | Previous / next branch point |
 | `M` | Back to the main line |
+| `z` / `Z` | Fold or open the variation (in a variation: that one; on the main line: the alternatives to this or the next move) / fold or open all; the cursor never hides in a folded variation |
 | `n` / `N` | Next / previous subject (when opened from a list) |
 | `1`–`7` | `!  ?  !!  ??  !?  ?!  □` (toggle) |
 | `a` | Annotation menu: all move, position and evaluation symbols (`+−  ±  ⩲  =  ∞  ⩱  ∓  −+` …) |
@@ -211,8 +212,9 @@ line up to it to the analysis.
 Without a key, command line only: `:analyse <title>` (open a position; the completions search titles and sources),
 `:engine.lines <1–5>`, `:new-position` (the position after this move becomes a position of its own, linked to its
 game; `:new-position moves` takes the continuation along), `:untag-move`, `:detect` (python-chess tag detection, also
-on a Library selection), `:evaluate [depth]` (the engine over the main line, for the eval graph). Later: `:lichess`
-(open in lichess, phase 6).
+on a Library selection), `:evaluate [depth]` (the engine over the main line, for the eval graph), `:moments` (the
+key moments of the main line as move tags: the local engine or the stored evaluations, python-chess, the
+annotator's symbols; 11 §1), `:lichess` (open the position in lichess).
 
 ## Collect
 
@@ -247,14 +249,16 @@ was imported to the trash.
 | `1`–`6` | Positions · Games · Puzzles/cards · Players · Sources · Tags |
 | `/` | Query bar |
 | all list keys | above |
-| `t T d r a y e` | Bulk keys (lists above) |
+| `t T d r a y e` | Bulk keys (lists above); on players, sources and tags `d` deletes the ones nothing uses |
+| `c` | Edit the selected players, sources or tags (`:edit field=value …`) |
 | `↵` | Positions and puzzles open in Analyse (the results are the subject list), games too; a player, source or tag shows its positions or games |
 | Filters pane: `↵` | Toggle the facet (adds/removes the query term) |
 | Filters pane: `-` | Exclude the facet (`-motif:…`) |
 
 In the query bar: `⇥` takes the completion (keys, tags with their place in the hierarchy, sources, players, saved
 queries), `↑ ↓` choose one, `↵` goes to the results, `Esc` leaves the bar. `:save-query <name>`, `:trash-empty`,
-`:import`.
+`:import`, `:edit`, `:new-tag`, `:new-player`, `:new-source`, `:delete`, `:player-link "<name>" [@player]` (04 ·
+Library).
 
 ## Stats
 
@@ -271,11 +275,18 @@ queries), `↑ ↓` choose one, `↵` goes to the results, `Esc` leaves the bar.
 
 | Key | Command |
 |---|---|
-| `j k` | Rows |
-| `h l` | Change the value (segmented, stepper, list with live preview) |
-| `↵` | Edit / apply |
+| `j k` | Rows (on a theme: live preview) |
+| `h l` | Step the value (on/off, a choice, a number) |
+| `↵` | Edit on the command line (`:set name=…`) · on a theme: choose it |
+| `⌫` | Reset to the default |
 | `/` | Filter settings |
 | `K` | Keymap editor |
+| Keymap editor: `↵` | Record new keys for the command (up to three, `↵` keeps, `Esc` cancels) |
+| Keymap editor: `⌫` | Remove your binding, or unmap the default one |
+
+Command line: `:set <name>=<value>` (tokens and settings), `:unset <name>`, `:theme-save <name>`,
+`:theme-delete <name>`, `:theme-export`, `:map [@context] <keys> <command> [args]`, `:unmap [@context] <keys>`,
+`:map-reset [keys]`.
 
 ## Board (any board pane)
 
@@ -294,7 +305,7 @@ queries), `↑ ↓` choose one, `↵` goes to the results, `Esc` leaves the bar.
 
 | Key | Command |
 |---|---|
-| `1`–`6` · `p n b r q k` | Piece to place |
+| `1`–`6` · `p n b r q k` | Piece to place (`board.letters = de`: `b s l t d k`) |
 | `c` | Switch colour · Shift+click places the other colour |
 | `x` / `h` | Eraser / hand |
 | `X` / `I` | Clear / initial position |

@@ -7,6 +7,7 @@
 import { Chess } from "../../vendor/chess.js"
 import { pushUndo } from "./commands.js"
 import { ctx, emit, on, status } from "./context.js"
+import { sound } from "./sound.js"
 
 export const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 const lines = new Map() // "mode:key" → line
@@ -55,6 +56,7 @@ export function setLine(key, next, { undo = null, persist = true } = {}) {
 
 /** Play a move (chess.js verbose move) at the line's current ply. */
 export function play(key, move) {
+  sound(move.captured ? "capture" : "move")
   if (delegates.has(key)) return delegates.get(key).play(move)
   const line = clone(getLine(key))
   const replaced = line.moves.length - line.ply

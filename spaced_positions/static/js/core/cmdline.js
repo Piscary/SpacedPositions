@@ -94,7 +94,10 @@ function completions(type) {
       return Object.entries(window.SPOS.views).map(([k, v]) => ({ value: k, label: `${v.label}${v.phase ? ` · phase ${v.phase}` : ""}` }))
     case "token":
     case "tokenname":
-      return Object.entries(themes.schema).map(([k, v]) => ({ value: type === "token" ? `${k}=` : k, label: v.description }))
+      return [
+        ...Object.entries(themes.schema).map(([k, v]) => ({ value: type === "token" ? `${k}=` : k, label: v.description })),
+        ...(window.SPOS.settingsSchema || []).map((s) => ({ value: type === "token" ? `${s.name}=` : s.name, label: s.help })),
+      ]
     case "layout":
       return layoutCache.map((name) => ({ value: name, label: "saved layout" }))
     case "pieceset":

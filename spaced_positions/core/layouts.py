@@ -134,7 +134,16 @@ VIEWS = {
             hints=(("pane.insert", "edit"), ("board.copyfen", "copy FEN"), ("board.copypgn", "copy PGN"), ("form.submit", "show what you pasted")),
         ),
         View("tags", "Tags", "t", 4, "The tag vocabulary."),
-        View("settings", "Settings", None, 6, "Every setting, searchable."),
+        View(
+            "settings", "Settings", ",", 0, "Every setting, searchable: themes, colours, type, board, keys, training, engine, data.",
+            "views/settings.html", list_view=True,
+            hints=(("search.open", "search"), ("settings.step next", "change"), ("settings.edit", "edit"), ("settings.reset", "reset"),
+                   ("section.next", "next section")),
+        ),
+        View(
+            "keymap", "Keymap", "K", 0, "Every command and its keys: ↵ binds new keys.", "views/keymap.html", list_view=True,
+            hints=(("search.open", "search"), ("keymap.bind", "new keys"), ("keymap.unbind", "remove")),
+        ),
         View(
             "today", "Today", "h", 0, "What to do now: due cards, one-key sessions, today's numbers, the pattern library.",
             "views/today.html",
@@ -187,7 +196,7 @@ DEFAULTS = {
     "collect": split("row", [55, 45], pane("board", "A"), split("col", [55, 45], pane("entry"), pane("pgn", "A"))),
     "library": split("row", [20, 50, 30], pane("filters", "A"), pane("library", "A"), pane("board", "A")),
     "stats": pane("chart"),
-    "settings": split("row", [65, 35], pane("settings"), pane("welcome")),
+    "settings": split("row", [62, 38], pane("settings"), pane("keymap")),
     "ui": split("row", [56, 44], pane("components"), split("col", [42, 58], pane("demo", "A"), pane("board", "A"))),
 }
 
@@ -204,6 +213,7 @@ OLD_DEFAULTS = {
     "collect": [],
     "home": [split("row", [55, 45], pane("welcome"), pane("demo", "A"))],
     "stats": [split("row", [60, 40], pane("chart"), pane("welcome"))],
+    "settings": [split("row", [65, 35], pane("settings"), pane("welcome"))],
 }
 
 

@@ -1,7 +1,7 @@
 // Boot: read the registry the server put into the page, start the keys, take over the workspace.
 
 import { handle, setRegistry, setTeachKeys } from "./core/commands.js"
-import { ctx, emit, on, setLayer, status, storage } from "./core/context.js"
+import { ctx, emit, on, setLayer, status } from "./core/context.js"
 import { cancelPending, initKeys, keyPerf } from "./core/keys.js"
 import { initWorkspace, restoreToggles } from "./core/layout.js"
 import { escapeSelection } from "./core/lists.js"
@@ -13,16 +13,29 @@ import "./core/scroll.js"
 import { detect } from "./core/paste.js"
 import { loadJournal } from "./core/analysis.js"
 import { announce } from "./core/charts.js"
+import { importSettings } from "./core/settings.js"
 
 const boot = JSON.parse(document.getElementById("boot").textContent)
 // Modules may have added to window.SPOS while they loaded (imports run first): add, don't replace.
-Object.assign((window.SPOS ||= {}), { views: boot.views, modes: boot.modes, themes: boot.themes, tokens: boot.tokens, keyPerf, ctx })
+Object.assign((window.SPOS ||= {}), {
+  views: boot.views, modes: boot.modes, themes: boot.themes, tokens: boot.tokens, settings: boot.settings,
+  settingsSchema: boot.settingsSchema, keyPerf, ctx,
+})
+
+/** Settings that the page applies itself (spec 07 §5); modules read window.SPOS.settings and listen to "settings". */
+function applySettings(values) {
+  window.SPOS.settings = values
+  document.documentElement.dataset.keycaps = values["keys.keycaps"]
+  document.documentElement.dataset.letters = values["board.letters"]
+  setTeachKeys(values["keys.teach"] !== false)
+  emit("settings", values)
+}
 
 setRegistry(boot.registry)
 ctx.mode = boot.mode
 ctx.theme = boot.theme
 ctx.launched = boot.launched
-setTeachKeys(storage("teachKeys") !== false)
+applySettings(boot.settings)
 
 handle("layer.escape", () => {
   cancelPending()
@@ -48,6 +61,13 @@ handle("form.submit", () => {
     detect(field.value)
     return
   }
+  if (form.hasAttribute("data-settings-import")) {
+    const field = form.querySelector("textarea")
+    document.activeElement?.blur()
+    setLayer("normal")
+    importSettings(field.value)
+    return
+  }
   if (form.hasAttribute("data-comment-form")) {
     document.activeElement?.blur() // leaving the field saves the comment (core/analysis.js)
     setLayer("normal")
@@ -63,11 +83,17 @@ handle("form.submit", () => {
 })
 
 on("effects", (effects) => {
+  if (effects.settings) applySettings(effects.settings)
+  if (effects.registry) setRegistry(effects.registry) // :map, :unmap: the keys work at once
+  if (effects.themes) window.SPOS.themes.themes = effects.themes
+  if (effects.copy) navigator.clipboard?.writeText(effects.copy).catch(() => status("The browser didn't allow copying", { kind: "error" }))
   if (effects.theme) {
     document.getElementById("theme").textContent = effects.theme.css
     ctx.theme = effects.theme.name
     window.SPOS.tokens = effects.theme.tokens
     document.documentElement.dataset.pieces = effects.theme.tokens["piece-set"] || "cburnett"
+    document.documentElement.toggleAttribute("data-figurines", effects.theme.tokens.figurines === true)
+    document.documentElement.dataset.coords = effects.theme.tokens["board-coords"] || "inside"
     for (const img of document.querySelectorAll("img.miniboard")) {
       const url = new URL(img.src)
       url.searchParams.set("t", effects.theme.boardHash)

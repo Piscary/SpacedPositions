@@ -217,6 +217,7 @@ def launcher(request):
 
 
 def launcher_context() -> dict:
+    from spaced_positions.core import settings as user_settings
     from spaced_positions.stats import metrics
 
     counts = selection.counts()
@@ -228,6 +229,8 @@ def launcher_context() -> dict:
         "next_due": srs.describe_due(counts["next_due"]) if counts["next_due"] else "",
         "records": records,
         "storm_best": {m: records["storm"].get(m, 0) for m in (3, 5, 10)},
+        "storm_pace": user_settings.get("training.storm-pace"),
+        "storm_paces": user_settings.BY_NAME["training.storm-pace"].values,
         "streak_best": records["streak"].get(0, 0),
         "again": selection.last_options(),
         "weakest": [f"{r['tag'].name} {round(100 * r['smoothed'])}%" for r in weak],

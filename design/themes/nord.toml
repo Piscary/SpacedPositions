@@ -1,0 +1,24 @@
+name = "nord"
+label = "Nord"
+dark = true
+extends = "ink"
+pair = "paper"
+
+[color]
+bg = "#2e3440"
+bg-alt = "#3b4252"
+surface = "#434c5e"
+line = "#4c566a"
+text = "#eceff4"
+text-sub = "#a3acbc"
+main = "#88c0d0"
+main-text = "#2e3440"
+good = "#5bd6c5"
+bad = "#e07a84"
+warn = "#ebcb8b"
+info = "#81a1c1"
+special = "#b48ead"
+
+[board]
+sq-light = "#d8dee9"
+sq-dark = "#81a1c1"

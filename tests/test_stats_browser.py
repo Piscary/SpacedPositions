@@ -71,7 +71,7 @@ def test_home_due_banner_and_sessions(page, material):
     Achievement.objects.create(kind="library", value=25, label="25 patterns in your library")
     open_mode(page, "home")
     page.wait_for_selector("#ws-home [data-banner] >> text=25 patterns in your library")
-    assert "3 new" in page.inner_text("#ws-home [data-view=today]")
+    page.wait_for_function("document.querySelector('#ws-home [data-view=today]').innerText.includes('3 new')")  # numbers count up
     page.click("#ws-home [data-view=today] .pane__title")
     with page.expect_response("**/stats/seen/"):
         keys(page, "x")

@@ -389,7 +389,24 @@ handle("library.detect", async () => {
   return bulk("library.detect", [], t)
 })
 
-handle("library.trash", libraryTarget((t) => bulk("library.trash", [], t)))
+const VOCABULARY = ["players", "sources", "tags"]
+
+// `d` on players, sources or tags deletes them (only those nothing uses); positions and games go to the trash
+handle("library.trash", libraryTarget((t) => bulk(VOCABULARY.includes(t.c) ? "library.delete" : "library.trash", [], t)))
+
+handle("library.edit", (args) => {
+  if (!args.length) return openCmdline("edit ")
+  const t = target()
+  // `:edit @tal role=model` names what it edits; otherwise the Library's selection
+  return bulk("library.edit", args, t?.el && VOCABULARY.includes(t.c) ? t : { c: "", ids: [] })
+})
+
+handle("library.delete", (args) => {
+  const t = target()
+  if (args.length) return bulk("library.delete", args, { c: "", ids: [] })
+  if (!t?.el || !VOCABULARY.includes(t.c) || !t.ids.length) return status("Select players, sources or tags in the Library (4 5 6)", { kind: "error" }) || false
+  return bulk("library.delete", [], t)
+})
 handle("library.restore", libraryTarget((t) => bulk("library.restore", [], t)))
 
 handle("library.emptytrash", () => {

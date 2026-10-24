@@ -58,3 +58,24 @@ export function matchMoves(text, moves) {
 }
 
 const isUci = (t) => /^[a-h][1-8]([a-h]([1-8][qrbn]?)?)?$/.test(t)
+
+const FIGURINES = { K: "♔", Q: "♕", R: "♖", B: "♗", N: "♘" }
+const GERMAN_OF = { K: "K", Q: "D", R: "T", B: "L", N: "S" }
+
+/** A SAN as DOM nodes whose piece letters carry their German letter and figurine; `html[data-letters]` and
+ *  `html[data-figurines]` draw those instead (07 · figurines, Settings → Board · piece letters). */
+export function sanNodes(san) {
+  const piece = (letter) => {
+    const p = Object.assign(document.createElement("span"), { className: "san-p" })
+    Object.assign(p.dataset, { de: GERMAN_OF[letter], fig: FIGURINES[letter] })
+    p.append(Object.assign(document.createElement("span"), { className: "san-l", textContent: letter }))
+    return [p]
+  }
+  const m = san.match(/^([KQRBN]?)(.*?)(=([KQRBN]))?([+#]?)$/)
+  if (!m) return [document.createTextNode(san)]
+  const out = m[1] ? piece(m[1]) : []
+  out.push(document.createTextNode(m[2]))
+  if (m[4]) out.push(document.createTextNode("="), ...piece(m[4]))
+  if (m[5]) out.push(document.createTextNode(m[5]))
+  return out
+}

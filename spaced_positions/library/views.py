@@ -30,7 +30,7 @@ KEYS = {
 VALUES = {
     "has": ["solution", "analysis", "puzzle", "comment", "source", "tags", "game", "positions"],
     "no": ["solution", "analysis", "puzzle", "comment", "source", "tags", "game"],
-    "is": ["diagram", "flagged", "draft", "trash"],
+    "is": ["diagram", "flagged", "draft", "trash", "unlinked"],
     "side": ["w", "b"],
     "state": ["new", "learning", "young", "mature", "relearning"],
     "due": ["today"],
@@ -77,6 +77,10 @@ def results(request):
     result = q.run(request.GET.get("q", ""), collection)
     total = result.queryset.count()
     rows = list(_rows(collection, result.queryset)[offset : offset + PAGE])
+    if collection == "games":
+        sparks = eval_sparks([r.pk for r in rows])
+        for r in rows:
+            r.spark = sparks.get(r.pk, "")
     info = {
         "count": total,
         "shown": offset + len(rows),
@@ -86,6 +90,43 @@ def results(request):
     return render(request, "library/results.html", {
         "collection": collection, "display": display, "rows": rows, "offset": offset, "info": info, "more": total - info["shown"],
     })
+
+
+# ── EvalGraph thumbnails (05 · EvalGraph) ─────────────────────────────────────────────────────────────────────
+
+SPARK_CLIP = 500  # centipawns: the graph's scale, as in graphs.js
+
+
+def eval_sparks(game_ids: list[int], width: int = 64, height: int = 16) -> dict[int, str]:
+    """A tiny eval graph of each game's main line (the evaluations `:evaluate` stored), as SVG points."""
+    from django.utils.html import format_html
+
+    nodes = Node.objects.filter(game_id__in=game_ids).values("id", "parent_id", "order", "game_id", "eval_cp", "eval_mate")
+    kids, roots = {}, {}
+    for n in sorted(nodes, key=lambda n: (n["order"], n["id"])):
+        if n["parent_id"] is None:
+            roots[n["game_id"]] = n
+        else:
+            kids.setdefault(n["parent_id"], []).append(n)
+    out = {}
+    for game_id, root in roots.items():
+        values, node = [], root
+        while kids.get(node["id"]):
+            node = kids[node["id"]][0]
+            if node["eval_mate"] is not None:
+                values.append(SPARK_CLIP if node["eval_mate"] > 0 or (node["eval_mate"] == 0 and (node["eval_cp"] or 0) > 0) else -SPARK_CLIP)
+            elif node["eval_cp"] is not None:
+                values.append(max(-SPARK_CLIP, min(SPARK_CLIP, node["eval_cp"])))
+        if len(values) < 2:
+            continue
+        step = width / (len(values) - 1)
+        points = " ".join(f"{i * step:.1f},{height / 2 - v / SPARK_CLIP * height / 2:.1f}" for i, v in enumerate(values))
+        out[game_id] = format_html(
+            '<svg class="spark" viewBox="0 0 {w} {h}" width="{w}" height="{h}" role="img" aria-label="Evaluation over {n} moves">'
+            '<line x1="0" y1="{m}" x2="{w}" y2="{m}"></line><polyline points="{p}"></polyline></svg>',
+            w=width, h=height, m=height / 2, n=len(values), p=points,
+        )
+    return out
 
 
 # ── Completions for the QueryBar ──────────────────────────────────────────────────────────────────────────────

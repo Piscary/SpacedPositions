@@ -53,6 +53,7 @@ function moveTo(list, index) {
   paint(list)
   rows[st.cursor].scrollIntoView({ block: "nearest" })
   const row = rows[st.cursor]
+  emit("list:cursor", { list, row })
   if (ctx.pane?.group) emit("cursor", { group: ctx.pane.group, from: ctx.pane.id, id: row.dataset.row, title: row.dataset.title, fen: row.dataset.fen })
 }
 

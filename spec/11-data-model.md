@@ -88,6 +88,18 @@ German names with English names and aliases for search (decision 6: English UI, 
   storing: a tag the user removed is never detected there again (`TagDismissal`, also for move tags; adding it back
   by hand lifts it; undoing a tag is not a dismissal), a manual tag is never touched, and detection withdraws only the
   tags it set itself. The solution's first moves get move tags too.
+- **Moments** (`:moments` in Analyse, phase 6; `library/moments.py`): the key moments of a game's or an analysis's
+  main line as move tags of the `moment` field, from the old app's three detectors. The engine, Lichess style, in
+  winning chances (wc = 2 / (1 + e^(−0.00368208·cp)) − 1 for the mover): a drop of ≥ 0.3 blunder, ≥ 0.2 mistake,
+  ≥ 0.1 inaccuracy; a missed win (≥ 0.6 → ≤ 0.2); a turning point (≥ +0.3 → ≤ −0.3); with the local engine (two
+  lines a position) also the only move (best by ≥ 0.3 and played, with at least 4 legal moves), the critical
+  moment (missed) and the brilliant move (an only move that sacrifices, the game not yet won). Without a local engine
+  the evaluations `:evaluate` stored are used. python-chess adds a missed mate in one, a move that allows mate in one
+  when it could be avoided, and tactical explosions (3 captures in 4 plies); the annotator's symbols become moments
+  too (`!!` brilliant … `□` only move) and win over the other sources. Stored with `detector = moments` by the
+  rules above (dismissals respected, manual tags untouched, only its own tags withdrawn).
+- **Editing** (phase 6): tags, sources and players are edited in the Library (04 · Library): new tags, names,
+  aliases, the hierarchy (no loops), weights and base difficulty; deleting only what nothing uses.
 - **Difficulty** (automatic): the weighted base difficulty of the position's tags (`weight`), plus at most one step
   from the move tags of its analysis (`analysis_weight`, each tag once, auto tags at 0.8); rounded to 1–5. The
   override wins. Both weights come with the starter vocabulary.
@@ -109,7 +121,7 @@ the next diagram number (04 · Collect).
 `name` (`Tal, Mikhail`), `aliases` (other spellings and online handles), `role` (`me` · `student` · `model` (role
 model) · `opponent` · empty), `title` (GM, IM …), `federation`, `fide_id`, `born`, `notes`. Imported games are
 matched to players by name and aliases (case and diacritics ignored, `Tal, M.` matches `Tal, Mikhail` when the
-initial fits); unmatched names stay text on the game until `:player link`.
+initial fits); unmatched names stay text on the game until `:player-link` (`is:unlinked` lists those games).
 
 ### Saved query
 

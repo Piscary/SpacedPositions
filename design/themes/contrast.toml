@@ -1,0 +1,25 @@
+name = "contrast"
+label = "High contrast"
+dark = true
+extends = "ink"
+high_contrast = true
+pair = "paper"
+
+[color]
+bg = "#000000"
+bg-alt = "#0d0d0d"
+surface = "#1a1a1a"
+line = "#8a8a8a"
+text = "#ffffff"
+text-sub = "#d0d0d0"
+main = "#ffd700"
+main-text = "#000000"
+good = "#5bd6c5"
+bad = "#ff8a8a"
+warn = "#ffcc4d"
+info = "#8ac8ff"
+special = "#e2a6ff"
+
+[board]
+sq-light = "#f0f0f0"
+sq-dark = "#6f8fa0"

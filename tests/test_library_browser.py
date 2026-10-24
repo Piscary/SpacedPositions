@@ -305,3 +305,31 @@ def test_library_accessibility(page, positions):
         }"""
     )
     assert result == [], result
+
+
+def test_edit_players_and_link_a_name(page):
+    """Phase 6: a player made and edited from the Library, a name on a game linked to it, `d` refused while used."""
+    from spaced_positions.library.models import Player
+
+    Game.objects.create(white_name="Tal, M.", black_name="Larsen", start_fen=START)
+    library(page)
+    keys(page, ":")
+    page.keyboard.type('new-player "Tal, Mikhail" role=model')
+    keys(page, "Enter")
+    page.wait_for_function("document.getElementById('status-message').textContent.startsWith('New player: Tal, Mikhail')")
+    keys(page, "4")
+    page.wait_for_selector("#ws-library [data-row='@tal']")
+    page.click("#ws-library [data-row='@tal'] .list__title")
+    keys(page, "c")
+    page.keyboard.type("title=GM")
+    keys(page, "Enter")
+    page.wait_for_selector("#ws-library [data-row='@tal'] .chip >> text=GM")
+    keys(page, ":")
+    page.keyboard.type('player-link "Tal, M." @tal')
+    keys(page, "Enter")
+    page.wait_for_selector("#ws-library [data-row='@tal'] >> text=1 game")
+    keys(page, "d")
+    page.wait_for_function("document.getElementById('status-message').textContent.includes('is used by 1 game')")
+    keys(page, "u")  # the link is undone
+    page.wait_for_selector("#ws-library [data-row='@tal'] >> text=0 games")
+    assert Player.objects.get(key="tal").aliases == []

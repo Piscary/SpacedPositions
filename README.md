@@ -2,17 +2,19 @@
 
 Collect, solve and train chess puzzles: keyboard first, with spaced repetition. Free software (GPL-3.0-or-later).
 
-**Status: phase 5 (stats + rewards).** Phase 0 built the shell, panes and splits, the command and key system, the design
-tokens and themes, the style guide and the launcher. Phase 1 added the board (moves, drawings, typed moves, the board
-editor), MiniBoards, paste detection and piece sets. Phase 2 added puzzles, cards with spaced repetition, and the
-Train mode: Review, Storm and Streak. Phase 3 adds the Analyse mode: a book-style move tree with variations, comments,
-annotation symbols and marks, the Inspector, Stockfish in the browser with lines, arrows and an eval bar, puzzles set
-up from the analysis, and undo of every change (also after a reload). Phase 4 adds the Library (a query language
-with completion, results as table, list or grid, a filter pane, bulk tagging and training with undo), tags in
-Analyse and Train, Collect for entering book diagrams fast, and PGN import and export with games in Analyse. Phase 5
-adds Stats (pattern library, retention, mastery, weak spots, records, activity, collection, all as keyboard
-charts), Home, achievements, tag detection with python-chess, and the eval and variation graphs. Settings is laid
-out with placeholder panes that name its phase. The specification is in [spec/](spec/README.md).
+**Status: phase 6 (customisation).** Phase 0 built the shell, panes and splits, the command and key system, the
+design tokens and themes, the style guide and the launcher. Phase 1 added the board (moves, drawings, typed moves, the
+board editor), MiniBoards, paste detection and piece sets. Phase 2 added puzzles, cards with spaced repetition, and
+the Train mode: Review, Storm and Streak. Phase 3 adds the Analyse mode: a book-style move tree with variations,
+comments, annotation symbols and marks, the Inspector, Stockfish in the browser with lines, arrows and an eval bar,
+puzzles set up from the analysis, and undo of every change (also after a reload). Phase 4 adds the Library (a query
+language with completion, results as table, list or grid, a filter pane, bulk tagging and training with undo), tags
+in Analyse and Train, Collect for entering book diagrams fast, and PGN import and export with games in Analyse.
+Phase 5 adds Stats (pattern library, retention, mastery, weak spots, records, activity, collection, all as keyboard
+charts), Home, achievements, tag detection with python-chess, and the eval and variation graphs. Phase 6 adds the
+Settings mode with the keymap editor, your own themes, key bindings and piece sets, settings as one TOML file (export
+and import), editing tags, sources and players, a local Stockfish through the app, key moments of games (`:moments`),
+figurines and folding in the move tree, and optional sounds. The specification is in [spec/](spec/README.md).
 
 ## Start it
 
@@ -25,7 +27,8 @@ spos                  # starts the app and opens the browser
 token, and keeps running until `Ctrl+C`, `:quit` in the app, or `spos stop`. Running `spos` again just opens the
 browser at the running instance. `spos list` shows where it runs; `--no-browser`, `--port`, `--data-dir` and `--lan`
 are the options. Data lives in the platform's user-data folder (`~/Library/Application Support/Spaced Positions/`
-on macOS), with a backup before every migration.
+on macOS), with a backup before every migration. Your own piece sets go in its `pieces/` folder (`pieces/<name>/` with
+`wK.svg` … `bP.svg`); a local engine is chosen in Settings → Engine (`stockfish` on the PATH by default).
 
 ## Try it
 

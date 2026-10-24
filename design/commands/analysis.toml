@@ -44,6 +44,28 @@ args = [{ name = "step", type = "enum", values = ["next", "prev"] }]
 when = "analysis.loaded"
 reason = "no position open: :analyse"
 
+["analysis.moments"]
+title = "Find the key moments (engine, python-chess, annotations)"
+group = "Analyse"
+aliases = ["moments"]
+handler = "client"
+when = "analysis.loaded"
+reason = "no position open: :analyse"
+
+["analysis.fold"]
+title = "Fold or open the variation"
+group = "Analyse"
+aliases = ["fold"]
+when = "analysis.loaded"
+reason = "no position open: :analyse"
+
+["analysis.foldall"]
+title = "Fold or open all variations"
+group = "Analyse"
+aliases = ["fold-all"]
+when = "analysis.loaded"
+reason = "no position open: :analyse"
+
 ["analysis.mainline"]
 title = "Back to the main line"
 group = "Analyse"

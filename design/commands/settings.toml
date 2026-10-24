@@ -1,0 +1,42 @@
+# Settings and the keymap editor (spec 04 · Settings, 07 §5).
+
+["settings.step"]
+title = "Change the setting (next / previous value)"
+group = "Settings"
+args = [{ name = "step", type = "enum", values = ["next", "prev"] }]
+when = "view.settings"
+reason = "in the Settings pane"
+
+["settings.edit"]
+title = "Edit the setting (or choose the theme)"
+group = "Settings"
+when = "view.settings"
+reason = "in the Settings pane"
+
+["settings.reset"]
+title = "Back to the default"
+group = "Settings"
+when = "view.settings"
+reason = "in the Settings pane"
+
+["settings.keymap"]
+title = "Edit the keymap"
+group = "Settings"
+aliases = ["keymap"]
+
+["settings.export"]
+title = "Export the settings (TOML)"
+group = "Settings"
+aliases = ["settings-export"]
+
+["keymap.bind"]
+title = "New keys for this command"
+group = "Settings"
+when = "view.keymap"
+reason = "in the Keymap pane"
+
+["keymap.unbind"]
+title = "Remove the keys (yours: back to the default)"
+group = "Settings"
+when = "view.keymap"
+reason = "in the Keymap pane"

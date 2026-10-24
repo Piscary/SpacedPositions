@@ -51,7 +51,7 @@ Used in Collect, and in Analyse to correct a position (`S`).
 
 | Key | Action |
 |---|---|
-| `1`–`6` or `p n b r q k` | choose pawn, knight, bishop, rook, queen, king (German `b s l t d k`: later, as a setting) |
+| `1`–`6` or `p n b r q k` | choose pawn, knight, bishop, rook, queen, king (with `board.letters = de`: `b s l t d k`, Bauer, Springer, Läufer, Turm, Dame, König; the layer `layer.setup-de` comes before the English letters) |
 | `c` | switch the colour of the chosen piece |
 | `x` | eraser · `h` hand (drag pieces freely) |
 | `X` | clear the board · `I` initial position |
@@ -108,6 +108,12 @@ large).
 - Engine settings (depth, lines, threads, hash, arrows) in the EngineLines header ⚙ and in Settings → Engine.
 - Where it runs: Stockfish WASM in a Web Worker by default; the local Stockfish binary through the server when it
   is configured (stronger, deeper). The EngineLines header shows which one is running.
+- As built (phase 6): `engine.source = local` runs `engine.path` (an executable file) or `stockfish` on the PATH.
+  The browser posts UCI commands to `/engine/local/` and reads the engine's lines from it (a read waits up to half a
+  second for new lines), so the engine module treats it like its worker. One process for the app, ended with it;
+  `engine.threads` and `engine.hash` are sent as options. Only the user sets `engine.path` (imports refuse it), so a
+  pasted file can never choose a program to run.
+- `:lichess` opens the board's position in lichess's analysis board (a new tab, the FEN in the URL).
 
 ## 8 · Look
 
@@ -117,7 +123,8 @@ on/off, blindfold (pieces invisible), silhouette (all pieces of one colour look 
 
 As built in phase 1: the squares are a CSS conic gradient of `sq-light`/`sq-dark` (a theme change needs no image);
 coordinates sit inside the board (ranks on the right edge, files along the bottom) in the colour of the other
-square; `board-coords = off` hides them (`outside` comes with the board settings in phase 6). Square highlights from
+square; `board-coords = off` hides them, `outside` (phase 6) puts the ranks left of the board and the files below
+it in the text colour (the board shrinks by that margin). Square highlights from
 the square tool are chessground custom square classes (under the pieces), not SVG shapes.
 
 ## 9 · Library choice

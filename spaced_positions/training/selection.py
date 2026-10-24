@@ -34,7 +34,9 @@ def new_left_today(now=None) -> int:
     now = now or timezone.now()
     start = timezone.localtime(now).replace(hour=0, minute=0, second=0, microsecond=0)
     introduced = Card.objects.filter(introduced_at__gte=start).count()
-    return max(0, srs.NEW_PER_DAY - introduced)
+    from spaced_positions.core.settings import get
+
+    return max(0, int(get("training.new-per-day")) - introduced)
 
 
 def counts(now=None) -> dict:

@@ -17,7 +17,9 @@ MAX_PASTE = 2_000_000  # characters: a large PGN file, not a database
 def board_look() -> tuple[str, str, str]:
     """Square colours and piece set of the active theme + the user's overrides."""
     prefs = Preferences.current()
-    themes = registry.themes()["themes"]
+    from .themes import all_themes
+
+    themes = all_themes()
     name = prefs.theme or "paper"
     values = themes.get(name, themes["paper"])["values"] | prefs.tokens
     return values["sq-light"], values["sq-dark"], values.get("piece-set", "cburnett")

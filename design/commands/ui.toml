@@ -79,3 +79,46 @@ group = "Lists"
 title = "Demo: a button with a key (flashes when the key is pressed)"
 group = "Style guide"
 repeatable = true
+
+["theme.save"]
+title = "Save the current colours as a theme"
+group = "Settings"
+aliases = ["theme-save"]
+args = [{ name = "name", type = "text" }]
+handler = "server"
+
+["theme.delete"]
+title = "Delete one of your themes"
+group = "Settings"
+aliases = ["theme-delete"]
+args = [{ name = "theme", type = "theme" }]
+handler = "server"
+
+["theme.export"]
+title = "Copy the theme as TOML"
+group = "Settings"
+aliases = ["theme-export"]
+handler = "server"
+
+["key.map"]
+title = "Bind keys to a command"
+group = "Settings"
+aliases = ["map"]
+args = [{ name = "binding", type = "text" }]
+handler = "server"
+undoable = true
+
+["key.unmap"]
+title = "Unbind keys"
+group = "Settings"
+aliases = ["unmap"]
+args = [{ name = "keys", type = "text" }]
+handler = "server"
+undoable = true
+
+["key.reset"]
+title = "Key bindings back to the defaults"
+group = "Settings"
+aliases = ["map-reset"]
+args = [{ name = "keys", type = "text", optional = true }]
+handler = "server"

@@ -299,3 +299,17 @@ def evals(request, pid):
         node.eval_depth = int(value.get("depth") or 0) or None
         node.save(update_fields=["eval_cp", "eval_mate", "eval_depth"])
     return _state(owner, message=f"Evaluated {len(nodes)} moves")
+
+
+@require_POST
+def moments(request, pid):
+    """`:moments`: the key moments of the main line as move tags (library/moments.py)."""
+    from spaced_positions.library import moments as found
+
+    owner = _position(pid)
+    result = found.run(owner)
+    how = {"local": "with the local engine", "stored": "with the stored evaluations", "": "without evaluations (:evaluate, or a local engine)"}[result["engine"]]
+    message = f"Moments {how}: {result['tags']} new tag{'s' if result['tags'] != 1 else ''} on {result['moves']} move{'s' if result['moves'] != 1 else ''}"
+    if result["withdrawn"]:
+        message += f" · {result['withdrawn']} withdrawn"
+    return _state(owner, message=message)

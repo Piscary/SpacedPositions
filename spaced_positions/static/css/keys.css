@@ -74,7 +74,7 @@
 }
 .segmented__option:last-child { border-right: 0; }
 .segmented__option:hover { background: var(--surface-hover); }
-.segmented__option[aria-checked="true"] { background: var(--main); color: var(--main-text); }
+.segmented__option:is([aria-checked="true"], [data-on="true"]) { background: var(--main); color: var(--main-text); }
 .segmented__option[aria-checked="true"] .keycap { background: transparent; border-color: currentColor; color: inherit; }
 
 /* ── Toggle ──────────────────────────────────────────────────────────────────────────────────────────────────── */
@@ -104,3 +104,7 @@
 /* ── KeyHint ─────────────────────────────────────────────────────────────────────────────────────────────────── */
 .keyhint { display: inline-flex; align-items: center; gap: var(--s-1); white-space: nowrap; cursor: pointer; }
 .keyhint:hover { color: var(--text); }
+
+/* Settings · keycaps: compact keeps the key strips, off hides keys on buttons and strips (spec 07 §5) */
+:root[data-keycaps="compact"] .keybutton .keys, :root[data-keycaps="off"] .keybutton .keys { display: none; }
+:root[data-keycaps="off"] .pane__footer .keyhint .keys { display: none; }

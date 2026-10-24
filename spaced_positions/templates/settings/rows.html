@@ -1,0 +1,36 @@
+{% load ui %}<div class="list settings__list" data-list data-settings-list>
+{% section "Theme" key="t" summary=theme %}
+  <div role="listbox" aria-label="Theme">{% for t in themes %}<div class="list__row settings__row settings__theme{% if t.name == theme %} is-on{% endif %}" role="option" aria-selected="false"
+       data-row="theme:{{ t.name }}" data-theme="{{ t.name }}" data-title="{{ t.label }}">
+    <span class="settings__check" aria-hidden="true">{% if t.name == theme %}●{% else %}○{% endif %}</span>
+    <span class="list__title">{{ t.label }}{% if t.user %} <span class="chip">yours</span>{% endif %}</span>
+    <span class="list__meta">{% if t.dark is None %}auto{% elif t.dark %}dark{% else %}light{% endif %}</span>
+    <span class="list__meta mono">:theme {{ t.name }}</span>
+  </div>{% endfor %}</div>
+  <div class="actionbar settings__actions">{% cmd "theme.save" label="Save as my theme" size="sm" %}{% cmd "theme.export" label="Copy as TOML" size="sm" %}</div>
+{% endsection %}
+{% for s in sections %}
+{% section s.title key=s.key summary=s.rows|length|stringformat:"s"|add:" settings" %}
+  <div role="listbox" aria-label="{{ s.title }}">{% for r in s.rows %}<div class="list__row settings__row{% if r.changed %} is-changed{% endif %}" role="option" aria-selected="false"
+       data-row="{{ r.name }}" data-set="{{ r.name }}" data-type="{{ r.type }}" data-value="{{ r.shown }}" data-title="{{ r.label }}"
+       data-values="{{ r.values|join:',' }}"{% if r.low is not None %} data-low="{{ r.low }}" data-high="{{ r.high }}"{% endif %}>
+    <span class="list__title">{{ r.label }}</span>
+    <span class="settings__value">{% if r.type == "color" %}<span class="settings__swatch" style="--swatch: {{ r.value }}"></span>{% endif %}
+      {% if r.type == "enum" or r.type == "bool" %}<span class="visually-hidden">{{ r.shown }}</span><span class="segmented__options" aria-hidden="true">{% if r.type == "bool" %}<span class="segmented__option" data-on="{% if r.shown == 'on' %}true{% else %}false{% endif %}" data-cmd="pref.set" data-args="{{ r.name }}=on">on</span><span class="segmented__option" data-on="{% if r.shown == 'off' %}true{% else %}false{% endif %}" data-cmd="pref.set" data-args="{{ r.name }}=off">off</span>{% else %}{% for v in r.values %}<span class="segmented__option" data-on="{% if v == r.shown %}true{% else %}false{% endif %}" data-cmd="pref.set" data-args="{{ r.name }}={{ v }}">{{ v }}</span>{% endfor %}{% endif %}</span>
+      {% else %}<b class="mono">{{ r.shown|default:"—" }}</b>{% endif %}
+      {% if r.note %}<span class="muted">{{ r.note }}</span>{% endif %}</span>
+    <span class="list__meta settings__help">{{ r.help }}</span>
+    <span class="list__meta mono">:set {{ r.name }}</span>
+  </div>{% endfor %}</div>
+  {% if s.key == "k" %}<div class="actionbar settings__actions">{% cmd "settings.keymap" label="Edit the keymap" size="sm" %}<span class="muted">{{ overrides }} binding{{ overrides|pluralize }} of yours</span></div>{% endif %}
+{% endsection %}
+{% endfor %}
+{% section "Data" key="x" summary="export · import" %}
+  <div class="settings__data">
+    <div class="actionbar">{% cmd "settings.export" label="Export settings (TOML)" size="sm" %}<a class="keybutton keybutton--secondary keybutton--sm" href="/lib/export/?c=positions&q=" download>Export the library (PGN)</a></div>
+    <form class="settings__import" data-settings-import>
+      <textarea class="field field--mono" name="text" aria-label="Settings or a theme to import" placeholder="Paste exported settings or a theme (TOML), then {% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵"></textarea>
+    </form>
+  </div>
+{% endsection %}
+</div>

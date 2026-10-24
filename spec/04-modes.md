@@ -251,7 +251,7 @@ Find, filter, organise, start training from any search.
 - `1`–`6` switch collection (positions, games, puzzles, players, sources, tags), `/` query (11 §3: completion with
   `⇥`, problems underlined below the bar, the count live), `j/k` cursor (the linked board shows the row),
   `Enter` open in Analyse (games too; a player, source or tag opens its games or positions), `x` select, `v` range,
-  `Mod+A` all results. `o` open in a split follows in phase 6.
+  `Mod+A` all results. `o` open in a split follows in phase 7.
 - `␣ u v` cycles the result display: **table** (dense rows) · **list** (row with a mini board) · **grid** (cards
   with boards). All three share cursor, selection and keys.
 - The filter pane writes into the query (and the query updates the filters): one source of truth, the query string.
@@ -262,6 +262,13 @@ Find, filter, organise, start training from any search.
   restores, `:trash-empty` deletes for good (positions with training history stay).
 - Every bulk change is one step of the undo stack (`u`), replayed exactly: tagging and untagging put back the links
   they changed, trashing restores.
+- **Players, sources and tags are edited here** (phase 6): `c` (`:edit`) changes fields of the selection
+  (`:edit role=student`, `:edit en="Knight fork" parent=fork difficulty=3`; also by name from anywhere:
+  `:edit @tal title=GM`, `:edit #fork weight=1.5`, `:edit s12 year=1994`); `:new-tag`, `:new-player`, `:new-source`
+  make one (a new tag takes its key from the English name and its field from the parent); `d` deletes the selected
+  ones that nothing uses (used ones are named and stay); `:player-link "Tal, M." @tal` gives the games with that name
+  the player (and the player the alias), `is:unlinked` in Games lists the names that match nobody. A change of a
+  tag's weight or difficulty updates the automatic difficulty of its positions.
 
 ---
 
@@ -301,7 +308,7 @@ name.
 ```
 ┌─ 1 Settings ────────────────────────────────────────────────────────────────────────────────────┐
 │ / search settings                                                                                │
-│ ▾ Theme         [nord] [serika] [paper] [ink] [+ custom]          ↑↓ preview · Enter apply       │
+│ ▾ Theme         ○ Follow the system ○ High contrast ○ Forest ● Ink ○ Nord ○ Paper ○ Sepia ○ yours │
 │ ▾ Colours       bg #2e3440 ■  text #d8dee9 ■  sub #4c566a ■  main #88c0d0 ■  …   theme.bg …     │
 │ ▾ Typography    font [Inter ▾]  mono [JetBrains Mono ▾]  size [13]  density [compact|cozy]       │
 │ ▾ Board         light ■ dark ■  coordinates [inside|outside|off]  animation 150ms  …              │
@@ -309,14 +316,29 @@ name.
 │ ▾ Keys          keycaps [full|compact|off] · teach keys ✓ · keymap: 3 overrides  [Edit keymap K]  │
 │ ▾ Training      new cards/day 20 · Storm pace [fast|medium|slow] · hints count as miss ✓          │
 │ ▾ Engine        threads 6 · hash 256MB · lines 3 · arrows ✓                                       │
-│ ▾ Data          export settings y · import settings p · export library e                          │
+│ ▾ Data          export settings · paste settings or a theme to import (⌘↵) · export library        │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-- `j/k` rows, `h/l` change the value of a segmented/stepper row, `Enter` edit a field, `/` filter rows.
-- Theme and piece set: moving the cursor over an option **previews it live**, `Enter` keeps it, `Esc` reverts.
-- **Keymap editor** (`K`): a table of all commands (id, title, context, keys); `Enter` on a row then press the new
-  key(s); conflicts are shown at once with the command they collide with.
+As built (phase 6): the mode opens with Settings and the keymap editor side by side.
+
+- `j/k` rows, `h/l` step the value of a row (on/off, a choice, a number), `Enter` edits it on the command line
+  (`:set name=…`), `Backspace` resets it to the theme's (or the default) value, `/` filters rows, `g` + a section key
+  jumps. Changed rows carry a dot; colours show their contrast against the backgrounds next to the value.
+- Themes: moving the cursor over one **previews it live**, `Enter` keeps it, leaving the rows reverts. "Save as my
+  theme" (`:theme-save <name>`) keeps the current colours as a theme of its own; "Copy as TOML" (`:theme-export`).
+- Tokens and settings share `:set`: tokens are the look (07), settings the behaviour (`training.new-per-day`,
+  `training.storm-pace`, `keys.keycaps`, `keys.teach`, `keys.whichkey`, `board.letters`, `engine.source`,
+  `engine.path`, `engine.lines`, `engine.depth`, `engine.threads`, `engine.hash`, `engine.arrows`, `sound.on`,
+  `display.ticker`).
+- **Keymap editor** (`K` from Settings): every command with its keys (yours marked). `Enter` on a row records new
+  keys (up to three, `Enter` keeps, `Esc` cancels), checked at once with the lint's rules (a key can't be a command
+  and a prefix in contexts active together, the browser's keys stay the browser's); `Backspace` removes your binding,
+  or unmaps a default one. `:map <keys> <command> [args]`, `:unmap <keys>`, `:map-reset`; `@view.library` first
+  binds in another context.
+- **Data**: export writes the theme, token overrides, settings, key bindings, your themes and named layouts as one
+  TOML file (07 §5); pasting one (or a single theme) into the box imports it, value by value, listing what it skipped.
+  `engine.path` is never exported or imported: which program runs is set by hand.
 
 ---
 

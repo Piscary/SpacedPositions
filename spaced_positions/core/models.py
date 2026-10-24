@@ -2,6 +2,7 @@
 `user` key so hosting later needs no redesign; locally it is always "local"."""
 
 from django.db import IntegrityError, models
+from django.utils import timezone
 
 LOCAL_USER = "local"
 
@@ -49,3 +50,33 @@ class Preferences(models.Model):
             return cls.objects.get_or_create(user=LOCAL_USER)[0]
         except IntegrityError:  # created by a concurrent request (many MiniBoards load at once)
             return cls.objects.get(user=LOCAL_USER)
+
+
+class UserTheme(models.Model):
+    """A theme made in the app (spec 07 §4): a built-in theme it extends plus base-token values on top."""
+
+    user = models.CharField(max_length=64, default=LOCAL_USER)
+    name = models.SlugField(max_length=60)
+    label = models.CharField(max_length=80)
+    extends = models.CharField(max_length=60, default="paper")
+    values = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["label"]
+        constraints = [models.UniqueConstraint(fields=["user", "name"], name="user_theme_once")]
+
+
+class KeymapOverride(models.Model):
+    """A key bound by the user (`:map`, the keymap editor), or a default binding taken away (`:unmap`)."""
+
+    user = models.CharField(max_length=64, default=LOCAL_USER)
+    context = models.CharField(max_length=40, default="global")
+    keys = models.CharField(max_length=60, help_text="Key tokens separated by spaces: 'space o', 'Q'")
+    command = models.CharField(max_length=80, blank=True, help_text="Empty: unmapped")
+    args = models.JSONField(default=list, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["context", "keys"]
+        constraints = [models.UniqueConstraint(fields=["user", "context", "keys"], name="keymap_override_once")]

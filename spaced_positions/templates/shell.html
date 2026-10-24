@@ -1,11 +1,12 @@
 {% load static %}<!doctype html>
-<html lang="en" data-pieces="{{ piece_set }}">
+<html lang="en" data-pieces="{{ piece_set }}"{% if figurines %} data-figurines{% endif %} data-coords="{{ coords }}" data-letters="{{ letters }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token }}">
   <title>{{ mode.label }} · Spaced Positions</title>
   <link rel="stylesheet" href="{% static 'css/app.css' %}?v={{ app_version }}">
+  <link rel="stylesheet" href="/pieces/user.css">
   <style id="theme">{{ theme_css|safe }}</style>
   <script src="{% static 'vendor/htmx.min.js' %}" defer></script>
   <script type="module" src="{% static 'js/app.js' %}?v={{ app_version }}"></script>
@@ -21,7 +22,7 @@
       </button>
       {% endif %}{% endfor %}
     </nav>
-    <div class="appbar__pulse"><span>phase 5 · stats</span></div>
+    <div class="appbar__pulse"><span>phase 6 · settings</span></div>
     <div class="appbar__end">
       {% cmd "mode.ui" display="compact" variant="ghost" icon="◧" %}
       {% cmd "cmdline.open" display="compact" variant="ghost" icon="⌘" %}

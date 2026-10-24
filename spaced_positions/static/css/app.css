@@ -17,5 +17,6 @@
 @import url("analysis.css") layer(components);
 @import url("library.css") layer(components);
 @import url("stats.css") layer(components);
+@import url("settings.css") layer(components);
 @import url("views.css") layer(views);
 @import url("utilities.css") layer(utilities);

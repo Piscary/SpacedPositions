@@ -6,7 +6,8 @@ from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_GET, require_POST
 
-from . import layouts, registry, server_commands
+from . import keymap, layouts, registry, server_commands, themes, user_pieces
+from . import settings as user_settings
 from .models import LOCAL_USER, NamedLayout, Preferences, UIState
 
 
@@ -57,16 +58,22 @@ def mode_page(request, mode):
     prefs = Preferences.current()
     context = _workspace_context(mode)
     context |= {
-        "theme_css": registry.theme_css(prefs.theme, prefs.tokens),
+        "theme_css": themes.theme_css(prefs.theme, prefs.tokens),
         "piece_set": prefs.tokens.get("piece-set", "cburnett"),
+        "figurines": prefs.tokens.get("figurines") is True,
+        "coords": prefs.tokens.get("board-coords", "inside"),
+        "letters": user_settings.get("board.letters"),
         "modes": layouts.MODES,
         "boot": {
             "mode": mode,
             "theme": prefs.theme,
             "tokens": prefs.tokens,
+            "settings": user_settings.values(prefs.settings),
+            "settingsSchema": [{"name": s.name, "label": s.label, "help": s.help, "type": s.type, "values": list(s.values)}
+                               for s in user_settings.SETTINGS],
             "launched": settings.SPOS_LAUNCHED,
-            "registry": registry.commands(),
-            "themes": registry.themes(),
+            "registry": keymap.effective(),  # the default keymap with the user's overrides
+            "themes": registry.themes() | {"themes": themes.all_themes(), "pieces": user_pieces.all_sets()},  # with the user's themes (and their CSS: live preview)
             "views": {
                 k: {"label": v.label, "picker": v.picker, "phase": v.phase, "list": v.list_view}
                 for k, v in layouts.VIEWS.items()

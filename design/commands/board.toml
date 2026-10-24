@@ -58,6 +58,13 @@ when = "view.board"
 reason = "needs a board"
 undoable = true
 
+["board.lichess"]
+title = "Open the position in lichess"
+group = "Board"
+aliases = ["lichess"]
+when = "view.board || mode.analyse"
+reason = "needs a board"
+
 ["board.copyfen"]
 title = "Copy FEN"
 group = "Board"

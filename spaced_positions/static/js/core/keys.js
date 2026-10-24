@@ -19,6 +19,7 @@ const isEditable = (el) =>
 /** The contexts that are active now, in resolution order (spec 02 §5). */
 export function activeContexts() {
   const chain = []
+  if (ctx.layer === "setup" && window.SPOS.settings?.["board.letters"] === "de") chain.push("layer.setup-de")
   if (!["normal", "insert", "pending", "command"].includes(ctx.layer)) chain.push(`layer.${ctx.layer}`)
   if (ctx.mode === "train" && ctx.trainState) chain.push(`state.${ctx.trainState}`)
   if (ctx.pane) {
@@ -181,6 +182,7 @@ function showPending(sticky = false) {
   setLayer("pending")
   const shown = document.getElementById("status-pending")
   shown.replaceChildren(keycaps(pending), " …")
+  if (window.SPOS?.settings?.["keys.whichkey"] === false && !sticky) return // the panel is switched off: the status line shows the prefix
   const title = document.createElement("div")
   title.className = "whichkey__title"
   const name = prefixes()[pending.join(" ")]

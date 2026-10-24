@@ -5,7 +5,7 @@
   {% section "Due now" key="d" summary=t.due|stringformat:"s"|add:" due" pinned=True %}
     <div class="train__session">
       {% cmd "train.review" variant="primary" label="Review" keys_in="view.today" %}
-      <span class="train__session-info">{% if t.due or t.counts.new %}<b>{{ t.due }}</b> due · <b>{{ t.counts.new }}</b> new{% else %}nothing due{% if t.next_due %} · next {{ t.next_due }}{% endif %}{% endif %}</span>
+      <span class="train__session-info">{% if t.due or t.counts.new %}<b data-ticker>{{ t.due }}</b> due · <b data-ticker>{{ t.counts.new }}</b> new{% else %}nothing due{% if t.next_due %} · next {{ t.next_due }}{% endif %}{% endif %}</span>
     </div>
   {% endsection %}
 
@@ -24,7 +24,7 @@
       <div class="stat"><span class="stat__label">Accuracy</span><span class="stat__value">{% if t.accuracy is not None %}{{ t.accuracy }}%{% else %}–{% endif %}</span></div>
       <div class="stat"><span class="stat__label">Days in a row</span><span class="stat__value">{{ t.consistency.current }}</span><span class="muted">{% if t.consistency.trained_today %}today counts{% else %}train today to keep it{% endif %}</span></div>
     </div>
-    <div class="meter home__library"><div class="meter__top"><span>Pattern library <b>{{ t.library.size }}</b>{% if t.library.next %} / {{ t.library.next }}{% endif %}</span>
+    <div class="meter home__library"><div class="meter__top"><span>Pattern library <b data-ticker>{{ t.library.size }}</b>{% if t.library.next %} / {{ t.library.next }}{% endif %}</span>
       <span class="muted">{% if t.library.on_course %}on course for {{ t.library.next }} by {{ t.library.on_course|date:"j M" }}{% elif t.library.next %}{{ t.library.established }} cards established{% endif %}</span></div>
       <div class="meter__track"><div class="meter__fill" style="--w: {% widthratio t.library.progress 1 100 %}%"></div></div></div>
   {% endsection %}

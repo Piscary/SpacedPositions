@@ -1,39 +1,90 @@
-// The engine (spec 04 · Analyse · Engine): Stockfish 17.1 lite (WASM, one thread) in a worker. It follows the line
-// of the analysis in the focused link group, shows MultiPV lines in Engine panes, draws its best moves on the
-// boards and fills their eval bar. It runs only while Analyse is on screen and the tab is visible.
+// The engine (spec 04 · Analyse · Engine): Stockfish 17.1 lite (WASM, one thread) in a worker, or a local engine
+// program through the app (engine.source = local). It follows the line of the analysis in the focused link group,
+// shows MultiPV lines in Engine panes, draws its best moves on the boards and fills their eval bar. It runs only
+// while Analyse is on screen and the tab is visible.
 
 import { Chess } from "../../vendor/chess.js"
-import { handle } from "./commands.js"
+import { handle, serverRun } from "./commands.js"
 import { ctx, emit, on, status, storage } from "./context.js"
 import * as lines from "./lines.js"
+import { sanNodes } from "./san.js"
 import { addLine, current, currentKey, mainlineOf, saveEvals, treeOf } from "./analysis.js"
 
 const WORKER = "/static/vendor/stockfish-17.1-lite-single-03e3232.js"
-const DEPTH = 24
 const SAN_PLIES = 14
 
 let worker = null
 let ready = false
 let enabled = storage("engine.on") ?? false
-let multipv = Number(storage("engine.lines")) || 3
+const setting = (name, fallback) => window.SPOS?.settings?.[name] ?? fallback
+let multipv = setting("engine.lines", 3)
+const depth = () => setting("engine.depth", 24)
 let searching = false // a "go" is running; the next search waits for its bestmove
 let queued = null // {key, fen} to search when the running one stops
 let search = null // {key, fen, white, lines: [], depth, nps}
 let batch = null // `:evaluate`: {items: [{id, fen}], i, best, results, depth, resolve}; the live analysis waits
 
 const engineKey = () => (ctx.mode === "analyse" ? currentKey() : null)
+const local = () => setting("engine.source", "browser") === "local"
+let source = null // the engine that runs: "browser" or the local program's name
+
+/** The local engine as a worker: UCI commands go to the app, its lines come back by polling (core/engine_local.py). */
+class LocalWorker {
+  constructor() {
+    this.after = null
+    this.outbox = []
+    this.closed = false
+  }
+
+  postMessage(cmd) {
+    this.outbox.push(cmd)
+    if (this.outbox.length === 1) queueMicrotask(() => this.flush())
+  }
+
+  async flush() {
+    const commands = this.outbox.splice(0)
+    const data = await fetch("/engine/local/", {
+      method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() }, body: JSON.stringify({ commands }),
+    }).then((r) => r.json()).catch(() => ({ ok: false, message: "the app is not reachable" }))
+    if (this.closed) return
+    if (!data.ok) return this.onerror?.({ message: data.message })
+    source = data.program
+    if (this.after === null) {
+      this.after = data.after
+      this.poll()
+    }
+  }
+
+  async poll() {
+    while (!this.closed) {
+      const data = await fetch(`/engine/local/?after=${this.after}`).then((r) => r.json()).catch(() => null)
+      if (this.closed) return
+      if (!data?.ok) return this.onerror?.({ message: data?.message || "the app is not reachable" })
+      this.after = data.next
+      for (const line of data.lines) this.onmessage?.({ data: line })
+    }
+  }
+
+  terminate() {
+    if (!this.closed && this.after !== null) this.postMessage("stop")
+    this.closed = true
+  }
+}
+
+const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content || ""
 
 function start() {
   if (worker) return
   try {
-    worker = new Worker(WORKER)
+    worker = local() ? new LocalWorker() : new Worker(WORKER)
+    source = local() ? "local engine" : "browser"
   } catch (err) {
     enabled = false
     return status(`The engine could not start: ${err.message}`, { kind: "error" })
   }
   worker.onmessage = (e) => onLine(String(e.data))
-  worker.onerror = () => {
-    status("The engine stopped with an error", { kind: "error" })
+  worker.onerror = (e) => {
+    status(local() ? `Local engine: ${e?.message || "it stopped"}` : "The engine stopped with an error", { kind: "error" })
     stop()
   }
   send("uci")
@@ -41,7 +92,10 @@ function start() {
 }
 
 function stop() {
-  worker?.terminate()
+  if (worker instanceof LocalWorker && !worker.closed && worker.after !== null) {
+    worker.closed = true
+    fetch("/engine/local/", { method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() }, body: JSON.stringify({ commands: ["stop"] }) }).catch(() => null)
+  } else worker?.terminate()
   worker = null
   ready = false
   searching = false
@@ -55,6 +109,10 @@ const send = (cmd) => worker?.postMessage(cmd)
 
 function onLine(text) {
   if (text === "uciok") {
+    if (local()) {
+      send(`setoption name Threads value ${setting("engine.threads", 2)}`)
+      send(`setoption name Hash value ${setting("engine.hash", 256)}`)
+    }
     send(`setoption name MultiPV value ${multipv}`)
     send("isready")
   } else if (text === "readyok") {
@@ -158,7 +216,7 @@ function go({ fen }) {
   if (!legal) return paint()
   searching = true
   send(`position fen ${fen}`)
-  send(`go depth ${DEPTH}`)
+  send(`go depth ${depth()}`)
 }
 
 function onInfo(text) {
@@ -181,7 +239,8 @@ function onInfo(text) {
   if (index === 0) {
     const best = search.lines.slice(0, multipv).filter(Boolean)
     const shapes = best.map((l, i) => ({ orig: l.pv[0].slice(0, 2), dest: l.pv[0].slice(2, 4), brush: i === 0 ? "paleBlue" : "paleGrey" }))
-    emit("engine", { key: search.key, shapes: shapes.slice(0, 1).concat(shapes.slice(1).map((s) => ({ ...s, modifiers: { lineWidth: 6 } }))), score })
+    const arrows = setting("engine.arrows", true) ? shapes.slice(0, 1).concat(shapes.slice(1).map((s) => ({ ...s, modifiers: { lineWidth: 6 } }))) : []
+    emit("engine", { key: search.key, shapes: arrows, score })
   }
   schedulePaint()
 }
@@ -244,7 +303,7 @@ function paint() {
     const list = el.querySelector("[data-engine-lines]")
     stateEl.textContent = !enabled ? "off" : !ready ? "starting…" : searching ? "thinking" : "done"
     stateEl.dataset.state = !enabled ? "off" : searching || !ready ? "busy" : "on"
-    info.textContent = enabled && search ? `Stockfish 17.1 · depth ${search.depth}/${DEPTH} · ${multipv} line${multipv > 1 ? "s" : ""}${search.nps ? ` · ${Math.round(search.nps / 1000)} kn/s` : ""}` : ""
+    info.textContent = enabled && search ? `${source === "browser" ? "Stockfish 17.1 (browser)" : source} · depth ${search.depth}/${depth()} · ${multipv} line${multipv > 1 ? "s" : ""}${search.nps ? ` · ${Math.round(search.nps / 1000)} kn/s` : ""}` : ""
     list.replaceChildren(...(enabled && search ? search.lines.slice(0, multipv).filter(Boolean).map(lineRow) : [hint()]))
   }
 }
@@ -252,7 +311,7 @@ function paint() {
 function hint() {
   const p = document.createElement("p")
   p.className = "muted engine__off"
-  p.textContent = enabled ? "Waiting for a position…" : "The engine is off. e turns it on; it runs in this browser and stops when you leave Analyse."
+  p.textContent = enabled ? "Waiting for a position…" : `The engine is off. e turns it on; it runs ${local() ? "as a program through the app" : "in this browser"} and stops when you leave Analyse.`
   return p
 }
 
@@ -269,7 +328,7 @@ function lineRow(line, i) {
     if (m.white || j === 0) moves.append(Object.assign(document.createElement("span"), { className: "mt-num", textContent: `${m.number}${m.white ? "." : "…"}` }))
     const b = document.createElement("span")
     b.className = "engine__move"
-    b.textContent = m.san
+    b.append(...sanNodes(m.san))
     b.dataset.ply = j
     b.title = "Add the line up to this move to the analysis"
     moves.append(b, " ")
@@ -306,7 +365,7 @@ function addToAnalysis(ucis) {
 handle("engine.toggle", () => {
   enabled = !enabled
   storage("engine.on", enabled)
-  status(enabled ? "Engine on: Stockfish 17.1 in this browser" : "Engine off", { timeout: 2000 })
+  status(enabled ? (local() ? "Engine on: the local engine through the app" : "Engine on: Stockfish 17.1 in this browser") : "Engine off", { timeout: 2000 })
   follow()
 })
 
@@ -316,14 +375,29 @@ handle("engine.best", () => {
   addToAnalysis(best.pv.slice(0, 1))
 })
 
-handle("engine.lines", ([count]) => {
+// `:engine.lines` is the setting engine.lines (kept with the preferences, shown in Settings).
+handle("engine.lines", async ([count]) => {
   const n = Number(count) || (multipv % 5) + 1
-  multipv = n
-  storage("engine.lines", n)
+  await serverRun("pref.set", [`engine.lines=${n}`])
   status(`Engine: ${n} line${n > 1 ? "s" : ""}`, { timeout: 1500 })
+})
+
+let lastSource = setting("engine.source", "browser")
+on("settings", (values) => {
+  if (values["engine.source"] !== lastSource) { // browser ↔ local: the other engine takes over
+    lastSource = values["engine.source"]
+    if (worker) {
+      stop()
+      follow()
+    }
+    return
+  }
+  const n = values["engine.lines"]
+  if (n === multipv) return
+  multipv = n
   if (!worker) return paint()
   send(`setoption name MultiPV value ${n}`) // read by the next "go"
-  if (search) {
+  if (search && !batch) {
     const { key, fen } = search
     search = null
     analyse(key, fen) // restarts the search

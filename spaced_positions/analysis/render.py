@@ -11,6 +11,35 @@ from . import puzzles as analysis_puzzles
 from . import tree
 
 LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+FIGURINES = {"K": "♔", "Q": "♕", "R": "♖", "B": "♗", "N": "♘"}
+GERMAN = {"K": "K", "Q": "D", "R": "T", "B": "L", "N": "S"}
+
+
+def san_html(san: str) -> str:
+    """A SAN whose piece letters carry their German letter and figurine; `html[data-letters]` and
+    `html[data-figurines]` draw those instead (07 · figurines, Settings → Board · piece letters). The text stays
+    the SAN, so searching and copying find `Nf3` in every look."""
+
+    def piece(letter: str) -> str:
+        return f'<span class="san-p" data-de="{GERMAN[letter]}" data-fig="{FIGURINES[letter]}"><span class="san-l">{letter}</span></span>'
+
+    out = escape(san)
+    if out[:1] in FIGURINES:
+        out = piece(out[0]) + out[1:]
+    if "=" in out and out.split("=")[1][:1] in FIGURINES:
+        head, tail = out.split("=", 1)
+        out = f"{head}={piece(tail[0])}{tail[1:]}"
+    return mark_safe(out)
+
+
+def _size(node_id, kids) -> int:
+    """Moves in the subtree from a node on (itself included)."""
+    count, stack = 0, [node_id]
+    while stack:
+        n = stack.pop()
+        count += 1
+        stack.extend(k.id for k in kids.get(n, []))
+    return count
 
 
 def _number(before_fen: str, force: bool) -> str:
@@ -59,8 +88,8 @@ def _token(node, roles, fens, force_number, tags):
     nags = "".join(tree.NAGS.get(n, "") for n in node.nags)
     chips = mark_safe("".join(str(format_html('<span class="mt-tag">{}</span>', t)) for t in tags.get(node.id, [])))
     return format_html(
-        '<span class="{}" data-node="{}" role="button" tabindex="-1"><span class="mt-num">{}</span>{}<span class="mt-nag">{}</span></span>{}',
-        " ".join(classes), node.id, _number(fens[node.parent_id], force_number), node.san, nags, chips,
+        '<span class="{}" data-node="{}" role="button" tabindex="-1"><span class="mt-num">{}</span><span class="mt-san">{}</span><span class="mt-nag">{}</span></span>{}',
+        " ".join(classes), node.id, _number(fens[node.parent_id], force_number), san_html(node.san), nags, chips,
     )
 
 
@@ -80,10 +109,13 @@ def _line(start, kids, roles, fens, force_number, siblings, depth, tags):
                 edge = alt.color or ""
                 blocks.append(
                     format_html(
-                        '<div class="mt-variation{}" style="{}" data-variation="{}"><span class="mt-label">{}</span>{}</div>',
+                        '<div class="mt-variation{}" style="{}" data-variation="{}" data-more="{}">'
+                        '<button type="button" class="mt-caret" data-fold tabindex="-1" aria-expanded="true" aria-label="Fold this variation (z)"></button>'
+                        '<span class="mt-label">{}</span>{}</div>',
                         f" is-{alt.mark}" if alt.mark else "",
                         f"--edge: {escape(edge)}" if edge else "",
                         alt.id,
+                        _size(alt.id, kids) - 1,  # the moves a fold hides
                         _label(depth, i),
                         mark_safe(_line(alt, kids, roles, fens, True, [], depth + 1, tags)),
                     )

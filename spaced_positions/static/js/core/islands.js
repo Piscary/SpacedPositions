@@ -2,6 +2,7 @@
 // workspace renders and when a pane fragment arrives.
 
 import { on } from "./context.js"
+import { tickIn } from "./ticker.js"
 import { mountBoard, renderLineText } from "../islands/board.js"
 import { mountTrain } from "../islands/train.js"
 import { mountInspector, mountMoves } from "./analysis.js"
@@ -10,6 +11,7 @@ import { mountFilters, mountLibrary } from "./library.js"
 import { mountEntry } from "./collect.js"
 import { mountStats } from "./charts.js"
 import { mountGraph } from "../islands/graphs.js"
+import { mountKeymap, mountSettings } from "./settings.js"
 
 const MOUNT = {
   board: mountBoard,
@@ -24,6 +26,8 @@ const MOUNT = {
   stats: mountStats,
   evalgraph: mountGraph,
   vargraph: mountGraph,
+  settings: mountSettings,
+  keymap: mountKeymap,
 }
 
 export function mountIslands(root = document) {
@@ -34,5 +38,8 @@ export function mountIslands(root = document) {
   }
 }
 
-on("layout", ({ el }) => mountIslands(el))
+on("layout", ({ el }) => {
+  mountIslands(el)
+  tickIn(el)
+})
 on("pane:load", ({ el }) => mountIslands(el))

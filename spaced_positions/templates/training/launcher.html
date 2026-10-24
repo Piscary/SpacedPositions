@@ -7,6 +7,9 @@
     <div class="train__session">
       <span class="train__session-name">Storm</span>
       {% cmd "train.storm" args="3" label="3′" %}{% cmd "train.storm" args="5" label="5′" %}{% cmd "train.storm" args="10" label="10′" %}
+      <span class="segmented train__pace" data-segmented title="How much time a quick solve earns (Settings → Training)"><span class="segmented__options" role="radiogroup" aria-label="Storm pace">
+        {% for p in storm_paces %}<button type="button" class="segmented__option" role="radio" aria-checked="{% if p == storm_pace %}true{% else %}false{% endif %}" data-cmd="pref.set" data-args="training.storm-pace={{ p }}">{{ p }}</button>{% endfor %}
+      </span></span>
       <span class="train__session-info">best {{ storm_best.3 }} · {{ storm_best.5 }} · {{ storm_best.10 }}</span>
     </div>
     <div class="train__session">

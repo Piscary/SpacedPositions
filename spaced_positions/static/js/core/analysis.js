@@ -248,7 +248,43 @@ function renderMoves(key) {
   const t = trees.get(key)
   for (const el of panesFor(key, "moves")) {
     el.innerHTML = t.html
+    paintFolds(key, el)
   }
+}
+
+// ── Folded variations (05 · MoveTree): `z` folds the variation at the cursor, `Z` all of them ─────────────────
+
+const folds = new Map() // position id → the start node ids of its folded variations
+
+const foldsOf = (t) => {
+  if (!folds.has(t.position.id)) folds.set(t.position.id, new Set())
+  return folds.get(t.position.id)
+}
+
+function paintFolds(key, el) {
+  const folded = foldsOf(trees.get(key))
+  for (const v of el.querySelectorAll("[data-variation]")) {
+    const on = folded.has(Number(v.dataset.variation))
+    v.classList.toggle("is-folded", on)
+    v.querySelector(":scope > [data-fold]")?.setAttribute("aria-expanded", String(!on))
+  }
+}
+
+function setFolds(key, change) {
+  const t = trees.get(key)
+  change(foldsOf(t))
+  for (const el of panesFor(key, "moves")) paintFolds(key, el)
+}
+
+/** The cursor may not hide in a folded variation: the variations around it open (its first move stays visible). */
+function unfoldAround(key, el) {
+  const cursor = el.querySelector(".mt-move.is-cursor")
+  const folded = foldsOf(trees.get(key))
+  for (let v = cursor?.closest(".mt-variation"); v; v = v.parentElement.closest(".mt-variation")) {
+    const first = v.querySelector(":scope > .mt-label + .mt-move")
+    if (folded.has(Number(v.dataset.variation)) && first !== cursor) folded.delete(Number(v.dataset.variation))
+  }
+  paintFolds(key, el)
 }
 
 function paintCursor(key) {
@@ -260,6 +296,7 @@ function paintCursor(key) {
       mv.classList.toggle("is-cursor", id === t.cursor)
       mv.classList.toggle("is-path", onPath.has(id) && id !== t.cursor)
     }
+    unfoldAround(key, el)
     el.querySelector(".is-cursor")?.scrollIntoView({ block: "nearest" })
     const subject = el.closest("[data-pane]")?.querySelector("[data-pane-subject]")
     if (subject) subject.textContent = t.position.title || ""
@@ -293,6 +330,11 @@ export function mountMoves(el) {
     paintCursor(key)
   }
   el.addEventListener("click", (e) => {
+    const caret = e.target.closest("[data-fold]")
+    if (caret) {
+      const id = Number(caret.closest("[data-variation]").dataset.variation)
+      return setFolds(keyOfIsland(el), (f) => (f.has(id) ? f.delete(id) : f.add(id)))
+    }
     const mv = e.target.closest("[data-node]")
     if (mv) moveTo(keyOfIsland(el), Number(mv.dataset.node))
   })
@@ -442,6 +484,49 @@ handle("analysis.branch", withTree((key, t, [step]) => {
   while (kidsOf(t, id).length === 1) id = kidsOf(t, id)[0].id
   return id === t.cursor ? false : moveTo(key, id)
 }))
+handle("analysis.moments", withTree(async (key, t) => {
+  status("Looking for the key moments…", { timeout: 0 })
+  const { data } = await post(`/analysis/${t.position.id}/moments/`, {})
+  if (!data.ok) return status(data.message, { kind: "error" }) || false
+  apply(key, data)
+  status(data.message, { kind: "good", timeout: 5000 })
+}))
+
+handle("analysis.fold", withTree((key, t) => {
+  const el = panesFor(key, "moves")[0]
+  const cursor = el?.querySelector(".mt-move.is-cursor")
+  if (!cursor) return status("Open the moves pane to fold variations", { kind: "error" }) || false
+  // in a variation: that one; on the main line: the alternatives to the cursor's move, else to the next move
+  const blockAfter = (mv) => {
+    let next = mv?.nextElementSibling
+    while (next && next.matches(".mt-tag, .mt-comment")) next = next.nextElementSibling
+    return next?.matches(".mt-variations") ? [...next.children] : []
+  }
+  const nextMove = (mv) => {
+    let next = mv.nextElementSibling
+    while (next && !next.matches(".mt-move, .mt-variations")) next = next.nextElementSibling
+    return next?.matches(".mt-move") ? next : null
+  }
+  let targets = cursor.closest(".mt-variation") ? [cursor.closest(".mt-variation")] : blockAfter(cursor)
+  if (!targets.length && !cursor.closest(".mt-variation")) targets = blockAfter(nextMove(cursor))
+  if (!targets.length) return status("No variation here", { timeout: 1500 }) || false
+  const ids = targets.map((v) => Number(v.dataset.variation))
+  const fold = !foldsOf(t).has(ids[0])
+  setFolds(key, (f) => ids.forEach((id) => (fold ? f.add(id) : f.delete(id))))
+  const first = targets[0].querySelector(":scope > .mt-label + .mt-move")
+  if (fold && targets[0].contains(cursor) && first !== cursor) moveTo(key, Number(first.dataset.node))
+}))
+
+handle("analysis.foldall", withTree((key, t) => {
+  const el = panesFor(key, "moves")[0]
+  const all = [...(el?.querySelectorAll("[data-variation]") || [])].map((v) => Number(v.dataset.variation))
+  if (!all.length) return status("No variations", { timeout: 1500 }) || false
+  const unfold = foldsOf(t).size > 0
+  setFolds(key, (f) => (unfold ? f.clear() : all.forEach((id) => f.add(id))))
+  if (!unfold) unfoldAround(key, el)
+  status(unfold ? "All variations open" : "All variations folded · z opens one", { timeout: 1500 })
+}))
+
 handle("analysis.mainline", withTree((key, t) => {
   // up to the last node that is on the main line (first child all the way from the root)
   const nodes = path(t, t.cursor)

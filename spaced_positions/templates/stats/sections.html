@@ -10,7 +10,7 @@
 
 {% section "Pattern library" key="l" summary=data.library.size|stringformat:"s"|add:" mature cards" %}
   <div class="stats__lead">
-    <div class="meter"><div class="meter__top"><span><b>{{ data.library.size }}</b> mature{% if data.library.next %} · next milestone {{ data.library.next }}{% endif %}</span>
+    <div class="meter"><div class="meter__top"><span><b data-ticker>{{ data.library.size }}</b> mature{% if data.library.next %} · next milestone {{ data.library.next }}{% endif %}</span>
       <span class="mono">{% if milestone_eta %}on course for {{ data.library.next }} by {{ milestone_eta|date:"j M" }}{% elif data.library.next %}keep up with the reviews to get there{% endif %}</span></div>
       <div class="meter__track"><div class="meter__fill" style="--w: {% widthratio data.library.progress 1 100 %}%"></div></div></div>
     <p class="muted">{{ data.library.counts.young|default:0 }} young · {{ data.library.counts.learning|default:0 }} learning · {{ data.library.counts.new|default:0 }} new · {{ data.library.maturing_soon }} become mature in the next 30 days if you keep up</p>

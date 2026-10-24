@@ -499,7 +499,13 @@ on("engine", ({ key, shapes, score }) => {
 
 on("theme", () => {
   requestAnimationFrame(() => {
-    for (const board of boards) if (board.alive) board.cg.set({ drawable: { brushes: brushes() } })
+    const coordinates = tokenValue("board-coords", "inside") !== "off"
+    for (const board of boards) {
+      if (!board.alive) continue
+      const redraw = board.cg.state.coordinates !== coordinates
+      board.cg.set({ coordinates, drawable: { brushes: brushes() } })
+      if (redraw) board.cg.redrawAll()
+    }
   })
 })
 
@@ -593,6 +599,13 @@ handle("board.copyfen", () => {
   return copy(fen, "FEN")
 })
 handle("board.copypgn", () => copy(lines.pgnOf(lines.getLine(focusedKey())), "PGN"))
+handle("board.lichess", () => {
+  const board = focusedBoard()
+  const fen = board?.layer === "setup" ? board.fullFen() : lines.fenAt(lines.getLine(focusedKey()))
+  if (!fen) return false
+  window.open(`https://lichess.org/analysis/standard/${fen.replaceAll(" ", "_")}`, "_blank", "noopener")
+  status("Opened in lichess (a new tab)", { timeout: 2500 })
+})
 
 // Setup commands (layer.setup)
 const withSetup = (fn) => withBoard((b, args) => (b.layer === "setup" ? fn(b, b.setup, args) : false))

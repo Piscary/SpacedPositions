@@ -166,6 +166,15 @@ accept = ["[", "]"]
 "S" = "board.setup"
 "esc" = "board.setup"
 
+# board.letters = de: German letters for the pieces (Bauer, Springer, Läufer, Turm, Dame, König), in front of the above
+[context."layer.setup-de"]
+"b" = "board.piece pawn"
+"s" = "board.piece knight"
+"l" = "board.piece bishop"
+"t" = "board.piece rook"
+"d" = "board.piece queen"
+"k" = "board.piece king"
+
 [context."state.launcher"]
 "r" = "train.review"
 "1" = "train.storm 3"
@@ -235,6 +244,8 @@ accept = ["[", "]"]
 "g p" = "analysis.branch prev"
 "g n" = "analysis.branch next"
 "M" = "analysis.mainline"
+"z" = "analysis.fold"
+"Z" = "analysis.foldall"
 "n" = "analysis.subject next"
 "N" = "analysis.subject prev"
 "1" = "analysis.nag 1"
@@ -283,6 +294,7 @@ accept = ["[", "]"]
 "a" = "library.analyse"
 "y" = "library.copyfen"
 "e" = "library.export"
+"c" = "library.edit"
 
 [context."mode.collect"]
 "mod+enter" = "collect.save"
@@ -343,3 +355,16 @@ accept = ["[", "]"]
 [context."view.continue"]
 "a" = "home.analysis"
 "c" = "home.collect"
+
+[context."view.settings"]
+"h" = "settings.step prev"
+"l" = "settings.step next"
+"left" = "settings.step prev"
+"right" = "settings.step next"
+"enter" = "settings.edit"
+"backspace" = "settings.reset"
+"K" = "settings.keymap"
+
+[context."view.keymap"]
+"enter" = "keymap.bind"
+"backspace" = "keymap.unbind"

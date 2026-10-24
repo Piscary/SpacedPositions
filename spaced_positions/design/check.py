@@ -197,7 +197,7 @@ def check_keymap(sources: lib.Sources) -> list[Problem]:
     problems = []
     parsed: dict[str, dict[tuple, tuple[str, list[str]]]] = {}
     for context, bindings in sources.keymap.items():
-        if not re.fullmatch(r"global|pane|(mode|view|layer|overlay|state)\.[a-z]+", context):
+        if not re.fullmatch(r"global|pane|(mode|view|layer|overlay|state)\.[a-z]+(-[a-z]+)?", context):
             problems.append(err("keymap", f"unknown context '{context}'"))
         parsed[context] = {}
         for seq, value in bindings.items():

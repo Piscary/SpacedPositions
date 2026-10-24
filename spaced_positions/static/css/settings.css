@@ -1,0 +1,31 @@
+/* Settings and the keymap editor (spec 04 · Settings). */
+
+.settings, .keymap { display: grid; grid-template-rows: auto minmax(0, 1fr); height: 100%; }
+.settings__rows, .keymap__rows { min-height: 0; overflow: auto; }
+.settings__row { grid-template-columns: minmax(9rem, 14rem) minmax(0, 1.3fr) minmax(0, 1fr) auto; min-height: var(--row-md); }
+.settings__theme { grid-template-columns: auto minmax(0, 1fr) auto auto; }
+.settings__row.is-changed .list__title::after { content: " •"; color: var(--main); }
+.settings__theme.is-on .list__title, .settings__theme.is-on .settings__check { color: var(--main); font-weight: 600; }
+.settings__check { color: var(--text-muted); }
+.settings__value { display: flex; flex-wrap: wrap; gap: var(--s-1); align-items: center; min-width: 0; }
+.settings__value .segmented__option { font-size: var(--fs-xs); }
+.settings__value > b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; max-width: 100%; }
+.settings__swatch { width: var(--s-3); height: var(--s-3); border: var(--rule) solid var(--line-strong); border-radius: var(--radius); background: var(--swatch); }
+.settings__help { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.settings__actions { padding: var(--s-1) var(--s-2); }
+.settings__data { display: grid; gap: var(--s-1); padding: var(--s-1) var(--s-2); }
+.settings__import textarea { width: 100%; min-height: calc(var(--row-md) * 5); }
+@container (width < 40rem) {
+  .settings__row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .settings__row .list__meta { display: none; }
+}
+
+.keymap__row { grid-template-columns: 6rem minmax(0, 1fr) auto; }
+.keymap__keys { display: flex; flex-wrap: wrap; gap: var(--s-half); }
+.keymap__binding { padding: 0 var(--s-half); border: var(--rule) solid var(--line); border-radius: var(--radius); font-family: var(--font-mono); }
+.keymap__binding.is-mine { border-color: var(--main); color: var(--main); }
+.keymap__unmapped { padding: var(--s-1) var(--s-2); }
+.keymap__cid { color: var(--text-sub); font-family: var(--font-mono); }
+.keymap__row:is(.is-cursor, .is-selected) .keymap__cid { color: color-mix(in oklab, var(--text) 82%, var(--cursor-row)); }
+
+.train__pace .segmented__option { font-size: var(--fs-xs); }

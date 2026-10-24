@@ -122,9 +122,12 @@ sq-light = "#d8dee9"  sq-dark = "#81a1c1"  piece-set = "cburnett"
 dark), `nord`, `sepia`, `forest`, `contrast` (high contrast, WCAG AAA text). More can be added by dropping a file in
 `design/themes/`.
 
-**User themes** have the same schema, are stored in the database, and can be exported/imported as TOML text
-(`:theme export`, `:theme import` or paste a theme into the Settings page). A user theme can extend a built-in one,
-so "nord with my board colours" is 3 lines.
+**User themes** have the same schema, are stored in the database (`UserTheme`: name, label, `extends`, the values
+that differ), and can be exported/imported as TOML text (`:theme-export` copies the current theme with your
+overrides; paste one into Settings → Data to import it; `:theme-save <name>` keeps the current colours as a theme,
+`:theme-delete <name>` removes one). A user theme extends a built-in one, so "nord with my board colours" is 3 lines.
+Saving warns about contrast the lint would refuse. Built-in themes (phase 6): paper, ink, nord, sepia, forest,
+contrast (High contrast).
 
 **Switching** is instant: the active theme is a `<style id="theme">` block of custom properties; switching replaces
 that block (no reload). Live preview while the cursor moves over the theme list sets the properties directly.
@@ -141,25 +144,40 @@ that block (no reload). Live preview while the cursor moves over the theme list 
 | Pieces | piece set (live preview row) | `:set pieces=merida` |
 | Keys | keycap display (full/compact/off), teach keys, which-key on/off, **keymap overrides** | `:map <keys> <command>`, `:unmap <keys>` |
 | Layout | per-mode layouts, named layouts | `:layout save/load/reset` |
-| Advanced | any tier 2 token; custom CSS (applied last, at the user's risk, with a "disable custom CSS" safe-mode key on load: hold `Esc`) | — |
+| Advanced | any tier 2 token (`:set`); custom CSS (applied last, at the user's risk, with a "disable custom CSS" safe-mode key on load: hold `Esc`) is not built yet | — |
 
 Every setting has a `:set` name, shown in its FormRow. **All settings export as one TOML file** (theme, keymap
 overrides, layouts, preferences), so a setup can be backed up or moved to another machine with copy/paste.
 
 ```toml
-# settings export (excerpt)
+# settings export (excerpt, as built in phase 6)
 theme = "nord"
-[color]            # overrides on top of the theme
+[color]            # token overrides on top of the theme
 main = "#ebcb8b"
 [board]
 piece-set = "merida"
-coords = "outside"
+board-coords = "outside"
+[settings]         # behaviour (04 · Settings); engine.path is never exported
+"training.storm-pace" = "slow"
+"board.letters" = "de"
 [keys]
-"space o" = "train.start storm 5"   # leader o starts a 5-minute Storm from anywhere
-"Q"    = "train.quit"
+"space o" = "train.storm 5"   # leader o starts a 5-minute Storm from anywhere
 [keys.unmap]
 "F" = true
+[keys.contexts."view.library"]
+"ctrl+e" = "library.export"
+[themes.my-nord]   # your themes travel along
+label = "My nord"
+extends = "nord"
+values = { main = "#ebcb8b" }
+[[layouts]]
+name = "wide board"
+mode = "analyse"
+layout = "{…}"     # the layout tree as JSON
 ```
+
+Importing checks every value like `:set` and `:map` do, applies what is valid and names the rest. A file with
+`extends` and a `[color]` table but no `theme` is a single theme and is imported as one.
 
 ## 6 · Fonts and piece sets
 
@@ -176,7 +194,11 @@ coords = "outside"
   AGPL sets (pixel, pirouetti, letter) would be allowed but are left out to keep the licence picture simple.
 - `design check` fails for a set without all 12 pieces, without `LICENSE`, without an allowed licence in
   `design/licences.toml`, with scripts or external references in an SVG, or for a folder the token doesn't list.
-- Later (phase 6): users can add any set they own to their data folder (`pieces/`).
+- **User sets** (phase 6): any set the user owns, in the data folder: `pieces/<name>/` with the 12 pieces and, if
+  wanted, an `about.toml` (`label`, `author`, `licence`). They are checked like the bundled ones (all 12 pieces, no
+  scripts or external references, at most 300 kB a piece; a bundled name wins), served by the app
+  (`/pieces/<name>/wK.svg`, `/pieces/user.css`), listed in the picker and in Settings, and drawn on MiniBoards.
+  They never become part of the app, so their licence is the user's business.
 - Silhouette and blind modes are board *looks* (CSS classes on the board), not piece sets.
 
 ## 7 · Rules every theme must pass

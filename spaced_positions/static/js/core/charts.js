@@ -6,6 +6,7 @@
 import { handle } from "./commands.js"
 import { ctx, status } from "./context.js"
 import { switchMode } from "./layout.js"
+import { tickIn } from "./ticker.js"
 
 const cursors = new WeakMap() // figure → index
 
@@ -61,6 +62,7 @@ async function load(el, period) {
   const html = await fetch(`/stats/sections/${period ? `?period=${period}` : ""}`).then((r) => r.text()).catch(() => null)
   if (html === null) return status("Stats: the app is not reachable", { kind: "error" })
   el.innerHTML = html
+  tickIn(el)
   window.htmx?.process(el)
   for (const figure of figures(el)) {
     const points = pointsOf(figure)

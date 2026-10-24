@@ -475,7 +475,8 @@ class Compiler:
             }
             return self.any_of(t, lambda v: (checks[v] if key == "has" else ~checks[v]) if v in checks else None)
         if key == "is":
-            return self.any_of(t, lambda v: Q(deleted_at__isnull=False) if v == "trash" else None)
+            unlinked = Q(white__isnull=True, white_name__gt="") | Q(black__isnull=True, black_name__gt="")  # :player-link
+            return self.any_of(t, lambda v: {"trash": Q(deleted_at__isnull=False), "unlinked": unlinked}.get(v))
         if key == "in":
             return self.any_of(t, self.saved)
         return NotImplemented

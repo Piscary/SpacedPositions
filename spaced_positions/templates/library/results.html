@@ -33,7 +33,7 @@
     <span class="list__meta mono">{{ r.result }}</span>
     <span class="list__meta">{{ r.year|default:"" }}</span>
     <span class="list__meta library__src">{{ r.event }}{% if r.eco %} · {{ r.eco }}{% endif %}</span>
-    <span class="list__meta library__status">{% if r.deleted_at %}<span class="chip chip--bad">trash</span>{% endif %}</span>
+    <span class="list__meta library__status">{{ r.spark }}{% if r.deleted_at %}<span class="chip chip--bad">trash</span>{% endif %}</span>
   </div>
 {% elif collection == "players" %}
   <div class="list__row library__row library__row--table" role="option" aria-selected="false" data-row="@{{ r.key }}" data-title="{{ r.name }}" data-query="player:@{{ r.key }}" data-query-collection="games">

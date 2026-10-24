@@ -218,9 +218,10 @@ def test_render_is_a_book_with_variations_and_comments(ruy):
     tree.edit(e4, {"comment": "Best by test", "nags": [1]})
     html = render.render(ruy)
     assert html.startswith('<div class="movetree" data-movetree')
-    assert '<span class="mt-num">1.</span>e4<span class="mt-nag">!</span>' in html
-    assert '<span class="mt-num">1…</span>e5' in html  # a black move after a comment gets its number
-    assert 'data-variation="%d"><span class="mt-label">A</span>' % c5.id in html
+    assert '<span class="mt-num">1.</span><span class="mt-san">e4</span><span class="mt-nag">!</span>' in html
+    assert '<span class="mt-num">1…</span><span class="mt-san">e5</span>' in html  # a black move after a comment gets its number
+    assert 'data-variation="%d" data-more="0"><button type="button" class="mt-caret" data-fold' % c5.id in html  # a fold caret
+    assert '<span class="mt-label">A</span>' in html
     assert html.count("data-node=") == 6
     empty = tree.create_position(START, [])
     assert "No moves yet" in render.render(empty)

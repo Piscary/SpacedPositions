@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import collect, commands, importer, views  # noqa: F401 (commands registers the server commands)
+from . import collect, commands, edit, importer, views  # noqa: F401 (commands and edit register the server commands)
 
 app_name = "library"
 

@@ -136,3 +136,61 @@ aliases = ["detect"]
 handler = "both"
 when = "library.hasTarget"
 reason = "select positions in the Library, or open one in Analyse"
+
+# Editing the vocabulary, sources and players (spec 04 · Library, 11 §1; phase 6).
+
+["library.edit"]
+title = "Edit the selected players, sources or tags"
+group = "Library"
+aliases = ["edit"]
+args = [{ name = "values", type = "text" }]
+handler = "both"
+undoable = true
+
+["tag.new"]
+title = "New tag"
+group = "Library"
+aliases = ["new-tag"]
+args = [{ name = "name", type = "text" }]
+handler = "server"
+undoable = true
+
+["player.new"]
+title = "New player"
+group = "Library"
+aliases = ["new-player"]
+args = [{ name = "name", type = "text" }]
+handler = "server"
+undoable = true
+
+["source.new"]
+title = "New source"
+group = "Library"
+aliases = ["new-source"]
+args = [{ name = "title", type = "text" }]
+handler = "server"
+undoable = true
+
+["library.delete"]
+title = "Delete the selected players, sources or tags nothing uses"
+group = "Library"
+aliases = ["delete"]
+args = [{ name = "which", type = "text", optional = true }]
+handler = "both"
+undoable = true
+
+["library.recreate"]
+title = "Bring deleted players, sources or tags back (undo)"
+group = "Library"
+args = [{ name = "change", type = "text" }]
+handler = "server"
+hidden = true
+internal = true  # only undo and redo run it
+
+["player.link"]
+title = "Link a name on games to a player"
+group = "Library"
+aliases = ["player-link"]
+args = [{ name = "link", type = "text" }]
+handler = "server"
+undoable = true

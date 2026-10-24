@@ -200,10 +200,19 @@ PIECES_DIR = Path(__file__).resolve().parent / "static" / "pieces"
 _SVG_ROOT = re.compile(r"<svg\b([^>]*)>(.*)</svg>", re.S)
 
 
+def piece_folder(piece_set: str) -> Path | None:
+    """A bundled set, else one of the user's (`<data folder>/pieces/`, spec 07 §6)."""
+    if (PIECES_DIR / piece_set).is_dir():
+        return PIECES_DIR / piece_set
+    from spaced_positions.core import user_pieces
+
+    return user_pieces.folder() / piece_set if piece_set in user_pieces.available() else None
+
+
 @lru_cache(maxsize=256)
 def _piece_symbol(piece_set: str, code: str) -> str:
     """A piece as a <symbol id="ps-<set>-<code>">, its internal ids prefixed so several pieces can share one SVG."""
-    text = (PIECES_DIR / piece_set / f"{code}.svg").read_text()
+    text = (piece_folder(piece_set) / f"{code}.svg").read_text()
     m = _SVG_ROOT.search(text)
     attrs, inner = m.group(1), m.group(2)
     view_box = re.search(r'viewBox="([^"]+)"', attrs)
@@ -227,7 +236,7 @@ def board_svg(
     drawn as they are. Each piece kind is defined once (<symbol>) and placed with <use>."""
     placement = fen.split()[0] if fen.strip() else START_FEN.split()[0]
     board = chess.BaseBoard(placement)
-    if not (PIECES_DIR / pieces).is_dir():
+    if piece_folder(pieces) is None:
         pieces = "cburnett"
     squares, uses, codes = [], [], set()
     for square in chess.SQUARES:

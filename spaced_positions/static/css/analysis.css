@@ -125,3 +125,16 @@
 }
 .evalbar.is-top .evalbar__text { inset: var(--s-half) 0 auto; }
 .evalbar.is-black .evalbar__text { color: var(--eval-white); }
+
+/* Piece letters (07 · figurines, board.letters): the text is the SAN; German letters and figurines are drawn */
+:is([data-letters="de"], [data-figurines]) .san-l { display: none; }
+[data-letters="de"] .san-p::before { content: attr(data-de); }
+[data-figurines] .san-p::before { content: attr(data-fig); }
+
+/* Fold carets (05 · MoveTree): a folded variation shows its first move and how many follow */
+.mt-caret { margin-right: var(--s-half); padding: 0; border: 0; background: none; color: var(--text-muted); font: inherit; font-size: var(--fs-xs); cursor: pointer; }
+.mt-caret::before { content: "▾"; }
+.mt-variation.is-folded > .mt-caret::before { content: "▸"; }
+.mt-variation.is-folded > :not(.mt-caret, .mt-label, .mt-label + .mt-move) { display: none; }
+.mt-variation.is-folded::after { content: " … +" attr(data-more); color: var(--text-muted); font-family: var(--font-ui); font-size: var(--fs-xs); }
+.mt-variation[data-more="0"] > .mt-caret { visibility: hidden; }

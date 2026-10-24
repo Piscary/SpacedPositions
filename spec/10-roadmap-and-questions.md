@@ -154,6 +154,30 @@ Moved on:
   → phase 6, with the local engine.
 - An EvalGraph thumbnail in the Library's game rows → phase 6.
 
+### Phase 6 status (2026-10-24)
+
+Built: the Settings mode (themes with a live preview, tokens and settings in eight sections, `h l` steps a value,
+`↵` edits it on the command line, `⌫` resets it, contrast shown next to the colours) beside the keymap editor (every
+command with its keys, `↵` records new ones and checks them like the lint, `⌫` removes one; `:map`, `:unmap`,
+`:map-reset`, also for one context with `@view.library`). Settings next to the tokens (`:set training.new-per-day=30`):
+new cards a day, Storm pace (also in the launcher), keycaps, teach keys, which-key, piece letters, the engine (browser
+or a local program, lines, depth, threads, hash, arrows), sounds and counting numbers. User themes (`:theme-save`,
+`:theme-delete`, `:theme-export`), four more themes (Nord, Sepia, Forest, High contrast), and the whole setup as one
+TOML file (Settings → Data: export, paste to import; a pasted theme becomes a theme of its own). Piece sets of the
+user's own in the data folder (07 §6). Editing the vocabulary, sources and players in the Library (`:edit` on the
+selection, `c`; `:new-tag`, `:new-player`, `:new-source`; `d` deletes the unused ones; `:player-link` with
+`is:unlinked`), each with undo. The moved-on items: figurines, German letters and fold carets in the move tree (`z`,
+`Z`), German letters in the board editor, coordinates outside the board, `:lichess`, sound (WebAudio, off by
+default) and the Ticker, EvalGraph thumbnails in the game rows, the local engine through the app, and `:moments`
+(the old app's engine, moments and annotation detectors: errors by win-chance drop, missed wins, turning points,
+only moves and critical moments with the local engine, missed and allowed mates, tactical explosions, the
+annotator's symbols). Tests: 23 on the server, 13 journeys incl. axe.
+
+Moved on:
+- `o` open in a split, sorting by a column key, folding groups in the table, analysing a puzzle in a split inside
+  Train → phase 7 (with the migration, which brings the old app's large libraries that need them).
+- Structural suggestions (pawn structures, batteries as position themes) → phase 7.
+
 ## Out of scope for now
 
 - **Publishing** (documents, print, PDF): the old app's document editor. The Diagram renderer is shared, so it can

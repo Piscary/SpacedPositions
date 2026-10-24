@@ -172,6 +172,17 @@ reference is `spec/08-keymap.md`.
 | `S` | Set up the position (board editor) | `board.setup` |
 | `Esc` | Set up the position (board editor) | `board.setup` |
 
+## layer.setup-de
+
+| Keys | Command | Id |
+|---|---|---|
+| `b` | Piece to place pawn | `board.piece` |
+| `s` | Piece to place knight | `board.piece` |
+| `l` | Piece to place bishop | `board.piece` |
+| `t` | Piece to place rook | `board.piece` |
+| `d` | Piece to place queen | `board.piece` |
+| `k` | Piece to place king | `board.piece` |
+
 ## state.launcher
 
 | Keys | Command | Id |
@@ -256,6 +267,8 @@ reference is `spec/08-keymap.md`.
 | `g` `p` | Previous / next branch point prev | `analysis.branch` |
 | `g` `n` | Previous / next branch point next | `analysis.branch` |
 | `M` | Back to the main line | `analysis.mainline` |
+| `z` | Fold or open the variation | `analysis.fold` |
+| `Z` | Fold or open all variations | `analysis.foldall` |
 | `n` | Next / previous position of the list next | `analysis.subject` |
 | `N` | Next / previous position of the list prev | `analysis.subject` |
 | `1` | Annotation symbol 1 | `analysis.nag` |
@@ -307,6 +320,7 @@ reference is `spec/08-keymap.md`.
 | `a` | Analyse these (n / N in Analyse) | `library.analyse` |
 | `y` | Copy the FENs | `library.copyfen` |
 | `e` | Export as PGN | `library.export` |
+| `c` | Edit the selected players, sources or tags | `library.edit` |
 
 ## mode.collect
 
@@ -385,3 +399,22 @@ reference is `spec/08-keymap.md`.
 |---|---|---|
 | `a` | Continue the analysis | `home.analysis` |
 | `c` | Continue collecting | `home.collect` |
+
+## view.settings
+
+| Keys | Command | Id |
+|---|---|---|
+| `h` | Change the setting (next / previous value) prev | `settings.step` |
+| `l` | Change the setting (next / previous value) next | `settings.step` |
+| `←` | Change the setting (next / previous value) prev | `settings.step` |
+| `→` | Change the setting (next / previous value) next | `settings.step` |
+| `↵` | Edit the setting (or choose the theme) | `settings.edit` |
+| `⌫` | Back to the default | `settings.reset` |
+| `K` | Edit the keymap | `settings.keymap` |
+
+## view.keymap
+
+| Keys | Command | Id |
+|---|---|---|
+| `↵` | New keys for this command | `keymap.bind` |
+| `⌫` | Remove the keys (yours: back to the default) | `keymap.unbind` |

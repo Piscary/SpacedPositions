@@ -1,0 +1,24 @@
+name = "sepia"
+label = "Sepia"
+dark = false
+extends = "paper"
+pair = "ink"
+
+[color]
+bg = "#f4ecd8"
+bg-alt = "#ebe0c7"
+surface = "#fbf6ea"
+line = "#d9cba8"
+text = "#3b2f20"
+text-sub = "#6e5c43"
+main = "#9a5b13"
+main-text = "#fbf6ea"
+good = "#1e7a6e"
+bad = "#b03a2e"
+warn = "#8a6200"
+info = "#2f5f8a"
+special = "#7a3f8a"
+
+[board]
+sq-light = "#f0d9b5"
+sq-dark = "#b58863"

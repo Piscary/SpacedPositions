@@ -158,8 +158,10 @@ def piece_codes():
 
 @register.simple_tag
 def piece_sets():
-    """The bundled piece sets with their credits (style guide, settings)."""
-    return [{"key": k} | v for k, v in registry.themes().get("pieces", {}).items()]
+    """The piece sets with their credits (style guide, settings): the bundled ones and the user's."""
+    from spaced_positions.core import user_pieces
+
+    return [{"key": k} | v for k, v in user_pieces.all_sets().items()]
 
 
 @register.simple_tag
