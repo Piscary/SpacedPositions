@@ -12,6 +12,7 @@ import "./core/islands.js"
 import "./core/scroll.js"
 import { detect } from "./core/paste.js"
 import { loadJournal } from "./core/analysis.js"
+import { announce } from "./core/charts.js"
 
 const boot = JSON.parse(document.getElementById("boot").textContent)
 // Modules may have added to window.SPOS while they loaded (imports run first): add, don't replace.
@@ -92,4 +93,5 @@ restoreToggles()
 initKeys()
 initWorkspace(document.querySelector(".workspace"))
 loadJournal() // undo reaches analysis changes made before a reload (spec 09 §5)
+setTimeout(announce, 1500) // records and milestones reached and not announced yet
 history.replaceState({ mode: ctx.mode }, "", location.pathname + location.search)

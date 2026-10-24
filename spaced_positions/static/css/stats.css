@@ -1,0 +1,111 @@
+/* Stats and charts (spec 04 · Stats, 05 · G): server-rendered SVG coloured by class from the chart tokens. */
+
+.stats { display: grid; gap: var(--s-1); align-content: start; padding-bottom: var(--s-4); }
+.stats__periods { padding: var(--s-1) var(--s-2); }
+.stats__lead { display: grid; gap: var(--s-1); padding: var(--s-1) 0; }
+.stats__lead .meter__fill { width: var(--w); }
+.stats__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); gap: var(--s-2); }
+.stats__loading { padding: var(--s-3); }
+.stat.is-flag .stat__value { color: var(--warn); }
+
+/* ── A chart ───────────────────────────────────────────────────────────────────────────────────────────────── */
+.chart { display: grid; gap: var(--s-half); margin: var(--s-1) 0; padding: var(--s-1); border: var(--rule) solid transparent; border-radius: var(--radius); }
+.chart.is-focused { border-color: var(--main); }
+.chart:focus-visible { outline: calc(var(--rule) * 2) solid var(--focus); }
+.chart__title { color: var(--text-sub); font-size: var(--fs-sm); }
+.chart__readout { min-height: calc(var(--fs-sm) * var(--leading)); font-size: var(--fs-sm); }
+.chart__plot svg { display: block; width: 100%; height: calc(var(--row-lg) * 4); overflow: visible; }
+.chart--heatmap .chart__plot svg { height: auto; }
+.chart__axis { display: flex; justify-content: space-between; color: var(--text-sub); font-family: var(--font-mono); font-size: var(--fs-xs); }
+.chart__legend { display: flex; flex-wrap: wrap; gap: var(--s-2); font-size: var(--fs-xs); color: var(--text-sub); }
+.chart__key { display: inline-flex; gap: var(--s-half); align-items: center; }
+.chart__swatch { width: var(--s-2); height: var(--s-2); border-radius: var(--radius); background: var(--c); }
+.chart__empty { margin: 0; padding: var(--s-2) 0; }
+.chart.is-table .chart__plot, .chart.is-table .chart__axis { display: none; }
+.chart__table { border-collapse: collapse; font-size: var(--fs-sm); }
+.chart__table th, .chart__table td { padding: var(--s-half) var(--s-1); border-bottom: var(--rule) solid var(--line); text-align: right; }
+.chart__table th:first-child, .chart__table td:first-child { text-align: left; }
+
+.chart__line { fill: none; stroke: var(--c); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.chart__dot { fill: var(--c); opacity: 0; }
+.chart__dot.is-cursor { opacity: 1; }
+.chart__base { stroke: var(--line); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.chart__hit { fill: transparent; }
+.chart__bar.is-cursor .chart__hit { fill: var(--cursor-row); }
+.chart__cell { fill: var(--surface); }
+.chart__cell.lv-1 { fill: color-mix(in oklab, var(--good) 30%, var(--surface)); }
+.chart__cell.lv-2 { fill: color-mix(in oklab, var(--good) 55%, var(--surface)); }
+.chart__cell.lv-3 { fill: color-mix(in oklab, var(--good) 78%, var(--surface)); }
+.chart__cell.lv-4 { fill: var(--good); }
+.chart__cell.is-cursor { stroke: var(--main); stroke-width: 2; }
+
+/* the colour of a series: s- for strokes, f- for fills, c- for swatches */
+:is(.s-chart-1, .f-chart-1, .c-chart-1) { --c: var(--chart-1); }
+:is(.s-chart-2, .f-chart-2, .c-chart-2) { --c: var(--chart-2); }
+:is(.s-chart-3, .f-chart-3, .c-chart-3) { --c: var(--chart-3); }
+:is(.s-chart-4, .f-chart-4, .c-chart-4) { --c: var(--chart-4); }
+:is(.s-chart-5, .f-chart-5, .c-chart-5) { --c: var(--chart-5); }
+:is(.s-chart-6, .f-chart-6, .c-chart-6) { --c: var(--chart-6); }
+:is(.s-good, .f-good, .c-good) { --c: var(--good); }
+:is(.s-bad, .f-bad, .c-bad) { --c: var(--bad); }
+rect[class^="f-"] { fill: var(--c); }
+
+/* ── Horizontal bars (collection, funnel, weak spots) ──────────────────────────────────────────────────────── */
+.hbars { display: grid; gap: var(--s-half); }
+.hbar { display: grid; grid-template-columns: minmax(6rem, 14rem) minmax(0, 1fr) 4em; gap: var(--s-1); align-items: center; font-size: var(--fs-sm); }
+.hbar.is-cursor { background: var(--cursor-row); }
+.hbar__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hbar__track { height: calc(var(--space) * 2.5); border-radius: var(--radius); background: var(--surface); }
+.hbar__fill { display: block; width: var(--w); height: 100%; border-radius: var(--radius); background: var(--c); }
+.hbar__value { text-align: right; color: var(--text-sub); }
+
+/* ── Mastery ladder ────────────────────────────────────────────────────────────────────────────────────────── */
+.ladder { border-collapse: separate; border-spacing: calc(var(--rule) * 2); font-size: var(--fs-sm); }
+.ladder th { padding: 0 var(--s-1); color: var(--text-sub); font-weight: 400; text-align: left; white-space: nowrap; }
+.ladder thead th { font-size: var(--fs-xs); text-align: center; }
+.ladder td { width: 4rem; height: var(--row-sm); border-radius: var(--radius); background: var(--surface); }
+.ladder td.is-on { background: var(--special); }
+.ladder tr.is-cursor th { color: var(--text); font-weight: 600; }
+
+.sparkline { width: 100%; height: var(--row-md); }
+
+/* ── Achievements ──────────────────────────────────────────────────────────────────────────────────────────── */
+.achievement {
+  display: inline-flex;
+  gap: var(--s-half);
+  align-items: center;
+  padding: 0 var(--s-1);
+  border: var(--rule) solid var(--special);
+  border-radius: var(--radius);
+  color: var(--special);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+.achievement--level::before { content: "↑"; }
+.achievement--library::before, .achievement--daystreak::before, .achievement--retention::before,
+.achievement--storm::before, .achievement--streak::before { content: "★"; }
+
+/* ── Home ──────────────────────────────────────────────────────────────────────────────────────────────────── */
+.home { display: grid; gap: var(--s-1); align-content: start; }
+.home__quick { flex-wrap: wrap; }
+.home__library .meter__fill { width: var(--w); }
+.home__paste textarea { width: 100%; min-height: calc(var(--row-md) * 3); }
+.banner { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; padding: var(--s-1) var(--s-2); border-bottom: var(--rule) solid var(--special); background: color-mix(in oklab, var(--special) 10%, var(--bg)); }
+
+/* ── Eval graph, variation graph ───────────────────────────────────────────────────────────────────────────── */
+.graph { display: grid; gap: var(--s-half); padding: var(--s-1) var(--s-2); }
+.graph__plot svg.evalgraph__svg { display: block; width: 100%; height: calc(var(--row-lg) * 3); }
+.graph__plot--scroll { overflow: auto; max-height: 100%; }
+.evalgraph__area { fill: color-mix(in oklab, var(--text) 10%, transparent); }
+.evalgraph__hit { fill: transparent; cursor: pointer; }
+.evalgraph__hit:hover { fill: var(--cursor-row); }
+.evalgraph__cursor { stroke: var(--main); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.evalgraph__mistake { fill: var(--bad); }
+.vargraph__edge { fill: none; stroke: var(--line-strong); stroke-width: 1.5; }
+.vargraph__edge.is-path { stroke: var(--main); }
+.vargraph__dot { fill: var(--text-sub); cursor: pointer; }
+.vargraph__dot.is-path { fill: var(--main); }
+.vargraph__dot.is-good { fill: var(--mark-good); }
+.vargraph__dot.is-dubious { fill: var(--mark-dubious); }
+.vargraph__dot.is-bad { fill: var(--mark-bad); }
+.vargraph__dot.is-cursor { stroke: var(--main); stroke-width: 2; }

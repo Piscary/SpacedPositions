@@ -20,7 +20,6 @@ args = [{ name = "lives", type = "enum", values = ["0", "1", "3", "5"] }, { name
 ["train.weakest"]
 title = "Streak on your weakest motifs"
 group = "Train"
-phase = 5
 
 ["train.again"]
 title = "The same session again"

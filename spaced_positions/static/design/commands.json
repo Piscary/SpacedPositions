@@ -312,6 +312,23 @@
    ],
    "handler": "client"
   },
+  "engine.evaluate": {
+   "title": "Evaluate the main line (the eval graph)",
+   "group": "Engine",
+   "aliases": [
+    "evaluate"
+   ],
+   "args": [
+    {
+     "name": "depth",
+     "type": "int",
+     "optional": true
+    }
+   ],
+   "when": "analysis.loaded",
+   "reason": "open a game or a position first",
+   "handler": "client"
+  },
   "board.flip": {
    "title": "Flip the board",
    "group": "Board",
@@ -908,6 +925,16 @@
    "reason": "in the filter pane",
    "handler": "client"
   },
+  "library.detect": {
+   "title": "Detect tags (python-chess)",
+   "group": "Library",
+   "aliases": [
+    "detect"
+   ],
+   "handler": "both",
+   "when": "library.hasTarget",
+   "reason": "select positions in the Library, or open one in Analyse"
+  },
   "pane.focus.next": {
    "title": "Focus the next pane",
    "group": "Panes",
@@ -1344,6 +1371,92 @@
    "reason": "only when started with spos",
    "danger": true
   },
+  "chart.next": {
+   "title": "Next / previous chart",
+   "group": "Stats",
+   "args": [
+    {
+     "name": "step",
+     "type": "enum",
+     "values": [
+      "next",
+      "prev"
+     ]
+    }
+   ],
+   "when": "view.chart",
+   "reason": "in the Stats pane",
+   "handler": "client"
+  },
+  "chart.cursor": {
+   "title": "Move the cursor over the chart's points",
+   "group": "Stats",
+   "args": [
+    {
+     "name": "step",
+     "type": "enum",
+     "values": [
+      "prev",
+      "next",
+      "first",
+      "last"
+     ]
+    }
+   ],
+   "when": "view.chart",
+   "reason": "in the Stats pane",
+   "handler": "client"
+  },
+  "chart.drill": {
+   "title": "Drill down (the Library, or a Streak on a weak spot)",
+   "group": "Stats",
+   "when": "view.chart",
+   "reason": "in the Stats pane",
+   "handler": "client"
+  },
+  "chart.table": {
+   "title": "The chart as a table",
+   "group": "Stats",
+   "when": "view.chart",
+   "reason": "in the Stats pane",
+   "handler": "client"
+  },
+  "stats.period": {
+   "title": "Period of the charts",
+   "group": "Stats",
+   "aliases": [
+    "period"
+   ],
+   "args": [
+    {
+     "name": "period",
+     "type": "enum",
+     "values": [
+      "7d",
+      "30d",
+      "90d",
+      "1y",
+      "all"
+     ]
+    }
+   ],
+   "handler": "client"
+  },
+  "home.analysis": {
+   "title": "Continue the analysis",
+   "group": "Home",
+   "handler": "client"
+  },
+  "home.collect": {
+   "title": "Continue collecting",
+   "group": "Home",
+   "handler": "client"
+  },
+  "home.dismiss": {
+   "title": "Dismiss the announcement",
+   "group": "Home",
+   "handler": "client"
+  },
   "train.review": {
    "title": "Review: due and new cards",
    "group": "Train",
@@ -1404,7 +1517,6 @@
   "train.weakest": {
    "title": "Streak on your weakest motifs",
    "group": "Train",
-   "phase": 5,
    "handler": "client"
   },
   "train.again": {
@@ -2956,6 +3068,158 @@
   "view.filters": {
    "-": {
     "command": "library.exclude",
+    "args": []
+   }
+  },
+  "view.chart": {
+   "j": {
+    "command": "chart.next",
+    "args": [
+     "next"
+    ]
+   },
+   "k": {
+    "command": "chart.next",
+    "args": [
+     "prev"
+    ]
+   },
+   "down": {
+    "command": "chart.next",
+    "args": [
+     "next"
+    ]
+   },
+   "up": {
+    "command": "chart.next",
+    "args": [
+     "prev"
+    ]
+   },
+   "h": {
+    "command": "chart.cursor",
+    "args": [
+     "prev"
+    ]
+   },
+   "l": {
+    "command": "chart.cursor",
+    "args": [
+     "next"
+    ]
+   },
+   "left": {
+    "command": "chart.cursor",
+    "args": [
+     "prev"
+    ]
+   },
+   "right": {
+    "command": "chart.cursor",
+    "args": [
+     "next"
+    ]
+   },
+   "H": {
+    "command": "chart.cursor",
+    "args": [
+     "first"
+    ]
+   },
+   "L": {
+    "command": "chart.cursor",
+    "args": [
+     "last"
+    ]
+   },
+   "enter": {
+    "command": "chart.drill",
+    "args": []
+   },
+   "t": {
+    "command": "chart.table",
+    "args": []
+   },
+   "1": {
+    "command": "stats.period",
+    "args": [
+     "7d"
+    ]
+   },
+   "2": {
+    "command": "stats.period",
+    "args": [
+     "30d"
+    ]
+   },
+   "3": {
+    "command": "stats.period",
+    "args": [
+     "90d"
+    ]
+   },
+   "4": {
+    "command": "stats.period",
+    "args": [
+     "1y"
+    ]
+   },
+   "5": {
+    "command": "stats.period",
+    "args": [
+     "all"
+    ]
+   }
+  },
+  "view.today": {
+   "r": {
+    "command": "train.review",
+    "args": []
+   },
+   "1": {
+    "command": "train.storm",
+    "args": [
+     "3"
+    ]
+   },
+   "2": {
+    "command": "train.storm",
+    "args": [
+     "5"
+    ]
+   },
+   "3": {
+    "command": "train.streak",
+    "args": [
+     "0"
+    ]
+   },
+   "4": {
+    "command": "train.streak",
+    "args": [
+     "3"
+    ]
+   },
+   "5": {
+    "command": "train.weakest",
+    "args": []
+   },
+   "6": {
+    "command": "train.again",
+    "args": []
+   },
+   "x": {
+    "command": "home.dismiss",
+    "args": []
+   }
+  },
+  "view.continue": {
+   "a": {
+    "command": "home.analysis",
+    "args": []
+   },
+   "c": {
+    "command": "home.collect",
     "args": []
    }
   }

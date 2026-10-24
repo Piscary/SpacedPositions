@@ -163,6 +163,20 @@ def piece_sets():
 
 
 @register.simple_tag
+def home_today():
+    from spaced_positions.stats.home import today
+
+    return today()
+
+
+@register.simple_tag
+def home_continue():
+    from spaced_positions.stats.home import continue_
+
+    return continue_()
+
+
+@register.simple_tag
 def tag_presets():
     from spaced_positions.library.collect import presets
 

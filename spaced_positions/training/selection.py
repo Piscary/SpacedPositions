@@ -111,7 +111,7 @@ def last_options() -> dict | None:
     last = Session.objects.exclude(Q(ended_at=None) & Q(solved=0) & Q(failed=0)).first()
     if not last:
         return None
-    keep = ("minutes", "lives", "look", "side", "first_move", "pace")
+    keep = ("minutes", "lives", "look", "side", "first_move", "pace", "filter")
     return {"mode": last.mode, **{k: v for k, v in last.options.items() if k in keep}}
 
 

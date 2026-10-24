@@ -49,6 +49,14 @@ def _options(data: dict) -> tuple[str, dict]:
         options["lives"] = int(data.get("lives") or 0) if int(data.get("lives") or 0) in (0, 1, 3, 5) else 0
     if str(data.get("filter") or "").strip():
         options["filter"] = str(data["filter"]).strip()[:500]
+    if data.get("weakest"):  # a Streak on the weakest motifs (Stats · Weak spots)
+        from spaced_positions.stats import metrics
+
+        weak = metrics.weakest(metrics.tag_rows(metrics.load()), k=4)
+        if not weak:
+            raise ValueError("no weak spots yet: they show after 3 attempts on a motif")
+        options["filter"] = "tag:" + ",".join(r["tag"].key for r in weak)
+        options["weakest"] = [r["tag"].name for r in weak]
     cards = data.get("cards")
     if isinstance(cards, list) and cards:
         options["cards"] = [str(c) for c in cards][:200]
@@ -155,6 +163,9 @@ def end(request, sid):
         session.streak = max(0, int(data.get("streak") or 0))
         session.duration_s = max(0, int(data.get("duration_s") or 0)) or None
         session.save()
+        from spaced_positions.stats.metrics import sync_achievements
+
+        sync_achievements(session=session)  # records, milestones and level-ups reached in it: on the result screen
     return JsonResponse({"ok": True})
 
 
@@ -206,7 +217,10 @@ def launcher(request):
 
 
 def launcher_context() -> dict:
+    from spaced_positions.stats import metrics
+
     counts = selection.counts()
+    weak = metrics.weakest(metrics.tag_rows(metrics.load()), k=3)
     records = selection.records()
     return {
         "counts": counts,
@@ -216,6 +230,7 @@ def launcher_context() -> dict:
         "storm_best": {m: records["storm"].get(m, 0) for m in (3, 5, 10)},
         "streak_best": records["streak"].get(0, 0),
         "again": selection.last_options(),
+        "weakest": [f"{r['tag'].name} {round(100 * r['smoothed'])}%" for r in weak],
         "saved_queries": SavedQuery.objects.filter(collection__in=["positions", "puzzles"])[:9],
         "custom_modes": [("review", "Review", "b"), ("storm", "Storm 3′", "n"), ("streak", "Streak", "m")],
         "custom_looks": [("normal", "Normal", "q"), ("silhouette", "Silhouette", "w"), ("blind", "Blind", "e")],

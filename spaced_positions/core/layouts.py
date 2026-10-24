@@ -97,8 +97,14 @@ VIEWS = {
             hints=(("analysis.comment", "comment"), ("analysis.annotate", "annotate"), ("analysis.puzzle start", "puzzle"),
                    ("section.next", "next section"), ("section.toggle", "fold")),
         ),
-        View("evalgraph", "Eval graph", "g", 5, "Evaluation over a game (games arrive with the library)."),
-        View("vargraph", "Variation graph", "r", 5, "The move tree as a graph."),
+        View(
+            "evalgraph", "Eval graph", "g", 0, "The engine's evaluation over the main line; mistakes marked.", "views/evalgraph.html",
+            hints=(("engine.evaluate", "evaluate"), ("analysis.back", "back"), ("analysis.forward", "forward")),
+        ),
+        View(
+            "vargraph", "Variation graph", "r", 0, "The move tree as a graph: the shape of a big analysis.", "views/vargraph.html",
+            hints=(("analysis.sibling next", "variation"), ("analysis.forward", "forward")),
+        ),
         View(
             "library", "Library", "l", 0, "Positions, games, puzzles and more, with the query bar.", "views/library.html",
             list_view=True,
@@ -118,13 +124,27 @@ VIEWS = {
             hints=(("collect.save", "save & next"), ("collect.source", "source"), ("collect.diagram up", "diagram +1"),
                    ("collect.tag", "tag"), ("collect.ready", "ready")),
         ),
-        View("chart", "Chart", "c", 5, "Statistics charts."),
+        View(
+            "chart", "Stats", "c", 0, "Progress in charts and numbers: every number drills down.", "views/stats.html",
+            hints=(("chart.next next", "next chart"), ("chart.cursor next", "points"), ("chart.drill", "drill down"),
+                   ("chart.table", "table"), ("stats.period 30d", "period")),
+        ),
         View(
             "pgn", "PGN / FEN", "p", 0, "The position or game as text; paste to load.", "views/pgn.html",
             hints=(("pane.insert", "edit"), ("board.copyfen", "copy FEN"), ("board.copypgn", "copy PGN"), ("form.submit", "show what you pasted")),
         ),
         View("tags", "Tags", "t", 4, "The tag vocabulary."),
         View("settings", "Settings", None, 6, "Every setting, searchable."),
+        View(
+            "today", "Today", "h", 0, "What to do now: due cards, one-key sessions, today's numbers, the pattern library.",
+            "views/today.html",
+            hints=(("train.review", "review"), ("train.storm 3", "Storm"), ("train.weakest", "weakest"), ("section.next", "next section")),
+        ),
+        View(
+            "continue", "Continue", "o", 0, "The open analysis, the next diagram, a paste box, recent work.", "views/continue.html",
+            list_view=True,
+            hints=(("home.analysis", "analysis"), ("home.collect", "collect"), ("pane.insert", "paste box"), ("list.open", "open")),
+        ),
         View(
             "welcome", "About this mode", None, 0, "What this mode is for.", "views/welcome.html",
             hints=(("pane.scroll down", "scroll"), ("mode.ui", "style guide"), ("cmdline.open", "commands"), ("help.context", "keys")),
@@ -156,7 +176,7 @@ def split(direction, sizes, *children):
 
 
 DEFAULTS = {
-    "home": split("row", [55, 45], pane("welcome"), pane("demo", "A")),
+    "home": split("row", [55, 45], pane("today"), pane("continue", "A")),
     "train": split("row", [60, 40], pane("board", "A"), pane("queue", "A")),
     "analyse": split(
         "row",
@@ -166,7 +186,7 @@ DEFAULTS = {
     ),
     "collect": split("row", [55, 45], pane("board", "A"), split("col", [55, 45], pane("entry"), pane("pgn", "A"))),
     "library": split("row", [20, 50, 30], pane("filters", "A"), pane("library", "A"), pane("board", "A")),
-    "stats": split("row", [60, 40], pane("chart"), pane("welcome")),
+    "stats": pane("chart"),
     "settings": split("row", [65, 35], pane("settings"), pane("welcome")),
     "ui": split("row", [56, 44], pane("components"), split("col", [42, 58], pane("demo", "A"), pane("board", "A"))),
 }
@@ -182,6 +202,8 @@ OLD_DEFAULTS = {
         split("col", [16, 50, 34], pane("engine", "A"), pane("moves", "A"), pane("inspector", "A")),
     )],
     "collect": [],
+    "home": [split("row", [55, 45], pane("welcome"), pane("demo", "A"))],
+    "stats": [split("row", [60, 40], pane("chart"), pane("welcome"))],
 }
 
 

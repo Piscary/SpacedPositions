@@ -213,7 +213,8 @@ class Session(models.Model):
             return f"Storm {o.get('minutes', 3)}′"
         if self.mode == self.Mode.STREAK:
             lives = o.get("lives", 0)
-            return "Streak" + (f" ♥{lives}" if lives else "") + (" · blind" if o.get("look") == "blind" else "")
+            return ("Streak" + (f" ♥{lives}" if lives else "") + (" · blind" if o.get("look") == "blind" else "")
+                    + (" · weakest motifs" if o.get("weakest") else ""))
         return "Review"
 
 

@@ -13,7 +13,7 @@ from django.utils import timezone
 from spaced_positions.core.server_commands import CommandError, command
 from spaced_positions.training.models import Attempt, Position
 
-from .models import Game, GameTag, NodeTag, PositionTag, SavedQuery, Tag
+from .models import Game, GameTag, NodeTag, PositionTag, SavedQuery, Tag, TagDismissal
 from .text import fold, slug
 from .views import objects
 
@@ -44,14 +44,36 @@ def _tag(value: str) -> Tag:
 
 
 def _apply(change: dict) -> dict:
-    """Apply {"c", "add": [[id, tag, origin]], "remove": [[id, tag, origin]]}; returns the inverse."""
+    """Apply {"c", "add": [[id, tag, origin]], "remove": [[id, tag, origin]]}; returns the inverse. A tag the user
+    takes away is remembered (detection won't add it again); one the user adds again is no longer dismissed."""
     Link, owner = LINKS[change["c"]]
+    dismissal = {"positions": "position_id", "nodes": "node_id"}.get(change["c"])
     with transaction.atomic():
         for obj, tag, _origin in change.get("remove", []):
             Link.objects.filter(**{owner: obj, "tag_id": tag}).delete()
+            if dismissal and not change.get("quiet"):
+                TagDismissal.objects.get_or_create(**{dismissal: obj, "tag_id": tag})
         for obj, tag, origin in change.get("add", []):
-            Link.objects.get_or_create(**{owner: obj, "tag_id": tag}, defaults={"origin": origin})
-    return {"c": change["c"], "add": change.get("remove", []), "remove": change.get("add", [])}
+            Link.objects.update_or_create(**{owner: obj, "tag_id": tag}, defaults={"origin": origin})
+            if dismissal:
+                TagDismissal.objects.filter(**{dismissal: obj, "tag_id": tag}).delete()
+    _refresh_difficulty(change)
+    # the inverse is an undo: taking a tag away again is not the user dismissing it
+    return {"c": change["c"], "add": change.get("remove", []), "remove": change.get("add", []), "quiet": True}
+
+
+def _refresh_difficulty(change: dict) -> None:
+    from .detect import refresh_difficulty
+
+    ids = {row[0] for row in change.get("add", []) + change.get("remove", [])}
+    if change["c"] == "positions":
+        positions = Position.objects.filter(pk__in=ids)
+    elif change["c"] == "nodes":
+        positions = Position.objects.filter(nodes__in=ids).distinct()
+    else:
+        return
+    for p in positions:
+        refresh_difficulty(p)
 
 
 def _relink_result(message: str, change: dict) -> dict:
@@ -75,8 +97,8 @@ def tag(args, context, body):
     Link, owner = LINKS[collection]
     have = set(Link.objects.filter(**{f"{owner}__in": ids, "tag": t}).exclude(origin="suggested").values_list(owner, flat=True))
     change = {"c": collection, "add": [[i, t.id, "manual"] for i in ids if i not in have], "remove": []}
-    # a suggestion that is confirmed becomes a manual tag
-    change["remove"] += [[i, t.id, "suggested"] for i in Link.objects.filter(**{f"{owner}__in": ids, "tag": t, "origin": "suggested"}).values_list(owner, flat=True)]
+    # a suggestion that is confirmed becomes a manual tag (added again as manual: update_or_create in _apply)
+    change["add"] += [[i, t.id, "manual"] for i in Link.objects.filter(**{f"{owner}__in": ids, "tag": t, "origin": "suggested"}).values_list(owner, flat=True)]
     if t.field.selection == "single":  # one tag of this field per object: the others go
         change["remove"] += [[getattr(link, owner), link.tag_id, link.origin]
                              for link in Link.objects.filter(**{f"{owner}__in": ids, "tag__field": t.field}).exclude(tag=t)]
@@ -199,4 +221,23 @@ def trash_many(args, context, body):
         "effects": {"library": "changed"},
         "undo": {"command": "library.trashmany", "args": [json.dumps(inverse)]},
         "redo": {"command": "library.trashmany", "args": [json.dumps(change)]},
+    }
+
+
+@command("library.detect")
+def detect_tags(args, context, body):
+    """`:detect`: python-chess detection (library/detect.py) on the selection, the query, or the open position."""
+    from .detect import run
+
+    collection, ids = _targets(body)
+    if collection != "positions":
+        raise CommandError("detection works on positions")
+    added = suggested = moves = 0
+    for position in Position.objects.filter(pk__in=ids[:2000]):
+        result = run(position, search=len(ids) <= 50)
+        added, suggested, moves = added + len(result["added"]), suggested + len(result["suggested"]), moves + result["moves"]
+    n = len(ids)
+    return {
+        "message": f"Detected on {n} position{'s' if n != 1 else ''}: {added} tags, {suggested} suggestions, {moves} move tags",
+        "effects": {"library": "changed"},
     }

@@ -36,6 +36,10 @@ class Node(models.Model):
     shapes = models.JSONField(default=list, blank=True, help_text="Arrows and circles (chessground shapes)")
     squares = models.JSONField(default=dict, blank=True, help_text="Filled squares {e4: 'green'}")
     tags = models.ManyToManyField("library.Tag", through="library.NodeTag", related_name="nodes", blank=True)
+    # the engine's evaluation of the position after the move, from white's side (`:evaluate`, the eval graph)
+    eval_cp = models.IntegerField(null=True, blank=True)
+    eval_mate = models.SmallIntegerField(null=True, blank=True)
+    eval_depth = models.PositiveSmallIntegerField(null=True, blank=True)
 
     class Meta:
         ordering = ["order", "id"]

@@ -117,7 +117,7 @@ Details of the board's behaviour are in 06. These are the visual components.
 | **MoveTree** (book style) | The analysis as text | Main line as flowing text, variations as indented blocks with letters (A, B …) and their mark colour as left border, comments in place, move tags as small chips after the move, NAG glyphs, fold carets. Cursor = current move (accent background); path to the cursor tinted. Puzzle markup: start framed, solver moves underlined, answer lines dotted, draft pale. |
 | **MoveTable** (columns) | Compact two-column move list (like lichess) | For games and for small panes; variations shown as an expandable row under their move. Switch with `␣ u m`. |
 | **VariationGraph** | The move tree as a graph | Nodes = moves (dot coloured by mark, size by subtree), edges = continuations; main line horizontal, variations branch below. Cursor shared with MoveTree. Good for seeing the shape of a big analysis and the puzzle's answer lines at once. Read-only; `h j k l` navigates. |
-| **EvalGraph** | Evaluation over a game | Area chart centred on 0 (white above), clipped at ±5; mistakes marked (`?`, `??` dots); click/`h l` to go to a move. Shared cursor with the board. |
+| **EvalGraph** | Evaluation over a game or a position's main line | Area chart centred on 0 (white above), clipped at ±5; mistakes marked (`?`, `??` and drops of 1.5 or more: dots); click to go to a move, the analysis keys move the cursor. Shared cursor with the board. The values come from `:evaluate` (the engine over the main line, stored per move). |
 | **MoveInput** | Typed move entry | Inline field on the board footer; live candidate preview as an arrow; ambiguity list (`Nbd2 / Nfd2`); English and German letters. |
 | **SetupPalette** | Board editor pieces | 6 pieces × 2 colours + eraser + hand; keys `1`–`6`, `c` colour, `x` eraser; shows what a click places now. |
 | **PositionMeta** | Side to move, castling, en passant, move number | Compact controls under the board in Setup; each with a key. |
@@ -133,8 +133,10 @@ Details of the board's behaviour are in 06. These are the visual components.
 
 ## G · Charts
 
-Charts are **server-rendered SVG** with tokens as colours (no chart library). Interaction (cursor, tooltips) is one
-small shared JS island (`chart.js`) that reads `data-*` attributes from the SVG.
+Charts are **server-rendered SVG** with tokens as colours (no chart library; `stats/charts.py`). Interaction (cursor,
+read-out) is one small shared JS island (`core/charts.js`) that reads the points from the figure's `data-points`.
+The EvalGraph and VariationGraph are the exception: they are drawn in the browser (`islands/graphs.js`) from the tree
+Analyse already has, so they follow the cursor without requests.
 
 Rules for all charts:
 - A chart is focusable; `h/l` moves a cursor along the data points, the value shows in a read-out row above the chart

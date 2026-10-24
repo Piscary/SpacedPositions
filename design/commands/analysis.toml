@@ -176,3 +176,11 @@ undoable = true
 title = "Engine lines"
 group = "Engine"
 args = [{ name = "count", type = "enum", values = ["1", "2", "3", "4", "5"], optional = true }]
+
+["engine.evaluate"]
+title = "Evaluate the main line (the eval graph)"
+group = "Engine"
+aliases = ["evaluate"]
+args = [{ name = "depth", type = "int", optional = true }]
+when = "analysis.loaded"
+reason = "open a game or a position first"

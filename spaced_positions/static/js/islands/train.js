@@ -117,6 +117,7 @@ async function start(params) {
 handle("train.review", () => start({ mode: "review", look: "normal", side: "move" }))
 handle("train.storm", ([minutes]) => start({ mode: "storm", minutes: Number(minutes || 3), look: "normal", side: "move", pace: "medium" }))
 handle("train.streak", ([lives, look]) => start({ mode: "streak", lives: Number(lives || 0), look: look || "normal", side: "move" }))
+handle("train.weakest", () => start({ mode: "streak", lives: 0, look: "normal", side: "move", weakest: true }))
 handle("train.again", () => {
   const params = T.params || lastFromLauncher()
   if (!params) return false

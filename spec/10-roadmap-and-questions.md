@@ -133,6 +133,27 @@ Moved on:
 - `o` open in a split, sorting by a column key, folding groups in the table, analysing a puzzle in a split inside
   Train → phase 6 (layouts).
 
+### Phase 5 status (2026-10-24)
+
+Built: the `stats` app with chess-study-manager's metrics ported (stages, pattern library with history and
+forecast, retention, mastery ladder per tag and family, weak spots, robustness, Storm and Streak records,
+consistency, the activity calendar, points per week, the collection and its funnel) and achievements (milestones,
+records, level-ups; logged once, the first run logs the history as seen except the latest). Charts as
+server-rendered SVG (line, stacked bars, horizontal bars, calendar heatmap, ladder, sparkline) with a keyboard
+island: the Stats mode with ten sections, periods, table views and drill-downs into the Library or a Streak. Home
+built: Today (due, quick sessions, today, the pattern library, the achievement banner) and Continue (analysis,
+collect, paste box, recent). Achievement chips on the result screen and once in the status line; the weakest motifs
+in the launcher and as a session. Tag detection ported from the old app (all 1,161 old auto tags reproduced) with
+suggestions, dismissals and automatic difficulty from the old tag weights; `:detect`, and detection on Collect saves
+and imported puzzles. `:evaluate`, the eval graph and the variation graph. Tests: 11 on the server, 5 journeys.
+
+Moved on:
+- Sound (optional clicks and tones) and the Ticker (numbers counting up) → phase 6 (settings and polish).
+- Detection by the engine (errors by win-chance drop, turning points: the old app's `engine` and `moments`
+  detectors), structural suggestions (pawn structure, batteries as position themes) and annotation-symbol moments
+  → phase 6, with the local engine.
+- An EvalGraph thumbnail in the Library's game rows → phase 6.
+
 ## Out of scope for now
 
 - **Publishing** (documents, print, PDF): the old app's document editor. The Diagram renderer is shared, so it can

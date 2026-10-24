@@ -179,7 +179,7 @@ class TestApi:
         session = Session.objects.get()
         assert (session.solved, session.failed, session.best_combo) == (1, 1, 1) and session.ended_at
         html = client.get(f"/train/r/{sid}/result/").content.decode()
-        assert "Storm 5′" in html and "new best: 1" in html and html.count('data-row="') == 2
+        assert "Storm 5′" in html and "▲ new best Storm 5′: 1" in html and html.count('data-row="') == 2
 
     def test_mirrored_side_and_given_cards(self, client):
         p = puzzles.create_from_line(MATE_IN_2, ["d1d8"])

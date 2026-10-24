@@ -8,6 +8,8 @@ import { mountInspector, mountMoves } from "./analysis.js"
 import { mountEngine } from "./engine.js"
 import { mountFilters, mountLibrary } from "./library.js"
 import { mountEntry } from "./collect.js"
+import { mountStats } from "./charts.js"
+import { mountGraph } from "../islands/graphs.js"
 
 const MOUNT = {
   board: mountBoard,
@@ -19,6 +21,9 @@ const MOUNT = {
   library: mountLibrary,
   filters: mountFilters,
   entry: mountEntry,
+  stats: mountStats,
+  evalgraph: mountGraph,
+  vargraph: mountGraph,
 }
 
 export function mountIslands(root = document) {

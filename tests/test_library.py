@@ -147,7 +147,10 @@ def test_collect_save_duplicate_merge_and_diagram(client):
     saved = post(client, "/lib/collect/save/", body).json()
     assert saved["ok"] and saved["message"].startswith("Saved p")
     p = Position.objects.get()
-    assert (p.title, p.source.title, p.source_page, p.source_ref, p.tag_names) == ("Nr. 1", "Polgár 5334", "41", "1", ["Grundreihenmatt"])
+    assert (p.title, p.source.title, p.source_page, p.source_ref) == ("Nr. 1", "Polgár 5334", "41", "1")
+    assert p.tag_links.get(tag__key="back-rank-mate").origin == "manual"
+    assert p.tag_links.get(tag__key="endgame").origin == "auto"  # detected (library/detect.py)
+    assert p.tag_links.get(tag__key="mate-in-1").origin == "auto"  # the mate search found Rd8#
     again = post(client, "/lib/collect/save/", body | {"moves": ["d1d8"]}).json()
     assert not again["ok"] and again["duplicate"]["short"] == p.short_id
     merged = post(client, "/lib/collect/save/", body | {"moves": ["d1d8"], "how": "merge"}).json()

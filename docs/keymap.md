@@ -343,3 +343,45 @@ reference is `spec/08-keymap.md`.
 | Keys | Command | Id |
 |---|---|---|
 | `-` | Exclude the facet (-term) | `library.exclude` |
+
+## view.chart
+
+| Keys | Command | Id |
+|---|---|---|
+| `j` | Next / previous chart next | `chart.next` |
+| `k` | Next / previous chart prev | `chart.next` |
+| `↓` | Next / previous chart next | `chart.next` |
+| `↑` | Next / previous chart prev | `chart.next` |
+| `h` | Move the cursor over the chart's points prev | `chart.cursor` |
+| `l` | Move the cursor over the chart's points next | `chart.cursor` |
+| `←` | Move the cursor over the chart's points prev | `chart.cursor` |
+| `→` | Move the cursor over the chart's points next | `chart.cursor` |
+| `H` | Move the cursor over the chart's points first | `chart.cursor` |
+| `L` | Move the cursor over the chart's points last | `chart.cursor` |
+| `↵` | Drill down (the Library, or a Streak on a weak spot) | `chart.drill` |
+| `t` | The chart as a table | `chart.table` |
+| `1` | Period of the charts 7d | `stats.period` |
+| `2` | Period of the charts 30d | `stats.period` |
+| `3` | Period of the charts 90d | `stats.period` |
+| `4` | Period of the charts 1y | `stats.period` |
+| `5` | Period of the charts all | `stats.period` |
+
+## view.today
+
+| Keys | Command | Id |
+|---|---|---|
+| `r` | Review: due and new cards | `train.review` |
+| `1` | Storm 3 | `train.storm` |
+| `2` | Storm 5 | `train.storm` |
+| `3` | Streak 0 | `train.streak` |
+| `4` | Streak 3 | `train.streak` |
+| `5` | Streak on your weakest motifs | `train.weakest` |
+| `6` | The same session again | `train.again` |
+| `x` | Dismiss the announcement | `home.dismiss` |
+
+## view.continue
+
+| Keys | Command | Id |
+|---|---|---|
+| `a` | Continue the analysis | `home.analysis` |
+| `c` | Continue collecting | `home.collect` |

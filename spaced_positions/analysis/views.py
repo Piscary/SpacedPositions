@@ -281,3 +281,21 @@ def new_position(request, pid):
         position.game, position.game_node = owner, node
         position.save(update_fields=["game", "game_node"])
     return JsonResponse({"ok": True, "position": str(position.uuid), "message": f"New position {position.short_id}"})
+
+
+@require_POST
+def evals(request, pid):
+    """Engine evaluations of moves (`:evaluate`), from white's side: {"evals": {node id: {cp, mate, depth}}}. Not a
+    change of the analysis (no journal entry): the engine can always compute them again."""
+    owner, data = _position(pid), _json(request)
+    rows = data.get("evals") or {}
+    nodes = {n.id: n for n in owner.nodes.filter(id__in=[int(k) for k in rows if str(k).isdigit()])}
+    for key, value in rows.items():
+        node = nodes.get(int(key)) if str(key).isdigit() else None
+        if node is None or not isinstance(value, dict):
+            continue
+        node.eval_cp = int(value["cp"]) if value.get("cp") is not None else None
+        node.eval_mate = int(value["mate"]) if value.get("mate") is not None else None
+        node.eval_depth = int(value.get("depth") or 0) or None
+        node.save(update_fields=["eval_cp", "eval_mate", "eval_depth"])
+    return _state(owner, message=f"Evaluated {len(nodes)} moves")

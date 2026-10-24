@@ -16,6 +16,9 @@
     </div>
     <div class="train__session">
       {% cmd "train.weakest" label="Weakest motifs" %}
+      <span class="train__session-info">{% if weakest %}{{ weakest|join:" · " }}{% else %}after 3 attempts on a motif{% endif %}</span>
+    </div>
+    <div class="train__session">
       {% cmd "train.again" label="Again" %}
       <span class="train__session-info" data-again-label>{% if again %}{{ again.mode }}{% if again.minutes %} {{ again.minutes }}′{% endif %}{% if again.lives %} ♥{{ again.lives }}{% endif %}{% if again.look and again.look != "normal" %} · {{ again.look }}{% endif %}{% endif %}</span>
     </div>

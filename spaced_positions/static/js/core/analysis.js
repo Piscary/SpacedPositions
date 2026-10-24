@@ -93,6 +93,7 @@ function apply(key, data, { cursor = null } = {}) {
   trees.set(key, t)
   t.html = data.html
   renderMoves(key)
+  emit("analysis:tree", { key })
   if (data.journal) {
     const entry = data.journal
     pushUndo({ label: entry.label, undo: () => journal(entry.id, "undo"), redo: () => journal(entry.id, "redo") })
@@ -161,6 +162,28 @@ async function playMove(key, move) {
     return showCursor(key)
   }
   apply(key, data, { cursor: data.node })
+}
+
+/** The main line from the start (the eval graph, `:evaluate`). */
+export function mainlineOf(t) {
+  const out = [t.nodes.get(t.root)]
+  let id = t.root
+  while (kidsOf(t, id)[0]) {
+    id = kidsOf(t, id)[0].id
+    out.push(t.nodes.get(id))
+  }
+  return out
+}
+
+export { moveTo, kidsOf, path }
+
+/** Store engine evaluations ({node id: {cp, mate, depth}}) and show them. */
+export async function saveEvals(key, evals) {
+  const t = trees.get(key)
+  const { data } = await post(`/analysis/${t.position.id}/evals/`, { evals })
+  if (!data.ok) return status(data.message, { kind: "error" }) || false
+  apply(key, data)
+  status(data.message, { kind: "good", timeout: 3000 })
 }
 
 /** Add a line of moves (from the engine) after the cursor; moves that exist are reused. */

@@ -108,6 +108,8 @@ class Tag(models.Model):
     task = models.CharField(max_length=120, blank=True, help_text="Objective tags: the task, {side} = Weiß/Schwarz")
     task_en = models.CharField(max_length=120, blank=True)
     base_difficulty = models.PositiveSmallIntegerField(default=2)
+    weight = models.FloatField(default=1.0, help_text="How much it counts for a position's difficulty (0: not at all)")
+    analysis_weight = models.FloatField(default=0.0, help_text="How much it counts as a move tag of the analysis")
     order = models.PositiveSmallIntegerField(default=0)
     search = models.TextField(blank=True, editable=False, help_text="Folded key, names and aliases")
 
@@ -157,6 +159,18 @@ class GameTag(TagLink):
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=["game", "tag"], name="game_tag_once")]
+
+
+class TagDismissal(models.Model):
+    """A tag the user removed from a position or a move: detection never adds it there again."""
+
+    position = models.ForeignKey("training.Position", null=True, blank=True, on_delete=models.CASCADE, related_name="+")
+    node = models.ForeignKey("analysis.Node", null=True, blank=True, on_delete=models.CASCADE, related_name="+")
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name="+")
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["position", "node", "tag"], name="dismissed_once")]
 
 
 class TagPreset(models.Model):

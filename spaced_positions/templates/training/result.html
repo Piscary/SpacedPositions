@@ -1,7 +1,7 @@
 <div class="result" data-result="{{ session.uuid }}">
   <div class="result__head">
     <span class="result__label">{{ session.label }}</span>
-    {% if record %}<span class="achievement">new best: {{ session.score }}{% if best_before %} (was {{ best_before }}){% endif %}</span>{% endif %}
+    {% for a in session.achievements.all %}<span class="achievement achievement--{{ a.kind }}">{{ a.label }}</span>{% endfor %}
   </div>
   <div class="stats-row">
     <div class="stat"><span class="stat__label">{% if session.mode == "streak" %}Streak{% else %}Solved{% endif %}</span><span class="stat__value">{{ session.score }}</span></div>

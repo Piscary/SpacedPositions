@@ -71,7 +71,8 @@ Keymap overrides use the same notation: `"space o" = "train.start storm 5"` (a c
 | `L` | Layouts: save, load, reset |
 
 View picker (after `v`, `s`, `e`): `b` board · `m` moves · `e` engine · `i` inspector · `g` eval graph · `r` variation
-graph · `l` library · `q` queue · `c` chart · `n` notes · `p` PGN/FEN text · `t` tags.
+graph · `l` library · `f` filters · `s` entry session · `q` queue · `c` stats · `h` today · `o` continue · `n` notes ·
+`p` PGN/FEN text · `t` tags.
 
 ---
 
@@ -118,11 +119,12 @@ column headers (phase 6). Grids move with `j k` in reading order.
 
 | Key | Command |
 |---|---|
-| `r` | Review |
+| `r` | Review (the Today pane) |
 | `1`–`6` | Quick sessions (Storm 3′, Storm 5′, Streak, Streak ♥3, weakest motifs, again) |
-| `a` | Continue the last analysis |
-| `c` | Continue collecting (last source) |
-| `p` | Focus the paste box |
+| `x` | Dismiss the announcement banner |
+| `a` | Continue the last analysis (the Continue pane) |
+| `c` | Continue collecting (last source, next diagram) |
+| `i` | Focus the paste box (`p` would collide with Analyse's puzzle keys when the pane is placed there) |
 
 ## Train
 
@@ -208,8 +210,9 @@ line up to it to the analysis.
 
 Without a key, command line only: `:analyse <title>` (open a position; the completions search titles and sources),
 `:engine.lines <1–5>`, `:new-position` (the position after this move becomes a position of its own, linked to its
-game; `:new-position moves` takes the continuation along), `:untag-move`. Later: `:detect` (detect tags, phase 5,
-with the detectors), `:lichess` (open in lichess, phase 6).
+game; `:new-position moves` takes the continuation along), `:untag-move`, `:detect` (python-chess tag detection, also
+on a Library selection), `:evaluate [depth]` (the engine over the main line, for the eval graph). Later: `:lichess`
+(open in lichess, phase 6).
 
 ## Collect
 
@@ -257,11 +260,12 @@ queries), `↑ ↓` choose one, `↵` goes to the results, `Esc` leaves the bar.
 
 | Key | Command |
 |---|---|
-| `j k` | Previous / next chart |
-| `h l` | Step through the data points of the focused chart |
-| `↵` | Drill down |
+| `j k` | Previous / next chart (the focused chart has the accent border) |
+| `h l` · `H L` | Step through the data points of the focused chart · first / last point (the read-out row shows it) |
+| `↵` | Drill down: a tag, source or difficulty → the Library; a weak spot → a Streak on it |
 | `t` | Table view of the chart |
-| `1`–`5` | Period: 7d · 30d · 90d · 1y · all |
+| `1`–`5` | Period: 7d · 30d · 90d · 1y · all (kept with the mode's state) |
+| `] [` · `g <key>` | Sections: `o` overview · `l` pattern library · `c` card stages · `r` retention · `m` mastery · `w` weak spots · `b` records · `a` activity · `k` collection · `t` timeline |
 
 ## Settings
 

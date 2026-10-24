@@ -55,6 +55,10 @@ is set** (a check constraint), and `tree.py` works on "the owner" of a tree. The
 pair. Analyse opens a game like a position (05 · MoveTree), with the game's headers in the Inspector and the eval
 graph (phase 5) below the board.
 
+Each node can hold the engine's evaluation of the position after it (`eval_cp` or `eval_mate` from white's side,
+`eval_depth`): `:evaluate` fills them for the main line, the eval graph shows them. They are not part of the journal
+(the engine can always compute them again).
+
 `:new position` (08) on a move of a game makes a Position from the FEN after that move, with `game` and `game_node`
 set; its own analysis starts empty (`:new position --with-moves` copies the game's continuation as its main line).
 
@@ -66,7 +70,8 @@ German names with English names and aliases for search (decision 6: English UI, 
 | Model | Fields |
 |---|---|
 | `TagField` | `key` (`motif`, `mate`, `goal`, `phase`, `strategy`, `endgame`, `technique`, `level`, `moment`, `custom`), `name`, `name_en`, `selection` (single: one tag of the field per object · multi), `on_positions`, `on_moves`, `color` (a chart/chip token, `--chart-1` … `--chart-6`), `order` |
-| `Tag` | `field`, `key` (slug, unique, from the old app: `fork`, `knight-fork`), `name` (German: `Gabel`), `name_en` (`Fork`), `aliases` (more search terms, any language), `parent` → Tag (hierarchy: Doppelangriff → Gabel → Springergabel), `description`, `task` and `task_en` (for objective tags: the printed task, `{side}` = the side to move), `base_difficulty` (1–5), `order` |
+| `Tag` | `field`, `key` (slug, unique, from the old app: `fork`, `knight-fork`), `name` (German: `Gabel`), `name_en` (`Fork`), `aliases` (more search terms, any language), `parent` → Tag (hierarchy: Doppelangriff → Gabel → Springergabel), `description`, `task` and `task_en` (for objective tags: the printed task, `{side}` = the side to move), `base_difficulty` (1–5), `weight` and `analysis_weight` (for the automatic difficulty), `order` |
+| `TagDismissal` | A tag the user removed from a position or a move: `position` or `node`, `tag` (detection respects it) |
 | `PositionTag`, `NodeTag`, `GameTag` | the link, plus `origin` (`manual` · `auto` · `suggested`), `detector` (which detector set it), `evidence` (`Ne5 forks Kg8, Qd7`), `created_at` |
 | `TagPreset` | A named set of tags for Collect (`1`–`9` in the entry session): `name`, `tags`, `order` |
 
@@ -76,8 +81,16 @@ German names with English names and aliases for search (decision 6: English UI, 
   tag alone (`motif:=gabel`). Chips show the tag's name; the path shows on hover and in the completion.
 - `single` fields: setting a tag replaces the other tag of that field (Phase: Opening → Endgame).
 - Objective tags (`goal`) fill `objective` when it is empty (`Matt in 2`, from `task`).
-- Automatic tags (detectors: mate-in-n from the engine, material patterns) come with phase 5 and only *suggest*
-  (`origin = suggested`) until accepted; the Library shows them dashed (05 · Chip `suggested`).
+- **Detection** (`:detect`, and on every Collect save and imported puzzle): python-chess looks at the position and
+  the main line of its analysis (`library/detect.py`, `sequences.py`: phase, endgame type, objective, mating
+  patterns, motifs). Reliable findings become tags with `origin = auto` and their evidence; the others are
+  *suggestions* (`origin = suggested`), shown dashed with a `?` until accepted (a click, or `:tag`). The rules of
+  storing: a tag the user removed is never detected there again (`TagDismissal`, also for move tags; adding it back
+  by hand lifts it; undoing a tag is not a dismissal), a manual tag is never touched, and detection withdraws only the
+  tags it set itself. The solution's first moves get move tags too.
+- **Difficulty** (automatic): the weighted base difficulty of the position's tags (`weight`), plus at most one step
+  from the move tags of its analysis (`analysis_weight`, each tag once, auto tags at 0.8); rounded to 1–5. The
+  override wins. Both weights come with the starter vocabulary.
 
 ### Source
 

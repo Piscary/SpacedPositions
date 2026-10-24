@@ -1,0 +1,45 @@
+# Stats (spec 04 · Stats, 05 · G): charts are keyboard-inspectable.
+
+["chart.next"]
+title = "Next / previous chart"
+group = "Stats"
+args = [{ name = "step", type = "enum", values = ["next", "prev"] }]
+when = "view.chart"
+reason = "in the Stats pane"
+
+["chart.cursor"]
+title = "Move the cursor over the chart's points"
+group = "Stats"
+args = [{ name = "step", type = "enum", values = ["prev", "next", "first", "last"] }]
+when = "view.chart"
+reason = "in the Stats pane"
+
+["chart.drill"]
+title = "Drill down (the Library, or a Streak on a weak spot)"
+group = "Stats"
+when = "view.chart"
+reason = "in the Stats pane"
+
+["chart.table"]
+title = "The chart as a table"
+group = "Stats"
+when = "view.chart"
+reason = "in the Stats pane"
+
+["stats.period"]
+title = "Period of the charts"
+group = "Stats"
+aliases = ["period"]
+args = [{ name = "period", type = "enum", values = ["7d", "30d", "90d", "1y", "all"] }]
+
+["home.analysis"]
+title = "Continue the analysis"
+group = "Home"
+
+["home.collect"]
+title = "Continue collecting"
+group = "Home"
+
+["home.dismiss"]
+title = "Dismiss the announcement"
+group = "Home"

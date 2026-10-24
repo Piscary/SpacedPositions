@@ -128,3 +128,11 @@ title = "Exclude the facet (-term)"
 group = "Library"
 when = "view.filters"
 reason = "in the filter pane"
+
+["library.detect"]
+title = "Detect tags (python-chess)"
+group = "Library"
+aliases = ["detect"]
+handler = "both"
+when = "library.hasTarget"
+reason = "select positions in the Library, or open one in Analyse"

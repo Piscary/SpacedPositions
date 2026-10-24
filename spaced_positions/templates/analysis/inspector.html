@@ -23,10 +23,10 @@
 
   {% section "Tags" key="t" summary=position.tag_names|join:", "|default:"none"|truncatechars:60 %}
     <div class="formrow"><span class="formrow__label">Position</span><span class="inspector__tags">
-      {% for link in position_tags %}<button type="button" class="chip chip--tag{% if link.origin == 'suggested' %} chip--suggested{% elif link.origin == 'auto' %} chip--auto{% endif %}" style="--tag: var(--{{ link.tag.field.color }})" data-cmd="library.untag" data-args="{{ link.tag.key }}" title="{{ link.tag.field.name }} · click removes it">{{ link.tag.name }}</button>{% empty %}<span class="muted">none</span>{% endfor %}
-      {% cmd "analysis.positiontags" label="Add" size="sm" %}</span></div>
+      {% for link in position_tags %}{% if link.origin == 'suggested' %}<button type="button" class="chip chip--tag chip--suggested" style="--tag: var(--{{ link.tag.field.color }})" data-cmd="library.tag" data-args="{{ link.tag.key }}" title="Suggested: {{ link.evidence }} · click accepts it">{{ link.tag.name }}?</button>{% else %}<button type="button" class="chip chip--tag{% if link.origin == 'auto' %} chip--auto{% endif %}" style="--tag: var(--{{ link.tag.field.color }})" data-cmd="library.untag" data-args="{{ link.tag.key }}" title="{{ link.tag.field.name }}{% if link.evidence %} · {{ link.evidence }}{% endif %} · click removes it">{{ link.tag.name }}</button>{% endif %}{% empty %}<span class="muted">none</span>{% endfor %}
+      {% cmd "analysis.positiontags" label="Add" size="sm" %}{% cmd "library.detect" label="Detect" size="sm" %}</span></div>
     {% if node.parent_id %}<div class="formrow"><span class="formrow__label">Move {{ node.san }}</span><span class="inspector__tags">
-      {% for link in move_tags %}<button type="button" class="chip chip--tag" style="--tag: var(--{{ link.tag.field.color }})" data-cmd="analysis.untag" data-args="{{ link.tag.key }}" title="{{ link.tag.field.name }} · click removes it">{{ link.tag.name }}</button>{% empty %}<span class="muted">none</span>{% endfor %}
+      {% for link in move_tags %}<button type="button" class="chip chip--tag{% if link.origin == 'auto' %} chip--auto{% endif %}" style="--tag: var(--{{ link.tag.field.color }})" data-cmd="analysis.untag" data-args="{{ link.tag.key }}" title="{{ link.tag.field.name }}{% if link.evidence %} · {{ link.evidence }}{% endif %} · click removes it">{{ link.tag.name }}</button>{% empty %}<span class="muted">none</span>{% endfor %}
       {% cmd "analysis.tags" label="Add" size="sm" %}</span></div>{% endif %}
   {% endsection %}
 

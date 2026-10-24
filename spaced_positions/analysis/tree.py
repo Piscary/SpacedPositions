@@ -68,6 +68,7 @@ def node_json(n: Node) -> dict:
     return {
         "id": n.id, "parent": n.parent_id, "order": n.order, "uci": n.uci, "san": n.san, "ply": n.ply, "fen": n.fen,
         "comment": n.comment, "nags": n.nags, "mark": n.mark, "color": n.color, "shapes": n.shapes, "squares": n.squares,
+        "eval": None if n.eval_cp is None and n.eval_mate is None else {"cp": n.eval_cp, "mate": n.eval_mate, "depth": n.eval_depth},
     }
 
 

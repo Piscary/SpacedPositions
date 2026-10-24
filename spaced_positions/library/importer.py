@@ -21,6 +21,7 @@ from spaced_positions.analysis import tree
 from spaced_positions.training.models import Position
 
 from .collect import duplicate_of
+from .detect import run as run_detection
 from .models import Game, Player
 from .text import fold
 
@@ -151,6 +152,7 @@ def import_puzzle(game, ready: bool, source=None) -> Position:
     if ready:
         position.puzzles.filter(start_node=root).update(active=True)
     analysis_puzzles.rebuild_all(position)
+    run_detection(position, search=False)
     return position
 
 

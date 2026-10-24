@@ -6,7 +6,7 @@ import { Chess } from "../../vendor/chess.js"
 import { handle } from "./commands.js"
 import { ctx, emit, on, status, storage } from "./context.js"
 import * as lines from "./lines.js"
-import { addLine, currentKey, treeOf } from "./analysis.js"
+import { addLine, current, currentKey, mainlineOf, saveEvals, treeOf } from "./analysis.js"
 
 const WORKER = "/static/vendor/stockfish-17.1-lite-single-03e3232.js"
 const DEPTH = 24
@@ -19,6 +19,7 @@ let multipv = Number(storage("engine.lines")) || 3
 let searching = false // a "go" is running; the next search waits for its bestmove
 let queued = null // {key, fen} to search when the running one stops
 let search = null // {key, fen, white, lines: [], depth, nps}
+let batch = null // `:evaluate`: {items: [{id, fen}], i, best, results, depth, resolve}; the live analysis waits
 
 const engineKey = () => (ctx.mode === "analyse" ? currentKey() : null)
 
@@ -59,15 +60,76 @@ function onLine(text) {
   } else if (text === "readyok") {
     if (!ready) {
       ready = true
+      if (batch) return nextInBatch()
       follow()
     }
   } else if (text.startsWith("info ") && text.includes(" pv ")) {
+    if (batch?.running) return onBatchInfo(text)
     onInfo(text)
   } else if (text.startsWith("bestmove")) {
     searching = false
+    if (batch) return nextInBatch()
     if (queued) go(queued)
     paint()
   }
+}
+
+// ── `:evaluate`: every move of a line, one after the other ────────────────────────────────────────────────────
+
+/** Evaluate positions [{id, fen}] at `depth`; resolves with {id: {cp, mate, depth}} from white's side. */
+export function evaluate(items, depth = 14) {
+  return new Promise((resolve) => {
+    batch = { items, i: -1, best: null, results: {}, depth, resolve, running: false }
+    if (!worker) return start() // readyok starts the batch
+    if (searching) return send("stop") // the bestmove of the live search starts it
+    if (ready) nextInBatch()
+  })
+}
+
+function onBatchInfo(text) {
+  if (/ (lowerbound|upperbound) /.test(text) || / multipv (?!1 )/.test(text)) return
+  const m = / score (cp|mate) (-?\d+)/.exec(text)
+  const depth = Number(/ depth (\d+)/.exec(text)?.[1] || 0)
+  if (m) batch.best = { kind: m[1], value: Number(m[2]), depth }
+}
+
+function nextInBatch() {
+  const b = batch
+  if (b.running && b.i >= 0) {
+    const item = b.items[b.i]
+    const sign = item.fen.split(" ")[1] === "b" ? -1 : 1
+    if (b.best) b.results[item.id] = b.best.kind === "cp" ? { cp: b.best.value * sign, depth: b.best.depth } : { mate: b.best.value * sign, depth: b.best.depth }
+    else if (item.over) b.results[item.id] = item.over
+  }
+  b.running = true
+  b.i += 1
+  b.best = null
+  status(`Evaluating ${Math.min(b.i + 1, b.items.length)} / ${b.items.length}…`, { timeout: 0 })
+  while (b.i < b.items.length) {
+    const item = b.items[b.i]
+    let game
+    try {
+      game = new Chess(item.fen)
+    } catch {
+      game = null
+    }
+    if (game && !game.isGameOver()) break
+    if (game?.isCheckmate()) b.results[item.id] = { mate: 0, cp: game.turn() === "w" ? -100000 : 100000, depth: 0 }
+    else if (game) b.results[item.id] = { cp: 0, depth: 0 }
+    b.i += 1
+  }
+  if (b.i >= b.items.length) {
+    batch = null
+    send(`setoption name MultiPV value ${multipv}`)
+    b.resolve(b.results)
+    search = null
+    follow()
+    return
+  }
+  searching = true
+  send("setoption name MultiPV value 1")
+  send(`position fen ${b.items[b.i].fen}`)
+  send(`go depth ${b.depth}`)
 }
 
 /** Analyse a position: stop the running search first, the next starts on its bestmove. */
@@ -147,6 +209,7 @@ function sans(fen, pv) {
 // ── Following the analysis ─────────────────────────────────────────────────────────────────────────────────────
 
 function follow() {
+  if (batch) return // `:evaluate` has the engine
   const running = enabled && ctx.mode === "analyse" && document.visibilityState === "visible"
   if (!running) {
     if (worker) stop()
@@ -268,3 +331,13 @@ handle("engine.lines", ([count]) => {
 })
 
 Object.assign((window.SPOS ||= {}), { engine: { ready: () => ready && Boolean(search?.lines[0]), state: () => ({ enabled, ready, searching, search }) } })
+
+handle("engine.evaluate", async ([depth]) => {
+  const t = current()
+  if (!t) return status("Open a position or a game first", { kind: "error" }) || false
+  if (batch) return status("Already evaluating", { timeout: 1500 }) || false
+  const key = currentKey()
+  const items = mainlineOf(t).map((n) => ({ id: n.id, fen: n.fen }))
+  const results = await evaluate(items, Number(depth) || 14)
+  return saveEvals(key, results)
+})

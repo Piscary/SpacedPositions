@@ -39,7 +39,10 @@ What to do now. Opens on start.
 └────────────────────────────────────────────────┴──────────────────────────────────────────────┘
 ```
 
-- `r` review, `1`–`6` quick sessions, `a` continue analysis, `c` continue collecting, `p` focus the paste box.
+- `r` review, `1`–`6` quick sessions (`5`: a Streak on the weakest motifs), `a` continue analysis, `c` continue
+  collecting, `i` focus the paste box. Today shows due cards, today's solved and accuracy, the days in a row and the
+  pattern library with its next milestone; the newest achievement not yet announced is a banner (`x` dismisses it).
+  Recent lists the positions analysed last and the newest games (`↵` opens them).
 - **Pasting anywhere** in Home (`Mod+V`, no field needed) detects FEN / PGN / lichess link / list of FENs and offers
   the matching commands in the status line: `Analyse a · Collect as position c · Import game g`.
 
@@ -281,6 +284,12 @@ Sections of charts and numbers. Every number links somewhere (drill-down).
 - `j/k` move between charts (the focused chart gets the accent border), `h/l` steps through its data points (a
   cursor line + value read-out: charts are keyboard-inspectable), `Enter` drills down (a tag → Library filtered; a
   weak motif → Streak on it), `t` toggles the chart's table view, `1`–`5` switch the period (7d, 30d, 90d, 1y, all).
+- The numbers are chess-study-manager's rules (stats/metrics.py): a card is *mature* at an interval of 21 days and
+  the pattern library is the mature cards; retention counts due reviews only; mastery levels need established cards
+  and proven retention (Solid 5 cards and 75 %, Strong 15 and 80 %, Expert 40 and 85 %, Master 100 and 90 %); weak
+  spots use smoothed accuracy from 3 attempts on. Milestones (pattern library, days in a row, retention, Storm,
+  Streak), records and level-ups (Solid and above) are logged once as **achievements**: on the result screen of the
+  session that reached them, once in the status line, as a banner on Home and in the Timeline.
 
 ---
 

@@ -1,0 +1,31 @@
+{% home_today as t %}<div class="home" data-island="home">
+  {% if t.banner %}<div class="banner" data-banner role="status"><span class="achievement achievement--{{ t.banner.kind }}">{{ t.banner.label }}</span>
+    <span class="muted">{{ t.banner.reached_at|date:"j M" }}</span>{% cmd "home.dismiss" label="Dismiss" size="sm" variant="ghost" %}</div>{% endif %}
+
+  {% section "Due now" key="d" summary=t.due|stringformat:"s"|add:" due" pinned=True %}
+    <div class="train__session">
+      {% cmd "train.review" variant="primary" label="Review" keys_in="view.today" %}
+      <span class="train__session-info">{% if t.due or t.counts.new %}<b>{{ t.due }}</b> due · <b>{{ t.counts.new }}</b> new{% else %}nothing due{% if t.next_due %} · next {{ t.next_due }}{% endif %}{% endif %}</span>
+    </div>
+  {% endsection %}
+
+  {% section "Quick start" key="q" summary="one key starts a session" pinned=True %}
+    <div class="actionbar home__quick">
+      {% cmd "train.storm" args="3" label="Storm 3′" keys_in="view.today" %}{% cmd "train.storm" args="5" label="Storm 5′" keys_in="view.today" %}
+      {% cmd "train.streak" args="0" label="Streak" keys_in="view.today" %}{% cmd "train.streak" args="3" label="Streak ♥3" keys_in="view.today" %}
+      {% cmd "train.weakest" label="Weakest motifs" keys_in="view.today" %}{% cmd "train.again" label="Again" keys_in="view.today" %}
+    </div>
+    {% if t.weakest %}<p class="muted">Weakest: {% for r in t.weakest %}{{ r.tag.name }} {% widthratio r.smoothed 1 100 %}%{% if not forloop.last %} · {% endif %}{% endfor %}</p>{% endif %}
+  {% endsection %}
+
+  {% section "Today" key="t" summary="solved · accuracy · days in a row" pinned=True %}
+    <div class="stats-row">
+      <div class="stat" data-drill="puzzles:last:<1d"><span class="stat__label">Solved today</span><span class="stat__value">{{ t.consistency.today_solved }}</span><span class="muted">of {{ t.consistency.today }}</span></div>
+      <div class="stat"><span class="stat__label">Accuracy</span><span class="stat__value">{% if t.accuracy is not None %}{{ t.accuracy }}%{% else %}–{% endif %}</span></div>
+      <div class="stat"><span class="stat__label">Days in a row</span><span class="stat__value">{{ t.consistency.current }}</span><span class="muted">{% if t.consistency.trained_today %}today counts{% else %}train today to keep it{% endif %}</span></div>
+    </div>
+    <div class="meter home__library"><div class="meter__top"><span>Pattern library <b>{{ t.library.size }}</b>{% if t.library.next %} / {{ t.library.next }}{% endif %}</span>
+      <span class="muted">{% if t.library.on_course %}on course for {{ t.library.next }} by {{ t.library.on_course|date:"j M" }}{% elif t.library.next %}{{ t.library.established }} cards established{% endif %}</span></div>
+      <div class="meter__track"><div class="meter__fill" style="--w: {% widthratio t.library.progress 1 100 %}%"></div></div></div>
+  {% endsection %}
+</div>

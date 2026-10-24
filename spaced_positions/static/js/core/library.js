@@ -382,6 +382,13 @@ const libraryTarget = (fn) => () => {
   return fn(t, stateOf(t.el))
 }
 
+handle("library.detect", async () => {
+  const t = target()
+  if (!t?.ids.length || !["positions", "puzzles"].includes(t.c)) return status("Select positions, or open one in Analyse", { kind: "error" }) || false
+  status("Detecting…", { timeout: 0 })
+  return bulk("library.detect", [], t)
+})
+
 handle("library.trash", libraryTarget((t) => bulk("library.trash", [], t)))
 handle("library.restore", libraryTarget((t) => bulk("library.restore", [], t)))
 

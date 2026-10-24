@@ -310,3 +310,36 @@ accept = ["[", "]"]
 
 [context."view.filters"]
 "-" = "library.exclude"
+
+[context."view.chart"]
+"j" = "chart.next next"
+"k" = "chart.next prev"
+"down" = "chart.next next"
+"up" = "chart.next prev"
+"h" = "chart.cursor prev"
+"l" = "chart.cursor next"
+"left" = "chart.cursor prev"
+"right" = "chart.cursor next"
+"H" = "chart.cursor first"
+"L" = "chart.cursor last"
+"enter" = "chart.drill"
+"t" = "chart.table"
+"1" = "stats.period 7d"
+"2" = "stats.period 30d"
+"3" = "stats.period 90d"
+"4" = "stats.period 1y"
+"5" = "stats.period all"
+
+[context."view.today"]
+"r" = "train.review"
+"1" = "train.storm 3"
+"2" = "train.storm 5"
+"3" = "train.streak 0"
+"4" = "train.streak 3"
+"5" = "train.weakest"
+"6" = "train.again"
+"x" = "home.dismiss"
+
+[context."view.continue"]
+"a" = "home.analysis"
+"c" = "home.collect"

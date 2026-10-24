@@ -116,7 +116,9 @@
    "description": "Die ersten Züge: Entwicklung, Zentrum, Rochade, Eröffnungsfallen.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 0.3,
+   "analysis_weight": 0.0
   },
   {
    "key": "middlegame",
@@ -131,7 +133,9 @@
    "description": "Die meisten Figuren sind noch auf dem Brett; Angriff, Pläne und Kombinationen.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 0.3,
+   "analysis_weight": 0.0
   },
   {
    "key": "endgame",
@@ -147,7 +151,9 @@
    "description": "Wenige Figuren: Königsaktivität, Freibauern und Technik entscheiden.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 0.3,
+   "analysis_weight": 0.0
   },
   {
    "key": "mate-in-1",
@@ -166,7 +172,9 @@
    "description": "",
    "task": "{side} setzt in einem Zug matt",
    "task_en": "{side} to play and mate in 1",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.5,
+   "analysis_weight": 0.0
   },
   {
    "key": "mate-in-2",
@@ -184,7 +192,9 @@
    "description": "",
    "task": "{side} setzt in 2 Zügen matt",
    "task_en": "{side} to play and mate in 2",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.5,
+   "analysis_weight": 0.0
   },
   {
    "key": "mate-in-3",
@@ -202,7 +212,9 @@
    "description": "",
    "task": "{side} setzt in 3 Zügen matt",
    "task_en": "{side} to play and mate in 3",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.5,
+   "analysis_weight": 0.0
   },
   {
    "key": "mate-in-4-plus",
@@ -223,7 +235,9 @@
    "description": "",
    "task": "{side} setzt matt",
    "task_en": "{side} to play and mate",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.5,
+   "analysis_weight": 0.0
   },
   {
    "key": "best-move",
@@ -240,7 +254,9 @@
    "description": "",
    "task": "{side} am Zug – finde den besten Zug",
    "task_en": "{side} to move – find the best move",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 0.5,
+   "analysis_weight": 0.0
   },
   {
    "key": "win-material",
@@ -257,7 +273,9 @@
    "description": "",
    "task": "{side} am Zug gewinnt Material",
    "task_en": "{side} to move and win material",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 0.8,
+   "analysis_weight": 0.0
   },
   {
    "key": "winning-continuation",
@@ -277,7 +295,9 @@
    "description": "",
    "task": "{side} zieht und gewinnt",
    "task_en": "{side} to play and win",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "draw",
@@ -297,7 +317,9 @@
    "description": "",
    "task": "{side} zieht und hält remis",
    "task_en": "{side} to play and draw",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "defend",
@@ -317,7 +339,9 @@
    "description": "",
    "task": "{side} am Zug – verteidige dich",
    "task_en": "{side} to move – defend",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 0.7,
+   "analysis_weight": 0.0
   },
   {
    "key": "find-threat",
@@ -334,7 +358,9 @@
    "description": "",
    "task": "Was droht? ({side} am Zug)",
    "task_en": "What is the threat? ({side} to move)",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 0.5,
+   "analysis_weight": 0.0
   },
   {
    "key": "find-mistake",
@@ -352,7 +378,9 @@
    "description": "",
    "task": "Welcher Zug war ein Fehler?",
    "task_en": "Which move was a mistake?",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 0.5,
+   "analysis_weight": 0.0
   },
   {
    "key": "evaluate",
@@ -371,7 +399,9 @@
    "description": "",
    "task": "Bewerte die Stellung ({side} am Zug)",
    "task_en": "Evaluate the position ({side} to move)",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 0.7,
+   "analysis_weight": 0.0
   },
   {
    "key": "plan",
@@ -388,7 +418,9 @@
    "description": "",
    "task": "{side} am Zug – finde einen Plan",
    "task_en": "{side} to move – find a plan",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 0.8,
+   "analysis_weight": 0.0
   },
   {
    "key": "calculate",
@@ -407,7 +439,9 @@
    "description": "",
    "task": "{side} am Zug – berechne die Varianten",
    "task_en": "{side} to move – calculate the variations",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 0.7,
+   "analysis_weight": 0.0
   },
   {
    "key": "pin",
@@ -424,7 +458,9 @@
    "description": "Eine Figur kann nicht (sinnvoll) ziehen, weil dahinter eine wertvollere Figur oder der König steht.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "absolute-pin",
@@ -439,7 +475,9 @@
    "description": "Hinter der gefesselten Figur steht der König: sie darf gar nicht ziehen.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "relative-pin",
@@ -454,7 +492,9 @@
    "description": "Hinter der gefesselten Figur steht eine wertvollere Figur: Ziehen kostet Material.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "skewer",
@@ -473,7 +513,9 @@
    "description": "Umgekehrte Fesselung: die wertvollere Figur wird angegriffen, weicht aus, und die dahinter fällt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "double-attack",
@@ -490,7 +532,9 @@
    "description": "Ein Zug droht zwei Dinge zugleich; der Gegner kann nur eines abwehren.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "fork",
@@ -505,7 +549,9 @@
    "description": "Eine Figur greift zwei oder mehr gegnerische Figuren gleichzeitig an.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "knight-fork",
@@ -521,7 +567,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "family-fork",
@@ -539,7 +587,9 @@
    "description": "Springergabel auf König, Dame und Turm.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "pawn-fork",
@@ -554,7 +604,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "queen-fork",
@@ -569,7 +621,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "discovered-attack",
@@ -586,7 +640,9 @@
    "description": "Eine Figur zieht weg und gibt die Linie einer Langschrittler-Figur frei, die nun angreift.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "discovered-check",
@@ -601,7 +657,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "double-check",
@@ -616,7 +674,9 @@
    "description": "Zwei Figuren geben gleichzeitig Schach; nur ein Königszug hilft.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "windmill",
@@ -633,7 +693,9 @@
    "description": "Abwechselnd Abzugsschach und einfaches Schach; bei jedem Abzug wird Material abgeräumt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "battery",
@@ -650,7 +712,9 @@
    "description": "Zwei Figuren auf derselben Linie verstärken sich gegenseitig (z. B. Dame vor Läufer).",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "x-ray",
@@ -670,7 +734,9 @@
    "description": "Eine Figur wirkt durch eine andere hindurch auf ein Feld oder eine Figur dahinter.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "deflection",
@@ -687,7 +753,9 @@
    "description": "Ein Verteidiger wird von seiner Aufgabe weggelockt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "decoy",
@@ -706,7 +774,9 @@
    "description": "Eine gegnerische Figur (oft der König) wird auf ein ungünstiges Feld gezogen.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "interference",
@@ -723,7 +793,9 @@
    "description": "Eine Figur wird zwischen gegnerische Figuren gestellt und unterbricht deren Verbindung.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "self-block",
@@ -739,7 +811,9 @@
    "description": "Der Gegner wird gezwungen, sich selbst Felder oder Linien zu verstellen.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "clearance",
@@ -756,7 +830,9 @@
    "description": "Eine Figur macht Platz – ein Feld oder eine Linie wird für eine andere Figur geräumt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "line-clearance",
@@ -772,7 +848,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "square-clearance",
@@ -787,7 +865,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "overloading",
@@ -806,7 +886,9 @@
    "description": "Eine Figur hat zu viele Verteidigungsaufgaben und kann nicht alle erfüllen.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "removal-of-guard",
@@ -826,7 +908,9 @@
    "description": "Der Verteidiger wird geschlagen (oder vertrieben), danach fällt, was er gedeckt hat.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "zwischenzug",
@@ -843,7 +927,9 @@
    "description": "Statt der erwarteten Antwort kommt zuerst ein noch stärkerer Zug, meist mit Schach oder Drohung.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.2,
+   "analysis_weight": 0.35
   },
   {
    "key": "trapped-piece",
@@ -860,7 +946,9 @@
    "description": "Eine Figur hat keine sicheren Felder mehr und geht verloren.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "queen-trap",
@@ -876,7 +964,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "hanging-piece",
@@ -895,7 +985,9 @@
    "description": "Eine ungedeckte oder unzureichend gedeckte Figur kann einfach geschlagen werden.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 0.8,
+   "analysis_weight": 0.35
   },
   {
    "key": "desperado",
@@ -910,7 +1002,9 @@
    "description": "Eine ohnehin verlorene Figur schlägt noch so viel wie möglich, bevor sie fällt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "quiet-move",
@@ -926,7 +1020,9 @@
    "description": "Ein Zug ohne Schach und ohne Schlagen, der trotzdem entscheidet.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.3,
+   "analysis_weight": 0.35
   },
   {
    "key": "sacrifice",
@@ -942,7 +1038,9 @@
    "description": "Material wird bewusst hergegeben, um mehr zu erreichen.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "queen-sacrifice",
@@ -958,7 +1056,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "exchange-sacrifice",
@@ -975,7 +1075,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "greek-gift",
@@ -996,7 +1098,9 @@
    "description": "Das klassische Läuferopfer auf h7 (h2), meist gefolgt von Sg5+ und Dh5.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "double-bishop-sacrifice",
@@ -1013,7 +1117,9 @@
    "description": "Beide Läufer werden auf h7 und g7 geopfert, um die Königsstellung aufzureißen (Lasker–Bauer 1889).",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "mating-net",
@@ -1029,7 +1135,9 @@
    "description": "Der König wird Schritt für Schritt eingeschnürt, bis ihm keine Felder mehr bleiben.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "mate-threat",
@@ -1045,7 +1153,9 @@
    "description": "Ein Zug, der Matt droht und den Gegner zur Verteidigung zwingt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "back-rank-weakness",
@@ -1062,7 +1172,9 @@
    "description": "Der König hat kein Luftloch; Schach auf der Grundreihe ist gefährlich.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "king-hunt",
@@ -1078,7 +1190,9 @@
    "description": "Der König wird mit einer Folge von Schachs quer übers Brett getrieben.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "perpetual-check",
@@ -1094,7 +1208,9 @@
    "description": "Endlose Schachgebote erzwingen Remis.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "stalemate-trick",
@@ -1112,7 +1228,9 @@
    "description": "Die unterlegene Seite rettet sich durch Patt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "promotion",
@@ -1129,7 +1247,9 @@
    "description": "Ein Bauer erreicht die letzte Reihe und wird zur Figur.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "mad-rook",
@@ -1147,7 +1267,9 @@
    "description": "Ein Turm gibt immer wieder Schach; schlägt man ihn, ist es Patt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.5
   },
   {
    "key": "underpromotion",
@@ -1164,7 +1286,9 @@
    "description": "Umwandlung in Turm, Läufer oder Springer statt in eine Dame.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.2,
+   "analysis_weight": 0.35
   },
   {
    "key": "en-passant",
@@ -1181,7 +1305,9 @@
    "description": "Ein Bauer schlägt einen Bauern, der mit Doppelschritt neben ihn gezogen ist.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "zugzwang",
@@ -1197,7 +1323,9 @@
    "description": "Jeder Zug verschlechtert die eigene Stellung, aber ziehen muss man.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.2,
+   "analysis_weight": 0.35
   },
   {
    "key": "counterattack",
@@ -1214,7 +1342,9 @@
    "description": "Statt zu verteidigen wird eine eigene, stärkere Drohung aufgestellt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "liquidation",
@@ -1232,7 +1362,9 @@
    "description": "Durch Abtausch in ein gewonnenes (oder gehaltenes) Endspiel übergehen.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "back-rank-mate",
@@ -1249,7 +1381,9 @@
    "description": "Turm oder Dame setzt den König auf der Grundreihe matt; eigene Bauern versperren die Fluchtfelder.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "corridor-mate",
@@ -1263,7 +1397,9 @@
    "description": "Der König steht in einem Korridor aus eigenen Figuren und wird von einer Schwerfigur frontal mattgesetzt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "smothered-mate",
@@ -1280,7 +1416,9 @@
    "description": "Ein Springer setzt matt; alle Nachbarfelder des Königs sind von eigenen Figuren besetzt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "arabian-mate",
@@ -1296,7 +1434,9 @@
    "description": "Turm und Springer: der Turm setzt den König in der Ecke matt, der Springer deckt den Turm.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "anastasia-mate",
@@ -1312,7 +1452,9 @@
    "description": "Springer und Schwerfigur: der König am Rand wird vom eigenen Bauern eingesperrt und auf der Randlinie mattgesetzt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "epaulette-mate",
@@ -1328,7 +1470,9 @@
    "description": "Frontales Matt; links und rechts neben dem König stehen eigene Figuren wie Schulterstücke.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "swallows-tail-mate",
@@ -1345,7 +1489,9 @@
    "description": "Die gedeckte Dame setzt direkt vor dem König matt; die beiden hinteren Diagonalfelder sind von eigenen Figuren besetzt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "dovetail-mate",
@@ -1362,7 +1508,9 @@
    "description": "Die gedeckte Dame setzt diagonal angrenzend matt; die zwei Felder hinter dem König sind von eigenen Figuren besetzt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "hook-mate",
@@ -1377,7 +1525,9 @@
    "description": "Turm, Springer und Bauer: der Turm setzt neben dem König matt, gedeckt vom Springer, der vom Bauern gedeckt ist.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "blackburne-mate",
@@ -1392,7 +1542,9 @@
    "description": "Zwei Läufer und ein Springer setzen den kurz rochierten König matt; ein Läufer wirkt von weit her.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "boden-mate",
@@ -1409,7 +1561,9 @@
    "description": "Zwei Läufer auf sich kreuzenden Diagonalen setzen den König matt; eigene Figuren versperren die Flucht.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "double-bishop-mate",
@@ -1425,7 +1579,9 @@
    "description": "Zwei Läufer auf benachbarten Diagonalen setzen den König matt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "corner-mate",
@@ -1440,7 +1596,9 @@
    "description": "Der König in der Ecke wird von einem Springer mattgesetzt, eine Schwerfigur sperrt die Randlinie.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "opera-mate",
@@ -1456,7 +1614,9 @@
    "description": "Ein Turm setzt auf der Grundreihe matt, gedeckt von einem Läufer aus der Ferne (Morphy, Paris 1858).",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "mayet-mate",
@@ -1471,7 +1631,9 @@
    "description": "Ein Turm setzt neben dem König auf der Grundreihe matt, gedeckt von einem Läufer auf der langen Diagonale.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "pillsbury-mate",
@@ -1486,7 +1648,9 @@
    "description": "Turm auf der Springerlinie und Läufer auf der langen Diagonale setzen den König am Rand matt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "morphy-mate",
@@ -1501,7 +1665,9 @@
    "description": "Ein Läufer setzt auf der langen Diagonale den König in der Ecke matt, ein Turm sperrt die Nachbarlinie.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "greco-mate",
@@ -1516,7 +1682,9 @@
    "description": "Ein Läufer sperrt das Fluchtfeld, Dame oder Turm setzen auf der Randlinie matt; der eigene Bauer blockiert.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "damiano-mate",
@@ -1532,7 +1700,9 @@
    "description": "Die Dame setzt diagonal neben dem König matt, gedeckt von einem Bauern (klassisch Dh7# mit Bauer g6).",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "lolli-mate",
@@ -1548,7 +1718,9 @@
    "description": "Die Dame dringt auf g7 (g2) ein und setzt matt, gedeckt von einem Bauern auf f6 (f3).",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "kiss-of-death",
@@ -1565,7 +1737,9 @@
    "description": "Die Dame setzt direkt neben dem König matt und wird vom eigenen König gedeckt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "kill-box-mate",
@@ -1581,7 +1755,9 @@
    "description": "Ein Turm setzt neben dem König matt, gedeckt von der Dame, die die übrigen Felder einer 3×3-Box sperrt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "vukovic-mate",
@@ -1597,7 +1773,9 @@
    "description": "Turm und Springer setzen mit Hilfe des eigenen Königs am Rand matt; der Turm wird vom König gedeckt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "max-lange-mate",
@@ -1612,7 +1790,9 @@
    "description": "Dame und Läufer setzen den König am Rand gemeinsam matt; der Läufer deckt die Dame aus der Ferne.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "reti-mate",
@@ -1629,7 +1809,9 @@
    "description": "Ein Läufer setzt matt, unterstützt von einem Turm; der König ist von eigenen Figuren eingeschlossen (Réti–Tartakower 1910).",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "balestra-mate",
@@ -1644,7 +1826,9 @@
    "description": "Ein Läufer setzt aus der Ferne matt, die Dame sperrt die übrigen Fluchtfelder.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "triangle-mate",
@@ -1659,7 +1843,9 @@
    "description": "Dame und Turm bilden ein Dreieck um den König: die Dame setzt matt, der Turm deckt sie.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "ladder-mate",
@@ -1678,7 +1864,9 @@
    "description": "Zwei Schwerfiguren drängen den König im Wechsel Reihe um Reihe an den Rand.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "blind-swine-mate",
@@ -1695,7 +1883,9 @@
    "description": "Zwei Türme auf der vorletzten Reihe setzen matt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "david-goliath-mate",
@@ -1711,7 +1901,9 @@
    "description": "Ein Bauer gibt das Matt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "mirror-mate",
@@ -1725,7 +1917,9 @@
    "description": "Alle Nachbarfelder des mattgesetzten Königs sind leer.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "legal-mate",
@@ -1745,7 +1939,9 @@
    "description": "Eröffnungsfalle: Damenopfer, Läufer auf f7 mit Schach und Springermatt (de Légal, Paris 1750).",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "scholars-mate",
@@ -1761,7 +1957,9 @@
    "description": "Dame und Läufer setzen früh auf f7 (f2) matt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "fools-mate",
@@ -1776,7 +1974,9 @@
    "description": "Das kürzestmögliche Matt: 1.f3 e5 2.g4 Dh4#.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "diagonal-corridor-mate",
@@ -1791,7 +1991,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.35
   },
   {
    "key": "weak-square",
@@ -1808,7 +2010,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "outpost",
@@ -1825,7 +2029,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "pawn-structure",
@@ -1841,7 +2047,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "isolated-pawn",
@@ -1859,7 +2067,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "doubled-pawns",
@@ -1874,7 +2084,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "backward-pawn",
@@ -1889,7 +2101,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "hanging-pawns",
@@ -1904,7 +2118,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "passed-pawn",
@@ -1920,7 +2136,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "outside-passed-pawn",
@@ -1936,7 +2154,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "protected-passed-pawn",
@@ -1951,7 +2171,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "connected-passed-pawns",
@@ -1966,7 +2188,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "pawn-majority",
@@ -1982,7 +2206,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "pawn-chain",
@@ -1997,7 +2223,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "pawn-islands",
@@ -2012,7 +2240,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "pawn-break",
@@ -2029,7 +2259,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "space-advantage",
@@ -2045,7 +2277,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "piece-activity",
@@ -2063,7 +2297,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "king-safety",
@@ -2082,7 +2318,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "king-attack",
@@ -2101,7 +2339,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 0.5,
+   "analysis_weight": 0.2
   },
   {
    "key": "prophylaxis",
@@ -2118,7 +2358,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.2,
+   "analysis_weight": 0.2
   },
   {
    "key": "blockade",
@@ -2135,7 +2377,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "opposite-bishops",
@@ -2152,7 +2396,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "minority-attack",
@@ -2167,7 +2413,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "good-bad-bishop",
@@ -2185,7 +2433,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "bishop-pair",
@@ -2202,7 +2452,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "open-file",
@@ -2217,7 +2469,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "half-open-file",
@@ -2233,7 +2487,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "seventh-rank",
@@ -2251,7 +2507,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "doubled-rooks",
@@ -2268,7 +2526,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "centralisation",
@@ -2284,7 +2544,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "centre",
@@ -2303,7 +2565,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "development",
@@ -2320,7 +2584,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "worst-piece",
@@ -2336,7 +2602,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "restriction",
@@ -2354,7 +2622,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "colour-complex",
@@ -2372,7 +2642,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "initiative",
@@ -2388,7 +2660,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "exchange",
@@ -2407,7 +2681,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "overprotection",
@@ -2423,7 +2699,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "imbalance",
@@ -2439,7 +2717,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "compensation",
@@ -2455,7 +2735,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "two-weaknesses",
@@ -2472,7 +2754,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "pawn-endgame",
@@ -2490,7 +2774,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "minor-piece-endgame",
@@ -2505,7 +2791,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "bishop-endgame",
@@ -2522,7 +2810,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "opposite-bishop-endgame",
@@ -2538,7 +2828,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "knight-endgame",
@@ -2553,7 +2845,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "bishop-vs-knight",
@@ -2570,7 +2864,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "minor-vs-pawns",
@@ -2585,7 +2881,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "rook-endgame",
@@ -2601,7 +2899,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "rook-pawn-vs-rook",
@@ -2617,7 +2917,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "double-rook-endgame",
@@ -2632,7 +2934,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "rook-vs-pawns",
@@ -2648,7 +2952,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "rook-vs-minor",
@@ -2666,7 +2972,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "rook-minor-endgame",
@@ -2682,7 +2990,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "queen-endgame",
@@ -2697,7 +3007,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "queen-vs-rook",
@@ -2712,7 +3024,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "queen-vs-pawns",
@@ -2728,7 +3042,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "heavy-piece-endgame",
@@ -2744,7 +3060,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "other-endgame",
@@ -2760,7 +3078,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "king-activity",
@@ -2777,7 +3097,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "opposition",
@@ -2793,7 +3115,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "distant-opposition",
@@ -2808,7 +3132,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "key-squares",
@@ -2825,7 +3151,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "corresponding-squares",
@@ -2841,7 +3169,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "triangulation",
@@ -2857,7 +3187,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "rule-of-square",
@@ -2873,7 +3205,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "shouldering",
@@ -2890,7 +3224,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "reti-manoeuvre",
@@ -2908,7 +3244,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "pawn-race",
@@ -2923,7 +3261,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "breakthrough",
@@ -2939,7 +3279,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "wrong-rook-pawn",
@@ -2955,7 +3297,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "fortress",
@@ -2970,7 +3314,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "lucena",
@@ -2985,7 +3331,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "building-bridge",
@@ -3002,7 +3350,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "philidor",
@@ -3019,7 +3369,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "vancura",
@@ -3035,7 +3387,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "short-side",
@@ -3052,7 +3406,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "rook-behind-passer",
@@ -3069,7 +3425,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "cutting-off",
@@ -3085,7 +3443,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "basic-mate",
@@ -3102,7 +3462,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "mate-queen",
@@ -3118,7 +3480,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "mate-rook",
@@ -3134,7 +3498,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "mate-two-bishops",
@@ -3150,7 +3516,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "mate-bishop-knight",
@@ -3168,7 +3536,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 1.0,
+   "analysis_weight": 0.25
   },
   {
    "key": "kids",
@@ -3188,7 +3558,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 0.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "brilliant",
@@ -3205,7 +3577,9 @@
    "description": "Ein überraschender, starker Zug – oft ein Opfer.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 0.0,
+   "analysis_weight": 0.45
   },
   {
    "key": "beginner",
@@ -3222,7 +3596,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 0.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "good-move",
@@ -3239,7 +3615,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 0.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "intermediate",
@@ -3254,7 +3632,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 0.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "interesting-move",
@@ -3270,7 +3650,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 0.0,
+   "analysis_weight": 0.15
   },
   {
    "key": "club",
@@ -3287,7 +3669,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 0.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "only-move",
@@ -3305,7 +3689,9 @@
    "description": "Nur dieser Zug hält die Stellung bzw. gewinnt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 0.0,
+   "analysis_weight": 0.4
   },
   {
    "key": "advanced",
@@ -3324,7 +3710,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 0.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "critical-moment",
@@ -3341,7 +3729,9 @@
    "description": "Ein Zug, bei dem es nur eine gute Fortsetzung gibt.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 0.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "turning-point",
@@ -3357,7 +3747,9 @@
    "description": "Der Vorteil wechselt die Seite.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 0.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "tactical-explosion",
@@ -3374,7 +3766,9 @@
    "description": "Viele Schlagzüge hintereinander.",
    "task": "",
    "task_en": "",
-   "base_difficulty": 3
+   "base_difficulty": 3,
+   "weight": 0.0,
+   "analysis_weight": 0.3
   },
   {
    "key": "inaccuracy",
@@ -3392,7 +3786,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 0.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "mistake",
@@ -3408,7 +3804,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 0.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "blunder",
@@ -3425,7 +3823,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 0.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "missed-win",
@@ -3441,7 +3841,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 0.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "missed-mate",
@@ -3457,7 +3859,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 0.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "allows-mate",
@@ -3473,7 +3877,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 1
+   "base_difficulty": 1,
+   "weight": 0.0,
+   "analysis_weight": 0.0
   },
   {
    "key": "classic",
@@ -3490,7 +3896,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 2
+   "base_difficulty": 2,
+   "weight": 0.0,
+   "analysis_weight": 0.2
   },
   {
    "key": "composed-study",
@@ -3509,7 +3917,9 @@
    "description": "",
    "task": "",
    "task_en": "",
-   "base_difficulty": 4
+   "base_difficulty": 4,
+   "weight": 0.5,
+   "analysis_weight": 0.2
   }
  ]
 }

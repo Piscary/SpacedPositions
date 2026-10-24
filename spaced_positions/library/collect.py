@@ -13,6 +13,7 @@ from spaced_positions.analysis import puzzles as analysis_puzzles
 from spaced_positions.analysis import tree
 from spaced_positions.training.models import Position
 
+from .detect import run as run_detection
 from .models import PositionTag, Source, Tag, TagPreset
 
 
@@ -98,6 +99,9 @@ def save(request):
             PositionTag.objects.get_or_create(position=position, tag=tag)
         if not position.diagram:
             message += _make_puzzle(position, bool(data.get("ready")))
+            detected = run_detection(position)  # tags from python-chess (library/detect.py), suggestions dashed
+            if detected["added"] or detected["suggested"]:
+                message += f" · detected {', '.join(detected['added'] + detected['suggested'])}"
     return JsonResponse({"ok": True, "position": describe(position), "message": message})
 
 
@@ -119,6 +123,7 @@ def save_many(request):
                 continue
             position = Position.objects.create(fen=check["fen"], canonical=check["canonical"], source=source, origin="collect")
             tree.root(position)
+            run_detection(position, search=False)
             for tag in tags:
                 PositionTag.objects.get_or_create(position=position, tag=tag)
             saved.append(position)

@@ -54,10 +54,11 @@ step to the next move       → no request for the board and the moves cursor; i
 | `core/paste.js` | Paste detection and the offers in the status line | 150 |
 | `core/islands.js` | Mounts `[data-island]` elements when a workspace renders or a pane arrives | 30 |
 | `islands/train.js` | Session runner: states, queue in batches, judging moves against the solution tree, clock, combo, lives, attempts in the background, pause, result | 600 |
-| `islands/chart.js` | Chart cursor, read-out, table toggle | 120 |
 | `core/library.js` | The Library: QueryBar (completion, problems, live count), results in three displays, collections, bulk commands with undo (the server's inverse is replayed, never the client side), the filter pane; `:tag` targets in Analyse and Train | 450 |
 | `core/collect.js` | Collect's entry session (source, page, number, title pattern, tags, presets, ready), save & next, duplicates, pasting into Collect | 250 |
 | `core/importer.js` | The PGN import list (from a paste or a file) | 160 |
+| `core/charts.js` | Stats: loads the sections, the chart cursor and read-out, table view, period, drill-down; Home's commands; announcing achievements once | 170 |
+| `islands/graphs.js` | The eval graph and the variation graph, drawn from the analysis tree | 150 |
 | `core/confirm.js` | A one-key question in the status line (`y / n`, `m / s`) | 20 |
 | `core/engine.js` | Stockfish 17.1 lite in a worker (UCI, MultiPV), the Engine pane, arrows and eval bar on the boards of the line it follows; runs only while Analyse is visible. A local binary streamed by the server follows in phase 6 | 280 |
 
@@ -65,7 +66,10 @@ Server side, the apps are `core` (shell, layouts, UI state, server commands), `t
 cards, sessions, scheduler), `analysis` (move trees of positions and games, journal, puzzles from the analysis, PGN
 in and out) and `library` (sources, players, tags, saved queries, games; the query language `library/query.py`;
 Collect's saving; the PGN importer; bulk commands in `library/commands.py`, registered through
-`core.server_commands.MODULES`).
+`core.server_commands.MODULES`) and `stats` (metrics from the training tables, achievements, the Stats sections,
+Home; charts as server-rendered SVG in `stats/charts.py`). Tag detection is `library/detect.py` and
+`library/sequences.py` (chess-study-manager's autotagger, ported: it reproduces all 1,161 auto tags of the old
+database's positions).
 
 **Islands** attach to server-rendered markup by attribute (`<div data-island="board" data-fen="…" data-group="A">`)
 on `htmx:load`, and clean up on `htmx:beforeCleanupElement`. They never render HTML that the server could render.
