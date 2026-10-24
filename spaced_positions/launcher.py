@@ -32,7 +32,9 @@ RUNTIME = "runtime.json"
 
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="spos", description="Spaced Positions: chess puzzle training.")
-    parser.add_argument("action", nargs="?", default="start", choices=["start", "list", "stop"])
+    parser.add_argument("action", nargs="?", default="start", choices=["start", "list", "stop", "import-csm"])
+    parser.add_argument("path", nargs="?", help="import-csm: the chess-study-manager database (db.sqlite3)")
+    parser.add_argument("--dry-run", action="store_true", help="import-csm: show what would be added, change nothing")
     parser.add_argument("--no-browser", action="store_true", help="don't open a browser")
     parser.add_argument("--port", type=int, help=f"port to use (default {DEFAULT_PORT} or the next free one)")
     parser.add_argument("--data-dir", help="use this data folder instead of the default one")
@@ -59,6 +61,9 @@ def main(argv=None):
         (data / RUNTIME).unlink(missing_ok=True)
         print("Stopped.")
         return
+
+    if args.action == "import-csm":
+        return _import_csm(data, args)
 
     if running:
         print(f"Already running: {running['url']}")
@@ -175,6 +180,28 @@ def _migrate(data: Path):
         dest.close()
         print(f"  Backup:      {target}")
     call_command("migrate", interactive=False, verbosity=0)
+
+
+def _import_csm(data: Path, args):
+    """`spos import-csm <db.sqlite3>`: the migration from chess-study-manager (spaced_positions/csm.py)."""
+    if not args.path:
+        sys.exit("spos import-csm: which database? e.g. spos import-csm ~/chess-study-manager/db.sqlite3")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "spaced_positions.settings")
+    import django
+
+    django.setup()
+    _migrate(data)
+    from spaced_positions import csm
+
+    try:
+        report = csm.run(args.path, dry_run=args.dry_run)
+    except (FileNotFoundError, ValueError) as e:
+        sys.exit(f"spos import-csm: {e}")
+    if report.backup:
+        print(f"  Backup:      {report.backup}")
+    print(("  Would add:   " if args.dry_run else "  Added:       ") + (", ".join(report.lines()) or "nothing new"))
+    for problem in report.problems:
+        print(f"  ! {problem}")
 
 
 def _lan_address() -> str:

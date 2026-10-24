@@ -571,15 +571,7 @@ class Compiler:
         return qs.order_by(*self.order(parsed))
 
     def order(self, parsed: Parsed) -> list[str]:
-        names = {
-            "positions": {"created": "created_at", "updated": "updated_at", "difficulty": "difficulty", "title": "title", "id": "id"},
-            "games": {"created": "created_at", "year": "year", "white": "white_name", "event": "event", "id": "id"},
-            "puzzles": {"created": "created_at", "difficulty": "position__difficulty", "title": "position__title",
-                        "success": "success_rate", "lapses": "lapse_sum", "id": "id"},
-            "players": {"name": "name", "created": "created_at"},
-            "sources": {"title": "title", "created": "created_at"},
-            "tags": {"name": "name", "field": "field__order"},
-        }[self.collection]
+        names = SORTS[self.collection]
         out = []
         for term in parsed.sort():
             for value in term.values:
@@ -607,6 +599,20 @@ def _material(value: str) -> str | None:
     if any(c not in order for c in white + black):
         return None
     return "".join(sorted(white, key=order.index)) + "v" + "".join(sorted(black, key=order.index))
+
+
+# `sort:` names per collection → the field they order by (11 §3). GROUPS: the sorts whose rows come in foldable groups.
+SORTS = {
+    "positions": {"created": "created_at", "updated": "updated_at", "difficulty": "difficulty", "title": "title", "source": "source__title", "id": "id"},
+    "games": {"created": "created_at", "year": "year", "white": "white_name", "black": "black_name", "event": "event", "id": "id"},
+    "puzzles": {"created": "created_at", "difficulty": "position__difficulty", "title": "position__title",
+                "success": "success_rate", "lapses": "lapse_sum", "id": "id"},
+    "players": {"name": "name", "role": "role", "created": "created_at"},
+    "sources": {"title": "title", "kind": "kind", "created": "created_at"},
+    "tags": {"name": "name", "field": "field__order"},
+}
+GROUPS = {"positions": ("difficulty", "source"), "games": ("year", "white", "black", "event"), "puzzles": ("difficulty",),
+          "players": ("role",), "sources": ("kind",), "tags": ("field",)}
 
 
 def base_queryset(collection: str):

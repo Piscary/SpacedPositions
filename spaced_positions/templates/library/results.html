@@ -1,7 +1,8 @@
 {% load ui %}{{ info|json_script:"query-info" }}
 {% for r in rows %}
+{% if r.group_start %}<div class="library__group" aria-hidden="true" data-group-head="{{ r.group }}"><span class="library__caret"></span><b>{{ r.group }}</b> <span class="muted">{{ r.group_size }}</span></div>{% endif %}
 {% if collection == "positions" %}
-  <div class="list__row library__row library__row--{{ display }}" role="option" aria-selected="false" data-row="p{{ r.pk }}" data-id="p{{ r.pk }}"
+  <div class="list__row library__row library__row--{{ display }}" role="option" aria-selected="false"{% if r.group %} data-group="{{ r.group }}"{% endif %} data-row="p{{ r.pk }}" data-id="p{{ r.pk }}"
        data-position="{{ r.uuid }}" data-title="{{ r.title }}" data-fen="{{ r.fen }}">
     {% if display != "table" %}{% miniboard r.fen 96 extra="library__board" %}{% endif %}
     <span class="list__mark" aria-hidden="true">▢</span>
@@ -13,7 +14,7 @@
     <span class="list__meta library__status">{% if r.in_training %}<span class="chip chip--good">✓ training</span>{% elif r.has_puzzle %}<span class="chip">draft</span>{% elif not r.has_analysis %}<span class="chip chip--bad">✗ solution</span>{% endif %}</span>
   </div>
 {% elif collection == "puzzles" %}
-  <div class="list__row library__row library__row--{{ display }}" role="option" aria-selected="false" data-row="z{{ r.pk }}" data-id="z{{ r.pk }}"
+  <div class="list__row library__row library__row--{{ display }}" role="option" aria-selected="false"{% if r.group %} data-group="{{ r.group }}"{% endif %} data-row="z{{ r.pk }}" data-id="z{{ r.pk }}"
        data-position="{{ r.position.uuid }}" data-node="{{ r.start_node_id|default:'' }}" data-title="{{ r.position.title }}" data-fen="{{ r.start_fen }}">
     {% if display != "table" %}{% miniboard r.start_fen 96 extra="library__board" %}{% endif %}
     <span class="list__mark" aria-hidden="true">▢</span>
@@ -25,7 +26,7 @@
     <span class="list__meta library__status">{% if not r.active %}<span class="chip">draft</span>{% elif r.flagged %}<span class="chip chip--bad">flagged</span>{% else %}<span class="chip chip--good">in training</span>{% endif %}</span>
   </div>
 {% elif collection == "games" %}
-  <div class="list__row library__row library__row--table" role="option" aria-selected="false" data-row="g{{ r.pk }}" data-id="g{{ r.pk }}"
+  <div class="list__row library__row library__row--table" role="option" aria-selected="false"{% if r.group %} data-group="{{ r.group }}"{% endif %} data-row="g{{ r.pk }}" data-id="g{{ r.pk }}"
        data-game="{{ r.uuid }}" data-title="{{ r.title }}" data-fen="{{ r.start_fen }}">
     <span class="list__mark" aria-hidden="true">▢</span>
     <span class="list__id">g{{ r.pk }}</span>
@@ -36,7 +37,7 @@
     <span class="list__meta library__status">{{ r.spark }}{% if r.deleted_at %}<span class="chip chip--bad">trash</span>{% endif %}</span>
   </div>
 {% elif collection == "players" %}
-  <div class="list__row library__row library__row--table" role="option" aria-selected="false" data-row="@{{ r.key }}" data-title="{{ r.name }}" data-query="player:@{{ r.key }}" data-query-collection="games">
+  <div class="list__row library__row library__row--table" role="option" aria-selected="false"{% if r.group %} data-group="{{ r.group }}"{% endif %} data-row="@{{ r.key }}" data-title="{{ r.name }}" data-query="player:@{{ r.key }}" data-query-collection="games">
     <span class="list__mark" aria-hidden="true">▢</span>
     <span class="list__id">@{{ r.key }}</span>
     <span class="list__title">{{ r.name }}{% if r.title %} <span class="chip">{{ r.title }}</span>{% endif %}</span>
@@ -44,7 +45,7 @@
     <span class="list__meta mono">{{ r.game_count }} game{{ r.game_count|pluralize }}</span>
   </div>
 {% elif collection == "sources" %}
-  <div class="list__row library__row library__row--table" role="option" aria-selected="false" data-row="s{{ r.pk }}" data-title="{{ r.title }}" data-query='src:"{{ r.label }}"' data-query-collection="positions">
+  <div class="list__row library__row library__row--table" role="option" aria-selected="false"{% if r.group %} data-group="{{ r.group }}"{% endif %} data-row="s{{ r.pk }}" data-title="{{ r.title }}" data-query='src:"{{ r.label }}"' data-query-collection="positions">
     <span class="list__mark" aria-hidden="true">▢</span>
     <span class="list__id">s{{ r.pk }}</span>
     <span class="list__title">{{ r.title }}</span>
@@ -52,7 +53,7 @@
     <span class="list__meta mono">{{ r.position_count }} pos · {{ r.game_count }} games</span>
   </div>
 {% else %}
-  <div class="list__row library__row library__row--table" role="option" aria-selected="false" data-row="#{{ r.key }}" data-title="{{ r.name }}" data-query="#{{ r.key }}" data-query-collection="positions">
+  <div class="list__row library__row library__row--table" role="option" aria-selected="false"{% if r.group %} data-group="{{ r.group }}"{% endif %} data-row="#{{ r.key }}" data-title="{{ r.name }}" data-query="#{{ r.key }}" data-query-collection="positions">
     <span class="list__mark" aria-hidden="true">▢</span>
     <span class="list__id">#{{ r.key }}</span>
     <span class="list__title">{{ r.name }}{% if r.name_en %} <span class="muted">{{ r.name_en }}</span>{% endif %}</span>

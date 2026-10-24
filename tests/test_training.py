@@ -201,40 +201,30 @@ class TestApi:
 
 
 def make_old_db(path):
-    db = sqlite3.connect(path)
-    db.executescript(
-        """
-        create table positions_variationnode (id integer primary key, sort_order int, uci text, san text, ply int, fen_after text,
-            position_id int, parent_id int, comment text default '', nags text default '[]', quality text default '',
-            color text default '', shapes text default '{}');
-        create table positions_position (id integer primary key, fen text, title text, difficulty int, book_id int, website_id int, source_ref text, source_page text);
-        create table training_trainingpuzzle (id integer primary key, active bool, solution text, node_id int);
-        create table training_trainingcard (id integer primary key, puzzle_id int, line text, in_solution bool, state text, due text,
-            interval_days real, ease real, step int, reps int, lapses int, success_streak int, attempts int, successes int,
-            total_ms int, best_ms int, last_result bool, last_seen text);
-        create table sources_book (id integer primary key, title text, authors text, year int, publisher text, isbn text, notes text);
-        create table sources_website (id integer primary key, name text, base_url text);
-        create table positions_tagfield (id integer primary key, key text, "order" int);
-        create table positions_tag (id integer primary key, name text, name_en text, field_id int, "order" int, slug text);
-        create table positions_positiontag (id integer primary key, position_id int, tag_id int, source text);
-        insert into positions_position values (1, '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1', 'Back rank', 2, 1, null, '7', '3');
-        insert into sources_book values (1, 'Mating Patterns', 'A. Author', 1999, '', '', '');
-        insert into positions_variationnode (id, sort_order, uci, san, ply, fen_after, position_id, parent_id, comment)
-            values (10, 0, '', '', 0, '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1', 1, null, 'Back rank!');
-        insert into positions_variationnode (id, sort_order, uci, san, ply, fen_after, position_id, parent_id, nags, quality, shapes)
-            values (11, 0, 'd1d8', 'Rd8#', 1, '3R2k1/5ppp/8/8/8/8/5PPP/6K1 b - - 1 1', 1, 10, '[3]', 'good',
-                    '{"arrows": [{"from": "d1", "to": "d8", "color": "R"}], "circles": [], "squares": [{"square": "g8", "color": "G"}]}');
-        insert into positions_variationnode (id, sort_order, uci, san, ply, fen_after, position_id, parent_id)
-            values (12, 1, 'd1e1', 'Re1', 1, '6k1/5ppp/8/8/8/8/5PPP/4R1K1 b - - 1 1', 1, 10);
-        insert into training_trainingpuzzle values (5, 1, '{"also": [12]}', 10);
-        insert into training_trainingcard values (1, 5, '', 1, 'review', '2026-01-01 10:00:00', 12.5, 2.4, 0, 4, 1, 2, 6, 5, 30000, 2500, 1, '2025-12-20 10:00:00');
-        insert into positions_tagfield values (1, 'goal', 1), (2, 'mate', 2);
-        insert into positions_tag values (1, 'Matt in 1', 'Mate in 1', 1, 1, 'mate-in-1'), (2, 'Grundreihenmatt', 'Back-rank mate', 2, 1, 'back-rank-mate');
-        insert into positions_positiontag values (1, 1, 1, 'manual'), (2, 1, 2, 'auto'), (3, 1, 99, 'manual');
-        """
-    )
-    db.commit()
-    db.close()
+    """A chess-study-manager database with the real schema (tests/data/csm_schema.sql): one puzzle with its analysis."""
+    from tests.test_csm import Old
+
+    o = Old(path)
+    fen = "6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1"
+    o.add("positions_position", id=1, fen=fen, canonical_fen=fen, title="Back rank", difficulty=2, difficulty_override=2, book_id=1,
+          source_ref="7", source_page="3", created_at="2025-12-01 10:00:00", updated_at="2025-12-01 10:00:00", has_solution=1, diagram=0)
+    o.add("sources_book", id=1, title="Mating Patterns", authors="A. Author", year=1999, created_at="2025-12-01 10:00:00", updated_at="2025-12-01 10:00:00")
+    o.add("positions_variationnode", id=10, sort_order=0, uci="", san="", ply=0, fen_before=fen, fen_after=fen, position_id=1, comment="Back rank!")
+    o.add("positions_variationnode", id=11, sort_order=0, uci="d1d8", san="Rd8#", ply=1, fen_before=fen, fen_after="3R2k1/5ppp/8/8/8/8/5PPP/6K1 b - - 1 1",
+          position_id=1, parent_id=10, nags="[3]", quality="good",
+          shapes='{"arrows": [{"from": "d1", "to": "d8", "color": "R"}], "circles": [], "squares": [{"square": "g8", "color": "G"}]}')
+    o.add("positions_variationnode", id=12, sort_order=1, uci="d1e1", san="Re1", ply=1, fen_before=fen, fen_after="6k1/5ppp/8/8/8/8/5PPP/4R1K1 b - - 1 1",
+          position_id=1, parent_id=10)
+    o.add("training_trainingpuzzle", id=5, active=1, solution='{"also": [12]}', node_id=10, created_at="2025-12-01 10:00:00")
+    o.add("training_trainingcard", id=1, puzzle_id=5, line="", in_solution=1, state="review", due="2026-01-01 10:00:00", interval_days=12.5,
+          ease=2.4, step=0, reps=4, lapses=1, success_streak=2, attempts=6, successes=5, total_ms=30000, best_ms=2500, last_result=1,
+          last_seen="2025-12-20 10:00:00", created_at="2025-12-01 10:00:00")
+    o.add("positions_tagfield", id=1, key="goal", name="Aufgabe", order=1)
+    o.add("positions_tagfield", id=2, key="mate", name="Matt", order=2)
+    o.add("positions_tag", id=1, name="Matt in 1", name_en="Mate in 1", field_id=1, order=1, slug="mate-in-1")
+    o.add("positions_tag", id=2, name="Grundreihenmatt", name_en="Back-rank mate", field_id=2, order=1, slug="back-rank-mate")
+    for lid, tag, source in ((1, 1, "manual"), (2, 2, "auto"), (3, 99, "manual")):
+        o.add("positions_positiontag", id=lid, position_id=1, tag_id=tag, source=source, created_at="2025-12-01 10:00:00")
 
 
 @pytest.mark.django_db

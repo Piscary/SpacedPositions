@@ -1079,6 +1079,44 @@
    "handler": "server",
    "undoable": true
   },
+  "library.beside": {
+   "title": "Open beside the list (a board and its moves)",
+   "group": "Library",
+   "when": "view.library",
+   "reason": "in the Library's results",
+   "handler": "client"
+  },
+  "library.sort": {
+   "title": "Sort by a column (again: reverse)",
+   "group": "Library",
+   "aliases": [
+    "sort"
+   ],
+   "args": [
+    {
+     "name": "field",
+     "type": "text",
+     "optional": true
+    }
+   ],
+   "when": "view.library",
+   "reason": "in the Library's results",
+   "handler": "client"
+  },
+  "library.fold": {
+   "title": "Fold or open the group",
+   "group": "Library",
+   "when": "view.library",
+   "reason": "in the Library's results",
+   "handler": "client"
+  },
+  "library.foldall": {
+   "title": "Fold or open all groups",
+   "group": "Library",
+   "when": "view.library",
+   "reason": "in the Library's results",
+   "handler": "client"
+  },
   "pane.focus.next": {
    "title": "Focus the next pane",
    "group": "Panes",
@@ -1807,7 +1845,7 @@
    "handler": "client"
   },
   "train.analyse": {
-   "title": "Analyse this puzzle",
+   "title": "Analyse this puzzle beside the board",
    "group": "Train",
    "handler": "client"
   },
@@ -1864,6 +1902,11 @@
    ],
    "when": "view.board",
    "reason": "needs a board with moves played",
+   "handler": "client"
+  },
+  "train.analysemode": {
+   "title": "Analyse this puzzle in Analyse",
+   "group": "Train",
    "handler": "client"
   },
   "ui.appbar": {
@@ -2933,6 +2976,10 @@
     "command": "train.analyse",
     "args": []
    },
+   "A": {
+    "command": "train.analysemode",
+    "args": []
+   },
    "t": {
     "command": "train.tag",
     "args": []
@@ -3297,6 +3344,22 @@
    },
    "c": {
     "command": "library.edit",
+    "args": []
+   },
+   "o": {
+    "command": "library.beside",
+    "args": []
+   },
+   "s": {
+    "command": "library.sort",
+    "args": []
+   },
+   "z": {
+    "command": "library.fold",
+    "args": []
+   },
+   "Z": {
+    "command": "library.foldall",
     "args": []
    }
   },

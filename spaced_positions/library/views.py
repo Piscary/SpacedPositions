@@ -9,6 +9,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_GET, require_POST
 
 from spaced_positions.analysis.models import Node
+from spaced_positions.core.templatetags.ui import stars
 from spaced_positions.training.models import Card, Puzzle
 
 from . import query as q
@@ -81,7 +82,11 @@ def results(request):
         sparks = eval_sparks([r.pk for r in rows])
         for r in rows:
             r.spark = sparks.get(r.pk, "")
+    sort = next((v for t in result.parsed.sort() for v in t.values), "")
+    if sort.lstrip("-") in q.GROUPS[collection]:
+        mark_groups(collection, sort.lstrip("-"), rows)
     info = {
+        "sort": sort, "sorts": list(q.SORTS[collection]), "groups": list(q.GROUPS[collection]),
         "count": total,
         "shown": offset + len(rows),
         "terms": [{"start": t.start, "end": t.end, "key": t.key, "neg": t.neg} for t in result.parsed.terms()],
@@ -90,6 +95,41 @@ def results(request):
     return render(request, "library/results.html", {
         "collection": collection, "display": display, "rows": rows, "offset": offset, "info": info, "more": total - info["shown"],
     })
+
+
+# ── Groups (sorted by a field with few values: the rows come in foldable groups) ────────────────────────────
+
+
+def group_label(collection: str, key: str, r) -> str:
+    if key == "difficulty":
+        d = r.difficulty if collection == "positions" else r.position.difficulty
+        return stars(d) if d else "No difficulty"
+    if key == "source":
+        return r.source.label if r.source_id else "No source"
+    if key == "year":
+        return str(r.year) if r.year else "No year"
+    if key in ("white", "black"):
+        return getattr(r, f"{key}_name") or "?"
+    if key == "event":
+        return r.event or "No event"
+    if key == "role":
+        return r.get_role_display() if r.role else "No role"
+    if key == "kind":
+        return r.get_kind_display()
+    return r.field.name  # tags by field
+
+
+def mark_groups(collection: str, key: str, rows: list) -> None:
+    """Each row gets its group; the first of a group carries the header (label and how many rows on this page)."""
+    sizes: dict[str, int] = {}
+    for r in rows:
+        r.group = group_label(collection, key, r)
+        sizes[r.group] = sizes.get(r.group, 0) + 1
+    previous = None
+    for r in rows:
+        r.group_start = r.group != previous
+        r.group_size = sizes[r.group]
+        previous = r.group
 
 
 # ── EvalGraph thumbnails (05 · EvalGraph) ─────────────────────────────────────────────────────────────────────

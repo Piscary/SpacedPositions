@@ -177,3 +177,13 @@
 .spark line { stroke: var(--line); stroke-width: var(--rule); }
 .spark polyline { fill: none; stroke: var(--text-sub); stroke-width: calc(var(--rule) * 1.5); stroke-linejoin: round; }
 .list__row.is-cursor .spark polyline { stroke: var(--text); }
+
+/* Groups: results sorted by a field with few values (difficulty, source, year …), foldable with z / Z or a click */
+.library__group {
+  display: flex; gap: var(--s-1); align-items: baseline;
+  padding: var(--s-1) var(--s-2) var(--s-half); border-bottom: var(--rule) solid var(--line);
+  font-size: var(--fs-sm); cursor: pointer; user-select: none;
+}
+.library__caret { color: var(--text-muted); font-size: var(--fs-xs); }
+.library__caret::before { content: "▾"; }
+.library__group.is-folded .library__caret::before { content: "▸"; }

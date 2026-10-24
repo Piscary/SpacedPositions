@@ -28,3 +28,20 @@ class Achievement(models.Model):
 
     def __str__(self):
         return self.label
+
+
+class ActivityLog(models.Model):
+    """Activity that left no other trace here: the old app's analysis work (phase 7). Stats count it with the rest."""
+
+    class Kind(models.TextChoices):
+        COLLECT = "collect", "Collect"
+        ANALYSE = "analyse", "Analyse"
+
+    kind = models.CharField(max_length=10, choices=Kind.choices)
+    points = models.SmallIntegerField(default=1)
+    at = models.DateTimeField(db_index=True)
+    label = models.CharField(max_length=200, blank=True)
+    origin = models.CharField(max_length=40, unique=True)
+
+    class Meta:
+        ordering = ["at"]

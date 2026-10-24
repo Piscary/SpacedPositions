@@ -205,3 +205,27 @@ def test_moments_endpoint(client, monkeypatch):
     data = client.post(f"/analysis/{game.uuid}/moments/", "{}", content_type="application/json").json()
     assert data["ok"] and data["message"].startswith("Moments without evaluations")  # python-chess and the symbols only
     assert "Erlaubt Matt" in data["html"] and "Verpasstes Matt" in data["html"]
+
+
+@pytest.mark.django_db(transaction=True)
+def test_big_import_in_the_background(client, monkeypatch):
+    """Phase 7: a big PGN is uploaded as it is and imported in batches in the background; duplicates are left out."""
+    import time
+
+    from spaced_positions.library import importer
+
+    monkeypatch.setattr(importer, "BATCH", 7)
+    games = "".join(f'[Event "Big {i}"]\n[White "W{i}"]\n[Black "B"]\n[Result "1-0"]\n\n1. e4 e5 2. Nf3 Nc6 1-0\n\n' for i in range(30))
+    pgn = games + '[Event "Big 3"]\n[White "W3"]\n[Black "B"]\n[Result "1-0"]\n\n1. e4 e5 2. Nf3 Nc6 1-0\n\n'  # one twice
+    data = client.post("/lib/import/upload/", pgn.encode(), content_type="application/octet-stream").json()
+    assert data["ok"]
+    for _ in range(100):
+        job = client.get(f"/lib/import/job/{data['id']}/").json()
+        if job["done"]:
+            break
+        time.sleep(0.1)
+    assert (job["games"], job["duplicates"], job["percent"]) == (30, 1, 100)
+    assert Game.objects.filter(event__startswith="Big").count() == 30
+    undo = client.post(f"/cmd/{job['undo']['command']}/", json.dumps({"args": job["undo"]["args"], "context": {}}), content_type="application/json").json()
+    assert undo["ok"] and Game.objects.filter(deleted_at=None, event__startswith="Big").count() == 0
+    assert not list((importer.JOBS[data["id"]].path.parent).glob("*.pgn"))  # the upload is gone

@@ -222,3 +222,23 @@ def test_accessibility_with_a_position_open(page, ruy):
         }"""
     )
     assert result == [], result
+
+
+def test_train_feedback_analyses_beside_the_board(page, ruy):
+    """Phase 7: `a` on the feedback shows the puzzle's analysis in Train, beside the board; the next puzzle closes it."""
+    root = tree.root(ruy)
+    analysis_puzzles.act(root, "start")
+    analysis_puzzles.act(root, "ready")
+    analysis_puzzles.rebuild_all(ruy)
+    open_mode(page, "train")
+    page.wait_for_function("window.SPOS.train && document.querySelector('[data-train-launcher]:not([hidden])')")
+    keys(page, "r")
+    page.wait_for_function("window.SPOS.train.state().state === 'solving'")
+    assert page.locator("#ws-train [data-island=moves]").count() == 0
+    keys(page, "s")
+    page.wait_for_function("window.SPOS.train.state().state === 'feedback'")
+    keys(page, "a")
+    page.wait_for_selector("#ws-train [data-island=moves] [data-movetree] >> text=Nf3")
+    assert page.evaluate("window.SPOS.ctx.mode") == "train"
+    keys(page, "Enter")  # the next puzzle (the same card again, or the result): the analysis goes
+    page.wait_for_function("!document.querySelector('#ws-train [data-island=moves]')")

@@ -196,3 +196,21 @@ def test_streak_on_the_weakest_motifs(client):
     data = post(client, "/train/start/", {"mode": "streak", "weakest": True}).json()
     assert data["ok"] and data["total"] == 1 and data["label"] == "Streak · weakest motifs"
     assert data["options"]["filter"] == "tag:smothered-mate"
+
+
+def test_structure_suggestions():
+    """Phase 7: the old app's structure detector (pawns, rooks, batteries, endgame set-ups) as suggestions."""
+    from spaced_positions.library import structure
+
+    def keys(fen, ph="middlegame"):
+        return {f.tag: f for f in structure.static_features(chess.Board(fen), ph)}
+
+    found = keys("r3k2r/pp3ppp/8/3p4/8/8/PP3PPP/R2Q1RK1 w kq - 0 1")
+    assert found["isolated-pawn"].evidence == "Isolated pawn on the d-file (Black)" and not found["isolated-pawn"].apply
+    assert keys("6k1/5ppp/8/8/8/3B4/2Q2PPP/6K1 w - - 0 1")["battery"].evidence == "Battery of queen and bishop against h7 (White)"
+    wrong = keys("7k/8/8/8/8/8/P7/2B3K1 w - - 0 1", "endgame")["wrong-rook-pawn"]
+    assert wrong.apply and "a8" in wrong.evidence
+    assert "opposition" in keys("8/8/4k3/8/4K3/4P3/8/8 w - - 0 1", "endgame")
+    p = tree.create_position("r3k2r/pp3ppp/8/3p4/8/8/PP3PPP/R2Q1RK1 w kq - 0 1", [])
+    detect.run(p, search=False)
+    assert p.tag_links.get(tag__key="isolated-pawn").origin == "suggested"

@@ -553,9 +553,12 @@ def detect(position, search: bool = True) -> list[Finding]:
         return []
     if not board.is_valid():
         return []
+    from .structure import static_features
+
     found = []
     ph, desc = phase(board)
     found.append(Finding(ph, desc, True))
+    found += static_features(board, ph)  # structure: suggestions (the wrong rook pawn is applied)
     if ph == "endgame":
         kind = endgame_type(board)
         if kind:

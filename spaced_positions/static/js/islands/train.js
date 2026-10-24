@@ -6,7 +6,7 @@ import { Chess } from "../../vendor/chess.js"
 import { handle, run } from "../core/commands.js"
 import { ctx, on, status, storage, updateStatus } from "../core/context.js"
 import { setOverlayHandler } from "../core/keys.js"
-import { focusPane, switchMode } from "../core/layout.js"
+import { closeBeside, focusPane, openBeside, switchMode } from "../core/layout.js"
 import * as lines from "../core/lines.js"
 import { sound } from "../core/sound.js"
 import { setNumber } from "../core/ticker.js"
@@ -192,6 +192,7 @@ function refill() {
 }
 
 async function nextPuzzle() {
+  if (ctx.mode === "train") closeBeside() // the last puzzle's analysis would show this one's solution
   if (!T.queue.length) await refill()
   const p = T.queue.shift()
   if (!p) return finish()
@@ -548,7 +549,16 @@ async function openInAnalyse(edit) {
   await window.SPOS.analysis.open(p.position, { node: p.startNode })
   if (edit) window.SPOS.analysis.focusInspector("z")
 }
-handle("train.analyse", () => openInAnalyse(false))
+// `a`: the puzzle's analysis beside the board, in Train (closed when the next puzzle starts); `A`: in Analyse
+handle("train.analyse", async () => {
+  if (T.state === "result") return run("list.open")
+  const p = T.current?.p
+  if (!p) return false
+  const group = await openBeside()
+  await window.SPOS.analysis.open(p.position, { key: `train:${group}`, show: false, node: p.startNode })
+  status("The analysis beside the board · ↵ next puzzle closes it · A opens it in Analyse", { timeout: 3000 })
+})
+handle("train.analysemode", () => openInAnalyse(false))
 handle("train.edit", () => openInAnalyse(true))
 
 handle("train.flag", async () => {
@@ -561,6 +571,7 @@ handle("train.flag", async () => {
 
 async function finish({ quiet = false } = {}) {
   if (!T.session) return
+  if (ctx.mode === "train") closeBeside()
   stopClock()
   const board = trainBoard()
   board?.stopSolving()

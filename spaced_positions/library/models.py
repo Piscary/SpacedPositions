@@ -26,6 +26,7 @@ class Source(models.Model):
     isbn = models.CharField(max_length=20, blank=True)
     url = models.URLField(blank=True)
     notes = models.TextField(blank=True)
+    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: csm-…:<id> (phase 7)")
     search = models.TextField(blank=True, editable=False)
     created_at = models.DateTimeField(default=timezone.now)
 
@@ -61,6 +62,7 @@ class Player(models.Model):
     fide_id = models.CharField(max_length=12, blank=True)
     born = models.PositiveSmallIntegerField(null=True, blank=True)
     notes = models.TextField(blank=True)
+    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: csm-…:<id> (phase 7)")
     search = models.TextField(blank=True, editable=False)
     created_at = models.DateTimeField(default=timezone.now)
 
@@ -217,6 +219,7 @@ class Game(models.Model):
     source = models.ForeignKey(Source, null=True, blank=True, on_delete=models.SET_NULL, related_name="games")
     source_ref = models.CharField(max_length=300, blank=True)
     notes = models.TextField(blank=True)
+    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: csm-…:<id> (phase 7)")
     tags = models.ManyToManyField(Tag, through=GameTag, related_name="games", blank=True)
     deleted_at = models.DateTimeField(null=True, blank=True, db_index=True)
     created_at = models.DateTimeField(default=timezone.now)

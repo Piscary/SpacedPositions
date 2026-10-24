@@ -6,6 +6,7 @@ import { pushUndo } from "./commands.js"
 import { inverse } from "./library.js"
 import { ctx, keycaps, setLayer, status } from "./context.js"
 import { setOverlayHandler } from "./keys.js"
+import { offer } from "./confirm.js"
 
 const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content || ""
 const post = (url, body) =>
@@ -18,9 +19,46 @@ let open = null
 export async function openImport(text) {
   status("Reading the PGN…", { timeout: 0 })
   const { data } = await post("/lib/import/scan/", { text })
+  if (data.message?.startsWith("the file is larger")) return importInBackground(new Blob([text]))
   if (!data.ok) return status(data.message, { kind: "error" }) || false
+  if (data.more) {
+    return offer("More than 5,000 games: import all of them in the background (duplicates left out)? y · r with the puzzles in training · n", {
+      y: () => importInBackground(new Blob([text])),
+      r: () => importInBackground(new Blob([text]), true),
+    })
+  }
   status("", { timeout: 1 })
   show(text, data.items)
+}
+
+const MAX_TEXT = 20_000_000
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+/** A big PGN: uploaded as it is, imported in the background (the app stays usable); the status line follows it. */
+export async function importInBackground(blob, ready = false) {
+  status("Uploading the PGN…", { timeout: 0 })
+  const data = await fetch(`/lib/import/upload/?ready=${ready ? 1 : 0}`, {
+    method: "POST", headers: { "Content-Type": "application/octet-stream", "X-CSRFToken": csrf() }, body: blob,
+  }).then((r) => r.json()).catch(() => ({ ok: false, message: "the app is not reachable" }))
+  if (!data.ok) return status(data.message, { kind: "error" }) || false
+  for (;;) {
+    await sleep(1000)
+    const job = await fetch(`/lib/import/job/${data.id}/`).then((r) => r.json()).catch(() => null)
+    if (!job?.ok) return status(job?.message || job?.error || "The import stopped", { kind: "error" }) || false
+    if (!job.done) {
+      status(`Importing in the background · ${job.imported.toLocaleString()} so far · ${job.percent} %`, { timeout: 0 })
+      continue
+    }
+    const parts = [`Imported ${job.games.toLocaleString()} game${job.games === 1 ? "" : "s"}`]
+    if (job.positions) parts.push(`${job.positions} puzzle${job.positions === 1 ? "" : "s"}`)
+    if (job.duplicates) parts.push(`${job.duplicates} already here`)
+    if (job.failed) parts.push(`${job.failed} could not be read`)
+    job.message = parts.join(" · ")
+    status(job.message, { kind: "good", keys: { seq: ["u"], label: "undo" } })
+    pushUndo(inverse(job))
+    if (job.games) window.SPOS.library?.setQuery?.("created:<1d", "games")
+    return true
+  }
 }
 
 function show(text, items) {
@@ -133,6 +171,7 @@ export function chooseFile() {
   input.addEventListener("change", async () => {
     const file = input.files?.[0]
     if (!file) return
+    if (file.size > MAX_TEXT) return importInBackground(file) // read on the server, a game at a time
     openImport(await file.text())
   })
   input.click()

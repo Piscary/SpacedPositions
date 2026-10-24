@@ -85,7 +85,11 @@ def export_game(g) -> str:
 
 def read_games(text: str, limit: int = 20000):
     """The games in a PGN text (python-chess is forgiving; games with errors keep what it could read)."""
-    stream = io.StringIO(text)
+    return games_in(io.StringIO(text), limit)
+
+
+def games_in(stream, limit: int = 20000):
+    """The games in a PGN stream (a file of any size: read one game at a time)."""
     found = 0
     while found < limit:
         game = chess.pgn.read_game(stream)

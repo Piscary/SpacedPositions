@@ -5,9 +5,10 @@
 import { handle, pushUndo, serverRun } from "./commands.js"
 import { ctx, emit, on, setLayer, status } from "./context.js"
 import { offer } from "./confirm.js"
-import { focusPane, nodeOf, switchMode } from "./layout.js"
+import { focusPane, nodeOf, openBeside, switchMode } from "./layout.js"
 import { cursorIndex, resetList, targetRows } from "./lists.js"
 import { openCmdline } from "./cmdline.js"
+import { openMenu } from "./menu.js"
 
 const DISPLAYS = ["table", "list", "grid"]
 const state = new WeakMap() // library element → {q, c, display, ticket}
@@ -46,6 +47,7 @@ async function refresh(el, { keep = false, clear = false } = {}) {
   el.dataset.display = st.display
   const info = JSON.parse(list.querySelector("#query-info")?.textContent || "{}")
   paintInfo(el, info)
+  paintFolds(el)
   resetList(list, { index, clear })
   for (const tab of el.querySelectorAll(".library__tabs [role=radio]")) tab.setAttribute("aria-checked", String(tab.dataset.args === st.c))
   emit("library:query", { group: groupOf(el), q: st.q, c: st.c })
@@ -298,6 +300,84 @@ const withLibrary = (fn) => (args) => {
   return fn(el, stateOf(el), args)
 }
 
+const infoOf = (el) => JSON.parse(el.querySelector("[data-library-results] #query-info")?.textContent || "{}")
+
+// `s`: sort by a column (the query's sort: term; the same column again reverses it)
+handle("library.sort", withLibrary(async (el, st, [field]) => {
+  const info = infoOf(el)
+  const current = info.sort || ""
+  if (!field) {
+    field = await openMenu({
+      title: "Sort by · the same again reverses · ▤ groups",
+      anchor: el,
+      start: Math.max(0, (info.sorts || []).indexOf(current.replace(/^-/, ""))),
+      items: (info.sorts || []).map((f) => ({
+        label: `${f}${(info.groups || []).includes(f) ? " ▤" : ""}`,
+        note: current === f ? "↑ now" : current === `-${f}` ? "↓ now" : "",
+        key: f[0], keys: [f[0]], value: f,
+      })),
+    })
+    if (!field) return false
+  }
+  const next = current === field ? `-${field}` : field
+  st.q = [...st.q.split(/\s+/).filter((w) => w && !/^-?sort:/.test(w)), `sort:${next}`].join(" ")
+  el.querySelector("[data-querybar]").value = st.q
+  return refresh(el)
+}))
+
+// ── Folded groups (`z` the cursor's group, `Z` all; a click on a group's header) ──────────────────────────────
+
+const folds = new Map() // "collection sort" → the labels of the folded groups
+
+const foldsOf = (el) => {
+  const key = `${stateOf(el).c} ${infoOf(el).sort || ""}`
+  if (!folds.has(key)) folds.set(key, new Set())
+  return folds.get(key)
+}
+
+function paintFolds(el) {
+  const list = el.querySelector("[data-library-results]")
+  const folded = foldsOf(el)
+  for (const head of list.querySelectorAll("[data-group-head]")) head.classList.toggle("is-folded", folded.has(head.dataset.groupHead))
+  for (const row of list.querySelectorAll("[data-group]")) row.hidden = folded.has(row.dataset.group)
+}
+
+/** Fold or open groups; the cursor stays on its row, or goes to the next one that can be seen. */
+function setFolds(el, change) {
+  const list = el.querySelector("[data-library-results]")
+  const rows = [...list.querySelectorAll("[data-row]")]
+  const before = list.querySelector(".list__row.is-cursor")
+  change(foldsOf(el))
+  paintFolds(el)
+  const start = Math.max(0, rows.indexOf(before))
+  const target = [...rows.slice(start), ...rows.slice(0, start).reverse()].find((r) => !r.hidden)
+  const visible = rows.filter((r) => !r.hidden)
+  resetList(list, { index: Math.max(0, visible.indexOf(target)) })
+}
+
+handle("library.fold", withLibrary((el) => {
+  const row = el.querySelector("[data-library-results] .list__row.is-cursor")
+  const group = row?.dataset.group
+  if (!group) return status("Groups come with a sort by difficulty, source, year …: s", { timeout: 2500 }) || false
+  setFolds(el, (f) => (f.has(group) ? f.delete(group) : f.add(group)))
+}))
+
+handle("library.foldall", withLibrary((el) => {
+  const heads = [...el.querySelectorAll("[data-library-results] [data-group-head]")].map((h) => h.dataset.groupHead)
+  if (!heads.length) return status("Groups come with a sort by difficulty, source, year …: s", { timeout: 2500 }) || false
+  const open = foldsOf(el).size > 0
+  setFolds(el, (f) => (open ? f.clear() : heads.forEach((h) => f.add(h))))
+  status(open ? "All groups open" : "All groups folded · z opens the one at the cursor", { timeout: 1500 })
+}))
+
+document.addEventListener("click", (e) => {
+  const head = e.target.closest("[data-library-results] [data-group-head]")
+  if (!head) return
+  const el = head.closest("[data-island='library']")
+  const group = head.dataset.groupHead
+  setFolds(el, (f) => (f.has(group) ? f.delete(group) : f.add(group)))
+})
+
 handle("library.collection", withLibrary((el, st, [c]) => {
   if (st.c === c) return false
   st.c = c
@@ -387,6 +467,19 @@ handle("library.detect", async () => {
   if (!t?.ids.length || !["positions", "puzzles"].includes(t.c)) return status("Select positions, or open one in Analyse", { kind: "error" }) || false
   status("Detecting…", { timeout: 0 })
   return bulk("library.detect", [], t)
+})
+
+// `o`: the cursor row's position or game to the right, with a board and its move tree (linked to each other)
+handle("library.beside", async () => {
+  const el = focusedLibrary()
+  const list = el?.querySelector("[data-library-results]")
+  const row = list?.querySelector(".list__row.is-cursor")
+  const id = row?.dataset.game || row?.dataset.position
+  if (!id) return status("o opens positions, puzzles and games beside the list", { timeout: 2000 }) || false
+  const group = await openBeside()
+  const node = Number(row.dataset.node) || null
+  await window.SPOS.analysis.open(id, { key: `library:${group}`, show: false, node })
+  status(`${row.dataset.title || "Position"} beside the list · ↵ opens it in Analyse`, { timeout: 2500 })
 })
 
 const VOCABULARY = ["players", "sources", "tags"]

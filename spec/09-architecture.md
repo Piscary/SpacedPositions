@@ -198,6 +198,7 @@ migrations, settings files or a Python environment.
 | `--data-dir PATH` | Use another data folder (e.g. a synced folder, a USB stick) |
 | `--lan` | Listen on the home network too (e.g. a second computer). Token required. |
 | `spos stop` / `spos list` | Stop the running instance / show where it runs |
+| `spos import-csm <db.sqlite3> [--dry-run]` | Bring over a chess-study-manager library (phase 7, 11 §6): reads a copy, backs up first, adds only what is new |
 
 **Stopping without a console** (double-click start): `:quit` (also in Settings → App) stops the server. The server
 also stops by itself 10 minutes after the last open tab stopped sending its heartbeat (setting, default on for

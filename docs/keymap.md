@@ -233,7 +233,8 @@ reference is `spec/08-keymap.md`.
 | `l` | Replay the solution forward | `train.replay` |
 | `r` | Retry this puzzle (not scored) | `train.retry` |
 | `!` | Flag the puzzle as broken | `train.flag` |
-| `a` | Analyse this puzzle | `train.analyse` |
+| `a` | Analyse this puzzle beside the board | `train.analyse` |
+| `A` | Analyse this puzzle in Analyse | `train.analysemode` |
 | `t` | Tag the position | `train.tag` |
 | `e` | Edit the puzzle in Analyse | `train.edit` |
 
@@ -250,7 +251,7 @@ reference is `spec/08-keymap.md`.
 | `k` | Cursor up | `list.up` |
 | `↓` | Cursor down | `list.down` |
 | `↑` | Cursor up | `list.up` |
-| `↵` | Analyse this puzzle | `train.analyse` |
+| `↵` | Analyse this puzzle beside the board | `train.analyse` |
 
 ## mode.analyse
 
@@ -323,6 +324,10 @@ reference is `spec/08-keymap.md`.
 | `y` | Copy the FENs | `library.copyfen` |
 | `e` | Export as PGN | `library.export` |
 | `c` | Edit the selected players, sources or tags | `library.edit` |
+| `o` | Open beside the list (a board and its moves) | `library.beside` |
+| `s` | Sort by a column (again: reverse) | `library.sort` |
+| `z` | Fold or open the group | `library.fold` |
+| `Z` | Fold or open all groups | `library.foldall` |
 
 ## mode.collect
 

@@ -9,6 +9,7 @@ import { focusPane } from "./layout.js"
 import { cursorIndex, resetList, targetRows } from "./lists.js"
 import { openCmdline } from "./cmdline.js"
 import { inverse } from "./library.js"
+import { offer } from "./confirm.js"
 
 const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content || ""
 const settingsPanes = () => [...document.querySelectorAll("[data-island='settings']")]
@@ -158,6 +159,21 @@ export async function importSettings(text) {
   if (!data) return status("Import: the app is not reachable", { kind: "error" })
   status(data.message, { kind: data.ok ? "good" : "error", timeout: 8000 })
   if (data.ok && data.effects) emit("effects", data.effects)
+}
+
+/** Settings → Data: the migration from chess-study-manager. First what it would add, then `y` imports it. */
+export async function importCsm(path, dryRun = true) {
+  status(dryRun ? "Reading the old database…" : "Importing (after a backup)…", { timeout: 0 })
+  const response = await fetch("/settings/csm/", {
+    method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() }, body: JSON.stringify({ path, dry_run: dryRun }),
+  }).catch(() => null)
+  const data = response ? await response.json().catch(() => null) : null
+  if (!data) return status("Import: the app is not reachable", { kind: "error" })
+  if (!data.ok) return status(data.message, { kind: "error", timeout: 8000 })
+  const problems = data.problems.length ? ` · ${data.problems.length} left out: ${data.problems[0]}` : ""
+  if (dryRun && data.new) return offer(`${data.message}${problems} · import it? y / n`, { y: () => importCsm(path, false) })
+  status(`${data.message}${problems}`, { kind: "good", timeout: 0 })
+  if (data.effects) emit("effects", data.effects)
 }
 
 // ── Keymap editor ─────────────────────────────────────────────────────────────────────────────────────────────

@@ -201,9 +201,11 @@ come from the same compiled query without the facet's own term.
   Position with the FEN, the line as its analysis, and a puzzle starting at the root (a draft unless `r` marks the
   import ready for training).
 - Headers map onto Game fields; `Annotator`, `PlyCount` and others stay in `headers`. Players are matched (§1).
-- An import runs while the status line says *Importing…* (up to 5,000 games or 20 MB per import; a bigger file
-  is split). Afterwards the Library shows what arrived (`created:<1d`). An import is one step of the undo stack:
-  `u` moves what it added to the trash (`U` brings it back).
+- An import runs while the status line says *Importing…* (up to 5,000 games or 20 MB at once, with the list to
+  choose from). A bigger file, or a paste with more games (asked first), is uploaded as it is into the data folder
+  and imported **in the background** (phase 7): a game at a time, in batches of 200 in short transactions so the app
+  stays usable, duplicates left out; the status line shows how far it is. Afterwards the Library shows what arrived
+  (`created:<1d`). An import is one step of the undo stack: `u` moves what it added to the trash (`U` brings it back).
 - Text that holds neither moves nor a `FEN` header isn't a game and is skipped.
 
 ## 5 · From the current models (phase 4 migrations)
@@ -217,3 +219,30 @@ come from the same compiled query without the facet's own term.
   an earlier default (the Library with its demo list) becomes the current one; changed layouts stay.
 - Node and JournalEntry get the `game` owner (§1 Game).
 - All migrations are additive; `spos` backs up the database before migrating (09 §11).
+
+## 6 · From chess-study-manager (phase 7)
+
+`spaced_positions/csm.py`, run with `spos import-csm <db.sqlite3> [--dry-run]`, `manage.py import_csm`, or from
+Settings → Data (the path is filled in when an old database sits next to the app; `⌘↵` shows what would be added,
+`y` imports it). The old database is copied (with what is still in its WAL) and only that copy is read; this app's
+database is backed up first (`<data folder>/backups/db-before-csm-…`).
+
+| Old | New |
+|---|---|
+| `sources_book`, `sources_website` | `Source` (kind book/website); a phase 4 source titled "Authors, Title" is matched and gets the title and the authors in their own fields |
+| `positions_player` | `Player` (aliases kept; matched by name) |
+| `positions_game` + its `variationnode`s | `Game` with its tree (headers, Elo, the original PGN, notes and source notes) |
+| `positions_position` + its `variationnode`s | `Position` with its tree: comments, NAGs, drawings, marks, colours; the citation as source, page and `Nr. <ref>`; a position from a game keeps its game and move |
+| `positiontag` · `nodetag` | `PositionTag` · `NodeTag` with origin, detector and evidence; tags the vocabulary doesn't have are named in the report and left out |
+| `tagsuggestion` open · dismissed | a suggested tag · a `TagDismissal` |
+| `boards_board`/`column`/`positioninboard` | custom tags: the board, and under it `Board · Column` (weight 0: no influence on difficulty) |
+| `trainingpuzzle` · `trainingcard` | `Puzzle` (made through the analysis, as `:puzzle` does) · its cards, matched by their line |
+| `trainingsession` · `trainingattempt` | `Session` (custom → review with the old options) · `Attempt` |
+| `core_activityevent` (analysis, annotation, drawing, board moves) | `stats.ActivityLog`, counted in Stats' activity; positions and games count by their creation date |
+| milestones | found again from the joined history (`sync_achievements`), logged as seen |
+
+Every object keeps its origin (`csm-position:12`, `csm-attempt:5378` …), so the import can run again and adds only
+what is new in the old app since. It never deletes or overwrites what was done here: an analysis changed here (its
+journal) keeps its moves, otherwise old moves that are missing are added; empty text fields are filled in; a tag
+removed here stays removed; a card trained in both apps takes the schedule of the app that saw it last, and its
+counters are counted again from the joined attempt log. Publishing (documents) is not migrated (out of scope).

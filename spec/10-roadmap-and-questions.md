@@ -178,6 +178,23 @@ Moved on:
   Train → phase 7 (with the migration, which brings the old app's large libraries that need them).
 - Structural suggestions (pawn structures, batteries as position themes) → phase 7.
 
+### Phase 7 status (2026-10-24)
+
+Built: the migration from chess-study-manager (11 §6): sources, players, games and positions with their trees,
+tags with their evidence, suggestions and dismissals, the old boards as tags, puzzles, cards, every session and
+attempt, the old analysis activity; achievements found again from the joined history. It reads a copy of the old
+database, backs this one up first, and can run again (it adds only what is new), so both apps can be used side by
+side for a while; what was done here is never undone. `spos import-csm`, `manage.py import_csm`, Settings → Data,
+each with a dry run. Checked on a copy of the development database: 2,002 positions and 4,059 moves as in the old
+app, 5,378 old attempts joined to the 319 made here, a second run adds nothing. The items moved here: `o` opens a
+row beside the list (a board and its move tree), `s` sorts by a column, groups fold with `z`/`Z`, `a` on the Train
+feedback shows the puzzle's analysis beside the board (`A`: in Analyse), the old app's structure detector
+(pawn structures, rooks and files, batteries, imbalances, king safety, endgame set-ups) as suggestions, and big
+PGN imports in the background with progress. Tests: 8 on the server, 3 journeys.
+
+Not migrated: publishing (out of scope). The old app's players arrive, and `:player-link` (phase 6) links names
+that match nobody.
+
 ## Out of scope for now
 
 - **Publishing** (documents, print, PDF): the old app's document editor. The Diagram renderer is shared, so it can

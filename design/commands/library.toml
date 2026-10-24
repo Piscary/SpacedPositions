@@ -194,3 +194,29 @@ aliases = ["player-link"]
 args = [{ name = "link", type = "text" }]
 handler = "server"
 undoable = true
+
+["library.beside"]
+title = "Open beside the list (a board and its moves)"
+group = "Library"
+when = "view.library"
+reason = "in the Library's results"
+
+["library.sort"]
+title = "Sort by a column (again: reverse)"
+group = "Library"
+aliases = ["sort"]
+args = [{ name = "field", type = "text", optional = true }]
+when = "view.library"
+reason = "in the Library's results"
+
+["library.fold"]
+title = "Fold or open the group"
+group = "Library"
+when = "view.library"
+reason = "in the Library's results"
+
+["library.foldall"]
+title = "Fold or open all groups"
+group = "Library"
+when = "view.library"
+reason = "in the Library's results"

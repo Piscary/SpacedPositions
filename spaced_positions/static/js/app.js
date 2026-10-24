@@ -13,7 +13,7 @@ import "./core/scroll.js"
 import { detect } from "./core/paste.js"
 import { loadJournal } from "./core/analysis.js"
 import { announce } from "./core/charts.js"
-import { importSettings } from "./core/settings.js"
+import { importCsm, importSettings } from "./core/settings.js"
 
 const boot = JSON.parse(document.getElementById("boot").textContent)
 // Modules may have added to window.SPOS while they loaded (imports run first): add, don't replace.
@@ -59,6 +59,13 @@ handle("form.submit", () => {
     document.activeElement?.blur()
     setLayer("normal")
     detect(field.value)
+    return
+  }
+  if (form.hasAttribute("data-csm-import")) {
+    const field = form.querySelector("input")
+    document.activeElement?.blur()
+    setLayer("normal")
+    importCsm(field.value)
     return
   }
   if (form.hasAttribute("data-settings-import")) {

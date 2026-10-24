@@ -217,6 +217,7 @@ accept = ["[", "]"]
 "r" = "train.retry"
 "!" = "train.flag"
 "a" = "train.analyse"
+"A" = "train.analysemode"
 "t" = "train.tag"
 "e" = "train.edit"
 
@@ -297,6 +298,10 @@ accept = ["[", "]"]
 "y" = "library.copyfen"
 "e" = "library.export"
 "c" = "library.edit"
+"o" = "library.beside"
+"s" = "library.sort"
+"z" = "library.fold"
+"Z" = "library.foldall"
 
 [context."mode.collect"]
 "mod+enter" = "collect.save"

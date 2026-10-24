@@ -460,6 +460,8 @@ def activity(d: Data, weeks: int = 26) -> list[dict]:
     """Points per week by kind: collect (positions made), analyse (changes of an analysis), train (puzzles solved)."""
     from spaced_positions.analysis.models import JournalEntry
 
+    from .models import ActivityLog
+
     today = local_day(d.now)
     start = today - timedelta(days=today.weekday() + 7 * (weeks - 1))
     out = {start + timedelta(days=7 * w): {"collect": 0, "analyse": 0, "train": 0} for w in range(weeks)}
@@ -469,12 +471,15 @@ def activity(d: Data, weeks: int = 26) -> list[dict]:
         return day - timedelta(days=day.weekday())
 
     since = timezone.make_aware(datetime.combine(start, time.min))
-    for created in Position.objects.filter(created_at__gte=since).exclude(origin__startswith="csm").values_list("created_at", flat=True):
-        if week_of(created) in out:  # imported test data (csm) is not collecting
+    for created in Position.objects.filter(created_at__gte=since).values_list("created_at", flat=True):
+        if week_of(created) in out:  # migrated positions keep the day they were collected in the old app
             out[week_of(created)]["collect"] += 1
     for when in JournalEntry.objects.filter(created_at__gte=since, undone=False).values_list("created_at", flat=True):
         if week_of(when) in out:
             out[week_of(when)]["analyse"] += 1
+    for kind, points, when in ActivityLog.objects.filter(at__gte=since).values_list("kind", "points", "at"):
+        if week_of(when) in out:  # the old app's analysis work and board moves (phase 7)
+            out[week_of(when)][kind] += points
     for a in d.attempts:
         if a.at >= since and a.success and week_of(a.at) in out:
             out[week_of(a.at)]["train"] += 1

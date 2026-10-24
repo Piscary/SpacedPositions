@@ -333,3 +333,42 @@ def test_edit_players_and_link_a_name(page):
     keys(page, "u")  # the link is undone
     page.wait_for_selector("#ws-library [data-row='@tal'] >> text=0 games")
     assert Player.objects.get(key="tal").aliases == []
+
+
+def test_open_beside_the_list(page, positions):
+    """Phase 7: `o` shows the cursor row's position beside the list (a board and its moves, linked to each other)."""
+    library(page)
+    keys(page, "j")
+    keys(page, "o")
+    page.wait_for_selector("#ws-library [data-island=moves] [data-movetree]")
+    groups = page.eval_on_selector_all("#ws-library [data-pane]", "els => els.map(e => [e.dataset.view, e.querySelector('[data-group]')?.dataset.group || null])")
+    assert ["board", "B"] in groups and ["moves", "B"] in groups
+    title = page.get_attribute("#ws-library [data-library-results] .list__row.is-cursor", "data-title")
+    page.wait_for_function("(t) => document.getElementById('status-message').textContent.startsWith(t)", arg=title)
+    assert "Rd8#" in page.inner_text("#ws-library [data-island=moves]")
+    # another row: the same split
+    page.click("#ws-library [data-view=library] .pane__title")
+    keys(page, "j", "o")
+    page.wait_for_timeout(500)
+    assert page.locator("#ws-library [data-island=moves]").count() == 1
+
+
+def test_sort_by_a_column_and_fold_groups(page, positions):
+    """Phase 7: `s` sorts by a column (into the query), groups by difficulty fold with z / Z, the cursor skips them."""
+    library(page)
+    keys(page, "s", "d")  # difficulty: the easiest first
+    page.wait_for_function("window.SPOS.library.state().q === 'sort:difficulty'")
+    page.wait_for_selector("#ws-library [data-group-head='★★☆☆☆']")
+    heads = page.eval_on_selector_all("#ws-library [data-group-head]", "els => els.map(e => e.dataset.groupHead)")
+    assert heads == ["★★☆☆☆", "★★★☆☆", "★★★★☆"]
+    keys(page, "s", "d")  # again: reversed
+    page.wait_for_function("window.SPOS.library.state().q === 'sort:-difficulty'")
+    page.wait_for_function("document.querySelector('#ws-library [data-group-head]').dataset.groupHead === '★★★★☆'")
+    keys(page, "z")  # the cursor's group (★★★★☆) folds; the cursor moves on to the next row that can be seen
+    page.wait_for_selector("#ws-library [data-group-head='★★★★☆'].is-folded")
+    assert page.get_attribute("#ws-library [data-library-results] .list__row.is-cursor", "data-group") == "★★★☆☆"
+    keys(page, "j")
+    assert page.get_attribute("#ws-library [data-library-results] .list__row.is-cursor", "data-group") == "★★☆☆☆"
+    keys(page, "Z")
+    page.wait_for_function("document.getElementById('status-message').textContent.startsWith('All groups open')")
+    assert page.locator("#ws-library [data-library-results] .list__row[hidden]").count() == 0

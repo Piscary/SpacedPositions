@@ -98,7 +98,7 @@ def settings_rows(request):
     ]
     return render(request, "settings/rows.html", {
         "sections": rows(), "themes": theme_rows, "theme": prefs.theme or "auto",
-        "overrides": KeymapOverride.objects.filter(user=LOCAL_USER).count(),
+        "overrides": KeymapOverride.objects.filter(user=LOCAL_USER).count(), "csm_path": csm_guess(),
     })
 
 
@@ -172,3 +172,44 @@ def user_piece(request, name, code):
     response["Content-Security-Policy"] = "default-src 'none'; style-src 'unsafe-inline'"  # an image, nothing more
     response["Cache-Control"] = "no-cache"
     return response
+
+
+# ── The migration from chess-study-manager (spaced_positions/csm.py) ──────────────────────────────────────────
+
+
+def csm_guess() -> str:
+    """Where an old database probably is: a chess-study-manager folder next to the app or in the home folder."""
+    from pathlib import Path
+
+    here = Path(__file__).resolve().parents[2]  # the folder the app is in (the repository, in development)
+    for folder in (here.parent, Path.home(), Path.cwd(), Path.cwd().parent):
+        candidate = folder / "chess-study-manager" / "db.sqlite3"
+        if candidate.is_file():
+            return str(candidate)
+    return ""
+
+
+@require_POST
+def import_csm(request):
+    """{path, dry_run}: run the migration (a real run backs up first) and say what it added."""
+    import json
+
+    from django.http import JsonResponse
+
+    from spaced_positions import csm
+
+    try:
+        data = json.loads(request.body or b"{}")
+    except ValueError:
+        data = {}
+    path, dry_run = str(data.get("path", "")).strip(), bool(data.get("dry_run"))
+    if not path:
+        return JsonResponse({"ok": False, "message": "the path of the old db.sqlite3"}, status=422)
+    try:
+        report = csm.run(path, dry_run=dry_run)
+    except (FileNotFoundError, ValueError) as e:
+        return JsonResponse({"ok": False, "message": str(e)}, status=422)
+    what = ", ".join(report.lines()) or "nothing new"
+    message = (f"Would add: {what}" if dry_run else f"Added: {what} · backup in {report.backup}")
+    return JsonResponse({"ok": True, "dry_run": dry_run, "message": message, "problems": report.problems,
+                         "new": sum(report.counts.values()), "effects": {} if dry_run else {"library": "changed"}})

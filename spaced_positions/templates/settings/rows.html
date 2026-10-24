@@ -28,6 +28,12 @@
 {% section "Data" key="x" summary="export · import" %}
   <div class="settings__data">
     <div class="actionbar">{% cmd "settings.export" label="Export settings (TOML)" size="sm" %}<a class="keybutton keybutton--secondary keybutton--sm" href="/lib/export/?c=positions&q=" download>Export the library (PGN)</a></div>
+    <form class="settings__csm" data-csm-import>
+      <label class="formrow__label" for="csm-path">From chess-study-manager: everything it has that isn't here yet (again later: only what's new)</label>
+      <input class="field field--mono" id="csm-path" name="path" type="text" spellcheck="false" autocomplete="off" value="{{ csm_path }}"
+             placeholder="…/chess-study-manager/db.sqlite3 · {% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵ shows what it adds">
+      <span class="muted">{% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵ shows what would be added, then <kbd class="keycap">y</kbd> imports it (after a backup). The old database is only read.</span>
+    </form>
     <form class="settings__import" data-settings-import>
       <textarea class="field field--mono" name="text" aria-label="Settings or a theme to import" placeholder="Paste exported settings or a theme (TOML), then {% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵"></textarea>
     </form>

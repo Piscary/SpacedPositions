@@ -67,7 +67,7 @@ title = "Flag the puzzle as broken"
 group = "Train"
 
 ["train.analyse"]
-title = "Analyse this puzzle"
+title = "Analyse this puzzle beside the board"
 group = "Train"
 
 ["train.tag"]
@@ -111,3 +111,7 @@ group = "Train"
 aliases = ["puzzle"]
 when = "view.board"
 reason = "needs a board with moves played"
+
+["train.analysemode"]
+title = "Analyse this puzzle in Analyse"
+group = "Train"

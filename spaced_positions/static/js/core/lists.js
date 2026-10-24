@@ -16,10 +16,11 @@ function listState(list) {
   return state.get(list)
 }
 
-const rowsOf = (list) => [...list.querySelectorAll("[data-row]")]
+const rowsOf = (list) => [...list.querySelectorAll("[data-row]")].filter((row) => !row.closest("[hidden]")) // folded or filtered out: skipped
 
 function paint(list) {
   const st = listState(list)
+  for (const row of list.querySelectorAll("[data-row].is-cursor")) row.classList.remove("is-cursor") // also on hidden rows
   rowsOf(list).forEach((row, i) => {
     const selected = st.selected.has(row.dataset.row)
     row.classList.toggle("is-cursor", i === st.cursor)

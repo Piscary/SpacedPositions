@@ -502,6 +502,48 @@ async function split(dir, args) {
     ws.max = null
   })
 }
+/** A board and a move tree to the right of the focused pane, in a link group of their own (`o` in lists: open in a
+ *  split). An earlier one is reused. Resolves with the group's letter once the panes are on screen. */
+export async function openBeside() {
+  const ws = current()
+  const used = new Set(panesOf(ws.tree).map((p) => p.group).filter(Boolean))
+  const mine = panesOf(ws.tree).find((p) => p.view === "moves" && p.group)
+  if (mine) return mine.group
+  const group = [..."BCDEFGH"].find((g) => !used.has(g)) || "H"
+  await change(ws, "Open in a split", () => {
+    const hit = focusedHit(ws)
+    const n = Number(newId(ws).slice(1))
+    const pane = (view, id) => ({ type: "pane", id, view, group, pinned: false, collapsed: false })
+    const board = pane("board", `p${n}`)
+    const moves = pane("moves", `p${n + 1}`)
+    const fresh = { type: "split", dir: "col", sizes: [62, 38], children: [board, moves] }
+    if (hit.parent && hit.parent.dir === "row") {
+      const half = hit.parent.sizes[hit.index] / 2
+      hit.parent.sizes.splice(hit.index, 1, half, half)
+      hit.parent.children.splice(hit.index + 1, 0, fresh)
+    } else {
+      replaceNode(ws, hit, { type: "split", dir: "row", sizes: [50, 50], children: [hit.node, fresh] })
+    }
+    ws.max = null
+  })
+  return group
+}
+
+/** Close what openBeside opened (Train: before the next puzzle), without an undo step. */
+export function closeBeside() {
+  const ws = current()
+  const opened = panesOf(ws.tree).filter((p) => p.group && ["moves", "board"].includes(p.view) && panesOf(ws.tree).some((m) => m.view === "moves" && m.group === p.group))
+  if (!opened.length) return false
+  const focus = ws.focus
+  for (const pane of opened) {
+    ws.focus = pane.id
+    removeFocused(ws)
+  }
+  ws.focus = panesOf(ws.tree).some((p) => p.id === focus) ? focus : panesOf(ws.tree)[0].id
+  render(ws)
+  return true
+}
+
 handle("pane.split.vertical", (args) => split("row", args))
 handle("pane.split.horizontal", (args) => split("col", args))
 

@@ -76,6 +76,7 @@ def _duplicate(game, kind) -> str | None:
 
 
 def scan(text: str) -> list[dict]:
+    """What a text holds, at most MAX_GAMES games (more: the import runs in the background, see Job)."""
     items = []
     for i, game in enumerate(pgn_io.read_games(text, MAX_GAMES)):
         kind = kind_of(game)
@@ -190,7 +191,7 @@ def scan_view(request):
     items = scan(text)
     if not items:
         return JsonResponse({"ok": False, "message": "no games in this text"}, status=422)
-    return JsonResponse({"ok": True, "items": items})
+    return JsonResponse({"ok": True, "items": items, "more": len(items) >= MAX_GAMES})  # more: import it in the background
 
 
 @require_POST
@@ -214,3 +215,128 @@ def run_view(request):
         "undo": {"command": "library.trashmany", "args": [json.dumps(added | {"restore": False})]},
         "redo": {"command": "library.trashmany", "args": [json.dumps(added | {"restore": True})]},
     })
+
+
+# ── Big imports: in the background, with progress (11 §4) ─────────────────────────────────────────────────────
+
+BATCH = 200  # games a transaction: short ones, so the app stays usable while it runs
+JOBS: dict[str, "Job"] = {}
+
+
+class Counted:
+    """A text file that counts what was read (≈ bytes: the progress of a big import)."""
+
+    def __init__(self, f):
+        self.f, self.count = f, 0
+
+    def readline(self, *args):
+        line = self.f.readline(*args)
+        self.count += len(line)
+        return line
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        line = self.readline()
+        if not line:
+            raise StopIteration
+        return line
+
+
+class Job:
+    """One big PGN in the background: read a game at a time from the file in the data folder, imported in batches,
+    duplicates left out. Its progress is polled (`/lib/import/job/<id>/`); what it added can be trashed again."""
+
+    def __init__(self, path, ready: bool):
+        import uuid
+
+        self.id, self.path, self.ready = uuid.uuid4().hex[:12], path, ready
+        self.size = path.stat().st_size
+        self.read = 0  # bytes
+        self.games: list[str] = []
+        self.positions: list[str] = []
+        self.duplicates = self.failed = 0
+        self.done, self.error = False, ""
+
+    def state(self) -> dict:
+        n = len(self.games) + len(self.positions)
+        return {"ok": not self.error, "id": self.id, "done": self.done, "error": self.error, "imported": n,
+                "games": len(self.games), "positions": len(self.positions), "duplicates": self.duplicates, "failed": self.failed,
+                "percent": 100 if self.done else int(100 * self.read / max(1, self.size)), "added": {"games": self.games, "positions": self.positions}}
+
+    def start(self):
+        import threading
+
+        JOBS[self.id] = self
+        threading.Thread(target=self.run, daemon=True, name=f"import-{self.id}").start()
+
+    def run(self):
+        from django.db import connection
+
+        try:
+            with open(self.path, encoding="utf-8", errors="replace") as f:
+                stream = Counted(f)
+                players = Players()
+                batch = []
+                for game in pgn_io.games_in(stream, limit=10**9):
+                    batch.append(game)
+                    if len(batch) >= BATCH:
+                        self.save(batch, players)
+                        self.read, batch = stream.count, []
+                self.save(batch, players)
+        except (OSError, ValueError) as e:
+            self.error = str(e)
+        finally:
+            self.done = True
+            self.path.unlink(missing_ok=True)
+            connection.close()  # this thread's connection
+
+    def save(self, games, players):
+        with transaction.atomic():
+            for game in games:
+                kind = kind_of(game)
+                if _duplicate(game, kind):
+                    self.duplicates += 1
+                    continue
+                try:
+                    with transaction.atomic():
+                        if kind == "puzzle":
+                            self.positions.append(import_puzzle(game, self.ready).short_id)
+                        else:
+                            self.games.append(import_game(game, players).short_id)
+                except (ValueError, tree.TreeError, chess.IllegalMoveError):
+                    self.failed += 1
+
+
+@require_POST
+def upload_view(request):
+    """The PGN as the request body (any size, streamed to the data folder), then imported in the background."""
+    from django.conf import settings
+
+    folder = settings.DATA_DIR / "imports"
+    folder.mkdir(parents=True, exist_ok=True)
+    import uuid
+
+    path = folder / f"{uuid.uuid4().hex}.pgn"
+    with open(path, "wb") as out:
+        for chunk in iter(lambda: request.read(1 << 20), b""):
+            out.write(chunk)
+    if not path.stat().st_size:
+        path.unlink()
+        return JsonResponse({"ok": False, "message": "an empty file"}, status=422)
+    job = Job(path, ready=request.GET.get("ready") == "1")
+    job.start()
+    return JsonResponse(job.state())
+
+
+def job_view(request, job_id):
+    job = JOBS.get(job_id)
+    if job is None:
+        return JsonResponse({"ok": False, "message": "no such import (the app was restarted?)"}, status=404)
+    state = job.state()
+    if job.done and not job.error:
+        added = state["added"]
+        state["undo"] = {"command": "library.trashmany", "args": [json.dumps(added | {"restore": False})]}
+        state["redo"] = {"command": "library.trashmany", "args": [json.dumps(added | {"restore": True})]}
+    return JsonResponse(state)

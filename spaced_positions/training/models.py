@@ -198,6 +198,7 @@ class Session(models.Model):
     best_combo = models.PositiveIntegerField(default=0)
     streak = models.PositiveIntegerField(default=0)
     duration_s = models.PositiveIntegerField(null=True, blank=True, help_text="Time actually played")
+    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: csm-…:<id> (phase 7)")
 
     class Meta:
         ordering = ["-started_at"]
@@ -238,6 +239,7 @@ class Attempt(models.Model):
     solved_as = models.CharField(max_length=1, blank=True, help_text="w / b")
     mirrored = models.BooleanField(default=False)
     flipped = models.BooleanField(default=False, help_text="The solver's side was at the top")
+    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: csm-…:<id> (phase 7)")
 
     class Meta:
         ordering = ["-at"]

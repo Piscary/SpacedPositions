@@ -83,7 +83,9 @@ graph · `l` library · `f` filters · `s` entry session · `q` queue · `c` sta
 | `j k` / `↓ ↑` | Cursor down / up (grids: `h l` / `← →` too) |
 | `g g` / `G` | First / last |
 | `↵` | Open (default command of the object, see 05 matrix) |
-| `o` | Open in a split to the right (linked) (phase 6, with layout presets) |
+| `o` | Open beside the list: a board and its move tree, linked to each other (Library, phase 7) |
+| `s` | Sort by a column (a menu; the same column again reverses: the query's `sort:` term) |
+| `z` / `Z` | Fold or open the group at the cursor / all groups (results sorted by a field with few values) |
 | `x` | Toggle selection of the cursor row |
 | `v` | Visual (range) selection |
 | `mod+a` | Select all results |
@@ -95,8 +97,8 @@ graph · `l` library · `f` filters · `s` entry session · `q` queue · `c` sta
 | `e` | Export as PGN (a download): the selection, or everything the query found |
 | `␣ u v` | Results as table · list (with boards) · grid |
 
-Sorting is a query term (`sort:-difficulty`); sorting by a column key and folding groups follow when the table gets
-column headers (phase 6). Grids move with `j k` in reading order.
+Sorting is a query term (`sort:-difficulty`), also chosen with `s`; sorted by difficulty, source, year, a player,
+event, role, kind or field, the rows come in foldable groups. Grids move with `j k` in reading order.
 
 ## Any pane (context `pane`)
 
@@ -156,7 +158,8 @@ context per Train state, checked after layers and before the focused view (02 §
 | `← →` / `h l` | Replay the solution |
 | `r` | Retry (not scored) |
 | `!` | Flag the puzzle as broken |
-| `a` · `t` · `e` | Analyse the position at the puzzle's start · tag (phase 4) · edit (Analyse with the Puzzle section open) |
+| `a` · `A` | The puzzle's analysis beside the board, in Train (closed by the next puzzle) · in Analyse, at the puzzle's start |
+| `t` · `e` | Tag · edit (Analyse with the Puzzle section open) |
 | `Q` | Stop the session and see the result (also the Stop button) |
 | `⎋` | `↵` next · `q` end the session and see the result |
 

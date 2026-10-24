@@ -20,6 +20,7 @@ urlpatterns = [
     path("settings/keymap/", settings_view.keymap_rows, name="keymap_rows"),
     path("settings/export/", settings_view.export_settings, name="settings_export"),
     path("settings/import/", settings_view.import_settings, name="settings_import"),
+    path("settings/csm/", settings_view.import_csm, name="settings_csm"),
     path("engine/local/", engine_local.local, name="engine_local"),
     path("pieces/user.css", settings_view.user_pieces_css, name="user_pieces_css"),
     path("pieces/<slug:name>/<str:code>.svg", settings_view.user_piece, name="user_piece"),

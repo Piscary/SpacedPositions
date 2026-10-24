@@ -18,4 +18,6 @@ urlpatterns = [
     path("lib/presets/", collect.save_preset, name="presets"),
     path("lib/import/scan/", importer.scan_view, name="import_scan"),
     path("lib/import/run/", importer.run_view, name="import_run"),
+    path("lib/import/upload/", importer.upload_view, name="import_upload"),
+    path("lib/import/job/<str:job_id>/", importer.job_view, name="import_job"),
 ]

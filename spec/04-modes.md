@@ -120,8 +120,10 @@ The side pane switches to the result of this puzzle; the board stays.
 │  [Next  Enter] [Analyse  a] [Retry  r] [Flag  !] [Edit  e]        │
 ```
 
-- `Enter` next, `← →` replay the solution on the board, `a` jumps to Analyse at the move where the puzzle starts
-  (the session waits in Train: `␣ t` goes back to it).
+- `Enter` next, `← →` replay the solution on the board, `a` shows the puzzle's analysis beside the board, in Train
+  (phase 7: a board and its move tree in a split of their own, closed when the next puzzle starts, so it never shows
+  a solution while you solve), `A` jumps to Analyse at the move where the puzzle starts (the session waits in Train:
+  `␣ t` goes back to it).
 - `t` tag the position, `!` flag the puzzle as broken (shows up in `Library · is:flagged`), `e` edit the
   puzzle setup in Analyse (its Puzzle section open), `r` retry (not scored).
 
@@ -254,7 +256,13 @@ Find, filter, organise, start training from any search.
 - `1`–`6` switch collection (positions, games, puzzles, players, sources, tags), `/` query (11 §3: completion with
   `⇥`, problems underlined below the bar, the count live), `j/k` cursor (the linked board shows the row),
   `Enter` open in Analyse (games too; a player, source or tag opens its games or positions), `x` select, `v` range,
-  `Mod+A` all results. `o` open in a split follows in phase 7.
+  `Mod+A` all results. `o` opens the cursor row's position or game beside the list (phase 7): a board and its move
+  tree in a link group of their own, reused for the next `o`; `↵` still opens it in Analyse.
+- `s` sorts by a column: a menu of the collection's sorts (`d` difficulty, `t` title, `c` created …); the same column
+  again reverses it. The sort is the query's `sort:` term, so the query stays the one source of truth. Sorted by a
+  field with few values (difficulty, source, year, white, black, event, role, kind, field), the results come in
+  **groups** with a header and their count: `z` folds the group at the cursor, `Z` folds or opens all, a click on
+  a header folds it; the cursor skips folded rows.
 - `␣ u v` cycles the result display: **table** (dense rows) · **list** (row with a mini board) · **grid** (cards
   with boards). All three share cursor, selection and keys.
 - The filter pane writes into the query (and the query updates the filters): one source of truth, the query string.
