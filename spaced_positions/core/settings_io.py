@@ -88,6 +88,9 @@ def import_toml(text: str) -> dict:
                 tokens[name] = checked
     stored = dict(prefs.settings)
     for name, value in (data.get("settings") or {}).items():
+        if name == "custom.css":  # your own CSS (Settings → Advanced)
+            stored[name] = str(value)[:50_000]
+            continue
         if name == "engine.path":  # which program runs is set by hand, never by a pasted file
             problems.append("engine.path is set by hand in Settings → Engine, not imported")
             continue

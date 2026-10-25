@@ -24,7 +24,8 @@ let queued = null // {key, fen} to search when the running one stops
 let search = null // {key, fen, white, lines: [], depth, nps}
 let batch = null // `:evaluate`: {items: [{id, fen}], i, best, results, depth, resolve}; the live analysis waits
 
-const engineKey = () => (ctx.mode === "analyse" ? currentKey() : null)
+// The engine follows the focused link group's board in any mode but Train (it would give the solutions away).
+const engineKey = () => (ctx.mode === "train" ? null : currentKey())
 const local = () => setting("engine.source", "browser") === "local"
 let source = null // the engine that runs: "browser" or the local program's name
 
@@ -269,7 +270,7 @@ function sans(fen, pv) {
 
 function follow() {
   if (batch) return // `:evaluate` has the engine
-  const running = enabled && ctx.mode === "analyse" && document.visibilityState === "visible"
+  const running = enabled && engineKey() !== null && document.visibilityState === "visible"
   if (!running) {
     if (worker) stop()
     return paint()
@@ -311,7 +312,8 @@ function paint() {
 function hint() {
   const p = document.createElement("p")
   p.className = "muted engine__off"
-  p.textContent = enabled ? "Waiting for a position…" : `The engine is off. e turns it on; it runs ${local() ? "as a program through the app" : "in this browser"} and stops when you leave Analyse.`
+  if (ctx.mode === "train") p.textContent = "The engine doesn't run in Train: it would show the solutions. Analyse the puzzle with a (beside the board) or A (in Analyse)."
+  else p.textContent = enabled ? "Waiting for a position…" : `The engine is off. e turns it on; it follows the board of this link group, runs ${local() ? "as a program through the app" : "in this browser"}, and stops in Train and when the app is in the background.`
   return p
 }
 

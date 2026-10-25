@@ -2,8 +2,9 @@
 
 Reads a snapshot *copy* of the old database (the original is only copied, never opened for writing) and adds, in
 order: sources (books, websites), players, games with their trees, all positions with their trees, tags (manual and
-detected, with their evidence; open suggestions; dismissed suggestions as dismissals), the old boards as tags
-(`Board · Column`), puzzles and cards, the sessions with every attempt, and the old analysis activity for Stats.
+detected, with their evidence; open suggestions; dismissed suggestions as dismissals), puzzles and cards, the
+sessions with every attempt, and the old analysis activity for Stats. The old pipeline boards are left out: this
+app's filters (has:analysis, has:solution …) tell what is analysed and solved.
 Achievements are then found from the joined history (logged as seen: they are history).
 
 Every object carries its origin (`csm-position:12`, `csm-attempt:5378` …), so the migration can run again: it adds
@@ -61,7 +62,7 @@ class Report:
 
     def lines(self) -> list[str]:
         order = ["sources", "players", "games", "game moves", "positions", "positions filled in", "moves", "position tags",
-                 "suggestions", "dismissals", "move tags", "board tags", "puzzles", "cards", "cards rescheduled",
+                 "suggestions", "dismissals", "move tags", "puzzles", "cards", "cards rescheduled",
                  "sessions", "attempts", "activity", "achievements"]
         shown = [f"{self.counts[k]} {k}" for k in order if self.counts.get(k)]
         return shown + [f"{v} {k}" for k, v in self.counts.items() if k not in order and v]
@@ -124,22 +125,12 @@ def snapshot(path: Path):
 
 
 def backup(label: str = "before-csm") -> Path:
-    """A consistent copy of this app's database in `<data folder>/backups/`."""
-    from django.conf import settings
+    """A compressed copy of this app's database next to it, in backups/ (spaced_positions/backups.py)."""
     from django.db import connection
 
-    folder = Path(settings.DATA_DIR) / "backups"
-    folder.mkdir(parents=True, exist_ok=True)
-    target = folder / f"db-{label}-{datetime.now():%Y-%m-%d_%H-%M-%S}.sqlite3"
-    # through a connection of its own: a backup through one that is inside a transaction would wait for itself
-    source = sqlite3.connect(f"file:{connection.settings_dict['NAME']}?mode=ro", uri=True)
-    dest = sqlite3.connect(target)
-    try:
-        source.backup(dest)  # a consistent copy, also of a WAL database
-    finally:
-        dest.close()
-        source.close()
-    return target
+    from spaced_positions import backups
+
+    return backups.make(Path(connection.settings_dict["NAME"]), label)
 
 
 def run(path, dry_run: bool = False, schedule: bool = True, make_backup: bool = True) -> Report:
@@ -178,7 +169,6 @@ class Migration:
         self.import_games()
         self.import_positions()
         self.import_tags()
-        self.import_boards()
         self.import_puzzles()
         self.import_sessions()
         self.import_attempts()
@@ -314,9 +304,10 @@ class Migration:
     def import_positions(self):
         from spaced_positions.training.models import Position
 
+        here = {p.origin: p for p in Position.objects.filter(origin__startswith="csm-position:")}  # one read, no index needed
         for row in self.rows("select * from positions_position order by id"):
             origin = f"csm-position:{row['id']}"
-            position = Position.objects.filter(origin=origin).first()
+            position = here.get(origin)
             if position is None:
                 check = chesslogic.check_fen(row["fen"], diagram=bool(row["diagram"]))
                 position = Position.objects.create(
@@ -385,8 +376,7 @@ class Migration:
             origin = PositionTag.Origin.AUTO if row["source"] == "auto" else PositionTag.Origin.MANUAL
             link, made = PositionTag.objects.get_or_create(
                 position=position, tag=tag,
-                defaults={"origin": origin, "detector": (row["detector"] or "")[:40], "evidence": (row["evidence"] or "")[:200],
-                          "created_at": _when(row["created_at"]) or timezone.now()},
+                defaults={"origin": origin, "detector": (row["detector"] or "")[:40], "evidence": (row["evidence"] or "")[:200]},
             )
             if made:
                 self.report.add("position tags")
@@ -420,34 +410,6 @@ class Migration:
         for key, n in unknown.items():
             self.report.problem(f"{n} position tags with the unknown tag '{key}' left out")
 
-    def import_boards(self):
-        """The old pipeline boards as custom tags: the board, and under it `Board · Column` for each column in use."""
-        from spaced_positions.library.models import PositionTag, Tag, TagField
-        from spaced_positions.library.text import slug
-
-        field_ = TagField.objects.filter(key="custom").first()
-        if field_ is None:
-            return
-        boards = {r["id"]: r for r in self.rows("select * from boards_board")}
-        columns = {r["id"]: r for r in self.rows("select * from boards_column")}
-        made_tags = {}
-        for row in self.rows("select * from boards_positioninboard order by id"):
-            position = self.positions.get(row["position_id"])
-            board, column = boards.get(row["board_id"]), columns.get(row["column_id"])
-            if position is None or board is None or column is None:
-                continue
-            key = f"board-{slug(board['name'])}"[:90]
-            if key not in made_tags:
-                made_tags[key] = Tag.objects.get_or_create(key=key, defaults={"field": field_, "name": board["name"][:100], "name_en": board["name"][:100],
-                                                                                "description": "A board of chess-study-manager", "weight": 0})[0]
-            ckey = f"{key}-{slug(column['name'])}"[:100]
-            if ckey not in made_tags:
-                made_tags[ckey] = Tag.objects.get_or_create(key=ckey, defaults={"field": field_, "parent": made_tags[key], "weight": 0,
-                                                                                  "name": f"{board['name']} · {column['name']}"[:100],
-                                                                                  "name_en": f"{board['name']} · {column['name']}"[:100]})[0]
-            _, made = PositionTag.objects.get_or_create(position=position, tag=made_tags[ckey], defaults={"origin": PositionTag.Origin.MANUAL})
-            self.report.add("board tags", made)
-
     # ── Puzzles and cards ───────────────────────────────────────────────────────────────────────────────────────
 
     def import_puzzles(self):
@@ -455,13 +417,14 @@ class Migration:
         from spaced_positions.training import puzzles
         from spaced_positions.training.models import Puzzle
 
+        here = {z.origin: z for z in Puzzle.objects.filter(origin__startswith="csm:")}
         for row in self.rows("select * from training_trainingpuzzle order by id"):
             origin = f"csm:{row['id']}"
             start = self.nodes.get(row["node_id"])
             if start is None or start.position_id is None:
                 self.report.problem(f"puzzle {row['id']}: its position or move wasn't imported")
                 continue
-            puzzle = Puzzle.objects.filter(origin=origin).first()
+            puzzle = here.get(origin)
             if puzzle is None:
                 sol = _json(row["solution"], {})
                 marks = {key: [self.nodes[i].id for i in sol.get(key, []) if i in self.nodes] for key in ("ends", "also", "replies")}

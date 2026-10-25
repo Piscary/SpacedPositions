@@ -175,28 +175,6 @@ on("focus", () => {
   }
 })
 
-// ── Link groups: previews follow the cursor of their group ─────────────────────────────────────────────────────
-
-on("cursor", ({ group, from, id, title, fen }) => {
-  for (const pane of document.querySelectorAll(".workspace:not([hidden]) [data-pane]")) {
-    if (pane.dataset.pane === from) continue
-    const link = pane.querySelector("[data-pane-link]")
-    if (!link || link.hidden || link.dataset.group !== group) continue
-    const preview = pane.querySelector("[data-preview]")
-    if (!preview) continue
-    preview.querySelector("[data-preview-title]").textContent = title
-    preview.querySelector("[data-preview-id]").textContent = id
-    const board = preview.querySelector("[data-preview-board]")
-    if (board) {
-      board.hidden = !fen
-      if (fen) {
-        board.src = `/svg/board/?${new URLSearchParams({ fen, size: 256 })}`
-        board.alt = `Position ${fen}`
-      }
-    }
-  }
-})
-
 // ── Sections: z / Z, click on a header, g + letter ────────────────────────────────────────────────────────────
 
 const sectionCursor = new WeakMap() // pane element → section element

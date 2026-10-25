@@ -136,28 +136,28 @@ class TagLink(models.Model):
     origin = models.CharField(max_length=10, choices=Origin.choices, default=Origin.MANUAL)
     detector = models.CharField(max_length=40, blank=True)
     evidence = models.CharField(max_length=200, blank=True)
-    created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         abstract = True
 
 
 class PositionTag(TagLink):
-    position = models.ForeignKey("training.Position", on_delete=models.CASCADE, related_name="tag_links")
+    # no index of its own: the unique (position, tag) index starts with it (the same for the other links)
+    position = models.ForeignKey("training.Position", on_delete=models.CASCADE, related_name="tag_links", db_index=False)
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=["position", "tag"], name="position_tag_once")]
 
 
 class NodeTag(TagLink):
-    node = models.ForeignKey("analysis.Node", on_delete=models.CASCADE, related_name="tag_links")
+    node = models.ForeignKey("analysis.Node", on_delete=models.CASCADE, related_name="tag_links", db_index=False)
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=["node", "tag"], name="node_tag_once")]
 
 
 class GameTag(TagLink):
-    game = models.ForeignKey("library.Game", on_delete=models.CASCADE, related_name="tag_links")
+    game = models.ForeignKey("library.Game", on_delete=models.CASCADE, related_name="tag_links", db_index=False)
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=["game", "tag"], name="game_tag_once")]

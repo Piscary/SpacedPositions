@@ -100,6 +100,19 @@ different* lines.
 - A link group can follow the **library cursor**: put the Library in one pane and a Board in a pane linked to it,
   and `j/k` in the list previews each position on the board. This is how browsing works in Library mode.
 
+**Every view in every mode** (phase 7 cleanup). The user may build any arrangement; a view either works wherever
+it is, or says plainly why not:
+- An **analysis** (Moves, Inspector, Engine, Eval graph, Variation graph, and the boards of its link group) works in
+  any mode: `:analyse` opens one into the focused link group's panes when the mode has a move tree there, `o` in the
+  Library opens a row beside the list, `a` on Train's feedback the puzzle. While one of these panes has the focus,
+  Analyse's keys work (`keys.js` adds the `mode.analyse` context); the engine follows the focused link group's board
+  everywhere but in Train (it would show the solutions). Empty, each says what fills it and which link group it
+  belongs to; the Filters pane says it needs a Library in its link group.
+- **Session** (Train) and **Entry session** (Collect) keep their keys and state in their mode: elsewhere the pane
+  shows what it is, that it works in that mode, and a button to go there (`lives_in` in `core/layouts.py`).
+- A saved layout that names a view the app no longer has keeps its arrangement; that pane says so and offers to
+  pick another view or close it.
+
 ## 5 · Sections inside panes
 
 Long views (Inspector, Settings, Stats, Home) are made of **sections**: a 22px header line with a title, a count or

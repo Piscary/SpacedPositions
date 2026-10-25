@@ -30,3 +30,4 @@
 
 .train__pace .segmented__option { font-size: var(--fs-xs); }
 .settings__csm { display: grid; gap: var(--s-half); padding-bottom: var(--s-1); }
+.settings__css { min-height: calc(var(--row-md) * 6); }

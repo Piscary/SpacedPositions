@@ -43,7 +43,6 @@
 .chip--suggested { border-style: dashed; }
 .chip--good { color: var(--good); border-color: currentColor; }
 .chip--bad { color: var(--bad); border-color: currentColor; }
-.chip__remove { border: 0; background: transparent; padding: 0; color: var(--text-sub); }
 
 .badge {
   display: inline-grid;
@@ -75,7 +74,6 @@
 
 /* ── Empty, skeleton, inline message ─────────────────────────────────────────────────────────────────────────── */
 .empty { display: grid; gap: var(--s-3); align-content: start; max-width: 40rem; padding: var(--s-4); }
-.empty__phase { justify-self: start; }
 .empty__title { font-size: var(--fs-lg); font-weight: 650; }
 .empty__text { color: var(--text-sub); }
 

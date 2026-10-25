@@ -29,9 +29,9 @@ spos                  # starts the app and opens the browser
 `spos` works like `jupyter notebook`: it picks a free port (8765 or the next one), opens the browser with a one-time
 token, and keeps running until `Ctrl+C`, `:quit` in the app, or `spos stop`. Running `spos` again just opens the
 browser at the running instance. `spos list` shows where it runs, `spos import-csm <db.sqlite3> [--dry-run]` brings
-over a chess-study-manager library; `--no-browser`, `--port`, `--data-dir` and `--lan`
+over a chess-study-manager library, `spos restore <backup>` puts a backup back; `--no-browser`, `--port`, `--data-dir` and `--lan`
 are the options. Data lives in the platform's user-data folder (`~/Library/Application Support/Spaced Positions/`
-on macOS), with a backup before every migration. Your own piece sets go in its `pieces/` folder (`pieces/<name>/` with
+on macOS), with a compressed backup every day and before every update (in its `backups/` folder; Settings → App). Your own piece sets go in its `pieces/` folder (`pieces/<name>/` with
 `wK.svg` … `bP.svg`); a local engine is chosen in Settings → Engine (`stockfish` on the PATH by default).
 
 ## Try it

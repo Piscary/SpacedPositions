@@ -3,7 +3,8 @@ filter pane, and what bulk commands need (the cards of a selection for training,
 
 import json
 
-from django.db.models import Count, Exists, OuterRef, Q
+from django.db.models import Count, Exists, OuterRef, Q, Subquery
+from django.db.models.functions import Coalesce
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_GET, require_POST
@@ -38,7 +39,6 @@ VALUES = {
     "result": ["1-0", "0-1", "draw"],
     "role": ["me", "student", "model", "opponent"],
     "kind": [k for k, _ in Source.Kind.choices],
-    "sort": ["created", "-created", "updated", "difficulty", "-difficulty", "title", "year", "success", "lapses", "-lapses"],
 }
 
 
@@ -55,8 +55,9 @@ def _rows(collection, qs):
             has_analysis=Exists(Node.objects.filter(position=OuterRef("pk"), parent__isnull=False)),
         )
     if collection == "puzzles":
+        cards = Card.objects.filter(puzzle=OuterRef("pk"), in_solution=True).order_by().values("puzzle").annotate(n=Count("pk")).values("n")
         return qs.select_related("position__source").prefetch_related("position__tag_links__tag__field").annotate(
-            card_count=Count("cards", filter=Q(cards__in_solution=True), distinct=True),
+            card_count=Coalesce(Subquery(cards), 0),  # for the shown rows only, not a count over every puzzle
         )
     if collection == "games":
         return qs.select_related("source")
@@ -94,6 +95,7 @@ def results(request):
     }
     return render(request, "library/results.html", {
         "collection": collection, "display": display, "rows": rows, "offset": offset, "info": info, "more": total - info["shown"],
+        "query": request.GET.get("q", "").strip(),
     })
 
 
@@ -105,7 +107,8 @@ def group_label(collection: str, key: str, r) -> str:
         d = r.difficulty if collection == "positions" else r.position.difficulty
         return stars(d) if d else "No difficulty"
     if key == "source":
-        return r.source.label if r.source_id else "No source"
+        p = r if collection == "positions" else r.position
+        return p.source.label if p.source_id else "No source"
     if key == "year":
         return str(r.year) if r.year else "No year"
     if key in ("white", "black"):
@@ -240,15 +243,20 @@ def complete(request):
         if key in fields or key == "tag":
             items = [{**i, "value": f"{key}:{head}{i['value']}"} for i in _tag_items(last, key if key in fields else None)]
         elif key == "src":
-            items = [{"value": f"src:{head}{fold(s.label).split()[0]}", "label": s.label, "note": s.authors}
-                     for s in Source.objects.filter(search__contains=fold(last))[:12]]
+            found = Source.objects.all()
+            for word in fold(last.strip('"')).split():
+                found = found.filter(search__contains=word)
+            items = [{"value": f"{source_term(s.label).replace('src:', f'src:{head}', 1)}", "label": s.label, "note": s.authors}
+                     for s in found[:12]]
         elif key in ("white", "black", "player"):
             items = [{"value": f"{key}:{head}@{p.key}", "label": p.name, "note": p.get_role_display() if p.role else ""}
                      for p in Player.objects.filter(search__contains=fold(last.lstrip("@")))[:12]]
         elif key == "in":
             items = [{"value": f"in:q:{s.key}", "label": s.name, "note": s.query} for s in SavedQuery.objects.all()[:12]]
-        elif key in VALUES:
-            items = [{"value": f"{key}:{head}{v}", "label": v, "note": ""} for v in VALUES[key] if v.startswith(last)]
+        elif key in VALUES or key == "sort":
+            values = [v for name in q.SORTS[collection] for v in (name, f"-{name}")] if key == "sort" else VALUES[key]
+            items = [{"value": f"{key}:{head}{v}", "label": v, "note": "groups" if key == "sort" and v.lstrip("-") in q.GROUPS[collection] else ""}
+                     for v in values if v.startswith(last)]
     else:
         fields = [(f.key, f.name) for f in TagField.objects.all()] if collection in ("positions", "games", "puzzles") else []
         keys = [(f"{k}:", n) for k, n in fields] + [(f"{k}:", "") for k in KEYS[collection]]
@@ -271,7 +279,7 @@ def facets(request):
     tag_counts = dict(
         PositionTag.objects.filter(position__in=ids).order_by().exclude(origin="suggested").values_list("tag").annotate(n=Count("id"))
     )
-    words = set(text.split())
+    words = {w for kind, w, _, _ in q._tokens(text) if kind == "word"}  # quoted terms stay whole
     groups = []
     for f in TagField.objects.filter(on_positions=True).prefetch_related("tags"):
         tags = sorted((t for t in f.tags.all() if tag_counts.get(t.id)), key=lambda t: -tag_counts[t.id])[:12]
@@ -284,18 +292,27 @@ def facets(request):
     groups.append({"label": "Difficulty", "key": "diff", "items": [
         {"term": f"diff:{d}", "label": "★" * d, "count": diffs.get(d, 0), "on": f"diff:{d}" in words} for d in range(1, 6) if diffs.get(d)
     ]})
-    sources = result.queryset.order_by().exclude(source=None).values_list("source", "source__title", "source__short").annotate(n=Count("id")).order_by("-n")[:8]
+    sources = result.queryset.order_by().exclude(source=None).values_list("source", "source__title", "source__short").annotate(n=Count("id")).order_by("-n")[:12]
     groups.append({"label": "Source", "key": "src", "items": [
-        {"term": f"src:{fold(short or title).split()[0]}", "label": short or title, "count": n, "on": f"src:{fold(short or title).split()[0]}" in words}
+        {"term": source_term(short or title), "label": short or title, "count": n, "on": source_term(short or title) in words}
         for _, title, short, n in sources
     ]})
-    status = []
-    for term, label in [("has:solution", "In training"), ("no:solution", "No puzzle in training"), ("has:analysis", "Analysed"),
-                        ("no:analysis", "Not analysed"), ("is:diagram", "Diagrams"), ("is:flagged", "Flagged"), ("is:trash", "Trash")]:
-        n = result.queryset.count() if term in words else q.run(f"{text} {term}", "positions").queryset.count()
-        status.append({"term": term, "label": label, "count": n, "on": term in words})
+    labels = [("has:solution", "In training"), ("no:solution", "No puzzle in training"), ("has:analysis", "Analysed"),
+              ("no:analysis", "Not analysed"), ("is:diagram", "Diagrams"), ("is:flagged", "Flagged")]
+    compiler = q.Compiler("positions")  # one query counts them all: each status is a filtered count of the results
+    counts = result.queryset.order_by().aggregate(**{f"n{i}": Count("pk", filter=compiler.where(q.parse(term))) for i, (term, _) in enumerate(labels)})
+    status = [{"term": term, "label": label, "count": counts[f"n{i}"], "on": term in words} for i, (term, label) in enumerate(labels)]
+    trash = "is:trash"  # the trash isn't in the results unless asked for: counted on its own
+    n = result.queryset.count() if trash in words else q.run(f"{text} {trash}", "positions").queryset.count()
+    status.append({"term": trash, "label": "Trash", "count": n, "on": trash in words})
     groups.append({"label": "Status", "key": "status", "items": status})
     return render(request, "library/facets.html", {"groups": [g for g in groups if g["items"]], "total": result.queryset.count()})
+
+
+def source_term(name: str) -> str:
+    """The query term for exactly one source: its whole name, quoted when it has spaces."""
+    clean = name.replace('"', "")
+    return f'src:"{clean}"' if " " in clean else f"src:{clean}"
 
 
 # ── For bulk commands ─────────────────────────────────────────────────────────────────────────────────────────
@@ -307,6 +324,14 @@ def _body(request) -> dict:
     except ValueError:
         return {}
     return data if isinstance(data, dict) else {}
+
+
+def ordered(collection: str, ids: list, text: str = ""):
+    """Like objects(), in the query's order also for a selection (Analyse's subject list, training in order)."""
+    if not ids:
+        return objects(collection, ids, text)
+    chosen = objects(collection, ids, text).values("pk")
+    return q.run(text, collection).queryset.filter(pk__in=chosen) if text else objects(collection, ids, text)
 
 
 def objects(collection: str, ids: list, text: str = ""):
@@ -333,7 +358,14 @@ def cards(request):
         cards = cards.none()
     if data.get("count"):  # the launcher's "86 cards match"
         return JsonResponse({"count": cards.count()})
-    ids = [str(u) for u in cards.order_by("puzzle__position__difficulty", "id").values_list("uuid", flat=True)[:500]]
+    text = data.get("q", "")
+    if q.parse(text).sort():  # in the query's order (a source in the order of its diagrams); else the easiest first
+        rank = {pk: i for i, pk in enumerate(ordered(collection, data.get("ids", []), text).values_list("pk", flat=True)[:2000])}
+        key = "puzzle_id" if collection == "puzzles" else "puzzle__position_id"
+        rows = sorted(cards.values_list("uuid", key, "id")[:2000], key=lambda r: (rank.get(r[1], len(rank)), r[2]))
+        ids = [str(u) for u, _, _ in rows[:500]]
+    else:
+        ids = [str(u) for u in cards.order_by("puzzle__position__difficulty", "id").values_list("uuid", flat=True)[:500]]
     return JsonResponse({"cards": ids})
 
 
@@ -368,20 +400,12 @@ def fens(request):
     return JsonResponse({"fens": []})
 
 
-def position_ids(collection, found) -> list[int]:
-    if collection == "positions":
-        return list(found.values_list("pk", flat=True))
-    if collection == "puzzles":
-        return list(found.values_list("position_id", flat=True).distinct())
-    return []
-
-
 @require_GET
 def subject(request):
     """The positions (uuids) of the selection or the query, in order: Analyse's subject list (`a`)."""
     collection = _collection(request)
     ids = [i for i in request.GET.get("ids", "").split(",") if i]
-    found = objects(collection, ids, request.GET.get("q", ""))
+    found = ordered(collection, ids, request.GET.get("q", ""))
     if collection == "positions":
         uuids = [str(u) for u in found.values_list("uuid", flat=True)[:1000]]
     elif collection == "puzzles":

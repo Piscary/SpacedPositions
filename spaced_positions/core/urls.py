@@ -7,6 +7,7 @@ app_name = "core"
 urlpatterns = [
     path("", views.home, name="home"),
     path("healthz", views.healthz, name="healthz"),
+    path("beat/", views.beat, name="beat"),
     path("m/<str:mode>/", views.workspace, name="workspace"),
     path("m/<str:mode>/default", views.default_layout, name="default_layout"),
     path("v/<str:view>/", views.view_fragment, name="view"),

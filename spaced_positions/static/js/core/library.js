@@ -42,6 +42,10 @@ async function refresh(el, { keep = false, clear = false } = {}) {
   const html = await fetch(`/lib/results/?${params}`).then((r) => r.text()).catch(() => null)
   if (html === null || ticket !== st.ticket) return // a newer query is on its way
   list.innerHTML = html
+  const rows = Boolean(list.querySelector("[data-row]")) // "nothing yet" is a message, not a list
+  list.setAttribute("role", rows ? "listbox" : "status")
+  list.toggleAttribute("aria-multiselectable", rows)
+  if (rows) list.setAttribute("aria-multiselectable", "true")
   list.dataset.display = st.display
   el.dataset.collection = st.c
   el.dataset.display = st.display
@@ -259,11 +263,14 @@ on("library:query", ({ group, q, c }) => {
 })
 
 /** A facet adds its term to the query of its group's library, or takes it out. */
+/** The terms of a query, a quoted value kept whole: `src:"Chess Monkeys Level 1" diff:3` → two terms. */
+const termsOf = (q) => q.match(/(?:[^\s"]+|"[^"]*"?)+/g) || []
+
 function toggleTerm(term, row) {
   const el = row ? libraries().find((l) => groupOf(l) === groupOf(row) && l.closest(".workspace") === row.closest(".workspace")) : currentLibrary()
   if (!el) return false
   const st = stateOf(el)
-  const words = st.q.split(/\s+/).filter(Boolean)
+  const words = termsOf(st.q)
   st.q = words.includes(term) ? words.filter((w) => w !== term).join(" ") : [...words, term].join(" ")
   el.querySelector("[data-querybar]").value = st.q
   return refresh(el)
@@ -320,7 +327,7 @@ handle("library.sort", withLibrary(async (el, st, [field]) => {
     if (!field) return false
   }
   const next = current === field ? `-${field}` : field
-  st.q = [...st.q.split(/\s+/).filter((w) => w && !/^-?sort:/.test(w)), `sort:${next}`].join(" ")
+  st.q = [...termsOf(st.q).filter((w) => !/^-?sort:/.test(w)), `sort:${next}`].join(" ")
   el.querySelector("[data-querybar]").value = st.q
   return refresh(el)
 }))

@@ -1,7 +1,13 @@
 <div class="moves" data-island="moves">
   <div class="empty moves__empty">
-    <p>No position open.</p>
+    <p>No position open{% if node.group %} in link group {{ node.group }}{% endif %}.</p>
+    {% if mode.key == "analyse" %}
     <p class="muted">{% keycap ":" %} <code>analyse</code> finds one, or paste a FEN or PGN ({% keycap "mod+v" %}) and choose {% keycap "a" %}.</p>
+    {% else %}
+    <p class="muted">This pane shows the analysis of its link group, here in {{ mode.label }}: {% keycap ":" %} <code>analyse</code> opens one
+      here, {% keycap "o" %} in the Library opens a row beside the list, {% keycap "a" %} on Train's feedback the puzzle. The board, engine,
+      inspector and graphs of the same link group follow it, and Analyse's keys work while one of them has the focus.</p>
+    {% endif %}
     <div class="actionbar">{% cmd "analysis.open" size="sm" %}</div>
   </div>
 </div>

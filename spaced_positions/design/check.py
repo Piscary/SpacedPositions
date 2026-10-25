@@ -184,7 +184,7 @@ def _contexts_together(a: str, b: str) -> bool:
     if a.startswith("view.") and b.startswith("view."):
         return False  # one view per focused pane
     if a.startswith("mode.") and b.startswith("mode."):
-        return False
+        return "mode.analyse" in (a, b)  # an analysis can sit in any mode's layout, with its keys (keys.js)
     if a.startswith("state.") and b.startswith("state."):
         return False  # one Train state at a time
     for x, y in ((a, b), (b, a)):
@@ -308,8 +308,6 @@ def check_references(sources: lib.Sources, templates_dir: Path, js_dir: Path, se
         problems.append(err("references", f"a client handler exists for unknown command '{cid}'"))
     for cid, spec in sources.commands.items():
         handler = spec.get("handler", "client")
-        if spec.get("phase"):
-            continue
         if handler in ("client", "both") and cid not in client_handlers:
             problems.append(err("implemented", f"{cid}: no client handler (handle('{cid}', …) in static/js)"))
         if handler in ("server", "both") and cid not in server_handlers:

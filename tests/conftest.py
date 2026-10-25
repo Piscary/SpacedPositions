@@ -48,3 +48,14 @@ def vocabulary(request):
 
     if not Tag.objects.exists():
         vocab.load(TagField, Tag)
+
+
+@pytest.fixture(autouse=True)
+def fresh_training_data():
+    """Every test reads the training data afresh: a rolled-back test can leave the same ids and counts behind, which
+    the cache of stats.metrics.load would take for unchanged data."""
+    from spaced_positions.stats import metrics
+
+    metrics._cached.clear()
+    yield
+    metrics._cached.clear()

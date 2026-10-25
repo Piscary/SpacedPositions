@@ -85,6 +85,7 @@ function drawVariations(island) {
   const box = island.querySelector("[data-graph]")
   if (!t) {
     box.replaceChildren()
+    island.querySelector("[data-readout]").textContent = "Open a game or a position in this link group."
     return
   }
   // layout: depth-first, the main child continues the row, other children open new rows below

@@ -26,6 +26,8 @@ export function activeContexts() {
     chain.push(`view.${ctx.pane.view}`)
     if (window.SPOS.views[ctx.pane.view]?.list) chain.push("view.list")
   }
+  // an analysis in the focused link group outside Analyse (o in the Library, a in Train): its keys work there too
+  if (ctx.mode !== "analyse" && window.SPOS.analysis?.loaded?.()) chain.push("mode.analyse")
   chain.push(`mode.${ctx.mode}`) // mode keys before the generic pane keys: in Analyse, j/k switch variations
   if (ctx.pane) chain.push("pane")
   chain.push("global")

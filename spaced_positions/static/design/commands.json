@@ -2103,6 +2103,36 @@
     }
    ],
    "handler": "server"
+  },
+  "pref.css": {
+   "title": "Your own CSS (Settings → Advanced)",
+   "group": "Settings",
+   "args": [
+    {
+     "name": "css",
+     "type": "text",
+     "optional": true
+    }
+   ],
+   "handler": "server",
+   "hidden": true,
+   "internal": true
+  },
+  "app.backup": {
+   "title": "Back up now",
+   "group": "App",
+   "aliases": [
+    "backup"
+   ],
+   "handler": "server"
+  },
+  "app.folder": {
+   "title": "Open the data folder",
+   "group": "App",
+   "aliases": [
+    "data-folder"
+   ],
+   "handler": "server"
   }
  },
  "keymap": {
@@ -2577,6 +2607,16 @@
    },
    "backspace": {
     "command": "board.cleardrawings",
+    "args": []
+   }
+  },
+  "view.engine": {
+   "e": {
+    "command": "engine.toggle",
+    "args": []
+   },
+   "enter": {
+    "command": "engine.best",
     "args": []
    }
   },

@@ -346,6 +346,12 @@ def test_open_beside_the_list(page, positions):
     title = page.get_attribute("#ws-library [data-library-results] .list__row.is-cursor", "data-title")
     page.wait_for_function("(t) => document.getElementById('status-message').textContent.startsWith(t)", arg=title)
     assert "Rd8#" in page.inner_text("#ws-library [data-island=moves]")
+    # Analyse's keys work on it here: the cursor moves through the analysis, the linked board follows
+    page.click("#ws-library [data-view=moves] .pane__title")
+    keys(page, "l")
+    page.wait_for_function("document.querySelector('#ws-library .mt-move.is-cursor')?.textContent.includes('Rd8')")
+    keys(page, "h")
+    page.wait_for_function("!document.querySelector('#ws-library .mt-move.is-cursor')")
     # another row: the same split
     page.click("#ws-library [data-view=library] .pane__title")
     keys(page, "j", "o")
@@ -372,3 +378,14 @@ def test_sort_by_a_column_and_fold_groups(page, positions):
     keys(page, "Z")
     page.wait_for_function("document.getElementById('status-message').textContent.startsWith('All groups open')")
     assert page.locator("#ws-library [data-library-results] .list__row[hidden]").count() == 0
+
+
+
+def test_a_pane_of_another_mode_says_where_it_works(page):
+    library(page)
+    keys(page, ":")
+    page.keyboard.type("vsplit queue")
+    keys(page, "Enter")
+    page.wait_for_selector("#ws-library [data-view=queue] >> text=It works in Train")
+    page.click("#ws-library [data-view=queue] [data-cmd='mode.train']")
+    page.wait_for_function("window.SPOS.ctx.mode === 'train'")

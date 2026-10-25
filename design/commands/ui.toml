@@ -122,3 +122,23 @@ group = "Settings"
 aliases = ["map-reset"]
 args = [{ name = "keys", type = "text", optional = true }]
 handler = "server"
+
+["pref.css"]
+title = "Your own CSS (Settings → Advanced)"
+group = "Settings"
+args = [{ name = "css", type = "text", optional = true }]
+handler = "server"
+hidden = true
+internal = true  # the Settings field, undo and redo run it
+
+["app.backup"]
+title = "Back up now"
+group = "App"
+aliases = ["backup"]
+handler = "server"
+
+["app.folder"]
+title = "Open the data folder"
+group = "App"
+aliases = ["data-folder"]
+handler = "server"

@@ -203,8 +203,8 @@ Mode-level: these work whether the board, the moves or the inspector pane has fo
 | `P` | Promote to main line |
 | `d` | Delete from here (undoable) |
 | `p` | Puzzle: `s` start here · `x` solution ends here · `a` also correct · `o` all answers count · `r` ready for training · `d` discard puzzle |
-| `e` | Engine on / off |
-| `↵` | Play the engine's best move |
+| `e` | Engine on / off (also in the Engine pane, in any mode but Train) |
+| `↵` | Play the engine's best move (also in the Engine pane) |
 | `y` / `Y` | Copy FEN / PGN |
 | `u` / `U` | Undo / redo: every change of the analysis, also after a reload (the journal, 09 §5) |
 

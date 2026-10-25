@@ -91,7 +91,7 @@ function completions(type) {
     case "theme":
       return ["auto", ...Object.keys(themes.themes)].map((v) => ({ value: v, label: v === "auto" ? "auto · follow the system" : themes.themes[v].label }))
     case "view":
-      return Object.entries(window.SPOS.views).map(([k, v]) => ({ value: k, label: `${v.label}${v.phase ? ` · phase ${v.phase}` : ""}` }))
+      return Object.entries(window.SPOS.views).map(([k, v]) => ({ value: k, label: v.label }))
     case "token":
     case "tokenname":
       return [

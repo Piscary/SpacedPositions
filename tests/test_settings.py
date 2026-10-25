@@ -245,3 +245,27 @@ def test_imports_never_set_the_engine_program(client):
     assert "engine.path" in response["problems"][0]
     run(client, "pref.set", "engine.path=/usr/local/bin/stockfish")
     assert "engine.path" not in client.get("/settings/export/").content.decode()
+
+
+def test_your_own_css_with_undo_and_safe_mode(client):
+    data = client.post("/cmd/pref.css/", json.dumps({"args": [], "context": {}, "css": ".board__frame { border-radius: 0 } </style><b>"}),
+                       content_type="application/json").json()
+    assert data["ok"] and data["effects"]["customCss"].startswith(".board__frame")
+    page = client.get("/settings/").content.decode()
+    assert '<style id="custom-css">.board__frame { border-radius: 0 } <\\/style><b></style>' in page  # can't end the element
+    assert '<style id="custom-css"></style>' in client.get("/settings/?safe").content.decode()
+    run(client, data["undo"]["command"], *data["undo"]["args"])
+    assert "custom.css" not in Preferences.current().settings
+
+
+def test_settings_app_section_and_back_up_now(client):
+    from spaced_positions.core.settings_view import storage
+
+    html = client.get("/settings/rows/").content.decode()
+    assert "Data folder" in html and 'data-cmd="app.backup"' in html and 'data-set="app.autostop"' in html
+    before = storage()["backups"]
+    result = run(client, "app.backup")
+    assert result["ok"] and result["message"].startswith("Backed up: db-now-") and result["effects"] == {"storage": True}
+    after = storage()
+    assert after["backups"] == min(before + 1, 5) or after["latest"]["kind"] == "now"  # at most 5 kept of a kind
+    assert client.post("/beat/").json() == {"ok": True}

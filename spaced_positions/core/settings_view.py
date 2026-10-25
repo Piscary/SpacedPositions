@@ -23,6 +23,7 @@ SECTIONS = [
     ("Keys", "k", ["keys.keycaps", "keys.teach", "keys.whichkey"]),
     ("Training", "r", ["training.new-per-day", "training.storm-pace"]),
     ("Engine", "e", ["engine.source", "engine.path", "engine.lines", "engine.depth", "engine.arrows", "engine.threads", "engine.hash"]),
+    ("App", "p", ["app.autostop"]),
 ]
 
 
@@ -99,6 +100,8 @@ def settings_rows(request):
     return render(request, "settings/rows.html", {
         "sections": rows(), "themes": theme_rows, "theme": prefs.theme or "auto",
         "overrides": KeymapOverride.objects.filter(user=LOCAL_USER).count(), "csm_path": csm_guess(),
+        "custom_css": prefs.settings.get("custom.css", ""),
+        "storage": storage(),
     })
 
 
@@ -213,3 +216,18 @@ def import_csm(request):
     message = (f"Would add: {what}" if dry_run else f"Added: {what} · backup in {report.backup}")
     return JsonResponse({"ok": True, "dry_run": dry_run, "message": message, "problems": report.problems,
                          "new": sum(report.counts.values()), "effects": {} if dry_run else {"library": "changed"}})
+
+
+def storage() -> dict:
+    """Settings → App: where the data is and how much of it there is."""
+    from pathlib import Path
+
+    from django.db import connection
+
+    from spaced_positions import backups
+
+    db = Path(connection.settings_dict["NAME"])
+    found = backups.listing(db.parent)
+    size = sum(db.parent.joinpath(f"{db.name}{s}").stat().st_size for s in ("", "-wal") if db.parent.joinpath(f"{db.name}{s}").exists())
+    return {"folder": str(db.parent), "db_size": size, "backups": len(found), "backups_size": sum(b["size"] for b in found),
+            "latest": found[0] if found else None}

@@ -347,6 +347,10 @@ As built (phase 6): the mode opens with Settings and the keymap editor side by s
   and a prefix in contexts active together, the browser's keys stay the browser's); `Backspace` removes your binding,
   or unmaps a default one. `:map <keys> <command> [args]`, `:unmap <keys>`, `:map-reset`; `@view.library` first
   binds in another context.
+- **Advanced**: your own CSS, applied after the theme (`⌘↵` applies it, `u` undoes; Esc held while loading, or
+  `?safe`, starts without it).
+- **App**: the data folder with the size of the database and of the backups, *back up now*, *open the folder*, and
+  `app.autostop` (stop 10 minutes after the last tab; for double-click starts).
 - **Data**: export writes the theme, token overrides, settings, key bindings, your themes and named layouts as one
   TOML file (07 §5); pasting one (or a single theme) into the box imports it, value by value, listing what it skipped.
   `engine.path` is never exported or imported: which program runs is set by hand.

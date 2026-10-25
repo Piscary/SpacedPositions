@@ -31,17 +31,17 @@ def test_which_key_lists_the_window_commands(page):
 def test_split_pick_close_undo_redo(page):
     keys(page, "Space", "w", "v")
     page.wait_for_selector(".menu")
-    keys(page, "n")  # view picker: notes
-    page.wait_for_selector('.workspace:not([hidden]) [data-view="notes"] form')
-    assert panes(page) == ["components", "notes", "demo", "board"]
+    keys(page, "p")  # view picker: PGN / FEN
+    page.wait_for_selector('.workspace:not([hidden]) [data-view="pgn"] form')
+    assert panes(page) == ["components", "pgn", "library", "board"]
     assert page.inner_text("#status-pane").startswith("2")  # the new pane has focus
     keys(page, "Space", "w", "q")
-    assert panes(page) == ["components", "demo", "board"]
+    assert panes(page) == ["components", "library", "board"]
     keys(page, "u")
-    assert panes(page) == ["components", "notes", "demo", "board"]
+    assert panes(page) == ["components", "pgn", "library", "board"]
     assert "Undone" in page.inner_text("#status-message")
     keys(page, "U")
-    assert panes(page) == ["components", "demo", "board"]
+    assert panes(page) == ["components", "library", "board"]
 
 
 def test_focus_and_resize_by_keys(page):
@@ -58,6 +58,13 @@ def test_focus_and_resize_by_keys(page):
 
 
 def test_list_selection_and_linked_board(page):
+    from spaced_positions.analysis import tree
+    from tests.factories import back_rank
+
+    for i in range(6):
+        tree.create_position(back_rank(i % 3), [], title=f"Position {i}")
+    open_mode(page, "ui")  # the style guide's Library, linked to its board
+    page.wait_for_selector(".workspace:not([hidden]) [data-library-results] [data-row]")
     keys(page, "Space", "2", "j", "j", "j", "x", "v", "j", "j")
     assert layer(page) == "visual"
     assert page.inner_text("#status-subject") == "3 selected"
@@ -87,12 +94,15 @@ def test_modes_switch_and_stay_alive(page):
     keys(page, "Space", "Space")
     page.wait_for_url("**/ui/")
     keys(page, "Space", "h", "Space", "s", "Space", "l")  # fast: the last key wins, whatever loads first
-    page.wait_for_function("location.pathname === '/library/' && !document.getElementById('ws-library').hidden")
+    page.wait_for_function("location.pathname === '/library/' && document.getElementById('ws-library')?.hidden === false")
     assert page.locator(".workspace:not([hidden])").count() == 1
     assert page.locator(".workspace").count() == 3  # at most three modes stay in the DOM
     assert page.locator("#ws-library").count() == 1
-    page.go_back()  # only completed switches enter the history: back from library is the style guide
-    page.wait_for_function("location.pathname === '/ui/' && !document.getElementById('ws-ui').hidden")
+    page.go_back()  # only completed switches enter the history: back from library is the mode shown before it
+    page.wait_for_function("""(() => {
+      const mode = location.pathname.replaceAll('/', '')
+      return mode !== 'library' && document.getElementById(`ws-${mode}`)?.hidden === false
+    })()""")
 
 
 def test_insert_layer(page):
@@ -191,5 +201,10 @@ def test_i_edits_the_panes_field(page):
     page.keyboard.type("Polgár")
     keys(page, "Escape")
     assert layer(page) == "normal"
-    keys(page, "Space", "2", "i")  # the demo list has no field
+    keys(page, "Space", "2", "i")  # the Library: its query bar
+    assert layer(page) == "insert" and page.evaluate("document.activeElement.matches('[data-querybar]')")
+    keys(page, "Escape")
+    open_mode(page, "stats")
+    page.click("#ws-stats [data-view=chart] .pane__title")
+    keys(page, "i")  # the charts have no text field
     assert layer(page) == "normal" and "no text field" in page.inner_text("#status-message")

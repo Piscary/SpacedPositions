@@ -72,7 +72,8 @@ German names with English names and aliases for search (decision 6: English UI, 
 | `TagField` | `key` (`motif`, `mate`, `goal`, `phase`, `strategy`, `endgame`, `technique`, `level`, `moment`, `custom`), `name`, `name_en`, `selection` (single: one tag of the field per object · multi), `on_positions`, `on_moves`, `color` (a chart/chip token, `--chart-1` … `--chart-6`), `order` |
 | `Tag` | `field`, `key` (slug, unique, from the old app: `fork`, `knight-fork`), `name` (German: `Gabel`), `name_en` (`Fork`), `aliases` (more search terms, any language), `parent` → Tag (hierarchy: Doppelangriff → Gabel → Springergabel), `description`, `task` and `task_en` (for objective tags: the printed task, `{side}` = the side to move), `base_difficulty` (1–5), `weight` and `analysis_weight` (for the automatic difficulty), `order` |
 | `TagDismissal` | A tag the user removed from a position or a move: `position` or `node`, `tag` (detection respects it) |
-| `PositionTag`, `NodeTag`, `GameTag` | the link, plus `origin` (`manual` · `auto` · `suggested`), `detector` (which detector set it), `evidence` (`Ne5 forks Kg8, Qd7`), `created_at` |
+| `Position` (search fields) | `search` (the folded title, task, description, notes and citation, kept up to date on save), `page_number` and `ref_number` (the first number of the page and of the reference: sorting a book in its order) |
+| `PositionTag`, `NodeTag`, `GameTag` | the link, plus `origin` (`manual` · `auto` · `suggested`), `detector` (which detector set it), `evidence` (`Ne5 forks Kg8, Qd7`); the unique (owner, tag) index is the only index on the owner |
 | `TagPreset` | A named set of tags for Collect (`1`–`9` in the entry session): `name`, `tags`, `order` |
 
 - **Names**: a query or `:tag` takes the key, the German or English name or an alias (`motif:gabel`, `motif:fork`);
@@ -154,12 +155,22 @@ values   = value { "," value }                   -- motif:gabel,spiess = gabel O
 op       = ">" | ">=" | "<" | "<=" | "="         -- numbers and dates; "=" for an exact tag
 range    = number ".." number                    -- diff:2..4  year:1950..1960
 tagterm  = "#" tagkey                            -- #gabel = a tag in any field
-text     = word | '"' words '"'                  -- title, description, notes, source, tag names and aliases
+text     = word | '"' words '"'                  -- title, task, description, notes, citation, source, tags, comments
 group    = "(" query { " or " query } ")"        -- (motif:gabel or mate:anastasia) diff:>=3
 ```
 
 Matching is case- and accent-insensitive (`spiess` finds Spieß). Unknown keys and values are underlined with the
 reason and ignored, so a half-typed query still shows results. `sort:` is a term too.
+
+**Words** (phase 7 cleanup): each word, or quoted phrase, must occur somewhere: the title, task, description, notes or
+citation (the position's folded `search` column), the source (title, short name, authors, publisher), a tag (name,
+English name, alias; not suggestions) or a comment of the analysis. Two words need not be next to each other
+(`only good`); a quoted phrase must (`"only good"`). A `*` is ignored (`fork*` = `fork`): words match anywhere already.
+
+**Sources**: `src:` with a source's whole title or short name (`src:"Chess Monkeys Level 1"`), or its id (`src:s5`),
+is exactly that source: the filter pane and the completion write this form. Any other value matches every source
+that has all its words, in any order, in its title, short name, authors or publisher (`src:monkeys`, `src:polgar`,
+`src:"monkeys 2"`); a citation that is only text (an import that matched no source) is matched by all the words too.
 
 ### Keys
 
@@ -169,7 +180,7 @@ reason and ignored, so a half-typed query still shows results. `sort:` is a term
 | `tag`, `#` | positions, games, puzzles | A tag of any field |
 | `diff` | positions, puzzles | Difficulty 1–5 |
 | `side` | positions, puzzles | `w` / `b`: the side to move |
-| `src`, `page`, `ref` | positions, games | Source (short name, title, author), page, reference |
+| `src`, `page`, `ref` | positions, games | Source (exactly, or by its words: above), page, reference |
 | `has`, `no` | positions | `solution` (a puzzle in training), `analysis`, `puzzle` (also drafts), `comment`, `source`, `tags`, `game` |
 | `is` | all | `diagram`, `flagged`, `trash` (only in the trash), `draft` (puzzles not in training) |
 | `material`, `pieces` | positions | `material:KRvKR` (white first), `pieces:<=7` |
@@ -180,7 +191,7 @@ reason and ignored, so a half-typed query still shows results. `sort:` is a term
 | `due`, `state`, `lapses`, `success`, `last`, `attempts` | puzzles, cards | Training: `due:today`, `state:new`, `lapses:>=2`, `success:<50%`, `last:>30d`, `attempts:0` |
 | `game` | positions | Taken from this game (`game:g12`) |
 | `in` | all | In a saved query (`in:q:name`) or a pack (phase 8) |
-| `sort` | all | `sort:created` (default newest first), `sort:difficulty`, `sort:title`, `sort:due`, `sort:success`; `-` reverses (`sort:-difficulty`) |
+| `sort` | all | positions: `created` (default newest first), `updated`, `difficulty`, `title`, `source` (title, then page, then diagram number: a book in its order), `diagram`, `page`; puzzles: the same plus `due`, `success`, `lapses`, `last`; games: `year`, `white`, `black`, `event`; players `name`, `role`; sources `title`, `kind`; tags `name`, `field`. `-` reverses (`sort:-difficulty`). Page and diagram numbers sort as numbers (Nr. 9 before Nr. 10) |
 
 The Library's collections: `1` positions · `2` games · `3` puzzles (one row per puzzle, its cards inside) · `4`
 players · `5` sources · `6` tags. Players, sources and tags take text and `sort:` only.
@@ -190,7 +201,11 @@ players · `5` sources · `6` tags. Players, sources and tags take text and `sor
 `library/query.py` parses the string into a small AST (with positions for the QueryBar's underlines), then compiles
 it to Django `Q` objects per collection. The parser is pure Python and unit-tested on its own; completions come from
 `GET /library/complete/?q=…&at=…` (keys, tag keys and names, sources, players). Counts per facet for the filter pane
-come from the same compiled query without the facet's own term.
+come from the same compiled query without the facet's own term; the status counts are one query (filtered counts).
+Conditions on related rows (tags, moves, puzzles, cards) compile to `IN (subquery)`, not `EXISTS` per row: SQLite
+computes the subquery once (4–20× faster at 50,000 positions). `T` (train these) and `a` (analyse these) keep the
+query's order when it has a `sort:`; the Library's results are grouped (and foldable) when the sort is a field with
+few values (difficulty, source, year, a player, event, role, kind, field).
 
 ## 4 · PGN import
 
@@ -235,7 +250,7 @@ database is backed up first (`<data folder>/backups/db-before-csm-…`).
 | `positions_position` + its `variationnode`s | `Position` with its tree: comments, NAGs, drawings, marks, colours; the citation as source, page and `Nr. <ref>`; a position from a game keeps its game and move |
 | `positiontag` · `nodetag` | `PositionTag` · `NodeTag` with origin, detector and evidence; tags the vocabulary doesn't have are named in the report and left out |
 | `tagsuggestion` open · dismissed | a suggested tag · a `TagDismissal` |
-| `boards_board`/`column`/`positioninboard` | custom tags: the board, and under it `Board · Column` (weight 0: no influence on difficulty) |
+| `boards_board`/`column`/`positioninboard` | not migrated: the pipeline is the filters here (`has:analysis`, `has:solution`, `is:draft` …); the tags an earlier import made of it are removed by migration `library 0007` |
 | `trainingpuzzle` · `trainingcard` | `Puzzle` (made through the analysis, as `:puzzle` does) · its cards, matched by their line |
 | `trainingsession` · `trainingattempt` | `Session` (custom → review with the old options) · `Attempt` |
 | `core_activityevent` (analysis, annotation, drawing, board moves) | `stats.ActivityLog`, counted in Stats' activity; positions and games count by their creation date |

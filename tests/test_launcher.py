@@ -74,3 +74,31 @@ def test_start_open_refuse_list_stop(tmp_path):
     finally:
         if server.poll() is None:
             server.kill()
+
+
+def test_backups_are_compressed_rotated_and_restore(tmp_path):
+    """spec 09 §11: a daily backup (14 kept), one before migrations and imports (5 kept), xz-compressed; restore."""
+    import sqlite3
+
+    from spaced_positions import backups
+
+    db = tmp_path / "db.sqlite3"
+    con = sqlite3.connect(db)
+    con.execute("create table t (x text)")
+    con.executemany("insert into t values (?)", [("a fairly repetitive row of text",)] * 5000)
+    con.commit()
+    con.close()
+    first = backups.daily(db)
+    assert first.name.endswith(".sqlite3.xz") and first.stat().st_size < db.stat().st_size / 5
+    assert backups.daily(db) is None  # one a day
+    for i in range(7):
+        backups.make(db, "before-migrate", f"2026-01-0{i + 1}_10-00-00")
+    names = sorted(p.name for p in (tmp_path / "backups").glob("db-before-migrate-*"))
+    assert len(names) == 5 and names[0].startswith("db-before-migrate-2026-01-03")  # the newest five
+    con = sqlite3.connect(db)
+    con.execute("delete from t")
+    con.commit()
+    con.close()
+    backups.restore(first, db)
+    assert sqlite3.connect(db).execute("select count(*) from t").fetchone()[0] == 5000
+    assert list((tmp_path / "backups").glob("db-before-restore-*.sqlite3.xz"))  # what was there before is kept

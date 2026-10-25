@@ -22,7 +22,6 @@
   border-color: currentColor;
   color: inherit;
 }
-.shell.keycaps-off .keybutton .keys { display: none; }
 
 /* ── KeyButton ───────────────────────────────────────────────────────────────────────────────────────────────── */
 .keybutton {

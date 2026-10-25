@@ -34,12 +34,12 @@ const derived = {
   "train.running": () => ctx.mode === "train" && ["solving", "feedback"].includes(ctx.trainState),
   "train.hasLast": () => Boolean(window.SPOS?.train?.hasLast()),
   "train.hasMissed": () => Boolean(window.SPOS?.train?.hasMissed()),
-  "analysis.loaded": () => ctx.mode === "analyse" && Boolean(window.SPOS?.analysis?.loaded()),
-  "analysis.onMove": () => ctx.mode === "analyse" && Boolean(window.SPOS?.analysis?.onMove()),
-  "analysis.hasList": () => ctx.mode === "analyse" && Boolean(window.SPOS?.analysis?.hasList()),
+  "analysis.loaded": () => Boolean(window.SPOS?.analysis?.loaded()), // in any mode: the focused link group's analysis
+  "analysis.onMove": () => Boolean(window.SPOS?.analysis?.onMove()),
+  "analysis.hasList": () => Boolean(window.SPOS?.analysis?.hasList()),
   "collect.hasDuplicate": () => ctx.mode === "collect" && Boolean(window.SPOS?.collect?.hasDuplicate()),
   "library.hasTarget": () => Boolean(window.SPOS?.library?.hasTarget()),
-  "engine.ready": () => ctx.mode === "analyse" && Boolean(window.SPOS?.engine?.ready()),
+  "engine.ready": () => ctx.mode !== "train" && Boolean(window.SPOS?.engine?.ready()),
 }
 
 export function lookup(name) {
@@ -82,10 +82,6 @@ export function status(text, { kind = "info", timeout = 6000, keys = null } = {}
   }
   clearTimeout(messageTimer)
   if (timeout) messageTimer = setTimeout(() => { el.textContent = ""; el.dataset.kind = "" }, timeout)
-}
-
-export function setActivity(text) {
-  $("status-activity").textContent = text || ""
 }
 
 export function updateStatus() {

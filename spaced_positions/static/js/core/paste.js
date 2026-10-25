@@ -1,6 +1,6 @@
 // Paste anything anywhere (spec 06 §6): ⌘V outside a text field, `:paste`, or the PGN/FEN view's field. The server
 // says what the text is (FEN, several FENs, PGN, lichess link); the status line offers what fits, each offer with
-// its key: b show on a board, a analyse, c collect (phase 4), i import (phase 4).
+// its key: b show on a board, a analyse, c collect, i import.
 
 import { focusedBoard, focusedKey } from "../islands/board.js"
 import { analyseNew } from "./analysis.js"

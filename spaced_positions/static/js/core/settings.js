@@ -51,7 +51,7 @@ function filter(el) {
 }
 
 on("effects", (effects) => {
-  if (effects.theme || effects.settings || effects.themes) settingsPanes().forEach(loadSettings)
+  if (effects.theme || effects.settings || effects.themes || effects.storage) settingsPanes().forEach(loadSettings)
   if (effects.registry) {
     keymapPanes().forEach(loadKeymap)
     settingsPanes().forEach(loadSettings)

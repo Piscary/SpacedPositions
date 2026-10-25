@@ -134,6 +134,10 @@ accept = ["[", "]"]
 "q" = "board.squaretool"
 "backspace" = "board.cleardrawings"
 
+[context."view.engine"]
+"e" = "engine.toggle"
+"enter" = "engine.best"
+
 [context."view.pgn"]
 "y" = "board.copyfen"
 "Y" = "board.copypgn"

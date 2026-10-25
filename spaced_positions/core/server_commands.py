@@ -157,6 +157,31 @@ def pref_reset(args, context, body):
     return result
 
 
+CUSTOM_CSS_MAX = 50_000
+
+
+@command("pref.css")
+def pref_css(args, context, body):
+    """Your own CSS, applied after the theme (Settings → Advanced, spec 07 §5). Undo and redo send the text as JSON."""
+    import json
+
+    css = json.loads(args[0]) if args and args[0] else str(body.get("css", ""))
+    if len(css) > CUSTOM_CSS_MAX:
+        raise CommandError(f"at most {CUSTOM_CSS_MAX:,} characters")
+    prefs = Preferences.current()
+    before = prefs.settings.get("custom.css", "")
+    prefs.settings = {k: v for k, v in prefs.settings.items() if k != "custom.css"} | ({"custom.css": css} if css.strip() else {})
+    prefs.save(update_fields=["settings", "updated_at"])
+    from .views import safe_css
+
+    return {
+        "message": "Your CSS is applied (hold Esc while the app loads, or open it with ?safe, to start without it)" if css.strip() else "Your CSS is off",
+        "effects": {"customCss": safe_css(css)},
+        "undo": {"command": "pref.css", "args": [json.dumps(before)]},
+        "redo": {"command": "pref.css", "args": [json.dumps(css)]},
+    }
+
+
 @command("layout.save")
 def layout_save(args, context, body):
     name = " ".join(args).strip()
@@ -169,6 +194,37 @@ def layout_save(args, context, body):
         user=LOCAL_USER, name=name, defaults={"mode": context.get("mode", ""), "layout": layout}
     )
     return {"message": f"Saved layout '{name}'"}
+
+
+@command("app.backup")
+def app_backup(args, context, body):
+    """Settings → App · back up now: a compressed copy in the data folder's backups/."""
+    from pathlib import Path
+
+    from django.db import connection
+
+    from spaced_positions import backups
+
+    made = backups.make(Path(connection.settings_dict["NAME"]), "now")
+    return {"message": f"Backed up: {made.name} ({made.stat().st_size / 1e6:.1f} MB)", "effects": {"storage": True}}
+
+
+@command("app.folder")
+def app_folder(args, context, body):
+    """Settings → App · open the data folder in the file manager (on the computer the app runs on)."""
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    from django.db import connection
+
+    folder = Path(connection.settings_dict["NAME"]).parent
+    opener = {"darwin": ["open"], "win32": ["explorer"]}.get(sys.platform, ["xdg-open"])
+    try:
+        subprocess.Popen([*opener, str(folder)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except OSError as e:
+        raise CommandError(f"could not open {folder}: {e}") from None
+    return {"message": f"Opened {folder}"}
 
 
 @command("app.quit")

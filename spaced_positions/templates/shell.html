@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="{% static 'css/app.css' %}?v={{ app_version }}">
   <link rel="stylesheet" href="/pieces/user.css">
   <style id="theme">{{ theme_css|safe }}</style>
+  <style id="custom-css">{{ custom_css|safe }}</style>
   <script src="{% static 'vendor/htmx.min.js' %}" defer></script>
   <script type="module" src="{% static 'js/app.js' %}?v={{ app_version }}"></script>
 </head>
@@ -22,7 +23,7 @@
       </button>
       {% endif %}{% endfor %}
     </nav>
-    <div class="appbar__pulse"><span>phase 7 · migration</span></div>
+    <div class="appbar__pulse"><span title="Spaced Positions {{ app_version }}">v{{ app_version }}</span></div>
     <div class="appbar__end">
       {% cmd "mode.ui" display="compact" variant="ghost" icon="◧" %}
       {% cmd "cmdline.open" display="compact" variant="ghost" icon="⌘" %}
@@ -41,7 +42,6 @@
     <span class="status__pane" id="status-pane"></span>
     <span class="status__subject" id="status-subject"></span>
     <span class="status__message" id="status-message"></span>
-    <span class="status__activity" id="status-activity"></span>
     <span class="status__help">{% keycap "space" %}<span>leader</span>{% keycap ":" %}<span>commands</span>{% keycap "?" %}<span>keys</span></span>
   </footer>
 </div>

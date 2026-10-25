@@ -134,6 +134,13 @@ reference is `spec/08-keymap.md`.
 | `q` | Square tool: right-click fills a square | `board.squaretool` |
 | `⌫` | Clear the drawings of this move | `board.cleardrawings` |
 
+## view.engine
+
+| Keys | Command | Id |
+|---|---|---|
+| `e` | Engine on / off | `engine.toggle` |
+| `↵` | Play the engine's best move | `engine.best` |
+
 ## view.pgn
 
 | Keys | Command | Id |

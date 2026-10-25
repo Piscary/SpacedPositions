@@ -33,6 +33,24 @@ def material_of(fen: str) -> tuple[str, int]:
     return f"{''.join(white)}v{''.join(black)}", len(white) + len(black)
 
 
+SEARCHED = {"title", "description", "objective", "notes", "source_text", "source_page", "source_ref"}
+
+
+def search_text(position) -> str:
+    """What a word of the Library's search looks in (the source, tags and comments are searched where they are)."""
+    from spaced_positions.library.text import fold
+
+    return fold(" ".join(str(getattr(position, f) or "") for f in ("title", "objective", "description", "notes", "source_text")))
+
+
+def first_number(text) -> int | None:
+    """'Nr. 12' → 12, '41-42' → 41: page and diagram numbers sort as numbers."""
+    import re
+
+    m = re.search(r"\d+", str(text or ""))
+    return int(m.group()[:9]) if m else None
+
+
 class Position(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     fen = models.CharField(max_length=100)
@@ -55,7 +73,10 @@ class Position(models.Model):
     side = models.CharField(max_length=1, default="w", editable=False)
     material = models.CharField(max_length=40, blank=True, db_index=True, editable=False)
     pieces = models.PositiveSmallIntegerField(default=0, editable=False)
-    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: board, csm:<id> …")
+    origin = models.CharField(max_length=40, blank=True, help_text="Where it came from: board, csm:<id> …")
+    search = models.TextField(blank=True, editable=False, help_text="Folded title, description, task, notes and citation")
+    page_number = models.PositiveIntegerField(null=True, blank=True, editable=False, help_text="The page as a number: sorts 9 before 10")
+    ref_number = models.PositiveIntegerField(null=True, blank=True, editable=False, help_text="The diagram number as a number")
     deleted_at = models.DateTimeField(null=True, blank=True, db_index=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
@@ -71,6 +92,8 @@ class Position(models.Model):
         self.side = parts[1] if len(parts) > 1 and parts[1] in "wb" else "w"
         self.material, self.pieces = material_of(self.fen)
         self.difficulty = self.difficulty_override or self.difficulty_auto
+        self.search = search_text(self)
+        self.page_number, self.ref_number = first_number(self.source_page), first_number(self.source_ref)
         fields = kwargs.get("update_fields")
         if fields is not None:
             fields = set(fields)
@@ -78,6 +101,10 @@ class Position(models.Model):
                 fields |= {"side", "material", "pieces"}
             if fields & {"difficulty_override", "difficulty_auto"}:
                 fields.add("difficulty")
+            if fields & SEARCHED:
+                fields.add("search")
+            if fields & {"source_page", "source_ref"}:
+                fields |= {"page_number", "ref_number"}
             kwargs["update_fields"] = fields | {"updated_at"}
         super().save(*args, **kwargs)
 
@@ -123,7 +150,7 @@ class Puzzle(models.Model):
     solution = models.JSONField(help_text="The solution tree, see puzzles.py")
     active = models.BooleanField(default=True, help_text="In the training pool")
     flagged = models.BooleanField(default=False, help_text="Marked as broken in training (`!`)")
-    origin = models.CharField(max_length=40, blank=True, db_index=True)
+    origin = models.CharField(max_length=40, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     start_node = models.ForeignKey(
         "analysis.Node", null=True, blank=True, on_delete=models.SET_NULL, related_name="puzzles",
@@ -239,7 +266,7 @@ class Attempt(models.Model):
     solved_as = models.CharField(max_length=1, blank=True, help_text="w / b")
     mirrored = models.BooleanField(default=False)
     flipped = models.BooleanField(default=False, help_text="The solver's side was at the top")
-    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: csm-…:<id> (phase 7)")
+    origin = models.CharField(max_length=40, blank=True, help_text="Where it came from: csm-…:<id> (phase 7)")
 
     class Meta:
         ordering = ["-at"]

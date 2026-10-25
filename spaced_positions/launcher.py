@@ -15,13 +15,11 @@ import os
 import secrets
 import signal
 import socket
-import sqlite3
 import sys
 import threading
 import time
 import urllib.request
 import webbrowser
-from datetime import datetime
 from pathlib import Path
 
 from spaced_positions import __version__
@@ -32,8 +30,8 @@ RUNTIME = "runtime.json"
 
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="spos", description="Spaced Positions: chess puzzle training.")
-    parser.add_argument("action", nargs="?", default="start", choices=["start", "list", "stop", "import-csm"])
-    parser.add_argument("path", nargs="?", help="import-csm: the chess-study-manager database (db.sqlite3)")
+    parser.add_argument("action", nargs="?", default="start", choices=["start", "list", "stop", "import-csm", "restore"])
+    parser.add_argument("path", nargs="?", help="import-csm: the chess-study-manager database (db.sqlite3) · restore: a backup")
     parser.add_argument("--dry-run", action="store_true", help="import-csm: show what would be added, change nothing")
     parser.add_argument("--no-browser", action="store_true", help="don't open a browser")
     parser.add_argument("--port", type=int, help=f"port to use (default {DEFAULT_PORT} or the next free one)")
@@ -64,6 +62,16 @@ def main(argv=None):
 
     if args.action == "import-csm":
         return _import_csm(data, args)
+    if args.action == "restore":
+        if running:
+            sys.exit("spos restore: stop the app first (spos stop)")
+        if not args.path:
+            sys.exit(f"spos restore: which backup? They are in {data / 'backups'}")
+        from spaced_positions import backups
+
+        backups.restore(Path(args.path).expanduser(), data / "db.sqlite3")
+        print(f"Restored {args.path} (the database before it is in backups/ as before-restore).")
+        return
 
     if running:
         print(f"Already running: {running['url']}")
@@ -146,6 +154,9 @@ def _serve(data: Path, args):
     if not args.no_browser:
         threading.Timer(0.3, webbrowser.open, args=[url]).start()
 
+    threading.Thread(target=_daily_backup, args=(data,), daemon=True, name="daily-backup").start()
+    threading.Thread(target=_autostop, daemon=True, name="autostop").start()
+
     def stop(*_):
         raise KeyboardInterrupt
 
@@ -169,17 +180,14 @@ def _migrate(data: Path):
     plan = executor.migration_plan(executor.loader.graph.leaf_nodes())
     if not plan:
         return
+    from spaced_positions import backups
+
     db = data / "db.sqlite3"
     if db.exists() and db.stat().st_size:
-        backups = data / "backups"
-        backups.mkdir(exist_ok=True)
-        target = backups / f"db-before-migrate-{datetime.now():%Y-%m-%d_%H-%M-%S}.sqlite3"
-        connection.ensure_connection()
-        dest = sqlite3.connect(target)
-        connection.connection.backup(dest)  # a consistent copy, also of a WAL database
-        dest.close()
-        print(f"  Backup:      {target}")
+        print(f"  Backup:      {backups.make(db, 'before-migrate')}")
     call_command("migrate", interactive=False, verbosity=0)
+    connection.close()
+    backups.compact(db)  # migrations that rebuild tables leave free pages behind
 
 
 def _import_csm(data: Path, args):
@@ -211,6 +219,46 @@ def _lan_address() -> str:
             return sock.getsockname()[0]
         except OSError:
             return socket.gethostname()
+
+
+def _daily_backup(data: Path):
+    """Today's backup, a little after the start (spec 09 §11)."""
+    from spaced_positions import backups
+
+    time.sleep(5)
+    try:
+        made = backups.daily(data / "db.sqlite3")
+        if made:
+            print(f"  Backup:      {made}")
+    except OSError as e:
+        print(f"  Backup failed: {e}")
+
+
+# The app stops by itself when no tab has sent its heartbeat for a while (setting app.autostop; spec 09 §11).
+AUTOSTOP_SECONDS = 600
+last_beat: float | None = None
+
+
+def beat():
+    global last_beat
+    last_beat = time.time()
+
+
+def _autostop():
+    from django.db import connection
+
+    from spaced_positions.core import settings as user_settings
+
+    while True:
+        time.sleep(60)
+        try:
+            on = user_settings.get("app.autostop")
+        finally:
+            connection.close()
+        if on and last_beat is not None and time.time() - last_beat > AUTOSTOP_SECONDS:
+            print("\nNo tab open for 10 minutes: stopping (Settings → App · stop by itself).")
+            quit_soon()
+            return
 
 
 def quit_soon():

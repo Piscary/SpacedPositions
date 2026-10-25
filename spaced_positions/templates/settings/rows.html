@@ -22,9 +22,22 @@
     <span class="list__meta settings__help">{{ r.help }}</span>
     <span class="list__meta mono">:set {{ r.name }}</span>
   </div>{% endfor %}</div>
+  {% if s.key == "p" %}<div class="settings__data">
+    <p><span class="muted">Data folder</span> <span class="mono">{{ storage.folder }}</span></p>
+    <p class="muted">The database: {{ storage.db_size|filesizeformat }} · {{ storage.backups }} backup{{ storage.backups|pluralize }}, {{ storage.backups_size|filesizeformat }}{% if storage.latest %} · the newest {{ storage.latest.when|date:"j M H:i" }} ({{ storage.latest.kind }}){% endif %}.
+      A backup is made every day and before every update; <span class="mono">spos restore &lt;file&gt;</span> puts one back.</p>
+    <div class="actionbar">{% cmd "app.backup" size="sm" %}{% cmd "app.folder" size="sm" %}</div>
+  </div>{% endif %}
   {% if s.key == "k" %}<div class="actionbar settings__actions">{% cmd "settings.keymap" label="Edit the keymap" size="sm" %}<span class="muted">{{ overrides }} binding{{ overrides|pluralize }} of yours</span></div>{% endif %}
 {% endsection %}
 {% endfor %}
+{% section "Advanced" key="v" summary="your own CSS" %}
+  <form class="settings__data" data-custom-css>
+    <label class="formrow__label" for="custom-css-field">Your own CSS, applied after the theme. If it hides the app: hold Esc while the app loads, or open it with ?safe.</label>
+    <textarea class="field field--mono settings__css" id="custom-css-field" name="css" spellcheck="false"
+              placeholder=".board__frame { border-radius: 0; } · {% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵ applies">{{ custom_css }}</textarea>
+  </form>
+{% endsection %}
 {% section "Data" key="x" summary="export · import" %}
   <div class="settings__data">
     <div class="actionbar">{% cmd "settings.export" label="Export settings (TOML)" size="sm" %}<a class="keybutton keybutton--secondary keybutton--sm" href="/lib/export/?c=positions&q=" download>Export the library (PGN)</a></div>

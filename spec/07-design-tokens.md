@@ -144,7 +144,7 @@ that block (no reload). Live preview while the cursor moves over the theme list 
 | Pieces | piece set (live preview row) | `:set pieces=merida` |
 | Keys | keycap display (full/compact/off), teach keys, which-key on/off, **keymap overrides** | `:map <keys> <command>`, `:unmap <keys>` |
 | Layout | per-mode layouts, named layouts | `:layout save/load/reset` |
-| Advanced | any tier 2 token (`:set`); custom CSS (applied last, at the user's risk, with a "disable custom CSS" safe-mode key on load: hold `Esc`) is not built yet | — |
+| Advanced | any tier 2 token (`:set`); your own CSS (Settings → Advanced, `⌘↵` applies, with undo), applied after the theme; hold `Esc` while the app loads, or open it with `?safe`, to start without it | — |
 
 Every setting has a `:set` name, shown in its FormRow. **All settings export as one TOML file** (theme, keymap
 overrides, layouts, preferences), so a setup can be backed up or moved to another machine with copy/paste.

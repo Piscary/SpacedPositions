@@ -564,7 +564,7 @@ handle("train.edit", () => openInAnalyse(true))
 handle("train.flag", async () => {
   if (!T.current) return false
   const r = await post("/train/flag/", { puzzle: T.current.p.puzzle }).then((x) => x.json()).catch(() => null)
-  status(r?.ok ? "Flagged as broken: you'll find it in the library (phase 4)" : "Could not flag it", { kind: r?.ok ? "good" : "error" })
+  status(r?.ok ? "Flagged as broken: is:flagged in the Library lists it" : "Could not flag it", { kind: r?.ok ? "good" : "error" })
 })
 
 // ── Ending, result ─────────────────────────────────────────────────────────────────────────────────────────────

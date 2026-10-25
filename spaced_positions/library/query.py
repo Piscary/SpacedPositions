@@ -13,7 +13,7 @@ import re
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 
-from django.db.models import Exists, F, Max, OuterRef, Q, Sum
+from django.db.models import F, Max, Min, Q, Sum
 from django.utils import timezone
 
 from .text import fold
@@ -254,6 +254,7 @@ class Compiler:
         self.problems: list[Problem] = []
         self.fields = {f.key: f for f in TagField.objects.all()}
         self._tags = None
+        self._sources = None
         self.Tag = Tag
 
     # Tags ───────────────────────────────────────────────────────────────────────────────────────────────────
@@ -295,11 +296,15 @@ class Compiler:
         if not ids:
             return None
         if self.collection == "games":
-            return Q(Exists(GameTag.objects.filter(game=OuterRef("pk"), tag__in=ids).exclude(origin="suggested")))
-        ref = OuterRef("pk") if self.collection == "positions" else OuterRef("position_id")
-        return Q(Exists(PositionTag.objects.filter(position=ref, tag__in=ids).exclude(origin="suggested")))
+            return Q(pk__in=GameTag.objects.filter(tag__in=ids).exclude(origin="suggested").values("game_id"))
+        return self.pos_in(PositionTag.objects.filter(tag__in=ids).exclude(origin="suggested").values("position_id"))
 
     # Helpers ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    def pos_in(self, position_ids) -> Q:
+        """The rows whose position is among `position_ids` (a values() subquery without NULLs: NOT IN stays right).
+        IN, not EXISTS: SQLite computes the subquery once instead of once per row (20× faster at 50,000 positions)."""
+        return Q(**{"pk__in" if self.collection == "positions" else "position_id__in": position_ids})
 
     def problem(self, term, message):
         self.problems.append(Problem(term.start, term.end, message))
@@ -339,14 +344,17 @@ class Compiler:
         from spaced_positions.training.models import Card
 
         now = self.now
-        cards = Card.objects.filter(puzzle=OuterRef("pk"), in_solution=True)
+        cards = Card.objects.filter(in_solution=True)
+
+        def having(qs):  # puzzles with such a card
+            return Q(pk__in=qs.values("puzzle_id"))
         if t.key == "due":
             def due(v):
                 if v in ("today", "now"):
                     end = timezone.localtime(now).replace(hour=23, minute=59, second=59)
-                    return Q(Exists(cards.exclude(state="new").filter(due__lte=end)))
+                    return having(cards.exclude(state="new").filter(due__lte=end))
                 found = _when(v, now)
-                return Q(Exists(cards.exclude(state="new").filter(due__lte=now + (now - found[0])))) if found and found[1] else None
+                return having(cards.exclude(state="new").filter(due__lte=now + (now - found[0]))) if found and found[1] else None
             return self.any_of(t, due)
         if t.key == "state":
             states = {"new", "learning", "review", "relearning", "young", "mature"}
@@ -354,10 +362,10 @@ class Compiler:
                 if v not in states:
                     return None
                 if v == "young":
-                    return Q(Exists(cards.filter(state="review", interval_days__lt=21)))
+                    return having(cards.filter(state="review", interval_days__lt=21))
                 if v == "mature":
-                    return Q(Exists(cards.filter(state="review", interval_days__gte=21)))
-                return Q(Exists(cards.filter(state=v)))
+                    return having(cards.filter(state="review", interval_days__gte=21))
+                return having(cards.filter(state=v))
             return self.any_of(t, state)
         if t.key in ("lapses", "attempts"):
             name = {"lapses": "lapse_sum", "attempts": "attempt_sum"}[t.key]
@@ -383,7 +391,7 @@ class Compiler:
             sides = {"w": "w", "white": "w", "weiss": "w", "b": "b", "black": "b", "schwarz": "b"}
             return self.any_of(t, lambda v: Q(**{p("side"): sides[fold(v)]}) if fold(v) in sides else None)
         if key == "src":
-            return self.any_of(t, lambda v: Q(**{f"{p('source__search')}__contains": fold(v)}) | Q(**{f"{p('source_text')}__icontains": v}))
+            return self.any_of(t, lambda v: self.source_q(v, p))
         if key == "page":
             return self.any_of(t, lambda v: Q(**{f"{p('source_page')}__iexact": v}))
         if key == "ref":
@@ -399,14 +407,14 @@ class Compiler:
             return self.any_of(t, lambda v: _date_q(name, t.op, v, self.now))
         if key == "game":
             return self.any_of(t, lambda v: Q(**{p("game_id"): int(v.lstrip("gG"))}) if v.lstrip("gG").isdigit() else None)
-        pos_ref = OuterRef("pk") if not puzzle else OuterRef("position_id")
+        nodes = Node.objects.filter(position__isnull=False)  # moves of games have no position
         checks = {
-            "solution": Q(Exists(Puzzle.objects.filter(position=pos_ref, active=True))),
-            "analysis": Q(Exists(Node.objects.filter(position=pos_ref, parent__isnull=False))),
-            "puzzle": Q(Exists(Puzzle.objects.filter(position=pos_ref))),
-            "comment": Q(Exists(Node.objects.filter(position=pos_ref).exclude(comment=""))),
+            "solution": self.pos_in(Puzzle.objects.filter(active=True).values("position_id")),
+            "analysis": self.pos_in(nodes.filter(parent__isnull=False).values("position_id")),
+            "puzzle": self.pos_in(Puzzle.objects.values("position_id")),
+            "comment": self.pos_in(nodes.exclude(comment="").values("position_id")),
             "source": Q(**{f"{p('source')}__isnull": False}) | ~Q(**{p("source_text"): ""}),
-            "tags": Q(Exists(self._position_tags(pos_ref))),
+            "tags": self.pos_in(self._position_tags().values("position_id")),
             "game": Q(**{f"{p('game')}__isnull": False}),
         }
         if key in ("has", "no"):
@@ -417,8 +425,8 @@ class Compiler:
         if key == "is":
             states = {
                 "diagram": Q(**{p("diagram"): True}),
-                "flagged": Q(flagged=True) if puzzle else Q(Exists(Puzzle.objects.filter(position=pos_ref, flagged=True))),
-                "draft": Q(active=False) if puzzle else Q(Exists(Puzzle.objects.filter(position=pos_ref, active=False))),
+                "flagged": Q(flagged=True) if puzzle else self.pos_in(Puzzle.objects.filter(flagged=True).values("position_id")),
+                "draft": Q(active=False) if puzzle else self.pos_in(Puzzle.objects.filter(active=False).values("position_id")),
                 "trash": Q(**{f"{p('deleted_at')}__isnull": False}),
             }
             return self.any_of(t, lambda v: states.get(v))
@@ -426,10 +434,10 @@ class Compiler:
             return self.any_of(t, self.saved)
         return NotImplemented
 
-    def _position_tags(self, ref):
+    def _position_tags(self):
         from .models import PositionTag
 
-        return PositionTag.objects.filter(position=ref).exclude(origin="suggested")
+        return PositionTag.objects.exclude(origin="suggested")
 
     def k_games(self, t: Term):
         key = t.key
@@ -469,9 +477,9 @@ class Compiler:
             from spaced_positions.analysis.models import Node
 
             checks = {
-                "analysis": Q(Exists(Node.objects.filter(game=OuterRef("pk"), parent__isnull=False, comment__gt=""))),
-                "comment": Q(Exists(Node.objects.filter(game=OuterRef("pk")).exclude(comment=""))),
-                "positions": Q(Exists(self._game_positions())),
+                "analysis": Q(pk__in=Node.objects.filter(game__isnull=False, parent__isnull=False, comment__gt="").values("game_id")),
+                "comment": Q(pk__in=Node.objects.filter(game__isnull=False).exclude(comment="").values("game_id")),
+                "positions": Q(pk__in=self._game_positions()),
             }
             return self.any_of(t, lambda v: (checks[v] if key == "has" else ~checks[v]) if v in checks else None)
         if key == "is":
@@ -484,7 +492,7 @@ class Compiler:
     def _game_positions(self):
         from spaced_positions.training.models import Position
 
-        return Position.objects.filter(game=OuterRef("pk"))
+        return Position.objects.filter(game__isnull=False).values("game_id")
 
     def k_players(self, t):
         if t.key == "role":
@@ -511,20 +519,41 @@ class Compiler:
         inner = Compiler(self.collection, self.now, self.depth + 1)
         return inner.where(parse(saved.query))
 
+    def source_q(self, value: str, p) -> Q:
+        """`src:` one source exactly (its whole title or short name, or s12), else every source with all the words."""
+        from .models import Source
+
+        if self._sources is None:
+            self._sources = [(pk, fold(title), fold(short), search) for pk, title, short, search in Source.objects.values_list("pk", "title", "short", "search")]
+        v = fold(value).replace("*", " ").strip()  # a * as in other searches: matching is "contains" anyway
+        exact = [pk for pk, title, short, _ in self._sources if v in (title, short, f"s{pk}")]
+        if exact:
+            return Q(**{f"{p('source_id')}__in": exact})
+        words = v.split()
+        loose = [pk for pk, _, _, search in self._sources if all(w in search for w in words)]  # title, short, authors, publisher
+        unmatched = Q(**{f"{p('source')}": None})  # a citation that is only text (imported, matched to no source)
+        for w in words:
+            unmatched &= Q(**{f"{p('source_text')}__icontains": w})
+        return Q(**{f"{p('source_id')}__in": loose}) | unmatched
+
     def text(self, text: str) -> Q | None:
+        """A word (or a quoted phrase) of the search: in the title, description, task, notes or citation, the source,
+        a tag, or a comment of the analysis. Case and accents don't matter."""
+        text = text.replace("*", "").strip()  # `fork*`: words match anywhere already
         if not text:
             return None
         v, folded = text, fold(text)
         if self.collection in ("positions", "puzzles"):
             p = self.p
-            from .models import PositionTag
+            from spaced_positions.analysis.models import Node
 
-            ref = OuterRef("pk") if self.collection == "positions" else OuterRef("position_id")
+            from .models import PositionTag, Source
+
+            sources = Source.objects.filter(search__contains=folded).values("pk")
             return (
-                Q(**{f"{p('title')}__icontains": v}) | Q(**{f"{p('description')}__icontains": v})
-                | Q(**{f"{p('notes')}__icontains": v}) | Q(**{f"{p('objective')}__icontains": v})
-                | Q(**{f"{p('source_text')}__icontains": v}) | Q(**{f"{p('source__search')}__contains": folded})
-                | Q(Exists(PositionTag.objects.filter(position=ref, tag__search__contains=folded).exclude(origin="suggested")))
+                Q(**{f"{p('search')}__contains": folded}) | Q(**{f"{p('source_id')}__in": sources})
+                | self.pos_in(PositionTag.objects.filter(tag__search__contains=folded).exclude(origin="suggested").values("position_id"))
+                | self.pos_in(Node.objects.filter(position__isnull=False, comment__icontains=v).values("position_id"))
             )
         if self.collection == "games":
             return (Q(white_name__icontains=v) | Q(black_name__icontains=v) | Q(event__icontains=v) | Q(site__icontains=v)
@@ -561,17 +590,21 @@ class Compiler:
         if self.collection == "puzzles":
             if not trash:
                 base = base.filter(position__deleted_at=None)
-            base = base.annotate(
+        sorts = {v.lstrip("-") for t in parsed.sort() for v in t.values}
+        if self.collection == "puzzles" and ({t.key for t in terms} & {"lapses", "attempts", "success", "last"} or sorts & {"success", "lapses", "due", "last"}):
+            base = base.annotate(  # the cards' numbers per puzzle: only when a term or the sort needs them
                 lapse_sum=Sum("cards__lapses", filter=Q(cards__in_solution=True)),
                 attempt_sum=Sum("cards__attempts", filter=Q(cards__in_solution=True)),
                 success_sum=Sum("cards__successes", filter=Q(cards__in_solution=True)),
                 last_seen_at=Max("cards__last_seen"),
+                next_due=Min("cards__due", filter=Q(cards__in_solution=True) & ~Q(cards__state="new")),
             ).annotate(success_rate=100.0 * F("success_sum") / F("attempt_sum"))
         qs = base.filter(self.where(parsed))
         return qs.order_by(*self.order(parsed))
 
     def order(self, parsed: Parsed) -> list[str]:
         names = SORTS[self.collection]
+        expand = {name: (fields if isinstance(fields, tuple) else (fields,)) for name, fields in names.items()}
         out = []
         for term in parsed.sort():
             for value in term.values:
@@ -580,11 +613,9 @@ class Compiler:
                 if name is None:
                     self.problem(term, f"sort: not '{value}' here ({', '.join(names)})")
                     continue
-                if self.collection == "puzzles" and value.lstrip("-") == "due":
-                    continue
                 if term.neg:
                     desc = not desc
-                out.append(F(name).desc(nulls_last=True) if desc else F(name).asc(nulls_last=True))
+                out += [F(f).desc(nulls_last=True) if desc else F(f).asc(nulls_last=True) for f in expand[value.lstrip("-")]]
         defaults = {"positions": ["-created_at", "-id"], "games": ["-created_at", "-id"], "puzzles": ["-created_at", "-id"],
                     "players": ["name"], "sources": ["title"], "tags": ["field__order", "order", "id"]}
         return out + defaults[self.collection]
@@ -603,15 +634,19 @@ def _material(value: str) -> str | None:
 
 # `sort:` names per collection → the field they order by (11 §3). GROUPS: the sorts whose rows come in foldable groups.
 SORTS = {
-    "positions": {"created": "created_at", "updated": "updated_at", "difficulty": "difficulty", "title": "title", "source": "source__title", "id": "id"},
+    "positions": {"created": "created_at", "updated": "updated_at", "difficulty": "difficulty", "title": "title",
+                  "source": ("source__title", "page_number", "ref_number"), "diagram": ("ref_number", "page_number"),
+                  "page": ("page_number", "ref_number"), "id": "id"},
     "games": {"created": "created_at", "year": "year", "white": "white_name", "black": "black_name", "event": "event", "id": "id"},
     "puzzles": {"created": "created_at", "difficulty": "position__difficulty", "title": "position__title",
-                "success": "success_rate", "lapses": "lapse_sum", "id": "id"},
+                "source": ("position__source__title", "position__page_number", "position__ref_number"),
+                "diagram": ("position__ref_number", "position__page_number"), "success": "success_rate", "lapses": "lapse_sum",
+                "due": "next_due", "last": "last_seen_at", "id": "id"},
     "players": {"name": "name", "role": "role", "created": "created_at"},
     "sources": {"title": "title", "kind": "kind", "created": "created_at"},
     "tags": {"name": "name", "field": "field__order"},
 }
-GROUPS = {"positions": ("difficulty", "source"), "games": ("year", "white", "black", "event"), "puzzles": ("difficulty",),
+GROUPS = {"positions": ("difficulty", "source"), "games": ("year", "white", "black", "event"), "puzzles": ("difficulty", "source"),
           "players": ("role",), "sources": ("kind",), "tags": ("field",)}
 
 

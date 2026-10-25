@@ -39,11 +39,18 @@ export function treeOf(key) {
   return trees.get(key) || null
 }
 
-/** The analysis the focused pane looks at (Analyse mode: its link group, A by default). */
+/** The analysis the focused pane looks at: its link group in this mode (A by default). Any mode can hold one: a
+ *  board and a move tree beside the Library's list (`o`), beside Train's board (`a`), or wherever the user put them. */
 export function currentKey() {
   const pane = ctx.pane?.el
   const node = pane ? nodeOf(pane) : null
-  return `analyse:${node?.group && !node.pinned ? node.group : "A"}`
+  return `${ctx.mode}:${node?.group && !node.pinned ? node.group : "A"}`
+}
+
+/** Whether this mode has panes for an analysis in the focused link group (`:analyse` opens it there). */
+function analysisPanesHere() {
+  const [mode, group] = currentKey().split(":")
+  return panesFor(`${mode}:${group}`, "moves").length > 0
 }
 export const current = () => treeOf(currentKey())
 
@@ -361,9 +368,6 @@ async function saveComment(form) {
   if (!t || t.nodes.get(node)?.comment === text) return
   await change(key, "edit", { node, comment: text }, { cursor: t.cursor })
 }
-export function submitComment(form) {
-  return saveComment(form)
-}
 document.addEventListener("focusout", async (e) => {
   const form = e.target.closest?.("[data-comment-form]")
   if (!form || !e.target.matches("textarea")) return
@@ -627,6 +631,7 @@ handle("analysis.newposition", withTree(async (key, t, [moves]) => {
 
 handle("analysis.open", async ([pid]) => {
   if (!pid) return openCmdline("analyse ")
+  if (ctx.mode !== "analyse" && analysisPanesHere()) return openPosition(pid, { key: currentKey(), show: false }) // into these panes
   return openPosition(pid)
 })
 

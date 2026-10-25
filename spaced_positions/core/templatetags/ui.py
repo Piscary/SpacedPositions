@@ -2,7 +2,7 @@
 
 {% keycap "space w v" %}                    keys as keycaps
 {% cmd "board.flip" %}                      a KeyButton rendered from the command registry
-{% cmd "pane.split.vertical" display="compact" variant="ghost" label="Split" args="notes" %}
+{% cmd "pane.split.vertical" display="compact" variant="ghost" label="Split" args="pgn" %}
 {% section "Tags" key="t" summary="5 tags" %} … {% endsection %}
 """
 

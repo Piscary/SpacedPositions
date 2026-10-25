@@ -1,6 +1,6 @@
 // Boot: read the registry the server put into the page, start the keys, take over the workspace.
 
-import { handle, setRegistry, setTeachKeys } from "./core/commands.js"
+import { handle, pushUndo, serverRun, setRegistry, setTeachKeys } from "./core/commands.js"
 import { ctx, emit, on, setLayer, status } from "./core/context.js"
 import { cancelPending, initKeys, keyPerf } from "./core/keys.js"
 import { initWorkspace, restoreToggles } from "./core/layout.js"
@@ -29,6 +29,24 @@ function applySettings(values) {
   document.documentElement.dataset.letters = values["board.letters"]
   setTeachKeys(values["keys.teach"] !== false)
   emit("settings", values)
+}
+
+// Safe mode: Esc held while the app loads starts it without your CSS (Settings → Advanced)
+const loadedAt = performance.now()
+document.addEventListener("keydown", function safeMode(e) {
+  if (performance.now() - loadedAt > 3000) return document.removeEventListener("keydown", safeMode, true)
+  const css = document.getElementById("custom-css")
+  if (e.key === "Escape" && css?.textContent.trim()) {
+    css.textContent = ""
+    status("Your CSS is off for this page (Esc while loading): Settings → Advanced", { kind: "good", timeout: 6000 })
+  }
+}, true)
+
+// An open tab says it's there, so a double-click start can stop by itself after the last tab (Settings → App)
+if (boot.launched) {
+  const beat = () => fetch("/beat/", { method: "POST", headers: { "X-CSRFToken": document.querySelector('meta[name="csrf-token"]')?.content || "" } }).catch(() => null)
+  beat()
+  setInterval(beat, 60_000)
 }
 
 setRegistry(boot.registry)
@@ -61,6 +79,17 @@ handle("form.submit", () => {
     detect(field.value)
     return
   }
+  if (form.hasAttribute("data-custom-css")) {
+    const field = form.querySelector("textarea")
+    document.activeElement?.blur()
+    setLayer("normal")
+    serverRun("pref.css", [], { css: field.value }).then((r) => {
+      if (!r) return
+      status(r.message, { kind: "good", keys: { seq: ["u"], label: "undo" } })
+      if (r.undo) pushUndo({ label: r.message, undo: () => serverRun(r.undo.command, r.undo.args), redo: () => serverRun(r.redo.command, r.redo.args) })
+    })
+    return
+  }
   if (form.hasAttribute("data-csm-import")) {
     const field = form.querySelector("input")
     document.activeElement?.blur()
@@ -80,12 +109,6 @@ handle("form.submit", () => {
     setLayer("normal")
     return
   }
-  if (form.hasAttribute("data-notes")) {
-    document.activeElement?.blur()
-    setLayer("normal")
-    status("Note submitted (demo: notes are not stored in phase 0)", { kind: "good" })
-    return
-  }
   form.requestSubmit()
 })
 
@@ -93,6 +116,7 @@ on("effects", (effects) => {
   if (effects.settings) applySettings(effects.settings)
   if (effects.registry) setRegistry(effects.registry) // :map, :unmap: the keys work at once
   if (effects.themes) window.SPOS.themes.themes = effects.themes
+  if (effects.customCss !== undefined) document.getElementById("custom-css").textContent = effects.customCss
   if (effects.copy) navigator.clipboard?.writeText(effects.copy).catch(() => status("The browser didn't allow copying", { kind: "error" }))
   if (effects.theme) {
     document.getElementById("theme").textContent = effects.theme.css

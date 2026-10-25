@@ -51,8 +51,9 @@ def continue_() -> dict:
     worked = (JournalEntry.objects.filter(user=LOCAL_USER, undone=False, position__deleted_at=None).exclude(position=None)
               .values("position").annotate(last=Max("created_at")).order_by("-last")[:6])
     ids = [w["position"] for w in worked]
-    recent_positions = sorted(Position.alive.filter(pk__in=ids), key=lambda p: ids.index(p.pk))
-    recent_positions += list(Position.alive.exclude(pk__in=ids).order_by("-created_at")[: max(0, 6 - len(recent_positions))])
+    tagged = Position.alive.prefetch_related("tag_links__tag__field")  # each row shows its tags
+    recent_positions = sorted(tagged.filter(pk__in=ids), key=lambda p: ids.index(p.pk))
+    recent_positions += list(tagged.exclude(pk__in=ids).order_by("-created_at")[: max(0, 6 - len(recent_positions))])
     return {
         "analysis": analysis,
         "collect": {"source": (entry.get("source") or {}).get("label"), "ref": entry.get("ref"), "page": entry.get("page")} if entry else None,

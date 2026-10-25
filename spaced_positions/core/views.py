@@ -15,6 +15,15 @@ def home(request):
     return redirect("core:mode", mode="home")
 
 
+@require_POST
+def beat(request):
+    """An open tab says it's there (each minute): the app stops by itself when none has for a while (app.autostop)."""
+    from spaced_positions import launcher
+
+    launcher.beat()
+    return JsonResponse({"ok": True})
+
+
 def healthz(request):
     return JsonResponse({"ok": True})
 
@@ -53,12 +62,19 @@ def _workspace_context(mode: str) -> dict:
     }
 
 
+def safe_css(css: str) -> str:
+    """CSS for a <style> element: it can't end the element early."""
+    return str(css).replace("</", "<\\/")
+
+
 @require_GET
 def mode_page(request, mode):
     prefs = Preferences.current()
     context = _workspace_context(mode)
     context |= {
         "theme_css": themes.theme_css(prefs.theme, prefs.tokens),
+        # your own CSS, applied last (Settings → Advanced); ?safe opens the app without it
+        "custom_css": "" if "safe" in request.GET else safe_css(prefs.settings.get("custom.css", "")),
         "piece_set": prefs.tokens.get("piece-set", "cburnett"),
         "figurines": prefs.tokens.get("figurines") is True,
         "coords": prefs.tokens.get("board-coords", "inside"),
@@ -75,7 +91,7 @@ def mode_page(request, mode):
             "registry": keymap.effective(),  # the default keymap with the user's overrides
             "themes": registry.themes() | {"themes": themes.all_themes(), "pieces": user_pieces.all_sets()},  # with the user's themes (and their CSS: live preview)
             "views": {
-                k: {"label": v.label, "picker": v.picker, "phase": v.phase, "list": v.list_view}
+                k: {"label": v.label, "picker": v.picker, "list": v.list_view}
                 for k, v in layouts.VIEWS.items()
             },
             "modes": {m.key: {"label": m.label, "leader": m.leader} for m in layouts.MODES},
@@ -98,8 +114,8 @@ def default_layout(request, mode):
 @require_GET
 def view_fragment(request, view):
     """One pane (header + body) for `layout.js` when a pane is created or its view changes."""
-    if view not in layouts.VIEWS:
-        raise Http404(f"no view '{view}'")
+    if not view.replace("-", "").isalnum():
+        raise Http404(f"no view '{view}'")  # an unknown view gets a pane that says so (a saved layout may name one)
     node = layouts.pane(
         view,
         request.GET.get("group") or None,

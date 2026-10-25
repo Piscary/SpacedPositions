@@ -62,6 +62,7 @@
   </div>
 {% endif %}
 {% empty %}
-  <div class="empty library__empty"><p>Nothing found.</p><p class="muted">Remove a term, or check the underlined ones.</p></div>
+  {% if query %}<div class="empty library__empty"><p>Nothing found.</p><p class="muted">Remove a term, or check the underlined ones.</p></div>
+  {% else %}<div class="empty library__empty"><p>No {{ collection }} yet.</p><p class="muted">Collect them ({% keycap "space c" %}), paste them ({% keycap "mod+v" %}) or import a PGN (<span class="mono">:import</span>).</p></div>{% endif %}
 {% endfor %}
 {% if more > 0 %}<div class="library__more muted">… {{ more }} more: refine the query</div>{% endif %}

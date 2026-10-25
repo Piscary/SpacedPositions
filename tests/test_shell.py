@@ -57,9 +57,9 @@ def test_layout_is_saved_and_restored(client):
 @pytest.mark.parametrize(
     "layout",
     [
-        {"type": "pane", "id": "p1", "view": "nope"},
-        {"type": "split", "dir": "diagonal", "sizes": [1], "children": [{"type": "pane", "id": "p1", "view": "notes"}]},
-        {"type": "split", "dir": "row", "sizes": [1, 2], "children": [{"type": "pane", "id": "p1", "view": "notes"}]},
+        {"type": "pane", "id": "p1", "view": "../nope"},  # not a view name (an unknown one is fine: its pane says so)
+        {"type": "split", "dir": "diagonal", "sizes": [1], "children": [{"type": "pane", "id": "p1", "view": "board"}]},
+        {"type": "split", "dir": "row", "sizes": [1, 2], "children": [{"type": "pane", "id": "p1", "view": "board"}]},
     ],
 )
 def test_invalid_layouts_are_rejected(client, layout):

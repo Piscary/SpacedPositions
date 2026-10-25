@@ -20,9 +20,10 @@ class Node(models.Model):
         DUBIOUS = "dubious", "Dubious"
         BAD = "bad", "Bad"
 
-    # The owner of the tree: a position or a game, exactly one of the two (spec 11 §1 Game).
-    position = models.ForeignKey(Position, null=True, blank=True, on_delete=models.CASCADE, related_name="nodes")
-    game = models.ForeignKey("library.Game", null=True, blank=True, on_delete=models.CASCADE, related_name="nodes")
+    # The owner of the tree: a position or a game, exactly one of the two (spec 11 §1 Game). No index of their own:
+    # the (position, parent) and (game, parent) indexes start with them.
+    position = models.ForeignKey(Position, null=True, blank=True, on_delete=models.CASCADE, related_name="nodes", db_index=False)
+    game = models.ForeignKey("library.Game", null=True, blank=True, on_delete=models.CASCADE, related_name="nodes", db_index=False)
     parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE, related_name="kids")
     order = models.PositiveSmallIntegerField(default=0)
     uci = models.CharField(max_length=5, blank=True)

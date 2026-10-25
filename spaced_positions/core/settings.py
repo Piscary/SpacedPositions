@@ -40,6 +40,7 @@ SETTINGS = [
     Setting("engine.arrows", "Engine", "Arrows", "bool", True, "The engine's best moves as arrows on the board"),
     Setting("sound.on", "Sound and motion", "Sounds", "bool", False, "A click on a move, a tone on right and wrong, a chord on a record"),
     Setting("display.ticker", "Sound and motion", "Counting numbers", "bool", True, "Numbers count up on the result screen and in Stats"),
+    Setting("app.autostop", "App", "Stop by itself", "bool", False, "The app stops 10 minutes after the last tab was closed (started without a console: on)"),
 ]
 BY_NAME = {s.name: s for s in SETTINGS}
 

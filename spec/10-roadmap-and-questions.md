@@ -181,7 +181,7 @@ Moved on:
 ### Phase 7 status (2026-10-24)
 
 Built: the migration from chess-study-manager (11 §6): sources, players, games and positions with their trees,
-tags with their evidence, suggestions and dismissals, the old boards as tags, puzzles, cards, every session and
+tags with their evidence, suggestions and dismissals, puzzles, cards, every session and
 attempt, the old analysis activity; achievements found again from the joined history. It reads a copy of the old
 database, backs this one up first, and can run again (it adds only what is new), so both apps can be used side by
 side for a while; what was done here is never undone. `spos import-csm`, `manage.py import_csm`, Settings → Data,
@@ -194,6 +194,24 @@ PGN imports in the background with progress. Tests: 8 on the server, 3 journeys.
 
 Not migrated: publishing (out of scope). The old app's players arrive, and `:player-link` (phase 6) links names
 that match nobody.
+
+### Cleanup before phase 8 (2026-10-25)
+
+- Search: `src:` picks one source exactly (its whole name, or `s5`) or every source with all the given words (title,
+  short name, authors); the filter pane and the completion use the exact form, so choosing one source marks only that
+  one. Words search title, task, description, notes, citation, source, tags and the analysis' comments, without
+  case or accents.
+- The old app's pipeline boards are gone (their tags removed by a migration): the filters say what is analysed and
+  solved. Sorting a book in its order: `sort:source` (title, page, diagram number, as numbers), `sort:diagram`,
+  `sort:page`, and for puzzles `due`, `last`; `T` and `a` follow the query's sort.
+- Removed: the placeholder Tags view, the demo views (Demo list, Notes, Linked preview, About this mode), the phase
+  labels of modes, views and commands, unused CSS and JS. The style guide shows a Library with its board.
+- Every view works in every mode or says why not (03 §4): analyses, their keys and the engine anywhere but the
+  engine in Train; Session and Entry session point to their mode; removed views keep the layout and say so.
+- Finished what the spec promised: your own CSS (07 §5), prefetching workspaces (09 §10), daily compressed backups
+  with `spos restore`, Settings → App, stopping by itself (09 §11).
+- Speed and size at 50,000 positions (09 §10): every page under 200 ms (Stats was 68 s), 19 % less on disk, backups
+  a fifth of the database; the pack format of phase 8 is defined (09 §12: about 60 bytes a position, zipped).
 
 ## Out of scope for now
 

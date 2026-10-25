@@ -300,12 +300,39 @@ function touch(mode) {
 let switchTicket = 0
 const loading = new Map() // mode → promise of its workspace, so a mode is fetched once even if keys repeat
 
+// Prefetch (spec 09 · speed): hovering a mode tab or pressing ␣ fetches the workspaces not loaded yet, so the switch
+// that likely follows needs no request. Only the HTML is kept (a minute); the workspace is built on the switch.
+const prefetched = new Map() // mode → {at, html: Promise<string>}
+const PREFETCH_MS = 60_000
+
+function prefetch(mode) {
+  if (!window.SPOS.modes[mode] || workspaces.has(mode) || loading.has(mode)) return
+  const known = prefetched.get(mode)
+  if (known && performance.now() - known.at < PREFETCH_MS) return
+  prefetched.set(mode, { at: performance.now(), html: fetch(`/m/${mode}/`).then((r) => (r.ok ? r.text() : Promise.reject(r.status))) })
+}
+
+function takePrefetched(mode) {
+  const known = prefetched.get(mode)
+  prefetched.delete(mode)
+  return known && performance.now() - known.at < PREFETCH_MS ? known.html.catch(() => null) : Promise.resolve(null)
+}
+
+document.addEventListener("pointerover", (e) => {
+  const tab = e.target.closest?.("[data-mode-tab]")
+  if (tab) prefetch(tab.dataset.modeTab)
+})
+document.addEventListener("keydown", (e) => {
+  if (e.key !== " " || ctx.layer !== "normal" || e.target.closest?.("input, textarea, select, [contenteditable]")) return
+  for (const mode of Object.keys(window.SPOS.modes)) if (mode !== "ui") prefetch(mode) // ␣ leads to the mode keys
+}, true)
+
 function loadWorkspace(mode) {
   if (!loading.has(mode)) {
     loading.set(
       mode,
-      fetch(`/m/${mode}/`)
-        .then((r) => r.text())
+      takePrefetched(mode)
+        .then((html) => html ?? fetch(`/m/${mode}/`).then((r) => r.text()))
         .then((html) => {
           const template = document.createElement("template")
           template.innerHTML = html.trim()
@@ -420,7 +447,7 @@ function onContextMenu(ws, e) {
 export function pickView(title = "View") {
   const items = Object.entries(window.SPOS.views)
     .filter(([, v]) => v.picker)
-    .map(([key, v]) => ({ label: v.label, key: v.picker, keys: [v.picker], note: v.phase ? `phase ${v.phase}` : "", value: key }))
+    .map(([key, v]) => ({ label: v.label, key: v.picker, keys: [v.picker], value: key }))
   return openMenu({ title, items, anchor: ctx.pane?.el?.querySelector(".pane__header") })
 }
 

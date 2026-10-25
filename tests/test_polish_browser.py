@@ -81,6 +81,7 @@ def test_coordinates_outside_the_board(page):
     analyse(page, p)
     run(page, "set board-coords=outside")
     page.wait_for_selector("html[data-coords='outside']")
+    page.wait_for_timeout(400)  # the board shrinks by the margin and is drawn again
     board = page.locator("#ws-analyse cg-board").bounding_box()
     ranks = page.locator("#ws-analyse coords.ranks").bounding_box()
     files = page.locator("#ws-analyse coords.files").bounding_box()

@@ -83,7 +83,7 @@ def old(tmp_path):
     o.add("positions_tagsuggestion", position_id=1, tag_id=3, status="open", evidence="maybe", created_at="2026-03-01 10:00:00")
     o.add("positions_tagsuggestion", position_id=2, tag_id=2, status="dismissed", created_at="2026-03-01 10:00:00")
     o.add("positions_nodetag", node_id=201, tag_id=2, source="auto", detector="pychess", evidence="mates", created_at="2026-03-01 10:00:00")
-    # a board with a column
+    # a board with a column: not migrated (the filters do that job here)
     o.add("boards_board", id=1, name="My Board", created_at="2026-03-01 10:00:00", updated_at="2026-03-01 10:00:00")
     o.add("boards_column", id=1, name="Inbox", board_id=1)
     o.add("boards_positioninboard", position_id=1, board_id=1, column_id=1, added_at="2026-03-01 10:00:00")
@@ -110,10 +110,9 @@ def test_everything_arrives(old):
     assert p.created_at.date().isoformat() == "2026-03-01"
     rd8 = p.nodes.get(san="Rd8#")
     assert rd8.shapes == [{"orig": "d1", "dest": "d8", "brush": "green"}]
-    assert {(link.tag.key, link.origin) for link in p.tag_links.all()} == {
-        ("back-rank-mate", "auto"), ("fork", "suggested"), ("board-my-board-inbox", "manual")}
+    assert {(link.tag.key, link.origin) for link in p.tag_links.all()} == {("back-rank-mate", "auto"), ("fork", "suggested")}
     assert p.tag_links.get(tag__key="back-rank-mate").evidence == "Rd8#"
-    assert Tag.objects.get(key="board-my-board-inbox").parent.key == "board-my-board"
+    assert not Tag.objects.filter(key__startswith="board-").exists()
     assert NodeTag.objects.get(node=rd8).tag.key == "mate-in-1"
     assert TagDismissal.objects.filter(position__origin="csm-position:2", tag__key="mate-in-1").exists()
     assert "1 position tags with the unknown tag 'an-old-tag' left out" in report.problems
@@ -189,6 +188,26 @@ def test_dry_run_changes_nothing_and_the_endpoint(old, client, settings):
     assert data["ok"] and data["message"].startswith("Would add: 1 sources, 1 players, 1 games")
     data = client.post("/settings/csm/", json.dumps({"path": str(old.path)}), content_type="application/json").json()
     assert data["ok"] and "backup in" in data["message"] and Position.objects.count() == 2
-    assert list((Path(settings.DATA_DIR) / "backups").glob("db-before-csm-*.sqlite3"))
+    assert list((Path(settings.DATA_DIR) / "backups").glob("db-before-csm-*.sqlite3.xz"))
     bad = client.post("/settings/csm/", json.dumps({"path": "/nowhere/db.sqlite3"}), content_type="application/json")
     assert bad.status_code == 422
+
+
+def test_the_board_tags_of_an_earlier_import_are_removed():
+    """Migration library 0007: only the tags the phase 7 import made of the old boards (and their links) go."""
+    import importlib
+
+    from django.apps import apps
+
+    from spaced_positions.analysis import tree
+
+    custom = Tag.objects.get(key="mate-in-1").field  # any field will do
+    board = Tag.objects.create(key="board-my-board", name="My Board", field=custom, description="A board of chess-study-manager")
+    column = Tag.objects.create(key="board-my-board-inbox", name="My Board · Inbox", field=custom, parent=board)
+    mine = Tag.objects.create(key="board-games", name="Board games", field=custom)  # the user's own: stays
+    p = tree.create_position(back_rank(0), ["d1d8"])
+    PositionTag.objects.create(position=p, tag=column)
+    PositionTag.objects.create(position=p, tag=mine)
+    importlib.import_module("spaced_positions.library.migrations.0007_remove_board_tags").remove(apps, None)
+    assert list(Tag.objects.filter(key__startswith="board-").values_list("key", flat=True)) == ["board-games"]
+    assert list(p.tag_links.values_list("tag__key", flat=True)) == ["board-games"]

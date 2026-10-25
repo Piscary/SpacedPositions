@@ -145,3 +145,81 @@ def test_games_players_sources_tags(db):
     Source.objects.create(title="Schach ohne Partner", authors="Grasemann")
     assert titles("grasemann", "sources") == ["Schach ohne Partner"]
     assert "Gabel" in titles("field:motif gabel", "tags")
+
+
+# ── Sources, words and the order of a book ────────────────────────────────────────────────────────────────────
+
+
+@pytest.fixture
+def books(db):
+    made = {}
+    for title, authors in (("Chess Monkeys Level 1", "Roman Vidonyak"), ("Chess Monkeys Level 2", "Roman Vidonyak"),
+                           ("CHESS - 5334 Problems", "László Polgár")):
+        source = Source.objects.create(title=title, authors=authors)
+        for n in (12, 2, 9):
+            p = tree.create_position(START, [], title=f"{title} {n}")
+            p.source, p.source_page, p.source_ref = source, str(n // 4 + 1), f"Nr. {n}"
+            p.save()
+            made[(title, n)] = p
+    return made
+
+
+def count(text):
+    return run(text, "positions").queryset.count()
+
+
+def test_one_source_exactly_or_all_with_the_words(books):
+    assert count('src:"Chess Monkeys Level 1"') == 3  # exactly that one
+    assert count("src:chess") == 9 and count("src:monkeys") == 6
+    assert count('src:"monkeys 2"') == 3  # all the words, in any order
+    assert count("src:polgar") == 3  # the authors count too
+    source = Source.objects.get(title="CHESS - 5334 Problems")
+    assert count(f"src:s{source.pk}") == 3
+
+
+def test_words_find_titles_sources_tags_and_comments(books):
+    p = books[("Chess Monkeys Level 1", 2)]
+    p.description = "Ein Spieß gewinnt die Dame"
+    p.save()
+    root = tree.root(p)
+    move, _ = tree.play(root, "e2e4")
+    tree.edit(move, {"comment": "The only good move"})
+    assert count("spiess") == 1 and count("SPIESS") == 1  # case and accents don't matter
+    assert count("only good") == 1  # two words: both somewhere
+    assert count('"only good"') == 1 and count('"good only"') == 0
+    assert count("vidonyak") == 6  # the source's authors
+
+
+def test_sort_by_source_page_and_diagram(books):
+    titles = [p.title for p in run('src:"Chess Monkeys Level 2" sort:source', "positions").queryset]
+    assert titles == ["Chess Monkeys Level 2 2", "Chess Monkeys Level 2 9", "Chess Monkeys Level 2 12"]  # 9 before 12
+    assert [p.ref_number for p in run("src:polgar sort:-diagram", "positions").queryset] == [12, 9, 2]
+
+
+def test_facets_pick_one_source_and_training_follows_the_order(books, client):
+    import json
+    import re
+
+    html = client.get("/lib/facets/", {"q": 'src:"Chess Monkeys Level 1"'}).content.decode()
+    from html import unescape
+
+    on = [unescape(t) for t in re.findall(r'filters__row is-on"[^>]*data-term="([^"]*)"', html)]
+    assert on == ['src:"Chess Monkeys Level 1"']  # only the chosen one is on
+    for (title, n), p in books.items():
+        if title == "Chess Monkeys Level 1":
+            root = tree.root(p)
+            tree.play(root, "e2e4")
+            analysis_puzzles.act(root, "start")
+            analysis_puzzles.act(root, "ready")
+            analysis_puzzles.rebuild_all(p)
+    data = client.post("/lib/cards/", json.dumps({"c": "positions", "q": 'src:"Chess Monkeys Level 1" sort:diagram'}),
+                       content_type="application/json").json()
+    from spaced_positions.training.models import Card
+
+    order = [Card.objects.get(uuid=u).puzzle.position.ref_number for u in data["cards"]]
+    assert order == [2, 9, 12]  # in the order of the diagrams
+
+
+def test_a_star_is_ignored(books):
+    assert count("src:monkeys*") == 6 and count('src:"Chess Monkeys*"') == 6
+    assert count("Level*") == count("Level")

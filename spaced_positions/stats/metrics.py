@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import math
 import statistics
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 from dataclasses import dataclass, field
 from datetime import date, datetime, time, timedelta
 from types import SimpleNamespace
@@ -75,7 +75,14 @@ def smoothed(ok, n):
 
 
 def local_day(dt) -> date:
-    return timezone.localtime(dt).date()
+    return dt.astimezone(timezone.get_current_timezone()).date()
+
+
+# The attempt fields the metrics read, plus the local day: plain tuples load ~5× faster than model instances, which
+# counts with a long training history (hundreds of thousands of attempts).
+ATTEMPT_FIELDS = ("card_id", "at", "success", "ms", "counted", "state_before", "solved_as", "mirrored", "interval_before",
+                  "interval_after", "flipped", "due_before", "mode")
+AttemptRow = namedtuple("AttemptRow", (*ATTEMPT_FIELDS, "day"))
 
 
 def is_review(a) -> bool:
@@ -92,33 +99,83 @@ class Data:
     attempts: list
     sessions: list
     tags: dict = field(default_factory=dict)  # card id → [Tag]
+    memo: dict = field(default_factory=dict)  # results computed from this data (kept with it in load's cache)
+
+
+CARD_FIELDS = ("pk", "state", "due", "created_at", "interval_days", "ease", "step", "reps", "lapses", "success_streak")
+CardRow = namedtuple("CardRow", (*CARD_FIELDS, "position_id", "start_node_id"))
+
+
+CACHE_SECONDS = 600
+_cached: dict = {}
+
+
+def fingerprint() -> tuple:
+    """Cheap numbers that change whenever what load() reads changes (newest ids and counts, by indexes)."""
+    from django.db.models import Count, Max, Q
+
+    from spaced_positions.library.models import NodeTag, PositionTag
+    from spaced_positions.training.models import Puzzle
+
+    def newest(qs, **more):
+        return tuple(qs.aggregate(top=Max("id"), n=Count("id"), **more).values())
+
+    return (
+        newest(Attempt.objects),
+        newest(Card.objects, used=Count("id", filter=Q(in_solution=True))),
+        newest(Session.objects, ended=Count("ended_at")),
+        Puzzle.objects.filter(active=True).count(),
+        Position.objects.exclude(deleted_at=None).count(),
+        newest(Position.objects),
+        newest(PositionTag.objects),
+        newest(NodeTag.objects),
+    )
 
 
 def load(now=None) -> Data:
-    """Cards in training with the tags of their position and of their first solver move."""
+    """The training data (load_fresh), kept while nothing it reads has changed: Home, Train and Stats ask for it on
+    every visit, and a long history takes a while to read. `now` is always the current one."""
+    import dataclasses
+    import time as clock
+
     now = now or timezone.now()
-    cards = list(
-        Card.objects.filter(in_solution=True, puzzle__active=True, puzzle__position__deleted_at=None)
-        .select_related("puzzle__position", "puzzle__start_node")
-        .prefetch_related("puzzle__position__tag_links__tag__field", "puzzle__start_node__kids__tag_links__tag__field")
-    )
-    attempts = list(Attempt.objects.order_by("at"))
+    key = fingerprint()
+    if _cached.get("key") == key and clock.monotonic() - _cached["at"] < CACHE_SECONDS:
+        return dataclasses.replace(_cached["data"], now=now)
+    data = load_fresh(now)
+    _cached.update(key=key, at=clock.monotonic(), data=data)
+    return data
+
+
+def load_fresh(now=None) -> Data:
+    """Cards in training with the tags of their position and of their first solver move; the attempts; the sessions.
+    Plain tuples and flat queries: this runs for Home, Train and Stats, with any size of library and history."""
+    from spaced_positions.analysis.models import Node
+    from spaced_positions.library.models import NodeTag, PositionTag, Tag
+
+    now = now or timezone.now()
+    tz = timezone.get_current_timezone()
+    cards = [CardRow(*row) for row in Card.objects.filter(in_solution=True, puzzle__active=True, puzzle__position__deleted_at=None)
+             .values_list(*CARD_FIELDS, "puzzle__position_id", "puzzle__start_node_id")]
+    attempts = [AttemptRow(*row, row[1].astimezone(tz).date()) for row in Attempt.objects.order_by("at").values_list(*ATTEMPT_FIELDS)]
     sessions = list(Session.objects.exclude(ended_at=None).order_by("started_at"))
     data = Data(now, cards, attempts, sessions)
     keys = {k for k, _ in FAMILIES}
+    tags = {t.pk: t for t in Tag.objects.filter(field__key__in=keys).select_related("field")}
+    by_position = defaultdict(list)
+    for position_id, tag_id in (PositionTag.objects.filter(tag_id__in=tags).exclude(origin="suggested")
+                                .filter(position__puzzles__cards__in_solution=True).distinct().values_list("position_id", "tag_id")):
+        by_position[position_id].append(tag_id)
+    first_moves = dict(Node.objects.filter(parent_id__in={c.start_node_id for c in cards if c.start_node_id}, order=0)
+                       .values_list("parent_id", "pk"))  # the solution's first move under each start
+    by_move = defaultdict(list)
+    for node_id, tag_id in (NodeTag.objects.filter(node_id__in=first_moves.values(), tag_id__in=tags)
+                            .exclude(origin="suggested").values_list("node_id", "tag_id")):
+        by_move[node_id].append(tag_id)
     for c in cards:
-        found = {}
-        for link in c.puzzle.position.tag_links.all():
-            if link.origin != "suggested" and link.tag.field.key in keys:
-                found[link.tag_id] = link.tag
-        start = c.puzzle.start_node
-        if start is not None:
-            for kid in start.kids.all():
-                if kid.order == 0:
-                    for link in kid.tag_links.all():
-                        if link.origin != "suggested" and link.tag.field.key in keys:
-                            found[link.tag_id] = link.tag
-        data.tags[c.pk] = list(found.values())
+        found = dict.fromkeys(by_position.get(c.position_id, []))
+        found |= dict.fromkeys(by_move.get(first_moves.get(c.start_node_id), []))
+        data.tags[c.pk] = [tags[t] for t in found]
     return data
 
 
@@ -200,7 +257,7 @@ def stage_history(d: Data, days: int = 60) -> list[dict]:
         steps = []
         for a in by_card[c.pk]:
             srs.review(sim, a.success, a.at)
-            steps.append((local_day(a.at), stage(sim)))
+            steps.append((a.day, stage(sim)))
         timeline[c.pk] = (local_day(c.created_at), steps)
     start = local_day(d.now) - timedelta(days=days - 1)
     out = []
@@ -275,6 +332,8 @@ def weight(card) -> float:
 
 
 def tag_rows(d: Data) -> list[dict]:
+    if "tag_rows" in d.memo:  # computed once per loaded data; callers get their own row dicts
+        return [dict(r) for r in d.memo["tag_rows"]]
     rows = {}
     card_stage = {c.pk: stage(c) for c in d.cards}
     for c in d.cards:
@@ -308,7 +367,8 @@ def tag_rows(d: Data) -> list[dict]:
         del r["ms"]
         out.append(r)
     out.sort(key=lambda r: (r["tag"].field.order, -r["cards"], r["tag"].name))
-    return out
+    d.memo["tag_rows"] = out
+    return [dict(r) for r in out]
 
 
 def families(rows: list[dict]) -> list[dict]:
@@ -388,7 +448,7 @@ def streaks(days: set, today: date) -> tuple[int, int]:
 
 
 def consistency(d: Data) -> dict:
-    days = {local_day(a.at) for a in d.attempts}
+    days = {a.day for a in d.attempts}
     today = local_day(d.now)
     cur, longest = streaks(days, today)
     per_week = defaultdict(int)
@@ -402,7 +462,7 @@ def consistency(d: Data) -> dict:
     due_attempts = [a for a in d.attempts if a.counted and a.state_before not in ("new", "") and a.due_before]
     recent = [a for a in due_attempts if a.at >= d.now - timedelta(days=30)]
     on_time = sum(1 for a in recent if a.at - a.due_before <= ON_TIME_GRACE)
-    today_attempts = [a for a in d.attempts if local_day(a.at) == today]
+    today_attempts = [a for a in d.attempts if a.day == today]
     return {
         "current": cur, "longest": longest, "trained_today": today in days, "weeks": weeks, "week_goal": WEEK_GOAL_DAYS,
         "this_week_days": per_week.get(this_week, 0), "active30": sum(1 for day in days if day > today - timedelta(days=30)),
@@ -417,7 +477,7 @@ def calendar(d: Data, weeks: int = 53) -> dict:
     start = today - timedelta(days=today.weekday() + 7 * (weeks - 1))
     count, solved = defaultdict(int), defaultdict(int)
     for a in d.attempts:
-        day = local_day(a.at)
+        day = a.day
         if day >= start:
             count[day] += 1
             solved[day] += a.success
@@ -467,13 +527,16 @@ def activity(d: Data, weeks: int = 26) -> list[dict]:
     out = {start + timedelta(days=7 * w): {"collect": 0, "analyse": 0, "train": 0} for w in range(weeks)}
 
     def week_of(dt):
-        day = local_day(dt)
+        return monday(local_day(dt))
+
+    def monday(day):
         return day - timedelta(days=day.weekday())
 
     since = timezone.make_aware(datetime.combine(start, time.min))
     for created in Position.objects.filter(created_at__gte=since).values_list("created_at", flat=True):
-        if week_of(created) in out:  # migrated positions keep the day they were collected in the old app
-            out[week_of(created)]["collect"] += 1
+        week = week_of(created)
+        if week in out:  # migrated positions keep the day they were collected in the old app
+            out[week]["collect"] += 1
     for when in JournalEntry.objects.filter(created_at__gte=since, undone=False).values_list("created_at", flat=True):
         if week_of(when) in out:
             out[week_of(when)]["analyse"] += 1
@@ -481,8 +544,8 @@ def activity(d: Data, weeks: int = 26) -> list[dict]:
         if week_of(when) in out:  # the old app's analysis work and board moves (phase 7)
             out[week_of(when)][kind] += points
     for a in d.attempts:
-        if a.at >= since and a.success and week_of(a.at) in out:
-            out[week_of(a.at)]["train"] += 1
+        if a.success and a.at >= since and monday(a.day) in out:
+            out[monday(a.day)]["train"] += 1
     return [{"week": week, **counts} for week, counts in out.items()]
 
 
@@ -500,8 +563,8 @@ def collection() -> dict:
     analysed = alive.filter(Exists(Node.objects.filter(position=OuterRef("pk"), parent__isnull=False))).count()
     with_puzzle = alive.filter(Exists(Puzzle.objects.filter(position=OuterRef("pk")))).count()
     in_training = alive.filter(Exists(Puzzle.objects.filter(position=OuterRef("pk"), active=True))).count()
-    mature = alive.filter(Exists(Card.objects.filter(puzzle__position=OuterRef("pk"), in_solution=True, state="review",
-                                                     interval_days__gte=MATURE_DAYS))).count()
+    mature = (Card.objects.filter(in_solution=True, state="review", interval_days__gte=MATURE_DAYS, puzzle__position__deleted_at=None)
+              .values("puzzle__position_id").distinct().count())  # from the cards' side: one indexed join, not a subquery per position
     by_field = []
     links = PositionTag.objects.filter(position__deleted_at=None).exclude(origin="suggested")
     for f in TagField.objects.filter(on_positions=True):
@@ -524,7 +587,7 @@ def collection() -> dict:
 def milestone_candidates(d: Data, lib: dict, ret: dict) -> dict:
     """(kind, value) → when it was first reached: dated from the history where possible."""
     out = [("library", m, when) for m, when in lib["reached"]]
-    days = sorted({local_day(a.at) for a in d.attempts})
+    days = sorted({a.day for a in d.attempts})
     run, prev = 0, None
     for day in days:
         run = run + 1 if prev and day - prev == timedelta(days=1) else 1
@@ -617,9 +680,14 @@ def sync_achievements(d: Data | None = None, session: Session | None = None) -> 
 
 def dashboard(now=None) -> dict:
     d = load(now)
+    hour = timezone.localtime(d.now).strftime("%Y-%m-%d %H")  # the numbers of "today" and "due now" move with the clock
+    if d.memo.get("dashboard", (None,))[0] == hour:
+        return d.memo["dashboard"][1] | {"_data": d}
     rows = tag_rows(d)
-    return {
+    out = {
         "library": library(d), "retention": retention(d), "consistency": consistency(d), "storm": storm(d), "streak": streak(d),
         "robustness": robustness(d), "families": families(rows), "tags": rows, "weakest": weakest(rows), "calendar": calendar(d),
-        "stages": stage_history(d), "activity": activity(d), "collection": collection(), "_data": d,
+        "stages": stage_history(d), "activity": activity(d), "collection": collection(),
     }
+    d.memo["dashboard"] = (hour, out)
+    return out | {"_data": d}

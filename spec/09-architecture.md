@@ -60,7 +60,7 @@ step to the next move       → no request for the board and the moves cursor; i
 | `core/charts.js` | Stats: loads the sections, the chart cursor and read-out, table view, period, drill-down; Home's commands; announcing achievements once | 170 |
 | `islands/graphs.js` | The eval graph and the variation graph, drawn from the analysis tree | 150 |
 | `core/confirm.js` | A one-key question in the status line (`y / n`, `m / s`) | 20 |
-| `core/engine.js` | Stockfish 17.1 lite in a worker (UCI, MultiPV), the Engine pane, arrows and eval bar on the boards of the line it follows; runs only while Analyse is visible. A local binary streamed by the server follows in phase 6 | 280 |
+| `core/engine.js` | Stockfish 17.1 lite in a worker (UCI, MultiPV), or a local engine through the app (`/engine/local/`), the Engine pane, arrows and eval bar on the boards of the line it follows; follows the focused link group in any mode but Train | 420 |
 
 Server side, the apps are `core` (shell, layouts, UI state, server commands), `training` (positions, puzzles,
 cards, sessions, scheduler), `analysis` (move trees of positions and games, journal, puzzles from the analysis, PGN
@@ -166,7 +166,25 @@ from `UIState`, so the first paint is already the right layout. The Analyse curs
 - Lists over 200 rows are virtualised (rows rendered by the server in pages of 100, swapped in on scroll).
 - No layout shift: skeletons have the content's size; fonts are self-hosted with `font-display: swap` and fixed
   metrics.
-- Prefetch the likely next view: hovering a ModeTab or holding `␣` prefetches mode workspaces not yet loaded.
+- Prefetch the likely next view: hovering a ModeTab or holding `␣` prefetches mode workspaces not yet loaded (the
+  HTML only, kept a minute; `core/layout.js`).
+
+**At scale** (measured 2026-10-25 on a copy of the development library grown to 50,050 positions with 237,000 tag
+links and 143,000 attempts; warm, on a laptop): every Library search 35–180 ms (the filter pane is the slowest),
+Analyse 7 ms, starting a session 40–90 ms, Home 190 ms, Train 90 ms, Stats 200 ms. What it took:
+
+- The training data (`stats.metrics.load`: cards, attempts, tags) is read as tuples with flat queries, not as model
+  objects with prefetches, and kept in memory while a cheap fingerprint (newest ids and counts of attempts, cards,
+  sessions, puzzles, tags, positions) is unchanged, at most 10 minutes; what is computed from it (the tag rows, the
+  Stats dashboard of the hour) is kept with it. The first visit after training reads it again (about 1.5 s with
+  143,000 attempts).
+- Conditions on related rows compile to `IN (subquery)` (11 §3); per-puzzle numbers are only computed when a term or
+  the sort needs them; a page of puzzles counts its cards per row.
+- Each attempt's local day is computed once.
+
+**On disk**: the database at that size is 91 MB (about 1.8 kB a position with its tree, tags, puzzle, card and
+history); a compressed backup 11 MB. No index is kept that another index already covers (a foreign key that leads a
+unique constraint or a composite index), and import-only `origin` columns have none. `VACUUM` runs after migrations.
 
 ## 11 · Starting the app (Jupyter-style)
 
@@ -199,6 +217,7 @@ migrations, settings files or a Python environment.
 | `--lan` | Listen on the home network too (e.g. a second computer). Token required. |
 | `spos stop` / `spos list` | Stop the running instance / show where it runs |
 | `spos import-csm <db.sqlite3> [--dry-run]` | Bring over a chess-study-manager library (phase 7, 11 §6): reads a copy, backs up first, adds only what is new |
+| `spos restore <backup>` | Put a backup back (the app stopped); the database before it is backed up first |
 
 **Stopping without a console** (double-click start): `:quit` (also in Settings → App) stops the server. The server
 also stops by itself 10 minutes after the last open tab stopped sending its heartbeat (setting, default on for
@@ -210,6 +229,13 @@ double-click starts, off for console starts).
 inside the install folder, so updates and reinstalls never touch user data. Settings → App shows it, with *open
 folder* and *back up now*.
 
+**Backups** (`spaced_positions/backups.py`, built in the phase 7 cleanup): SQLite's own consistent copy (also while
+the app runs), compressed with xz (about a fifth); `db-daily-<date>` once a day a few seconds after the start (14
+kept), `db-before-migrate-…`, `db-before-csm-…`, `db-before-restore-…` and `db-now-…` (*back up now*) keep their
+newest 5. `spos restore <backup>` puts one back (the app must be stopped; the current database is backed up first).
+**Stopping by itself**: open tabs send a heartbeat each minute; with `app.autostop` on (Settings → App; meant for
+double-click starts, off for console starts) the app stops 10 minutes after the last one.
+
 **Updates**: an opt-in check at start shows `update 1.4 available` in the app bar's pulse area with a link. Updating
 is reinstalling. Data stays, and migrations run with a backup on the next start.
 
@@ -220,9 +246,14 @@ is reinstalling. Data stays, and migrations run with a backup on the next start.
 Each person has their own database, so material moves between them as files. The app is free for everyone. **The
 packs are the coach's own material**, made for their students and not for publication.
 
-- A **pack** (`.sppack`) is a zip: `manifest.json` (format version, title, author, description, licence, created,
-  pack id) + positions, puzzles (solution trees, answer lines), tags and sources as JSON, plus a PGN copy for other
-  tools.
+- A **pack** (`.sppack`) is a zip (deflate): `manifest.json` (format version, title, author, description, licence,
+  created, pack id, counts) + `positions.jsonl`, one JSON object a line, compact (no spaces, empty fields left out):
+  `id` (the uuid), `fen`, `title`, `task`, `desc`, `src` (a source of `sources.json`), `page`, `ref`, `diff`, `tags`
+  (keys; tags the vocabulary lacks are in `tags.json`), `moves` (the analysis as PGN movetext: variations, comments,
+  NAGs and drawings as `[%cal]`/`[%csl]`), and `puzzles` (`start` and the marks `ends`/`also`/`replies` as move
+  paths: the child indexes from the root, `0.1.0`). Games go as `games.pgn`. Training history is never in a pack.
+  Measured on the development library (2,002 positions with analysis, tags and puzzles): 223 bytes a position as
+  JSON lines, 59 bytes zipped, so 50,000 puzzles make a pack of about 3 MB.
 - **Every object has a UUID** next to its database id, from day one. Packs, re-imports and the later migration
   depend on it.
 - **Export**: from a Library selection or a saved query (`e` → *Pack*), or `:pack export`. Training history is
