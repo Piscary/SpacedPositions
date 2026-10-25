@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext, gettext_lazy
 
 W, H = 600, 150  # the SVG's own coordinates; it scales to the figure's width
 
@@ -35,7 +36,7 @@ class Chart:
     points: list[Point]
     series: list[Series] = field(default_factory=list)
     unit: str = ""
-    empty: str = "No data yet."
+    empty: str = gettext_lazy("No data yet.")
 
 
 def _figure(chart: Chart, svg: str, kind: str, legend: bool = True, foot: str = "") -> str:
@@ -47,7 +48,7 @@ def _figure(chart: Chart, svg: str, kind: str, legend: bool = True, foot: str = 
     keys = "".join(
         f'<span class="chart__key"><span class="chart__swatch c-{s.color}"></span>{escape(s.name)}</span>' for s in chart.series
     ) if legend and len(chart.series) > 1 else ""
-    body = svg if chart.points else f'<p class="muted chart__empty">{escape(chart.empty)}</p>'
+    body = svg if chart.points else f'<p class="muted chart__empty">{escape(str(chart.empty))}</p>'
     return mark_safe(
         f'<figure class="chart chart--{kind}" data-chart="{escape(chart.id)}" tabindex="0" aria-label="{escape(chart.title)}" '
         f"data-points='{escape(json.dumps(data))}'>"
@@ -90,7 +91,7 @@ def line(chart: Chart, max_value: float | None = None) -> str:
             shapes.append(f'<circle class="chart__dot s-{chart.series[0].color}" data-i="{i}" cx="{x(i):.1f}" cy="{H - v / top * (H - 8) - 4:.1f}" r="3" />')
     shapes.append(f'<line class="chart__base" x1="0" y1="{H - 0.5}" x2="{W}" y2="{H - 0.5}" />')
     svg = f'<svg viewBox="0 0 {W} {H}" preserveAspectRatio="none" role="img" aria-hidden="true">{"".join(shapes)}</svg>'
-    return _figure(chart, svg, "line", foot=_axis(pts[0].label, pts[-1].label, f"max {_num(top)}{chart.unit}"))
+    return _figure(chart, svg, "line", foot=_axis(pts[0].label, pts[-1].label, gettext("max {value}").format(value=f"{_num(top)}{chart.unit}")))
 
 
 def bars(chart: Chart) -> str:
@@ -115,7 +116,7 @@ def bars(chart: Chart) -> str:
         shapes.append(f'<g class="chart__bar" data-i="{i}"><rect class="chart__hit" x="{i * slot:.1f}" y="0" width="{slot:.1f}" height="{H}" />{"".join(group)}</g>')
     shapes.append(f'<line class="chart__base" x1="0" y1="{H - 0.5}" x2="{W}" y2="{H - 0.5}" />')
     svg = f'<svg viewBox="0 0 {W} {H}" preserveAspectRatio="none" role="img" aria-hidden="true">{"".join(shapes)}</svg>'
-    return _figure(chart, svg, "bars", foot=_axis(pts[0].label, pts[-1].label, f"max {_num(top)}{chart.unit}"))
+    return _figure(chart, svg, "bars", foot=_axis(pts[0].label, pts[-1].label, gettext("max {value}").format(value=f"{_num(top)}{chart.unit}")))
 
 
 def hbars(chart: Chart) -> str:

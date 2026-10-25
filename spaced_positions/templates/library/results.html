@@ -7,11 +7,11 @@
     {% if display != "table" %}{% miniboard r.fen 96 extra="library__board" %}{% endif %}
     <span class="list__mark" aria-hidden="true">▢</span>
     <span class="list__id">p{{ r.pk }}</span>
-    <span class="list__title">{{ r.title|default:r.fen }}{% if r.diagram %} <span class="chip">diagram</span>{% endif %}{% if r.deleted_at %} <span class="chip chip--bad">trash</span>{% endif %}</span>
+    <span class="list__title">{{ r.title|default:r.fen }}{% if r.diagram %} <span class="chip">{% translate "diagram" %}</span>{% endif %}{% if r.deleted_at %} <span class="chip chip--bad">{% translate "trash" %}</span>{% endif %}</span>
     <span class="list__meta library__tags">{% for t in r.tag_names|slice:":5" %}<span class="chip chip--tag">{{ t }}</span>{% endfor %}</span>
-    <span class="list__meta library__diff" title="Difficulty">{% if r.difficulty %}{{ r.difficulty|stars }}{% endif %}</span>
+    <span class="list__meta library__diff" title="{% translate "Difficulty" %}">{% if r.difficulty %}{{ r.difficulty|stars }}{% endif %}</span>
     <span class="list__meta library__src">{{ r.citation }}</span>
-    <span class="list__meta library__status">{% if r.in_training %}<span class="chip chip--good">✓ training</span>{% elif r.has_puzzle %}<span class="chip">draft</span>{% elif not r.has_analysis %}<span class="chip chip--bad">✗ solution</span>{% endif %}</span>
+    <span class="list__meta library__status">{% if r.in_training %}<span class="chip chip--good">✓ {% translate "training" %}</span>{% elif r.has_puzzle %}<span class="chip">{% translate "draft" %}</span>{% elif not r.has_analysis %}<span class="chip chip--bad">✗ {% translate "solution" %}</span>{% endif %}</span>
   </div>
 {% elif collection == "puzzles" %}
   <div class="list__row library__row library__row--{{ display }}" role="option" aria-selected="false"{% if r.group %} data-group="{{ r.group }}"{% endif %} data-row="z{{ r.pk }}" data-id="z{{ r.pk }}"
@@ -22,8 +22,8 @@
     <span class="list__title">{{ r.position.title|default:r.start_fen }}</span>
     <span class="list__meta library__tags">{% for t in r.position.tag_names|slice:":5" %}<span class="chip chip--tag">{{ t }}</span>{% endfor %}</span>
     <span class="list__meta library__diff">{% if r.position.difficulty %}{{ r.position.difficulty|stars }}{% endif %}</span>
-    <span class="list__meta library__src">{{ r.card_count }} card{{ r.card_count|pluralize }}{% if r.attempt_sum %} · {{ r.success_rate|floatformat:0 }}% of {{ r.attempt_sum }}{% endif %}</span>
-    <span class="list__meta library__status">{% if not r.active %}<span class="chip">draft</span>{% elif r.flagged %}<span class="chip chip--bad">flagged</span>{% else %}<span class="chip chip--good">in training</span>{% endif %}</span>
+    <span class="list__meta library__src">{% blocktranslate trimmed count n=r.card_count %}{{ n }} card{% plural %}{{ n }} cards{% endblocktranslate %}{% if r.attempt_sum %} · {% blocktranslate trimmed with rate=r.success_rate|floatformat:0 n=r.attempt_sum %}{{ rate }}% of {{ n }}{% endblocktranslate %}{% endif %}</span>
+    <span class="list__meta library__status">{% if not r.active %}<span class="chip">{% translate "draft" %}</span>{% elif r.flagged %}<span class="chip chip--bad">{% translate "flagged" %}</span>{% else %}<span class="chip chip--good">{% translate "in training" %}</span>{% endif %}</span>
   </div>
 {% elif collection == "games" %}
   <div class="list__row library__row library__row--table" role="option" aria-selected="false"{% if r.group %} data-group="{{ r.group }}"{% endif %} data-row="g{{ r.pk }}" data-id="g{{ r.pk }}"
@@ -34,7 +34,7 @@
     <span class="list__meta mono">{{ r.result }}</span>
     <span class="list__meta">{{ r.year|default:"" }}</span>
     <span class="list__meta library__src">{{ r.event }}{% if r.eco %} · {{ r.eco }}{% endif %}</span>
-    <span class="list__meta library__status">{{ r.spark }}{% if r.deleted_at %}<span class="chip chip--bad">trash</span>{% endif %}</span>
+    <span class="list__meta library__status">{{ r.spark }}{% if r.deleted_at %}<span class="chip chip--bad">{% translate "trash" %}</span>{% endif %}</span>
   </div>
 {% elif collection == "players" %}
   <div class="list__row library__row library__row--table" role="option" aria-selected="false"{% if r.group %} data-group="{{ r.group }}"{% endif %} data-row="@{{ r.key }}" data-title="{{ r.name }}" data-query="player:@{{ r.key }}" data-query-collection="games">
@@ -42,7 +42,7 @@
     <span class="list__id">@{{ r.key }}</span>
     <span class="list__title">{{ r.name }}{% if r.title %} <span class="chip">{{ r.title }}</span>{% endif %}</span>
     <span class="list__meta">{{ r.get_role_display }}</span>
-    <span class="list__meta mono">{{ r.game_count }} game{{ r.game_count|pluralize }}</span>
+    <span class="list__meta mono">{% blocktranslate trimmed count n=r.game_count %}{{ n }} game{% plural %}{{ n }} games{% endblocktranslate %}</span>
   </div>
 {% elif collection == "sources" %}
   <div class="list__row library__row library__row--table" role="option" aria-selected="false"{% if r.group %} data-group="{{ r.group }}"{% endif %} data-row="s{{ r.pk }}" data-title="{{ r.title }}" data-query='src:"{{ r.label }}"' data-query-collection="positions">
@@ -50,19 +50,19 @@
     <span class="list__id">s{{ r.pk }}</span>
     <span class="list__title">{{ r.title }}</span>
     <span class="list__meta">{{ r.authors }}{% if r.year %} · {{ r.year }}{% endif %}</span>
-    <span class="list__meta mono">{{ r.position_count }} pos · {{ r.game_count }} games</span>
+    <span class="list__meta mono">{% blocktranslate trimmed with p=r.position_count g=r.game_count %}{{ p }} pos · {{ g }} games{% endblocktranslate %}</span>
   </div>
 {% else %}
-  <div class="list__row library__row library__row--table" role="option" aria-selected="false"{% if r.group %} data-group="{{ r.group }}"{% endif %} data-row="#{{ r.key }}" data-title="{{ r.name }}" data-query="#{{ r.key }}" data-query-collection="positions">
+  <div class="list__row library__row library__row--table" role="option" aria-selected="false"{% if r.group %} data-group="{{ r.group }}"{% endif %} data-row="#{{ r.key }}" data-title="{{ r.label }}" data-query="#{{ r.key }}" data-query-collection="positions">
     <span class="list__mark" aria-hidden="true">▢</span>
     <span class="list__id">#{{ r.key }}</span>
-    <span class="list__title">{{ r.name }}{% if r.name_en %} <span class="muted">{{ r.name_en }}</span>{% endif %}</span>
-    <span class="list__meta">{{ r.field.name }}{% if r.parent %} › {{ r.parent.name }}{% endif %}</span>
+    <span class="list__title">{{ r.label }}{% if r.other_names %} <span class="muted">{{ r.other_names }}</span>{% endif %}</span>
+    <span class="list__meta">{{ r.field.label }}{% if r.parent %} › {{ r.parent.label }}{% endif %}</span>
     <span class="list__meta mono">{{ r.position_count }}</span>
   </div>
 {% endif %}
 {% empty %}
-  {% if query %}<div class="empty library__empty"><p>Nothing found.</p><p class="muted">Remove a term, or check the underlined ones.</p></div>
-  {% else %}<div class="empty library__empty"><p>No {{ collection }} yet.</p><p class="muted">Collect them ({% keycap "space c" %}), paste them ({% keycap "mod+v" %}) or import a PGN (<span class="mono">:import</span>).</p></div>{% endif %}
+  {% if query %}<div class="empty library__empty"><p>{% translate "Nothing found." %}</p><p class="muted">{% translate "Remove a term, or check the underlined ones." %}</p></div>
+  {% else %}{% keycap "space c" as collect_keys %}{% keycap "mod+v" as paste_keys %}<div class="empty library__empty"><p>{% if collection == "positions" %}{% translate "No positions yet." %}{% elif collection == "games" %}{% translate "No games yet." %}{% elif collection == "puzzles" %}{% translate "No puzzles yet." %}{% elif collection == "players" %}{% translate "No players yet." %}{% elif collection == "sources" %}{% translate "No sources yet." %}{% else %}{% translate "No tags yet." %}{% endif %}</p><p class="muted">{% blocktranslate trimmed %}Collect them ({{ collect_keys }}), paste them ({{ paste_keys }}), import a PGN (<span class="mono">:import</span>) or a puzzle pack (<span class="mono">:pack-import</span>).{% endblocktranslate %}</p></div>{% endif %}
 {% endfor %}
-{% if more > 0 %}<div class="library__more muted">… {{ more }} more: refine the query</div>{% endif %}
+{% if more > 0 %}<div class="library__more muted">{% blocktranslate trimmed with n=more %}… {{ n }} more: refine the query{% endblocktranslate %}</div>{% endif %}

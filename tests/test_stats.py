@@ -1,4 +1,4 @@
-"""Phase 5 on the server: metrics (stages, mastery, streaks, records, milestones), achievements, the Stats sections and
+"""On the server: metrics (stages, mastery, streaks, records, milestones), achievements, the Stats sections and
 Home, tag detection with its storage rules, automatic difficulty, engine evaluations and the weakest-motifs session."""
 
 import json
@@ -66,7 +66,7 @@ def test_library_stages_retention_tags_and_weak_spots():
     ret = metrics.retention(d)
     assert ret["all"] == {"n": 4, "ok": 1, "rate": 0.25}
     rows = {r["tag"].key: r for r in metrics.tag_rows(d)}
-    assert rows["back-rank-mate"]["established"] == 1.0 and rows["back-rank-mate"]["mastery"] == metrics.NOT_STARTED
+    assert rows["back-rank-mate"]["established"] == 1.0 and rows["back-rank-mate"]["mastery"] == metrics.not_started()
     assert [r["tag"].key for r in metrics.weakest(list(rows.values()))] == ["smothered-mate"]
     assert metrics.consistency(d)["current"] == 4
 
@@ -182,7 +182,7 @@ def test_evals_are_stored_and_sent_with_the_tree(client):
     p = tree.create_position(START, ["e2e4", "e7e5"])
     e4 = p.nodes.get(san="e4")
     data = post(client, f"/analysis/{p.uuid}/evals/", {"evals": {str(e4.id): {"cp": 34, "depth": 14}, "999999": {"cp": 1}}}).json()
-    assert data["message"] == "Evaluated 1 moves" and data["journal"] is None
+    assert data["message"] == "Evaluated 1 move" and data["journal"] is None
     node = next(n for n in data["tree"]["nodes"] if n["id"] == e4.id)
     assert node["eval"] == {"cp": 34, "mate": None, "depth": 14}
 
@@ -199,7 +199,7 @@ def test_streak_on_the_weakest_motifs(client):
 
 
 def test_structure_suggestions():
-    """Phase 7: the old app's structure detector (pawns, rooks, batteries, endgame set-ups) as suggestions."""
+    """The structure detector (pawns, rooks, batteries, endgame set-ups) as suggestions."""
     from spaced_positions.library import structure
 
     def keys(fen, ph="middlegame"):

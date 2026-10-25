@@ -34,6 +34,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "spaced_positions.core.middleware.TokenMiddleware",
+    "spaced_positions.core.i18n.LanguageMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -52,7 +53,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "spaced_positions.core.context_processors.shell",
             ],
-            "builtins": ["spaced_positions.core.templatetags.ui"],
+            "builtins": ["spaced_positions.core.templatetags.ui", "django.templatetags.i18n"],
             "string_if_invalid": "",
         },
     },
@@ -74,6 +75,8 @@ DATABASES = {
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LANGUAGE_CODE = "en"
+LANGUAGES = [("en", "English"), ("de", "Deutsch"), ("fr", "Français"), ("it", "Italiano")]
+LOCALE_PATHS = [PACKAGE_DIR / "locale"]
 USE_I18N = True
 TIME_ZONE = "UTC"
 USE_TZ = True

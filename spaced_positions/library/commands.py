@@ -9,6 +9,8 @@ import json
 from django.db import transaction
 from django.db.models import Exists, OuterRef
 from django.utils import timezone
+from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
 
 from spaced_positions.core.server_commands import CommandError, command
 from spaced_positions.training.models import Attempt, Position
@@ -28,7 +30,7 @@ def _targets(body) -> tuple[str, list[int]]:
         found = objects("puzzles", body.get("ids", []), body.get("q", ""))
         return "positions", list(found.values_list("position_id", flat=True).distinct())
     if collection not in LINKS:
-        raise CommandError(f"{collection} can't be tagged")
+        raise CommandError(_("{collection} can't be tagged").format(collection=collection))
     found = objects(collection, body.get("ids", []), body.get("q", ""))
     return collection, list(found.values_list("pk", flat=True))
 
@@ -39,7 +41,7 @@ def _tag(value: str) -> Tag:
     if tag is None:
         tag = next((t for t in Tag.objects.all() if v in t.search.split(" | ")), None)
     if tag is None:
-        raise CommandError(f"no tag '{value}' (the Library's Tags, 6, lists them all)")
+        raise CommandError(_("no tag '{tag}' (the Library's Tags, 6, lists them all)").format(tag=value))
     return tag
 
 
@@ -89,11 +91,11 @@ def _relink_result(message: str, change: dict) -> dict:
 @command("library.tag")
 def tag(args, context, body):
     if not args:
-        raise CommandError("which tag? e.g. :tag gabel")
+        raise CommandError(_("which tag? e.g. :tag fork"))
     t = _tag(args[0])
     collection, ids = _targets(body)
     if not ids:
-        raise CommandError("nothing selected")
+        raise CommandError(_("nothing selected"))
     Link, owner = LINKS[collection]
     have = set(Link.objects.filter(**{f"{owner}__in": ids, "tag": t}).exclude(origin="suggested").values_list(owner, flat=True))
     change = {"c": collection, "add": [[i, t.id, "manual"] for i in ids if i not in have], "remove": []}
@@ -103,20 +105,21 @@ def tag(args, context, body):
         change["remove"] += [[getattr(link, owner), link.tag_id, link.origin]
                              for link in Link.objects.filter(**{f"{owner}__in": ids, "tag__field": t.field}).exclude(tag=t)]
     added = len(change["add"])
-    return _relink_result(f"Tagged {added} {'item' if added == 1 else 'items'} {t.name}" + (f" ({len(have)} had it)" if have else ""), change)
+    return _relink_result(ngettext("Tagged {n} item {tag}", "Tagged {n} items {tag}", added).format(n=added, tag=t.label)
+                          + (" " + _("({n} had it)").format(n=len(have)) if have else ""), change)
 
 
 @command("library.untag")
 def untag(args, context, body):
     if not args:
-        raise CommandError("which tag? e.g. :untag gabel")
+        raise CommandError(_("which tag? e.g. :untag fork"))
     t = _tag(args[0])
     collection, ids = _targets(body)
     Link, owner = LINKS[collection]
     links = Link.objects.filter(**{f"{owner}__in": ids, "tag": t})
     change = {"c": collection, "add": [], "remove": [[getattr(link, owner), link.tag_id, link.origin] for link in links]}
     n = len(change["remove"])
-    return _relink_result(f"Removed {t.name} from {n} {'item' if n == 1 else 'items'}", change)
+    return _relink_result(ngettext("Removed {tag} from {n} item", "Removed {tag} from {n} items", n).format(n=n, tag=t.label), change)
 
 
 @command("library.relink")
@@ -124,10 +127,10 @@ def relink(args, context, body):
     try:
         change = json.loads(args[0])
     except (IndexError, ValueError):
-        raise CommandError("bad change") from None
+        raise CommandError(_("bad change")) from None
     if change.get("c") not in LINKS:
-        raise CommandError("bad change")
-    return _relink_result("Tags restored", change)
+        raise CommandError(_("bad change"))
+    return _relink_result(_("Tags restored"), change)
 
 
 def _ids_arg(args, body):
@@ -141,12 +144,12 @@ def _ids_arg(args, body):
 def trash(args, context, body):
     collection, ids = _ids_arg(args, body)
     if collection not in ("positions", "games"):
-        raise CommandError("only positions and games go to the trash")
+        raise CommandError(_("only positions and games go to the trash"))
     found = objects(collection, ids, body.get("q", "") if not ids else "").filter(deleted_at=None)
     short = [f"{'p' if collection == 'positions' else 'g'}{pk}" for pk in found.values_list("pk", flat=True)]
     n = found.update(deleted_at=timezone.now())
     return {
-        "message": f"Moved {n} to the trash · is:trash shows it",
+        "message": _("Moved {n} to the trash · is:trash shows it").format(n=n),
         "effects": {"library": "changed"},
         "undo": {"command": "library.restore", "args": [",".join(short), collection]},
         "redo": {"command": "library.trash", "args": [",".join(short), collection]},
@@ -157,12 +160,12 @@ def trash(args, context, body):
 def restore(args, context, body):
     collection, ids = _ids_arg(args, body)
     if collection not in ("positions", "games"):
-        raise CommandError("only positions and games are in the trash")
+        raise CommandError(_("only positions and games are in the trash"))
     found = objects(collection, ids, body.get("q", "") if not ids else "").exclude(deleted_at=None)
     short = [f"{'p' if collection == 'positions' else 'g'}{pk}" for pk in found.values_list("pk", flat=True)]
     n = found.update(deleted_at=None)
     return {
-        "message": f"Restored {n} from the trash",
+        "message": _("Restored {n} from the trash").format(n=n),
         "effects": {"library": "changed"},
         "undo": {"command": "library.trash", "args": [",".join(short), collection]},
         "redo": {"command": "library.restore", "args": [",".join(short), collection]},
@@ -180,9 +183,9 @@ def empty_trash(args, context, body):
     with transaction.atomic():
         gone.delete()
         Game.objects.exclude(deleted_at=None).delete()
-    message = f"Trash emptied: {n_positions} positions and {n_games} games deleted for good"
+    message = _("Trash emptied: {positions} positions and {games} games deleted for good").format(positions=n_positions, games=n_games)
     if kept:
-        message += f"; {kept} with training history stay in the trash"
+        message += "; " + _("{n} with training history stay in the trash").format(n=kept)
     return {"message": message, "effects": {"library": "changed"}}
 
 
@@ -190,15 +193,15 @@ def empty_trash(args, context, body):
 def save_query(args, context, body):
     name = " ".join(args).strip()
     if not name:
-        raise CommandError("a name, e.g. :save-query hard forks")
+        raise CommandError(_("a name, e.g. :save-query hard forks"))
     text = str(body.get("q", "")).strip()
     if not text:
-        raise CommandError("the query is empty")
+        raise CommandError(_("the query is empty"))
     key = slug(name) or "query"
     SavedQuery.objects.update_or_create(
         key=key, defaults={"name": name, "query": text, "collection": body.get("c", "positions")}
     )
-    return {"message": f"Saved as q:{key} · use it with in:q:{key} or in a training session", "effects": {"library": "saved"}}
+    return {"message": _("Saved as q:{key} · use it with in:q:{key} or in a training session").format(key=key), "effects": {"library": "saved"}}
 
 
 
@@ -208,7 +211,7 @@ def trash_many(args, context, body):
     try:
         change = json.loads(args[0])
     except (IndexError, ValueError):
-        raise CommandError("bad change") from None
+        raise CommandError(_("bad change")) from None
     restore = bool(change.get("restore"))
     stamp = None if restore else timezone.now()
     n = 0
@@ -217,7 +220,7 @@ def trash_many(args, context, body):
         n += model.objects.filter(pk__in=pks).update(deleted_at=stamp)
     inverse = change | {"restore": not restore}
     return {
-        "message": f"{'Restored' if restore else 'Moved to the trash'}: {n} imported",
+        "message": (_("Restored: {n} imported") if restore else _("Moved to the trash: {n} imported")).format(n=n),
         "effects": {"library": "changed"},
         "undo": {"command": "library.trashmany", "args": [json.dumps(inverse)]},
         "redo": {"command": "library.trashmany", "args": [json.dumps(change)]},
@@ -231,13 +234,15 @@ def detect_tags(args, context, body):
 
     collection, ids = _targets(body)
     if collection != "positions":
-        raise CommandError("detection works on positions")
+        raise CommandError(_("detection works on positions"))
     added = suggested = moves = 0
     for position in Position.objects.filter(pk__in=ids[:2000]):
         result = run(position, search=len(ids) <= 50)
         added, suggested, moves = added + len(result["added"]), suggested + len(result["suggested"]), moves + result["moves"]
     n = len(ids)
     return {
-        "message": f"Detected on {n} position{'s' if n != 1 else ''}: {added} tags, {suggested} suggestions, {moves} move tags",
+        "message": ngettext("Detected on {n} position: {added} tags, {suggested} suggestions, {moves} move tags",
+                            "Detected on {n} positions: {added} tags, {suggested} suggestions, {moves} move tags", n).format(
+                                n=n, added=added, suggested=suggested, moves=moves),
         "effects": {"library": "changed"},
     }

@@ -1,4 +1,4 @@
-"""Phase 6 journeys in a real browser: the Settings mode by keyboard (live theme preview, stepping a value, reset),
+"""Journeys in a real browser: the Settings mode by keyboard (live theme preview, stepping a value, reset),
 binding a key in the keymap editor and using it, and importing settings."""
 
 from pathlib import Path

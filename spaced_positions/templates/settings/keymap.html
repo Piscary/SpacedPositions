@@ -1,8 +1,8 @@
-<div class="list keymap__list" data-list data-keymap-list role="listbox" aria-label="Keymap">
+<div class="list keymap__list" data-list data-keymap-list role="listbox" aria-label="{% translate "Keymap" %}">
   {% for r in rows %}<div class="list__row keymap__row" role="option" aria-selected="false" data-row="{{ r.id }}" data-command="{{ r.id }}" data-title="{{ r.title }}">
     <span class="list__id">{{ r.group }}</span>
     <span class="list__title">{{ r.title }} <span class="keymap__cid">{{ r.id }}</span></span>
     <span class="list__meta keymap__keys">{% for k in r.keys %}<span class="keymap__binding{% if k.mine %} is-mine{% endif %}" title="{{ k.context }}" data-keys="{{ k.seq }}" data-context="{{ k.context }}">{{ k.label }}</span>{% empty %}<span class="muted">—</span>{% endfor %}</span>
   </div>{% endfor %}
 </div>
-{% if unmapped %}<p class="muted keymap__unmapped">Unmapped: {% for o in unmapped %}<span class="mono">{{ o.keys }}</span>{% if not forloop.last %} · {% endif %}{% endfor %}</p>{% endif %}
+{% if unmapped %}<p class="muted keymap__unmapped">{% translate "Unmapped:" %} {% for o in unmapped %}<span class="mono">{{ o.keys }}</span>{% if not forloop.last %} · {% endif %}{% endfor %}</p>{% endif %}

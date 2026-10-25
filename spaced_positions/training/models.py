@@ -1,7 +1,7 @@
 """Positions, puzzles and the training history (spec 04 · objects, Train).
 
-Position   a FEN with what identifies and describes it, and its analysis (analysis.Node, the move tree). Phase 4
-           adds tags, sources and the library.
+Position   a FEN with what identifies and describes it, and its analysis (analysis.Node, the move tree), with its
+           tags and source.
 Puzzle     a trainable problem: a start position and a solution tree (puzzles.py). Self-contained, so a puzzle
            doesn't depend on an analysis staying as it is.
 Card       one answer line of a puzzle, the unit of spaced repetition (srs.py): a puzzle whose solution lets the
@@ -13,6 +13,7 @@ import uuid
 
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 class AliveManager(models.Manager):
@@ -69,11 +70,13 @@ class Position(models.Model):
     tags = models.ManyToManyField("library.Tag", through="library.PositionTag", related_name="positions", blank=True)
     diagram = models.BooleanField(default=False, help_text="An illustration: shown, never trained, may be illegal")
     game = models.ForeignKey("library.Game", null=True, blank=True, on_delete=models.SET_NULL, related_name="positions")
+    pack = models.ForeignKey("library.ReceivedPack", null=True, blank=True, on_delete=models.SET_NULL, related_name="positions",
+                             help_text="The imported pack it came with (a newer version of the pack updates it)")
     game_node = models.ForeignKey("analysis.Node", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
     side = models.CharField(max_length=1, default="w", editable=False)
     material = models.CharField(max_length=40, blank=True, db_index=True, editable=False)
     pieces = models.PositiveSmallIntegerField(default=0, editable=False)
-    origin = models.CharField(max_length=40, blank=True, help_text="Where it came from: board, csm:<id> …")
+    origin = models.CharField(max_length=40, blank=True, help_text="Where it came from: analysis, collect, game, …")
     search = models.TextField(blank=True, editable=False, help_text="Folded title, description, task, notes and citation")
     page_number = models.PositiveIntegerField(null=True, blank=True, editable=False, help_text="The page as a number: sorts 9 before 10")
     ref_number = models.PositiveIntegerField(null=True, blank=True, editable=False, help_text="The diagram number as a number")
@@ -116,7 +119,7 @@ class Position(models.Model):
     def tag_names(self) -> list[str]:
         """Names of its tags in field order (prefetch `tag_links__tag__field` for lists)."""
         links = sorted(self.tag_links.all(), key=lambda link: (link.tag.field.order, link.tag.order, link.tag.id))
-        return [link.tag.name for link in links if link.origin != "suggested"]
+        return [link.tag.label for link in links if link.origin != "suggested"]
 
     @property
     def task(self) -> str:
@@ -129,14 +132,13 @@ class Position(models.Model):
             return self.objective
         for link in self.tag_links.all():
             if link.tag.field.key == "goal" and link.tag.task_en and link.origin != "suggested":
-                return link.tag.task_en.replace("{side}", "White" if side == "w" else "Black")
+                return link.tag.task_text(side)
         return ""
 
     @property
     def citation(self) -> str:
-        if self.source_id and self.source.kind == "pack":  # the pack, who it's from and for, then the book it cites
-            received = getattr(self.source, "pack", None)
-            name = f"{self.source.label} ({received.credit})" if received and received.credit else self.source.label
+        if self.pack_id and (self.pack.student or not self.source_id):  # a personal pack: who it's from and for, then the book
+            name = self.pack.source.label + (f" ({self.pack.credit})" if self.pack.credit else "")
             return " · ".join(x for x in [name, self.source_text] if x)
         if self.source_id:
             ref = " · ".join(x for x in [f"p. {self.source_page}" if self.source_page else "", self.source_ref] if x)
@@ -171,10 +173,10 @@ class Puzzle(models.Model):
 
 class Card(models.Model):
     class State(models.TextChoices):
-        NEW = "new", "New"
-        LEARNING = "learning", "Learning"
-        REVIEW = "review", "Review"
-        RELEARNING = "relearning", "Relearning"
+        NEW = "new", _("New")
+        LEARNING = "learning", _("Learning")
+        REVIEW = "review", _("Review")
+        RELEARNING = "relearning", _("Relearning")
 
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     puzzle = models.ForeignKey(Puzzle, on_delete=models.CASCADE, related_name="cards")
@@ -215,9 +217,9 @@ class Card(models.Model):
 
 class Session(models.Model):
     class Mode(models.TextChoices):
-        REVIEW = "review", "Review"
-        STORM = "storm", "Storm"
-        STREAK = "streak", "Streak"
+        REVIEW = "review", _("Review")
+        STORM = "storm", _("Storm")
+        STREAK = "streak", _("Streak")
 
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     mode = models.CharField(max_length=8, choices=Mode.choices)
@@ -229,7 +231,7 @@ class Session(models.Model):
     best_combo = models.PositiveIntegerField(default=0)
     streak = models.PositiveIntegerField(default=0)
     duration_s = models.PositiveIntegerField(null=True, blank=True, help_text="Time actually played")
-    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: csm-…:<id> (phase 7)")
+    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: the id in what it was imported from, so importing again adds nothing twice")
 
     class Meta:
         ordering = ["-started_at"]
@@ -240,14 +242,16 @@ class Session(models.Model):
 
     @property
     def label(self) -> str:
+        from django.utils.translation import gettext as _
+
         o = self.options
         if self.mode == self.Mode.STORM:
-            return f"Storm {o.get('minutes', 3)}′"
+            return _("Storm {minutes}′").format(minutes=o.get("minutes", 3))
         if self.mode == self.Mode.STREAK:
             lives = o.get("lives", 0)
-            return ("Streak" + (f" ♥{lives}" if lives else "") + (" · blind" if o.get("look") == "blind" else "")
-                    + (" · weakest motifs" if o.get("weakest") else ""))
-        return "Review"
+            return (_("Streak") + (f" ♥{lives}" if lives else "") + (" · " + _("blind") if o.get("look") == "blind" else "")
+                    + (" · " + _("weakest motifs") if o.get("weakest") else ""))
+        return _("Review")
 
 
 class Attempt(models.Model):
@@ -270,7 +274,7 @@ class Attempt(models.Model):
     solved_as = models.CharField(max_length=1, blank=True, help_text="w / b")
     mirrored = models.BooleanField(default=False)
     flipped = models.BooleanField(default=False, help_text="The solver's side was at the top")
-    origin = models.CharField(max_length=40, blank=True, help_text="Where it came from: csm-…:<id> (phase 7)")
+    origin = models.CharField(max_length=40, blank=True, help_text="Where it came from: the id in what it was imported from, so importing again adds nothing twice")
 
     class Meta:
         ordering = ["-at"]

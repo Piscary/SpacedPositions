@@ -6,6 +6,8 @@ import json
 
 from django.db import transaction
 from django.http import JsonResponse
+from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
 from django.views.decorators.http import require_POST
 
 from spaced_positions import chesslogic
@@ -48,7 +50,7 @@ def _make_puzzle(position, ready: bool) -> str:
     if ready:
         position.puzzles.filter(start_node=root).update(active=True)
     analysis_puzzles.rebuild_all(position)
-    return " · puzzle in training" if ready else " · puzzle as a draft"
+    return " · " + (_("puzzle in training") if ready else _("puzzle as a draft"))
 
 
 @require_POST
@@ -59,27 +61,27 @@ def save(request):
     diagram = bool(data.get("diagram"))
     check = chesslogic.check_fen(start, diagram=diagram)
     if not check.get("readable", check.get("ok")):
-        return JsonResponse({"ok": False, "message": "not a position"}, status=422)
+        return JsonResponse({"ok": False, "message": _("not a position")}, status=422)
     if not check["ok"] and not diagram:
-        return JsonResponse({"ok": False, "message": "not legal: " + "; ".join(p["message"] for p in check["problems"]) + " (D keeps it as a diagram)"}, status=422)
+        return JsonResponse({"ok": False, "message": _("not legal: {problems} (D keeps it as a diagram)").format(problems="; ".join(p["message"] for p in check["problems"]))}, status=422)
     canonical = check.get("canonical") or chesslogic.canonical_fen(start)
     existing = duplicate_of(canonical)
     how = data.get("how")  # None: ask on a duplicate · "merge" · "new"
     if existing and how not in ("merge", "new"):
         # not an error: a question for the user (merge, save anyway, cancel)
-        return JsonResponse({"ok": False, "duplicate": describe(existing), "message": f"duplicate of {existing.short_id} {existing.title}"})
+        return JsonResponse({"ok": False, "duplicate": describe(existing), "message": _("duplicate of {id} {title}").format(id=existing.short_id, title=existing.title)})
     source = Source.objects.filter(pk=data.get("source")).first() if data.get("source") else None
     tags = _tags(data.get("tags"))
     with transaction.atomic():
         if existing and how == "merge":
             position = existing
-            with tree.change(position, "Collect: merge"):
+            with tree.change(position, _("Collect: merge")):
                 if moves:
                     tree.add_line(tree.root(position), moves)
             if source and not position.source_id:
                 position.source, position.source_page, position.source_ref = source, str(data.get("page", ""))[:40], str(data.get("ref", ""))[:300]
                 position.save()
-            message = f"Merged into {position.short_id}"
+            message = _("Merged into {id}").format(id=position.short_id)
         else:
             fen = check.get("fen") or start
             if diagram and not check["ok"]:
@@ -92,7 +94,7 @@ def save(request):
             position.source_ref = str(data.get("ref", ""))[:300]
             position.diagram = diagram
             position.save()
-            message = f"Saved {position.short_id}"
+            message = _("Saved {id}").format(id=position.short_id)
         for tag in tags:
             if tag.field.selection == "single":
                 position.tag_links.filter(tag__field=tag.field).exclude(tag=tag).delete()
@@ -127,11 +129,11 @@ def save_many(request):
             for tag in tags:
                 PositionTag.objects.get_or_create(position=position, tag=tag)
             saved.append(position)
-    parts = [f"Saved {len(saved)} position{'s' if len(saved) != 1 else ''}"]
+    parts = [ngettext("Saved {n} position", "Saved {n} positions", len(saved)).format(n=len(saved))]
     if skipped:
-        parts.append(f"{skipped} already in the library")
+        parts.append(_("{n} already in the library").format(n=skipped))
     if bad:
-        parts.append(f"{bad} not legal")
+        parts.append(_("{n} not legal").format(n=bad))
     return JsonResponse({"ok": True, "message": " · ".join(parts), "positions": [describe(p) for p in saved[-20:]]})
 
 
@@ -140,7 +142,7 @@ def new_source(request):
     data = _body(request)
     title = str(data.get("title", "")).strip()[:300]
     if not title:
-        return JsonResponse({"ok": False, "message": "a title"}, status=422)
+        return JsonResponse({"ok": False, "message": _("a title")}, status=422)
     kind = data.get("kind") if data.get("kind") in Source.Kind.values else Source.Kind.BOOK
     source = Source.objects.filter(title=title).first() or Source.objects.create(title=title, kind=kind)
     return JsonResponse({"ok": True, "id": source.pk, "label": source.label})
@@ -153,7 +155,7 @@ def save_preset(request):
     name = str(data.get("name", "")).strip()[:80]
     tags = _tags(data.get("tags"))
     if not name or not tags:
-        return JsonResponse({"ok": False, "message": "a name and at least one tag in the session"}, status=422)
+        return JsonResponse({"ok": False, "message": _("a name and at least one tag in the session")}, status=422)
     preset = TagPreset.objects.filter(name=name).first() or TagPreset.objects.create(name=name, order=TagPreset.objects.count())
     preset.tags.set(tags)
     return JsonResponse({"ok": True, "message": f"Preset {name}: {', '.join(t.name for t in tags)}", "presets": presets()})

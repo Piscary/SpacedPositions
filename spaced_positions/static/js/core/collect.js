@@ -8,6 +8,7 @@ import { offer } from "./confirm.js"
 import { openCmdline } from "./cmdline.js"
 import { focusPane, switchMode } from "./layout.js"
 import * as lines from "./lines.js"
+import { tr } from "./i18n.js"
 
 const EMPTY = "8/8/8/8/8/8/8/8 w - - 0 1"
 const DEFAULT = { source: null, page: "", ref: "1", title: "", tags: [], ready: true, saved: [] }
@@ -17,7 +18,7 @@ const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content ||
 const post = (url, body) =>
   fetch(url, { method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() }, body: JSON.stringify(body) })
     .then(async (r) => ({ status: r.status, data: await r.json().catch(() => ({ ok: false, message: `error ${r.status}` })) }))
-    .catch(() => ({ status: 0, data: { ok: false, message: "the app is not reachable" } }))
+    .catch(() => ({ status: 0, data: { ok: false, message: tr("the app is not reachable") } }))
 
 const pane = () => document.querySelector("#ws-collect [data-island='entry']")
 const board = () => document.querySelector("#ws-collect [data-island='board']")?.board || null
@@ -55,14 +56,14 @@ export function titleNow() {
 function render() {
   const el = pane()
   if (!el) return
-  el.querySelector("[data-entry-source]").textContent = session.source?.label || "— none —"
+  el.querySelector("[data-entry-source]").textContent = session.source?.label || tr("— none —")
   for (const field of el.querySelectorAll("[data-entry]")) {
     if (document.activeElement !== field) field.value = session[field.dataset.entry] ?? ""
   }
-  el.querySelector("[data-entry-title-now]").textContent = titleNow() || "(none)"
+  el.querySelector("[data-entry-title-now]").textContent = titleNow() || tr("(none)")
   const tags = el.querySelector("[data-entry-tags]")
   tags.replaceChildren(...session.tags.map((t) => Object.assign(document.createElement("span"), { className: "chip chip--tag", textContent: t.name })))
-  if (!session.tags.length) tags.append(Object.assign(document.createElement("span"), { className: "muted", textContent: "none · t adds one, ⌫ removes the last" }))
+  if (!session.tags.length) tags.append(Object.assign(document.createElement("span"), { className: "muted", textContent: tr("none · t adds one, ⌫ removes the last") }))
   for (const button of el.querySelectorAll("[data-cmd='collect.preset']")) {
     const keys = (button.dataset.keys || "").split(",").filter(Boolean)
     button.setAttribute("aria-pressed", String(keys.length > 0 && keys.every((k) => session.tags.some((t) => t.key === k))))
@@ -78,7 +79,7 @@ function render() {
     row.dataset.title = p.title
     row.append(
       Object.assign(document.createElement("span"), { className: "list__id", textContent: p.short }),
-      Object.assign(document.createElement("span"), { className: "list__title", textContent: p.title || "(no title)" }),
+      Object.assign(document.createElement("span"), { className: "list__title", textContent: p.title || tr("(no title)") }),
       Object.assign(document.createElement("span"), { className: "list__meta", textContent: p.note || "" }),
     )
     return row
@@ -108,23 +109,23 @@ function showDuplicate() {
   const el = pane()
   const dup = board()?.duplicate
   if (!el) return
-  el.querySelector("[data-entry-state]").textContent = dup ? `This position: duplicate of ${dup.short} ${dup.title} · g d go there` : "This position: new"
+  el.querySelector("[data-entry-state]").textContent = dup ? tr("This position: duplicate of {id} {title} · g d go there", { id: dup.short, title: dup.title }) : tr("This position: new")
   el.querySelector("[data-entry-state]").classList.toggle("is-duplicate", Boolean(dup))
 }
 on("duplicate", showDuplicate)
 
 async function saveBoard({ open = false, how = null } = {}) {
   const b = board()
-  if (!b) return status("Collect needs a board pane", { kind: "error" }) || false
+  if (!b) return status(tr("Collect needs a board pane"), { kind: "error" }) || false
   const position = boardPosition(b)
-  if (position.start.startsWith(EMPTY.split(" ")[0])) return status("The board is empty: set up the diagram first", { kind: "error" }) || false
+  if (position.start.startsWith(EMPTY.split(" ")[0])) return status(tr("The board is empty: set up the diagram first"), { kind: "error" }) || false
   const body = {
     ...position, how, title: titleNow(), source: session.source?.id || null, page: session.page, ref: session.ref,
     tags: session.tags.map((t) => t.key), ready: session.ready,
   }
   const { data } = await post("/lib/collect/save/", body)
   if (data.duplicate) {
-    return offer(`Duplicate of ${data.duplicate.short} ${data.duplicate.title}: m merge into it · s save anyway · g go there · Esc cancel`, {
+    return offer(tr("Duplicate of {id} {title}: m merge into it · s save anyway · g go there · Esc cancel", { id: data.duplicate.short, title: data.duplicate.title }), {
       m: () => saveBoard({ open, how: "merge" }),
       s: () => saveBoard({ open, how: "new" }),
       g: () => window.SPOS.analysis.open(data.duplicate.id),
@@ -134,7 +135,7 @@ async function saveBoard({ open = false, how = null } = {}) {
   session.saved = [{ ...data.position, note: data.message.split(" · ").slice(1).join(" · ") }, ...session.saved].slice(0, 12)
   if (/^\d+$/.test(session.ref)) session.ref = String(Number(session.ref) + 1)
   save()
-  status(`${data.message}${open ? "" : " · next: diagram " + session.ref}`, { kind: "good", timeout: 4000 })
+  status(`${data.message}${open ? "" : " · " + tr("next: diagram {n}", { n: session.ref })}`, { kind: "good", timeout: 4000 })
   if (open) return window.SPOS.analysis.open(data.position.id)
   lines.load(b.key, { start: EMPTY }, { undo: null })
   b.enterSetup()
@@ -152,13 +153,13 @@ handle("collect.source", async ([value]) => {
   if (/^\d+$/.test(value)) {
     const data = await fetch(`/lib/complete/?kind=source&q=`).then((r) => r.json()).catch(() => ({ items: [] }))
     const found = data.items.find((i) => i.value === value)
-    if (!found) return status("No such source", { kind: "error" }) || false
+    if (!found) return status(tr("No such source"), { kind: "error" }) || false
     session.source = { id: Number(value), label: found.label }
   } else {
     const { data } = await post("/lib/sources/new/", { title: value })
     if (!data.ok) return status(data.message, { kind: "error" }) || false
     session.source = { id: data.id, label: data.label }
-    status(`New source: ${data.label}`, { kind: "good", timeout: 2500 })
+    status(tr("New source: {name}", { name: data.label }), { kind: "good", timeout: 2500 })
   }
   save()
 })
@@ -175,7 +176,7 @@ handle("collect.tag", async ([key]) => {
   if (!key) return openCmdline("collect.tag ")
   const data = await fetch(`/lib/complete/?kind=tag&q=${encodeURIComponent(key)}`).then((r) => r.json()).catch(() => ({ items: [] }))
   const tag = data.items.find((i) => i.value === key) || data.items[0]
-  if (!tag) return status(`No tag '${key}'`, { kind: "error" }) || false
+  if (!tag) return status(tr("No tag '{tag}'", { tag: key }), { kind: "error" }) || false
   if (!session.tags.some((t) => t.key === tag.value)) session.tags.push({ key: tag.value, name: tag.label.split(" › ").pop() })
   save()
 })
@@ -187,7 +188,7 @@ handle("collect.untag", () => {
 
 handle("collect.preset", ([n]) => {
   const button = pane()?.querySelectorAll("[data-cmd='collect.preset']")[Number(n) - 1]
-  if (!button) return status(`No preset ${n} (:preset-save <name> makes one)`, { kind: "error" }) || false
+  if (!button) return status(tr("No preset {n} (:preset-save <name> makes one)", { n }), { kind: "error" }) || false
   const keys = button.dataset.keys.split(",")
   const names = button.dataset.names.split("|")
   const on = keys.every((k) => session.tags.some((t) => t.key === k))
@@ -238,7 +239,7 @@ export async function collectPaste(detected) {
   const b = board()
   if (!b) return false
   const fen = detected.kind === "fen" ? detected.fen : detected.start
-  lines.load(b.key, { start: fen, moves: detected.kind === "pgn" ? detected.moves.map((m) => m.uci) : [] }, { undo: "Paste position" })
+  lines.load(b.key, { start: fen, moves: detected.kind === "pgn" ? detected.moves.map((m) => m.uci) : [] }, { undo: tr("Paste position") })
   focusPane(b.pane.dataset.pane) // check and correct it on the board
   if (detected.kind === "fen") b.enterSetup()
 }

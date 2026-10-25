@@ -47,7 +47,7 @@ step to the next move       → no request for the board and the moves cursor; i
 | `core/layout.js` | Split tree, gutters, focus, maximise/collapse, link groups, pane drag, persistence | 500 |
 | `core/cmdline.js` | Command line + finder (`␣ f`): fuzzy matching, argument completion, history | 300 |
 | `core/hints.js` | Hint layer labels | 100 |
-| `islands/board.js` | Wraps chessground + chess.js; layers (play, setup, entry; solving in phase 2); drawings, square tool; the PGN/FEN view | 500 |
+| `islands/board.js` | Wraps chessground + chess.js; layers (play, setup, entry, solving); drawings, square tool; the PGN/FEN view | 500 |
 | `core/lines.js` | The line a board or link group shows (start, moves, ply, drawings); undo; saved with the mode's UI state. In Analyse the analysis tree owns the line (a *delegate*: moves, stepping, drawings and loading go to it) | 230 |
 | `core/analysis.js` | Analyse: the tree of each link group in the browser, the cursor, the Moves and Inspector panes, every `analysis.*` command, the journal on the undo stack, the subject saved per tab and on the server | 600 |
 | `core/san.js`, `core/keyname.js` | Pure helpers (typed-move matching, key normalisation), unit-tested with node | 120 |
@@ -68,8 +68,7 @@ in and out) and `library` (sources, players, tags, saved queries, games; the que
 Collect's saving; the PGN importer; bulk commands in `library/commands.py`, registered through
 `core.server_commands.MODULES`) and `stats` (metrics from the training tables, achievements, the Stats sections,
 Home; charts as server-rendered SVG in `stats/charts.py`). Tag detection is `library/detect.py` and
-`library/sequences.py` (chess-study-manager's autotagger, ported: it reproduces all 1,161 auto tags of the old
-database's positions).
+`library/sequences.py`, `library/structure.py` (static features) and `library/moments.py` (key moments).
 
 **Islands** attach to server-rendered markup by attribute (`<div data-island="board" data-fen="…" data-group="A">`)
 on `htmx:load`, and clean up on `htmx:beforeCleanupElement`. They never render HTML that the server could render.
@@ -95,14 +94,14 @@ POST /cmd/<id> ──▶ Django: registry lookup → permission/when re-check �
 
 ## 5 · Undo: the command journal
 
-- Analysis changes (phase 3) are journaled as **snapshots**: `JournalEntry(user, label, position, before, after,
+- Analysis changes are journaled as **snapshots**: `JournalEntry(user, label, position, before, after,
   undone)` holds the position's tree (every node with its id, comment, symbols, mark, drawings) and its puzzles'
   setup before and after the change. Undo restores `before`, redo `after`, by comparing node ids, so nodes keep
   their ids and puzzles stay linked; puzzles made after the snapshot are deleted on undo unless they were trained
   (then they only leave training: attempts are never deleted, `Attempt.card` is `PROTECT`). A new change drops the
   undone entries (the redo chain ends). The client puts each entry on its undo stack, and on load the last 50
   entries come back from `GET /journal/`, so `u` works after a reload.
-- Library commands (phase 4) store an **inverse** instead (a command id + args that reverts it, e.g.
+- Library commands store an **inverse** instead (a command id + args that reverts it, e.g.
   `library.untag {ids, tag}`): bulk changes are too big for snapshots. `u` runs the inverse of the latest not-undone
   entry, `U` re-runs the original. Bulk commands are one entry.
 - Client-only state (layout, folds) has its own small undo stack in memory.
@@ -194,7 +193,7 @@ migrations, settings files or a Python environment.
 **Install**
 - Console users: `pipx install spaced-positions` or `uv tool install spaced-positions` (one isolated environment, one
   command on the PATH).
-- Everyone else: a **double-click app** per platform that bundles Python (built in phase 8 with PyInstaller,
+- Everyone else: a **double-click app** per platform that bundles Python (built with PyInstaller,
   `packaging/`): macOS `Spaced-Positions-<version>-macOS.dmg` (drag the `.app` to Applications), Windows
   `Spaced-Positions-<version>-Windows.zip` (unzip, double-click `Spaced Positions.exe`). No Python install needed.
   The release workflow (`.github/workflows/release.yml`) builds both on a version tag (`v0.2.0`), smoke-tests them
@@ -225,7 +224,6 @@ migrations, settings files or a Python environment.
 | `--data-dir PATH` | Use another data folder (e.g. a synced folder, a USB stick) |
 | `--lan` | Listen on the home network too (e.g. a second computer). Token required. |
 | `spos stop` / `spos list` | Stop the running instance / show where it runs |
-| `spos import-csm <db.sqlite3> [--dry-run]` | Bring over a chess-study-manager library (phase 7, 11 §6): reads a copy, backs up first, adds only what is new |
 | `spos restore <backup>` | Put a backup back (the app stopped); the database before it is backed up first |
 
 **Stopping without a console** (double-click start): `:quit` (also in Settings → App) stops the server. The server
@@ -238,9 +236,9 @@ double-click starts, off for console starts).
 inside the install folder, so updates and reinstalls never touch user data. Settings → App shows it, with *open
 folder* and *back up now*.
 
-**Backups** (`spaced_positions/backups.py`, built in the phase 7 cleanup): SQLite's own consistent copy (also while
+**Backups** (`spaced_positions/backups.py`): SQLite's own consistent copy (also while
 the app runs), compressed with xz (about a fifth); `db-daily-<date>` once a day a few seconds after the start (14
-kept), `db-before-migrate-…`, `db-before-csm-…`, `db-before-restore-…` and `db-now-…` (*back up now*) keep their
+kept), `db-before-migrate-…`, `db-before-restore-…` and `db-now-…` (*back up now*) keep their
 newest 5. `spos restore <backup>` puts one back (the app must be stopped; the current database is backed up first).
 **Stopping by itself**: open tabs send a heartbeat each minute; with `app.autostop` on (Settings → App; meant for
 double-click starts, off for console starts) the app stops 10 minutes after the last one.
@@ -262,9 +260,12 @@ packs are the coach's own material**, made for their students and not for public
   `id` (the uuid), `fen`, `title`, `task`, `desc`, `src` (a source of `sources.json`), `page`, `ref`, `diff`, `tags`
   (keys; tags the vocabulary lacks are in `tags.json`), `moves` (the analysis as PGN movetext: variations, comments,
   NAGs and drawings as `[%cal]`/`[%csl]`), and `puzzles` (`start` and the marks `ends`/`also`/`replies` as move
-  paths: the child indexes from the root, `0.1.0`). Games go as `games.pgn`. Training history is never in a pack.
-  Measured on the development library (2,002 positions with analysis, tags and puzzles): 223 bytes a position as
-  JSON lines, 59 bytes zipped, so 50,000 puzzles make a pack of about 3 MB.
+  paths: the child indexes from the root, `0.1.0`), plus what PGN doesn't carry, by path: `marks` (good, dubious,
+  bad), `colors`, `squares` (filled squares) and `mtags` (move tags). Tags set by detection are written `~key`, tags
+  set by hand `key`. Games go as `games.jsonl` the same way (players, result, date, event, site, round, ECO, Elo,
+  other headers, the start position if not the usual one, the moves). Training history and private notes are never
+  in a pack. Measured on a library of 2,000 positions with analysis, tags and puzzles: about 60 bytes a position
+  zipped, so 50,000 puzzles make a pack of about 3 MB.
 - **Every object has a UUID** next to its database id, from day one. Packs, re-imports and the later migration
   depend on it.
 - **Export**: from a Library selection or the query (`e` → *Pack*), or
@@ -275,13 +276,20 @@ packs are the coach's own material**, made for their students and not for public
   preview lists the pack (title, author, *for*, version, licence), what is new, what updates an earlier version,
   what is a duplicate (canonical FEN) or the user's own position (same uuid), and which tags are unknown (created
   as free tags from `tags.json`). `↵` accepts the licence and imports, `r` toggles *ready to train* (on by
-  default), `Esc` cancels. The pack becomes the **source** of its positions (kind *pack*), so `src:` filters and
-  training filters work on it; the Library shows the result.
+  default), `Esc` cancels. Positions and games keep the **book they cite** as their source (matched by title and authors,
+  else made) and point to the pack (`pack` → `ReceivedPack`, which has a source row of its own, kind *pack*), so
+  `src:` finds them by the book and by the pack; the Library shows the result. So a pack can also move one's own
+  material to another computer and be packed again from there, with its books.
 - **Re-importing** a newer version of the same pack updates its content and keeps the student's cards and history.
 - Later: a **progress report** file (`.spreport`, export from Stats) a student can send to their coach, with
   retention, mastery and weak motifs. No server needed.
 - Starter content: the lichess puzzle database is published under CC0, so public-domain starter packs by motif are
   possible (check its terms again before bundling).
+
+**Packs and copyright.** The app doesn't check what goes into a pack. The README's *Packs and copyright* gives
+users a guide: game moves and positions are facts, one's own analysis is one's own; a published puzzle collection
+is protected as a collection (selection, order, solution texts), so packing a whole book for others needs the
+publisher's permission, while teaching exceptions (Switzerland: URG Art. 19) cover excerpts for one's pupils.
 
 **Keeping packs with the students they're for.** The app is open source and runs on the student's computer, so no
 technical measure can *stop* a student from passing a pack on: whoever can open a pack can read its contents.
@@ -291,13 +299,13 @@ traceability:
 | Measure | What it does |
 |---|---|
 | **Pack licence** in the manifest (default for new packs: *personal use by the named student, do not share*) | Shown in the import preview, which the student confirms, and on the pack's source page |
-| **Personalised export**: `:pack export for <student>` | Writes the student's name into the manifest and a per-copy id. The app shows *"from <coach> for <student>"* on the pack's source page and in the Feedback line under each puzzle. A shared copy shows who it came from. |
+| **Personalised export**: `:pack-export <title> for=<student>` | Writes the student's name into the manifest and a per-copy id. The app shows *"from <coach> for <student>"* on the pack's source page and in the Feedback line under each puzzle. A shared copy shows who it came from. |
 | **Coach's export log** | Settings → Packs lists which pack version went to which student and when, so updates go to the right people |
-| *(optional, not built)* password on the pack file | Would protect the file in transit (email, cloud folder); not a protection against the student. Left out in phase 8: a shared cloud folder or a direct message is enough for now. |
+| *(optional, not built)* password on the pack file | Would protect the file in transit (email, cloud folder); not a protection against the student. Left out: a shared cloud folder or a direct message is enough for now. |
 
 Puzzles from a personalised pack can be trained, tagged and analysed like any other, but a pack export by the
 student leaves them out by default (the `received` option of `:pack-export` to override), so packs don't spread by
-accident. Models: `Pack` and `PackExport` (the coach's packs and export log), `ReceivedPack` (one a pack source:
+accident. Models: `Pack` and `PackExport` (the coach's packs and export log), `ReceivedPack` (an imported pack:
 pack id, version, author, student, copy id, licence). Code: `library/packs.py` (format, build, scan, run),
 `library/pack_views.py` (command, upload, download), `static/js/core/packs.js` (preview, drag and drop).
 
@@ -320,8 +328,35 @@ program, and their licence is set by their author (§12).
 
 `design check` gets a **licence check**: Python and JS dependencies are compared to an allowlist of GPL-3.0-compatible
 licences (MIT, BSD, Apache-2.0, ISC, 0BSD, ZPL, LGPL, GPL-2.0+/3.0, OFL for fonts, CC0/CC BY/CC BY-SA for assets).
-Anything else fails CI unless it is a documented exception in this table. A **Licences** page in Settings → App lists
+Anything else fails CI unless it is a documented exception in this table. A **Licences** section in Settings lists
 every bundled component and its licence, and links the app's source (`SOURCE_URL`,
 https://github.com/Piscary/SpacedPositions); it is built from `design/licences.toml` into `static/design/licences.json`
-plus the installed Python packages' versions. (This is an engineering summary, not legal
-advice.)
+plus the installed Python packages' versions. It also links the GPL text (`LICENSE`, served from
+`static/licences/GPL-3.0.txt`) and **all licence texts and notices** (`/licences/notices.txt`, built at runtime: the
+vendored files with their licence files, the piece sets with authors, every Python package with the licence files of
+its metadata, Python's own licence, the GPL once at the end). The double-click app carries the packages' metadata and
+Python's licence for this (`packaging/spos.spec`), and its smoke test checks the notices. The binaries are released
+next to the source of the same tag (GPL-3.0 §6(d)); the sources of the bundled GPL components are named in the
+notices (10 · *Next*: attaching them to each release). (This is an engineering summary, not legal advice.)
+
+## 14 · Languages
+
+English, German, French and Italian (decision 21). `ui.language` (Settings → Language) picks one, or *automatic*
+follows the browser's `Accept-Language`; `core/i18n.py`'s middleware activates it for each request, so templates
+(`{% translate %}`, `{% blocktranslate trimmed %}`, `_("…")` in tag arguments), server messages (`gettext`, with
+`{name}` placeholders and `str.format`) and the boot data (commands' titles, views, settings) come in it. The page's
+`<html lang>` and an embedded catalogue (`#i18n`, from `static/i18n/<lang>.json`) serve `static/js/core/i18n.js`:
+`tr("…", {params})`, `trn(one, many, n)`, `trc(context, "…")`, and Swiss number formats (`locale`). Changing the
+language reloads the page.
+
+Catalogues: `locale/<lang>/LC_MESSAGES/django.po` is the source; `manage.py i18n extract` finds every text
+(templates, Python, JavaScript, the commands' title/group/reason, prefix names, tokens' labels, descriptions and
+values, settings' values) and keeps the .po files in step; `i18n build` writes `django.mo` and the JavaScript
+catalogues; `i18n check` (also in `design check`, so in CI) fails on a text without translation, on placeholders
+or markup a translation lost, and on compiled files that are out of date. German follows Swiss spelling (*ss*).
+
+**Tag names** have four columns (`name`, the base name, German for the built-in vocabulary; `name_en`, `name_fr`,
+`name_it`), and so do objective lines (`task…`, with `{side}`). `tags.language` shows them in the app's language or
+one of their own; a tag the user made shows its base name. Searching finds a tag by any of its names and aliases.
+**Piece letters** in moves (`board.letters`): English, German, French or Italian, for typed moves and the move
+lists; the board editor's letter keys are English or German, the digits 1–6 work always.

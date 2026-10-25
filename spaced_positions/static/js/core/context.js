@@ -1,5 +1,7 @@
 // The context object (spec 02 §5), a tiny event bus and the status line.
 
+import { tr } from "./i18n.js"
+
 export const isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)
 
 export const ctx = {
@@ -58,7 +60,7 @@ export const on = (type, fn) => bus.addEventListener(type, (e) => fn(e.detail))
 export const emit = (type, detail = {}) => bus.dispatchEvent(new CustomEvent(type, { detail }))
 
 const $ = (id) => document.getElementById(id)
-const LAYER_LABELS = { normal: "Normal", insert: "Insert", pending: "Pending", visual: "Visual", command: "Command", hint: "Hint" }
+const LAYER_LABELS = { normal: tr("Normal"), insert: tr("Insert"), pending: tr("Pending"), visual: tr("Visual"), command: tr("Command"), hint: tr("Hint") }
 
 export function setLayer(layer) {
   if (ctx.layer === layer) return
@@ -94,7 +96,7 @@ export function updateStatus() {
     pane.append(n, ` ${window.SPOS?.views?.[ctx.pane.view]?.label || ctx.pane.view}`)
   }
   const subject = $("status-subject")
-  subject.textContent = ctx.selection.count ? `${ctx.selection.count} selected` : ctx.pane?.subject || ""
+  subject.textContent = ctx.selection.count ? tr("{n} selected", { n: ctx.selection.count }) : ctx.pane?.subject || ""
 }
 
 // ── Key display (mirrors design/lib.py display_key) ─────────────────────────────────────────────────────────────

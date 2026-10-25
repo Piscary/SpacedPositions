@@ -6,7 +6,7 @@ from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_GET, require_POST
 
-from . import keymap, layouts, registry, server_commands, themes, user_pieces
+from . import i18n, keymap, layouts, registry, server_commands, themes, user_pieces
 from . import settings as user_settings
 from .models import LOCAL_USER, NamedLayout, Preferences, UIState
 
@@ -80,6 +80,7 @@ def mode_page(request, mode):
         "coords": prefs.tokens.get("board-coords", "inside"),
         "letters": user_settings.get("board.letters"),
         "modes": layouts.MODES,
+        "i18n_catalog": i18n.js_catalog(getattr(request, "LANGUAGE_CODE", "en")),
         "boot": {
             "mode": mode,
             "theme": prefs.theme,
@@ -88,7 +89,7 @@ def mode_page(request, mode):
             "settingsSchema": [{"name": s.name, "label": s.label, "help": s.help, "type": s.type, "values": list(s.values)}
                                for s in user_settings.SETTINGS],
             "launched": settings.SPOS_LAUNCHED,
-            "registry": keymap.effective(),  # the default keymap with the user's overrides
+            "registry": keymap.for_page(),  # the default keymap with the user's overrides, in the page's language
             "themes": registry.themes() | {"themes": themes.all_themes(), "pieces": user_pieces.all_sets()},  # with the user's themes (and their CSS: live preview)
             "views": {
                 k: {"label": v.label, "picker": v.picker, "list": v.list_view}

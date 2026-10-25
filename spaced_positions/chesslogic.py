@@ -16,24 +16,25 @@ from urllib.parse import unquote, urlparse
 
 import chess
 import chess.pgn
+from django.utils.translation import gettext, gettext_noop
 
 START_FEN = chess.STARTING_FEN
 
 # python-chess status flags → message. Fixable ones carry a fix code.
 STATUS_MESSAGES = [
-    (chess.STATUS_EMPTY, "the board is empty", None),
-    (chess.STATUS_NO_WHITE_KING, "no white king", None),
-    (chess.STATUS_NO_BLACK_KING, "no black king", None),
-    (chess.STATUS_TOO_MANY_KINGS, "too many kings", None),
-    (chess.STATUS_TOO_MANY_WHITE_PAWNS, "more than 8 white pawns", None),
-    (chess.STATUS_TOO_MANY_BLACK_PAWNS, "more than 8 black pawns", None),
-    (chess.STATUS_PAWNS_ON_BACKRANK, "a pawn on the first or last rank", None),
-    (chess.STATUS_TOO_MANY_WHITE_PIECES, "more than 16 white pieces", None),
-    (chess.STATUS_TOO_MANY_BLACK_PIECES, "more than 16 black pieces", None),
-    (chess.STATUS_OPPOSITE_CHECK, "the side not to move is in check", "side"),
-    (chess.STATUS_TOO_MANY_CHECKERS, "the king is in check from too many pieces", None),
-    (chess.STATUS_IMPOSSIBLE_CHECK, "this check can't arise in a game", None),
-    (chess.STATUS_INVALID_EP_SQUARE, "the en passant square is not possible", "ep"),
+    (chess.STATUS_EMPTY, gettext_noop("the board is empty"), None),
+    (chess.STATUS_NO_WHITE_KING, gettext_noop("no white king"), None),
+    (chess.STATUS_NO_BLACK_KING, gettext_noop("no black king"), None),
+    (chess.STATUS_TOO_MANY_KINGS, gettext_noop("too many kings"), None),
+    (chess.STATUS_TOO_MANY_WHITE_PAWNS, gettext_noop("more than 8 white pawns"), None),
+    (chess.STATUS_TOO_MANY_BLACK_PAWNS, gettext_noop("more than 8 black pawns"), None),
+    (chess.STATUS_PAWNS_ON_BACKRANK, gettext_noop("a pawn on the first or last rank"), None),
+    (chess.STATUS_TOO_MANY_WHITE_PIECES, gettext_noop("more than 16 white pieces"), None),
+    (chess.STATUS_TOO_MANY_BLACK_PIECES, gettext_noop("more than 16 black pieces"), None),
+    (chess.STATUS_OPPOSITE_CHECK, gettext_noop("the side not to move is in check"), "side"),
+    (chess.STATUS_TOO_MANY_CHECKERS, gettext_noop("the king is in check from too many pieces"), None),
+    (chess.STATUS_IMPOSSIBLE_CHECK, gettext_noop("this check can't arise in a game"), None),
+    (chess.STATUS_INVALID_EP_SQUARE, gettext_noop("the en passant square is not possible"), "ep"),
 ]
 
 
@@ -49,11 +50,11 @@ def _castling_message(board: chess.Board) -> str | None:
             color = chess.WHITE if label.isupper() else chess.BLACK
             king_home = chess.E1 if color else chess.E8
             if board.king(color) != king_home:
-                reason = "king not on " + chess.square_name(king_home)
+                reason = gettext("king not on {square}").format(square=chess.square_name(king_home))
             else:
-                reason = "rook not on " + chess.square_name(rook_square)
+                reason = gettext("rook not on {square}").format(square=chess.square_name(rook_square))
             bad.append(f"{label} ({reason})")
-    return "castling " + ", ".join(bad) + " impossible"
+    return gettext("castling {rights} impossible").format(rights=", ".join(bad))
 
 
 def check_fen(fen: str, diagram: bool = False) -> dict:
@@ -70,7 +71,7 @@ def check_fen(fen: str, diagram: bool = False) -> dict:
         problems.append({"message": castling, "fix": "castling"})
     for flag, message, fix in STATUS_MESSAGES:
         if status & flag:
-            problems.append({"message": message, "fix": fix})
+            problems.append({"message": gettext(message), "fix": fix})
     fixed = fix_fen(fen) if any(p["fix"] for p in problems) else None
     return {
         "ok": not problems,
@@ -126,7 +127,7 @@ def parse_paste(text: str) -> dict:
     """What a pasted text is. kind: fen | fens | pgn | lichess-game | unknown."""
     text = (text or "").strip()
     if not text:
-        return {"kind": "unknown", "message": "the clipboard is empty"}
+        return {"kind": "unknown", "message": gettext("the clipboard is empty")}
 
     if re.match(r"^https?://", text) and "lichess.org" in text:
         url = urlparse(text.split()[0])
@@ -139,9 +140,9 @@ def parse_paste(text: str) -> dict:
         if LICHESS_GAME_PATH.match(path):
             return {
                 "kind": "lichess-game",
-                "message": "a lichess game link: open the game on lichess, copy its PGN and paste that",
+                "message": gettext("a lichess game link: open the game on lichess, copy its PGN and paste that"),
             }
-        return {"kind": "unknown", "message": "a lichess link without a position"}
+        return {"kind": "unknown", "message": gettext("a lichess link without a position")}
 
     lines = [line.strip() for line in text.splitlines() if line.strip()]
     if len(lines) == 1 and FEN_RE.match(_complete_fen(lines[0])):
@@ -152,7 +153,7 @@ def parse_paste(text: str) -> dict:
 
     if "[" in text or re.search(r"\b1\.\s*[a-hKQRBNO]", text):
         return _parse_pgn(text)
-    return {"kind": "unknown", "message": "not a FEN, PGN or lichess link"}
+    return {"kind": "unknown", "message": gettext("not a FEN, PGN or lichess link")}
 
 
 def _parse_pgn(text: str) -> dict:
@@ -165,7 +166,7 @@ def _parse_pgn(text: str) -> dict:
         if not game.errors or list(game.mainline_moves()):
             games.append(game)
     if not games:
-        return {"kind": "unknown", "message": "looks like PGN, but no game could be read"}
+        return {"kind": "unknown", "message": gettext("looks like PGN, but no game could be read")}
     first = games[0]
     board = first.board()
     start = board.fen()

@@ -85,7 +85,7 @@ All inputs put the app into the **Insert** layer while focused (02 §2). `Esc` l
 
 | Component | Purpose | Notes |
 |---|---|---|
-| **ObjectRef** | Inline reference to any object (`p123 Polgár Nr. 102`) | Short id in mono + title; click/`Enter` opens; hover/focus shows **MiniBoard** preview after 300 ms. |
+| **ObjectRef** | Inline reference to any object (`p123 Manual Nr. 102`) | Short id in mono + title; click/`Enter` opens; hover/focus shows **MiniBoard** preview after 300 ms. |
 | **Chip** | A tag, a filter term, a state | Variants: `tag` (left border in the tag field's colour), `filter`, `state` (solved/missed/new). Provenance mark for detected tags (`◇` auto, `◌` suggested): what set it is shown in the Inspector, not only on hover. Removable (`×`, or `Backspace` when focused). |
 | **Badge** | Small count or status | On ModeTabs, Pulse, PaneTabs. |
 | **List** | Keyboard-navigable rows | Cursor row (accent bar left), selection mark (`▣`), row actions shown on the cursor row only. Virtualised over 200 rows. |
@@ -181,9 +181,9 @@ Every object has the same set of representations, so it looks and behaves the sa
 | Position | `p123 Title` | id · MiniBoard(sm) · title · tags · difficulty · solution? · source | MiniBoard · title · tags · stars | meta, tags, source, notes, puzzles | Board + prompt | `Enter` analyse · `T` train · `t` tag · `y` FEN · `d` trash |
 | Game | `g12 White–Black 1956` | date · White · result · Black · event · ECO · positions | header + EvalGraph thumbnail | headers, players, positions taken | Board at final position + EvalGraph | `Enter` analyse · `y` PGN · `d` trash |
 | Move | `12…Nf6` | ply · SAN · NAG · eval · tags | — | comment, tags, mark, drawings, puzzle role | Board after the move | `c` comment · `t` tag · `1–7` · `m` |
-| Puzzle | `z45 Polgár 102` | start position · objective · lines · cards · status | MiniBoard · prompt · stages | solution tree, cards, stats | Board + prompt | `Enter` train · `a` analyse · `r` ready |
+| Puzzle | `z45 Manual 102` | start position · objective · lines · cards · status | MiniBoard · prompt · stages | solution tree, cards, stats | Board + prompt | `Enter` train · `a` analyse · `r` ready |
 | Card | `c45.2` | line · stage · due · ease · accuracy | — | schedule, attempts history | Board + line | `Enter` train once · `R` reset |
 | Session | `r88 Storm 5′` | date · mode · score · accuracy · time | Stat tiles | ResultScreen | — | `Enter` open result · `r` run again |
 | Tag | `#gabel` Chip | name · field · count · mastery · auto/manual | — | tag editor (names, parent, weights) | Library query `tag:gabel` | `Enter` filter · `T` train · `o` edit in a split |
-| Source | `s7 Polgár` | title · type · positions · last page | — | metadata, coverage (diagram numbers present/missing) | Library query `source:s7` | `Enter` filter · `c` collect from it |
+| Source | `s7 Manual` | title · type · positions · last page | — | metadata, coverage (diagram numbers present/missing) | Library query `source:s7` | `Enter` filter · `c` collect from it |
 | Player | `@tal` | name · role · games · score | — | records, openings, opponents | Library query `player:tal` | `Enter` games · `T` train positions |

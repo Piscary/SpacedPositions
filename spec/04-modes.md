@@ -27,8 +27,8 @@ What to do now. Opens on start.
 
 ```
 ┌─ 1 Today ─────────────────────────────────────┬─ 2 Continue ─────────────────────────────────┐
-│ ▾ Due now                                      │ ▾ Analysis   p123 Polgár 102 · 12…Nf6    a   │
-│   14 reviews · 6 new         [▶ Review    r]  │ ▾ Collect    Polgár: next Nr. 103 p.41    c   │
+│ ▾ Due now                                      │ ▾ Analysis   p123 Manual 102 · 12…Nf6    a   │
+│   14 reviews · 6 new         [▶ Review    r]  │ ▾ Collect    Manual: next Nr. 103 p.41    c   │
 │ ▾ Quick start                                  │ ▾ Paste FEN / PGN / link        Mod+V or p  │
 │   [Storm 3′  1] [Storm 5′  2] [Streak  3]     │   ┌──────────────────────────────────────┐   │
 │   [Streak ♥3  4] [Weakest motifs  5] [Again 6]│   └──────────────────────────────────────┘   │
@@ -45,15 +45,14 @@ What to do now. Opens on start.
   Recent lists the positions analysed last and the newest games (`↵` opens them).
 - **Pasting anywhere** in Home (`Mod+V`, no field needed) detects FEN / PGN / lichess link / list of FENs and offers
   the matching commands in the status line: `Analyse a · Collect as position c · Import game g`.
-- **First run** (phase 8): while the library is empty, Today starts with *Welcome*: a sentence on what the app does,
-  *Import a puzzle pack* (`:pack-import`), *Collect from a book* (Collect), the paste hint, and, if a
-  chess-study-manager database is found next to the app, where to bring it over.
+- **First run**: while the library is empty, Today starts with *Welcome*: a sentence on what the app does,
+  *Import a puzzle pack* (`:pack-import`), *Collect from a book* (Collect) and the paste hint.
 
 ---
 
 ## Train  `␣ t`
 
-The heart of the app. Four states. (As built in phase 2: one layout, Board + Session; the Session pane shows the
+The heart of the app. Four states. (one layout, Board + Session; the Session pane shows the
 launcher, the heads-up display while solving, the feedback and the result, and the board follows the result list.
 The app bar hides while solving and during feedback.)
 
@@ -95,7 +94,7 @@ Fullscreen by default (app bar hidden, status line stays). Nothing on screen tha
 │ ┃                                                         │  White to play                 │
 │ ┃                                                         │  Mate in 2                     │
 │ ┃                                                         │  ───────────────────────────── │
-│ ┃ eval bar hidden while solving                           │  last: Polgár 98 ✓ 3.2s        │
+│ ┃ eval bar hidden while solving                           │  last: Manual 98 ✓ 3.2s        │
 ├───────────────────────────────────────────────────────────┤                                │
 │ click/drag: move · i type move · h hint · s solution     │  [Hint h] [Solution s] [Esc]   │
 └───────────────────────────────────────────────────────────┴───────────────────────────────┘
@@ -119,12 +118,12 @@ The side pane switches to the result of this puzzle; the board stays.
 │  ✓ Solved · 4.2s · card c45.2 → next in 9 days                    │
 │  1.Qxh7+! Kxh7 2.Rh3#                     ← → replay              │
 │  #opfer #matt-in-2 #arabisches-matt       t tag                   │
-│  Polgár: 5334 Problems, Nr. 102, p.41                             │
+│  Tactics Manual, Nr. 102, p.41                             │
 │  [Next  Enter] [Analyse  a] [Retry  r] [Flag  !] [Edit  e]        │
 ```
 
 - `Enter` next, `← →` replay the solution on the board, `a` shows the puzzle's analysis beside the board, in Train
-  (phase 7: a board and its move tree in a split of their own, closed when the next puzzle starts, so it never shows
+  (a board and its move tree in a split of their own, closed when the next puzzle starts, so it never shows
   a solution while you solve), `A` jumps to Analyse at the move where the puzzle starts (the session waits in Train:
   `␣ t` goes back to it).
 - `t` tag the position, `!` flag the puzzle as broken (shows up in `Library · is:flagged`), `e` edit the
@@ -141,8 +140,8 @@ Like monkeytype's result screen: big numbers, one chart, everything clickable.
 │  │▂▃▂▅▂▃▃▆▂▂▃▄▅▃▇▃▄▅▆▅▃▄▆▇█▅▆▇▆▅▇█▇▆▇█▇▆▅▇▆█▇▆▇█                                         ││
 │  └────────────────────────────────────────────────────────────────────────────────────────────┘│
 ├─ 2 Puzzles ─────────────────────────────────────────────┬─ 3 Board (linked to 2) ────────────┤
-│  1 ✓ 2.1s  Polgár 98   #gabel                            │                                    │
-│  2 ✗ 9.8s  Polgár 102  #zwischenzug          ← cursor    │      (position of the row under    │
+│  1 ✓ 2.1s  Manual 98   #gabel                            │                                    │
+│  2 ✗ 9.8s  Manual 102  #zwischenzug          ← cursor    │      (position of the row under    │
 │  ...                                                      │       the cursor, with solution)   │
 └──────────────────────────────────────────────────────────┴────────────────────────────────────┘
   r again · Enter open puzzle · m review the missed · a analyse missed · l launcher · y copy result
@@ -171,11 +170,11 @@ One position or game, board-centred. All panes in link group A.
 ├──────────────────────────────────────────┤                                                   │
 │ var B instead of 12…Nf6 · M main line    ├─ 4 Inspector ─────────────────────────────────────┤
 │ right-drag arrow · right-click circle    │ ▾ Move 12…Nf6   ?! · −0.4 · dubious      1–7  m   │
-├─ 5 Eval graph (games only, phase 5) ─────┤ ▾ Comment                                   c     │
+├─ 5 Eval graph (games only) ──────────────┤ ▾ Comment                                   c     │
 │ ▁▂▂▃▂▂▁▁▂▅▇▆▅▃▂▁ ▁▂▃▃▂                  │   Threatens e4, but …                             │
-└──────────────────────────────────────────┤ ▾ Tags   #zwischenzug (phase 4)              t     │
+└──────────────────────────────────────────┤ ▾ Tags   #zwischenzug              t     │
                                            │ ▸ Puzzle  not set up                        p     │
-                                           │ ▸ Position p123 · Polgár 5334 Nr. 102 · diff 3     │
+                                           │ ▸ Position p123 · Manual Nr. 102 · diff 3     │
                                            └───────────────────────────────────────────────────┘
 ```
 
@@ -183,7 +182,7 @@ One position or game, board-centred. All panes in link group A.
   `g p` / `g n` previous / next branch point, `M` back to the main line. Stepping needs no request: the whole tree
   is in the browser; the cursor survives reloads.
 - **Edit the current move**: `1`–`7` annotation symbols, `m` mark menu (`m g` good, `m d` dubious, `m b` bad,
-  `m c` colour, `m x` clear), `c` comment, `t` move tag (phase 4), `Shift+↑/↓` reorder variation, `P` promote to
+  `m c` colour, `m x` clear), `c` comment, `t` move tag, `Shift+↑/↓` reorder variation, `P` promote to
   main line, `d` delete from here. Every change is a journal entry: `u`/`U` undo and redo it, also after a reload.
 - **Board**: `f` flip, `e` engine on/off, `Enter` play the engine's best move, `S` setup (correct the position: the
   analysis stays when its moves are still legal, otherwise `y / n` before they go), `i` type a move, `y` copy FEN,
@@ -194,7 +193,7 @@ One position or game, board-centred. All panes in link group A.
   a move of a line adds the line up to it.
 - **Puzzle**: `p` puzzle menu (which-key): `p s` start here, `p x` solution ends here, `p a` also correct,
   `p o` all answers count, `p r` ready for training, `p d` discard. The solution is the analysis from the start
-  move (the old app's walker: main moves, also-correct moves, answer lines, at most 8 solver moves unless an end is
+  move (the walker: main moves, also-correct moves, answer lines, at most 8 solver moves unless an end is
   marked); it is rebuilt after every change, one card per answer line. The move tree shows it: the start framed,
   solver moves underlined, answers dotted, ends with a small square, drafts grey.
 - **Subject list**: `n`/`N` next/previous subject when Analyse was opened from a list (library results, missed
@@ -204,13 +203,13 @@ One position or game, board-centred. All panes in link group A.
 
 ## Collect  `␣ c`
 
-Getting material in, fast. Built for entering a book diagram after diagram (as in the old rapid entry).
+Getting material in, fast. Built for entering a book diagram after diagram.
 
 ```
 ┌─ 1 Board · SETUP ────────────────────────┬─ 2 Entry session ─────────────────────────────────┐
-│ palette: ♙1 ♘2 ♗3 ♖4 ♕5 ♔6  ⇄ c  ⌫ x     │ Source   Polgár: 5334 Problems         s         │
+│ palette: ♙1 ♘2 ♗3 ♖4 ♕5 ♔6  ⇄ c  ⌫ x     │ Source   Tactics Manual         s         │
 │┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  │ Page     41   + / −         Diagram 103   ↑/↓    │
-│┃                                      ┃  │ Title    Polgár Nr. {n}                          │
+│┃                                      ┃  │ Title    Manual Nr. {n}                          │
 │┃      (board, indigo frame = Setup)   ┃  │ Presets  [Mate-in-2 set ✓] [Kids ✗]     1–9      │
 │┃                                      ┃  │ Ready for training ✓                     r        │
 │┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  │ This diagram: new · source has 102 positions      │
@@ -245,8 +244,8 @@ Find, filter, organise, start training from any search.
 │ ▾ Fields              │ [1 Positions][2 Games][3 Puzzles][4 Players][5 Sources]  │  (board linked     │
 │   Motif               │ / motif:gabel diff:>=3 no:solution          38 of 2,002   │   to the cursor)   │
 │     ▸ Gabel  (122)    │ ─────────────────────────────────────────────────────────│                    │
-│     ▸ Fesselung (88)  │ ▢ p1873 ⬛ Polgár Nr. 88    #gabel #opfer   ★★★  ✗ sol  │                    │
-│   Mating pattern      │ ▣ p1874 ⬛ Polgár Nr. 89    #gabel           ★★★  ✗ sol  │ Polgár Nr. 89      │
+│     ▸ Fesselung (88)  │ ▢ p1873 ⬛ Manual Nr. 88    #gabel #opfer   ★★★  ✗ sol  │                    │
+│   Mating pattern      │ ▣ p1874 ⬛ Manual Nr. 89    #gabel           ★★★  ✗ sol  │ Manual Nr. 89      │
 │ ▾ Difficulty  1–5     │ ▢ p1902 ⬛ Nunn Ex. 12      #gabel #matt-in-2 ★★★★ ✗ sol │ White to play      │
 │ ▾ Source              │ ...                                                      │ #gabel             │
 │ ▾ Status              │                                                          │ no solution yet    │
@@ -259,7 +258,7 @@ Find, filter, organise, start training from any search.
 - `1`–`6` switch collection (positions, games, puzzles, players, sources, tags), `/` query (11 §3: completion with
   `⇥`, problems underlined below the bar, the count live), `j/k` cursor (the linked board shows the row),
   `Enter` open in Analyse (games too; a player, source or tag opens its games or positions), `x` select, `v` range,
-  `Mod+A` all results. `o` opens the cursor row's position or game beside the list (phase 7): a board and its move
+  `Mod+A` all results. `o` opens the cursor row's position or game beside the list: a board and its move
   tree in a link group of their own, reused for the next `o`; `↵` still opens it in Analyse.
 - `s` sorts by a column: a menu of the collection's sorts (`d` difficulty, `t` title, `c` created …); the same column
   again reverses it. The sort is the query's `sort:` term, so the query stays the one source of truth. Sorted by a
@@ -276,7 +275,7 @@ Find, filter, organise, start training from any search.
   restores, `:trash-empty` deletes for good (positions with training history stay).
 - Every bulk change is one step of the undo stack (`u`), replayed exactly: tagging and untagging put back the links
   they changed, trashing restores.
-- **Players, sources and tags are edited here** (phase 6): `c` (`:edit`) changes fields of the selection
+- **Players, sources and tags are edited here**: `c` (`:edit`) changes fields of the selection
   (`:edit role=student`, `:edit en="Knight fork" parent=fork difficulty=3`; also by name from anywhere:
   `:edit @tal title=GM`, `:edit #fork weight=1.5`, `:edit s12 year=1994`); `:new-tag`, `:new-player`, `:new-source`
   make one (a new tag takes its key from the English name and its field from the parent); `d` deletes the selected
@@ -305,7 +304,7 @@ Sections of charts and numbers. Every number links somewhere (drill-down).
 - `j/k` move between charts (the focused chart gets the accent border), `h/l` steps through its data points (a
   cursor line + value read-out: charts are keyboard-inspectable), `Enter` drills down (a tag → Library filtered; a
   weak motif → Streak on it), `t` toggles the chart's table view, `1`–`5` switch the period (7d, 30d, 90d, 1y, all).
-- The numbers are chess-study-manager's rules (stats/metrics.py): a card is *mature* at an interval of 21 days and
+- The numbers follow fixed rules (stats/metrics.py): a card is *mature* at an interval of 21 days and
   the pattern library is the mature cards; retention counts due reviews only; mastery levels need established cards
   and proven retention (Solid 5 cards and 75 %, Strong 15 and 80 %, Expert 40 and 85 %, Master 100 and 90 %); weak
   spots use smoothed accuracy from 3 attempts on. Milestones (pattern library, days in a row, retention, Storm,
@@ -334,7 +333,7 @@ name.
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-As built (phase 6): the mode opens with Settings and the keymap editor side by side.
+As built: the mode opens with Settings and the keymap editor side by side.
 
 - `j/k` rows, `h/l` step the value of a row (on/off, a choice, a number), `Enter` edits it on the command line
   (`:set name=…`), `Backspace` resets it to the theme's (or the default) value, `/` filters rows, `g` + a section key
@@ -352,7 +351,9 @@ As built (phase 6): the mode opens with Settings and the keymap editor side by s
   binds in another context.
 - **Advanced**: your own CSS, applied after the theme (`⌘↵` applies it, `u` undoes; Esc held while loading, or
   `?safe`, starts without it).
-- **Packs** (phase 8): `packs.author` (the name a pack carries; default: the player marked as you), the packs you
+- **Language**: `ui.language` (automatic, English, Deutsch, Français, Italiano) and `tags.language` (as the app, or
+  one of the four); a change reloads the page (09 §14).
+- **Packs**: `packs.author` (the name a pack carries; default: the player marked as you), the packs you
   made with their export log (version, student, copy, date, positions) and the packs you received (author, *for*,
   version, licence).
 - **App**: the data folder with the size of the database and of the backups, *back up now*, *open the folder*,

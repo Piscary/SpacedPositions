@@ -1,4 +1,4 @@
-"""Phase 8 journeys: making a pack in the Library (`:pack-export`) and importing one (the file chooser, the preview
+"""Journeys: making a pack in the Library (`:pack-export`) and importing one (the file chooser, the preview
 with its licence, ↵), then training it."""
 
 import pytest
@@ -42,7 +42,7 @@ def test_import_a_pack_and_train_it(page, coach, tmp_path):
     keys(page, "Enter")
     page.wait_for_function("document.getElementById('status-message').textContent.startsWith('Pack Back ranks: 3 new, 3 puzzles')")
     page.wait_for_function("window.SPOS.library.state().q.startsWith('src:s')")
-    assert Position.objects.filter(source__kind="pack").count() == 3
+    assert Position.objects.filter(pack__isnull=False).count() == 3
     open_mode(page, "train")
     page.wait_for_function("window.SPOS.train && document.querySelector('[data-train-launcher]:not([hidden])')")
     keys(page, "r")

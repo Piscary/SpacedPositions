@@ -1,4 +1,4 @@
-"""Phase 5 journeys in a real browser: the Stats charts by keyboard (focus, cursor, table, period, drill-down), Home
+"""Journeys in a real browser: the Stats charts by keyboard (focus, cursor, table, period, drill-down), Home
 (due, sessions, the achievement banner, continue), the eval and variation graphs, and detecting tags from Analyse."""
 
 from pathlib import Path
@@ -114,7 +114,7 @@ def test_detect_from_the_inspector(page):
     page.wait_for_selector("#ws-analyse [data-inspector] [data-cmd='library.detect']")
     page.click("#ws-analyse [data-inspector] [data-cmd='library.detect']")
     page.wait_for_function("document.getElementById('status-message').textContent.startsWith('Detected on 1 position')")
-    page.wait_for_selector("#ws-analyse [data-inspector] .inspector__tags >> text=Grundreihenmatt")
+    page.wait_for_selector("#ws-analyse [data-inspector] .inspector__tags >> text=Back-rank mate")
     assert p.tag_links.get(tag__key="back-rank-mate").origin == "auto"
 
 

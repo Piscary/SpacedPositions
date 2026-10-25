@@ -126,7 +126,7 @@ dark), `nord`, `sepia`, `forest`, `contrast` (high contrast, WCAG AAA text). Mor
 that differ), and can be exported/imported as TOML text (`:theme-export` copies the current theme with your
 overrides; paste one into Settings → Data to import it; `:theme-save <name>` keeps the current colours as a theme,
 `:theme-delete <name>` removes one). A user theme extends a built-in one, so "nord with my board colours" is 3 lines.
-Saving warns about contrast the lint would refuse. Built-in themes (phase 6): paper, ink, nord, sepia, forest,
+Saving warns about contrast the lint would refuse. Built-in themes: paper, ink, nord, sepia, forest,
 contrast (High contrast).
 
 **Switching** is instant: the active theme is a `<style id="theme">` block of custom properties; switching replaces
@@ -150,7 +150,7 @@ Every setting has a `:set` name, shown in its FormRow. **All settings export as 
 overrides, layouts, preferences), so a setup can be backed up or moved to another machine with copy/paste.
 
 ```toml
-# settings export (excerpt, as built in phase 6)
+# settings export (excerpt)
 theme = "nord"
 [color]            # token overrides on top of the theme
 main = "#ebcb8b"
@@ -187,14 +187,14 @@ Importing checks every value like `:set` and `:map` do, applies what is valid an
   them; `design build` writes `static/design/pieces.css`, which switches chessground's piece images by
   `<html data-pieces="…">`, so changing the set needs no reload. MiniBoards are drawn server-side in the same set
   (each piece a `<symbol>` with its internal ids prefixed) and their URL hash includes the set.
-- **Bundled (phase 1)**, all from lichess with the licences listed in lila's `COPYING.md`: Cburnett, Merida (GPLv2+),
+- **Bundled**, all from lichess with the licences listed in lila's `COPYING.md`: Cburnett, Merida (GPLv2+),
   MPChess (GPLv3+), Chessnut (Apache 2.0), Fantasy, Spatial, Celtic (MIT), Shapes (CC BY-SA 4.0), RhosGFX (CC0),
   Kiwen-suwi, Totoy, Papercut (CC BY 4.0). Not bundled: the many CC BY-NC-SA sets (staunty, california, maestro,
   cardinal …) and "freeware" sets (alpha, companion, leipzig): their licences don't let anyone redistribute the app.
   AGPL sets (pixel, pirouetti, letter) would be allowed but are left out to keep the licence picture simple.
 - `design check` fails for a set without all 12 pieces, without `LICENSE`, without an allowed licence in
   `design/licences.toml`, with scripts or external references in an SVG, or for a folder the token doesn't list.
-- **User sets** (phase 6): any set the user owns, in the data folder: `pieces/<name>/` with the 12 pieces and, if
+- **User sets**: any set the user owns, in the data folder: `pieces/<name>/` with the 12 pieces and, if
   wanted, an `about.toml` (`label`, `author`, `licence`). They are checked like the bundled ones (all 12 pieces, no
   scripts or external references, at most 300 kB a piece; a bundled name wins), served by the app
   (`/pieces/<name>/wK.svg`, `/pieces/user.css`), listed in the picker and in Settings, and drawn on MiniBoards.
@@ -234,7 +234,7 @@ design/
 
 ### Build (`python manage.py design build`)
 
-Pure Python, no Node needed (as built in phase 0):
+Pure Python, no Node needed:
 1. Reads `tokens.toml`, the themes, commands and keymap (`design check` validates them).
 2. Writes `static/design/tokens.css` (tier 1 defaults of the non-colour tokens + tier 2).
 3. Writes `static/design/themes.json`: every theme resolved to CSS values, plus the token schema. The server
@@ -264,7 +264,7 @@ Generated files are committed; CI checks that they are up to date.
 ### Living style guide (`/_ui/`)
 
 A page per component with every variant and state, plus the board in all layers, plus full mode screens with fixture
-data (taken from a frozen, anonymised extract of the old database). Theme, density and font size can be switched
+data (a fixed sample). Theme, density and font size can be switched
 on the page. This is where components are built and reviewed, before they are used in a mode.
 
 ### Tests in CI

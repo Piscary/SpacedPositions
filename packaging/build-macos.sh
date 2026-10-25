@@ -6,8 +6,8 @@ cd "$(dirname "$0")/.."
 python manage.py design build
 python -m PyInstaller --noconfirm --clean --distpath dist --workpath build packaging/spos.spec
 version=$(python -c "import spaced_positions; print(spaced_positions.__version__)")
-stage=build/dmg
-rm -rf "$stage" && mkdir -p "$stage"
+stage=$(mktemp -d)  # a fresh folder each time: the image holds exactly the app and the Applications link
+trap 'rm -rf "$stage"' EXIT
 cp -R "dist/Spaced Positions.app" "$stage/"
 ln -s /Applications "$stage/Applications"
 rm -f "dist/Spaced-Positions-$version-macOS.dmg"

@@ -23,6 +23,7 @@ class TokenMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        self.request = request
         open_paths = (settings.STATIC_URL, "/healthz")  # static files and the liveness check reveal nothing
         if not settings.SPOS_TOKEN or request.path.startswith(open_paths):
             return self.get_response(request)
@@ -43,4 +44,8 @@ class TokenMiddleware:
         return self.get_response(request)
 
     def _refuse(self):
-        return HttpResponse(render_to_string("refused.html"), status=403)
+        from django.utils import translation
+
+        language = translation.get_language_from_request(self.request) or "en"
+        with translation.override(language):
+            return HttpResponse(render_to_string("refused.html", {"lang": language}), status=403)

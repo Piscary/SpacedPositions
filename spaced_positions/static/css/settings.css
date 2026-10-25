@@ -29,7 +29,6 @@
 .keymap__row:is(.is-cursor, .is-selected) .keymap__cid { color: color-mix(in oklab, var(--text) 82%, var(--cursor-row)); }
 
 .train__pace .segmented__option { font-size: var(--fs-xs); }
-.settings__csm { display: grid; gap: var(--s-half); padding-bottom: var(--s-1); }
 .settings__css { min-height: calc(var(--row-md) * 6); }
 .settings__log { margin: 0 0 var(--s-1); padding-left: var(--s-3); font-size: var(--fs-sm); }
 .settings__table { width: 100%; font-size: var(--fs-sm); border-collapse: collapse; }

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import io
+import re
 
 import chess
 import chess.pgn
@@ -113,12 +114,20 @@ def shapes_of(game_node) -> tuple[list, dict]:
     return shapes, squares
 
 
+DRAWINGS = re.compile(r"\s*\[%(?:cal|csl)\s+[^\]]*\]\s*")
+
+
+def comment_of(game_node) -> str:
+    """The comment without the drawing commands, which become shapes (python-chess keeps them in the text)."""
+    return DRAWINGS.sub(" ", game_node.comment or "").strip()
+
+
 def fill_tree(root_node, game: chess.pgn.Game) -> int:
     """Add a parsed game's moves under a tree's root (existing moves are reused). Returns the number of moves added."""
     from .models import Node
 
     added = 0
-    root_node.comment = root_node.comment or game.comment or ""
+    root_node.comment = root_node.comment or comment_of(game)
     root_node.shapes, root_node.squares = shapes_of(game)
     root_node.save()
     stack = [(game, root_node)]
@@ -136,7 +145,7 @@ def fill_tree(root_node, game: chess.pgn.Game) -> int:
                 shapes, squares = shapes_of(variation)
                 child = Node.objects.create(
                     position=node.position, game=node.game, parent=node, order=order, uci=uci, san=san, ply=node.ply + 1,
-                    fen=board.fen(), comment=variation.comment or "", nags=sorted(n for n in variation.nags if n in tree.NAGS),
+                    fen=board.fen(), comment=comment_of(variation), nags=sorted(n for n in variation.nags if n in tree.NAGS),
                     shapes=shapes, squares=squares,
                 )
                 added += 1

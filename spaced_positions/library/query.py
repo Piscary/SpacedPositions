@@ -1,6 +1,6 @@
 """The query language of the Library (spec 11 §3).
 
-    motif:gabel,spiess diff:>=3 -is:diagram "back rank" (src:polgar or src:nunn) sort:-difficulty
+    motif:gabel,spiess diff:>=3 -is:diagram "back rank" (src:reti or src:nunn) sort:-difficulty
 
 `parse` turns the string into a tree of terms with their places in the string (for the QueryBar's chips and
 underlines) and never fails: what it can't read becomes a problem. `compile` turns the tree into a Django filter for
@@ -15,6 +15,7 @@ from datetime import datetime, timedelta
 
 from django.db.models import F, Max, Min, Q, Sum
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from .text import fold
 
@@ -126,7 +127,7 @@ def _term(word: str, start: int, end: int, problems: list[Problem]) -> Term:
     values = [_unquote(v) for v in _split_values(rest)]
     values = [v for v in values if v != ""]
     if not values:
-        problems.append(Problem(start, end, f"{key}: needs a value"))
+        problems.append(Problem(start, end, _("{key}: needs a value").format(key=key)))
     return Term(start, end, neg, key, op, values)
 
 
@@ -162,7 +163,7 @@ def parse(text: str) -> Parsed:
             kind, value, s, e = tokens[pos]
             if kind == "close":
                 if depth == 0:
-                    problems.append(Problem(s, e, "no ( for this )"))
+                    problems.append(Problem(s, e, _('no ( for this )')))
                     pos += 1
                     continue
                 pos += 1
@@ -183,7 +184,7 @@ def parse(text: str) -> Parsed:
                 g.alternatives[-1].append(_term(value, s, e, problems))
             g.end = e
         if depth:
-            problems.append(Problem(start, start + 1, "this ( isn't closed"))
+            problems.append(Problem(start, start + 1, _("this ( isn't closed")))
         return g
 
     root = group(0)
@@ -291,7 +292,7 @@ class Compiler:
         for value in term.values:
             found = self.tag_ids(value, field_key, term.op == "=")
             if not found:
-                self.problem(term, f"no tag '{value}'" + (f" in {field_key}" if field_key else ""))
+                self.problem(term, _("no tag '{value}'").format(value=value) + (_(" in {field_key}").format(field_key=field_key) if field_key else ""))
             ids |= found
         if not ids:
             return None
@@ -314,7 +315,7 @@ class Compiler:
         for value in term.values:
             q = make(value)
             if q is None:
-                self.problem(term, f"{term.key}: can't read '{value}'")
+                self.problem(term, _("{key}: can't read '{value}'").format(key=term.key, value=value))
                 continue
             out = q if out is None else out | q
         return out
@@ -333,7 +334,7 @@ class Compiler:
         handler = getattr(self, f"k_{self.collection}", None)
         q = handler(t) if handler else None
         if q is NotImplemented:
-            self.problem(t, f"{t.key}: not a key for {self.collection}")
+            self.problem(t, _("{key}: not a key for {collection}").format(key=t.key, collection=self.collection))
             return None
         return q
 
@@ -468,7 +469,7 @@ class Compiler:
                 return white | black if white else None
             return self.any_of(t, elo)
         if key == "src":
-            return self.any_of(t, lambda v: Q(source__search__contains=fold(v)))
+            return self.any_of(t, lambda v: Q(source__search__contains=fold(v)) | Q(pack__source__search__contains=fold(v)))
         if key == "ref":
             return self.any_of(t, lambda v: Q(source_ref__icontains=v))
         if key in ("created", "updated"):
@@ -527,14 +528,14 @@ class Compiler:
             self._sources = [(pk, fold(title), fold(short), search) for pk, title, short, search in Source.objects.values_list("pk", "title", "short", "search")]
         v = fold(value).replace("*", " ").strip()  # a * as in other searches: matching is "contains" anyway
         exact = [pk for pk, title, short, _ in self._sources if v in (title, short, f"s{pk}")]
-        if exact:
-            return Q(**{f"{p('source_id')}__in": exact})
+        if exact:  # a pack is matched by what came with it, too
+            return Q(**{f"{p('source_id')}__in": exact}) | Q(**{f"{p('pack__source_id')}__in": exact})
         words = v.split()
         loose = [pk for pk, _, _, search in self._sources if all(w in search for w in words)]  # title, short, authors, publisher
         unmatched = Q(**{f"{p('source')}": None})  # a citation that is only text (imported, matched to no source)
         for w in words:
             unmatched &= Q(**{f"{p('source_text')}__icontains": w})
-        return Q(**{f"{p('source_id')}__in": loose}) | unmatched
+        return Q(**{f"{p('source_id')}__in": loose}) | Q(**{f"{p('pack__source_id')}__in": loose}) | unmatched
 
     def text(self, text: str) -> Q | None:
         """A word (or a quoted phrase) of the search: in the title, description, task, notes or citation, the source,
@@ -611,7 +612,7 @@ class Compiler:
                 desc = value.startswith("-")
                 name = names.get(value.lstrip("-"))
                 if name is None:
-                    self.problem(term, f"sort: not '{value}' here ({', '.join(names)})")
+                    self.problem(term, _("sort: not '{value}' here ({value2})").format(value=value, value2=', '.join(names)))
                     continue
                 if term.neg:
                     desc = not desc

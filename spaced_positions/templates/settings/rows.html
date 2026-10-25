@@ -1,76 +1,73 @@
 {% load ui %}<div class="list settings__list" data-list data-settings-list>
-{% section "Theme" key="t" summary=theme %}
-  <div role="listbox" aria-label="Theme">{% for t in themes %}<div class="list__row settings__row settings__theme{% if t.name == theme %} is-on{% endif %}" role="option" aria-selected="false"
+{% section _("Theme") key="t" summary=theme %}
+  <div role="listbox" aria-label="{% translate "Theme" %}">{% for t in themes %}<div class="list__row settings__row settings__theme{% if t.name == theme %} is-on{% endif %}" role="option" aria-selected="false"
        data-row="theme:{{ t.name }}" data-theme="{{ t.name }}" data-title="{{ t.label }}">
     <span class="settings__check" aria-hidden="true">{% if t.name == theme %}●{% else %}○{% endif %}</span>
-    <span class="list__title">{{ t.label }}{% if t.user %} <span class="chip">yours</span>{% endif %}</span>
-    <span class="list__meta">{% if t.dark is None %}auto{% elif t.dark %}dark{% else %}light{% endif %}</span>
+    <span class="list__title">{{ t.label }}{% if t.user %} <span class="chip">{% translate "yours" %}</span>{% endif %}</span>
+    <span class="list__meta">{% if t.dark is None %}{% translate "auto" %}{% elif t.dark %}{% translate "dark" %}{% else %}{% translate "light" %}{% endif %}</span>
     <span class="list__meta mono">:theme {{ t.name }}</span>
   </div>{% endfor %}</div>
-  <div class="actionbar settings__actions">{% cmd "theme.save" label="Save as my theme" size="sm" %}{% cmd "theme.export" label="Copy as TOML" size="sm" %}</div>
+  <div class="actionbar settings__actions">{% cmd "theme.save" label=_("Save as my theme") size="sm" %}{% cmd "theme.export" label=_("Copy as TOML") size="sm" %}</div>
 {% endsection %}
 {% for s in sections %}
-{% section s.title key=s.key summary=s.rows|length|stringformat:"s"|add:" settings" %}
+{% blocktranslate trimmed count n=s.rows|length asvar rows_summary %}{{ n }} setting{% plural %}{{ n }} settings{% endblocktranslate %}
+{% section s.title key=s.key summary=rows_summary %}
   <div role="listbox" aria-label="{{ s.title }}">{% for r in s.rows %}<div class="list__row settings__row{% if r.changed %} is-changed{% endif %}" role="option" aria-selected="false"
        data-row="{{ r.name }}" data-set="{{ r.name }}" data-type="{{ r.type }}" data-value="{{ r.shown }}" data-title="{{ r.label }}"
        data-values="{{ r.values|join:',' }}"{% if r.low is not None %} data-low="{{ r.low }}" data-high="{{ r.high }}"{% endif %}>
     <span class="list__title">{{ r.label }}</span>
     <span class="settings__value">{% if r.type == "color" %}<span class="settings__swatch" style="--swatch: {{ r.value }}"></span>{% endif %}
-      {% if r.type == "enum" or r.type == "bool" %}<span class="visually-hidden">{{ r.shown }}</span><span class="segmented__options" aria-hidden="true">{% if r.type == "bool" %}<span class="segmented__option" data-on="{% if r.shown == 'on' %}true{% else %}false{% endif %}" data-cmd="pref.set" data-args="{{ r.name }}=on">on</span><span class="segmented__option" data-on="{% if r.shown == 'off' %}true{% else %}false{% endif %}" data-cmd="pref.set" data-args="{{ r.name }}=off">off</span>{% else %}{% for v in r.values %}<span class="segmented__option" data-on="{% if v == r.shown %}true{% else %}false{% endif %}" data-cmd="pref.set" data-args="{{ r.name }}={{ v }}">{{ v }}</span>{% endfor %}{% endif %}</span>
+      {% if r.type == "enum" or r.type == "bool" %}<span class="visually-hidden">{{ r.shown }}</span><span class="segmented__options" aria-hidden="true">{% if r.type == "bool" %}<span class="segmented__option" data-on="{% if r.shown == 'on' %}true{% else %}false{% endif %}" data-cmd="pref.set" data-args="{{ r.name }}=on">{% translate "on" %}</span><span class="segmented__option" data-on="{% if r.shown == 'off' %}true{% else %}false{% endif %}" data-cmd="pref.set" data-args="{{ r.name }}=off">{% translate "off" %}</span>{% else %}{% for v, label in r.options %}<span class="segmented__option" data-on="{% if v == r.shown %}true{% else %}false{% endif %}" data-cmd="pref.set" data-args="{{ r.name }}={{ v }}">{{ label }}</span>{% endfor %}{% endif %}</span>
       {% else %}<b class="mono">{{ r.shown|default:"—" }}</b>{% endif %}
       {% if r.note %}<span class="muted">{{ r.note }}</span>{% endif %}</span>
     <span class="list__meta settings__help">{{ r.help }}</span>
     <span class="list__meta mono">:set {{ r.name }}</span>
   </div>{% endfor %}</div>
   {% if s.key == "a" %}<div class="settings__data">
-    <p class="muted">Packs share your own material with your students (<span class="mono">:pack-export "title" for=Ben</span> in the
-      Library, <span class="mono">:pack-import</span> or drop a <span class="mono">.sppack</span> file on the app).</p>
+    <p class="muted">{% blocktranslate trimmed %}Packs share positions, puzzles and games as one file, for example with your students (<span class="mono">:pack-export "title" for=Ben</span> in the
+      Library, <span class="mono">:pack-import</span> or drop a <span class="mono">.sppack</span> file on the app).{% endblocktranslate %}</p>
     {% for p in packs_made %}<p><b>{{ p.title }}</b> <span class="muted">v{{ p.version }}{% if p.query %} · <span class="mono">{{ p.query }}</span>{% endif %}</span></p>
-      <ul class="settings__log">{% for e in p.exports.all|slice:":12" %}<li class="muted">v{{ e.version }} · {% if e.student %}for {{ e.student }}{% else %}for anyone{% endif %} · {{ e.positions }} positions · {{ e.at|date:"j M Y H:i" }}</li>{% endfor %}</ul>
-    {% empty %}<p class="muted">No packs made yet.</p>{% endfor %}
-    {% if packs_received %}<p><span class="muted">Received</span></p>
+      <ul class="settings__log">{% for e in p.exports.all|slice:":12" %}<li class="muted">v{{ e.version }} · {% if e.student %}{% blocktranslate trimmed with name=e.student %}for {{ name }}{% endblocktranslate %}{% else %}{% translate "for anyone" %}{% endif %} · {% blocktranslate trimmed count n=e.positions %}{{ n }} item{% plural %}{{ n }} items{% endblocktranslate %} · {{ e.at|date:"j M Y H:i" }}</li>{% endfor %}</ul>
+    {% empty %}<p class="muted">{% translate "No packs made yet." %}</p>{% endfor %}
+    {% if packs_received %}<p><span class="muted">{% translate "Received" %}</span></p>
       <ul class="settings__log">{% for r in packs_received %}<li>{{ r.source.title }} <span class="muted">v{{ r.version }}{% if r.credit %} · {{ r.credit }}{% endif %}{% if r.licence %} · {{ r.licence }}{% endif %}</span></li>{% endfor %}</ul>{% endif %}
   </div>{% endif %}
   {% if s.key == "p" %}<div class="settings__data">
-    <p><span class="muted">Data folder</span> <span class="mono">{{ storage.folder }}</span></p>
-    <p class="muted">The database: {{ storage.db_size|filesizeformat }} · {{ storage.backups }} backup{{ storage.backups|pluralize }}, {{ storage.backups_size|filesizeformat }}{% if storage.latest %} · the newest {{ storage.latest.when|date:"j M H:i" }} ({{ storage.latest.kind }}){% endif %}.
-      A backup is made every day and before every update; <span class="mono">spos restore &lt;file&gt;</span> puts one back.</p>
+    <p><span class="muted">{% translate "Data folder" %}</span> <span class="mono">{{ storage.folder }}</span></p>
+    <p class="muted">{% blocktranslate trimmed with size=storage.db_size|filesizeformat count n=storage.backups %}The database: {{ size }} · {{ n }} backup{% plural %}The database: {{ size }} · {{ n }} backups{% endblocktranslate %}, {{ storage.backups_size|filesizeformat }}{% if storage.latest %} · {% blocktranslate trimmed with when=storage.latest.when|date:"j M H:i" kind=storage.latest.kind %}the newest {{ when }} ({{ kind }}){% endblocktranslate %}{% endif %}.
+      {% blocktranslate trimmed %}A backup is made every day and before every update; <span class="mono">spos restore &lt;file&gt;</span> puts one back.{% endblocktranslate %}</p>
     <div class="actionbar">{% cmd "app.backup" size="sm" %}{% cmd "app.folder" size="sm" %}</div>
   </div>{% endif %}
-  {% if s.key == "k" %}<div class="actionbar settings__actions">{% cmd "settings.keymap" label="Edit the keymap" size="sm" %}<span class="muted">{{ overrides }} binding{{ overrides|pluralize }} of yours</span></div>{% endif %}
+  {% if s.key == "k" %}<div class="actionbar settings__actions">{% cmd "settings.keymap" label=_("Edit the keymap") size="sm" %}<span class="muted">{% blocktranslate trimmed count n=overrides %}{{ n }} binding of yours{% plural %}{{ n }} bindings of yours{% endblocktranslate %}</span></div>{% endif %}
 {% endsection %}
 {% endfor %}
-{% section "Advanced" key="v" summary="your own CSS" %}
+{% translate "your own CSS" as css_summary %}{% section _("Advanced") key="v" summary=css_summary %}
   <form class="settings__data" data-custom-css>
-    <label class="formrow__label" for="custom-css-field">Your own CSS, applied after the theme. If it hides the app: hold Esc while the app loads, or open it with ?safe.</label>
+    <label class="formrow__label" for="custom-css-field">{% translate "Your own CSS, applied after the theme. If it hides the app: hold Esc while the app loads, or open it with ?safe." %}</label>
     <textarea class="field field--mono settings__css" id="custom-css-field" name="css" spellcheck="false"
-              placeholder=".board__frame { border-radius: 0; } · {% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵ applies">{{ custom_css }}</textarea>
+              placeholder="{% if is_mac %}{% translate ".board__frame { border-radius: 0; } · ⌘↵ applies" %}{% else %}{% translate ".board__frame { border-radius: 0; } · Ctrl+↵ applies" %}{% endif %}">{{ custom_css }}</textarea>
   </form>
 {% endsection %}
-{% section "Licences" key="l" summary="free software: GPL-3.0" collapsed=True %}
+{% translate "free software: GPL-3.0" as licence_summary %}{% section _("Licences") key="l" summary=licence_summary collapsed=True %}
   <div class="settings__data settings__licences">
-    <p><b>Spaced Positions {{ licences.version }}</b> is free software under the GNU General Public License, version 3 or later:
-      anyone may use it, read and change its source, and pass it on under the same licence.
-      The source: <a href="{{ licences.source }}" target="_blank" rel="noopener">{{ licences.source }}</a>. Puzzle packs are content, with the licence their author gives them.</p>
-    <table class="table settings__table"><caption class="muted">Bundled with it</caption>
-      <thead><tr><th scope="col">Component</th><th scope="col">Licence</th><th scope="col">Source</th></tr></thead>
+    <p>{% blocktranslate trimmed with version=licences.version %}<b>Spaced Positions {{ version }}</b> is free software under the GNU General Public License, version 3 or later:
+      anyone may use it, read and change its source, and pass it on under the same licence.{% endblocktranslate %}
+      {% translate "The source:" %} <a href="{{ licences.source }}" target="_blank" rel="noopener">{{ licences.source }}</a>. {% translate "Puzzle packs are content, with the licence their author gives them." %}</p>
+    <p><a href="/static/licences/GPL-3.0.txt" target="_blank" rel="noopener">{% translate "The licence (GPL-3.0)" %}</a> ·
+      <a href="/licences/notices.txt" target="_blank" rel="noopener">{% translate "All licence texts and notices" %}</a></p>
+    <table class="table settings__table"><caption class="muted">{% translate "Bundled with it" %}</caption>
+      <thead><tr><th scope="col">{% translate "Component" %}</th><th scope="col">{% translate "Licence" %}</th><th scope="col">{% translate "Source" %}</th></tr></thead>
       <tbody>{% for r in licences.files %}<tr><td class="mono">{{ r.name }}</td><td>{{ r.licence }}</td><td class="muted">{{ r.source }}</td></tr>{% endfor %}
       {% for r in licences.packages %}<tr><td class="mono">{{ r.name }}</td><td>{{ r.licence }}</td><td class="muted">{{ r.source }}</td></tr>{% endfor %}
-      {% for r in licences.pieces %}<tr><td>Pieces: {{ r.name }}</td><td>{{ r.licence }}</td><td class="muted">{{ r.source }}</td></tr>{% endfor %}</tbody>
+      {% for r in licences.pieces %}<tr><td>{% blocktranslate trimmed with name=r.name %}Pieces: {{ name }}{% endblocktranslate %}</td><td>{{ r.licence }}</td><td class="muted">{{ r.source }}</td></tr>{% endfor %}</tbody>
     </table>
   </div>
 {% endsection %}
-{% section "Data" key="x" summary="export · import" %}
+{% translate "export · import" as data_summary %}{% section _("Data") key="x" summary=data_summary %}
   <div class="settings__data">
-    <div class="actionbar">{% cmd "settings.export" label="Export settings (TOML)" size="sm" %}<a class="keybutton keybutton--secondary keybutton--sm" href="/lib/export/?c=positions&q=" download>Export the library (PGN)</a></div>
-    <form class="settings__csm" data-csm-import>
-      <label class="formrow__label" for="csm-path">From chess-study-manager: everything it has that isn't here yet (again later: only what's new)</label>
-      <input class="field field--mono" id="csm-path" name="path" type="text" spellcheck="false" autocomplete="off" value="{{ csm_path }}"
-             placeholder="…/chess-study-manager/db.sqlite3 · {% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵ shows what it adds">
-      <span class="muted">{% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵ shows what would be added, then <kbd class="keycap">y</kbd> imports it (after a backup). The old database is only read.</span>
-    </form>
+    <div class="actionbar">{% cmd "settings.export" label=_("Export settings (TOML)") size="sm" %}<a class="keybutton keybutton--secondary keybutton--sm" href="/lib/export/?c=positions&q=" download>{% translate "Export the library (PGN)" %}</a></div>
     <form class="settings__import" data-settings-import>
-      <textarea class="field field--mono" name="text" aria-label="Settings or a theme to import" placeholder="Paste exported settings or a theme (TOML), then {% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵"></textarea>
+      <textarea class="field field--mono" name="text" aria-label="{% translate "Settings or a theme to import" %}" placeholder="{% if is_mac %}{% translate "Paste exported settings or a theme (TOML), then ⌘↵" %}{% else %}{% translate "Paste exported settings or a theme (TOML), then Ctrl+↵" %}{% endif %}"></textarea>
     </form>
   </div>
 {% endsection %}

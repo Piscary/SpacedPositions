@@ -2,6 +2,7 @@
 
 import { handle } from "./commands.js"
 import { FIELDS, ctx, setLayer, status } from "./context.js"
+import { tr } from "./i18n.js"
 
 const lastField = new WeakMap() // pane element → the field edited last, so `i` returns to it
 
@@ -28,7 +29,7 @@ handle("pane.insert", () => {
   if (!pane) return false
   const remembered = lastField.get(pane)
   const field = remembered?.isConnected ? remembered : [...pane.querySelectorAll(FIELDS)].find((f) => f.offsetParent)
-  if (!field) return status("This pane has no text field", { kind: "error" }) || false
+  if (!field) return status(tr("This pane has no text field"), { kind: "error" }) || false
   field.focus()
   field.scrollIntoView({ block: "nearest" })
   setLayer("insert")

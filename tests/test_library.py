@@ -66,7 +66,7 @@ def test_tag_single_field_replaces_and_undo_restores_exactly(client, two):
     opening, middlegame = Tag.objects.get(key="opening"), Tag.objects.get(key="middlegame")
     PositionTag.objects.create(position=a, tag=opening, origin="auto")
     result = cmd(client, "library.tag", ["mittelspiel"], c="positions", ids=[a.short_id, b.short_id]).json()
-    assert result["ok"] and result["message"] == "Tagged 2 items Mittelspiel"
+    assert result["ok"] and result["message"] == "Tagged 2 items Middlegame"  # tag names in the language of the app
     assert set(a.tags.all()) == {middlegame}  # phase is a single field: Opening went
     undo = result["undo"]
     assert cmd(client, undo["command"], undo["args"]).json()["ok"]
@@ -75,7 +75,7 @@ def test_tag_single_field_replaces_and_undo_restores_exactly(client, two):
     cmd(client, redo["command"], redo["args"])
     assert set(b.tags.all()) == {middlegame}
     untag = cmd(client, "library.untag", ["middlegame"], c="positions", ids=[b.short_id]).json()
-    assert untag["message"] == "Removed Mittelspiel from 1 item" and not b.tags.exists()
+    assert untag["message"] == "Removed Middlegame from 1 item" and not b.tags.exists()
     assert not cmd(client, "library.tag", ["nonsense"], c="positions", ids=[a.short_id]).json()["ok"]
 
 
@@ -141,13 +141,13 @@ def test_results_completion_and_facets(client, two):
 
 
 def test_collect_save_duplicate_merge_and_diagram(client):
-    source = post(client, "/lib/sources/new/", {"title": "Polgár 5334"}).json()
+    source = post(client, "/lib/sources/new/", {"title": "Réti 1922"}).json()
     body = {"start": back_rank(0), "moves": [], "title": "Nr. 1", "source": source["id"], "page": "41", "ref": "1",
             "tags": ["back-rank-mate"], "ready": True}
     saved = post(client, "/lib/collect/save/", body).json()
     assert saved["ok"] and saved["message"].startswith("Saved p")
     p = Position.objects.get()
-    assert (p.title, p.source.title, p.source_page, p.source_ref) == ("Nr. 1", "Polgár 5334", "41", "1")
+    assert (p.title, p.source.title, p.source_page, p.source_ref) == ("Nr. 1", "Réti 1922", "41", "1")
     assert p.tag_links.get(tag__key="back-rank-mate").origin == "manual"
     assert p.tag_links.get(tag__key="endgame").origin == "auto"  # detected (library/detect.py)
     assert p.tag_links.get(tag__key="mate-in-1").origin == "auto"  # the mate search found Rd8#

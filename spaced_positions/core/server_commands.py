@@ -5,6 +5,8 @@ optionally `oob` HTML fragments for htmx to swap in.
 """
 
 from django.conf import settings
+from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
 
 from spaced_positions.design import lib
 
@@ -55,18 +57,18 @@ def _theme_effects(prefs: Preferences) -> dict:
 @command("theme.set")
 def theme_set(args, context, body):
     if not args:
-        raise CommandError("which theme? e.g. :theme ink")
+        raise CommandError(_("which theme? e.g. :theme ink"))
     name = args[0]
     known = themes.all_themes()
     if name not in known and name not in ("", "auto"):
-        raise CommandError(f"no theme '{name}'")
+        raise CommandError(_("no theme '{name}'").format(name=name))
     prefs = Preferences.current()
     previous = prefs.theme or "auto"
     prefs.theme = "" if name == "auto" else name
     prefs.save(update_fields=["theme", "updated_at"])
-    label = known.get(prefs.theme, {}).get("label", "follow the system")
+    label = known.get(prefs.theme, {}).get("label") or _("follow the system")
     return {
-        "message": f"Theme: {label}",
+        "message": _("Theme: {label}").format(label=label),
         "effects": _theme_effects(prefs),
         "undo": {"command": "theme.set", "args": [previous]},
         "redo": {"command": "theme.set", "args": [name]},
@@ -85,7 +87,7 @@ def theme_pair(args, context, body):
 def pref_set(args, context, body):
     text = " ".join(args).strip()
     if "=" not in text:
-        raise CommandError("write token=value, e.g. :set main=#e2b714")
+        raise CommandError(_("write token=value, e.g. :set main=#e2b714"))
     name, value = (part.strip() for part in text.split("=", 1))
     if name in user_settings.BY_NAME:
         return _setting_set(name, value)
@@ -135,7 +137,7 @@ def pref_reset(args, context, body):
         before = user_settings.values(prefs.settings)
         prefs.settings = {k: v for k, v in prefs.settings.items() if k not in args}
         prefs.save(update_fields=["settings", "updated_at"])
-        result = {"message": f"Reset {', '.join(args)}", "effects": {"settings": user_settings.values(prefs.settings)}}
+        result = {"message": _("Reset {names}").format(names=", ".join(args)), "effects": {"settings": user_settings.values(prefs.settings)}}
         if len(args) == 1:
             old = before[args[0]]
             old = {True: "on", False: "off"}.get(old, old) if isinstance(old, bool) else old
@@ -145,11 +147,11 @@ def pref_reset(args, context, body):
     names = args or list(prefs.tokens)
     unknown = [n for n in names if n not in prefs.tokens]
     if unknown:
-        raise CommandError(f"not set: {', '.join(unknown)}")
+        raise CommandError(_("not set: {names}").format(names=", ".join(unknown)))
     removed = {k: prefs.tokens[k] for k in names}
     prefs.tokens = {k: v for k, v in prefs.tokens.items() if k not in names}
     prefs.save(update_fields=["tokens", "updated_at"])
-    result = {"message": f"Reset {', '.join(names) or 'nothing'}", "effects": _theme_effects(prefs)}
+    result = {"message": _("Reset {names}").format(names=", ".join(names)) if names else _("Nothing to reset"), "effects": _theme_effects(prefs)}
     if len(removed) == 1:
         (name, value), = removed.items()
         result["undo"] = {"command": "pref.set", "args": [f"{name}={value}"]}
@@ -167,7 +169,7 @@ def pref_css(args, context, body):
 
     css = json.loads(args[0]) if args and args[0] else str(body.get("css", ""))
     if len(css) > CUSTOM_CSS_MAX:
-        raise CommandError(f"at most {CUSTOM_CSS_MAX:,} characters")
+        raise CommandError(_("at most {n} characters").format(n=CUSTOM_CSS_MAX))
     prefs = Preferences.current()
     before = prefs.settings.get("custom.css", "")
     prefs.settings = {k: v for k, v in prefs.settings.items() if k != "custom.css"} | ({"custom.css": css} if css.strip() else {})
@@ -175,7 +177,7 @@ def pref_css(args, context, body):
     from .views import safe_css
 
     return {
-        "message": "Your CSS is applied (hold Esc while the app loads, or open it with ?safe, to start without it)" if css.strip() else "Your CSS is off",
+        "message": _("Your CSS is applied (hold Esc while the app loads, or open it with ?safe, to start without it)") if css.strip() else _("Your CSS is off"),
         "effects": {"customCss": safe_css(css)},
         "undo": {"command": "pref.css", "args": [json.dumps(before)]},
         "redo": {"command": "pref.css", "args": [json.dumps(css)]},
@@ -186,14 +188,14 @@ def pref_css(args, context, body):
 def layout_save(args, context, body):
     name = " ".join(args).strip()
     if not name:
-        raise CommandError("name the layout: :layout-save <name>")
+        raise CommandError(_("name the layout: :layout-save <name>"))
     layout = body.get("layout")
     if not isinstance(layout, dict):
-        raise CommandError("no layout to save")
+        raise CommandError(_("no layout to save"))
     NamedLayout.objects.update_or_create(
         user=LOCAL_USER, name=name, defaults={"mode": context.get("mode", ""), "layout": layout}
     )
-    return {"message": f"Saved layout '{name}'"}
+    return {"message": _("Saved layout '{name}'").format(name=name)}
 
 
 @command("app.backup")
@@ -206,7 +208,7 @@ def app_backup(args, context, body):
     from spaced_positions import backups
 
     made = backups.make(Path(connection.settings_dict["NAME"]), "now")
-    return {"message": f"Backed up: {made.name} ({made.stat().st_size / 1e6:.1f} MB)", "effects": {"storage": True}}
+    return {"message": _("Backed up: {name} ({size} MB)").format(name=made.name, size=f"{made.stat().st_size / 1e6:.1f}"), "effects": {"storage": True}}
 
 
 @command("app.folder")
@@ -223,18 +225,18 @@ def app_folder(args, context, body):
     try:
         subprocess.Popen([*opener, str(folder)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except OSError as e:
-        raise CommandError(f"could not open {folder}: {e}") from None
-    return {"message": f"Opened {folder}"}
+        raise CommandError(_("could not open {folder}: {error}").format(folder=folder, error=e)) from None
+    return {"message": _("Opened {folder}").format(folder=folder)}
 
 
 @command("app.quit")
 def app_quit(args, context, body):
     if not settings.SPOS_LAUNCHED:
-        raise CommandError("only when started with spos")
+        raise CommandError(_("only when started with spos"))
     from spaced_positions.launcher import quit_soon
 
     quit_soon()
-    return {"message": "Stopping Spaced Positions …", "effects": {"quit": True}}
+    return {"message": _("Stopping Spaced Positions …"), "effects": {"quit": True}}
 
 
 # ── User themes (spec 07 §4) ──────────────────────────────────────────────────────────────────────────────────
@@ -249,7 +251,7 @@ def theme_save(args, context, body):
 
     label = " ".join(args).strip()
     if not label:
-        raise CommandError("a name, e.g. :theme-save my nord")
+        raise CommandError(_("a name, e.g. :theme-save my nord"))
     prefs = Preferences.current()
     known = themes.all_themes()
     base_name = prefs.theme if prefs.theme in known else ("ink" if context.get("prefersDark") else "paper")
@@ -258,12 +260,12 @@ def theme_save(args, context, body):
     values = {k: v for k, v in (base["values"] | prefs.tokens).items() if registry.themes()["themes"][extends]["values"].get(k) != v}
     name = slugify(label)[:60] or "theme"
     if name in registry.themes()["themes"]:
-        raise CommandError(f"'{name}' is a built-in theme: choose another name")
+        raise CommandError(_("'{name}' is a built-in theme: choose another name").format(name=name))
     UserTheme.objects.update_or_create(user=LOCAL_USER, name=name, defaults={"label": label, "extends": extends, "values": values})
     prefs.theme, prefs.tokens = name, {k: v for k, v in prefs.tokens.items() if k not in values}
     prefs.save(update_fields=["theme", "tokens", "updated_at"])
     warnings = themes.contrast_problems(themes.all_themes()[name]["values"])
-    message = f"Theme {label} saved and chosen" + (f" · check contrast: {'; '.join(warnings[:2])}" if warnings else "")
+    message = _("Theme {label} saved and chosen").format(label=label) + (" · " + _("check contrast: {problems}").format(problems="; ".join(warnings[:2])) if warnings else "")
     return {"message": message, "effects": _theme_effects(prefs) | {"themes": themes.all_themes()}}
 
 
@@ -274,13 +276,13 @@ def theme_delete(args, context, body):
     name = " ".join(args).strip()
     found = UserTheme.objects.filter(user=LOCAL_USER, name=name).first()
     if found is None:
-        raise CommandError(f"no theme of yours called '{name}' (built-in themes stay)")
+        raise CommandError(_("no theme of yours called '{name}' (built-in themes stay)").format(name=name))
     found.delete()
     prefs = Preferences.current()
     if prefs.theme == name:
         prefs.theme = found.extends
         prefs.save(update_fields=["theme", "updated_at"])
-    return {"message": f"Theme {found.label} deleted", "effects": _theme_effects(prefs) | {"themes": themes.all_themes()}}
+    return {"message": _("Theme {label} deleted").format(label=found.label), "effects": _theme_effects(prefs) | {"themes": themes.all_themes()}}
 
 
 @command("theme.export")
@@ -293,8 +295,8 @@ def theme_export(args, context, body):
     extends = t.get("extends", name)
     base = registry.themes()["themes"][extends]["values"]
     values = {k: v for k, v in (t["values"] | prefs.tokens).items() if base.get(k) != v}
-    text = themes.to_toml(f"{name}-mine" if not t.get("user") else name, f"{t['label']} (mine)" if not t.get("user") else t["label"], extends, values)
-    return {"message": "Theme copied as TOML: paste it into Settings → Data to import it elsewhere", "effects": {"copy": text}}
+    text = themes.to_toml(f"{name}-mine" if not t.get("user") else name, _("{label} (mine)").format(label=t["label"]) if not t.get("user") else t["label"], extends, values)
+    return {"message": _("Theme copied as TOML: paste it into Settings → Data to import it elsewhere"), "effects": {"copy": text}}
 
 
 # ── Keymap overrides (spec 07 §5, 08) ─────────────────────────────────────────────────────────────────────────
@@ -303,7 +305,7 @@ def theme_export(args, context, body):
 def _keymap_effects() -> dict:
     from . import keymap
 
-    return {"registry": keymap.effective()}
+    return {"registry": keymap.for_page()}
 
 
 @command("key.map")
@@ -317,7 +319,7 @@ def key_map(args, context, body):
     commands = registry.commands()["commands"]
     split = next((i for i, a in enumerate(args) if a in commands), None)
     if not split:
-        raise CommandError("write the keys, then the command: :map space o train.storm 5")
+        raise CommandError(_("write the keys, then the command: :map space o train.storm 5"))
     try:
         keys = keymap.normalise(" ".join(args[:split]))
     except ValueError as e:
@@ -328,7 +330,7 @@ def key_map(args, context, body):
         raise CommandError(problems[0])
     old = KeymapOverride.objects.filter(user=LOCAL_USER, context=where, keys=keys).first()
     KeymapOverride.objects.update_or_create(user=LOCAL_USER, context=where, keys=keys, defaults={"command": cid, "args": cargs})
-    result = {"message": f"{keys} → {commands[cid]['title']}", "effects": _keymap_effects(),
+    result = {"message": f"{keys} → {_(commands[cid]['title'])}", "effects": _keymap_effects(),
               "redo": {"command": "key.map", "args": [*([f"@{where}"] if where != "global" else []), *keys.split(), cid, *cargs]}}
     result["undo"] = ({"command": "key.map", "args": [*([f"@{where}"] if where != "global" else []), *keys.split(), old.command, *old.args]} if old and old.command
                       else {"command": "key.reset", "args": [*([f"@{where}"] if where != "global" else []), *keys.split()]})
@@ -348,9 +350,9 @@ def key_unmap(args, context, body):
         raise CommandError(str(e)) from None
     bound = keymap.effective()["keymap"].get(where, {}).get(keys)
     if bound is None:
-        raise CommandError(f"'{keys}' isn't bound in {where}")
+        raise CommandError(_("'{keys}' isn't bound in {where}").format(keys=keys, where=where))
     KeymapOverride.objects.update_or_create(user=LOCAL_USER, context=where, keys=keys, defaults={"command": "", "args": []})
-    return {"message": f"{keys} unmapped (was {registry.commands()['commands'][bound['command']]['title']})", "effects": _keymap_effects(),
+    return {"message": _("{keys} unmapped (was {title})").format(keys=keys, title=_(registry.commands()["commands"][bound["command"]]["title"])), "effects": _keymap_effects(),
             "undo": {"command": "key.reset", "args": [*([f"@{where}"] if where != "global" else []), *keys.split()]}, "redo": {"command": "key.unmap", "args": [*([f"@{where}"] if where != "global" else []), *keys.split()]}}
 
 
@@ -367,4 +369,4 @@ def key_reset(args, context, body):
         rows = rows.filter(keys=keymap.normalise(" ".join(args)), context=where)
     n = rows.count()
     rows.delete()
-    return {"message": f"Reset {n} key binding{'s' if n != 1 else ''} to the defaults", "effects": _keymap_effects()}
+    return {"message": ngettext("Reset {n} key binding to the defaults", "Reset {n} key bindings to the defaults", n).format(n=n), "effects": _keymap_effects()}

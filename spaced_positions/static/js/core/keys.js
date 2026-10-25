@@ -4,6 +4,7 @@
 import { command, enabled, keymap, prefixes, run } from "./commands.js"
 import { ctx, displayKey, emit, isMac, keycaps, setLayer, status } from "./context.js"
 import { tokenFromEvent as toToken } from "./keyname.js"
+import { tr } from "./i18n.js"
 
 let pending = []
 let overlayHandler = null // set by overlays: (event, token) => "pass" (browser) | "fallthrough" (keymap) | anything else (handled)
@@ -130,7 +131,7 @@ function onKeyDown(e) {
     e.preventDefault()
     const shown = seq.map(displayKey).join(" ")
     cancelPending()
-    status(`${shown} is not bound here`, { kind: "error", timeout: 3000 })
+    status(tr("{keys} is not bound here", { keys: shown }), { kind: "error", timeout: 3000 })
   }
   // A single unbound key falls through to the browser.
 }

@@ -1,137 +1,155 @@
 # Spaced Positions
 
-Collect, solve and train chess puzzles: keyboard first, with spaced repetition. Free software (GPL-3.0-or-later).
+**Collect, solve and train chess puzzles, keyboard first, with spaced repetition.** Each puzzle comes back just
+before you would forget it, so the patterns stay. Spaced Positions runs on your own computer, in your browser,
+without an account and without sending anything anywhere. It is free software (GPL-3.0-or-later), in English,
+German, French and Italian.
 
-**Status: phase 7 (migration).** Phase 0 built the shell, panes and splits, the command and key system, the
-design tokens and themes, the style guide and the launcher. Phase 1 added the board (moves, drawings, typed moves, the
-board editor), MiniBoards, paste detection and piece sets. Phase 2 added puzzles, cards with spaced repetition, and
-the Train mode: Review, Storm and Streak. Phase 3 adds the Analyse mode: a book-style move tree with variations,
-comments, annotation symbols and marks, the Inspector, Stockfish in the browser with lines, arrows and an eval bar,
-puzzles set up from the analysis, and undo of every change (also after a reload). Phase 4 adds the Library (a query
-language with completion, results as table, list or grid, a filter pane, bulk tagging and training with undo), tags
-in Analyse and Train, Collect for entering book diagrams fast, and PGN import and export with games in Analyse.
-Phase 5 adds Stats (pattern library, retention, mastery, weak spots, records, activity, collection, all as keyboard
-charts), Home, achievements, tag detection with python-chess, and the eval and variation graphs. Phase 6 adds the
-Settings mode with the keymap editor, your own themes, key bindings and piece sets, settings as one TOML file (export
-and import), editing tags, sources and players, a local Stockfish through the app, key moments of games (`:moments`),
-figurines and folding in the move tree, and optional sounds. Phase 7 brings everything over from
-chess-study-manager (`spos import-csm <its db.sqlite3>`, or Settings → Data; it can run again and adds only what's
-new), plus opening a row beside the Library's list, sorting and folding groups, the puzzle's analysis beside the
-board in Train, structure suggestions, and big PGN imports in the background. The specification is in [spec/](spec/README.md).
+- **Train**: Review (spaced repetition from solved or missed, no self-rating), Storm (against the clock, with combos),
+  Streak (until the first miss, also with lives or blind), your weakest motifs, and custom sessions filtered by any
+  search.
+- **Collect**: enter the diagrams of a book fast (source, page and diagram number count up), paste a FEN, a PGN or a
+  lichess link anywhere, import PGN files of any size.
+- **Analyse**: a book-style move tree with variations, comments, annotation symbols and drawings, Stockfish in the
+  browser (or a local engine), the evaluation graph, key moments of a game, and puzzles set up straight from the
+  analysis.
+- **Library**: positions, games, puzzles, players, sources and tags with a search language
+  (`motif:fork diff:>=3 src:"Endgame Manual" sort:source`), filters, bulk tagging and automatic tag detection for
+  205 tactical, mating, positional and endgame motifs.
+- **Stats**: the pattern library, retention, mastery per motif, weak spots, records and activity; every number
+  leads to the puzzles behind it.
+- **Puzzle packs**: share positions, puzzles and games as one file, for example as a coach with your students, or
+  move your own material to another computer.
 
-## Start it
+## Install
 
-Without a console: download the app from the [releases](https://github.com/Piscary/SpacedPositions/releases)
-(macOS `.dmg`: drag it to Applications; Windows `.zip`: unzip and double-click `Spaced Positions.exe`). It isn't
-signed, so the first open is right click → *Open* (macOS) or *More info → Run anyway* (Windows). A double click
-starts it in the background and opens the browser; it stops by itself when no tab has been open for 10 minutes.
+**The app** (no Python needed): download it from the
+[releases](https://github.com/Piscary/SpacedPositions/releases).
 
-With Python:
+- macOS: open the `.dmg` and drag *Spaced Positions* to Applications.
+- Windows: unzip the `.zip` and double-click `Spaced Positions.exe` in the folder.
+
+The apps aren't signed yet (that needs paid certificates), so the system asks once: on macOS right click the app →
+*Open*, on Windows *More info → Run anyway*. A double click starts Spaced Positions in the background and opens it
+in your browser; another double click opens it again. It stops by itself 10 minutes after you closed the last tab.
+
+**With Python** (3.12 or newer), from a copy of this repository:
 
 ```bash
-pipx install .        # or: pip install -e . in a virtual environment
-spos                  # starts the app and opens the browser
+pipx install .
+spos
 ```
 
-`spos` works like `jupyter notebook`: it picks a free port (8765 or the next one), opens the browser with a one-time
-token, and keeps running until `Ctrl+C`, `:quit` in the app, or `spos stop`. Running `spos` again just opens the
-browser at the running instance. `spos list` shows where it runs, `spos import-csm <db.sqlite3> [--dry-run]` brings
-over a chess-study-manager library, `spos restore <backup>` puts a backup back; `--no-browser`, `--port`, `--data-dir` and `--lan`
-are the options. Data lives in the platform's user-data folder (`~/Library/Application Support/Spaced Positions/`
-on macOS), with a compressed backup every day and before every update (in its `backups/` folder; Settings → App). Your own piece sets go in its `pieces/` folder (`pieces/<name>/` with
-`wK.svg` … `bP.svg`); a local engine is chosen in Settings → Engine (`stockfish` on the PATH by default).
+`spos` starts the app and opens the browser, like `jupyter notebook`; `Ctrl+C`, `spos stop` or `:quit` in the app
+stops it. `spos list` shows where it runs, `spos restore <backup>` puts a backup back; the options are
+`--no-browser`, `--port`, `--data-dir` (for example a synced folder) and `--lan` (open it from another computer at
+home, with the same one-time link).
 
-## Try it
+## First steps
+
+1. **Fill the library.** Home shows how while it is empty: import a puzzle pack (drop the `.sppack` file on the
+   window), collect diagrams from a book (`␣ c`), or paste positions and games anywhere (`⌘V` / `Ctrl+V`).
+2. **Make puzzles.** In Analyse (`␣ a`), go to the move after which the puzzle starts, `p s` sets it up, `p r` puts
+   it into training. On any board, `:puzzle` makes a puzzle from the moves played. Imported PGN files with set-up
+   positions become puzzles by themselves.
+3. **Train.** `␣ t`, then `r` for today's review, `1`–`3` for a Storm, `4` for a Streak.
+
+Every action has a key, and every button shows it. `?` lists the keys that work where you are, `␣` (space) shows
+what can follow, `:` opens the command line, `F` puts a letter on everything clickable.
 
 | Keys | |
 |---|---|
-| `␣` | Leader: the which-key panel lists what can follow |
-| `␣ h` `␣ t` `␣ a` `␣ c` `␣ l` `␣ s` `␣ ,` · `␣ ␣` | Modes · back to the previous mode |
-| `⇥` · `␣ 1`–`␣ 9` · `␣ w h/j/k/l` | Focus the next pane · pane N · by direction |
-| In the focused pane | `j`/`k` scroll (lists: cursor) · `J`/`K` half a page · `g g`/`G` top/bottom · `]`/`[` next/previous section · `i` edit its text field · `Esc` back |
-| `␣ u p` | Piece set, with live preview (12 free sets) · or `:pieces merida` |
-| `␣ w v` / `␣ w s` | Split (then pick a view) · `␣ w q` close · `␣ w m` maximise · `␣ w c` collapse |
-| `␣ w <` `>` `+` `-` | Resize (sticky: keep pressing, `Esc` ends) · or drag a gutter |
-| `:` | Command line: `:vsplit notes`, `:theme ink`, `:set main=#e2b714`, `:set density=compact`, `:layout-save study` |
-| `F` | Hint labels: click anything by keyboard |
-| `u` / `U` | Undo / redo (layout, settings, every change of an analysis) |
-| `?` | Every key that works here |
-| `:ui` | The style guide: every component, plus a demo list linked to a board |
-| On a board | Click/drag to move · right-drag arrows (⇧ red, ⌥ blue) · `i` type a move (`Nf3`, `Sf3`, `g1f3`) · `S` board editor · `h`/`l` step · `f` flip · `q` square tool · `y`/`Y` copy FEN/PGN |
-| `⌘V` | Paste a FEN, PGN or lichess link anywhere (not in a text field): the status line offers `b` show on a board, `a` analyse |
-| `␣ t` Train | `r` Review · `1` `2` `3` Storm 3′/5′/10′ · `4` Streak · `5` Streak ♥3 · `6` blind · while solving `h` hint, `s` solution, `Esc` pause |
-| `:puzzle` | On any board: the line played so far becomes a puzzle |
-| `␣ a` Analyse | `:analyse <title>` opens a position · `h`/`l` step · `j`/`k` other variation · `1`–`7` `! ? !! ?? !? ?! □` · `m g/d/b` mark · `c` comment · `P` main line · `d` delete · `e` engine, `↵` its best move · `p s` puzzle from here, `p x` ends here, `p r` ready |
-| From Train | Feedback: `a` analyse, `e` edit the puzzle, `t` tag · Result: `↵` opens the puzzle under the cursor, `a` the missed ones (`n`/`N` the others) |
-| `␣ l` Library | `/` query (`motif:gabel diff:>=3 -is:diagram sort:-difficulty`, `⇥` completes) · `1`–`6` collections · `x` select · `t` tag · `T` train · `a` analyse · `d` trash · `e` PGN · `␣ u v` table/list/grid · `u` undoes any of it |
-| `␣ c` Collect | Paste a FEN and `c`, or set up with `S` · `⌘↵` save & next · in the entry pane: `s` source, `↑↓` diagram, `t` tags, `1`–`9` presets |
-| `:import` | A PGN file: games, and short set-up lines as puzzles (`r` into training) |
-| Packs | Coach: select in the Library, `e` → Pack, or `:pack-export "Back ranks" for=Ben` · student: drop the `.sppack` on the app (or `:pack-import`), `↵` |
-| `␣ s` Stats | `j`/`k` charts · `h`/`l` points · `↵` drill down · `t` table · `1`–`5` period · `g <key>` a section |
-| `␣ h` Home | `r` review · `1`–`6` sessions (`5` weakest motifs) · `a` continue the analysis · `c` continue collecting |
-| `:detect` · `:evaluate` | Tags from python-chess (Library selection or Analyse) · the engine over the main line (`␣ w v`, `g` the eval graph) |
+| `␣ h` `␣ t` `␣ a` `␣ c` `␣ l` `␣ s` `␣ ,` | Home · Train · Analyse · Collect · Library · Stats · Settings |
+| `⇥` · `␣ 1`–`␣ 9` | Focus the next pane · pane N |
+| `j` `k` · `g g` `G` · `]` `[` | Down, up · top, bottom · next, previous section |
+| `u` `U` | Undo, redo (also every change of an analysis, after a reload too) |
+| On a board | Click or drag to move · right-drag for arrows (⇧ red, ⌥ blue) · `i` type a move (`Nf3`, also German, French or Italian letters) · `S` board editor · `f` flip |
+| While solving | `h` hint (counts as missed) · `s` solution · `Esc` pause |
+| `␣ l` Library | `/` search (`⇥` completes) · `x` select · `t` tag · `T` train · `a` analyse · `e` export (PGN or pack) |
+| `␣ w v` · `␣ w s` | Split side by side · above and below; `␣ w q` closes, `␣ w m` maximises |
 
-## Puzzles to train with
+## Languages
 
-Make puzzles from any board with `:puzzle`, or import the training puzzles of a chess-study-manager database (it reads
-a copy; the original is never opened):
+Settings → Language: English, Deutsch, Français or Italiano, or automatically the browser's language. Tag names
+follow the language of the app, or keep one of their own (for example German tag names in an English app). Piece
+letters in moves (Settings → Board) can be English (KQRBN), German (KDTLS), French (RDTFC) or Italian (RDTAC).
 
-```bash
-.venv/bin/python manage.py import_csm ../chess-study-manager/db.sqlite3
-```
+## Puzzle packs
+
+A pack (`.sppack`) holds positions with their analysis, tags and puzzles, and games. Training history and private
+notes never travel. In the Library, search or select what goes in, then `e` → *Pack* or
+`:pack-export "Back ranks" for=Ben`. `for=` makes a personal copy: the name shows with every puzzle of it ("from
+Coach for Ben"), and Settings → Packs logs which version went to whom. Exporting under the same title again is the
+next version of the same pack: when the receiver imports it, new positions and moves are added and their training
+history stays. To import, drop the file on the app or use `:pack-import`; a preview shows what is new and the
+pack's licence.
+
+**Packs and copyright.** Spaced Positions doesn't check what goes into a pack, so you decide what you may share.
+As a guide (not legal advice):
+
+- Moves of games and positions are facts, and old games are public domain anyway; your own analysis and comments
+  are yours to share.
+- A published puzzle book is protected as a collection (its selection, order and solution texts). Copying a whole
+  book, or most of it, into a pack for others needs the publisher's permission. For your own study, a pack of your
+  own book is fine.
+- Teaching exceptions (in Switzerland Art. 19 of the Copyright Act, similar elsewhere) allow excerpts for your
+  pupils, not complete books.
+- The licence you give a pack (`licence="…"`) is shown to whoever imports it. The default asks the receiver not to
+  pass a personal copy on.
+
+## Your data
+
+Everything stays on your computer, in the user-data folder (`~/Library/Application Support/Spaced Positions/` on
+macOS, `%APPDATA%\Spaced Positions\` on Windows, `~/.local/share/spaced-positions/` on Linux; Settings → App shows
+it). A compressed backup is made every day and before every update, in its `backups/` folder; *back up now* is in
+Settings → App. The app asks no server anything unless you turn on the update check (Settings → App), which asks
+GitHub once a day for the newest version. Your own piece sets go in the data folder's `pieces/` folder
+(`pieces/<name>/wK.svg` … `bP.svg`); a local engine is chosen in Settings → Engine.
+
+## Licence
+
+Spaced Positions is free software under the GNU General Public License, version 3 or later ([LICENSE](LICENSE)):
+use it, read and change its source, and pass it on under the same licence. It bundles chessground and python-chess
+(GPL-3.0), Stockfish 17.1 (GPL-3.0), chess.js (BSD-2-Clause), htmx (0BSD), Django, waitress, WhiteNoise and
+platformdirs (BSD, ZPL, MIT) and 12 piece sets under free licences; Settings → Licences in the app lists every
+component with its licence and shows all licence texts.
 
 ## Develop
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -e ".[dev]"
-.venv/bin/python manage.py runserver 8020        # development: data in .data/, DEBUG on
+.venv/bin/python manage.py runserver 8020        # data in .data/, DEBUG on
 .venv/bin/python manage.py design build          # after changing anything in design/
-.venv/bin/python manage.py design check          # the design lint (also runs in CI)
+.venv/bin/python manage.py design check          # the design lint and the translation check (also in CI)
+.venv/bin/python manage.py i18n extract          # after changing texts: new texts into locale/*/django.po
+.venv/bin/python manage.py i18n build            # the compiled catalogues (django.mo, static/i18n/*.json)
 .venv/bin/python -m pytest -m "not browser"      # Python tests
 node --experimental-default-type=module --test tests/js/
 .venv/bin/python -m playwright install chromium && .venv/bin/python -m pytest -m browser
 sh packaging/build-macos.sh                      # the double-click app and its .dmg in dist/ (with the venv active)
 ```
 
-A version tag (`git tag v0.2.0 && git push --tags`) builds the macOS and Windows apps in GitHub Actions and attaches
-them to a draft release (`.github/workflows/release.yml`). Bump `version` in `pyproject.toml` and `__version__` in
-`spaced_positions/__init__.py` first.
+Texts are marked for translation with `_()` (Python), `{% translate %}` (templates) and `tr()` / `trn()`
+(JavaScript); `manage.py i18n missing` lists what still needs a translation. A version tag (`git tag v0.2.0 && git
+push --tags`) builds and tests the macOS and Windows apps in GitHub Actions and attaches them to a draft release;
+bump `version` in `pyproject.toml` and `__version__` in `spaced_positions/__init__.py` first. The design and the
+architecture are described in [spec/](spec/README.md).
 
 ### Where things are
 
 ```
-design/                  source of truth for the design system
-  tokens.toml            tier 1 tokens (types, defaults, ranges)
-  derived.css            tier 2 tokens (derived in CSS)
-  themes/*.toml          paper, ink
-  commands/*.toml        every command: title, args, when, handler
-  keymap/default.toml    bindings by context
-  licences.toml          licences of vendored files
+design/                  the design system's source: tokens, themes, commands, keymap, licences of vendored files
 spaced_positions/
   launcher.py            the `spos` command
-  design/                build + lint (`manage.py design build|check`)
-  chesslogic.py          all chess rules on the server (python-chess): FEN checks and fixes, paste parsing, SVG boards
-  core/                  shell views, layouts, server commands, chess endpoints, token middleware, template tags
-  training/              positions, puzzles (solution trees), cards, scheduler (srs.py), Storm pace, selection, API
-  analysis/              move trees of positions and games, the journal (undo), puzzles from the analysis, PGN, API
-  library/               sources, players, tags (data/tags.json: the starter vocabulary), games, saved queries,
-                         the query language (query.py), Collect, the PGN importer, bulk commands, tag detection,
-                         puzzle packs (packs.py, pack_views.py)
-  stats/                 metrics, achievements, the Stats sections, Home, SVG charts (charts.py)
-  static/design/         generated: tokens.css, themes.json, commands.json (committed)
-  static/css/            components (cascade layers; no literal colours or sizes)
-  static/js/core/        keys, commands, layout, command line, hints, help, lists, menu, lines, paste, san,
-                         analysis (tree, Moves and Inspector panes), engine (Stockfish worker, lines, eval bar),
-                         library (QueryBar, results, bulk), collect (entry session), importer, packs, confirm
-  static/js/islands/     the board (chessground + chess.js), the PGN/FEN view, the trainer
-  static/vendor/         htmx, chessground, chess.js, Stockfish 17.1 lite (licences in licences/ and design/licences.toml)
+  core/                  shell, layouts, server commands, settings, languages (i18n.py, i18n_catalog.py), updates
+  training/              positions, puzzles, cards, the scheduler (srs.py), Storm pace, sessions
+  analysis/              move trees, the journal (undo), puzzles from the analysis, PGN
+  library/               sources, players, tags (data/tags.json: the vocabulary in four languages), games, the query
+                         language, Collect, the PGN importer, tag detection, puzzle packs
+  stats/                 metrics, achievements, the Stats sections, Home, SVG charts
+  locale/                translations (German, French, Italian)
+  static/                CSS, JavaScript (core/, islands/), generated design files and catalogues, vendored libraries
   templates/             shell, components, views
-packaging/               the double-click app: entry (app.py), PyInstaller spec, icons, macOS build, smoke test
-docs/keymap.md           generated keymap reference
-tests/                   pytest (design, shell, chess, launcher, training, analysis, browser journeys, axe) and tests/js (node)
+packaging/               the double-click app: entry, PyInstaller spec, icons, macOS build, smoke test
+tests/                   pytest (incl. Playwright journeys and the axe accessibility check) and tests/js (node)
 ```
-
-Rules the lint enforces: every command has a client or server handler; every `{% cmd %}` and `data-cmd` names a
-real command; no key is both a command and a prefix in one context; global keys are reserved; browser-owned keys are
-never bound; built-in themes pass the contrast checks; component CSS uses tokens only; dependencies and vendored files
-have GPL-compatible licences; the generated files are up to date.

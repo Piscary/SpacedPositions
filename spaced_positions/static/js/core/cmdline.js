@@ -5,6 +5,7 @@ import { commands, enabled, handle, primaryKeys, run } from "./commands.js"
 import { ctx, keycaps, setLayer, status, storage } from "./context.js"
 import { setOverlayHandler } from "./keys.js"
 import { bufferIds, layoutNames } from "./layout.js"
+import { tr } from "./i18n.js"
 
 const MAX_ROWS = 12
 let el, input, results, hint
@@ -27,7 +28,7 @@ function build() {
   prompt.textContent = ":"
   input = document.createElement("input")
   input.className = "cmdline__input"
-  input.setAttribute("aria-label", "Command")
+  input.setAttribute("aria-label", tr("Command"))
   input.autocomplete = "off"
   input.spellcheck = false
   hint = document.createElement("span")
@@ -89,21 +90,21 @@ function completions(type) {
   const themes = window.SPOS.themes
   switch (type) {
     case "theme":
-      return ["auto", ...Object.keys(themes.themes)].map((v) => ({ value: v, label: v === "auto" ? "auto · follow the system" : themes.themes[v].label }))
+      return ["auto", ...Object.keys(themes.themes)].map((v) => ({ value: v, label: v === "auto" ? tr("auto · follow the system") : themes.themes[v].label }))
     case "view":
       return Object.entries(window.SPOS.views).map(([k, v]) => ({ value: k, label: v.label }))
     case "token":
     case "tokenname":
       return [
-        ...Object.entries(themes.schema).map(([k, v]) => ({ value: type === "token" ? `${k}=` : k, label: v.description })),
+        ...Object.entries(themes.schema).map(([k, v]) => ({ value: type === "token" ? `${k}=` : k, label: tr(v.description) })),
         ...(window.SPOS.settingsSchema || []).map((s) => ({ value: type === "token" ? `${s.name}=` : s.name, label: s.help })),
       ]
     case "layout":
-      return layoutCache.map((name) => ({ value: name, label: "saved layout" }))
+      return layoutCache.map((name) => ({ value: name, label: tr("saved layout") }))
     case "pieceset":
       return Object.entries(themes.pieces || {}).map(([k, v]) => ({ value: k, label: `${v.label} · ${v.author} · ${v.licence}` }))
     case "buffer":
-      return bufferIds().map((id) => ({ value: id, label: "hidden buffer" }))
+      return bufferIds().map((id) => ({ value: id, label: tr("hidden buffer") }))
     case "position":
     case "tag":
     case "source":
@@ -157,7 +158,7 @@ function refresh() {
   if (id) {
     const spec = commands()[id]
     const arg = spec.args?.[0]
-    hint.textContent = arg ? `${spec.title} · ${arg.name}${arg.optional ? " (optional)" : ""}` : spec.title
+    hint.textContent = arg ? `${spec.title} · ${arg.name}${arg.optional ? ` (${tr("optional")})` : ""}` : spec.title
     const values = arg ? (arg.type === "enum" ? arg.values.map((v) => ({ value: v, label: v })) : completions(arg.type)) : []
     rows = values
       .map((c) => ({ ...c, match: c.server ? { score: 0 } : fuzzy(rest, c.value) }))
@@ -166,7 +167,7 @@ function refresh() {
       .slice(0, MAX_ROWS)
     rows.forEach((c, i) => results.append(completionRow(c, i)))
   } else {
-    hint.textContent = text ? "" : "type a command · Tab completes · ↑ history"
+    hint.textContent = text ? "" : tr("type a command · Tab completes · ↑ history")
     const all = commands()
     rows = Object.entries(all)
       .filter(([, spec]) => !spec.hidden)
@@ -265,7 +266,7 @@ async function accept() {
   if (!commandId) {
     const exact = byName(text.trim())
     const choice = exact ? { id: exact } : rows[cursor]
-    if (!choice?.id) return status(`no command '${text}'`, { kind: "error" })
+    if (!choice?.id) return status(tr("no command '{name}'", { name: text }), { kind: "error" })
     commandId = choice.id
     const spec = commands()[commandId]
     const required = (spec.args || []).filter((a) => !a.optional)

@@ -9,6 +9,7 @@ import { focusPane, nodeOf, openBeside, switchMode } from "./layout.js"
 import { cursorIndex, resetList, targetRows } from "./lists.js"
 import { openCmdline } from "./cmdline.js"
 import { openMenu } from "./menu.js"
+import { locale, tr, trn } from "./i18n.js"
 
 const DISPLAYS = ["table", "list", "grid"]
 const state = new WeakMap() // library element → {q, c, display, ticket}
@@ -60,7 +61,7 @@ async function refresh(el, { keep = false, clear = false } = {}) {
 
 function paintInfo(el, info) {
   const count = el.querySelector("[data-query-count]")
-  count.textContent = info.count === undefined ? "" : `${info.count.toLocaleString()} ${stateOf(el).c}`
+  count.textContent = info.count === undefined ? "" : countText(stateOf(el).c, info.count)
   const box = el.querySelector("[data-query-problems]")
   box.replaceChildren()
   const text = stateOf(el).q
@@ -222,7 +223,7 @@ on("selection", ({ list }) => {
   const bar = el.querySelector("[data-bulk]")
   const n = targetRows(list).selected ? targetRows(list).ids.length : 0
   bar.hidden = n === 0
-  bar.querySelector("[data-bulk-count]").textContent = `${n} selected`
+  bar.querySelector("[data-bulk-count]").textContent = tr("{n} selected", { n })
 })
 
 on("effects", (effects) => {
@@ -263,7 +264,7 @@ on("library:query", ({ group, q, c }) => {
 })
 
 /** A facet adds its term to the query of its group's library, or takes it out. */
-/** The terms of a query, a quoted value kept whole: `src:"Chess Monkeys Level 1" diff:3` → two terms. */
+/** The terms of a query, a quoted value kept whole: `src:"Endgame Manual" diff:3` → two terms. */
 const termsOf = (q) => q.match(/(?:[^\s"]+|"[^"]*"?)+/g) || []
 
 function toggleTerm(term, row) {
@@ -291,7 +292,7 @@ async function setQuery(text, collection) {
     await switchMode("library")
     el = currentLibrary()
   }
-  if (!el) return status("The Library has no results pane: ␣ w v, then l", { kind: "error" }) || false
+  if (!el) return status(tr("The Library has no results pane: ␣ w v, then l"), { kind: "error" }) || false
   const st = stateOf(el)
   st.q = text
   if (collection) st.c = collection
@@ -307,6 +308,16 @@ const withLibrary = (fn) => (args) => {
   return fn(el, stateOf(el), args)
 }
 
+/** "1,234 positions" in the interface language. */
+function countText(collection, n) {
+  const shown = n.toLocaleString(locale)
+  const forms = {
+    positions: trn("{n} position", "{n} positions", n), games: trn("{n} game", "{n} games", n), puzzles: trn("{n} puzzle", "{n} puzzles", n),
+    players: trn("{n} player", "{n} players", n), sources: trn("{n} source", "{n} sources", n), tags: trn("{n} tag", "{n} tags", n),
+  }
+  return (forms[collection] || `${n} ${collection}`).replace(String(n), shown)
+}
+
 const infoOf = (el) => JSON.parse(el.querySelector("[data-library-results] #query-info")?.textContent || "{}")
 
 // `s`: sort by a column (the query's sort: term; the same column again reverses it)
@@ -315,12 +326,12 @@ handle("library.sort", withLibrary(async (el, st, [field]) => {
   const current = info.sort || ""
   if (!field) {
     field = await openMenu({
-      title: "Sort by · the same again reverses · ▤ groups",
+      title: tr("Sort by · the same again reverses · ▤ groups"),
       anchor: el,
       start: Math.max(0, (info.sorts || []).indexOf(current.replace(/^-/, ""))),
       items: (info.sorts || []).map((f) => ({
         label: `${f}${(info.groups || []).includes(f) ? " ▤" : ""}`,
-        note: current === f ? "↑ now" : current === `-${f}` ? "↓ now" : "",
+        note: current === f ? tr("↑ now") : current === `-${f}` ? tr("↓ now") : "",
         key: f[0], keys: [f[0]], value: f,
       })),
     })
@@ -365,16 +376,16 @@ function setFolds(el, change) {
 handle("library.fold", withLibrary((el) => {
   const row = el.querySelector("[data-library-results] .list__row.is-cursor")
   const group = row?.dataset.group
-  if (!group) return status("Groups come with a sort by difficulty, source, year …: s", { timeout: 2500 }) || false
+  if (!group) return status(tr("Groups come with a sort by difficulty, source, year …: s"), { timeout: 2500 }) || false
   setFolds(el, (f) => (f.has(group) ? f.delete(group) : f.add(group)))
 }))
 
 handle("library.foldall", withLibrary((el) => {
   const heads = [...el.querySelectorAll("[data-library-results] [data-group-head]")].map((h) => h.dataset.groupHead)
-  if (!heads.length) return status("Groups come with a sort by difficulty, source, year …: s", { timeout: 2500 }) || false
+  if (!heads.length) return status(tr("Groups come with a sort by difficulty, source, year …: s"), { timeout: 2500 }) || false
   const open = foldsOf(el).size > 0
   setFolds(el, (f) => (open ? f.clear() : heads.forEach((h) => f.add(h))))
-  status(open ? "All groups open" : "All groups folded · z opens the one at the cursor", { timeout: 1500 })
+  status(open ? tr("All groups open") : tr("All groups folded · z opens the one at the cursor"), { timeout: 1500 })
 }))
 
 document.addEventListener("click", (e) => {
@@ -393,7 +404,7 @@ handle("library.collection", withLibrary((el, st, [c]) => {
 
 handle("library.display", withLibrary((el, st, [display]) => {
   st.display = display || DISPLAYS[(DISPLAYS.indexOf(st.display) + 1) % DISPLAYS.length]
-  status(`Results as ${st.display}`, { timeout: 1500 })
+  status({ table: tr("Results as a table"), list: tr("Results as a list"), grid: tr("Results as a grid") }[st.display] || st.display, { timeout: 1500 })
   return refresh(el, { keep: true })
 }))
 
@@ -431,7 +442,7 @@ function target({ moves = false } = {}) {
 async function bulk(id, args, t) {
   const result = await serverRun(id, args, { c: t.c, ids: t.ids })
   if (!result) return false
-  status(result.message, { kind: "good", keys: result.undo ? { seq: ["u"], label: "undo" } : null })
+  status(result.message, { kind: "good", keys: result.undo ? { seq: ["u"], label: tr("undo") } : null })
   if (result.undo) pushUndo(inverse(result))
   return true
 }
@@ -450,7 +461,7 @@ handle("library.tag", ([tag]) => {
   if (!tag) return openCmdline("tag ")
   const t = target({ moves: window.SPOS.library.pendingMoveTags }) // `t` in Analyse: the move, not the position
   window.SPOS.library.pendingMoveTags = false
-  if (!t?.ids.length) return status("Nothing to tag here", { kind: "error" }) || false
+  if (!t?.ids.length) return status(tr("Nothing to tag here"), { kind: "error" }) || false
   return bulk("library.tag", [tag], t)
 })
 
@@ -458,21 +469,21 @@ handle("library.untag", ([tag]) => {
   if (!tag) return openCmdline("untag ")
   const t = target({ moves: window.SPOS.library.pendingMoveTags })
   window.SPOS.library.pendingMoveTags = false
-  if (!t?.ids.length) return status("Nothing selected", { kind: "error" }) || false
+  if (!t?.ids.length) return status(tr("Nothing selected"), { kind: "error" }) || false
   return bulk("library.untag", [tag], t)
 })
 
 const libraryTarget = (fn) => () => {
   const t = target()
   if (!t?.el) return false
-  if (!t.ids.length) return status("Nothing here", { kind: "error" }) || false
+  if (!t.ids.length) return status(tr("Nothing here"), { kind: "error" }) || false
   return fn(t, stateOf(t.el))
 }
 
 handle("library.detect", async () => {
   const t = target()
-  if (!t?.ids.length || !["positions", "puzzles"].includes(t.c)) return status("Select positions, or open one in Analyse", { kind: "error" }) || false
-  status("Detecting…", { timeout: 0 })
+  if (!t?.ids.length || !["positions", "puzzles"].includes(t.c)) return status(tr("Select positions, or open one in Analyse"), { kind: "error" }) || false
+  status(tr("Detecting…"), { timeout: 0 })
   return bulk("library.detect", [], t)
 })
 
@@ -482,11 +493,11 @@ handle("library.beside", async () => {
   const list = el?.querySelector("[data-library-results]")
   const row = list?.querySelector(".list__row.is-cursor")
   const id = row?.dataset.game || row?.dataset.position
-  if (!id) return status("o opens positions, puzzles and games beside the list", { timeout: 2000 }) || false
+  if (!id) return status(tr("o opens positions, puzzles and games beside the list"), { timeout: 2000 }) || false
   const group = await openBeside()
   const node = Number(row.dataset.node) || null
   await window.SPOS.analysis.open(id, { key: `library:${group}`, show: false, node })
-  status(`${row.dataset.title || "Position"} beside the list · ↵ opens it in Analyse`, { timeout: 2500 })
+  status(tr("{title} beside the list · ↵ opens it in Analyse", { title: row.dataset.title || tr("Position") }), { timeout: 2500 })
 })
 
 const VOCABULARY = ["players", "sources", "tags"]
@@ -504,13 +515,13 @@ handle("library.edit", (args) => {
 handle("library.delete", (args) => {
   const t = target()
   if (args.length) return bulk("library.delete", args, { c: "", ids: [] })
-  if (!t?.el || !VOCABULARY.includes(t.c) || !t.ids.length) return status("Select players, sources or tags in the Library (4 5 6)", { kind: "error" }) || false
+  if (!t?.el || !VOCABULARY.includes(t.c) || !t.ids.length) return status(tr("Select players, sources or tags in the Library (4 5 6)"), { kind: "error" }) || false
   return bulk("library.delete", [], t)
 })
 handle("library.restore", libraryTarget((t) => bulk("library.restore", [], t)))
 
 handle("library.emptytrash", () => {
-  offer("Empty the trash? Its positions and games are deleted for good (trained ones stay). y / n", {
+  offer(tr("Empty the trash? Its positions and games are deleted for good (trained ones stay). y / n"), {
     y: () => serverRun("library.emptytrash", []).then((r) => r && status(r.message, { kind: "good" })),
   })
 })
@@ -529,14 +540,14 @@ handle("library.train", libraryTarget(async (t, st) => {
   const data = await fetch("/lib/cards/", {
     method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() }, body: JSON.stringify(body),
   }).then((r) => r.json()).catch(() => null)
-  if (!data?.cards?.length) return status("No puzzles in training among these (p r in Analyse puts one into training)", { kind: "error" }) || false
+  if (!data?.cards?.length) return status(tr("No puzzles in training among these (p r in Analyse puts one into training)"), { kind: "error" }) || false
   return window.SPOS.train.start({ mode: "review", cards: data.cards, look: "normal", side: "move" })
 }))
 
 handle("library.analyse", libraryTarget(async (t, st) => {
   const all = !targetRows(t.el.querySelector("[data-library-results]")).selected
   const data = await fetch(`/lib/subject/?${params(all ? { ids: [] } : t, st)}`).then((r) => r.json()).catch(() => null)
-  if (!data?.ids?.length) return status("Nothing to analyse here", { kind: "error" }) || false
+  if (!data?.ids?.length) return status(tr("Nothing to analyse here"), { kind: "error" }) || false
   if (st.c === "games") return window.SPOS.analysis.openGame?.(data.ids[0], { list: { ids: data.ids, index: 0, kind: "game" } })
   return window.SPOS.analysis.open(data.ids[0], { list: { ids: data.ids, index: 0 } })
 }))
@@ -546,24 +557,24 @@ handle("library.copyfen", libraryTarget(async (t, st) => {
   if (!data?.fens?.length) return false
   try {
     await navigator.clipboard.writeText(data.fens.join("\n"))
-    status(data.fens.length === 1 ? "Copied FEN" : `Copied ${data.fens.length} FENs`, { kind: "good", timeout: 2500 })
+    status(trn("Copied {n} FEN", "Copied {n} FENs", data.fens.length), { kind: "good", timeout: 2500 })
   } catch {
-    status("The browser didn't allow copying", { kind: "error" })
+    status(tr("The browser didn't allow copying"), { kind: "error" })
   }
 }))
 
-// `e`: PGN (positions and games), or a puzzle pack for students (positions and puzzles)
+// `e`: PGN (positions and games), or a puzzle pack (positions, puzzles and games)
 handle("library.export", libraryTarget(async (t, st) => {
-  if (["positions", "puzzles"].includes(st.c)) {
+  if (["positions", "puzzles", "games"].includes(st.c)) {
     const kind = await openMenu({
-      title: "Export", anchor: t.el,
-      items: [{ label: "PGN", note: "for any chess program", key: "p", keys: ["p"], value: "pgn" },
-              { label: "Puzzle pack", note: "for students: :pack-export <title> for=<name>", key: "k", keys: ["k"], value: "pack" }],
+      title: tr("Export"), anchor: t.el,
+      items: [{ label: "PGN", note: tr("for any chess program"), key: "p", keys: ["p"], value: "pgn" },
+              { label: tr("Puzzle pack"), note: ":pack-export <title> [for=<name>]", key: "k", keys: ["k"], value: "pack" }],
     })
     if (kind === "pack") return openCmdline("pack-export ")
     if (kind !== "pgn") return false
   }
-  if (!["positions", "games"].includes(st.c)) return status("Positions and games export as PGN", { kind: "error" }) || false
+  if (!["positions", "games"].includes(st.c)) return status(tr("Positions and games export as PGN"), { kind: "error" }) || false
   const all = !targetRows(t.el.querySelector("[data-library-results]")).selected
   const link = document.createElement("a")
   link.href = `/lib/export/?${params(all ? { ids: [] } : t, st)}`
@@ -571,25 +582,25 @@ handle("library.export", libraryTarget(async (t, st) => {
   document.body.append(link)
   link.click()
   link.remove()
-  status(all ? "Exporting everything the query found" : `Exporting ${t.ids.length}`, { timeout: 2500 })
+  status(all ? tr("Exporting everything the query found") : tr("Exporting {n}", { n: t.ids.length }), { timeout: 2500 })
 }))
 
 // `:pack-export <title> [for=<student>]`: the selection, else everything the query found
 handle("pack.export", async (args) => {
   if (!args.length) return openCmdline("pack-export ")
   const el = currentLibrary()
-  if (!el) return status("Packs are made in the Library: search, select, then :pack-export", { kind: "error" }) || false
+  if (!el) return status(tr("Packs are made in the Library: search, select, then :pack-export"), { kind: "error" }) || false
   const st = stateOf(el)
-  if (!["positions", "puzzles"].includes(st.c)) return status("Packs hold positions: collection 1 or 3", { kind: "error" }) || false
+  if (!["positions", "puzzles", "games"].includes(st.c)) return status(tr("Packs hold positions and games: collection 1, 2 or 3"), { kind: "error" }) || false
   const rows = targetRows(el.querySelector("[data-library-results]"))
-  status("Making the pack…", { timeout: 0 })
+  status(tr("Making the pack…"), { timeout: 0 })
   const result = await serverRun("pack.export", args, { c: st.c, ids: rows.selected ? rows.ids : [], q: st.q })
   if (result) status(result.message, { kind: "good", timeout: 8000 })
 })
 
 // Analyse: `t` tags the move, `T` the position (through :tag, with the tag's completion).
 handle("analysis.tags", () => {
-  if (!target({ moves: true })) return status("Go to a move first (T tags the position)", { kind: "error" }) || false
+  if (!target({ moves: true })) return status(tr("Go to a move first (T tags the position)"), { kind: "error" }) || false
   window.SPOS.library.pendingMoveTags = true
   return openCmdline("tag ")
 })

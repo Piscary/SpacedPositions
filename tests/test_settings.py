@@ -1,4 +1,4 @@
-"""Phase 6 on the server: settings (`:set` for settings next to tokens), user themes, key bindings of one's own and
+"""On the server: settings (`:set` for settings next to tokens), user themes, key bindings of one's own and
 the settings as one TOML file (export, import, a pasted theme)."""
 
 import json

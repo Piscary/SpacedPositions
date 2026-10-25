@@ -21,11 +21,11 @@ AXE = Path(__file__).parent / "vendor" / "axe.min.js"
 
 @pytest.fixture
 def positions():
-    polgar = Source.objects.create(title="5334 Problems", short="Polgár 5334")
+    reti = Source.objects.create(title="Endgame Studies", short="Réti 1922")
     made = []
     for i, (title, tag, diff) in enumerate([("Fork one", "knight-fork", 3), ("Fork two", "family-fork", 4), ("Pin one", "pin", 2)]):
         p = tree.create_position(back_rank(i), ["d1d8"], title=title)
-        p.source, p.source_ref, p.difficulty_override = polgar, f"Nr. {i + 1}", diff
+        p.source, p.source_ref, p.difficulty_override = reti, f"Nr. {i + 1}", diff
         p.save()
         PositionTag.objects.create(position=p, tag=Tag.objects.get(key=tag))
         root = tree.root(p)
@@ -94,7 +94,7 @@ def test_query_with_completion_cursor_and_preview(page, positions):
 
 def test_select_tag_and_undo(page, positions):
     library(page)
-    query(page, "src:polgar sort:title")
+    query(page, "src:reti sort:title")
     keys(page, "x", "j", "x")
     page.wait_for_selector("#ws-library [data-bulk]:not([hidden]) >> text=2 selected")
     keys(page, "t")  # opens the command line with "tag "
@@ -185,10 +185,10 @@ def test_collect_save_next_duplicate_and_solution(page):
     page.wait_for_selector("#ws-collect [data-island=entry]")
     page.click("#ws-collect [data-view=entry] .pane__title")
     keys(page, "s")
-    page.keyboard.type("Polgar Probleme")
+    page.keyboard.type("Reti Studien")
     keys(page, "Enter")
-    wait_status(page, "New source: Polgar Probleme")
-    page.wait_for_selector("#ws-collect [data-entry-source] >> text=Polgar Probleme")
+    wait_status(page, "New source: Reti Studien")
+    page.wait_for_selector("#ws-collect [data-entry-source] >> text=Reti Studien")
     paste(page, back_rank(0))
     page.wait_for_selector("#status-message .keyhint")
     keys(page, "c")  # onto the Collect board, in the editor
@@ -196,7 +196,7 @@ def test_collect_save_next_duplicate_and_solution(page):
     keys(page, "ControlOrMeta+Enter")
     wait_status(page, "Saved p")
     first = Position.objects.get()
-    assert (first.title, first.source.title, first.source_ref) == ("Polgar Probleme Nr. 1", "Polgar Probleme", "1")
+    assert (first.title, first.source.title, first.source_ref) == ("Reti Studien Nr. 1", "Reti Studien", "1")
     assert page.input_value("#ws-collect [data-entry=ref]") == "2"  # diagram + 1
     assert page.evaluate("document.querySelector('#ws-collect [data-island=board]').board.layer") == "setup"
     # the same position again: a duplicate, merged with its solution
@@ -284,8 +284,8 @@ def test_tags_in_analyse(page, positions):
     page.keyboard.type("opfer")
     page.wait_for_timeout(300)
     keys(page, "Enter")
-    wait_status(page, "Tagged 1 item Opfer")
-    page.wait_for_selector("#ws-analyse [data-inspector] .inspector__tags >> text=Opfer")
+    wait_status(page, "Tagged 1 item Sacrifice")
+    page.wait_for_selector("#ws-analyse [data-inspector] .inspector__tags >> text=Sacrifice")
     keys(page, "l", "t")
     page.keyboard.type("zwischenzug")
     page.wait_for_timeout(300)
@@ -308,7 +308,7 @@ def test_library_accessibility(page, positions):
 
 
 def test_edit_players_and_link_a_name(page):
-    """Phase 6: a player made and edited from the Library, a name on a game linked to it, `d` refused while used."""
+    """A player made and edited from the Library, a name on a game linked to it, `d` refused while used."""
     from spaced_positions.library.models import Player
 
     Game.objects.create(white_name="Tal, M.", black_name="Larsen", start_fen=START)
@@ -336,7 +336,7 @@ def test_edit_players_and_link_a_name(page):
 
 
 def test_open_beside_the_list(page, positions):
-    """Phase 7: `o` shows the cursor row's position beside the list (a board and its moves, linked to each other)."""
+    """`o` shows the cursor row's position beside the list (a board and its moves, linked to each other)."""
     library(page)
     keys(page, "j")
     keys(page, "o")
@@ -360,7 +360,7 @@ def test_open_beside_the_list(page, positions):
 
 
 def test_sort_by_a_column_and_fold_groups(page, positions):
-    """Phase 7: `s` sorts by a column (into the query), groups by difficulty fold with z / Z, the cursor skips them."""
+    """`s` sorts by a column (into the query), groups by difficulty fold with z / Z, the cursor skips them."""
     library(page)
     keys(page, "s", "d")  # difficulty: the easiest first
     page.wait_for_function("window.SPOS.library.state().q === 'sort:difficulty'")

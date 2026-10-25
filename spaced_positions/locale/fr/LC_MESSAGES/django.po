@@ -1,0 +1,6322 @@
+# Spaced Positions: French (Switzerland). Built with `manage.py i18n extract`; translate the msgstr lines.
+msgid ""
+msgstr ""
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html
+msgid "move · annotation · mark"
+msgstr "coup · annotation · marque"
+
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html
+msgid "Annotation symbols"
+msgstr "Symboles d'annotation"
+
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html
+msgid "More…"
+msgstr "Plus…"
+
+#: templates/analysis/inspector.html analysis/models.py:20 design/tokens.toml:good
+msgid "Good"
+msgstr "Bon"
+
+#: templates/analysis/inspector.html analysis/models.py:21
+msgid "Dubious"
+msgstr "Douteux"
+
+#: templates/analysis/inspector.html analysis/models.py:22 design/tokens.toml:bad
+msgid "Bad"
+msgstr "Mauvais"
+
+#: templates/analysis/inspector.html templates/views/board.html
+msgid "Clear"
+msgstr "Effacer"
+
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html static/js/islands/board.js:658
+msgid "none"
+msgstr "aucun"
+
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html analysis/views.py:99
+msgid "Comment"
+msgstr "Commentaire"
+
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html
+msgid "Comment on %(move)s"
+msgstr "Commentaire sur %(move)s"
+
+#: templates/analysis/inspector.html
+msgid "Comment on the position"
+msgstr "Commentaire sur la position"
+
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html
+msgid "A comment on %(move)s"
+msgstr "Un commentaire sur %(move)s"
+
+#: templates/analysis/inspector.html
+msgid "An introduction to the position"
+msgstr "Une introduction à la position"
+
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html
+msgid "Alt+K Q R B N P insert ♔ ♕ ♖ ♗ ♘ ♙ (⇧ for black)"
+msgstr "Alt+K Q R B N P insèrent ♔ ♕ ♖ ♗ ♘ ♙ (⇧ pour les noirs)"
+
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html
+msgid "⌘↵ saves"
+msgstr "⌘↵ enregistre"
+
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html
+msgid "Ctrl+↵ saves"
+msgstr "Ctrl+↵ enregistre"
+
+#: templates/analysis/inspector.html templates/views/entry.html templates/views/library.html
+msgid "Tags"
+msgstr "Tags"
+
+#: templates/analysis/inspector.html static/js/core/analysis.js:133 static/js/core/library.js:500
+msgid "Position"
+msgstr "Position"
+
+#: templates/analysis/inspector.html
+msgid "Suggested: %(why)s · click accepts it"
+msgstr "Suggéré : %(why)s · un clic l'accepte"
+
+#: templates/analysis/inspector.html
+msgid "click removes it"
+msgstr "un clic le retire"
+
+#: templates/analysis/inspector.html
+msgid "Add"
+msgstr "Ajouter"
+
+#: templates/analysis/inspector.html
+msgid "Detect"
+msgstr "Détecter"
+
+#: templates/analysis/inspector.html
+msgid "Move %(move)s"
+msgstr "Coup %(move)s"
+
+#: templates/analysis/inspector.html
+msgid "set up"
+msgstr "configuré"
+
+#: templates/analysis/inspector.html templates/training/result.html library/importer.py:60
+msgid "Puzzle"
+msgstr "Exercice"
+
+#: templates/analysis/inspector.html templates/library/results.html
+msgid "in training"
+msgstr "en entraînement"
+
+#: templates/analysis/inspector.html templates/library/results.html
+msgid "draft"
+msgstr "brouillon"
+
+#: templates/analysis/inspector.html templates/library/results.html
+msgid "%(n)s card"
+msgid_plural "%(n)s cards"
+msgstr[0] "%(n)s carte"
+msgstr[1] "%(n)s cartes"
+
+#: templates/analysis/inspector.html
+msgid "it starts here"
+msgstr "il commence ici"
+
+#: templates/analysis/inspector.html
+msgid "starts at %(move)s"
+msgstr "commence à %(move)s"
+
+#: templates/analysis/inspector.html
+msgid "starts at the start"
+msgstr "commence dans la position de départ"
+
+#: templates/analysis/inspector.html
+msgid "Solution ends here"
+msgstr "La solution s'arrête ici"
+
+#: templates/analysis/inspector.html analysis/puzzles.py:150
+msgid "Also correct"
+msgstr "Aussi correct"
+
+#: templates/analysis/inspector.html
+msgid "All answers count"
+msgstr "Toutes les réponses comptent"
+
+#: templates/analysis/inspector.html
+msgid "Take out of training"
+msgstr "Retirer de l'entraînement"
+
+#: templates/analysis/inspector.html templates/views/entry.html analysis/puzzles.py:134
+msgid "Ready for training"
+msgstr "Prêt pour l'entraînement"
+
+#: templates/analysis/inspector.html
+msgid "Discard"
+msgstr "Abandonner"
+
+#: templates/analysis/inspector.html
+msgid "No puzzle here. Go to the move after which the puzzle starts (or the start position) and set one up: its solution is the analysis from there."
+msgstr "Pas d'exercice ici. Allez au coup après lequel l'exercice commence (ou à la position de départ) et créez-le : sa solution est l'analyse à partir de là."
+
+#: templates/analysis/inspector.html
+msgid "Set up a puzzle from here"
+msgstr "Créer un exercice à partir d'ici"
+
+#: templates/analysis/inspector.html
+msgid "source · objective · FEN"
+msgstr "source · objectif · FEN"
+
+#: templates/analysis/inspector.html templates/settings/rows.html templates/views/entry.html
+msgid "Source"
+msgstr "Source"
+
+#: templates/analysis/inspector.html
+msgid "Objective"
+msgstr "Objectif"
+
+#: templates/analysis/inspector.html templates/library/results.html library/views.py:293
+msgid "Difficulty"
+msgstr "Difficulté"
+
+#: templates/analysis/inspector.html templates/views/continue.html
+msgid "Analysis"
+msgstr "Analyse"
+
+#: templates/analysis/inspector.html
+msgid "%(n)s move"
+msgid_plural "%(n)s moves"
+msgstr[0] "%(n)s coup"
+msgstr[1] "%(n)s coups"
+
+#: templates/analysis/inspector_game.html
+msgid "Comment on the game"
+msgstr "Commentaire sur la partie"
+
+#: templates/analysis/inspector_game.html
+msgid "About the game"
+msgstr "À propos de la partie"
+
+#: templates/analysis/inspector_game.html
+msgid "Game"
+msgstr "Partie"
+
+#: templates/analysis/inspector_game.html templates/views/library.html stats/views.py:128
+msgid "Positions"
+msgstr "Positions"
+
+#: templates/analysis/inspector_game.html
+msgid "Puzzles come from positions: %(colon)s<code>new-position</code> takes the position after this move out of the game."
+msgstr "Les exercices viennent des positions : %(colon)s<code>new-position</code> sort la position après ce coup de la partie."
+
+#: templates/components/pane.html
+msgid "pinned"
+msgstr "épinglé"
+
+#: templates/components/pane.html
+msgid "The app no longer has this view: a saved layout still names it. Pick another view for this pane, or close it."
+msgstr "Cette vue n'existe plus : une disposition enregistrée la nomme encore. Choisissez une autre vue pour ce panneau, ou fermez-le."
+
+#: templates/components/pane.html
+msgid "It works in %(mode)s: its keys and the session belong there. Here, pick another view for this pane."
+msgstr "Elle fonctionne dans %(mode)s : ses touches et la session y appartiennent. Ici, choisissez une autre vue pour ce panneau."
+
+#: templates/library/facets.html templates/stats/sections.html
+msgid "%(n)s position"
+msgid_plural "%(n)s positions"
+msgstr[0] "%(n)s position"
+msgstr[1] "%(n)s positions"
+
+#: templates/library/results.html
+msgid "diagram"
+msgstr "diagramme"
+
+#: templates/library/results.html templates/views/library.html core/layouts.py:113
+msgid "trash"
+msgstr "corbeille"
+
+#: templates/library/results.html
+msgid "training"
+msgstr "entraînement"
+
+#: templates/library/results.html
+msgid "solution"
+msgstr "solution"
+
+#: templates/library/results.html
+msgid "%(rate)s%% of %(n)s"
+msgstr "%(rate)s%% sur %(n)s"
+
+#: templates/library/results.html
+msgid "flagged"
+msgstr "signalé"
+
+#: templates/library/results.html
+msgid "%(n)s game"
+msgid_plural "%(n)s games"
+msgstr[0] "%(n)s partie"
+msgstr[1] "%(n)s parties"
+
+#: templates/library/results.html
+msgid "%(p)s pos · %(g)s games"
+msgstr "%(p)s pos. · %(g)s parties"
+
+#: templates/library/results.html
+msgid "Nothing found."
+msgstr "Rien trouvé."
+
+#: templates/library/results.html
+msgid "Remove a term, or check the underlined ones."
+msgstr "Retirez un terme, ou vérifiez ceux qui sont soulignés."
+
+#: templates/library/results.html
+msgid "No positions yet."
+msgstr "Pas encore de positions."
+
+#: templates/library/results.html
+msgid "No games yet."
+msgstr "Pas encore de parties."
+
+#: templates/library/results.html
+msgid "No puzzles yet."
+msgstr "Pas encore d'exercices."
+
+#: templates/library/results.html
+msgid "No players yet."
+msgstr "Pas encore de joueurs."
+
+#: templates/library/results.html stats/views.py:119
+msgid "No sources yet."
+msgstr "Pas encore de sources."
+
+#: templates/library/results.html
+msgid "No tags yet."
+msgstr "Pas encore de tags."
+
+#: templates/library/results.html
+msgid "Collect them (%(collect_keys)s), paste them (%(paste_keys)s), import a PGN (<span class=\"mono\">:import</span>) or a puzzle pack (<span class=\"mono\">:pack-import</span>)."
+msgstr "Saisissez-les (%(collect_keys)s), collez-les (%(paste_keys)s), importez un PGN (<span class=\"mono\">:import</span>) ou un pack d'exercices (<span class=\"mono\">:pack-import</span>)."
+
+#: templates/library/results.html
+msgid "… %(n)s more: refine the query"
+msgstr "… %(n)s de plus : affinez la recherche"
+
+#: templates/refused.html
+msgid "This page only opens from the link that Spaced Positions gives you when it starts."
+msgstr "Cette page ne s'ouvre que par le lien que Spaced Positions donne au démarrage."
+
+#: templates/refused.html
+msgid "Start it from its icon, or run <code>spos</code> in a terminal. If it is already running, <code>spos</code> opens the right link."
+msgstr "Lancez-le depuis son icône, ou avec <code>spos</code> dans un terminal. S'il tourne déjà, <code>spos</code> ouvre le bon lien."
+
+#: templates/settings/keymap.html core/layouts.py:145
+msgid "Keymap"
+msgstr "Raccourcis"
+
+#: templates/settings/keymap.html
+msgid "Unmapped:"
+msgstr "Non attribuées :"
+
+#: templates/settings/rows.html design/commands/ui.toml:theme.set
+msgid "Theme"
+msgstr "Thème"
+
+#: templates/settings/rows.html core/user_pieces.py:54
+msgid "yours"
+msgstr "à vous"
+
+#: templates/settings/rows.html
+msgid "auto"
+msgstr "auto"
+
+#: templates/settings/rows.html
+msgid "dark"
+msgstr "sombre"
+
+#: templates/settings/rows.html
+msgid "light"
+msgstr "clair"
+
+#: templates/settings/rows.html
+msgid "Save as my theme"
+msgstr "Enregistrer comme mon thème"
+
+#: templates/settings/rows.html
+msgid "Copy as TOML"
+msgstr "Copier en TOML"
+
+#: templates/settings/rows.html
+msgid "%(n)s setting"
+msgid_plural "%(n)s settings"
+msgstr[0] "%(n)s réglage"
+msgstr[1] "%(n)s réglages"
+
+#: templates/settings/rows.html
+msgid "on"
+msgstr "oui"
+
+#: templates/settings/rows.html templates/views/engine.html static/js/core/engine.js:306
+msgid "off"
+msgstr "non"
+
+#: templates/settings/rows.html
+msgid "Packs share positions, puzzles and games as one file, for example with your students (<span class=\"mono\">:pack-export \"title\" for=Ben</span> in the Library, <span class=\"mono\">:pack-import</span> or drop a <span class=\"mono\">.sppack</span> file on the app)."
+msgstr "Les packs partagent des positions, des exercices et des parties en un seul fichier, par exemple avec vos élèves (<span class=\"mono\">:pack-export \"titre\" for=Ben</span> dans la Bibliothèque, <span class=\"mono\">:pack-import</span> ou déposez un fichier <span class=\"mono\">.sppack</span> sur l'app)."
+
+#: templates/settings/rows.html
+msgid "for %(name)s"
+msgstr "pour %(name)s"
+
+#: templates/settings/rows.html
+msgid "for anyone"
+msgstr "pour tous"
+
+#: templates/settings/rows.html
+msgid "%(n)s item"
+msgid_plural "%(n)s items"
+msgstr[0] "%(n)s élément"
+msgstr[1] "%(n)s éléments"
+
+#: templates/settings/rows.html
+msgid "No packs made yet."
+msgstr "Aucun pack créé pour l'instant."
+
+#: templates/settings/rows.html
+msgid "Received"
+msgstr "Reçus"
+
+#: templates/settings/rows.html
+msgid "Data folder"
+msgstr "Dossier des données"
+
+#: templates/settings/rows.html
+msgid "The database: %(size)s · %(n)s backup"
+msgid_plural "The database: %(size)s · %(n)s backups"
+msgstr[0] "La base de données : %(size)s · %(n)s sauvegarde"
+msgstr[1] "La base de données : %(size)s · %(n)s sauvegardes"
+
+#: templates/settings/rows.html
+msgid "the newest %(when)s (%(kind)s)"
+msgstr "la plus récente %(when)s (%(kind)s)"
+
+#: templates/settings/rows.html
+msgid "A backup is made every day and before every update; <span class=\"mono\">spos restore &lt;file&gt;</span> puts one back."
+msgstr "Une sauvegarde est faite chaque jour et avant chaque mise à jour ; <span class=\"mono\">spos restore &lt;fichier&gt;</span> en restaure une."
+
+#: templates/settings/rows.html design/commands/settings.toml:settings.keymap
+msgid "Edit the keymap"
+msgstr "Modifier les raccourcis"
+
+#: templates/settings/rows.html
+msgid "%(n)s binding of yours"
+msgid_plural "%(n)s bindings of yours"
+msgstr[0] "%(n)s raccourci personnel"
+msgstr[1] "%(n)s raccourcis personnels"
+
+#: templates/settings/rows.html
+msgid "your own CSS"
+msgstr "votre propre CSS"
+
+#: templates/settings/rows.html
+msgid "Advanced"
+msgstr "Avancé"
+
+#: templates/settings/rows.html
+msgid "Your own CSS, applied after the theme. If it hides the app: hold Esc while the app loads, or open it with ?safe."
+msgstr "Votre propre CSS, appliqué après le thème. S'il cache l'app : maintenez Échap pendant le chargement, ou ouvrez-la avec ?safe."
+
+#: templates/settings/rows.html
+msgid ".board__frame { border-radius: 0; } · ⌘↵ applies"
+msgstr ".board__frame { border-radius: 0; } · ⌘↵ applique"
+
+#: templates/settings/rows.html
+msgid ".board__frame { border-radius: 0; } · Ctrl+↵ applies"
+msgstr ".board__frame { border-radius: 0; } · Ctrl+↵ applique"
+
+#: templates/settings/rows.html
+msgid "free software: GPL-3.0"
+msgstr "logiciel libre : GPL-3.0"
+
+#: templates/settings/rows.html
+msgid "Licences"
+msgstr "Licences"
+
+#: templates/settings/rows.html
+msgid "<b>Spaced Positions %(version)s</b> is free software under the GNU General Public License, version 3 or later: anyone may use it, read and change its source, and pass it on under the same licence."
+msgstr "<b>Spaced Positions %(version)s</b> est un logiciel libre sous la licence publique générale GNU, version 3 ou ultérieure : chacun peut l'utiliser, lire et modifier son code source, et le redistribuer sous la même licence."
+
+#: templates/settings/rows.html
+msgid "The source:"
+msgstr "Le code source :"
+
+#: templates/settings/rows.html
+msgid "Puzzle packs are content, with the licence their author gives them."
+msgstr "Les packs d'exercices sont du contenu, sous la licence que leur auteur leur donne."
+
+#: templates/settings/rows.html
+msgid "The licence (GPL-3.0)"
+msgstr "La licence (GPL-3.0)"
+
+#: templates/settings/rows.html
+msgid "All licence texts and notices"
+msgstr "Tous les textes de licence et mentions"
+
+#: templates/settings/rows.html
+msgid "Bundled with it"
+msgstr "Fourni avec"
+
+#: templates/settings/rows.html
+msgid "Component"
+msgstr "Composant"
+
+#: templates/settings/rows.html
+msgid "Licence"
+msgstr "Licence"
+
+#: templates/settings/rows.html
+msgid "Pieces: %(name)s"
+msgstr "Pièces : %(name)s"
+
+#: templates/settings/rows.html
+msgid "export · import"
+msgstr "export · import"
+
+#: templates/settings/rows.html
+msgid "Data"
+msgstr "Données"
+
+#: templates/settings/rows.html
+msgid "Export settings (TOML)"
+msgstr "Exporter les réglages (TOML)"
+
+#: templates/settings/rows.html
+msgid "Export the library (PGN)"
+msgstr "Exporter la bibliothèque (PGN)"
+
+#: templates/settings/rows.html
+msgid "Settings or a theme to import"
+msgstr "Réglages ou thème à importer"
+
+#: templates/settings/rows.html
+msgid "Paste exported settings or a theme (TOML), then ⌘↵"
+msgstr "Collez des réglages exportés ou un thème (TOML), puis ⌘↵"
+
+#: templates/settings/rows.html
+msgid "Paste exported settings or a theme (TOML), then Ctrl+↵"
+msgstr "Collez des réglages exportés ou un thème (TOML), puis Ctrl+↵"
+
+#: templates/shell.html design/commands/shell.toml:mode.home design/commands/shell.toml:mode.train
+msgid "Modes"
+msgstr "Modes"
+
+#: templates/shell.html training/views.py:250 static/js/core/context.js:63
+msgid "Normal"
+msgstr "Normal"
+
+#: templates/shell.html
+msgid "leader"
+msgstr "leader"
+
+#: templates/shell.html
+msgid "commands"
+msgstr "commandes"
+
+#: templates/shell.html core/layouts.py:56
+msgid "keys"
+msgstr "touches"
+
+#: templates/stats/sections.html
+msgid "Period"
+msgstr "Période"
+
+#: templates/stats/sections.html
+msgid "positions · training · library · days in a row"
+msgstr "positions · entraînement · bibliothèque · jours d'affilée"
+
+#: templates/stats/sections.html
+msgid "Overview"
+msgstr "Vue d'ensemble"
+
+#: templates/stats/sections.html
+msgid "%(n)s mature card"
+msgid_plural "%(n)s mature cards"
+msgstr[0] "%(n)s carte acquise"
+msgstr[1] "%(n)s cartes acquises"
+
+#: templates/stats/sections.html templates/views/today.html stats/models.py:10
+msgid "Pattern library"
+msgstr "Bibliothèque de motifs"
+
+#: templates/stats/sections.html
+msgid "<b data-ticker>%(n)s</b> mature"
+msgstr "<b data-ticker>%(n)s</b> acquises"
+
+#: templates/stats/sections.html
+msgid "next milestone %(goal)s"
+msgstr "prochain palier %(goal)s"
+
+#: templates/stats/sections.html templates/views/today.html
+msgid "on course for %(goal)s by %(when)s"
+msgstr "en route vers %(goal)s pour le %(when)s"
+
+#: templates/stats/sections.html
+msgid "keep up with the reviews to get there"
+msgstr "suivez les révisions pour y arriver"
+
+#: templates/stats/sections.html
+msgid "%(young)s young · %(learning)s learning · %(new)s new · %(soon)s become mature in the next 30 days if you keep up"
+msgstr "%(young)s récentes · %(learning)s en apprentissage · %(new)s nouvelles · %(soon)s seront acquises dans les 30 prochains jours si vous continuez"
+
+#: templates/stats/sections.html
+msgid "new · learning · young · mature per day"
+msgstr "nouvelles · apprentissage · récentes · acquises par jour"
+
+#: templates/stats/sections.html
+msgid "Card stages"
+msgstr "Étapes des cartes"
+
+#: templates/stats/sections.html stats/models.py:12
+msgid "Retention"
+msgstr "Rétention"
+
+#: templates/stats/sections.html
+msgid "%(ok)s of %(n)s due reviews"
+msgstr "%(ok)s sur %(n)s révisions dues"
+
+#: templates/stats/sections.html
+msgid "Young / mature"
+msgstr "Récentes / acquises"
+
+#: templates/stats/sections.html
+msgid "%(young)s / %(mature)s reviews"
+msgstr "%(young)s / %(mature)s révisions"
+
+#: templates/stats/sections.html
+msgid "Learning → Familiar → Solid → Strong → Expert → Master"
+msgstr "Apprentissage → Familier → Solide → Fort → Expert → Maître"
+
+#: templates/stats/sections.html
+msgid "Mastery"
+msgstr "Maîtrise"
+
+#: templates/stats/sections.html
+msgid "weakest motifs · robustness"
+msgstr "motifs les plus faibles · robustesse"
+
+#: templates/stats/sections.html
+msgid "Weak spots"
+msgstr "Points faibles"
+
+#: templates/stats/sections.html
+msgid "weaker %(side)s"
+msgstr "plus faible %(side)s"
+
+#: templates/stats/sections.html
+msgid "Records"
+msgstr "Records"
+
+#: templates/stats/sections.html templates/training/launcher.html templates/training/result.html
+msgid "Streak"
+msgstr "Streak"
+
+#: templates/stats/sections.html templates/training/result.html
+msgid "Best combo"
+msgstr "Meilleur combo"
+
+#: templates/stats/sections.html
+msgid "training days · points per week"
+msgstr "jours d'entraînement · points par semaine"
+
+#: templates/stats/sections.html
+msgid "Activity"
+msgstr "Activité"
+
+#: templates/stats/sections.html templates/views/today.html stats/models.py:11
+msgid "Days in a row"
+msgstr "Jours d'affilée"
+
+#: templates/stats/sections.html
+msgid "longest %(n)s"
+msgstr "record %(n)s"
+
+#: templates/stats/sections.html
+msgid "Training weeks in a row"
+msgstr "Semaines d'entraînement d'affilée"
+
+#: templates/stats/sections.html
+msgid "%(goal)s+ days a week · this week %(days)s"
+msgstr "%(goal)s+ jours par semaine · cette semaine %(days)s"
+
+#: templates/stats/sections.html
+msgid "Due reviews on time"
+msgstr "Révisions faites à temps"
+
+#: templates/stats/sections.html
+msgid "%(n)s overdue now"
+msgstr "%(n)s en retard"
+
+#: templates/stats/sections.html templates/views/library.html design/commands/library.toml:library.collection
+msgid "Collection"
+msgstr "Collection"
+
+#: templates/stats/sections.html
+msgid "records, milestones and level-ups"
+msgstr "records, paliers et progressions"
+
+#: templates/stats/sections.html
+msgid "Timeline"
+msgstr "Chronologie"
+
+#: templates/stats/sections.html
+msgid "Records, milestones and level-ups appear here as you reach them."
+msgstr "Les records, paliers et progressions apparaissent ici dès que vous les atteignez."
+
+#: templates/training/launcher.html templates/views/today.html
+msgid "one key starts a session"
+msgstr "une touche lance une session"
+
+#: templates/training/launcher.html
+msgid "Sessions"
+msgstr "Sessions"
+
+#: templates/training/launcher.html templates/views/today.html training/models.py:254
+msgid "Review"
+msgstr "Révision"
+
+#: templates/training/launcher.html
+msgid "<b>%(due)s</b> due · <b>%(new)s</b> new"
+msgstr "<b>%(due)s</b> à réviser · <b>%(new)s</b> nouvelles"
+
+#: templates/training/launcher.html templates/views/today.html
+msgid "nothing due"
+msgstr "rien à réviser"
+
+#: templates/training/launcher.html templates/views/today.html
+msgid "next %(when)s"
+msgstr "prochaine %(when)s"
+
+#: templates/training/launcher.html core/layouts.py:151 stats/models.py:13
+msgid "Storm"
+msgstr "Storm"
+
+#: templates/training/launcher.html
+msgid "How much time a quick solve earns (Settings → Training)"
+msgstr "Le temps qu'une solution rapide fait gagner (Réglages → Entraînement)"
+
+#: templates/training/launcher.html core/settings.py:32
+msgid "Storm pace"
+msgstr "Rythme du Storm"
+
+#: templates/training/launcher.html
+msgid "best"
+msgstr "record"
+
+#: templates/training/launcher.html training/views.py:250
+msgid "Blind"
+msgstr "À l'aveugle"
+
+#: templates/training/launcher.html templates/views/today.html
+msgid "Weakest motifs"
+msgstr "Motifs les plus faibles"
+
+#: templates/training/launcher.html
+msgid "after 3 attempts on a motif"
+msgstr "après 3 essais sur un motif"
+
+#: templates/training/launcher.html templates/training/result.html templates/views/today.html
+msgid "Again"
+msgstr "Encore"
+
+#: templates/training/launcher.html
+msgid "%(cards)s cards in %(puzzles)s puzzles · make a puzzle from any board line with <span class=\"mono\">:puzzle</span>"
+msgstr "%(cards)s cartes dans %(puzzles)s exercices · créez un exercice depuis une ligne de l'échiquier avec <span class=\"mono\">:puzzle</span>"
+
+#: templates/training/launcher.html
+msgid "mode · look · side · lives · first move · filter"
+msgstr "mode · affichage · camp · vies · premier coup · filtre"
+
+#: templates/training/launcher.html
+msgid "Custom session"
+msgstr "Session personnalisée"
+
+#: templates/training/launcher.html
+msgid "Mode"
+msgstr "Mode"
+
+#: templates/training/launcher.html
+msgid "Look"
+msgstr "Affichage"
+
+#: templates/training/launcher.html templates/views/board.html
+msgid "Side"
+msgstr "Camp"
+
+#: templates/training/launcher.html
+msgid "Lives"
+msgstr "Vies"
+
+#: templates/training/launcher.html
+msgid "First move only"
+msgstr "Premier coup seulement"
+
+#: templates/training/launcher.html
+msgid "Filter"
+msgstr "Filtre"
+
+#: templates/training/launcher.html
+msgid "Filter: a Library query"
+msgstr "Filtre : une requête de la Bibliothèque"
+
+#: templates/training/launcher.html
+msgid "/ motif:fork diff:<=3 · empty: all puzzles"
+msgstr "/ motif:fork diff:<=3 · vide : tous les exercices"
+
+#: templates/training/launcher.html static/js/islands/graphs.js:77
+msgid "Start"
+msgstr "Démarrer"
+
+#: templates/training/result.html templates/views/queue.html stats/views.py:81
+msgid "Solved"
+msgstr "Résolus"
+
+#: templates/training/result.html templates/views/today.html
+msgid "Accuracy"
+msgstr "Précision"
+
+#: templates/training/result.html
+msgid "Per minute"
+msgstr "Par minute"
+
+#: templates/training/result.html
+msgid "Median time"
+msgstr "Temps médian"
+
+#: templates/training/result.html templates/views/queue.html stats/views.py:94
+msgid "Missed"
+msgstr "Manqués"
+
+#: templates/training/result.html
+msgid "Time per puzzle"
+msgstr "Temps par exercice"
+
+#: templates/training/result.html
+msgid "Time per puzzle · solved / missed · longest %(s)ss"
+msgstr "Temps par exercice · résolus / manqués · le plus long %(s)s s"
+
+#: templates/training/result.html
+msgid "solved"
+msgstr "résolu"
+
+#: templates/training/result.html
+msgid "missed"
+msgstr "manqué"
+
+#: templates/training/result.html
+msgid "Puzzles of this session"
+msgstr "Exercices de cette session"
+
+#: templates/training/result.html
+msgid "hint"
+msgstr "indice"
+
+#: templates/training/result.html
+msgid "solution shown"
+msgstr "solution affichée"
+
+#: templates/training/result.html
+msgid "Solved before it was due: the schedule didn't change"
+msgstr "Résolu avant l'échéance : le planning n'a pas changé"
+
+#: templates/training/result.html
+msgid "early"
+msgstr "en avance"
+
+#: templates/training/result.html
+msgid "No puzzles played."
+msgstr "Aucun exercice joué."
+
+#: templates/views/board.html
+msgid "Castling"
+msgstr "Roque"
+
+#: templates/views/board.html
+msgid "E.p."
+msgstr "e.p."
+
+#: templates/views/board.html
+msgid "Mirror"
+msgstr "Miroir"
+
+#: templates/views/board.html
+msgid "Initial"
+msgstr "Position initiale"
+
+#: templates/views/board.html templates/views/entry.html
+msgid "Diagram"
+msgstr "Diagramme"
+
+#: templates/views/board.html
+msgid "Fix"
+msgstr "Corriger"
+
+#: templates/views/board.html
+msgid "Done"
+msgstr "Terminé"
+
+#: templates/views/continue.html
+msgid "analysis · collect"
+msgstr "analyse · saisie"
+
+#: templates/views/continue.html core/layouts.py:154
+msgid "Continue"
+msgstr "Continuer"
+
+#: templates/views/continue.html
+msgid "No analysis open yet: <span class=\"mono\">:analyse</span> or paste a game."
+msgstr "Aucune analyse ouverte : <span class=\"mono\">:analyse</span> ou collez une partie."
+
+#: templates/views/continue.html core/layouts.py:27 stats/models.py:54
+msgid "Collect"
+msgstr "Saisie"
+
+#: templates/views/continue.html
+msgid "next Nr. %(ref)s"
+msgstr "prochain n° %(ref)s"
+
+#: templates/views/continue.html
+msgid "p. %(page)s"
+msgstr "p. %(page)s"
+
+#: templates/views/continue.html
+msgid "enter diagrams from a book"
+msgstr "saisir des diagrammes d'un livre"
+
+#: templates/views/continue.html
+msgid "FEN · PGN · lichess link"
+msgstr "FEN · PGN · lien lichess"
+
+#: templates/views/continue.html templates/views/pgn.html design/commands/board.toml:paste.detect
+msgid "Paste"
+msgstr "Coller"
+
+#: templates/views/continue.html design/commands/board.toml:paste.detect
+msgid "Paste a FEN, PGN or lichess link"
+msgstr "Collez un FEN, un PGN ou un lien lichess"
+
+#: templates/views/continue.html
+msgid "A FEN, a PGN or a lichess link, then ⌘↵ · or ⌘V anywhere"
+msgstr "Un FEN, un PGN ou un lien lichess, puis ⌘↵ · ou ⌘V n'importe où"
+
+#: templates/views/continue.html
+msgid "A FEN, a PGN or a lichess link, then Ctrl+↵ · or Ctrl+V anywhere"
+msgstr "Un FEN, un PGN ou un lien lichess, puis Ctrl+↵ · ou Ctrl+V n'importe où"
+
+#: templates/views/continue.html
+msgid "positions and games worked on last"
+msgstr "positions et parties travaillées récemment"
+
+#: templates/views/continue.html
+msgid "Recent"
+msgstr "Récent"
+
+#: templates/views/engine.html
+msgid "On / off"
+msgstr "Marche / arrêt"
+
+#: templates/views/engine.html core/settings.py:44
+msgid "Lines"
+msgstr "Lignes"
+
+#: templates/views/entry.html static/js/core/collect.js:59
+msgid "— none —"
+msgstr "— aucune —"
+
+#: templates/views/entry.html
+msgid "Choose"
+msgstr "Choisir"
+
+#: templates/views/entry.html
+msgid "Page"
+msgstr "Page"
+
+#: templates/views/entry.html
+msgid "Diagram number"
+msgstr "Numéro du diagramme"
+
+#: templates/views/entry.html templates/views/pgn.html
+msgid "Title"
+msgstr "Titre"
+
+#: templates/views/entry.html
+msgid "Title template"
+msgstr "Modèle de titre"
+
+#: templates/views/entry.html
+msgid "{source} {page} {n} are filled in · now:"
+msgstr "{source} {page} {n} sont remplis · maintenant :"
+
+#: templates/views/entry.html
+msgid "Presets"
+msgstr "Préréglages"
+
+#: templates/views/entry.html
+msgid "none yet · :preset-save &lt;name&gt; keeps the session's tags"
+msgstr "aucun pour l'instant · :preset-save &lt;nom&gt; garde les tags de la session"
+
+#: templates/views/entry.html
+msgid "Just saved"
+msgstr "Tout juste enregistrées"
+
+#: templates/views/evalgraph.html
+msgid "Evaluate the main line"
+msgstr "Évaluer la ligne principale"
+
+#: templates/views/filters.html core/layouts.py:116
+msgid "Filters"
+msgstr "Filtres"
+
+#: templates/views/filters.html
+msgid "Facets of the results of a Library pane in the same link group:"
+msgstr "Facettes des résultats d'un panneau Bibliothèque du même groupe lié :"
+
+#: templates/views/filters.html
+msgid "↵ adds or removes a term, - excludes it. Without a Library in this link group, this pane stays empty."
+msgstr "↵ ajoute ou retire un terme, - l'exclut. Sans Bibliothèque dans ce groupe lié, ce panneau reste vide."
+
+#: templates/views/inspector.html
+msgid "The move at the cursor of this link group's analysis appears here: its annotation, mark, comment and puzzle. Open a position in a move tree of the same link group."
+msgstr "Le coup au curseur de l'analyse de ce groupe lié apparaît ici : son annotation, sa marque, son commentaire et son exercice. Ouvrez une position dans un arbre de coups du même groupe lié."
+
+#: templates/views/keymap.html
+msgid "Search commands"
+msgstr "Chercher des commandes"
+
+#: templates/views/keymap.html
+msgid "search commands · ↵ new keys · ⌫ remove your binding"
+msgstr "chercher des commandes · ↵ nouvelles touches · ⌫ retirer votre raccourci"
+
+#: templates/views/keymap.html templates/views/settings.html
+msgid "Loading…"
+msgstr "Chargement…"
+
+#: templates/views/library.html
+msgid "Query"
+msgstr "Recherche"
+
+#: templates/views/library.html
+msgid "motif:fork diff:>=3 no:solution · ⇥ completes · ↵ to the results"
+msgstr "motif:fork diff:>=3 no:solution · ⇥ complète · ↵ vers les résultats"
+
+#: templates/views/library.html
+msgid "Completions"
+msgstr "Complétions"
+
+#: templates/views/library.html stats/views.py:128
+msgid "Games"
+msgstr "Parties"
+
+#: templates/views/library.html
+msgid "Puzzles"
+msgstr "Exercices"
+
+#: templates/views/library.html
+msgid "Players"
+msgstr "Joueurs"
+
+#: templates/views/library.html
+msgid "Sources"
+msgstr "Sources"
+
+#: templates/views/library.html
+msgid "Results"
+msgstr "Résultats"
+
+#: templates/views/library.html core/layouts.py:112 core/layouts.py:126
+msgid "tag"
+msgstr "taguer"
+
+#: templates/views/library.html core/layouts.py:112
+msgid "train"
+msgstr "entraîner"
+
+#: templates/views/library.html core/layouts.py:113
+msgid "analyse"
+msgstr "analyser"
+
+#: templates/views/library.html
+msgid "export"
+msgstr "exporter"
+
+#: templates/views/library.html
+msgid "clear"
+msgstr "effacer"
+
+#: templates/views/moves.html
+msgid "No position open in link group %(group)s."
+msgstr "Aucune position ouverte dans le groupe lié %(group)s."
+
+#: templates/views/moves.html
+msgid "No position open."
+msgstr "Aucune position ouverte."
+
+#: templates/views/moves.html
+msgid "%(colon)s <code>analyse</code> finds one, or paste a FEN or PGN (%(paste)s) and choose %(key_a)s."
+msgstr "%(colon)s <code>analyse</code> en trouve une, ou collez un FEN ou un PGN (%(paste)s) et choisissez %(key_a)s."
+
+#: templates/views/moves.html
+msgid "This pane shows the analysis of its link group, here in %(mode)s: %(colon)s <code>analyse</code> opens one here, %(key_o)s in the Library opens a row beside the list, %(key_a)s on Train's feedback the puzzle. The board, engine, inspector and graphs of the same link group follow it, and Analyse's keys work while one of them has the focus."
+msgstr "Ce panneau montre l'analyse de son groupe lié, ici dans %(mode)s : %(colon)s <code>analyse</code> en ouvre une ici, %(key_o)s dans la Bibliothèque ouvre une ligne à côté de la liste, %(key_a)s dans le retour de l'entraînement l'exercice. L'échiquier, le moteur, l'inspecteur et les graphiques du même groupe lié la suivent, et les touches de l'Analyse fonctionnent tant que l'un d'eux a le focus."
+
+#: templates/views/pgn.html
+msgid "A FEN, a PGN or a lichess link, then ⌘↵"
+msgstr "Un FEN, un PGN ou un lien lichess, puis ⌘↵"
+
+#: templates/views/pgn.html
+msgid "A FEN, a PGN or a lichess link, then Ctrl+↵"
+msgstr "Un FEN, un PGN ou un lien lichess, puis Ctrl+↵"
+
+#: templates/views/pgn.html
+msgid "Or press ⌘V anywhere outside a text field."
+msgstr "Ou appuyez sur ⌘V n'importe où hors d'un champ de texte."
+
+#: templates/views/pgn.html
+msgid "Or press Ctrl+V anywhere outside a text field."
+msgstr "Ou appuyez sur Ctrl+V n'importe où hors d'un champ de texte."
+
+#: templates/views/pgn.html
+msgid "Show"
+msgstr "Afficher"
+
+#: templates/views/queue.html
+msgid "Stop"
+msgstr "Arrêter"
+
+#: templates/views/settings.html
+msgid "Search settings"
+msgstr "Chercher dans les réglages"
+
+#: templates/views/settings.html
+msgid "search settings · h l change · ↵ edit · ⌫ reset"
+msgstr "chercher dans les réglages · h l changer · ↵ modifier · ⌫ réinitialiser"
+
+#: templates/views/stats.html
+msgid "Counting…"
+msgstr "Comptage…"
+
+#: templates/views/today.html
+msgid "Dismiss"
+msgstr "Fermer"
+
+#: templates/views/today.html
+msgid "your library is empty"
+msgstr "votre bibliothèque est vide"
+
+#: templates/views/today.html
+msgid "Welcome"
+msgstr "Bienvenue"
+
+#: templates/views/today.html
+msgid "<b>Spaced Positions</b> trains chess patterns with spaced repetition: each puzzle comes back just before you would forget it. Your library is empty, so here is how to fill it:"
+msgstr "<b>Spaced Positions</b> entraîne les motifs d'échecs par répétition espacée : chaque exercice revient juste avant que vous l'oubliiez. Votre bibliothèque est vide, voici comment la remplir :"
+
+#: templates/views/today.html design/commands/library.toml:pack.import
+msgid "Import a puzzle pack"
+msgstr "Importer un pack d'exercices"
+
+#: templates/views/today.html
+msgid "Collect from a book"
+msgstr "Saisir depuis un livre"
+
+#: templates/views/today.html
+msgid "A pack is a file of positions and puzzles, for example from your coach (<span class=\"mono\">.sppack</span>): drop it on this window, or choose it."
+msgstr "Un pack est un fichier de positions et d'exercices, par exemple de votre entraîneur (<span class=\"mono\">.sppack</span>) : déposez-le sur cette fenêtre, ou choisissez-le."
+
+#: templates/views/today.html
+msgid "Or paste a FEN, a PGN or a lichess link anywhere (%(paste_keys)s), or import a PGN file (<span class=\"mono\">:import</span>)."
+msgstr "Ou collez un FEN, un PGN ou un lien lichess n'importe où (%(paste_keys)s), ou importez un fichier PGN (<span class=\"mono\">:import</span>)."
+
+#: templates/views/today.html
+msgid "%(n)s due"
+msgid_plural "%(n)s due"
+msgstr[0] "%(n)s à réviser"
+msgstr[1] "%(n)s à réviser"
+
+#: templates/views/today.html
+msgid "Due now"
+msgstr "À réviser maintenant"
+
+#: templates/views/today.html
+msgid "<b data-ticker>%(due)s</b> due · <b data-ticker>%(new)s</b> new"
+msgstr "<b data-ticker>%(due)s</b> à réviser · <b data-ticker>%(new)s</b> nouvelles"
+
+#: templates/views/today.html
+msgid "Quick start"
+msgstr "Démarrage rapide"
+
+#: templates/views/today.html training/views.py:243
+msgid "Storm 3′"
+msgstr "Storm 3′"
+
+#: templates/views/today.html
+msgid "Storm 5′"
+msgstr "Storm 5′"
+
+#: templates/views/today.html
+msgid "Streak ♥3"
+msgstr "Streak ♥3"
+
+#: templates/views/today.html
+msgid "Weakest:"
+msgstr "Les plus faibles :"
+
+#: templates/views/today.html
+msgid "solved · accuracy · days in a row"
+msgstr "résolus · précision · jours d'affilée"
+
+#: templates/views/today.html core/layouts.py:149
+msgid "Today"
+msgstr "Aujourd'hui"
+
+#: templates/views/today.html
+msgid "Solved today"
+msgstr "Résolus aujourd'hui"
+
+#: templates/views/today.html
+msgid "of %(n)s"
+msgstr "sur %(n)s"
+
+#: templates/views/today.html
+msgid "today counts"
+msgstr "aujourd'hui compte"
+
+#: templates/views/today.html
+msgid "train today to keep it"
+msgstr "entraînez-vous aujourd'hui pour la garder"
+
+#: templates/views/today.html
+msgid "%(n)s cards established"
+msgstr "%(n)s cartes acquises"
+
+#: analysis/models.py:19
+msgid "None"
+msgstr "Aucune"
+
+#: analysis/puzzles.py:127
+msgid "Puzzle set up from here (a draft: p r puts it into training)"
+msgstr "Exercice créé à partir d'ici (un brouillon : p r le met en entraînement)"
+
+#: analysis/puzzles.py:142
+msgid "Puzzle discarded"
+msgstr "Exercice abandonné"
+
+#: analysis/puzzles.py:119
+msgid "puzzles come from positions: :new-position takes this move's position out of the game"
+msgstr "les exercices viennent des positions : :new-position sort la position de ce coup de la partie"
+
+#: analysis/puzzles.py:123
+msgid "A puzzle already starts here"
+msgstr "Un exercice commence déjà ici"
+
+#: analysis/puzzles.py:130
+msgid "no puzzle here: p s sets one up at this move"
+msgstr "pas d'exercice ici : p s en crée un à ce coup"
+
+#: analysis/puzzles.py:134
+msgid "Taken out of training (its history stays)"
+msgstr "Retiré de l'entraînement (son historique reste)"
+
+#: analysis/puzzles.py:140
+msgid "Puzzle removed from the analysis (trained before: its history stays)"
+msgstr "Exercice retiré de l'analyse (déjà entraîné : son historique reste)"
+
+#: analysis/puzzles.py:144
+msgid "that's the start of the puzzle: go to a move of its solution"
+msgstr "c'est le début de l'exercice : allez à un coup de sa solution"
+
+#: analysis/puzzles.py:146
+msgid "The solution ends here"
+msgstr "La solution s'arrête ici"
+
+#: analysis/puzzles.py:146
+msgid "End removed"
+msgstr "Fin retirée"
+
+#: analysis/puzzles.py:150
+msgid "No longer correct"
+msgstr "Plus correct"
+
+#: analysis/puzzles.py:159
+msgid "Only the main answer counts"
+msgstr "Seule la réponse principale compte"
+
+#: analysis/puzzles.py:125
+msgid "play the solution first: there are no moves after this position"
+msgstr "jouez d'abord la solution : il n'y a pas de coups après cette position"
+
+#: analysis/puzzles.py:149
+msgid "only the solver's moves can be also correct"
+msgstr "seuls les coups du camp qui résout peuvent être aussi corrects"
+
+#: analysis/puzzles.py:153
+msgid "on a solver move: every answer to it then continues the puzzle"
+msgstr "sur un coup du camp qui résout : chaque réponse continue alors l'exercice"
+
+#: analysis/puzzles.py:166
+msgid "unknown puzzle action {action}"
+msgstr "action d'exercice inconnue {action}"
+
+#: analysis/puzzles.py:162
+msgid "All {n} answers count: {n} lines"
+msgstr "Les {n} réponses comptent : {n} lignes"
+
+#: analysis/render.py:77
+msgid "No moves yet: play one on the board, paste a PGN, or let the engine suggest one."
+msgstr "Pas encore de coups : jouez-en un sur l'échiquier, collez un PGN ou laissez le moteur en proposer un."
+
+#: analysis/tree.py:198
+msgid "the start position can't be deleted"
+msgstr "la position de départ ne peut pas être supprimée"
+
+#: analysis/tree.py:275
+msgid "a game's start position can't be changed"
+msgstr "la position de départ d'une partie ne peut pas être modifiée"
+
+#: analysis/tree.py:278
+msgid "not a FEN"
+msgstr "pas un FEN"
+
+#: analysis/tree.py:170
+msgid "{move} is not legal here"
+msgstr "{move} n'est pas légal ici"
+
+#: analysis/tree.py:311
+msgid "the analysis has moves that aren't legal in the corrected position ({n} moves would go)"
+msgstr "l'analyse a des coups illégaux dans la position corrigée ({n} coups disparaîtraient)"
+
+#: analysis/tree.py:333
+msgid "not a legal position: {problems}"
+msgstr "pas une position légale : {problems}"
+
+#: analysis/tree.py:168
+msgid "not a move: {move}"
+msgstr "pas un coup : {move}"
+
+#: analysis/views.py:100
+msgid "Edit"
+msgstr "Modifier"
+
+#: analysis/views.py:147
+msgid "Position corrected; the analysis is kept"
+msgstr "Position corrigée ; l'analyse est conservée"
+
+#: analysis/views.py:314
+msgid "with the local engine"
+msgstr "avec le moteur local"
+
+#: analysis/views.py:314
+msgid "with the stored evaluations"
+msgstr "avec les évaluations enregistrées"
+
+#: analysis/views.py:315
+msgid "without evaluations (:evaluate, or a local engine)"
+msgstr "sans évaluations (:evaluate, ou un moteur local)"
+
+#: analysis/views.py:316
+msgid "Moments {how}: {tags} on {moves}"
+msgstr "Moments {how} : {tags} sur {moves}"
+
+#: analysis/views.py:87
+msgid "Add engine line"
+msgstr "Ajouter la ligne du moteur"
+
+#: analysis/views.py:99 static/js/core/analysis.js:565
+msgid "Annotation"
+msgstr "Annotation"
+
+#: analysis/views.py:99 design/keymap/default.toml
+msgid "Mark"
+msgstr "Marque"
+
+#: analysis/views.py:99 static/js/core/analysis.js:578
+msgid "Line colour"
+msgstr "Couleur de la ligne"
+
+#: analysis/views.py:100
+msgid "Drawing"
+msgstr "Dessin"
+
+#: analysis/views.py:141
+msgid "Correct the position"
+msgstr "Corriger la position"
+
+#: analysis/views.py:146
+msgid "Position corrected; {n} move of the analysis was dropped"
+msgid_plural "Position corrected; {n} moves of the analysis were dropped"
+msgstr[0] "Position corrigée ; {n} coup de l'analyse a été supprimé"
+msgstr[1] "Position corrigée ; {n} coups de l'analyse ont été supprimés"
+
+#: analysis/views.py:157
+msgid "Replace the moves"
+msgstr "Remplacer les coups"
+
+#: analysis/views.py:122
+msgid "Main line {move}"
+msgstr "Ligne principale {move}"
+
+#: analysis/views.py:131
+msgid "Move variation {move}"
+msgstr "Déplacer la variante {move}"
+
+#: analysis/views.py:286
+msgid "New position {id}"
+msgstr "Nouvelle position {id}"
+
+#: analysis/views.py:304
+msgid "Evaluated {n} move"
+msgid_plural "Evaluated {n} moves"
+msgstr[0] "{n} coup évalué"
+msgstr[1] "{n} coups évalués"
+
+#: analysis/views.py:317
+msgid "{n} new tag"
+msgid_plural "{n} new tags"
+msgstr[0] "{n} nouveau tag"
+msgstr[1] "{n} nouveaux tags"
+
+#: analysis/views.py:318 static/js/core/paste.js:46 static/js/islands/graphs.js:127
+msgid "{n} move"
+msgid_plural "{n} moves"
+msgstr[0] "{n} coup"
+msgstr[1] "{n} coups"
+
+#: analysis/views.py:320
+msgid "{n} withdrawn"
+msgstr "{n} retirés"
+
+#: analysis/views.py:101
+msgid "start"
+msgstr "début"
+
+#: analysis/views.py:111
+msgid "Delete from {move}"
+msgstr "Supprimer à partir de {move}"
+
+#: analysis/views.py:201 library/structure.py:15 training/views.py:245
+msgid "White"
+msgstr "Blancs"
+
+#: analysis/views.py:201 library/structure.py:15 training/views.py:245
+msgid "Black"
+msgstr "Noirs"
+
+#: analysis/views.py:201
+msgid "Result"
+msgstr "Résultat"
+
+#: analysis/views.py:202
+msgid "Date"
+msgstr "Date"
+
+#: analysis/views.py:202
+msgid "Event"
+msgstr "Événement"
+
+#: analysis/views.py:202
+msgid "Site"
+msgstr "Lieu"
+
+#: analysis/views.py:202
+msgid "Round"
+msgstr "Ronde"
+
+#: analysis/views.py:203
+msgid "White Elo"
+msgstr "Elo Blancs"
+
+#: analysis/views.py:203
+msgid "Black Elo"
+msgstr "Elo Noirs"
+
+#: backups.py:93
+msgid "{backup} doesn't exist"
+msgstr "{backup} n'existe pas"
+
+#: chesslogic.py:25
+msgid "the board is empty"
+msgstr "l'échiquier est vide"
+
+#: chesslogic.py:26
+msgid "no white king"
+msgstr "pas de roi blanc"
+
+#: chesslogic.py:27
+msgid "no black king"
+msgstr "pas de roi noir"
+
+#: chesslogic.py:28
+msgid "too many kings"
+msgstr "trop de rois"
+
+#: chesslogic.py:29
+msgid "more than 8 white pawns"
+msgstr "plus de 8 pions blancs"
+
+#: chesslogic.py:30
+msgid "more than 8 black pawns"
+msgstr "plus de 8 pions noirs"
+
+#: chesslogic.py:31
+msgid "a pawn on the first or last rank"
+msgstr "un pion sur la première ou la dernière rangée"
+
+#: chesslogic.py:32
+msgid "more than 16 white pieces"
+msgstr "plus de 16 pièces blanches"
+
+#: chesslogic.py:33
+msgid "more than 16 black pieces"
+msgstr "plus de 16 pièces noires"
+
+#: chesslogic.py:34
+msgid "the side not to move is in check"
+msgstr "le camp qui n'a pas le trait est en échec"
+
+#: chesslogic.py:35
+msgid "the king is in check from too many pieces"
+msgstr "le roi est en échec par trop de pièces"
+
+#: chesslogic.py:36
+msgid "this check can't arise in a game"
+msgstr "cet échec ne peut pas survenir dans une partie"
+
+#: chesslogic.py:37
+msgid "the en passant square is not possible"
+msgstr "la case en passant n'est pas possible"
+
+#: chesslogic.py:156
+msgid "not a FEN, PGN or lichess link"
+msgstr "pas un FEN, un PGN ou un lien lichess"
+
+#: chesslogic.py:57
+msgid "castling {rights} impossible"
+msgstr "roque {rights} impossible"
+
+#: chesslogic.py:130
+msgid "the clipboard is empty"
+msgstr "le presse-papiers est vide"
+
+#: chesslogic.py:145
+msgid "a lichess link without a position"
+msgstr "un lien lichess sans position"
+
+#: chesslogic.py:169
+msgid "looks like PGN, but no game could be read"
+msgstr "ressemble à du PGN, mais aucune partie n'a pu être lue"
+
+#: chesslogic.py:143
+msgid "a lichess game link: open the game on lichess, copy its PGN and paste that"
+msgstr "un lien de partie lichess : ouvrez la partie sur lichess, copiez son PGN et collez-le"
+
+#: chesslogic.py:53
+msgid "king not on {square}"
+msgstr "roi pas en {square}"
+
+#: chesslogic.py:55
+msgid "rook not on {square}"
+msgstr "tour pas en {square}"
+
+#: core/chess_views.py:52
+msgid "too large to paste: import it as a file (:import)"
+msgstr "trop grand pour être collé : importez-le comme fichier (:import)"
+
+#: core/engine_local.py:91
+msgid "no stockfish on the PATH: install it, or set engine.path (Settings → Engine)"
+msgstr "pas de stockfish dans le PATH : installez-le, ou réglez engine.path (Réglages → Moteur)"
+
+#: core/engine_local.py:89
+msgid "engine.path {path} is not a program (Settings → Engine)"
+msgstr "engine.path {path} n'est pas un programme (Réglages → Moteur)"
+
+#: core/engine_local.py:127
+msgid "the local engine is not running"
+msgstr "le moteur local ne tourne pas"
+
+#: core/layouts.py:24 design/commands/shell.toml:mode.home design/commands/stats.toml:home.analysis
+msgid "Home"
+msgstr "Accueil"
+
+#: core/layouts.py:24
+msgid "What to do now: due cards, one-key sessions, a paste box, recent work."
+msgstr "Quoi faire maintenant : cartes à réviser, sessions en une touche, une zone de collage, le travail récent."
+
+#: core/layouts.py:25 design/commands/shell.toml:mode.train design/commands/train.toml:train.review
+msgid "Train"
+msgstr "Entraînement"
+
+#: core/layouts.py:25
+msgid "Solve puzzles: Review, Storm, Streak and custom sessions, with result screens."
+msgstr "Résoudre des exercices : Révision, Storm, Streak et sessions personnalisées, avec des écrans de résultats."
+
+#: core/layouts.py:26 stats/models.py:55 design/commands/analysis.toml:analysis.open
+msgid "Analyse"
+msgstr "Analyse"
+
+#: core/layouts.py:26
+msgid "One position or game: moves, variations, comments, tags, engine, puzzles."
+msgstr "Une position ou une partie : coups, variantes, commentaires, tags, moteur, exercices."
+
+#: core/layouts.py:27
+msgid "Get material in fast: board editor, paste FEN/PGN, rapid entry from a book."
+msgstr "Saisir vite du matériel : éditeur d'échiquier, coller un FEN/PGN, saisie rapide depuis un livre."
+
+#: core/layouts.py:28 core/layouts.py:110 design/commands/library.toml:library.collection
+msgid "Library"
+msgstr "Bibliothèque"
+
+#: core/layouts.py:28
+msgid "Find and organise positions, games, puzzles, players, sources and tags."
+msgstr "Trouver et organiser positions, parties, exercices, joueurs, sources et tags."
+
+#: core/layouts.py:29 core/layouts.py:130 design/commands/shell.toml:mode.stats
+msgid "Stats"
+msgstr "Statistiques"
+
+#: core/layouts.py:29
+msgid "Progress: collection, analysis and training statistics, records, milestones."
+msgstr "Progrès : statistiques de la collection, de l'analyse et de l'entraînement, records, paliers."
+
+#: core/layouts.py:30 core/layouts.py:139 design/commands/settings.toml:settings.step
+msgid "Settings"
+msgstr "Réglages"
+
+#: core/layouts.py:30
+msgid "Theme, board, pieces, keymap, training rules and data."
+msgstr "Thème, échiquier, pièces, raccourcis, règles d'entraînement et données."
+
+#: core/layouts.py:31 design/commands/shell.toml:mode.ui design/commands/ui.toml:demo.flash
+msgid "Style guide"
+msgstr "Guide de style"
+
+#: core/layouts.py:31
+msgid "Every component in every state, and a playground for panes."
+msgstr "Chaque composant dans chaque état, et un terrain de jeu pour les panneaux."
+
+#: core/layouts.py:56
+msgid "change view"
+msgstr "changer de vue"
+
+#: core/layouts.py:56
+msgid "split"
+msgstr "diviser"
+
+#: core/layouts.py:59
+msgid "flip"
+msgstr "retourner"
+
+#: core/layouts.py:60 core/layouts.py:70 core/layouts.py:103
+msgid "back"
+msgstr "arrière"
+
+#: core/layouts.py:61 core/layouts.py:71 core/layouts.py:103
+msgid "forward"
+msgstr "avant"
+
+#: core/layouts.py:62
+msgid "type a move"
+msgstr "taper un coup"
+
+#: core/layouts.py:63
+msgid "set up the position"
+msgstr "mettre en place"
+
+#: core/layouts.py:64
+msgid "square tool"
+msgstr "outil cases"
+
+#: core/layouts.py:72 core/layouts.py:107
+msgid "variation"
+msgstr "variante"
+
+#: core/layouts.py:74
+msgid "mark"
+msgstr "marquer"
+
+#: core/layouts.py:75 core/layouts.py:98
+msgid "comment"
+msgstr "commenter"
+
+#: core/layouts.py:76
+msgid "main line"
+msgstr "ligne principale"
+
+#: core/layouts.py:77
+msgid "delete"
+msgstr "supprimer"
+
+#: core/layouts.py:84 core/settings_view.py:24 stats/metrics.py:522
+msgid "Board"
+msgstr "Échiquier"
+
+#: core/layouts.py:84
+msgid "The interactive board: moves, drawings, setup, typed moves."
+msgstr "L'échiquier interactif : coups, dessins, mise en place, coups tapés."
+
+#: core/layouts.py:88
+msgid "Moves"
+msgstr "Coups"
+
+#: core/layouts.py:88
+msgid "The analysis as a book-style move tree."
+msgstr "L'analyse sous forme d'arbre de coups, comme dans un livre."
+
+#: core/layouts.py:92 core/settings.py:41 core/settings_view.py:29
+msgid "Engine"
+msgstr "Moteur"
+
+#: core/layouts.py:92
+msgid "Stockfish lines and evaluation."
+msgstr "Lignes et évaluation de Stockfish."
+
+#: core/layouts.py:96
+msgid "Inspector"
+msgstr "Inspecteur"
+
+#: core/layouts.py:96
+msgid "The current move and position: comment, marks, puzzle setup."
+msgstr "Le coup et la position actuels : commentaire, marques, création d'exercices."
+
+#: core/layouts.py:102
+msgid "Eval graph"
+msgstr "Graphique d'évaluation"
+
+#: core/layouts.py:102
+msgid "The engine's evaluation over the main line; mistakes marked."
+msgstr "L'évaluation du moteur sur la ligne principale ; erreurs marquées."
+
+#: core/layouts.py:106
+msgid "Variation graph"
+msgstr "Graphique des variantes"
+
+#: core/layouts.py:106
+msgid "The move tree as a graph: the shape of a big analysis."
+msgstr "L'arbre de coups en graphique : la forme d'une grande analyse."
+
+#: core/layouts.py:110
+msgid "Positions, games, puzzles and more, with the query bar."
+msgstr "Positions, parties, exercices et plus, avec la barre de recherche."
+
+#: core/layouts.py:116
+msgid "Facets that write into the library query."
+msgstr "Des facettes qui écrivent dans la requête de la bibliothèque."
+
+#: core/layouts.py:120
+msgid "Session"
+msgstr "Session"
+
+#: core/layouts.py:120
+msgid "Sessions to start, the running session (clock, combo, lives, prompt), the result."
+msgstr "Les sessions à lancer, la session en cours (horloge, combo, vies, consigne), le résultat."
+
+#: core/layouts.py:124
+msgid "Entry session"
+msgstr "Session de saisie"
+
+#: core/layouts.py:124
+msgid "Source, page, diagram number and presets for rapid entry."
+msgstr "Source, page, numéro de diagramme et préréglages pour la saisie rapide."
+
+#: core/layouts.py:130
+msgid "Progress in charts and numbers: every number drills down."
+msgstr "Les progrès en graphiques et en chiffres : chaque chiffre se détaille."
+
+#: core/layouts.py:135
+msgid "PGN / FEN"
+msgstr "PGN / FEN"
+
+#: core/layouts.py:135
+msgid "The position or game as text; paste to load."
+msgstr "La position ou la partie en texte ; collez pour charger."
+
+#: core/layouts.py:139
+msgid "Every setting, searchable: themes, colours, type, board, keys, training, engine, data."
+msgstr "Chaque réglage, consultable : thèmes, couleurs, police, échiquier, touches, entraînement, moteur, données."
+
+#: core/layouts.py:145
+msgid "Every command and its keys: ↵ binds new keys."
+msgstr "Chaque commande et ses touches : ↵ attribue de nouvelles touches."
+
+#: core/layouts.py:149
+msgid "What to do now: due cards, one-key sessions, today's numbers, the pattern library."
+msgstr "Quoi faire maintenant : cartes à réviser, sessions en une touche, les chiffres du jour, la bibliothèque de motifs."
+
+#: core/layouts.py:154
+msgid "The open analysis, the next diagram, a paste box, recent work."
+msgstr "L'analyse ouverte, le prochain diagramme, une zone de collage, le travail récent."
+
+#: core/layouts.py:159
+msgid "Components"
+msgstr "Composants"
+
+#: core/layouts.py:159
+msgid "Every component in every state."
+msgstr "Chaque composant dans chaque état."
+
+#: core/layouts.py:93
+msgid "on / off"
+msgstr "marche / arrêt"
+
+#: core/layouts.py:93
+msgid "play best"
+msgstr "jouer le meilleur"
+
+#: core/layouts.py:93
+msgid "lines"
+msgstr "lignes"
+
+#: core/layouts.py:98
+msgid "annotate"
+msgstr "annoter"
+
+#: core/layouts.py:98 static/js/core/importer.js:110
+msgid "puzzle"
+msgstr "exercice"
+
+#: core/layouts.py:99 core/layouts.py:142 core/layouts.py:151
+msgid "next section"
+msgstr "section suivante"
+
+#: core/layouts.py:99 core/layouts.py:162
+msgid "fold"
+msgstr "replier"
+
+#: core/layouts.py:103
+msgid "evaluate"
+msgstr "évaluer"
+
+#: core/layouts.py:112
+msgid "query"
+msgstr "recherche"
+
+#: core/layouts.py:112 static/js/core/importer.js:79
+msgid "select"
+msgstr "sélectionner"
+
+#: core/layouts.py:113
+msgid "display"
+msgstr "affichage"
+
+#: core/layouts.py:117 static/js/core/importer.js:79
+msgid "down"
+msgstr "bas"
+
+#: core/layouts.py:117
+msgid "add / remove"
+msgstr "ajouter / retirer"
+
+#: core/layouts.py:117
+msgid "exclude"
+msgstr "exclure"
+
+#: core/layouts.py:125
+msgid "save & next"
+msgstr "enregistrer & suivant"
+
+#: core/layouts.py:125
+msgid "source"
+msgstr "source"
+
+#: core/layouts.py:125
+msgid "diagram +1"
+msgstr "diagramme +1"
+
+#: core/layouts.py:126
+msgid "ready"
+msgstr "prêt"
+
+#: core/layouts.py:131
+msgid "next chart"
+msgstr "graphique suivant"
+
+#: core/layouts.py:131
+msgid "points"
+msgstr "points"
+
+#: core/layouts.py:131
+msgid "drill down"
+msgstr "détailler"
+
+#: core/layouts.py:132
+msgid "table"
+msgstr "tableau"
+
+#: core/layouts.py:132
+msgid "period"
+msgstr "période"
+
+#: core/layouts.py:136 core/layouts.py:141
+msgid "edit"
+msgstr "modifier"
+
+#: core/layouts.py:136
+msgid "copy FEN"
+msgstr "copier le FEN"
+
+#: core/layouts.py:136
+msgid "copy PGN"
+msgstr "copier le PGN"
+
+#: core/layouts.py:136
+msgid "show what you pasted"
+msgstr "afficher le collage"
+
+#: core/layouts.py:141 core/layouts.py:146
+msgid "search"
+msgstr "chercher"
+
+#: core/layouts.py:141
+msgid "change"
+msgstr "changer"
+
+#: core/layouts.py:141
+msgid "reset"
+msgstr "réinitialiser"
+
+#: core/layouts.py:146
+msgid "new keys"
+msgstr "nouvelles touches"
+
+#: core/layouts.py:146
+msgid "remove"
+msgstr "retirer"
+
+#: core/layouts.py:151 static/js/islands/train.js:16
+msgid "review"
+msgstr "réviser"
+
+#: core/layouts.py:151
+msgid "weakest"
+msgstr "les plus faibles"
+
+#: core/layouts.py:156
+msgid "analysis"
+msgstr "analyse"
+
+#: core/layouts.py:156
+msgid "collect"
+msgstr "saisir"
+
+#: core/layouts.py:156
+msgid "paste box"
+msgstr "zone de collage"
+
+#: core/layouts.py:156
+msgid "open"
+msgstr "ouvrir"
+
+#: core/layouts.py:161
+msgid "scroll"
+msgstr "défiler"
+
+#: core/layouts.py:161
+msgid "half page"
+msgstr "demi-page"
+
+#: core/layouts.py:162
+msgid "fold all"
+msgstr "tout replier"
+
+#: core/layouts.py:162
+msgid "edit a field"
+msgstr "modifier un champ"
+
+#: core/layouts.py:162
+msgid "flash demo"
+msgstr "démo du clignotement"
+
+#: core/server_commands.py:69
+msgid "follow the system"
+msgstr "comme le système"
+
+#: core/server_commands.py:239
+msgid "Stopping Spaced Positions …"
+msgstr "Arrêt de Spaced Positions …"
+
+#: core/server_commands.py:299
+msgid "Theme copied as TOML: paste it into Settings → Data to import it elsewhere"
+msgstr "Thème copié en TOML : collez-le dans Réglages → Données pour l'importer ailleurs"
+
+#: core/server_commands.py:60
+msgid "which theme? e.g. :theme ink"
+msgstr "quel thème ? par ex. :theme ink"
+
+#: core/server_commands.py:90
+msgid "write token=value, e.g. :set main=#e2b714"
+msgstr "écrivez jeton=valeur, par ex. :set main=#e2b714"
+
+#: core/server_commands.py:154
+msgid "Nothing to reset"
+msgstr "Rien à réinitialiser"
+
+#: core/server_commands.py:180
+msgid "Your CSS is applied (hold Esc while the app loads, or open it with ?safe, to start without it)"
+msgstr "Votre CSS est appliqué (maintenez Échap pendant le chargement, ou ouvrez avec ?safe, pour démarrer sans lui)"
+
+#: core/server_commands.py:180
+msgid "Your CSS is off"
+msgstr "Votre CSS est désactivé"
+
+#: core/server_commands.py:191
+msgid "name the layout: :layout-save <name>"
+msgstr "nommez la disposition : :layout-save <nom>"
+
+#: core/server_commands.py:194
+msgid "no layout to save"
+msgstr "pas de disposition à enregistrer"
+
+#: core/server_commands.py:235 design/commands/shell.toml:app.quit
+msgid "only when started with spos"
+msgstr "seulement si lancé avec spos"
+
+#: core/server_commands.py:254
+msgid "a name, e.g. :theme-save my nord"
+msgstr "un nom, par ex. :theme-save mon nord"
+
+#: core/server_commands.py:322
+msgid "write the keys, then the command: :map space o train.storm 5"
+msgstr "écrivez les touches, puis la commande : :map space o train.storm 5"
+
+#: core/server_commands.py:71
+msgid "Theme: {label}"
+msgstr "Thème : {label}"
+
+#: core/server_commands.py:198
+msgid "Saved layout '{name}'"
+msgstr "Disposition « {name} » enregistrée"
+
+#: core/server_commands.py:211
+msgid "Backed up: {name} ({size} MB)"
+msgstr "Sauvegardé : {name} ({size} Mo)"
+
+#: core/server_commands.py:229
+msgid "Opened {folder}"
+msgstr "{folder} ouvert"
+
+#: core/server_commands.py:268
+msgid "Theme {label} saved and chosen"
+msgstr "Thème {label} enregistré et choisi"
+
+#: core/server_commands.py:285
+msgid "Theme {label} deleted"
+msgstr "Thème {label} supprimé"
+
+#: core/server_commands.py:355
+msgid "{keys} unmapped (was {title})"
+msgstr "{keys} libérée (était {title})"
+
+#: core/server_commands.py:372
+msgid "Reset {n} key binding to the defaults"
+msgid_plural "Reset {n} key bindings to the defaults"
+msgstr[0] "{n} raccourci réinitialisé"
+msgstr[1] "{n} raccourcis réinitialisés"
+
+#: core/server_commands.py:64 core/settings_io.py:111
+msgid "no theme '{name}'"
+msgstr "pas de thème « {name} »"
+
+#: core/server_commands.py:140 core/server_commands.py:154
+msgid "Reset {names}"
+msgstr "Réinitialisé : {names}"
+
+#: core/server_commands.py:150
+msgid "not set: {names}"
+msgstr "non défini : {names}"
+
+#: core/server_commands.py:172
+msgid "at most {n} characters"
+msgstr "{n} caractères au maximum"
+
+#: core/server_commands.py:263
+msgid "'{name}' is a built-in theme: choose another name"
+msgstr "« {name} » est un thème intégré : choisissez un autre nom"
+
+#: core/server_commands.py:279
+msgid "no theme of yours called '{name}' (built-in themes stay)"
+msgstr "aucun de vos thèmes ne s'appelle « {name} » (les thèmes intégrés restent)"
+
+#: core/server_commands.py:298
+msgid "{label} (mine)"
+msgstr "{label} (le mien)"
+
+#: core/server_commands.py:353
+msgid "'{keys}' isn't bound in {where}"
+msgstr "« {keys} » n'est pas attribuée dans {where}"
+
+#: core/server_commands.py:228
+msgid "could not open {folder}: {error}"
+msgstr "impossible d'ouvrir {folder} : {error}"
+
+#: core/server_commands.py:268 core/settings_io.py:184
+msgid "check contrast: {problems}"
+msgstr "vérifiez le contraste : {problems}"
+
+#: core/settings.py:27 core/settings_view.py:20
+msgid "Language"
+msgstr "Langue"
+
+#: core/settings.py:27
+msgid "The language of the app: automatic follows the browser"
+msgstr "La langue de l'app : automatique suit le navigateur"
+
+#: core/settings.py:29
+msgid "Tag names"
+msgstr "Noms des tags"
+
+#: core/settings.py:29
+msgid "The language of tag names: as the app, or one of its own"
+msgstr "La langue des noms de tags : comme l'app, ou une autre"
+
+#: core/settings.py:31
+msgid "New cards a day"
+msgstr "Nouvelles cartes par jour"
+
+#: core/settings.py:31
+msgid "How many new cards Review introduces a day"
+msgstr "Combien de nouvelles cartes la Révision introduit par jour"
+
+#: core/settings.py:32
+msgid "The Storm clock: fast, medium or slow (adaptive to your solving times)"
+msgstr "L'horloge du Storm : rapide, moyenne ou lente (s'adapte à vos temps de résolution)"
+
+#: core/settings.py:34
+msgid "Keycaps"
+msgstr "Touches affichées"
+
+#: core/settings.py:34
+msgid "Keys on buttons: full, compact (only the key strips), off"
+msgstr "Touches sur les boutons : complètes, compactes (seulement les bandes de touches), aucune"
+
+#: core/settings.py:36
+msgid "Teach keys"
+msgstr "Apprendre les touches"
+
+#: core/settings.py:36
+msgid "After a click, the status line shows the key for it"
+msgstr "Après un clic, la ligne d'état montre la touche correspondante"
+
+#: core/settings.py:37
+msgid "Which-key panel"
+msgstr "Aide aux touches"
+
+#: core/settings.py:37
+msgid "The panel that lists what can follow a prefix (␣, g …)"
+msgstr "Le panneau qui liste ce qui peut suivre un préfixe (␣, g …)"
+
+#: core/settings.py:38
+msgid "Piece letters"
+msgstr "Lettres des pièces"
+
+#: core/settings.py:39
+msgid "Letters of the pieces in moves, typed and shown: English (KQRBN), German (KDTLS), French (RDTFC) or Italian (RDTAC)"
+msgstr "Lettres des pièces dans les coups, tapés et affichés : anglais (KQRBN), allemand (KDTLS), français (RDTFC) ou italien (RDTAC)"
+
+#: core/settings.py:41
+msgid "Stockfish in the browser (WASM), or a local Stockfish program through the app"
+msgstr "Stockfish dans le navigateur (WASM), ou un programme Stockfish local via l'app"
+
+#: core/settings.py:43
+msgid "Local engine"
+msgstr "Moteur local"
+
+#: core/settings.py:43
+msgid "Path of a UCI engine program (empty: stockfish on the PATH)"
+msgstr "Chemin d'un programme de moteur UCI (vide : stockfish dans le PATH)"
+
+#: core/settings.py:44
+msgid "How many best lines the engine shows"
+msgstr "Combien de meilleures lignes le moteur affiche"
+
+#: core/settings.py:45
+msgid "Depth"
+msgstr "Profondeur"
+
+#: core/settings.py:45
+msgid "How deep the engine searches"
+msgstr "La profondeur de recherche du moteur"
+
+#: core/settings.py:46
+msgid "Threads"
+msgstr "Threads"
+
+#: core/settings.py:46
+msgid "Threads of the local engine"
+msgstr "Threads du moteur local"
+
+#: core/settings.py:47
+msgid "Hash (MB)"
+msgstr "Hash (Mo)"
+
+#: core/settings.py:47
+msgid "Hash table of the local engine"
+msgstr "Table de hachage du moteur local"
+
+#: core/settings.py:48
+msgid "Arrows"
+msgstr "Flèches"
+
+#: core/settings.py:48
+msgid "The engine's best moves as arrows on the board"
+msgstr "Les meilleurs coups du moteur en flèches sur l'échiquier"
+
+#: core/settings.py:49
+msgid "Sounds"
+msgstr "Sons"
+
+#: core/settings.py:49
+msgid "A click on a move, a tone on right and wrong, a chord on a record"
+msgstr "Un clic sur un coup, un son pour juste et faux, un accord pour un record"
+
+#: core/settings.py:50
+msgid "Counting numbers"
+msgstr "Chiffres qui défilent"
+
+#: core/settings.py:50
+msgid "Numbers count up on the result screen and in Stats"
+msgstr "Les chiffres défilent sur l'écran de résultat et dans les Statistiques"
+
+#: core/settings.py:51
+msgid "Your name in packs"
+msgstr "Votre nom dans les packs"
+
+#: core/settings.py:51
+msgid "Shown to students with the packs you make (else the player marked as you)"
+msgstr "Affiché avec les packs que vous créez (sinon le joueur marqué comme vous)"
+
+#: core/settings.py:52
+msgid "Look for updates"
+msgstr "Chercher des mises à jour"
+
+#: core/settings.py:52
+msgid "At most once a day, ask GitHub whether there is a newer version (nothing else is sent)"
+msgstr "Au plus une fois par jour, demander à GitHub s'il existe une version plus récente (rien d'autre n'est envoyé)"
+
+#: core/settings.py:53
+msgid "Stop by itself"
+msgstr "S'arrêter tout seul"
+
+#: core/settings.py:53
+msgid "The app stops 10 minutes after the last tab was closed (started without a console: on)"
+msgstr "L'app s'arrête 10 minutes après la fermeture du dernier onglet (lancée sans console : oui)"
+
+#: core/settings.py:93
+msgid "automatic"
+msgstr "automatique"
+
+#: core/settings.py:95
+msgid "as the app"
+msgstr "comme l'app"
+
+#: core/settings.py:62
+msgid "no setting '{name}'"
+msgstr "pas de réglage « {name} »"
+
+#: core/settings.py:69
+msgid "{name}: on or off"
+msgstr "{name} : on ou off"
+
+#: core/settings.py:71
+msgid "{name}: one of {values}"
+msgstr "{name} : l'un de {values}"
+
+#: core/settings.py:76
+msgid "{name}: a number"
+msgstr "{name} : un nombre"
+
+#: core/settings_io.py:98
+msgid "engine.path is set by hand in Settings → Engine, not imported"
+msgstr "engine.path se règle à la main dans Réglages → Moteur, il n'est pas importé"
+
+#: core/settings_io.py:153
+msgid "Imported {n} setting"
+msgid_plural "Imported {n} settings"
+msgstr[0] "{n} réglage importé"
+msgstr[1] "{n} réglages importés"
+
+#: core/settings_io.py:183
+msgid "Theme {label} imported (:theme {name})"
+msgstr "Thème {label} importé (:theme {name})"
+
+#: core/settings_io.py:167
+msgid "a theme extends a built-in theme ({themes}), not '{name}'"
+msgstr "un thème étend un thème intégré ({themes}), pas « {name} »"
+
+#: core/settings_io.py:73
+msgid "not TOML: {error}"
+msgstr "pas du TOML : {error}"
+
+#: core/settings_io.py:129
+msgid "{keys}: no command '{command}'"
+msgstr "{keys} : pas de commande « {command} »"
+
+#: core/settings_io.py:154
+msgid "{n} skipped: {first}"
+msgstr "{n} ignorés : {first}"
+
+#: core/settings_io.py:149
+msgid "layout {name}: unreadable"
+msgstr "disposition {name} : illisible"
+
+#: core/settings_view.py:208
+msgid "daily"
+msgstr "quotidienne"
+
+#: core/settings_view.py:208
+msgid "before an update"
+msgstr "avant une mise à jour"
+
+#: core/settings_view.py:208
+msgid "before a restore"
+msgstr "avant une restauration"
+
+#: core/settings_view.py:208
+msgid "by hand"
+msgstr "à la main"
+
+#: core/settings_view.py:225
+msgid "the web framework"
+msgstr "le framework web"
+
+#: core/settings_view.py:225
+msgid "part of Django"
+msgstr "partie de Django"
+
+#: core/settings_view.py:225
+msgid "the server"
+msgstr "le serveur"
+
+#: core/settings_view.py:226
+msgid "static files"
+msgstr "fichiers statiques"
+
+#: core/settings_view.py:226
+msgid "the data folder"
+msgstr "le dossier des données"
+
+#: core/settings_view.py:226
+msgid "python-chess: rules, PGN, engines"
+msgstr "python-chess : règles, PGN, moteurs"
+
+#: core/settings_view.py:21
+msgid "Colours"
+msgstr "Couleurs"
+
+#: core/settings_view.py:22
+msgid "Typography"
+msgstr "Typographie"
+
+#: core/settings_view.py:23
+msgid "Density and shape"
+msgstr "Densité et forme"
+
+#: core/settings_view.py:26
+msgid "Sound and motion"
+msgstr "Son et mouvement"
+
+#: core/settings_view.py:27 static/js/core/help.js:67
+msgid "Keys"
+msgstr "Touches"
+
+#: core/settings_view.py:28
+msgid "Training"
+msgstr "Entraînement"
+
+#: core/settings_view.py:30
+msgid "Packs"
+msgstr "Packs"
+
+#: core/settings_view.py:31 design/commands/shell.toml:app.quit design/commands/ui.toml:app.backup
+msgid "App"
+msgstr "App"
+
+#: core/settings_view.py:107
+msgid "Follow the system (Paper / Ink)"
+msgstr "Comme le système (Paper / Ink)"
+
+#: core/settings_view.py:99
+msgid "{ratio}:1, needs {minimum}:1"
+msgstr "{ratio}:1, il faut {minimum}:1"
+
+#: core/templatetags/ui.py:145
+msgid "Position {fen}"
+msgstr "Position {fen}"
+
+#: core/user_pieces.py:29
+msgid "missing {value}"
+msgstr "manquant : {value}"
+
+#: core/user_pieces.py:33
+msgid "{code}.svg: too large, or scripts or external references"
+msgstr "{code}.svg : trop grand, ou avec des scripts ou des références externes"
+
+#: core/user_pieces.py:55
+msgid "your own"
+msgstr "les vôtres"
+
+#: design/lib.py:86
+msgid "unknown token '{name}'"
+msgstr "réglage inconnu « {name} »"
+
+#: design/lib.py:109
+msgid "{name}: use true or false"
+msgstr "{name} : true ou false"
+
+#: design/lib.py:90
+msgid "{name}: '{value}' is not a hex colour"
+msgstr "{name} : « {value} » n'est pas une couleur hexadécimale"
+
+#: design/lib.py:98
+msgid "{name}: {value} is outside {lo}–{hi}"
+msgstr "{name} : {value} est hors de {lo}–{hi}"
+
+#: design/lib.py:101
+msgid "{name}: choose one of {value}"
+msgstr "{name} : choisissez parmi {value}"
+
+#: design/lib.py:113
+msgid "{name}: not a valid font list"
+msgstr "{name} : liste de polices invalide"
+
+#: design/lib.py:95
+msgid "{name}: '{value}' is not a number"
+msgstr "{name} : « {value} » n'est pas un nombre"
+
+#: library/collect.py:53
+msgid "puzzle in training"
+msgstr "exercice en entraînement"
+
+#: library/collect.py:53
+msgid "puzzle as a draft"
+msgstr "exercice en brouillon"
+
+#: library/collect.py:64
+msgid "not a position"
+msgstr "pas une position"
+
+#: library/collect.py:132
+msgid "Saved {n} position"
+msgid_plural "Saved {n} positions"
+msgstr[0] "{n} position enregistrée"
+msgstr[1] "{n} positions enregistrées"
+
+#: library/collect.py:145
+msgid "a title"
+msgstr "un titre"
+
+#: library/collect.py:158
+msgid "a name and at least one tag in the session"
+msgstr "un nom et au moins un tag dans la session"
+
+#: library/collect.py:78
+msgid "Collect: merge"
+msgstr "Saisie : fusionner"
+
+#: library/collect.py:84
+msgid "Merged into {id}"
+msgstr "Fusionné avec {id}"
+
+#: library/collect.py:97
+msgid "Saved {id}"
+msgstr "{id} enregistrée"
+
+#: library/collect.py:134 static/js/core/importer.js:100
+msgid "{n} already in the library"
+msgstr "{n} déjà dans la bibliothèque"
+
+#: library/collect.py:136 static/js/core/paste.js:44
+msgid "{n} not legal"
+msgstr "{n} illégales"
+
+#: library/collect.py:66
+msgid "not legal: {problems} (D keeps it as a diagram)"
+msgstr "illégale : {problems} (D la garde comme diagramme)"
+
+#: library/collect.py:72
+msgid "duplicate of {id} {title}"
+msgstr "doublon de {id} {title}"
+
+#: library/commands.py:133
+msgid "Tags restored"
+msgstr "Tags restaurés"
+
+#: library/commands.py:94
+msgid "which tag? e.g. :tag fork"
+msgstr "quel tag ? par ex. :tag fork"
+
+#: library/commands.py:98 library/edit.py:78
+msgid "nothing selected"
+msgstr "rien de sélectionné"
+
+#: library/commands.py:115
+msgid "which tag? e.g. :untag fork"
+msgstr "quel tag ? par ex. :untag fork"
+
+#: library/commands.py:132 library/commands.py:130 library/commands.py:214
+msgid "bad change"
+msgstr "modification invalide"
+
+#: library/commands.py:147
+msgid "only positions and games go to the trash"
+msgstr "seules les positions et les parties vont à la corbeille"
+
+#: library/commands.py:163
+msgid "only positions and games are in the trash"
+msgstr "seules les positions et les parties sont dans la corbeille"
+
+#: library/commands.py:186
+msgid "Trash emptied: {positions} positions and {games} games deleted for good"
+msgstr "Corbeille vidée : {positions} positions et {games} parties supprimées définitivement"
+
+#: library/commands.py:196
+msgid "a name, e.g. :save-query hard forks"
+msgstr "un nom, par ex. :save-query fourchettes difficiles"
+
+#: library/commands.py:199
+msgid "the query is empty"
+msgstr "la requête est vide"
+
+#: library/commands.py:237
+msgid "detection works on positions"
+msgstr "la détection fonctionne sur des positions"
+
+#: library/commands.py:122
+msgid "Removed {tag} from {n} item"
+msgid_plural "Removed {tag} from {n} items"
+msgstr[0] "{tag} retiré de {n} élément"
+msgstr[1] "{tag} retiré de {n} éléments"
+
+#: library/commands.py:152
+msgid "Moved {n} to the trash · is:trash shows it"
+msgstr "{n} mis à la corbeille · is:trash les montre"
+
+#: library/commands.py:168
+msgid "Restored {n} from the trash"
+msgstr "{n} restaurés depuis la corbeille"
+
+#: library/commands.py:204
+msgid "Saved as q:{key} · use it with in:q:{key} or in a training session"
+msgstr "Enregistrée comme q:{key} · utilisez-la avec in:q:{key} ou dans une session d'entraînement"
+
+#: library/commands.py:244
+msgid "Detected on {n} position: {added} tags, {suggested} suggestions, {moves} move tags"
+msgid_plural "Detected on {n} positions: {added} tags, {suggested} suggestions, {moves} move tags"
+msgstr[0] "Détecté sur {n} position : {added} tags, {suggested} suggestions, {moves} tags de coups"
+msgstr[1] "Détecté sur {n} positions : {added} tags, {suggested} suggestions, {moves} tags de coups"
+
+#: library/commands.py:33
+msgid "{collection} can't be tagged"
+msgstr "{collection} ne peuvent pas être tagués"
+
+#: library/commands.py:44
+msgid "no tag '{tag}' (the Library's Tags, 6, lists them all)"
+msgstr "pas de tag « {tag} » (les Tags de la Bibliothèque, 6, les listent tous)"
+
+#: library/commands.py:108
+msgid "Tagged {n} item {tag}"
+msgid_plural "Tagged {n} items {tag}"
+msgstr[0] "{n} élément tagué {tag}"
+msgstr[1] "{n} éléments tagués {tag}"
+
+#: library/commands.py:188
+msgid "{n} with training history stay in the trash"
+msgstr "{n} avec un historique d'entraînement restent dans la corbeille"
+
+#: library/commands.py:223
+msgid "Restored: {n} imported"
+msgstr "Restauré : {n} importés"
+
+#: library/commands.py:223
+msgid "Moved to the trash: {n} imported"
+msgstr "Mis à la corbeille : {n} importés"
+
+#: library/commands.py:109
+msgid "({n} had it)"
+msgstr "({n} l'avaient déjà)"
+
+#: library/detect.py:29 library/structure.py:17
+msgid "pawn"
+msgstr "pion"
+
+#: library/detect.py:29 library/structure.py:17
+msgid "knight"
+msgstr "cavalier"
+
+#: library/detect.py:29 library/structure.py:17
+msgid "bishop"
+msgstr "fou"
+
+#: library/detect.py:29 library/structure.py:17
+msgid "rook"
+msgstr "tour"
+
+#: library/detect.py:29 library/structure.py:17
+msgid "queen"
+msgstr "dame"
+
+#: library/detect.py:29 library/structure.py:17
+msgid "king"
+msgstr "roi"
+
+#: library/detect.py:511
+msgid "Discovered checks one after the other"
+msgstr "Échecs à la découverte l'un après l'autre"
+
+#: library/detect.py:83
+msgid ", {home_minors} minor pieces still at home"
+msgstr ", {home_minors} pièces mineures encore sur leur case de départ"
+
+#: library/detect.py:521
+msgid "{checks_given} checks, the king walks {value}–{value2}"
+msgstr "{checks_given} échecs, le roi marche de {value} à {value2}"
+
+#: library/detect.py:617 library/detect.py:584
+msgid "Mating pattern after {value}"
+msgstr "Schéma de mat après {value}"
+
+#: library/detect.py:400
+msgid "The solution ends with {last}"
+msgstr "La solution se termine par {last}"
+
+#: library/detect.py:406
+msgid "Checks until the position repeats"
+msgstr "Des échecs jusqu'à la répétition de la position"
+
+#: library/detect.py:429
+msgid "Double check with {text}"
+msgstr "Échec double avec {text}"
+
+#: library/detect.py:436
+msgid "En passant {text}"
+msgstr "En passant {text}"
+
+#: library/detect.py:439
+msgid "Bishop sacrifice {text}"
+msgstr "Sacrifice de fou {text}"
+
+#: library/detect.py:483
+msgid "{text}: no check, no capture"
+msgstr "{text} : ni échec, ni prise"
+
+#: library/detect.py:514
+msgid "Queen sacrifice (after {value})"
+msgstr "Sacrifice de dame (après {value})"
+
+#: library/detect.py:516
+msgid "Sacrifice: down {value} points on the way"
+msgstr "Sacrifice : {value} points de moins en cours de route"
+
+#: library/detect.py:402
+msgid "Mating pattern after {last}"
+msgstr "Schéma de mat après {last}"
+
+#: library/detect.py:404
+msgid "The solution ends in stalemate after {value}"
+msgstr "La solution se termine par un pat après {value}"
+
+#: library/detect.py:431
+msgid "Discovered check with {text}"
+msgstr "Échec à la découverte avec {text}"
+
+#: library/detect.py:455
+msgid "Fork with {text}"
+msgstr "Fourchette avec {text}"
+
+#: library/detect.py:480
+msgid "{text} takes an undefended piece"
+msgstr "{text} prend une pièce non défendue"
+
+#: library/detect.py:629
+msgid "{value} sacrifices material"
+msgstr "{value} sacrifie du matériel"
+
+#: library/detect.py:488
+msgid "{text} lures the king to {value}"
+msgstr "{text} attire le roi en {value}"
+
+#: library/detect.py:496
+msgid "{text} deflects the defender"
+msgstr "{text} dévie le défenseur"
+
+#: library/detect.py:408
+msgid "Wins material by {value}"
+msgstr "Gagne du matériel par {value}"
+
+#: library/detect.py:463
+msgid "{text} pins the {value} on {value2}"
+msgstr "{text} cloue : {value} en {value2}"
+
+#: library/detect.py:476
+msgid "Discovered attack with {text}"
+msgstr "Attaque à la découverte avec {text}"
+
+#: library/detect.py:500
+msgid "{text} removes the defender"
+msgstr "{text} élimine le défenseur"
+
+#: library/detect.py:465
+msgid "{text} pins to {value}"
+msgstr "{text} cloue sur {value}"
+
+#: library/detect.py:506
+msgid "{text} clears the line"
+msgstr "{text} dégage la ligne"
+
+#: library/detect.py:467
+msgid "Skewer with {text}"
+msgstr "Enfilade avec {text}"
+
+#: library/edit.py:286
+msgid "a Collect preset"
+msgstr "un préréglage de Saisie"
+
+#: library/edit.py:407
+msgid "Link undone"
+msgstr "Lien annulé"
+
+#: library/edit.py:75
+msgid "select players, sources or tags in the Library (4 5 6), or name one: :edit @tal role=model"
+msgstr "sélectionnez des joueurs, des sources ou des tags dans la Bibliothèque (4 5 6), ou nommez-en un : :edit @tal role=model"
+
+#: library/edit.py:150
+msgid "Edit undone"
+msgstr "Modification annulée"
+
+#: library/edit.py:203
+msgid "a name first, then any field=value"
+msgstr "d'abord un nom, puis des champ=valeur"
+
+#: library/edit.py:370
+msgid "the name as it is on the games: :player-link \"Tal, M.\" @tal"
+msgstr "le nom tel qu'il figure dans les parties : :player-link \"Tal, M.\" @tal"
+
+#: library/edit.py:164
+msgid "Changed {names} of {label}"
+msgstr "{names} de {label} modifiés"
+
+#: library/edit.py:276 library/structure.py:188 stats/metrics.py:338
+msgid " and "
+msgstr " et "
+
+#: library/edit.py:282
+msgid "{n} position or move"
+msgid_plural "{n} positions or moves"
+msgstr[0] "{n} position ou coup"
+msgstr[1] "{n} positions ou coups"
+
+#: library/edit.py:284
+msgid "the tags below it ({value})"
+msgstr "les tags en dessous ({value})"
+
+#: library/edit.py:307
+msgid ":delete takes no values"
+msgstr ":delete ne prend pas de valeurs"
+
+#: library/edit.py:317
+msgid "Deleted {value}"
+msgstr "Supprimé : {value}"
+
+#: library/edit.py:390
+msgid " (new player)"
+msgstr " (nouveau joueur)"
+
+#: library/edit.py:84
+msgid "{value}s have {value2}; not '{name}'"
+msgstr "les {value}s ont {value2} ; pas « {name} »"
+
+#: library/edit.py:129
+msgid "no field '{raw}' ({value})"
+msgstr "pas de champ « {raw} » ({value})"
+
+#: library/edit.py:154
+msgid "what to change? {value}"
+msgstr "que changer ? {value}"
+
+#: library/edit.py:232
+msgid "there is a tag '{key}' already (#{key})"
+msgstr "il existe déjà un tag « {key} » (#{key})"
+
+#: library/edit.py:273 library/edit.py:390 library/edit.py:277
+msgid "{n} game"
+msgid_plural "{n} games"
+msgstr[0] "{n} partie"
+msgstr[1] "{n} parties"
+
+#: library/edit.py:313
+msgid " (:player-link moves games to another player)"
+msgstr " (:player-link déplace les parties vers un autre joueur)"
+
+#: library/edit.py:317
+msgid " · {n} in use stay"
+msgstr " · {n} utilisés restent"
+
+#: library/edit.py:375
+msgid "no game has '{name}' without a player (is:unlinked in Games lists them)"
+msgstr "aucune partie n'a « {name} » sans joueur (is:unlinked dans Parties les liste)"
+
+#: library/edit.py:47
+msgid "unbalanced quotes: {e}"
+msgstr "guillemets non fermés : {e}"
+
+#: library/edit.py:93
+msgid "'{raw}' is taken (or empty)"
+msgstr "« {raw} » est déjà pris (ou vide)"
+
+#: library/edit.py:113
+msgid "{name} is one of {shown}"
+msgstr "{name} est l'un de {shown}"
+
+#: library/edit.py:313
+msgid "{o} is used by {why}: it stays"
+msgstr "{o} est utilisé par {why} : il reste"
+
+#: library/edit.py:103
+msgid "{name} is a number"
+msgstr "{name} est un nombre"
+
+#: library/edit.py:124
+msgid "{name} is below {name2}: that would make a loop"
+msgstr "{name} est sous {name2} : cela ferait une boucle"
+
+#: library/edit.py:276 library/pack_views.py:74 static/js/core/library.js:315
+msgid "{n} position"
+msgid_plural "{n} positions"
+msgstr[0] "{n} position"
+msgstr[1] "{n} positions"
+
+#: library/importer.py:192
+msgid "the file is larger than 20 MB: split it"
+msgstr "le fichier dépasse 20 Mo : divisez-le"
+
+#: library/importer.py:195
+msgid "no games in this text"
+msgstr "pas de parties dans ce texte"
+
+#: library/importer.py:204
+msgid "the file is larger than 20 MB"
+msgstr "le fichier dépasse 20 Mo"
+
+#: library/importer.py:216
+msgid "Nothing imported"
+msgstr "Rien importé"
+
+#: library/importer.py:330
+msgid "an empty file"
+msgstr "un fichier vide"
+
+#: library/importer.py:339
+msgid "no such import (the app was restarted?)"
+msgstr "import introuvable (l'app a-t-elle redémarré ?)"
+
+#: library/importer.py:208 static/js/core/importer.js:53
+msgid "Imported {n} game"
+msgid_plural "Imported {n} games"
+msgstr[0] "{n} partie importée"
+msgstr[1] "{n} parties importées"
+
+#: library/importer.py:213 library/pack_views.py:129 static/js/core/importer.js:56
+msgid "{n} could not be read"
+msgstr "{n} illisibles"
+
+#: library/importer.py:210
+msgid "{n} puzzle in training"
+msgid_plural "{n} puzzles in training"
+msgstr[0] "{n} exercice en entraînement"
+msgstr[1] "{n} exercices en entraînement"
+
+#: library/importer.py:211
+msgid "{n} puzzle as a draft"
+msgid_plural "{n} puzzles as drafts"
+msgstr[0] "{n} exercice en brouillon"
+msgstr[1] "{n} exercices en brouillon"
+
+#: library/models.py:15
+msgid "Book"
+msgstr "Livre"
+
+#: library/models.py:16
+msgid "Website"
+msgstr "Site web"
+
+#: library/models.py:17
+msgid "Own analysis"
+msgstr "Analyse personnelle"
+
+#: library/models.py:18
+msgid "Public domain"
+msgstr "Domaine public"
+
+#: library/models.py:19
+msgid "Course"
+msgstr "Cours"
+
+#: library/models.py:20 library/packs.py:316 static/js/core/library.js:572
+msgid "Puzzle pack"
+msgstr "Pack d'exercices"
+
+#: library/models.py:52
+msgid "—"
+msgstr "—"
+
+#: library/models.py:53
+msgid "Me"
+msgstr "Moi"
+
+#: library/models.py:54
+msgid "Student"
+msgstr "Élève"
+
+#: library/models.py:55
+msgid "Role model"
+msgstr "Modèle"
+
+#: library/models.py:56
+msgid "Opponent"
+msgstr "Adversaire"
+
+#: library/models.py:84
+msgid "One tag"
+msgstr "Un tag"
+
+#: library/models.py:85
+msgid "Several tags"
+msgstr "Plusieurs tags"
+
+#: library/models.py:179
+msgid "By hand"
+msgstr "À la main"
+
+#: library/models.py:180
+msgid "Detected"
+msgstr "Détecté"
+
+#: library/models.py:181
+msgid "Suggested"
+msgstr "Suggéré"
+
+#: library/models.py:354 static/js/core/packs.js:48
+msgid "from {name}"
+msgstr "de {name}"
+
+#: library/models.py:355 library/pack_views.py:73 static/js/core/packs.js:48
+msgid "for {name}"
+msgstr "pour {name}"
+
+#: library/moments.py:87
+msgid "The advantage changes sides"
+msgstr "L'avantage change de camp"
+
+#: library/moments.py:85
+msgid "A won position given away ({best:+.2f} → {played:+.2f})"
+msgstr "Une position gagnante gâchée ({best:+.2f} → {played:+.2f})"
+
+#: library/moments.py:92
+msgid "The only move, and a sacrifice"
+msgstr "Le seul coup, et un sacrifice"
+
+#: library/moments.py:82
+msgid "Winning chances {best:+.2f} → {played:+.2f}"
+msgstr "Chances de gain {best:+.2f} → {played:+.2f}"
+
+#: library/moments.py:90
+msgid "The only good move (the next best is {value:.2f} behind)"
+msgstr "Le seul bon coup (le suivant est {value:.2f} derrière)"
+
+#: library/moments.py:94
+msgid "One good move, not found: {value}"
+msgstr "Un seul bon coup, pas trouvé : {value}"
+
+#: library/moments.py:159
+msgid "Mate in one was there: {value}"
+msgstr "Il y avait un mat en un coup : {value}"
+
+#: library/moments.py:163
+msgid "Allows mate in one; {value} would have prevented it"
+msgstr "Permet le mat en un coup ; {value} l'aurait empêché"
+
+#: library/moments.py:173
+msgid "{captures} captures in {EXPLOSION_PLIES} plies"
+msgstr "{captures} prises en {EXPLOSION_PLIES} demi-coups"
+
+#: library/pack_views.py:50
+msgid "a title: :pack-export \"Back ranks\" for=Ben"
+msgstr "un titre : :pack-export \"Dernière rangée\" for=Ben"
+
+#: library/pack_views.py:53
+msgid "packs hold positions and games: select positions, puzzles or games in the Library"
+msgstr "les packs contiennent des positions et des parties : sélectionnez des positions, des exercices ou des parties dans la Bibliothèque"
+
+#: library/pack_views.py:75 library/pack_views.py:126 static/js/core/importer.js:54
+msgid "{n} puzzle"
+msgid_plural "{n} puzzles"
+msgstr[0] "{n} exercice"
+msgstr[1] "{n} exercices"
+
+#: library/pack_views.py:78
+msgid "Pack {title} v{version}{who}: {contents}, {size} kB (exports/{name})"
+msgstr "Pack {title} v{version}{who} : {contents}, {size} ko (exports/{name})"
+
+#: library/pack_views.py:117
+msgid "the preview has expired: open the pack again"
+msgstr "l'aperçu a expiré : rouvrez le pack"
+
+#: library/pack_views.py:125 static/js/core/packs.js:42 static/js/core/packs.js:51
+msgid "{n} new"
+msgstr "{n} nouvelles"
+
+#: library/pack_views.py:125 static/js/core/packs.js:52
+msgid "{n} updated"
+msgstr "{n} mises à jour"
+
+#: library/pack_views.py:128 static/js/core/importer.js:55
+msgid "{n} already here"
+msgstr "{n} déjà là"
+
+#: library/pack_views.py:131
+msgid "Pack {title}: {contents}"
+msgstr "Pack {title} : {contents}"
+
+#: library/pack_views.py:46
+msgid "unbalanced quotes: {error}"
+msgstr "guillemets non fermés : {error}"
+
+#: library/packs.py:38
+msgid "For the personal use of the student it was made for. Please don't pass it on."
+msgstr "Pour l'usage personnel de l'élève à qui il est destiné. Merci de ne pas le transmettre."
+
+#: library/packs.py:182
+msgid "no positions or games to put in a pack"
+msgstr "pas de positions ou de parties à mettre dans un pack"
+
+#: library/packs.py:218
+msgid "this file is too large for a pack"
+msgstr "ce fichier est trop grand pour un pack"
+
+#: library/packs.py:235
+msgid "this pack was made by a newer version of Spaced Positions: update the app"
+msgstr "ce pack a été créé par une version plus récente de Spaced Positions : mettez l'app à jour"
+
+#: library/packs.py:237
+msgid "not a puzzle pack (no pack id)"
+msgstr "pas un pack d'exercices (pas d'identifiant)"
+
+#: library/packs.py:485
+msgid "no game"
+msgstr "pas de partie"
+
+#: library/packs.py:223
+msgid "not a puzzle pack (no manifest)"
+msgstr "pas un pack d'exercices (pas de manifeste)"
+
+#: library/packs.py:233
+msgid "not a puzzle pack ({error})"
+msgstr "pas un pack d'exercices ({error})"
+
+#: library/packs.py:357
+msgid "p. {page}"
+msgstr "p. {page}"
+
+#: library/query.py:187
+msgid "this ( isn't closed"
+msgstr "cette ( n'est pas fermée"
+
+#: library/query.py:130
+msgid "{key}: needs a value"
+msgstr "{key} : il faut une valeur"
+
+#: library/query.py:337
+msgid "{key}: not a key for {collection}"
+msgstr "{key} : pas une clé pour {collection}"
+
+#: library/query.py:166
+msgid "no ( for this )"
+msgstr "pas de ( pour cette )"
+
+#: library/query.py:318
+msgid "{key}: can't read '{value}'"
+msgstr "{key} : impossible de lire « {value} »"
+
+#: library/query.py:295
+msgid "no tag '{value}'"
+msgstr "pas de tag « {value} »"
+
+#: library/query.py:615
+msgid "sort: not '{value}' here ({value2})"
+msgstr "sort : pas « {value} » ici ({value2})"
+
+#: library/query.py:295
+msgid " in {field_key}"
+msgstr " dans {field_key}"
+
+#: library/sequences.py:95
+msgid "Liquidation into a pawn ending"
+msgstr "Liquidation vers une finale de pions"
+
+#: library/sequences.py:91
+msgid "Two bishop sacrifices: {value} …"
+msgstr "Deux sacrifices de fou : {value} …"
+
+#: library/sequences.py:105
+msgid "Exchange sacrifice {text}"
+msgstr "Sacrifice de qualité {text}"
+
+#: library/sequences.py:169
+msgid "Breakthrough with {text}"
+msgstr "Percée avec {text}"
+
+#: library/sequences.py:186
+msgid "Perpetual check from {text}"
+msgstr "Échec perpétuel à partir de {text}"
+
+#: library/sequences.py:199
+msgid "Self-block on {value}"
+msgstr "Autoblocage en {value}"
+
+#: library/sequences.py:113
+msgid "Intermezzo {text} before taking back"
+msgstr "Coup intermédiaire {text} avant de reprendre"
+
+#: library/sequences.py:140
+msgid "{text} traps the {value} on {value2}"
+msgstr "{text} piège : {value} en {value2}"
+
+#: library/sequences.py:157
+msgid "{text} builds a battery"
+msgstr "{text} forme une batterie"
+
+#: library/sequences.py:183
+msgid "Windmill: discovered check {text} and again"
+msgstr "Moulin : échec à la découverte {text}, et encore"
+
+#: library/sequences.py:192
+msgid "Mad rook: {text}, taking it stalemates"
+msgstr "Tour enragée : {text}, la prendre fait pat"
+
+#: library/sequences.py:151
+msgid "{text} blocks the {value} on {value2}"
+msgstr "{text} bloque : {value} en {value2}"
+
+#: library/structure.py:241
+msgid "En passant is possible"
+msgstr "La prise en passant est possible"
+
+#: library/structure.py:307
+msgid "Opposite-coloured bishops"
+msgstr "Fous de couleurs opposées"
+
+#: library/structure.py:118
+msgid "queenside"
+msgstr "aile dame"
+
+#: library/structure.py:118
+msgid "kingside"
+msgstr "aile roi"
+
+#: library/structure.py:156
+msgid "seventh rank"
+msgstr "septième rangée"
+
+#: library/structure.py:212
+msgid "Material imbalance: {value} against {value2}"
+msgstr "Déséquilibre matériel : {value} contre {value2}"
+
+#: library/structure.py:277
+msgid "Both sides have passed pawns"
+msgstr "Les deux camps ont des pions passés"
+
+#: library/structure.py:79
+msgid "Isolated queen's pawn ({side})"
+msgstr "Pion dame isolé ({side})"
+
+#: library/structure.py:101
+msgid "Passed pawn {value} ({side})"
+msgstr "Pion passé {value} ({side})"
+
+#: library/structure.py:108
+msgid "Connected passed pawns ({side})"
+msgstr "Pions passés liés ({side})"
+
+#: library/structure.py:116
+msgid "{side}: {value} pawn islands, the opponent {value2}"
+msgstr "{side} : {value} îlots de pions, l'adversaire {value2}"
+
+#: library/structure.py:136
+msgid "{side} has the bishop pair"
+msgstr "{side} a la paire de fous"
+
+#: library/structure.py:156
+msgid "{value}-file"
+msgstr "colonne {value}"
+
+#: library/structure.py:232
+msgid "King {value} without an escape square ({value2})"
+msgstr "Roi {value} sans case de fuite ({value2})"
+
+#: library/structure.py:76
+msgid "Doubled pawns on the {value}-file ({side})"
+msgstr "Pions doublés sur la colonne {value} ({side})"
+
+#: library/structure.py:87
+msgid "Hanging pawns {value}/{value2} ({side})"
+msgstr "Pions pendants {value}/{value2} ({side})"
+
+#: library/structure.py:104
+msgid "Protected passed pawn {value} ({side})"
+msgstr "Pion passé protégé {value} ({side})"
+
+#: library/structure.py:157
+msgid "Rooks doubled on the {line} ({side})"
+msgstr "Tours doublées sur la {line} ({side})"
+
+#: library/structure.py:189
+msgid "Battery of {names} against {value} ({value2})"
+msgstr "Batterie de {names} contre {value} ({value2})"
+
+#: library/structure.py:295
+msgid "Lucena position: king {value} in front of the pawn, the defender cut off"
+msgstr "Position de Lucena : roi {value} devant le pion, le défenseur coupé"
+
+#: library/structure.py:297
+msgid "Philidor position: rook {value} on the defender's third rank"
+msgstr "Position de Philidor : tour {value} sur la troisième rangée du défenseur"
+
+#: library/structure.py:83
+msgid "Isolated pawn on the {value}-file ({side})"
+msgstr "Pion isolé sur la colonne {value} ({side})"
+
+#: library/structure.py:96
+msgid "Backward pawn {value} ({side})"
+msgstr "Pion arriéré {value} ({side})"
+
+#: library/structure.py:113
+msgid "Outside passed pawn {value} ({side})"
+msgstr "Pion passé éloigné {value} ({side})"
+
+#: library/structure.py:122
+msgid "{side}: a pawn majority on the {wing} ({a} against {b})"
+msgstr "{side} : une majorité de pions à l'{wing} ({a} contre {b})"
+
+#: library/structure.py:144
+msgid "Rook {value} on the open {value2}-file ({side})"
+msgstr "Tour {value} sur la colonne ouverte {value2} ({side})"
+
+#: library/structure.py:150
+msgid "Rook on the seventh rank: {value} ({side})"
+msgstr "Tour sur la septième rangée : {value} ({side})"
+
+#: library/structure.py:265
+msgid "Wrong rook pawn: the bishop doesn't control {value}"
+msgstr "Mauvais pion de tour : le fou ne contrôle pas {value}"
+
+#: library/structure.py:273
+msgid "The kings in opposition ({value}/{value2})"
+msgstr "Les rois en opposition ({value}/{value2})"
+
+#: library/structure.py:146
+msgid "Rook {value} on the half-open {value2}-file ({side})"
+msgstr "Tour {value} sur la colonne semi-ouverte {value2} ({side})"
+
+#: library/structure.py:275
+msgid "Distant opposition ({value}/{value2})"
+msgstr "Opposition à distance ({value}/{value2})"
+
+#: library/structure.py:285
+msgid "Rule of the square: pawn {value} against king {value2}"
+msgstr "Règle du carré : pion {value} contre roi {value2}"
+
+#: library/views.py:109
+msgid "No difficulty"
+msgstr "Sans difficulté"
+
+#: library/views.py:112
+msgid "No source"
+msgstr "Sans source"
+
+#: library/views.py:114
+msgid "No year"
+msgstr "Sans année"
+
+#: library/views.py:118
+msgid "No event"
+msgstr "Sans événement"
+
+#: library/views.py:120
+msgid "No role"
+msgstr "Sans rôle"
+
+#: library/views.py:301 stats/metrics.py:601 stats/views.py:128
+msgid "In training"
+msgstr "En entraînement"
+
+#: library/views.py:301
+msgid "No puzzle in training"
+msgstr "Aucun exercice en entraînement"
+
+#: library/views.py:301 stats/metrics.py:600 stats/views.py:81
+msgid "Analysed"
+msgstr "Analysées"
+
+#: library/views.py:302
+msgid "Not analysed"
+msgstr "Non analysées"
+
+#: library/views.py:302
+msgid "Diagrams"
+msgstr "Diagrammes"
+
+#: library/views.py:302
+msgid "Flagged"
+msgstr "Signalés"
+
+#: library/views.py:308
+msgid "Trash"
+msgstr "Corbeille"
+
+#: library/views.py:309
+msgid "Status"
+msgstr "Statut"
+
+#: library/views.py:386
+msgid "Only positions and games export as PGN"
+msgstr "Seules les positions et les parties s'exportent en PGN"
+
+#: stats/charts.py:39
+msgid "No data yet."
+msgstr "Pas encore de données."
+
+#: stats/charts.py:94 stats/charts.py:119
+msgid "max {value}"
+msgstr "max {value}"
+
+#: stats/metrics.py:59
+msgid "{v} patterns in your library"
+msgstr "{v} motifs dans votre bibliothèque"
+
+#: stats/metrics.py:59
+msgid "{v} days in a row"
+msgstr "{v} jours d'affilée"
+
+#: stats/metrics.py:60
+msgid "{v} % retention over 30 days"
+msgstr "{v} % de rétention sur 30 jours"
+
+#: stats/metrics.py:60
+msgid "{v} puzzles in one Storm"
+msgstr "{v} exercices en un Storm"
+
+#: stats/metrics.py:61
+msgid "A streak of {v}"
+msgstr "Un streak de {v}"
+
+#: stats/metrics.py:53
+msgid "Tactical motifs"
+msgstr "Motifs tactiques"
+
+#: stats/metrics.py:53
+msgid "Mating patterns"
+msgstr "Schémas de mat"
+
+#: stats/metrics.py:53
+msgid "Objectives"
+msgstr "Objectifs"
+
+#: stats/metrics.py:54
+msgid "Endgame types"
+msgstr "Types de finales"
+
+#: stats/metrics.py:54
+msgid "Endgame technique"
+msgstr "Technique de finale"
+
+#: stats/metrics.py:55
+msgid "Positional themes"
+msgstr "Thèmes positionnels"
+
+#: stats/metrics.py:56 stats/views.py:71 training/models.py:177
+msgid "Learning"
+msgstr "Apprentissage"
+
+#: stats/metrics.py:56
+msgid "Familiar"
+msgstr "Familier"
+
+#: stats/metrics.py:56
+msgid "Solid"
+msgstr "Solide"
+
+#: stats/metrics.py:57
+msgid "Strong"
+msgstr "Fort"
+
+#: stats/metrics.py:57
+msgid "Expert"
+msgstr "Expert"
+
+#: stats/metrics.py:57
+msgid "Master"
+msgstr "Maître"
+
+#: stats/metrics.py:66
+msgid "Not started"
+msgstr "Pas commencé"
+
+#: stats/metrics.py:520
+msgid "Colour"
+msgstr "Couleur"
+
+#: stats/metrics.py:520
+msgid "as White"
+msgstr "avec les Blancs"
+
+#: stats/metrics.py:520
+msgid "as Black"
+msgstr "avec les Noirs"
+
+#: stats/metrics.py:521
+msgid "Mirroring"
+msgstr "Miroir"
+
+#: stats/metrics.py:521
+msgid "original"
+msgstr "original"
+
+#: stats/metrics.py:521
+msgid "mirrored"
+msgstr "en miroir"
+
+#: stats/metrics.py:522
+msgid "side below"
+msgstr "son camp en bas"
+
+#: stats/metrics.py:522
+msgid "side on top"
+msgstr "son camp en haut"
+
+#: stats/metrics.py:600 stats/views.py:81
+msgid "Collected"
+msgstr "Saisies"
+
+#: stats/metrics.py:601 stats/views.py:71
+msgid "Mature"
+msgstr "Acquises"
+
+#: stats/metrics.py:659
+msgid "new best Streak: {value}"
+msgstr "nouveau record de Streak : {value}"
+
+#: stats/metrics.py:656
+msgid "new best Storm {minutes}′: {value}"
+msgstr "nouveau record de Storm {minutes}′ : {value}"
+
+#: stats/metrics.py:658
+msgid "new best Streak ♥{lives}: {value}"
+msgstr "nouveau record de Streak ♥{lives} : {value}"
+
+#: stats/metrics.py:333
+msgid "{n} more established card"
+msgid_plural "{n} more established cards"
+msgstr[0] "{n} carte acquise de plus"
+msgstr[1] "{n} cartes acquises de plus"
+
+#: stats/metrics.py:335
+msgid "{n} due reviews to prove retention"
+msgstr "{n} révisions dues pour prouver la rétention"
+
+#: stats/metrics.py:337
+msgid "retention {rate}"
+msgstr "rétention {rate}"
+
+#: stats/models.py:15
+msgid "Record"
+msgstr "Record"
+
+#: stats/models.py:16
+msgid "Level-up"
+msgstr "Progression"
+
+#: stats/views.py:25
+msgid "7 days"
+msgstr "7 jours"
+
+#: stats/views.py:25
+msgid "30 days"
+msgstr "30 jours"
+
+#: stats/views.py:25
+msgid "90 days"
+msgstr "90 jours"
+
+#: stats/views.py:25
+msgid "1 year"
+msgstr "1 an"
+
+#: stats/views.py:26
+msgid "all"
+msgstr "tout"
+
+#: stats/views.py:99
+msgid "Mastery per tag"
+msgstr "Maîtrise par tag"
+
+#: stats/views.py:105
+msgid "Weak spots: smoothed accuracy, at least 3 attempts"
+msgstr "Points faibles : précision lissée, au moins 3 essais"
+
+#: stats/views.py:113
+msgid "From collected to mature"
+msgstr "De saisie à acquise"
+
+#: stats/views.py:116
+msgid "Positions by source"
+msgstr "Positions par source"
+
+#: stats/views.py:77
+msgid "Activity per week: collected, analysed, solved"
+msgstr "Activité par semaine : saisies, analysées, résolues"
+
+#: stats/views.py:89
+msgid "Storm: the last sessions (solved and missed)"
+msgstr "Storm : les dernières sessions (résolus et manqués)"
+
+#: stats/views.py:104
+msgid "Mastery grows with the cards you train: solve some puzzles first."
+msgstr "La maîtrise grandit avec les cartes que vous entraînez : résolvez d'abord quelques exercices."
+
+#: stats/views.py:109
+msgid "No weak spots yet (or not enough attempts)."
+msgstr "Pas encore de points faibles (ou pas assez d'essais)."
+
+#: stats/views.py:120
+msgid "Positions by difficulty"
+msgstr "Positions par difficulté"
+
+#: stats/views.py:129
+msgid "Moves of analysis"
+msgstr "Coups d'analyse"
+
+#: stats/views.py:130
+msgid "Cards"
+msgstr "Cartes"
+
+#: stats/views.py:94
+msgid "No Storm yet: ␣ t, then 1."
+msgstr "Pas encore de Storm : ␣ t, puis 1."
+
+#: stats/views.py:109
+msgid "Smoothed accuracy %"
+msgstr "Précision lissée %"
+
+#: stats/views.py:141
+msgid "Last 7 days"
+msgstr "7 derniers jours"
+
+#: stats/views.py:141
+msgid "Last 30 days"
+msgstr "30 derniers jours"
+
+#: stats/views.py:141
+msgid "All"
+msgstr "Tout"
+
+#: stats/views.py:59
+msgid "Pattern library: mature cards, last {n} days"
+msgstr "Bibliothèque de motifs : cartes acquises, {n} derniers jours"
+
+#: stats/views.py:60
+msgid "Mature cards"
+msgstr "Cartes acquises"
+
+#: stats/views.py:66
+msgid "Cards by stage, last {n} days"
+msgstr "Cartes par étape, {n} derniers jours"
+
+#: stats/views.py:71
+msgid "Young"
+msgstr "Récentes"
+
+#: stats/views.py:71 training/models.py:176
+msgid "New"
+msgstr "Nouvelles"
+
+#: stats/views.py:83
+msgid "Training days: {n} in the last 53 weeks"
+msgstr "Jours d'entraînement : {n} sur les 53 dernières semaines"
+
+#: stats/views.py:107
+msgid "{tag} · {rate} of {n} · ↵ Streak on it"
+msgstr "{tag} · {rate} sur {n} · ↵ Streak dessus"
+
+#: stats/views.py:60
+msgid "{day} · {n} mature"
+msgstr "{day} · {n} acquises"
+
+#: stats/views.py:68
+msgid "{day} · mature {mature} · young {young} · learning {learning} · new {new}"
+msgstr "{day} · acquises {mature} · récentes {young} · apprentissage {learning} · nouvelles {new}"
+
+#: stats/views.py:79
+msgid "week of {day} · collected {collect} · analysed {analyse} · solved {train}"
+msgstr "semaine du {day} · saisies {collect} · analysées {analyse} · résolues {train}"
+
+#: stats/views.py:91
+msgid "{day} · Storm {minutes}′ · {solved} solved, {failed} missed"
+msgstr "{day} · Storm {minutes}′ · {solved} résolus, {failed} manqués"
+
+#: stats/views.py:102
+msgid "accuracy {rate}"
+msgstr "précision {rate}"
+
+#: stats/views.py:101
+msgid "next: {what}"
+msgstr "suivant : {what}"
+
+#: training/models.py:179
+msgid "Relearning"
+msgstr "Réapprentissage"
+
+#: training/models.py:249
+msgid "Storm {minutes}′"
+msgstr "Storm {minutes}′"
+
+#: training/models.py:253
+msgid "weakest motifs"
+msgstr "motifs les plus faibles"
+
+#: training/models.py:252
+msgid "blind"
+msgstr "à l'aveugle"
+
+#: training/puzzles.py:34
+msgid "a puzzle needs at least one move"
+msgstr "un exercice a besoin d'au moins un coup"
+
+#: training/puzzles.py:152
+msgid "Puzzle from a board line"
+msgstr "Exercice depuis une ligne de l'échiquier"
+
+#: training/puzzles.py:66
+msgid "a point without moves"
+msgstr "un point sans coups"
+
+#: training/puzzles.py:141
+msgid "the start position isn't legal: {problems}"
+msgstr "la position de départ n'est pas légale : {problems}"
+
+#: training/puzzles.py:151
+msgid "{short_id} already has a puzzle from this position: edit it in Analyse (p a, p o)"
+msgstr "{short_id} a déjà un exercice depuis cette position : modifiez-le dans l'Analyse (p a, p o)"
+
+#: training/puzzles.py:70
+msgid "illegal solver move {uci} in {value}"
+msgstr "coup de solution illégal {uci} dans {value}"
+
+#: training/puzzles.py:75
+msgid "illegal answer {uci} in {value}"
+msgstr "réponse illégale {uci} dans {value}"
+
+#: training/srs.py:115
+msgid "now"
+msgstr "maintenant"
+
+#: training/srs.py:123
+msgid "tomorrow"
+msgstr "demain"
+
+#: training/srs.py:118
+msgid "in {n} minute"
+msgid_plural "in {n} minutes"
+msgstr[0] "dans {n} minute"
+msgstr[1] "dans {n} minutes"
+
+#: training/srs.py:121
+msgid "in {n} hour"
+msgid_plural "in {n} hours"
+msgstr[0] "dans {n} heure"
+msgstr[1] "dans {n} heures"
+
+#: training/srs.py:123
+msgid "in {n} day"
+msgid_plural "in {n} days"
+msgstr[0] "dans {n} jour"
+msgstr[1] "dans {n} jours"
+
+#: training/views.py:250
+msgid "Silhouette"
+msgstr "Silhouette"
+
+#: training/views.py:42
+msgid "mode must be review, storm or streak"
+msgstr "le mode doit être review, storm ou streak"
+
+#: training/views.py:79
+msgid "Nothing due right now."
+msgstr "Rien à réviser pour l'instant."
+
+#: training/views.py:79
+msgid "No puzzles yet: make one from a board with :puzzle"
+msgstr "Pas encore d'exercices : créez-en un sur un échiquier avec :puzzle"
+
+#: training/views.py:60
+msgid "no weak spots yet: they show after 3 attempts on a motif"
+msgstr "pas encore de points faibles : ils apparaissent après 3 essais sur un motif"
+
+#: training/views.py:245
+msgid "To move"
+msgstr "Au trait"
+
+#: training/views.py:245
+msgid "Random"
+msgstr "Au hasard"
+
+#: training/views.py:280
+msgid "Puzzle saved: {n} card in training"
+msgid_plural "Puzzle saved: {n} cards in training"
+msgstr[0] "Exercice enregistré : {n} carte en entraînement"
+msgstr[1] "Exercice enregistré : {n} cartes en entraînement"
+
+#: training/views.py:81
+msgid "No due puzzles match “{filter}”"
+msgstr "Aucun exercice à réviser ne correspond à « {filter} »"
+
+#: training/views.py:82
+msgid "No puzzles in training match “{filter}”"
+msgstr "Aucun exercice en entraînement ne correspond à « {filter} »"
+
+#: static/js/app.js:43
+msgid "Your CSS is off for this page (Esc while loading): Settings → Advanced"
+msgstr "Votre CSS est désactivé pour cette page (Échap au chargement) : Réglages → Avancé"
+
+#: static/js/app.js:59
+msgid "update {version} available"
+msgstr "mise à jour {version} disponible"
+
+#: static/js/app.js:100 static/js/core/commands.js:143 static/js/core/importer.js:58
+msgid "undo"
+msgstr "annuler"
+
+#: static/js/app.js:136 static/js/core/library.js:562 static/js/islands/train.js:640
+msgid "The browser didn't allow copying"
+msgstr "Le navigateur n'a pas permis la copie"
+
+#: static/js/app.js:156
+msgid "Spaced Positions has stopped. Start it again from its icon or with spos."
+msgstr "Spaced Positions s'est arrêté. Relancez-le depuis son icône ou avec spos."
+
+#: static/js/core/analysis.js:17
+msgid "Blue"
+msgstr "Bleu"
+
+#: static/js/core/analysis.js:17
+msgid "Violet"
+msgstr "Violet"
+
+#: static/js/core/analysis.js:17
+msgid "Orange"
+msgstr "Orange"
+
+#: static/js/core/analysis.js:17
+msgid "Green"
+msgstr "Vert"
+
+#: static/js/core/analysis.js:17
+msgid "Red"
+msgstr "Rouge"
+
+#: static/js/core/analysis.js:17
+msgid "Grey"
+msgstr "Gris"
+
+#: static/js/core/analysis.js:23 static/js/core/collect.js:21 static/js/core/engine.js:50
+msgid "the app is not reachable"
+msgstr "l'app est injoignable"
+
+#: static/js/core/analysis.js:128
+msgid "Could not open that position"
+msgstr "Impossible d'ouvrir cette position"
+
+#: static/js/core/analysis.js:228
+msgid "Replace the moves of “{title}” with the pasted game? y / n"
+msgstr "Remplacer les coups de « {title} » par la partie collée ? y / n"
+
+#: static/js/core/analysis.js:228 static/js/core/analysis.js:229
+msgid "this position"
+msgstr "cette position"
+
+#: static/js/core/analysis.js:229
+msgid "Replace the moves of “{title}” with the pasted position? y / n"
+msgstr "Remplacer les coups de « {title} » par la position collée ? y / n"
+
+#: static/js/core/analysis.js:239
+msgid "Drop them? y / n"
+msgstr "Les supprimer ? y / n"
+
+#: static/js/core/analysis.js:459
+msgid "No position open: :analyse, or paste one (⌘V, a)"
+msgstr "Aucune position ouverte : :analyse, ou collez-en une (⌘V, a)"
+
+#: static/js/core/analysis.js:480
+msgid "No other move here"
+msgstr "Pas d'autre coup ici"
+
+#: static/js/core/analysis.js:494
+msgid "Looking for the key moments…"
+msgstr "Recherche des moments clés…"
+
+#: static/js/core/analysis.js:504
+msgid "Open the moves pane to fold variations"
+msgstr "Ouvrez le panneau des coups pour replier les variantes"
+
+#: static/js/core/analysis.js:518
+msgid "No variation here"
+msgstr "Pas de variante ici"
+
+#: static/js/core/analysis.js:529
+msgid "No variations"
+msgstr "Pas de variantes"
+
+#: static/js/core/analysis.js:533
+msgid "All variations open"
+msgstr "Toutes les variantes ouvertes"
+
+#: static/js/core/analysis.js:533
+msgid "All variations folded · z opens one"
+msgstr "Toutes les variantes repliées · z en ouvre une"
+
+#: static/js/core/analysis.js:550
+msgid "This is the first"
+msgstr "C'est la première"
+
+#: static/js/core/analysis.js:550
+msgid "This is the last"
+msgstr "C'est la dernière"
+
+#: static/js/core/analysis.js:554
+msgid "Go to a move first"
+msgstr "Allez d'abord à un coup"
+
+#: static/js/core/analysis.js:591
+msgid "Open an Inspector pane to write comments: ␣ w v, then i"
+msgstr "Ouvrez un panneau Inspecteur pour écrire des commentaires : ␣ w v, puis i"
+
+#: static/js/core/analysis.js:609
+msgid "Open an Inspector pane: ␣ w v, then i"
+msgstr "Ouvrez un panneau Inspecteur : ␣ w v, puis i"
+
+#: static/js/core/analysis.js:631
+msgid "its own analysis, with the continuation"
+msgstr "sa propre analyse, avec la suite"
+
+#: static/js/core/analysis.js:631
+msgid "its own analysis"
+msgstr "sa propre analyse"
+
+#: static/js/core/charts.js:64
+msgid "Stats: the app is not reachable"
+msgstr "Statistiques : l'app est injoignable"
+
+#: static/js/core/charts.js:113
+msgid "Nothing to drill into here"
+msgstr "Rien à détailler ici"
+
+#: static/js/core/charts.js:132
+msgid "Period: {period}"
+msgstr "Période : {period}"
+
+#: static/js/core/charts.js:139
+msgid "No analysis to continue: :analyse opens one"
+msgstr "Pas d'analyse à poursuivre : :analyse en ouvre une"
+
+#: static/js/core/cmdline.js:31 static/js/core/context.js:63
+msgid "Command"
+msgstr "Commande"
+
+#: static/js/core/cmdline.js:93
+msgid "auto · follow the system"
+msgstr "auto · comme le système"
+
+#: static/js/core/cmdline.js:103
+msgid "saved layout"
+msgstr "disposition enregistrée"
+
+#: static/js/core/cmdline.js:107
+msgid "hidden buffer"
+msgstr "panneau masqué"
+
+#: static/js/core/cmdline.js:161
+msgid "optional"
+msgstr "facultatif"
+
+#: static/js/core/cmdline.js:170
+msgid "type a command · Tab completes · ↑ history"
+msgstr "tapez une commande · Tab complète · ↑ historique"
+
+#: static/js/core/cmdline.js:269
+msgid "no command '{name}'"
+msgstr "pas de commande « {name} »"
+
+#: static/js/core/collect.js:63
+msgid "(none)"
+msgstr "(aucun)"
+
+#: static/js/core/collect.js:66
+msgid "none · t adds one, ⌫ removes the last"
+msgstr "aucun · t en ajoute un, ⌫ retire le dernier"
+
+#: static/js/core/collect.js:82
+msgid "(no title)"
+msgstr "(sans titre)"
+
+#: static/js/core/collect.js:112
+msgid "This position: duplicate of {id} {title} · g d go there"
+msgstr "Cette position : doublon de {id} {title} · g d y va"
+
+#: static/js/core/collect.js:112
+msgid "This position: new"
+msgstr "Cette position : nouvelle"
+
+#: static/js/core/collect.js:119
+msgid "Collect needs a board pane"
+msgstr "La Saisie a besoin d'un panneau échiquier"
+
+#: static/js/core/collect.js:121
+msgid "The board is empty: set up the diagram first"
+msgstr "L'échiquier est vide : mettez d'abord le diagramme en place"
+
+#: static/js/core/collect.js:128
+msgid "Duplicate of {id} {title}: m merge into it · s save anyway · g go there · Esc cancel"
+msgstr "Doublon de {id} {title} : m fusionner · s enregistrer quand même · g y aller · Échap annuler"
+
+#: static/js/core/collect.js:138
+msgid "next: diagram {n}"
+msgstr "suivant : diagramme {n}"
+
+#: static/js/core/collect.js:156
+msgid "No such source"
+msgstr "Source introuvable"
+
+#: static/js/core/collect.js:162
+msgid "New source: {name}"
+msgstr "Nouvelle source : {name}"
+
+#: static/js/core/collect.js:179
+msgid "No tag '{tag}'"
+msgstr "Pas de tag « {tag} »"
+
+#: static/js/core/collect.js:191
+msgid "No preset {n} (:preset-save <name> makes one)"
+msgstr "Pas de préréglage {n} (:preset-save <nom> en crée un)"
+
+#: static/js/core/collect.js:242 static/js/core/paste.js:124 static/js/core/paste.js:128
+msgid "Paste position"
+msgstr "Coller la position"
+
+#: static/js/core/commands.js:29
+msgid "unknown command"
+msgstr "commande inconnue"
+
+#: static/js/core/commands.js:31
+msgid "not available here"
+msgstr "pas disponible ici"
+
+#: static/js/core/commands.js:68
+msgid "{command}: the app is not reachable"
+msgstr "{command} : l'app est injoignable"
+
+#: static/js/core/commands.js:88
+msgid "unknown command '{id}'"
+msgstr "commande inconnue « {id} »"
+
+#: static/js/core/commands.js:115
+msgid "{command}: not implemented yet"
+msgstr "{command} : pas encore disponible"
+
+#: static/js/core/commands.js:151
+msgid "Undone: {what}"
+msgstr "Annulé : {what}"
+
+#: static/js/core/commands.js:151
+msgid "redo"
+msgstr "rétablir"
+
+#: static/js/core/commands.js:160
+msgid "Redone: {what}"
+msgstr "Rétabli : {what}"
+
+#: static/js/core/commands.js:191
+msgid "tip: "
+msgstr "astuce : "
+
+#: static/js/core/context.js:63
+msgid "Insert"
+msgstr "Insertion"
+
+#: static/js/core/context.js:63
+msgid "Pending"
+msgstr "En attente"
+
+#: static/js/core/context.js:63
+msgid "Visual"
+msgstr "Visuel"
+
+#: static/js/core/context.js:63
+msgid "Hint"
+msgstr "Indice"
+
+#: static/js/core/context.js:99 static/js/core/importer.js:100 static/js/core/library.js:226
+msgid "{n} selected"
+msgstr "{n} sélectionnés"
+
+#: static/js/core/engine.js:82
+msgid "local engine"
+msgstr "moteur local"
+
+#: static/js/core/engine.js:85
+msgid "The engine could not start: {error}"
+msgstr "Le moteur n'a pas pu démarrer : {error}"
+
+#: static/js/core/engine.js:89
+msgid "Local engine: {error}"
+msgstr "Moteur local : {error}"
+
+#: static/js/core/engine.js:89
+msgid "it stopped"
+msgstr "il s'est arrêté"
+
+#: static/js/core/engine.js:89
+msgid "The engine stopped with an error"
+msgstr "Le moteur s'est arrêté sur une erreur"
+
+#: static/js/core/engine.js:167
+msgid "Evaluating {i} / {n}…"
+msgstr "Évaluation {i} / {n}…"
+
+#: static/js/core/engine.js:306
+msgid "starting…"
+msgstr "démarrage…"
+
+#: static/js/core/engine.js:306
+msgid "thinking"
+msgstr "réfléchit"
+
+#: static/js/core/engine.js:306
+msgid "done"
+msgstr "terminé"
+
+#: static/js/core/engine.js:308
+msgid "Stockfish 17.1 (browser)"
+msgstr "Stockfish 17.1 (navigateur)"
+
+#: static/js/core/engine.js:308
+msgid "depth {depth}/{max}"
+msgstr "profondeur {depth}/{max}"
+
+#: static/js/core/engine.js:316
+msgid "The engine doesn't run in Train: it would show the solutions. Analyse the puzzle with a (beside the board) or A (in Analyse)."
+msgstr "Le moteur ne tourne pas à l'entraînement : il montrerait les solutions. Analysez l'exercice avec a (à côté de l'échiquier) ou A (dans l'Analyse)."
+
+#: static/js/core/engine.js:317
+msgid "Waiting for a position…"
+msgstr "En attente d'une position…"
+
+#: static/js/core/engine.js:318
+msgid "The engine is off. e turns it on; it follows the board of this link group, runs as a program through the app, and stops in Train and when the app is in the background."
+msgstr "Le moteur est arrêté. e le démarre ; il suit l'échiquier de ce groupe lié, tourne comme programme via l'app, et s'arrête à l'entraînement et quand l'app est en arrière-plan."
+
+#: static/js/core/engine.js:319
+msgid "The engine is off. e turns it on; it follows the board of this link group, runs in this browser, and stops in Train and when the app is in the background."
+msgstr "Le moteur est arrêté. e le démarre ; il suit l'échiquier de ce groupe lié, tourne dans ce navigateur, et s'arrête à l'entraînement et quand l'app est en arrière-plan."
+
+#: static/js/core/engine.js:338
+msgid "Add the line up to this move to the analysis"
+msgstr "Ajouter la ligne jusqu'à ce coup à l'analyse"
+
+#: static/js/core/engine.js:373
+msgid "Engine on: the local engine through the app"
+msgstr "Moteur en marche : le moteur local via l'app"
+
+#: static/js/core/engine.js:373
+msgid "Engine on: Stockfish 17.1 in this browser"
+msgstr "Moteur en marche : Stockfish 17.1 dans ce navigateur"
+
+#: static/js/core/engine.js:373
+msgid "Engine off"
+msgstr "Moteur arrêté"
+
+#: static/js/core/engine.js:379
+msgid "The engine has no move yet"
+msgstr "Le moteur n'a pas encore de coup"
+
+#: static/js/core/engine.js:416
+msgid "Open a position or a game first"
+msgstr "Ouvrez d'abord une position ou une partie"
+
+#: static/js/core/engine.js:417
+msgid "Already evaluating"
+msgstr "Évaluation déjà en cours"
+
+#: static/js/core/engine.js:308 static/js/islands/graphs.js:127
+msgid "{n} line"
+msgid_plural "{n} lines"
+msgstr[0] "{n} ligne"
+msgstr[1] "{n} lignes"
+
+#: static/js/core/engine.js:387
+msgid "Engine: {n} line"
+msgid_plural "Engine: {n} lines"
+msgstr[0] "Moteur : {n} ligne"
+msgstr[1] "Moteur : {n} lignes"
+
+#: static/js/core/help.js:10
+msgid "Everywhere"
+msgstr "Partout"
+
+#: static/js/core/help.js:11
+msgid "Any pane"
+msgstr "Tout panneau"
+
+#: static/js/core/help.js:12
+msgid "In a text field (Insert)"
+msgstr "Dans un champ de texte (Insertion)"
+
+#: static/js/core/help.js:13 design/commands/ui.toml:list.down design/commands/ui.toml:list.up
+msgid "Lists"
+msgstr "Listes"
+
+#: static/js/core/help.js:21
+msgid "View: {name}"
+msgstr "Vue : {name}"
+
+#: static/js/core/help.js:22
+msgid "Mode: {name}"
+msgstr "Mode : {name}"
+
+#: static/js/core/help.js:55
+msgid "all contexts · a: this context"
+msgstr "tous les contextes · a : ce contexte"
+
+#: static/js/core/help.js:55
+msgid "this context · a: all contexts"
+msgstr "ce contexte · a : tous les contextes"
+
+#: static/js/core/help.js:70
+msgid "/ filter"
+msgstr "/ filtrer"
+
+#: static/js/core/importer.js:21
+msgid "Reading the PGN…"
+msgstr "Lecture du PGN…"
+
+#: static/js/core/importer.js:26
+msgid "More than 5,000 games: import all of them in the background (duplicates left out)? y · r with the puzzles in training · n"
+msgstr "Plus de 5000 parties : tout importer en arrière-plan (sans les doublons) ? y · r avec les exercices en entraînement · n"
+
+#: static/js/core/importer.js:40
+msgid "Uploading the PGN…"
+msgstr "Envoi du PGN…"
+
+#: static/js/core/importer.js:48
+msgid "The import stopped"
+msgstr "L'import s'est arrêté"
+
+#: static/js/core/importer.js:50
+msgid "Importing in the background · {n} so far · {percent} %"
+msgstr "Import en arrière-plan · {n} jusqu'ici · {percent} %"
+
+#: static/js/core/importer.js:71 static/js/core/importer.js:99
+msgid "Import"
+msgstr "Import"
+
+#: static/js/core/importer.js:79
+msgid "all / none"
+msgstr "tout / rien"
+
+#: static/js/core/importer.js:79 static/js/core/importer.js:101
+msgid "puzzles into training"
+msgstr "exercices en entraînement"
+
+#: static/js/core/importer.js:79
+msgid "import"
+msgstr "importer"
+
+#: static/js/core/importer.js:79 static/js/core/packs.js:58
+msgid "cancel"
+msgstr "annuler"
+
+#: static/js/core/importer.js:101
+msgid "puzzles as drafts"
+msgstr "exercices en brouillon"
+
+#: static/js/core/importer.js:110
+msgid "game"
+msgstr "partie"
+
+#: static/js/core/importer.js:114
+msgid "error: {error}"
+msgstr "erreur : {error}"
+
+#: static/js/core/importer.js:114
+msgid "duplicate of {id}"
+msgstr "doublon de {id}"
+
+#: static/js/core/importer.js:114
+msgid "{n} plies"
+msgstr "{n} demi-coups"
+
+#: static/js/core/importer.js:146 static/js/core/library.js:472
+msgid "Nothing selected"
+msgstr "Rien de sélectionné"
+
+#: static/js/core/importer.js:149
+msgid "Importing…"
+msgstr "Import…"
+
+#: static/js/core/keys.js:134
+msgid "{keys} is not bound here"
+msgstr "{keys} n'est pas attribuée ici"
+
+#: static/js/core/layout.js:125
+msgid "Could not load this view ({error})."
+msgstr "Impossible de charger cette vue ({error})."
+
+#: static/js/core/layout.js:155
+msgid "Link group: click to cycle"
+msgstr "Groupe lié : cliquez pour changer"
+
+#: static/js/core/layout.js:262
+msgid "layout not saved: the app is not reachable"
+msgstr "disposition non enregistrée : l'app est injoignable"
+
+#: static/js/core/layout.js:353
+msgid "no mode '{name}'"
+msgstr "pas de mode « {name} »"
+
+#: static/js/core/layout.js:413 static/js/core/layout.js:689
+msgid "Resize"
+msgstr "Redimensionner"
+
+#: static/js/core/layout.js:433
+msgid "Pane"
+msgstr "Panneau"
+
+#: static/js/core/layout.js:448
+msgid "View"
+msgstr "Vue"
+
+#: static/js/core/layout.js:458
+msgid "no view '{name}'"
+msgstr "pas de vue « {name} »"
+
+#: static/js/core/layout.js:492
+msgid "no pane {n}"
+msgstr "pas de panneau {n}"
+
+#: static/js/core/layout.js:511
+msgid "no pane in that direction"
+msgstr "pas de panneau dans cette direction"
+
+#: static/js/core/layout.js:516
+msgid "Split: view of the new pane"
+msgstr "Diviser : vue du nouveau panneau"
+
+#: static/js/core/layout.js:516
+msgid "Split below: view of the new pane"
+msgstr "Diviser en bas : vue du nouveau panneau"
+
+#: static/js/core/layout.js:519
+msgid "Split"
+msgstr "Diviser"
+
+#: static/js/core/layout.js:541
+msgid "Open in a split"
+msgstr "Ouvrir dans une division"
+
+#: static/js/core/layout.js:592 design/commands/pane.toml:pane.close
+msgid "Close pane"
+msgstr "Fermer le panneau"
+
+#: static/js/core/layout.js:596
+msgid "Only this pane"
+msgstr "Seulement ce panneau"
+
+#: static/js/core/layout.js:607 design/commands/pane.toml:pane.buffers
+msgid "Hidden buffers"
+msgstr "Panneaux masqués"
+
+#: static/js/core/layout.js:618
+msgid "no hidden buffer '{id}'"
+msgstr "pas de panneau masqué « {id} »"
+
+#: static/js/core/layout.js:619
+msgid "Show buffer"
+msgstr "Afficher le panneau"
+
+#: static/js/core/layout.js:628 static/js/core/layout.js:631
+msgid "Change view"
+msgstr "Changer de vue"
+
+#: static/js/core/layout.js:640
+msgid "Maximised · the other panes are tabs in its header"
+msgstr "Agrandi · les autres panneaux sont des onglets dans son en-tête"
+
+#: static/js/core/layout.js:640
+msgid "Restored"
+msgstr "Restauré"
+
+#: static/js/core/layout.js:645
+msgid "Collapse"
+msgstr "Replier"
+
+#: static/js/core/layout.js:653
+msgid "Swap panes"
+msgstr "Échanger les panneaux"
+
+#: static/js/core/layout.js:665
+msgid "Rotate split"
+msgstr "Pivoter la division"
+
+#: static/js/core/layout.js:673 design/commands/pane.toml:pane.equalize
+msgid "Equal sizes"
+msgstr "Tailles égales"
+
+#: static/js/core/layout.js:688
+msgid "no side-by-side split to resize"
+msgstr "pas de division côte à côte à redimensionner"
+
+#: static/js/core/layout.js:688
+msgid "no stacked split to resize"
+msgstr "pas de division superposée à redimensionner"
+
+#: static/js/core/layout.js:703
+msgid "Link group"
+msgstr "Groupe lié"
+
+#: static/js/core/layout.js:707
+msgid "Link group {group}"
+msgstr "Groupe lié {group}"
+
+#: static/js/core/layout.js:707
+msgid "Not linked"
+msgstr "Non lié"
+
+#: static/js/core/layout.js:713
+msgid "Pin"
+msgstr "Épingler"
+
+#: static/js/core/layout.js:716
+msgid "Pinned: this pane keeps its subject"
+msgstr "Épinglé : ce panneau garde son sujet"
+
+#: static/js/core/layout.js:716
+msgid "Unpinned"
+msgstr "Désépinglé"
+
+#: static/js/core/layout.js:723
+msgid "Reset layout"
+msgstr "Réinitialiser la disposition"
+
+#: static/js/core/layout.js:741
+msgid "no layout '{name}'"
+msgstr "pas de disposition « {name} »"
+
+#: static/js/core/layout.js:743
+msgid "Load layout {name}"
+msgstr "Charger la disposition {name}"
+
+#: static/js/core/library.js:295
+msgid "The Library has no results pane: ␣ w v, then l"
+msgstr "La Bibliothèque n'a pas de panneau de résultats : ␣ w v, puis l"
+
+#: static/js/core/library.js:329
+msgid "Sort by · the same again reverses · ▤ groups"
+msgstr "Trier par · le même encore inverse · ▤ groupes"
+
+#: static/js/core/library.js:334
+msgid "↑ now"
+msgstr "↑ actuel"
+
+#: static/js/core/library.js:334
+msgid "↓ now"
+msgstr "↓ actuel"
+
+#: static/js/core/library.js:379 static/js/core/library.js:385
+msgid "Groups come with a sort by difficulty, source, year …: s"
+msgstr "Les groupes viennent avec un tri par difficulté, source, année … : s"
+
+#: static/js/core/library.js:388
+msgid "All groups open"
+msgstr "Tous les groupes ouverts"
+
+#: static/js/core/library.js:388
+msgid "All groups folded · z opens the one at the cursor"
+msgstr "Tous les groupes repliés · z ouvre celui du curseur"
+
+#: static/js/core/library.js:407
+msgid "Results as a table"
+msgstr "Résultats en tableau"
+
+#: static/js/core/library.js:407
+msgid "Results as a list"
+msgstr "Résultats en liste"
+
+#: static/js/core/library.js:407
+msgid "Results as a grid"
+msgstr "Résultats en grille"
+
+#: static/js/core/library.js:464
+msgid "Nothing to tag here"
+msgstr "Rien à taguer ici"
+
+#: static/js/core/library.js:479
+msgid "Nothing here"
+msgstr "Rien ici"
+
+#: static/js/core/library.js:485
+msgid "Select positions, or open one in Analyse"
+msgstr "Sélectionnez des positions, ou ouvrez-en une dans l'Analyse"
+
+#: static/js/core/library.js:486
+msgid "Detecting…"
+msgstr "Détection…"
+
+#: static/js/core/library.js:496
+msgid "o opens positions, puzzles and games beside the list"
+msgstr "o ouvre positions, exercices et parties à côté de la liste"
+
+#: static/js/core/library.js:500
+msgid "{title} beside the list · ↵ opens it in Analyse"
+msgstr "{title} à côté de la liste · ↵ l'ouvre dans l'Analyse"
+
+#: static/js/core/library.js:518
+msgid "Select players, sources or tags in the Library (4 5 6)"
+msgstr "Sélectionnez des joueurs, des sources ou des tags dans la Bibliothèque (4 5 6)"
+
+#: static/js/core/library.js:524
+msgid "Empty the trash? Its positions and games are deleted for good (trained ones stay). y / n"
+msgstr "Vider la corbeille ? Ses positions et parties sont supprimées définitivement (celles entraînées restent). y / n"
+
+#: static/js/core/library.js:543
+msgid "No puzzles in training among these (p r in Analyse puts one into training)"
+msgstr "Aucun exercice en entraînement parmi elles (p r dans l'Analyse en met un en entraînement)"
+
+#: static/js/core/library.js:550
+msgid "Nothing to analyse here"
+msgstr "Rien à analyser ici"
+
+#: static/js/core/library.js:570
+msgid "Export"
+msgstr "Exporter"
+
+#: static/js/core/library.js:571
+msgid "for any chess program"
+msgstr "pour tout logiciel d'échecs"
+
+#: static/js/core/library.js:577
+msgid "Positions and games export as PGN"
+msgstr "Seules les positions et les parties s'exportent en PGN"
+
+#: static/js/core/library.js:585
+msgid "Exporting everything the query found"
+msgstr "Export de tout ce que la requête a trouvé"
+
+#: static/js/core/library.js:585
+msgid "Exporting {n}"
+msgstr "Export de {n}"
+
+#: static/js/core/library.js:592
+msgid "Packs are made in the Library: search, select, then :pack-export"
+msgstr "Les packs se font dans la Bibliothèque : chercher, sélectionner, puis :pack-export"
+
+#: static/js/core/library.js:594
+msgid "Packs hold positions and games: collection 1, 2 or 3"
+msgstr "Les packs contiennent des positions et des parties : collection 1, 2 ou 3"
+
+#: static/js/core/library.js:596
+msgid "Making the pack…"
+msgstr "Création du pack…"
+
+#: static/js/core/library.js:603
+msgid "Go to a move first (T tags the position)"
+msgstr "Allez d'abord à un coup (T tague la position)"
+
+#: static/js/core/library.js:316
+msgid "{n} player"
+msgid_plural "{n} players"
+msgstr[0] "{n} joueur"
+msgstr[1] "{n} joueurs"
+
+#: static/js/core/library.js:316
+msgid "{n} source"
+msgid_plural "{n} sources"
+msgstr[0] "{n} source"
+msgstr[1] "{n} sources"
+
+#: static/js/core/library.js:316
+msgid "{n} tag"
+msgid_plural "{n} tags"
+msgstr[0] "{n} tag"
+msgstr[1] "{n} tags"
+
+#: static/js/core/library.js:560
+msgid "Copied {n} FEN"
+msgid_plural "Copied {n} FENs"
+msgstr[0] "{n} FEN copié"
+msgstr[1] "{n} FEN copiés"
+
+#: static/js/core/lines.js:102
+msgid "Load position"
+msgstr "Charger la position"
+
+#: static/js/core/lines.js:113
+msgid "could not replay the moves: {error}"
+msgstr "impossible de rejouer les coups : {error}"
+
+#: static/js/core/lines.js:68
+msgid "{move} replaced {n} move (Analyse keeps variations)"
+msgid_plural "{move} replaced {n} moves (Analyse keeps variations)"
+msgstr[0] "{move} a remplacé {n} coup (l'Analyse garde les variantes)"
+msgstr[1] "{move} a remplacé {n} coups (l'Analyse garde les variantes)"
+
+#: static/js/core/packs.js:15
+msgid "Reading {file}…"
+msgstr "Lecture de {file}…"
+
+#: static/js/core/packs.js:27
+msgid "Puzzle pack {title}"
+msgstr "Pack d'exercices {title}"
+
+#: static/js/core/packs.js:42
+msgid "{n} updated (you had version {version})"
+msgstr "{n} mises à jour (vous aviez la version {version})"
+
+#: static/js/core/packs.js:43
+msgid "{n} already in your library"
+msgstr "{n} déjà dans votre bibliothèque"
+
+#: static/js/core/packs.js:43
+msgid "{n} yours already"
+msgstr "{n} déjà à vous"
+
+#: static/js/core/packs.js:45
+msgid "Puzzle pack · {title} · version {version}"
+msgstr "Pack d'exercices · {title} · version {version}"
+
+#: static/js/core/packs.js:48
+msgid "no author given"
+msgstr "aucun auteur indiqué"
+
+#: static/js/core/packs.js:53
+msgid "New tags: {tags}"
+msgstr "Nouveaux tags : {tags}"
+
+#: static/js/core/packs.js:54
+msgid "Licence: {licence}"
+msgstr "Licence : {licence}"
+
+#: static/js/core/packs.js:54
+msgid "none given"
+msgstr "aucune indiquée"
+
+#: static/js/core/packs.js:55
+msgid "Puzzles go straight into training"
+msgstr "Les exercices vont directement en entraînement"
+
+#: static/js/core/packs.js:55
+msgid "Puzzles come as drafts (not in training yet)"
+msgstr "Les exercices arrivent en brouillon (pas encore en entraînement)"
+
+#: static/js/core/packs.js:58
+msgid "accept the licence and import"
+msgstr "accepter la licence et importer"
+
+#: static/js/core/packs.js:58
+msgid "training on / off"
+msgstr "entraînement oui / non"
+
+#: static/js/core/packs.js:79
+msgid "Importing the pack…"
+msgstr "Import du pack…"
+
+#: static/js/core/packs.js:113
+msgid "{file}: drop a puzzle pack (.sppack) or a PGN"
+msgstr "{file} : déposez un pack d'exercices (.sppack) ou un PGN"
+
+#: static/js/core/paste.js:31
+msgid "Paste: the app is not reachable"
+msgstr "Coller : l'app est injoignable"
+
+#: static/js/core/paste.js:33
+msgid "Paste: {message}"
+msgstr "Coller : {message}"
+
+#: static/js/core/paste.js:40
+msgid "black to move"
+msgstr "trait aux Noirs"
+
+#: static/js/core/paste.js:40
+msgid "white to move"
+msgstr "trait aux Blancs"
+
+#: static/js/core/paste.js:41
+msgid "not legal: {problems}"
+msgstr "illégale : {problems}"
+
+#: static/js/core/paste.js:42
+msgid "Lichess position"
+msgstr "Position lichess"
+
+#: static/js/core/paste.js:45
+msgid "{n} games (the first is shown)"
+msgstr "{n} parties (la première est affichée)"
+
+#: static/js/core/paste.js:107
+msgid "The browser didn't allow reading the clipboard: press ⌘V instead"
+msgstr "Le navigateur n'a pas permis de lire le presse-papiers : appuyez plutôt sur ⌘V"
+
+#: static/js/core/paste.js:120
+msgid "Paste game"
+msgstr "Coller la partie"
+
+#: static/js/core/paste.js:125
+msgid "Not a legal position: shown as a diagram. S opens the board editor to fix it."
+msgstr "Pas une position légale : affichée comme diagramme. S ouvre l'éditeur d'échiquier pour la corriger."
+
+#: static/js/core/paste.js:141
+msgid "Not a legal position: show it on a board (b) and fix it in the board editor first"
+msgstr "Pas une position légale : affichez-la sur un échiquier (b) et corrigez-la d'abord dans l'éditeur"
+
+#: static/js/core/paste.js:44
+msgid "{n} FEN"
+msgid_plural "{n} FENs"
+msgstr[0] "{n} FEN"
+msgstr[1] "{n} FEN"
+
+#: static/js/core/scroll.js:32
+msgid "This pane has no text field"
+msgstr "Ce panneau n'a pas de champ de texte"
+
+#: static/js/core/settings.js:120
+msgid "↵ edits this one on the command line"
+msgstr "↵ modifie celui-ci sur la ligne de commande"
+
+#: static/js/core/settings.js:135
+msgid "Already the default"
+msgstr "Déjà la valeur par défaut"
+
+#: static/js/core/settings.js:150
+msgid "Settings exported as TOML: Settings → Data imports them on another machine"
+msgstr "Réglages exportés en TOML : Réglages → Données les importe sur un autre appareil"
+
+#: static/js/core/settings.js:159
+msgid "Import: the app is not reachable"
+msgstr "Import : l'app est injoignable"
+
+#: static/js/core/settings.js:171
+msgid "New keys for “{command}”: {keys} · ↵ keep · Esc cancel"
+msgstr "Nouvelles touches pour « {command} » : {keys} · ↵ garder · Échap annuler"
+
+#: static/js/core/settings.js:177
+msgid "Cancelled"
+msgstr "Annulé"
+
+#: static/js/core/settings.js:203
+msgid "No keys to remove here"
+msgstr "Pas de touches à retirer ici"
+
+#: static/js/islands/board.js:133
+msgid "Promote to"
+msgstr "Promouvoir en"
+
+#: static/js/islands/board.js:135
+msgid "Queen"
+msgstr "Dame"
+
+#: static/js/islands/board.js:135
+msgid "Rook"
+msgstr "Tour"
+
+#: static/js/islands/board.js:135
+msgid "Bishop"
+msgstr "Fou"
+
+#: static/js/islands/board.js:135
+msgid "Knight"
+msgstr "Cavalier"
+
+#: static/js/islands/board.js:223
+msgid "Evaluation {score} (white's view)"
+msgstr "Évaluation {score} (du point de vue des Blancs)"
+
+#: static/js/islands/board.js:324
+msgid "Not a legal position: {problems}"
+msgstr "Pas une position légale : {problems}"
+
+#: static/js/islands/board.js:324
+msgid "a fixes it"
+msgstr "a la corrige"
+
+#: static/js/islands/board.js:324
+msgid "D: keep it as a diagram"
+msgstr "D : la garder comme diagramme"
+
+#: static/js/islands/board.js:335
+msgid "Set up position"
+msgstr "Mise en place de la position"
+
+#: static/js/islands/board.js:349
+msgid "This position can't be played (a diagram)"
+msgstr "Cette position ne peut pas être jouée (un diagramme)"
+
+#: static/js/islands/board.js:395
+msgid "Which one? {moves} · ⇥ choose, ↵ play"
+msgstr "Lequel ? {moves} · ⇥ choisir, ↵ jouer"
+
+#: static/js/islands/board.js:397
+msgid "No legal move matches “{text}”"
+msgstr "Aucun coup légal ne correspond à « {text} »"
+
+#: static/js/islands/board.js:397
+msgid "Type a move, e.g. Nf3, Sf3 or g1f3"
+msgstr "Tapez un coup, par ex. Nf3, Cf3 ou g1f3"
+
+#: static/js/islands/board.js:422
+msgid "a: fix"
+msgstr "a : corriger"
+
+#: static/js/islands/board.js:436
+msgid "Type a move: "
+msgstr "Tapez un coup : "
+
+#: static/js/islands/board.js:438
+msgid "↵ play · ⇥ next · Esc done"
+msgstr "↵ jouer · ⇥ suivant · Échap terminé"
+
+#: static/js/islands/board.js:440
+msgid "Solve as black · click/drag or i to type the move · h hint · s solution"
+msgstr "Résolvez avec les Noirs · cliquer/glisser ou i pour taper le coup · h indice · s solution"
+
+#: static/js/islands/board.js:441
+msgid "Solve as white · click/drag or i to type the move · h hint · s solution"
+msgstr "Résolvez avec les Blancs · cliquer/glisser ou i pour taper le coup · h indice · s solution"
+
+#: static/js/islands/board.js:444
+msgid "Black to move"
+msgstr "Trait aux Noirs"
+
+#: static/js/islands/board.js:444
+msgid "White to move"
+msgstr "Trait aux Blancs"
+
+#: static/js/islands/board.js:444
+msgid "Diagram: not playable"
+msgstr "Diagramme : pas jouable"
+
+#: static/js/islands/board.js:445
+msgid "move {n} of {total}"
+msgstr "coup {n} sur {total}"
+
+#: static/js/islands/board.js:446
+msgid "right-click: fill a square (⇧ red · ⌥ blue)"
+msgstr "clic droit : remplir une case (⇧ rouge · ⌥ bleu)"
+
+#: static/js/islands/board.js:446
+msgid "click/drag: move · right-drag: arrow (⇧ red · ⌥ blue · ⇧⌥ yellow)"
+msgstr "cliquer/glisser : coup · glisser avec le clic droit : flèche (⇧ rouge · ⌥ bleu · ⇧⌥ jaune)"
+
+#: static/js/islands/board.js:551
+msgid "Not while solving a puzzle"
+msgstr "Pas pendant la résolution d'un exercice"
+
+#: static/js/islands/board.js:559 design/commands/board.toml:board.squaretool
+msgid "Square tool: right-click fills a square"
+msgstr "Outil cases : le clic droit remplit une case"
+
+#: static/js/islands/board.js:559
+msgid "Square tool off: right-drag draws arrows"
+msgstr "Outil cases désactivé : glisser avec le clic droit dessine des flèches"
+
+#: static/js/islands/board.js:578
+msgid "Play the solution on the board first, then :puzzle"
+msgstr "Jouez d'abord la solution sur l'échiquier, puis :puzzle"
+
+#: static/js/islands/board.js:593
+msgid "Copied {what}"
+msgstr "{what} copié"
+
+#: static/js/islands/board.js:595
+msgid "Could not copy the {what}: the browser refused"
+msgstr "Impossible de copier le {what} : le navigateur a refusé"
+
+#: static/js/islands/board.js:609
+msgid "Opened in lichess (a new tab)"
+msgstr "Ouvert sur lichess (un nouvel onglet)"
+
+#: static/js/islands/board.js:631
+msgid "Nothing to fix automatically"
+msgstr "Rien à corriger automatiquement"
+
+#: static/js/islands/board.js:637 design/commands/board.toml:board.castling
+msgid "Castling rights"
+msgstr "Droits de roque"
+
+#: static/js/islands/board.js:639
+msgid "White O-O"
+msgstr "Blancs O-O"
+
+#: static/js/islands/board.js:639
+msgid "White O-O-O"
+msgstr "Blancs O-O-O"
+
+#: static/js/islands/board.js:639
+msgid "Black O-O"
+msgstr "Noirs O-O"
+
+#: static/js/islands/board.js:639
+msgid "Black O-O-O"
+msgstr "Noirs O-O-O"
+
+#: static/js/islands/board.js:656 design/commands/board.toml:board.ep
+msgid "En passant square"
+msgstr "Case en passant"
+
+#: static/js/islands/board.js:676
+msgid "Piece set · ↑↓ preview · ↵ keep · Esc back"
+msgstr "Jeu de pièces · ↑↓ aperçu · ↵ garder · Échap retour"
+
+#: static/js/islands/board.js:687
+msgid "No piece set '{name}'"
+msgstr "Pas de jeu de pièces « {name} »"
+
+#: static/js/islands/graphs.js:36
+msgid "not evaluated"
+msgstr "pas évalué"
+
+#: static/js/islands/graphs.js:47 static/js/islands/graphs.js:89
+msgid "Open a game or a position in this link group."
+msgstr "Ouvrez une partie ou une position dans ce groupe lié."
+
+#: static/js/islands/graphs.js:80
+msgid "No evaluations yet: :evaluate runs the engine over the main line."
+msgstr "Pas encore d'évaluations : :evaluate fait tourner le moteur sur la ligne principale."
+
+#: static/js/islands/graphs.js:127
+msgid "at {move}"
+msgstr "à {move}"
+
+#: static/js/islands/train.js:16
+msgid "new"
+msgstr "nouvelle"
+
+#: static/js/islands/train.js:16
+msgid "learning"
+msgstr "apprentissage"
+
+#: static/js/islands/train.js:16
+msgid "relearning"
+msgstr "réapprentissage"
+
+#: static/js/islands/train.js:16
+msgid "young"
+msgstr "récente"
+
+#: static/js/islands/train.js:16
+msgid "mature"
+msgstr "acquise"
+
+#: static/js/islands/train.js:93
+msgid "Train needs a board pane: ␣ w v, then b"
+msgstr "L'entraînement a besoin d'un panneau échiquier : ␣ w v, puis b"
+
+#: static/js/islands/train.js:96
+msgid "Could not start: the app is not reachable"
+msgstr "Impossible de démarrer : l'app est injoignable"
+
+#: static/js/islands/train.js:97
+msgid "Could not start"
+msgstr "Impossible de démarrer"
+
+#: static/js/islands/train.js:323
+msgid "retry (not scored)"
+msgstr "nouvel essai (non compté)"
+
+#: static/js/islands/train.js:358
+msgid "White: {pieces}"
+msgstr "Blancs : {pieces}"
+
+#: static/js/islands/train.js:358
+msgid "Black: {pieces}"
+msgstr "Noirs : {pieces}"
+
+#: static/js/islands/train.js:372
+msgid "×{level} combo · +{seconds}s a puzzle"
+msgstr "combo ×{level} · +{seconds} s par exercice"
+
+#: static/js/islands/train.js:379
+msgid "Black to play"
+msgstr "Les Noirs jouent"
+
+#: static/js/islands/train.js:379
+msgid "White to play"
+msgstr "Les Blancs jouent"
+
+#: static/js/islands/train.js:380
+msgid "Find the first move"
+msgstr "Trouvez le premier coup"
+
+#: static/js/islands/train.js:380
+msgid "Find the best continuation"
+msgstr "Trouvez la meilleure suite"
+
+#: static/js/islands/train.js:441
+msgid "The move is on the board · this puzzle counts as missed"
+msgstr "Le coup est sur l'échiquier · cet exercice compte comme manqué"
+
+#: static/js/islands/train.js:441
+msgid "The piece to move is circled · this puzzle counts as missed"
+msgstr "La pièce à jouer est entourée · cet exercice compte comme manqué"
+
+#: static/js/islands/train.js:488
+msgid "Solution shown"
+msgstr "Solution affichée"
+
+#: static/js/islands/train.js:488
+msgid "Solved with a hint · counts as missed"
+msgstr "Résolu avec un indice · compte comme manqué"
+
+#: static/js/islands/train.js:489
+msgid "{move} was not it"
+msgstr "{move} n'était pas le bon"
+
+#: static/js/islands/train.js:495
+msgid "next {when}"
+msgstr "prochaine {when}"
+
+#: static/js/islands/train.js:496
+msgid "solved before it was due: the schedule stays (next {when})"
+msgstr "résolu avant l'échéance : le planning reste (prochaine {when})"
+
+#: static/js/islands/train.js:503
+msgid "the run is over: ↵ shows the result"
+msgstr "la série est terminée : ↵ affiche le résultat"
+
+#: static/js/islands/train.js:564
+msgid "The analysis beside the board · ↵ next puzzle closes it · A opens it in Analyse"
+msgstr "L'analyse à côté de l'échiquier · ↵ exercice suivant la ferme · A l'ouvre dans l'Analyse"
+
+#: static/js/islands/train.js:572
+msgid "Flagged as broken: is:flagged in the Library lists it"
+msgstr "Signalé comme défectueux : is:flagged dans la Bibliothèque le liste"
+
+#: static/js/islands/train.js:572
+msgid "Could not flag it"
+msgstr "Impossible de le signaler"
+
+#: static/js/islands/train.js:608
+msgid "the {n} not reached stay due"
+msgstr "les {n} non atteints restent à réviser"
+
+#: static/js/islands/train.js:638
+msgid "Copied the result"
+msgstr "Résultat copié"
+
+#: static/js/islands/train.js:650
+msgid "↵ next puzzle · q end the session and see the result"
+msgstr "↵ exercice suivant · q terminer la session et voir le résultat"
+
+#: static/js/islands/train.js:654
+msgid "Quit the Storm? y / n"
+msgstr "Quitter le Storm ? y / n"
+
+#: static/js/islands/train.js:658
+msgid "Paused · ↵ resume · q quit · r restart"
+msgstr "En pause · ↵ reprendre · q quitter · r recommencer"
+
+#: static/js/islands/train.js:158
+msgid "{n} card matches"
+msgid_plural "{n} cards match"
+msgstr[0] "{n} carte correspond"
+msgstr[1] "{n} cartes correspondent"
+
+#: static/js/islands/train.js:608
+msgid "Stopped after {n} puzzle"
+msgid_plural "Stopped after {n} puzzles"
+msgstr[0] "Arrêté après {n} exercice"
+msgstr[1] "Arrêté après {n} exercices"
+
+#: design/commands/analysis.toml:analysis.open
+msgid "Analyse a position"
+msgstr "Analyser une position"
+
+#: design/commands/analysis.toml:analysis.back design/commands/board.toml:board.back
+msgid "Back one move"
+msgstr "Un coup en arrière"
+
+#: design/commands/analysis.toml:analysis.back design/commands/analysis.toml:analysis.forward design/commands/analysis.toml:analysis.start
+msgid "no position open: :analyse"
+msgstr "aucune position ouverte : :analyse"
+
+#: design/commands/analysis.toml:analysis.forward
+msgid "Forward (main continuation)"
+msgstr "Avancer (suite principale)"
+
+#: design/commands/analysis.toml:analysis.start design/commands/board.toml:board.start
+msgid "To the start position"
+msgstr "À la position de départ"
+
+#: design/commands/analysis.toml:analysis.end
+msgid "To the end of the line"
+msgstr "À la fin de la ligne"
+
+#: design/commands/analysis.toml:analysis.sibling
+msgid "Other variation at this move"
+msgstr "Autre variante à ce coup"
+
+#: design/commands/analysis.toml:analysis.branch
+msgid "Previous / next branch point"
+msgstr "Embranchement précédent / suivant"
+
+#: design/commands/analysis.toml:analysis.moments
+msgid "Find the key moments (engine, python-chess, annotations)"
+msgstr "Trouver les moments clés (moteur, python-chess, annotations)"
+
+#: design/commands/analysis.toml:analysis.fold
+msgid "Fold or open the variation"
+msgstr "Replier ou ouvrir la variante"
+
+#: design/commands/analysis.toml:analysis.foldall
+msgid "Fold or open all variations"
+msgstr "Replier ou ouvrir toutes les variantes"
+
+#: design/commands/analysis.toml:analysis.mainline
+msgid "Back to the main line"
+msgstr "Retour à la ligne principale"
+
+#: design/commands/analysis.toml:analysis.subject
+msgid "Next / previous position of the list"
+msgstr "Position suivante / précédente de la liste"
+
+#: design/commands/analysis.toml:analysis.subject
+msgid "Analyse wasn't opened from a list"
+msgstr "L'Analyse n'a pas été ouverte depuis une liste"
+
+#: design/commands/analysis.toml:analysis.nag
+msgid "Annotation symbol"
+msgstr "Symbole d'annotation"
+
+#: design/commands/analysis.toml:analysis.nag design/commands/analysis.toml:analysis.annotate design/commands/analysis.toml:analysis.mark
+msgid "go to a move first"
+msgstr "allez d'abord à un coup"
+
+#: design/commands/analysis.toml:analysis.annotate
+msgid "All annotation and evaluation symbols"
+msgstr "Tous les symboles d'annotation et d'évaluation"
+
+#: design/commands/analysis.toml:analysis.mark
+msgid "Mark the move"
+msgstr "Marquer le coup"
+
+#: design/commands/analysis.toml:analysis.comment
+msgid "Comment on this move"
+msgstr "Commenter ce coup"
+
+#: design/commands/analysis.toml:analysis.rootcomment
+msgid "Comment on the start position"
+msgstr "Commenter la position de départ"
+
+#: design/commands/analysis.toml:analysis.moveup
+msgid "Move the variation up"
+msgstr "Monter la variante"
+
+#: design/commands/analysis.toml:analysis.movedown
+msgid "Move the variation down"
+msgstr "Descendre la variante"
+
+#: design/commands/analysis.toml:analysis.promote
+msgid "Make this the main line"
+msgstr "En faire la ligne principale"
+
+#: design/commands/analysis.toml:analysis.delete
+msgid "Delete from here"
+msgstr "Supprimer à partir d'ici"
+
+#: design/commands/analysis.toml:analysis.tags
+msgid "Tag the move"
+msgstr "Taguer le coup"
+
+#: design/commands/analysis.toml:analysis.untag
+msgid "Remove a tag from the move"
+msgstr "Retirer un tag du coup"
+
+#: design/commands/analysis.toml:analysis.newposition
+msgid "New position from this move"
+msgstr "Nouvelle position à partir de ce coup"
+
+#: design/commands/analysis.toml:analysis.newposition
+msgid "no position or game open"
+msgstr "aucune position ou partie ouverte"
+
+#: design/commands/analysis.toml:analysis.positiontags design/commands/train.toml:train.tag
+msgid "Tag the position"
+msgstr "Taguer la position"
+
+#: design/commands/analysis.toml:engine.toggle
+msgid "Engine on / off"
+msgstr "Moteur marche / arrêt"
+
+#: design/commands/analysis.toml:engine.best
+msgid "Play the engine's best move"
+msgstr "Jouer le meilleur coup du moteur"
+
+#: design/commands/analysis.toml:engine.best
+msgid "the engine is off (e)"
+msgstr "le moteur est arrêté (e)"
+
+#: design/commands/analysis.toml:engine.lines
+msgid "Engine lines"
+msgstr "Lignes du moteur"
+
+#: design/commands/analysis.toml:engine.evaluate
+msgid "Evaluate the main line (the eval graph)"
+msgstr "Évaluer la ligne principale (le graphique d'évaluation)"
+
+#: design/commands/analysis.toml:engine.evaluate
+msgid "open a game or a position first"
+msgstr "ouvrez d'abord une partie ou une position"
+
+#: design/commands/board.toml:board.flip
+msgid "Flip the board"
+msgstr "Retourner l'échiquier"
+
+#: design/commands/board.toml:board.flip design/commands/board.toml:board.back design/commands/board.toml:board.forward
+msgid "needs a board"
+msgstr "il faut un échiquier"
+
+#: design/commands/board.toml:board.forward
+msgid "Forward one move"
+msgstr "Un coup en avant"
+
+#: design/commands/board.toml:board.end
+msgid "To the last move"
+msgstr "Au dernier coup"
+
+#: design/commands/board.toml:board.squaretool design/commands/board.toml:board.cleardrawings design/commands/board.toml:board.entry
+msgid "needs a board in play"
+msgstr "il faut un échiquier en jeu"
+
+#: design/commands/board.toml:board.cleardrawings
+msgid "Clear the drawings of this move"
+msgstr "Effacer les dessins de ce coup"
+
+#: design/commands/board.toml:board.entry
+msgid "Type a move"
+msgstr "Taper un coup"
+
+#: design/commands/board.toml:board.setup
+msgid "Set up the position (board editor)"
+msgstr "Mettre en place la position (éditeur d'échiquier)"
+
+#: design/commands/board.toml:board.lichess
+msgid "Open the position in lichess"
+msgstr "Ouvrir la position sur lichess"
+
+#: design/commands/board.toml:board.copyfen
+msgid "Copy FEN"
+msgstr "Copier le FEN"
+
+#: design/commands/board.toml:board.copyfen design/commands/board.toml:board.copypgn
+msgid "needs a board or the PGN/FEN view"
+msgstr "il faut un échiquier ou la vue PGN/FEN"
+
+#: design/commands/board.toml:board.copypgn
+msgid "Copy PGN"
+msgstr "Copier le PGN"
+
+#: design/commands/board.toml:board.piece
+msgid "Piece to place"
+msgstr "Pièce à placer"
+
+#: design/commands/board.toml:board.piece design/commands/board.toml:board.color design/commands/board.toml:board.eraser
+msgid "Setup"
+msgstr "Mise en place"
+
+#: design/commands/board.toml:board.piece design/commands/board.toml:board.color design/commands/board.toml:board.eraser
+msgid "only in the board editor (S)"
+msgstr "seulement dans l'éditeur d'échiquier (S)"
+
+#: design/commands/board.toml:board.color
+msgid "Switch the colour to place"
+msgstr "Changer la couleur à placer"
+
+#: design/commands/board.toml:board.eraser
+msgid "Eraser"
+msgstr "Gomme"
+
+#: design/commands/board.toml:board.hand
+msgid "Hand: drag pieces freely"
+msgstr "Main : déplacer librement les pièces"
+
+#: design/commands/board.toml:board.clear
+msgid "Clear the board"
+msgstr "Vider l'échiquier"
+
+#: design/commands/board.toml:board.initial
+msgid "Initial position"
+msgstr "Position initiale"
+
+#: design/commands/board.toml:board.side
+msgid "Side to move"
+msgstr "Camp au trait"
+
+#: design/commands/board.toml:board.mirror
+msgid "Mirror: swap the colours"
+msgstr "Miroir : échanger les couleurs"
+
+#: design/commands/board.toml:board.diagram
+msgid "Diagram: allow an illegal position"
+msgstr "Diagramme : autoriser une position illégale"
+
+#: design/commands/board.toml:board.fix
+msgid "Fix what can be fixed"
+msgstr "Corriger ce qui peut l'être"
+
+#: design/commands/board.toml:paste.board
+msgid "Paste: show on a board"
+msgstr "Coller : afficher sur un échiquier"
+
+#: design/commands/board.toml:paste.analyse
+msgid "Paste: analyse"
+msgstr "Coller : analyser"
+
+#: design/commands/board.toml:paste.collect
+msgid "Paste: collect as positions"
+msgstr "Coller : saisir comme positions"
+
+#: design/commands/board.toml:paste.import
+msgid "Paste: import the games"
+msgstr "Coller : importer les parties"
+
+#: design/commands/board.toml:board.pieces design/tokens.toml:piece-set
+msgid "Piece set"
+msgstr "Jeu de pièces"
+
+#: design/commands/collect.toml:collect.save
+msgid "Save & next"
+msgstr "Enregistrer & suivant"
+
+#: design/commands/collect.toml:collect.save design/commands/collect.toml:collect.saveopen design/commands/collect.toml:collect.source
+msgid "in Collect"
+msgstr "dans la Saisie"
+
+#: design/commands/collect.toml:collect.saveopen
+msgid "Save & open in Analyse"
+msgstr "Enregistrer & ouvrir dans l'Analyse"
+
+#: design/commands/collect.toml:collect.source
+msgid "Source of the entry session"
+msgstr "Source de la session de saisie"
+
+#: design/commands/collect.toml:collect.page
+msgid "Page + / −"
+msgstr "Page + / −"
+
+#: design/commands/collect.toml:collect.diagram
+msgid "Diagram number + / −"
+msgstr "Numéro du diagramme + / −"
+
+#: design/commands/collect.toml:collect.tag
+msgid "Tag the next positions"
+msgstr "Taguer les positions suivantes"
+
+#: design/commands/collect.toml:collect.untag
+msgid "Remove the last tag of the entry session"
+msgstr "Retirer le dernier tag de la session de saisie"
+
+#: design/commands/collect.toml:collect.preset
+msgid "Tag preset on / off"
+msgstr "Préréglage de tags oui / non"
+
+#: design/commands/collect.toml:collect.presetsave
+msgid "Save the session's tags as a preset"
+msgstr "Enregistrer les tags de la session comme préréglage"
+
+#: design/commands/collect.toml:collect.ready
+msgid "Ready for training on / off"
+msgstr "Prêt pour l'entraînement oui / non"
+
+#: design/commands/collect.toml:collect.duplicate
+msgid "Go to the duplicate"
+msgstr "Aller au doublon"
+
+#: design/commands/collect.toml:collect.duplicate
+msgid "no duplicate of the board's position"
+msgstr "pas de doublon de la position de l'échiquier"
+
+#: design/commands/library.toml:library.collection design/commands/library.toml:library.display design/commands/library.toml:library.trash
+msgid "in the Library's results"
+msgstr "dans les résultats de la Bibliothèque"
+
+#: design/commands/library.toml:library.display
+msgid "Results as table · list · grid"
+msgstr "Résultats en tableau · liste · grille"
+
+#: design/commands/library.toml:library.tag
+msgid "Tag the selection"
+msgstr "Taguer la sélection"
+
+#: design/commands/library.toml:library.tag design/commands/library.toml:library.untag
+msgid "select something in the Library, or open a position in Analyse"
+msgstr "sélectionnez quelque chose dans la Bibliothèque, ou ouvrez une position dans l'Analyse"
+
+#: design/commands/library.toml:library.untag
+msgid "Remove a tag from the selection"
+msgstr "Retirer un tag de la sélection"
+
+#: design/commands/library.toml:library.relink
+msgid "Put tags back (undo)"
+msgstr "Remettre les tags (annuler)"
+
+#: design/commands/library.toml:library.trash
+msgid "Move to the trash"
+msgstr "Mettre à la corbeille"
+
+#: design/commands/library.toml:library.restore
+msgid "Restore from the trash"
+msgstr "Restaurer depuis la corbeille"
+
+#: design/commands/library.toml:library.restore
+msgid "in the Library's results (is:trash)"
+msgstr "dans les résultats de la Bibliothèque (is:trash)"
+
+#: design/commands/library.toml:library.emptytrash
+msgid "Empty the trash (deletes for good)"
+msgstr "Vider la corbeille (supprime définitivement)"
+
+#: design/commands/library.toml:library.savequery
+msgid "Save the query"
+msgstr "Enregistrer la requête"
+
+#: design/commands/library.toml:library.train
+msgid "Train these"
+msgstr "Entraîner celles-ci"
+
+#: design/commands/library.toml:library.analyse
+msgid "Analyse these (n / N in Analyse)"
+msgstr "Analyser celles-ci (n / N dans l'Analyse)"
+
+#: design/commands/library.toml:library.copyfen
+msgid "Copy the FENs"
+msgstr "Copier les FEN"
+
+#: design/commands/library.toml:library.export
+msgid "Export as PGN"
+msgstr "Exporter en PGN"
+
+#: design/commands/library.toml:library.query
+msgid "Search the Library"
+msgstr "Chercher dans la Bibliothèque"
+
+#: design/commands/library.toml:library.trashmany
+msgid "Undo or redo an import"
+msgstr "Annuler ou rétablir un import"
+
+#: design/commands/library.toml:library.import
+msgid "Import a PGN file"
+msgstr "Importer un fichier PGN"
+
+#: design/commands/library.toml:library.exclude
+msgid "Exclude the facet (-term)"
+msgstr "Exclure la facette (-terme)"
+
+#: design/commands/library.toml:library.exclude
+msgid "in the filter pane"
+msgstr "dans le panneau des filtres"
+
+#: design/commands/library.toml:library.detect
+msgid "Detect tags (python-chess)"
+msgstr "Détecter les tags (python-chess)"
+
+#: design/commands/library.toml:library.detect
+msgid "select positions in the Library, or open one in Analyse"
+msgstr "sélectionnez des positions dans la Bibliothèque, ou ouvrez-en une dans l'Analyse"
+
+#: design/commands/library.toml:library.edit
+msgid "Edit the selected players, sources or tags"
+msgstr "Modifier les joueurs, sources ou tags sélectionnés"
+
+#: design/commands/library.toml:tag.new
+msgid "New tag"
+msgstr "Nouveau tag"
+
+#: design/commands/library.toml:player.new
+msgid "New player"
+msgstr "Nouveau joueur"
+
+#: design/commands/library.toml:source.new
+msgid "New source"
+msgstr "Nouvelle source"
+
+#: design/commands/library.toml:library.delete
+msgid "Delete the selected players, sources or tags nothing uses"
+msgstr "Supprimer les joueurs, sources ou tags sélectionnés qui ne servent à rien"
+
+#: design/commands/library.toml:library.recreate
+msgid "Bring deleted players, sources or tags back (undo)"
+msgstr "Ramener les joueurs, sources ou tags supprimés (annuler)"
+
+#: design/commands/library.toml:player.link
+msgid "Link a name on games to a player"
+msgstr "Relier un nom des parties à un joueur"
+
+#: design/commands/library.toml:library.beside
+msgid "Open beside the list (a board and its moves)"
+msgstr "Ouvrir à côté de la liste (un échiquier et ses coups)"
+
+#: design/commands/library.toml:library.sort
+msgid "Sort by a column (again: reverse)"
+msgstr "Trier par une colonne (encore : inverser)"
+
+#: design/commands/library.toml:library.fold
+msgid "Fold or open the group"
+msgstr "Replier ou ouvrir le groupe"
+
+#: design/commands/library.toml:library.foldall
+msgid "Fold or open all groups"
+msgstr "Replier ou ouvrir tous les groupes"
+
+#: design/commands/library.toml:pack.export
+msgid "Export as a puzzle pack"
+msgstr "Exporter comme pack d'exercices"
+
+#: design/commands/pane.toml:pane.focus.next
+msgid "Focus the next pane"
+msgstr "Activer le panneau suivant"
+
+#: design/commands/pane.toml:pane.focus.next design/commands/pane.toml:pane.focus.prev design/commands/pane.toml:pane.focus
+msgid "Panes"
+msgstr "Panneaux"
+
+#: design/commands/pane.toml:pane.focus.prev
+msgid "Focus the previous pane"
+msgstr "Activer le panneau précédent"
+
+#: design/commands/pane.toml:pane.focus
+msgid "Focus pane N"
+msgstr "Activer le panneau N"
+
+#: design/commands/pane.toml:pane.focus.dir
+msgid "Focus the pane in a direction"
+msgstr "Activer le panneau dans une direction"
+
+#: design/commands/pane.toml:pane.split.vertical
+msgid "Split vertically (side by side)"
+msgstr "Diviser verticalement (côte à côte)"
+
+#: design/commands/pane.toml:pane.split.horizontal
+msgid "Split horizontally (above / below)"
+msgstr "Diviser horizontalement (dessus / dessous)"
+
+#: design/commands/pane.toml:pane.close
+msgid "the last pane can't be closed"
+msgstr "le dernier panneau ne peut pas être fermé"
+
+#: design/commands/pane.toml:pane.only
+msgid "Only this pane (others become hidden buffers)"
+msgstr "Seulement ce panneau (les autres sont masqués)"
+
+#: design/commands/pane.toml:pane.only
+msgid "it is already the only pane"
+msgstr "c'est déjà le seul panneau"
+
+#: design/commands/pane.toml:pane.buffers design/commands/pane.toml:pane.buffer
+msgid "no hidden buffers"
+msgstr "pas de panneaux masqués"
+
+#: design/commands/pane.toml:pane.buffer
+msgid "Show a hidden buffer in a split"
+msgstr "Afficher un panneau masqué dans une division"
+
+#: design/commands/pane.toml:pane.view
+msgid "Change this pane's view"
+msgstr "Changer la vue de ce panneau"
+
+#: design/commands/pane.toml:pane.maximize
+msgid "Maximise / restore pane"
+msgstr "Agrandir / restaurer le panneau"
+
+#: design/commands/pane.toml:pane.collapse
+msgid "Collapse / expand pane"
+msgstr "Replier / déplier le panneau"
+
+#: design/commands/pane.toml:pane.swap
+msgid "Swap with the next pane"
+msgstr "Échanger avec le panneau suivant"
+
+#: design/commands/pane.toml:pane.swap design/commands/pane.toml:pane.rotate design/commands/pane.toml:pane.equalize
+msgid "needs two panes"
+msgstr "il faut deux panneaux"
+
+#: design/commands/pane.toml:pane.rotate
+msgid "Rotate the split"
+msgstr "Pivoter la division"
+
+#: design/commands/pane.toml:pane.resize
+msgid "Resize pane"
+msgstr "Redimensionner le panneau"
+
+#: design/commands/pane.toml:pane.group
+msgid "Cycle link group (A → B → none)"
+msgstr "Changer de groupe lié (A → B → aucun)"
+
+#: design/commands/pane.toml:pane.pin
+msgid "Pin / unpin pane"
+msgstr "Épingler / désépingler le panneau"
+
+#: design/commands/pane.toml:layout.menu
+msgid "Layouts: save, load, reset"
+msgstr "Dispositions : enregistrer, charger, réinitialiser"
+
+#: design/commands/pane.toml:layout.save
+msgid "Save this layout"
+msgstr "Enregistrer cette disposition"
+
+#: design/commands/pane.toml:layout.load
+msgid "Load a saved layout"
+msgstr "Charger une disposition enregistrée"
+
+#: design/commands/pane.toml:layout.reset
+msgid "Reset this mode's layout"
+msgstr "Réinitialiser la disposition de ce mode"
+
+#: design/commands/pane.toml:section.toggle
+msgid "Fold / unfold the section"
+msgstr "Replier / déplier la section"
+
+#: design/commands/pane.toml:section.toggle design/commands/pane.toml:section.all design/commands/pane.toml:section.next
+msgid "Sections"
+msgstr "Sections"
+
+#: design/commands/pane.toml:section.toggle design/commands/pane.toml:section.all design/commands/pane.toml:section.next
+msgid "this pane has no sections"
+msgstr "ce panneau n'a pas de sections"
+
+#: design/commands/pane.toml:section.all
+msgid "Fold / unfold all sections"
+msgstr "Replier / déplier toutes les sections"
+
+#: design/commands/pane.toml:pane.scroll
+msgid "Scroll the pane"
+msgstr "Faire défiler le panneau"
+
+#: design/commands/pane.toml:pane.insert
+msgid "Edit: focus the pane's text field (Insert layer)"
+msgstr "Modifier : activer le champ de texte du panneau (Insertion)"
+
+#: design/commands/pane.toml:pane.insert
+msgid "this pane has no text field"
+msgstr "ce panneau n'a pas de champ de texte"
+
+#: design/commands/pane.toml:section.next
+msgid "Next section"
+msgstr "Section suivante"
+
+#: design/commands/pane.toml:section.prev
+msgid "Previous section"
+msgstr "Section précédente"
+
+#: design/commands/settings.toml:settings.step
+msgid "Change the setting (next / previous value)"
+msgstr "Changer le réglage (valeur suivante / précédente)"
+
+#: design/commands/settings.toml:settings.step design/commands/settings.toml:settings.edit design/commands/settings.toml:settings.reset
+msgid "in the Settings pane"
+msgstr "dans le panneau Réglages"
+
+#: design/commands/settings.toml:settings.edit
+msgid "Edit the setting (or choose the theme)"
+msgstr "Modifier le réglage (ou choisir le thème)"
+
+#: design/commands/settings.toml:settings.reset
+msgid "Back to the default"
+msgstr "Retour à la valeur par défaut"
+
+#: design/commands/settings.toml:settings.export
+msgid "Export the settings (TOML)"
+msgstr "Exporter les réglages (TOML)"
+
+#: design/commands/settings.toml:keymap.bind
+msgid "New keys for this command"
+msgstr "Nouvelles touches pour cette commande"
+
+#: design/commands/settings.toml:keymap.bind design/commands/settings.toml:keymap.unbind
+msgid "in the Keymap pane"
+msgstr "dans le panneau Raccourcis"
+
+#: design/commands/settings.toml:keymap.unbind
+msgid "Remove the keys (yours: back to the default)"
+msgstr "Retirer les touches (les vôtres : retour par défaut)"
+
+#: design/commands/shell.toml:layer.escape
+msgid "Back to Normal"
+msgstr "Retour au mode Normal"
+
+#: design/commands/shell.toml:layer.escape design/commands/shell.toml:cmdline.open design/commands/shell.toml:search.open
+msgid "Global"
+msgstr "Global"
+
+#: design/commands/shell.toml:cmdline.open
+msgid "Command line"
+msgstr "Ligne de commande"
+
+#: design/commands/shell.toml:search.open
+msgid "Search in this view"
+msgstr "Chercher dans cette vue"
+
+#: design/commands/shell.toml:search.open
+msgid "this view has no search yet"
+msgstr "cette vue n'a pas encore de recherche"
+
+#: design/commands/shell.toml:help.context
+msgid "Keys of this context"
+msgstr "Touches de ce contexte"
+
+#: design/commands/shell.toml:help.all
+msgid "All keys of every context"
+msgstr "Toutes les touches de chaque contexte"
+
+#: design/commands/shell.toml:hint.open
+msgid "Hint labels: click anything by keyboard"
+msgstr "Étiquettes d'aide : tout cliquer au clavier"
+
+#: design/commands/shell.toml:undo
+msgid "Undo"
+msgstr "Annuler"
+
+#: design/commands/shell.toml:undo
+msgid "nothing to undo"
+msgstr "rien à annuler"
+
+#: design/commands/shell.toml:redo
+msgid "Redo"
+msgstr "Rétablir"
+
+#: design/commands/shell.toml:redo
+msgid "nothing to redo"
+msgstr "rien à rétablir"
+
+#: design/commands/shell.toml:repeat
+msgid "Repeat the last command"
+msgstr "Répéter la dernière commande"
+
+#: design/commands/shell.toml:repeat
+msgid "nothing to repeat yet"
+msgstr "rien à répéter pour l'instant"
+
+#: design/commands/shell.toml:form.submit
+msgid "Submit the field"
+msgstr "Valider le champ"
+
+#: design/commands/shell.toml:mode.previous
+msgid "Previous mode"
+msgstr "Mode précédent"
+
+#: design/commands/shell.toml:mode.previous
+msgid "no previous mode yet"
+msgstr "pas encore de mode précédent"
+
+#: design/commands/shell.toml:app.quit
+msgid "Quit Spaced Positions (stop the server)"
+msgstr "Quitter Spaced Positions (arrêter le serveur)"
+
+#: design/commands/stats.toml:chart.next
+msgid "Next / previous chart"
+msgstr "Graphique suivant / précédent"
+
+#: design/commands/stats.toml:chart.next design/commands/stats.toml:chart.cursor design/commands/stats.toml:chart.drill
+msgid "in the Stats pane"
+msgstr "dans le panneau Statistiques"
+
+#: design/commands/stats.toml:chart.cursor
+msgid "Move the cursor over the chart's points"
+msgstr "Déplacer le curseur sur les points du graphique"
+
+#: design/commands/stats.toml:chart.drill
+msgid "Drill down (the Library, or a Streak on a weak spot)"
+msgstr "Détailler (la Bibliothèque, ou un Streak sur un point faible)"
+
+#: design/commands/stats.toml:chart.table
+msgid "The chart as a table"
+msgstr "Le graphique en tableau"
+
+#: design/commands/stats.toml:stats.period
+msgid "Period of the charts"
+msgstr "Période des graphiques"
+
+#: design/commands/stats.toml:home.analysis
+msgid "Continue the analysis"
+msgstr "Poursuivre l'analyse"
+
+#: design/commands/stats.toml:home.collect
+msgid "Continue collecting"
+msgstr "Poursuivre la saisie"
+
+#: design/commands/stats.toml:home.dismiss
+msgid "Dismiss the announcement"
+msgstr "Fermer l'annonce"
+
+#: design/commands/train.toml:train.review
+msgid "Review: due and new cards"
+msgstr "Révision : cartes dues et nouvelles"
+
+#: design/commands/train.toml:train.weakest
+msgid "Streak on your weakest motifs"
+msgstr "Streak sur vos motifs les plus faibles"
+
+#: design/commands/train.toml:train.again
+msgid "The same session again"
+msgstr "La même session encore"
+
+#: design/commands/train.toml:train.again
+msgid "no session yet"
+msgstr "pas encore de session"
+
+#: design/commands/train.toml:train.set
+msgid "Session option"
+msgstr "Option de session"
+
+#: design/commands/train.toml:train.custom
+msgid "Start the custom session"
+msgstr "Lancer la session personnalisée"
+
+#: design/commands/train.toml:train.hint
+msgid "Hint (the puzzle counts as missed)"
+msgstr "Indice (l'exercice compte comme manqué)"
+
+#: design/commands/train.toml:train.hint design/commands/train.toml:train.giveup
+msgid "only while solving"
+msgstr "seulement pendant la résolution"
+
+#: design/commands/train.toml:train.giveup
+msgid "Show the solution (give up)"
+msgstr "Afficher la solution (abandonner)"
+
+#: design/commands/train.toml:train.next
+msgid "Next puzzle"
+msgstr "Exercice suivant"
+
+#: design/commands/train.toml:train.replay
+msgid "Replay the solution"
+msgstr "Rejouer la solution"
+
+#: design/commands/train.toml:train.retry
+msgid "Retry this puzzle (not scored)"
+msgstr "Réessayer cet exercice (non compté)"
+
+#: design/commands/train.toml:train.flag
+msgid "Flag the puzzle as broken"
+msgstr "Signaler l'exercice comme défectueux"
+
+#: design/commands/train.toml:train.analyse
+msgid "Analyse this puzzle beside the board"
+msgstr "Analyser cet exercice à côté de l'échiquier"
+
+#: design/commands/train.toml:train.edit
+msgid "Edit the puzzle in Analyse"
+msgstr "Modifier l'exercice dans l'Analyse"
+
+#: design/commands/train.toml:train.analysemissed
+msgid "Analyse the missed ones (n / N in Analyse)"
+msgstr "Analyser les manqués (n / N dans l'Analyse)"
+
+#: design/commands/train.toml:train.analysemissed design/commands/train.toml:train.missed
+msgid "nothing missed"
+msgstr "rien de manqué"
+
+#: design/commands/train.toml:train.missed
+msgid "Review the missed ones"
+msgstr "Réviser les manqués"
+
+#: design/commands/train.toml:train.launcher
+msgid "Back to the sessions"
+msgstr "Retour aux sessions"
+
+#: design/commands/train.toml:train.copy
+msgid "Copy the result"
+msgstr "Copier le résultat"
+
+#: design/commands/train.toml:train.quit
+msgid "Stop the session and see the result"
+msgstr "Arrêter la session et voir le résultat"
+
+#: design/commands/train.toml:train.quit
+msgid "no session running"
+msgstr "aucune session en cours"
+
+#: design/commands/train.toml:puzzle.create
+msgid "Make a puzzle from the line on this board"
+msgstr "Faire un exercice de la ligne sur cet échiquier"
+
+#: design/commands/train.toml:puzzle.create
+msgid "needs a board with moves played"
+msgstr "il faut un échiquier avec des coups joués"
+
+#: design/commands/train.toml:train.analysemode
+msgid "Analyse this puzzle in Analyse"
+msgstr "Analyser cet exercice dans l'Analyse"
+
+#: design/commands/ui.toml:ui.appbar
+msgid "Show / hide the app bar"
+msgstr "Afficher / masquer la barre de l'app"
+
+#: design/commands/ui.toml:ui.appbar design/commands/ui.toml:ui.keystrips design/commands/ui.toml:ui.zen
+msgid "UI"
+msgstr "Interface"
+
+#: design/commands/ui.toml:ui.keystrips
+msgid "Show / hide key strips in pane footers"
+msgstr "Afficher / masquer les bandes de touches en pied de panneau"
+
+#: design/commands/ui.toml:ui.zen
+msgid "Zen: hide app bar and footers"
+msgstr "Zen : masquer la barre et les pieds de panneau"
+
+#: design/commands/ui.toml:ui.themepair
+msgid "Switch between the light and dark theme"
+msgstr "Basculer entre le thème clair et sombre"
+
+#: design/commands/ui.toml:pref.set
+msgid "Set a token (e.g. main=#e2b714, font-size=14, density=compact)"
+msgstr "Définir un jeton (par ex. main=#e2b714, font-size=14, density=compact)"
+
+#: design/commands/ui.toml:pref.reset
+msgid "Reset a token to the theme's value"
+msgstr "Réinitialiser un jeton à la valeur du thème"
+
+#: design/commands/ui.toml:list.down
+msgid "Cursor down"
+msgstr "Curseur vers le bas"
+
+#: design/commands/ui.toml:list.up
+msgid "Cursor up"
+msgstr "Curseur vers le haut"
+
+#: design/commands/ui.toml:list.first
+msgid "First item"
+msgstr "Premier élément"
+
+#: design/commands/ui.toml:list.last
+msgid "Last item"
+msgstr "Dernier élément"
+
+#: design/commands/ui.toml:list.open
+msgid "Open the item"
+msgstr "Ouvrir l'élément"
+
+#: design/commands/ui.toml:list.select
+msgid "Select / deselect the item"
+msgstr "Sélectionner / désélectionner l'élément"
+
+#: design/commands/ui.toml:list.visual
+msgid "Visual (range) selection"
+msgstr "Sélection visuelle (plage)"
+
+#: design/commands/ui.toml:list.selectall
+msgid "Select all"
+msgstr "Tout sélectionner"
+
+#: design/commands/ui.toml:demo.flash
+msgid "Demo: a button with a key (flashes when the key is pressed)"
+msgstr "Démo : un bouton avec une touche (clignote quand on l'appuie)"
+
+#: design/commands/ui.toml:theme.save
+msgid "Save the current colours as a theme"
+msgstr "Enregistrer les couleurs actuelles comme thème"
+
+#: design/commands/ui.toml:theme.delete
+msgid "Delete one of your themes"
+msgstr "Supprimer un de vos thèmes"
+
+#: design/commands/ui.toml:theme.export
+msgid "Copy the theme as TOML"
+msgstr "Copier le thème en TOML"
+
+#: design/commands/ui.toml:key.map
+msgid "Bind keys to a command"
+msgstr "Attribuer des touches à une commande"
+
+#: design/commands/ui.toml:key.unmap
+msgid "Unbind keys"
+msgstr "Libérer des touches"
+
+#: design/commands/ui.toml:key.reset
+msgid "Key bindings back to the defaults"
+msgstr "Raccourcis remis par défaut"
+
+#: design/commands/ui.toml:pref.css
+msgid "Your own CSS (Settings → Advanced)"
+msgstr "Votre propre CSS (Réglages → Avancé)"
+
+#: design/commands/ui.toml:app.backup
+msgid "Back up now"
+msgstr "Sauvegarder maintenant"
+
+#: design/commands/ui.toml:app.folder
+msgid "Open the data folder"
+msgstr "Ouvrir le dossier des données"
+
+#: design/keymap/default.toml
+msgid "Leader"
+msgstr "Leader"
+
+#: design/keymap/default.toml
+msgid "Window"
+msgstr "Fenêtre"
+
+#: design/keymap/default.toml
+msgid "UI toggles"
+msgstr "Bascules d'interface"
+
+#: design/keymap/default.toml
+msgid "Go"
+msgstr "Aller"
+
+#: design/tokens.toml:bg
+msgid "Bg"
+msgstr "Fond"
+
+#: design/tokens.toml:bg
+msgid "Workspace background"
+msgstr "Fond de l'espace de travail"
+
+#: design/tokens.toml:bg-alt
+msgid "Bg alt"
+msgstr "Fond 2"
+
+#: design/tokens.toml:bg-alt
+msgid "Pane headers, status line, app bar"
+msgstr "En-têtes de panneau, ligne d'état, barre de l'app"
+
+#: design/tokens.toml:surface
+msgid "Surface"
+msgstr "Surface"
+
+#: design/tokens.toml:surface
+msgid "Inputs and raised elements: keycaps, chips"
+msgstr "Champs et éléments en relief : touches, puces"
+
+#: design/tokens.toml:line
+msgid "Line"
+msgstr "Ligne"
+
+#: design/tokens.toml:line
+msgid "Rules between panes, borders"
+msgstr "Filets entre panneaux, bordures"
+
+#: design/tokens.toml:text
+msgid "Text"
+msgstr "Texte"
+
+#: design/tokens.toml:text design/tokens.toml:main-text
+msgid "Main text"
+msgstr "Texte principal"
+
+#: design/tokens.toml:text-sub
+msgid "Text sub"
+msgstr "Texte 2"
+
+#: design/tokens.toml:text-sub
+msgid "Secondary text, labels, axes"
+msgstr "Texte secondaire, libellés, axes"
+
+#: design/tokens.toml:main
+msgid "Main"
+msgstr "Accent"
+
+#: design/tokens.toml:main
+msgid "Accent: focus, cursor, primary buttons, current mode"
+msgstr "Accent : focus, curseur, boutons principaux, mode actuel"
+
+#: design/tokens.toml:main-text
+msgid "Text on the accent colour"
+msgstr "Texte sur la couleur d'accent"
+
+#: design/tokens.toml:good
+msgid "Correct, good move, positive delta"
+msgstr "Correct, bon coup, écart positif"
+
+#: design/tokens.toml:bad
+msgid "Wrong, bad move, negative delta"
+msgstr "Faux, mauvais coup, écart négatif"
+
+#: design/tokens.toml:warn
+msgid "Warn"
+msgstr "Alerte"
+
+#: design/tokens.toml:warn
+msgid "Dubious move, warnings"
+msgstr "Coup douteux, alertes"
+
+#: design/tokens.toml:info
+msgid "Info"
+msgstr "Info"
+
+#: design/tokens.toml:info
+msgid "Neutral highlights, links"
+msgstr "Mises en évidence neutres, liens"
+
+#: design/tokens.toml:special
+msgid "Special"
+msgstr "Spécial"
+
+#: design/tokens.toml:special
+msgid "Rewards: records, milestones, level-ups"
+msgstr "Récompenses : records, paliers, progressions"
+
+#: design/tokens.toml:sq-light
+msgid "Sq light"
+msgstr "Cases claires"
+
+#: design/tokens.toml:sq-light
+msgid "Light squares"
+msgstr "Cases claires"
+
+#: design/tokens.toml:sq-dark
+msgid "Sq dark"
+msgstr "Cases foncées"
+
+#: design/tokens.toml:sq-dark
+msgid "Dark squares"
+msgstr "Cases foncées"
+
+#: design/tokens.toml:sq-lastmove
+msgid "Sq lastmove"
+msgstr "Dernier coup"
+
+#: design/tokens.toml:sq-lastmove
+msgid "Last-move overlay (with alpha)"
+msgstr "Surbrillance du dernier coup (avec alpha)"
+
+#: design/tokens.toml:sq-selected
+msgid "Sq selected"
+msgstr "Pièce sélectionnée"
+
+#: design/tokens.toml:sq-selected
+msgid "Selected-piece overlay (with alpha)"
+msgstr "Surbrillance de la pièce sélectionnée (avec alpha)"
+
+#: design/tokens.toml:sq-check
+msgid "Sq check"
+msgstr "Échec"
+
+#: design/tokens.toml:sq-check
+msgid "King-in-check overlay (with alpha)"
+msgstr "Surbrillance du roi en échec (avec alpha)"
+
+#: design/tokens.toml:sq-hint
+msgid "Sq hint"
+msgstr "Case d'indice"
+
+#: design/tokens.toml:sq-hint
+msgid "Hint overlay (with alpha)"
+msgstr "Surbrillance de l'indice (avec alpha)"
+
+#: design/tokens.toml:arrow-green
+msgid "Arrow green"
+msgstr "Flèche verte"
+
+#: design/tokens.toml:arrow-green
+msgid "Drawn arrows and circles: default colour"
+msgstr "Flèches et cercles dessinés : couleur par défaut"
+
+#: design/tokens.toml:arrow-red
+msgid "Arrow red"
+msgstr "Flèche rouge"
+
+#: design/tokens.toml:arrow-red
+msgid "Drawn arrows and circles with Shift"
+msgstr "Flèches et cercles dessinés avec Maj"
+
+#: design/tokens.toml:arrow-blue
+msgid "Arrow blue"
+msgstr "Flèche bleue"
+
+#: design/tokens.toml:arrow-blue
+msgid "Drawn arrows and circles with Alt"
+msgstr "Flèches et cercles dessinés avec Alt"
+
+#: design/tokens.toml:arrow-yellow
+msgid "Arrow yellow"
+msgstr "Flèche jaune"
+
+#: design/tokens.toml:arrow-yellow
+msgid "Drawn arrows and circles with Shift+Alt"
+msgstr "Flèches et cercles dessinés avec Maj+Alt"
+
+#: design/tokens.toml:arrow-engine
+msgid "Arrow engine"
+msgstr "Flèche du moteur"
+
+#: design/tokens.toml:arrow-engine
+msgid "Engine arrows (fade by rank)"
+msgstr "Flèches du moteur (s'estompent selon le rang)"
+
+#: design/tokens.toml:board-border
+msgid "Board border"
+msgstr "Bord de l'échiquier"
+
+#: design/tokens.toml:board-border
+msgid "Board frame width"
+msgstr "Largeur du cadre de l'échiquier"
+
+#: design/tokens.toml:board-coords
+msgid "Board coords"
+msgstr "Coordonnées"
+
+#: design/tokens.toml:board-coords
+msgid "Coordinates"
+msgstr "Coordonnées"
+
+#: design/tokens.toml:board-coords
+msgctxt "setting value"
+msgid "inside"
+msgstr "dedans"
+
+#: design/tokens.toml:board-coords
+msgctxt "setting value"
+msgid "outside"
+msgstr "dehors"
+
+#: design/tokens.toml:board-coords core/settings.py:keys.keycaps
+msgctxt "setting value"
+msgid "off"
+msgstr "aucune"
+
+#: design/tokens.toml:piece-set
+msgctxt "setting value"
+msgid "cburnett"
+msgstr "cburnett"
+
+#: design/tokens.toml:piece-set
+msgctxt "setting value"
+msgid "merida"
+msgstr "merida"
+
+#: design/tokens.toml:piece-set
+msgctxt "setting value"
+msgid "chessnut"
+msgstr "chessnut"
+
+#: design/tokens.toml:piece-set
+msgctxt "setting value"
+msgid "fantasy"
+msgstr "fantasy"
+
+#: design/tokens.toml:piece-set
+msgctxt "setting value"
+msgid "spatial"
+msgstr "spatial"
+
+#: design/tokens.toml:piece-set
+msgctxt "setting value"
+msgid "celtic"
+msgstr "celtic"
+
+#: design/tokens.toml:piece-set
+msgctxt "setting value"
+msgid "mpchess"
+msgstr "mpchess"
+
+#: design/tokens.toml:piece-set
+msgctxt "setting value"
+msgid "shapes"
+msgstr "shapes"
+
+#: design/tokens.toml:piece-set
+msgctxt "setting value"
+msgid "rhosgfx"
+msgstr "rhosgfx"
+
+#: design/tokens.toml:piece-set
+msgctxt "setting value"
+msgid "kiwen-suwi"
+msgstr "kiwen-suwi"
+
+#: design/tokens.toml:piece-set
+msgctxt "setting value"
+msgid "totoy"
+msgstr "totoy"
+
+#: design/tokens.toml:piece-set
+msgctxt "setting value"
+msgid "papercut"
+msgstr "papercut"
+
+#: design/tokens.toml:font-ui
+msgid "Font ui"
+msgstr "Police de l'interface"
+
+#: design/tokens.toml:font-ui
+msgid "Interface font"
+msgstr "Police de l'interface"
+
+#: design/tokens.toml:font-mono
+msgid "Font mono"
+msgstr "Police à chasse fixe"
+
+#: design/tokens.toml:font-mono
+msgid "Keycaps, ids, FEN/PGN, clocks"
+msgstr "Touches, identifiants, FEN/PGN, horloges"
+
+#: design/tokens.toml:font-moves
+msgid "Font moves"
+msgstr "Police des coups"
+
+#: design/tokens.toml:font-moves
+msgid "Move lists (allows a figurine font)"
+msgstr "Listes de coups (permet une police à figurines)"
+
+#: design/tokens.toml:font-size
+msgid "Font size"
+msgstr "Taille de police"
+
+#: design/tokens.toml:font-size
+msgid "Base font size"
+msgstr "Taille de police de base"
+
+#: design/tokens.toml:type-ratio
+msgid "Type ratio"
+msgstr "Rapport typographique"
+
+#: design/tokens.toml:type-ratio
+msgid "Modular scale for headings and big numbers"
+msgstr "Échelle modulaire pour les titres et les grands nombres"
+
+#: design/tokens.toml:density
+msgid "Density"
+msgstr "Densité"
+
+#: design/tokens.toml:density
+msgid "Spacing unit: compact 3px, cozy 4px, comfortable 5px"
+msgstr "Unité d'espacement : compacte 3px, douillette 4px, confortable 5px"
+
+#: design/tokens.toml:density core/settings.py:keys.keycaps
+msgctxt "setting value"
+msgid "compact"
+msgstr "compact"
+
+#: design/tokens.toml:density
+msgctxt "setting value"
+msgid "cozy"
+msgstr "douillet"
+
+#: design/tokens.toml:density
+msgctxt "setting value"
+msgid "comfortable"
+msgstr "confortable"
+
+#: design/tokens.toml:radius
+msgid "Radius"
+msgstr "Rayon"
+
+#: design/tokens.toml:radius
+msgid "Corner radius"
+msgstr "Rayon des coins"
+
+#: design/tokens.toml:rule
+msgid "Rule"
+msgstr "Filet"
+
+#: design/tokens.toml:rule
+msgid "Border width"
+msgstr "Largeur de bordure"
+
+#: design/tokens.toml:motion
+msgid "Motion"
+msgstr "Mouvement"
+
+#: design/tokens.toml:motion
+msgid "Animation speed factor: 0 = off, 1 = default"
+msgstr "Facteur de vitesse d'animation : 0 = arrêt, 1 = par défaut"
+
+#: design/tokens.toml:board-motion
+msgid "Board motion"
+msgstr "Mouvement de l'échiquier"
+
+#: design/tokens.toml:board-motion
+msgid "Piece animation"
+msgstr "Animation des pièces"
+
+#: design/tokens.toml:figurines
+msgid "Figurines"
+msgstr "Figurines"
+
+#: design/tokens.toml:figurines
+msgid "Moves as figurines (♘f3) instead of letters (Nf3)"
+msgstr "Coups en figurines (♘f3) au lieu de lettres (Cf3)"
+
+#: core/settings.py:ui.language
+msgctxt "setting value"
+msgid "auto"
+msgstr "automatique"
+
+#: core/settings.py:ui.language core/settings.py:tags.language core/settings.py:board.letters
+msgctxt "setting value"
+msgid "en"
+msgstr "English"
+
+#: core/settings.py:ui.language core/settings.py:tags.language core/settings.py:board.letters
+msgctxt "setting value"
+msgid "de"
+msgstr "Deutsch"
+
+#: core/settings.py:ui.language core/settings.py:tags.language core/settings.py:board.letters
+msgctxt "setting value"
+msgid "fr"
+msgstr "Français"
+
+#: core/settings.py:ui.language core/settings.py:tags.language core/settings.py:board.letters
+msgctxt "setting value"
+msgid "it"
+msgstr "Italiano"
+
+#: core/settings.py:tags.language
+msgctxt "setting value"
+msgid "ui"
+msgstr "comme l'app"
+
+#: core/settings.py:training.storm-pace
+msgctxt "setting value"
+msgid "fast"
+msgstr "rapide"
+
+#: core/settings.py:training.storm-pace
+msgctxt "setting value"
+msgid "medium"
+msgstr "moyen"
+
+#: core/settings.py:training.storm-pace
+msgctxt "setting value"
+msgid "slow"
+msgstr "lent"
+
+#: core/settings.py:keys.keycaps
+msgctxt "setting value"
+msgid "full"
+msgstr "complet"
+
+#: core/settings.py:engine.source
+msgctxt "setting value"
+msgid "browser"
+msgstr "navigateur"
+
+#: core/settings.py:engine.source
+msgctxt "setting value"
+msgid "local"
+msgstr "local"

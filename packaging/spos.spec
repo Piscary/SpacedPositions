@@ -4,14 +4,26 @@
 import os
 import sys
 
-from PyInstaller.utils.hooks import collect_data_files, collect_submodules
+from PyInstaller.utils.hooks import collect_data_files, collect_submodules, copy_metadata
 
 block_cipher = None
 name = "Spaced Positions"
 
 hidden = collect_submodules("spaced_positions") + collect_submodules("django") + collect_submodules("waitress") + \
     collect_submodules("whitenoise") + ["chess", "chess.pgn", "chess.engine", "chess.svg", "platformdirs"]
-datas = collect_data_files("spaced_positions", include_py_files=False) + collect_data_files("django")
+# Django's data: its translations and formats; not the contrib apps the app doesn't use (their templates, static files)
+UNUSED = ["admin", "admindocs", "auth", "flatpages", "gis", "humanize", "messages", "postgres", "redirects", "sessions", "sitemaps",
+          "sites", "syndication"]
+datas = collect_data_files("spaced_positions", include_py_files=False) + collect_data_files(
+    "django", excludes=[f"contrib/{app}/**" for app in UNUSED])
+# The packages' metadata and licence files (Settings → Licences, /licences/notices.txt) and Python's own licence
+for package in ("django", "asgiref", "sqlparse", "waitress", "whitenoise", "platformdirs", "chess"):
+    datas += copy_metadata(package)
+python_licence = os.path.join(sys.base_prefix, "lib", f"python{sys.version_info.major}.{sys.version_info.minor}", "LICENSE.txt")
+if not os.path.exists(python_licence):
+    python_licence = os.path.join(sys.base_prefix, "LICENSE.txt")
+if os.path.exists(python_licence):
+    datas.append((python_licence, "spaced_positions/static/licences"))
 
 a = Analysis(
     [os.path.join(SPECPATH, "app.py")],

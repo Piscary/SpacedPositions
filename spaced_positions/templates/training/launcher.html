@@ -1,55 +1,55 @@
-{% section "Sessions" key="s" summary="one key starts a session" pinned=True %}
+{% translate "one key starts a session" as sessions_summary %}{% section _("Sessions") key="s" summary=sessions_summary pinned=True %}
   <div class="train__sessions">
     <div class="train__session">
-      {% cmd "train.review" variant="primary" label="Review" %}
-      <span class="train__session-info">{% if due or counts.new %}<b>{{ due }}</b> due · <b>{{ counts.new }}</b> new{% else %}nothing due{% if next_due %} · next {{ next_due }}{% endif %}{% endif %}</span>
+      {% cmd "train.review" variant="primary" label=_("Review") %}
+      <span class="train__session-info">{% if due or counts.new %}{% blocktranslate trimmed with due=due new=counts.new %}<b>{{ due }}</b> due · <b>{{ new }}</b> new{% endblocktranslate %}{% else %}{% translate "nothing due" %}{% if next_due %} · {% blocktranslate trimmed with when=next_due %}next {{ when }}{% endblocktranslate %}{% endif %}{% endif %}</span>
     </div>
     <div class="train__session">
-      <span class="train__session-name">Storm</span>
+      <span class="train__session-name">{% translate "Storm" %}</span>
       {% cmd "train.storm" args="3" label="3′" %}{% cmd "train.storm" args="5" label="5′" %}{% cmd "train.storm" args="10" label="10′" %}
-      <span class="segmented train__pace" data-segmented title="How much time a quick solve earns (Settings → Training)"><span class="segmented__options" role="radiogroup" aria-label="Storm pace">
-        {% for p in storm_paces %}<button type="button" class="segmented__option" role="radio" aria-checked="{% if p == storm_pace %}true{% else %}false{% endif %}" data-cmd="pref.set" data-args="training.storm-pace={{ p }}">{{ p }}</button>{% endfor %}
+      <span class="segmented train__pace" data-segmented title="{% translate "How much time a quick solve earns (Settings → Training)" %}"><span class="segmented__options" role="radiogroup" aria-label="{% translate "Storm pace" %}">
+        {% for p in storm_paces %}<button type="button" class="segmented__option" role="radio" aria-checked="{% if p == storm_pace %}true{% else %}false{% endif %}" data-cmd="pref.set" data-args="training.storm-pace={{ p }}">{% translate p context "setting value" %}</button>{% endfor %}
       </span></span>
-      <span class="train__session-info">best {{ storm_best.3 }} · {{ storm_best.5 }} · {{ storm_best.10 }}</span>
+      <span class="train__session-info">{% translate "best" %} {{ storm_best.3 }} · {{ storm_best.5 }} · {{ storm_best.10 }}</span>
     </div>
     <div class="train__session">
-      <span class="train__session-name">Streak</span>
-      {% cmd "train.streak" args="0" label="Streak" %}{% cmd "train.streak" args="3" label="♥3" %}{% cmd "train.streak" args="0 blind" label="Blind" %}
-      <span class="train__session-info">best {{ streak_best }}</span>
+      <span class="train__session-name">{% translate "Streak" %}</span>
+      {% cmd "train.streak" args="0" label=_("Streak") %}{% cmd "train.streak" args="3" label="♥3" %}{% cmd "train.streak" args="0 blind" label=_("Blind") %}
+      <span class="train__session-info">{% translate "best" %} {{ streak_best }}</span>
     </div>
     <div class="train__session">
-      {% cmd "train.weakest" label="Weakest motifs" %}
-      <span class="train__session-info">{% if weakest %}{{ weakest|join:" · " }}{% else %}after 3 attempts on a motif{% endif %}</span>
+      {% cmd "train.weakest" label=_("Weakest motifs") %}
+      <span class="train__session-info">{% if weakest %}{{ weakest|join:" · " }}{% else %}{% translate "after 3 attempts on a motif" %}{% endif %}</span>
     </div>
     <div class="train__session">
-      {% cmd "train.again" label="Again" %}
-      <span class="train__session-info" data-again-label>{% if again %}{{ again.mode }}{% if again.minutes %} {{ again.minutes }}′{% endif %}{% if again.lives %} ♥{{ again.lives }}{% endif %}{% if again.look and again.look != "normal" %} · {{ again.look }}{% endif %}{% endif %}</span>
+      {% cmd "train.again" label=_("Again") %}
+      <span class="train__session-info" data-again-label>{{ again_label }}</span>
     </div>
   </div>
-  <p class="muted train__pool">{{ counts.cards }} cards in {{ counts.puzzles }} puzzles · make a puzzle from any board line with <span class="mono">:puzzle</span></p>
+  <p class="muted train__pool">{% blocktranslate trimmed with cards=counts.cards puzzles=counts.puzzles %}{{ cards }} cards in {{ puzzles }} puzzles · make a puzzle from any board line with <span class="mono">:puzzle</span>{% endblocktranslate %}</p>
   <script type="application/json" data-again>{% if again %}{{ again|safe_json }}{% else %}null{% endif %}</script>
 {% endsection %}
 
-{% section "Custom session" key="c" summary="mode · look · side · lives · first move · filter" pinned=True %}
+{% translate "mode · look · side · lives · first move · filter" as custom_summary %}{% section _("Custom session") key="c" summary=custom_summary pinned=True %}
   <div class="train__custom" data-custom>
-    <div class="segmented" data-segmented><span class="segmented__label">Mode</span><span class="segmented__options" role="radiogroup">
+    <div class="segmented" data-segmented><span class="segmented__label">{% translate "Mode" %}</span><span class="segmented__options" role="radiogroup">
       {% for value, label, key in custom_modes %}<button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="train.set" data-args="mode {{ value }}">{{ label }} {% keycap key %}</button>{% endfor %}
     </span></div>
-    <div class="segmented" data-segmented><span class="segmented__label">Look</span><span class="segmented__options" role="radiogroup">
+    <div class="segmented" data-segmented><span class="segmented__label">{% translate "Look" %}</span><span class="segmented__options" role="radiogroup">
       {% for value, label, key in custom_looks %}<button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="train.set" data-args="look {{ value }}">{{ label }} {% keycap key %}</button>{% endfor %}
     </span></div>
-    <div class="segmented" data-segmented><span class="segmented__label">Side</span><span class="segmented__options" role="radiogroup">
+    <div class="segmented" data-segmented><span class="segmented__label">{% translate "Side" %}</span><span class="segmented__options" role="radiogroup">
       {% for value, label, key in custom_sides %}<button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="train.set" data-args="side {{ value }}">{{ label }} {% keycap key %}</button>{% endfor %}
     </span></div>
-    <div class="segmented" data-segmented><span class="segmented__label">Lives</span><span class="segmented__options" role="radiogroup">
+    <div class="segmented" data-segmented><span class="segmented__label">{% translate "Lives" %}</span><span class="segmented__options" role="radiogroup">
       {% for value, label, key in custom_lives %}<button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="train.set" data-args="lives {{ value }}">{{ label }} {% keycap key %}</button>{% endfor %}
     </span></div>
-    <button type="button" class="toggle" aria-pressed="false" data-cmd="train.set" data-args="first"><span class="toggle__switch"></span>First move only {% keycap "o" %}</button>
-    <label class="train__filter"><span class="segmented__label">Filter</span>
-      <input class="field mono" type="text" data-train-filter data-search spellcheck="false" autocomplete="off" aria-label="Filter: a Library query"
-             placeholder="/ motif:gabel diff:<=3 · empty: all puzzles"></label>
+    <button type="button" class="toggle" aria-pressed="false" data-cmd="train.set" data-args="first"><span class="toggle__switch"></span>{% translate "First move only" %} {% keycap "o" %}</button>
+    <label class="train__filter"><span class="segmented__label">{% translate "Filter" %}</span>
+      <input class="field mono" type="text" data-train-filter data-search spellcheck="false" autocomplete="off" aria-label="{% translate "Filter: a Library query" %}"
+             placeholder="{% translate "/ motif:fork diff:<=3 · empty: all puzzles" %}"></label>
     <span class="muted train__match" data-train-match aria-live="polite"></span>
     {% if saved_queries %}<div class="train__queries">{% for sq in saved_queries %}<button type="button" class="chip" data-train-query="in:q:{{ sq.key }}" title="{{ sq.query }}">q:{{ sq.key }}</button>{% endfor %}</div>{% endif %}
-    <div class="actionbar">{% cmd "train.custom" variant="primary" label="Start" %}</div>
+    <div class="actionbar">{% cmd "train.custom" variant="primary" label=_("Start") %}</div>
   </div>
 {% endsection %}

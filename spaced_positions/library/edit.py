@@ -13,6 +13,8 @@ import shlex
 from django.db import transaction
 from django.db.models import Q
 from django.forms.models import model_to_dict
+from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
 
 from spaced_positions.core.server_commands import CommandError, command
 
@@ -42,7 +44,7 @@ def _words(args) -> list[str]:
     try:
         return shlex.split(" ".join(args))
     except ValueError as e:
-        raise CommandError(f"unbalanced quotes: {e}") from None
+        raise CommandError(_("unbalanced quotes: {e}").format(e=e)) from None
 
 
 def find(collection: str, ref: str):
@@ -70,16 +72,16 @@ def _targets(body, words: list[str]) -> tuple[str, list, list[str]]:
         return collection, [find(collection, r) for r in refs], [w for w in words if "=" in w]
     collection = body.get("c", "")
     if collection not in MODELS:
-        raise CommandError("select players, sources or tags in the Library (4 5 6), or name one: :edit @tal role=model")
+        raise CommandError(_('select players, sources or tags in the Library (4 5 6), or name one: :edit @tal role=model'))
     objs = [find(collection, str(i)) for i in body.get("ids", [])]
     if not objs:
-        raise CommandError("nothing selected")
+        raise CommandError(_('nothing selected'))
     return collection, objs, words
 
 
 def _value(collection: str, obj, name: str, raw: str):
     if name not in FIELDS[collection]:
-        raise CommandError(f"{collection[:-1]}s have {', '.join(FIELDS[collection])}; not '{name}'")
+        raise CommandError(_("{value}s have {value2}; not '{name}'").format(value=collection[:-1], value2=', '.join(FIELDS[collection]), name=name))
     attr, kind = FIELDS[collection][name]
     model = type(obj)
     if kind == "text":
@@ -88,7 +90,7 @@ def _value(collection: str, obj, name: str, raw: str):
     if kind == "slug":
         value = slug(raw)
         if not value or model.objects.filter(key=value).exclude(pk=obj.pk).exists():
-            raise CommandError(f"'{raw}' is taken (or empty)")
+            raise CommandError(_("'{raw}' is taken (or empty)").format(raw=raw))
         return attr, value
     if kind == "list":
         return attr, [a.strip() for a in raw.split(",") if a.strip()]
@@ -98,17 +100,17 @@ def _value(collection: str, obj, name: str, raw: str):
         try:
             value = int(raw) if kind == "int" else float(raw)
         except ValueError:
-            raise CommandError(f"{name} is a number") from None
+            raise CommandError(_("{name} is a number").format(name=name)) from None
         low, high = RANGES.get(attr, (None, None))
         if low is not None and not low <= value <= high:
             raise CommandError(f"{name} is {low}–{high}")
         return attr, value
     if kind == "choice":
         raw = "" if raw == "none" else raw
-        choices = [c for c, _ in model._meta.get_field(attr).choices]
+        choices = [c for c, _label in model._meta.get_field(attr).choices]
         if raw not in choices:
             shown = ", ".join(c or "none" for c in choices)
-            raise CommandError(f"{name} is one of {shown}")
+            raise CommandError(_("{name} is one of {shown}").format(name=name, shown=shown))
         return attr, raw
     if kind == "tag":
         if raw in ("", "none", "-"):
@@ -119,12 +121,12 @@ def _value(collection: str, obj, name: str, raw: str):
         ancestor = parent
         while ancestor is not None:  # no loops in the hierarchy
             if ancestor.pk == obj.pk:
-                raise CommandError(f"{parent.name} is below {obj.name}: that would make a loop")
+                raise CommandError(_("{name} is below {name2}: that would make a loop").format(name=parent.name, name2=obj.name))
             ancestor = ancestor.parent
         return attr, parent
     field = TagField.objects.filter(Q(key=raw) | Q(name__iexact=raw) | Q(name_en__iexact=raw)).first()  # kind == "field"
     if field is None:
-        raise CommandError(f"no field '{raw}' ({', '.join(TagField.objects.values_list('key', flat=True))})")
+        raise CommandError(_("no field '{raw}' ({value})").format(raw=raw, value=', '.join(TagField.objects.values_list('key', flat=True))))
     return attr, field
 
 
@@ -145,21 +147,21 @@ def edit(args, context, body):
     """`:edit role=student`; undo and redo send `{"c": …, "values": {pk: {attr: value}}}` as JSON."""
     if args and str(args[0]).startswith("{"):
         change = json.loads(args[0])
-        return _write(change["c"], {int(pk): values for pk, values in change["values"].items()}, "Edit undone")
+        return _write(change["c"], {int(pk): values for pk, values in change["values"].items()}, _('Edit undone'))
     words = _words(args)
     collection, objs, pairs = _targets(body, words)
     if not pairs:
-        raise CommandError(f"what to change? {', '.join(f'{n}=…' for n in FIELDS[collection])}")
+        raise CommandError(_("what to change? {value}").format(value=', '.join((f'{n}=…' for n in FIELDS[collection]))))
     values = {}
     for obj in objs:
         values[obj.pk] = {}
         for pair in pairs:
-            name, _, raw = pair.partition("=")
+            name, _sep, raw = pair.partition("=")
             attr, value = _value(collection, obj, name.strip().lower(), raw.strip())
             values[obj.pk][attr] = value.pk if hasattr(value, "pk") else value
     names = ", ".join(pair.partition("=")[0] for pair in pairs)
     label = objs[0].name if len(objs) == 1 and hasattr(objs[0], "name") else f"{len(objs)} {collection}" if len(objs) > 1 else str(objs[0])
-    return _write(collection, values, f"Changed {names} of {label}")
+    return _write(collection, values, _("Changed {names} of {label}").format(names=names, label=label))
 
 
 def _write(collection: str, values: dict, message: str) -> dict:
@@ -198,13 +200,13 @@ def _split_new(args) -> tuple[str, list[str]]:
     words = _words(args)
     name = " ".join(w for w in words if "=" not in w).strip()
     if not name:
-        raise CommandError("a name first, then any field=value")
+        raise CommandError(_('a name first, then any field=value'))
     return name, [w for w in words if "=" in w]
 
 
 def _fill(collection: str, obj, pairs: list[str]) -> None:
     for pair in pairs:
-        name, _, raw = pair.partition("=")
+        name, _sep, raw = pair.partition("=")
         attr, value = _value(collection, obj, name.strip().lower(), raw.strip())
         _assign(obj, attr, value)
 
@@ -227,7 +229,7 @@ def tag_new(args, context, body):
     _fill("tags", tag, pairs)
     tag.key = slug(tag.name_en or name)  # keys are English, like the starter vocabulary's
     if not tag.key or Tag.objects.filter(key=tag.key).exists():
-        raise CommandError(f"there is a tag '{tag.key}' already (#{tag.key})")
+        raise CommandError(_("there is a tag '{key}' already (#{key})").format(key=tag.key))
     if tag.parent and not any(p.startswith("field=") for p in pairs):
         tag.field = tag.parent.field
     tag.save()
@@ -254,7 +256,7 @@ def player_new(args, context, body):
 
 @command("source.new")
 def source_new(args, context, body):
-    """`:new-source "Polgár: Chess" short="Polgár" year=1994`."""
+    """`:new-source "Réti: Studies" short="Réti" year=1922`."""
     title, pairs = _split_new(args)
     source = Source(title=title[:300])
     _fill("sources", source, pairs)
@@ -268,19 +270,20 @@ def source_new(args, context, body):
 def _uses(collection: str, obj) -> str:
     if collection == "players":
         n = Game.objects.filter(Q(white=obj) | Q(black=obj)).count()
-        return f"{n} game{'s' if n != 1 else ''}" if n else ""
+        return ngettext("{n} game", "{n} games", n).format(n=n) if n else ""
     if collection == "sources":
         n, g = obj.positions.count(), obj.games.count()
-        return " and ".join(x for x in [f"{n} position{'s' if n != 1 else ''}" if n else "", f"{g} game{'s' if g != 1 else ''}" if g else ""] if x)
+        return _(" and ").join(x for x in [ngettext("{n} position", "{n} positions", n).format(n=n) if n else "",
+                                           ngettext("{n} game", "{n} games", g).format(n=g) if g else ""] if x)
     from .models import GameTag, NodeTag, PositionTag, TagDismissal
 
     n = sum(M.objects.filter(tag=obj).count() for M in (PositionTag, NodeTag, GameTag, TagDismissal))
     if n:
-        return f"{n} position{'s' if n != 1 else ''} or moves"
+        return ngettext("{n} position or move", "{n} positions or moves", n).format(n=n)
     if obj.children.exists():
-        return f"the tags below it ({', '.join(obj.children.values_list('name', flat=True)[:3])})"
+        return _("the tags below it ({value})").format(value=', '.join(obj.children.values_list('name', flat=True)[:3]))
     if obj.presets.exists():
-        return "a Collect preset"
+        return _('a Collect preset')
     return ""
 
 
@@ -301,17 +304,17 @@ def delete(args, context, body):
     else:
         collection, objs, pairs = _targets(body, _words(args))
         if pairs:
-            raise CommandError(":delete takes no values")
+            raise CommandError(_(':delete takes no values'))
     used = [(o, _uses(collection, o)) for o in objs]
     blocked = [(o, why) for o, why in used if why]
     free = [o for o, why in used if not why]
     if not free:
         o, why = blocked[0]
-        raise CommandError(f"{o} is used by {why}: it stays" + (" (:player-link moves games to another player)" if collection == "players" else ""))
+        raise CommandError(_("{o} is used by {why}: it stays").format(o=o, why=why) + (_(' (:player-link moves games to another player)') if collection == "players" else ""))
     snapshots = [_snapshot(o) for o in free]
     with transaction.atomic():
         MODELS[collection].objects.filter(pk__in=[o.pk for o in free]).delete()
-    message = f"Deleted {', '.join(str(o) for o in free)}" + (f" · {len(blocked)} in use stay" if blocked else "")
+    message = _("Deleted {value}").format(value=', '.join((str(o) for o in free))) + (_(" · {n} in use stay").format(n=len(blocked)) if blocked else "")
     change = json.dumps({"c": collection, "objects": snapshots})
     return {
         "message": message,
@@ -326,10 +329,10 @@ def recreate(args, context, body):
     try:
         change = json.loads(args[0])
     except (IndexError, ValueError):
-        raise CommandError("bad change") from None
+        raise CommandError(_('bad change')) from None
     collection = change.get("c")
     if collection not in MODELS:
-        raise CommandError("bad change")
+        raise CommandError(_('bad change'))
     Model = MODELS[collection]
     snapshots = change.get("objects") or []
     with transaction.atomic():
@@ -364,12 +367,12 @@ def player_link(args, context, body):
     refs = [w for w in words if w.startswith("@")]
     name = " ".join(w for w in words if not w.startswith("@")).strip()
     if not name:
-        raise CommandError('the name as it is on the games: :player-link "Tal, M." @tal')
+        raise CommandError(_('the name as it is on the games: :player-link "Tal, M." @tal'))
     folded = fold(name)
     white = [g.pk for g in Game.objects.filter(white__isnull=True).exclude(white_name="") if fold(g.white_name) == folded]
     black = [g.pk for g in Game.objects.filter(black__isnull=True).exclude(black_name="") if fold(g.black_name) == folded]
     if not white and not black:
-        raise CommandError(f"no game has '{name}' without a player (is:unlinked in Games lists them)")
+        raise CommandError(_("no game has '{name}' without a player (is:unlinked in Games lists them)").format(name=name))
     made = False
     player = find("players", refs[0]) if refs else _make_player(name, [])
     made = not refs
@@ -384,7 +387,7 @@ def player_link(args, context, body):
     n = len(set(white) | set(black))
     change = {"player": player.pk, "white": white, "black": black, "alias": name if alias_added else None, "made": made}
     return {
-        "message": f"{name} → {player.name}: {n} game{'s' if n != 1 else ''}" + (" (new player)" if made else ""),
+        "message": f"{name} → {player.name}: " + ngettext("{n} game", "{n} games", n).format(n=n) + (_(' (new player)') if made else ""),
         "effects": {"library": "changed"},
         "undo": {"command": "player.link", "args": [json.dumps(change)]},
         "redo": {"command": "player.link", "args": [shlex.join([name, *refs])]},
@@ -401,4 +404,4 @@ def _unlink(change: dict) -> dict:
         elif player and change.get("alias"):
             player.aliases = [a for a in player.aliases if a != change["alias"]]
             player.save()
-    return {"message": "Link undone", "effects": {"library": "changed"}}
+    return {"message": _('Link undone'), "effects": {"library": "changed"}}

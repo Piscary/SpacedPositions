@@ -2,22 +2,22 @@
   <div class="querybar">
     <span class="querybar__slash" aria-hidden="true">/</span>
     <input class="querybar__input" type="text" data-search data-querybar spellcheck="false" autocomplete="off"
-           aria-label="Query" placeholder="motif:gabel diff:>=3 no:solution · ⇥ completes · ↵ to the results">
+           aria-label="{% translate "Query" %}" placeholder="{% translate "motif:fork diff:>=3 no:solution · ⇥ completes · ↵ to the results" %}">
     <span class="querybar__count mono" data-query-count></span>
   </div>
   <div class="querybar__problems" data-query-problems aria-live="polite"></div>
-  <div class="querybar__complete" data-query-complete hidden role="listbox" aria-label="Completions"></div>
-  <div class="segmented library__tabs" role="radiogroup" aria-label="Collection"><span class="segmented__options">
-    <button type="button" class="segmented__option" role="radio" aria-checked="true" data-cmd="library.collection" data-args="positions">Positions <kbd class="keycap">1</kbd></button>
-    <button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="library.collection" data-args="games">Games <kbd class="keycap">2</kbd></button>
-    <button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="library.collection" data-args="puzzles">Puzzles <kbd class="keycap">3</kbd></button>
-    <button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="library.collection" data-args="players">Players <kbd class="keycap">4</kbd></button>
-    <button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="library.collection" data-args="sources">Sources <kbd class="keycap">5</kbd></button>
-    <button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="library.collection" data-args="tags">Tags <kbd class="keycap">6</kbd></button>
+  <div class="querybar__complete" data-query-complete hidden role="listbox" aria-label="{% translate "Completions" %}"></div>
+  <div class="segmented library__tabs" role="radiogroup" aria-label="{% translate "Collection" %}"><span class="segmented__options">
+    <button type="button" class="segmented__option" role="radio" aria-checked="true" data-cmd="library.collection" data-args="positions">{% translate "Positions" %} <kbd class="keycap">1</kbd></button>
+    <button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="library.collection" data-args="games">{% translate "Games" %} <kbd class="keycap">2</kbd></button>
+    <button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="library.collection" data-args="puzzles">{% translate "Puzzles" %} <kbd class="keycap">3</kbd></button>
+    <button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="library.collection" data-args="players">{% translate "Players" %} <kbd class="keycap">4</kbd></button>
+    <button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="library.collection" data-args="sources">{% translate "Sources" %} <kbd class="keycap">5</kbd></button>
+    <button type="button" class="segmented__option" role="radio" aria-checked="false" data-cmd="library.collection" data-args="tags">{% translate "Tags" %} <kbd class="keycap">6</kbd></button>
   </span></div>
-  <div class="list library__results" data-list data-library-results role="listbox" aria-multiselectable="true" aria-label="Results"></div>
+  <div class="list library__results" data-list data-library-results role="listbox" aria-multiselectable="true" aria-label="{% translate "Results" %}"></div>
   <div class="library__bulk" data-bulk hidden>
     <b data-bulk-count></b>
-    {% keyhint "library.tag" "tag" %}{% keyhint "library.trash" "trash" %}{% keyhint "library.train" "train" %}{% keyhint "library.analyse" "analyse" %}{% keyhint "library.copyfen" "FEN" %}{% keyhint "library.export" "PGN" %}{% keyhint "layer.escape" "clear" %}
+    {% keyhint "library.tag" _("tag") %}{% keyhint "library.trash" _("trash") %}{% keyhint "library.train" _("train") %}{% keyhint "library.analyse" _("analyse") %}{% keyhint "library.copyfen" "FEN" %}{% keyhint "library.export" _("export") %}{% keyhint "layer.escape" _("clear") %}
   </div>
 </div>

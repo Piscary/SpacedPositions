@@ -2,7 +2,7 @@
 where lines end, which further solver moves are also correct and which further answers count. The solution tree the
 trainer uses (training/puzzles.py) is rebuilt from the analysis after every change, so the two never disagree.
 
-The walker keeps chess-study-manager's rules:
+The walker's rules:
     · at every point where the solver moves, the main move is correct, and so are the moves marked "also correct";
     · the opponent answers with the main continuation, or with any answer added to the solution: each answer line is
       a card of its own;
@@ -14,6 +14,7 @@ The walker keeps chess-study-manager's rules:
 from __future__ import annotations
 
 from django.db import transaction
+from django.utils.translation import gettext as _
 
 from spaced_positions.training import puzzles as training_puzzles
 from spaced_positions.training.models import Puzzle
@@ -115,54 +116,54 @@ def _toggle(puzzle: Puzzle, key: str, node_id: int) -> bool:
 def act(node: Node, action: str) -> str:
     """Apply one puzzle action at `node`; returns a message for the status line."""
     if node.game_id:
-        raise tree.TreeError("puzzles come from positions: :new-position takes this move's position out of the game")
+        raise tree.TreeError(_("puzzles come from positions: :new-position takes this move's position out of the game"))
     if action == "start":
         existing = node.position.puzzles.filter(start_node=node).first()
         if existing:
-            return "A puzzle already starts here"
+            return _("A puzzle already starts here")
         if not node.kids.exists():
-            raise tree.TreeError("play the solution first: there are no moves after this position")
+            raise tree.TreeError(_("play the solution first: there are no moves after this position"))
         Puzzle.objects.create(position=node.position, start_node=node, start_fen=node.fen, solution={"moves": []}, active=False, origin="analysis")
-        return "Puzzle set up from here (a draft: p r puts it into training)"
+        return _("Puzzle set up from here (a draft: p r puts it into training)")
     puzzle = puzzle_at(node)
     if puzzle is None:
-        raise tree.TreeError("no puzzle here: p s sets one up at this move")
+        raise tree.TreeError(_("no puzzle here: p s sets one up at this move"))
     if action == "ready":
         puzzle.active = not puzzle.active
         puzzle.save(update_fields=["active"])
-        return "Ready for training" if puzzle.active else "Taken out of training (its history stays)"
+        return _("Ready for training") if puzzle.active else _("Taken out of training (its history stays)")
     if action == "discard":
         if puzzle.cards.filter(attempts__gt=0).exists():
             puzzle.active = False
             puzzle.start_node = None
             puzzle.save(update_fields=["active", "start_node"])
-            return "Puzzle removed from the analysis (trained before: its history stays)"
+            return _("Puzzle removed from the analysis (trained before: its history stays)")
         puzzle.delete()
-        return "Puzzle discarded"
+        return _("Puzzle discarded")
     if node.id == puzzle.start_node_id:
-        raise tree.TreeError("that's the start of the puzzle: go to a move of its solution")
+        raise tree.TreeError(_("that's the start of the puzzle: go to a move of its solution"))
     if action == "end":
-        return "The solution ends here" if _toggle(puzzle, "ends", node.id) else "End removed"
+        return _("The solution ends here") if _toggle(puzzle, "ends", node.id) else _("End removed")
     if action == "also":
         if not _solver_move(puzzle, node):
-            raise tree.TreeError("only the solver's moves can be also correct")
-        return "Also correct" if _toggle(puzzle, "also", node.id) else "No longer correct"
+            raise tree.TreeError(_("only the solver's moves can be also correct"))
+        return _("Also correct") if _toggle(puzzle, "also", node.id) else _("No longer correct")
     if action == "answers":
         if not _solver_move(puzzle, node):
-            raise tree.TreeError("on a solver move: every answer to it then continues the puzzle")
+            raise tree.TreeError(_("on a solver move: every answer to it then continues the puzzle"))
         replies = list(node.kids.values_list("id", flat=True))
         marks = dict(puzzle.marks or {})
         current = set(marks.get("replies", []))
         if replies and all(r in current for r in replies[1:]):
             marks["replies"] = [r for r in current if r not in replies]
-            message = "Only the main answer counts"
+            message = _("Only the main answer counts")
         else:
             marks["replies"] = sorted(current | set(replies[1:]))
-            message = f"All {len(replies)} answers count: {len(replies)} lines"
+            message = _("All {n} answers count: {n} lines").format(n=len(replies))
         puzzle.marks = marks
         puzzle.save(update_fields=["marks"])
         return message
-    raise tree.TreeError(f"unknown puzzle action {action}")
+    raise tree.TreeError(_("unknown puzzle action {action}").format(action=action))
 
 
 def roles(position, kids) -> dict:

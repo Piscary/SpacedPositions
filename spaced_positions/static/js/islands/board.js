@@ -11,6 +11,7 @@ import { nodeOf } from "../core/layout.js"
 import * as lines from "../core/lines.js"
 import { openMenu } from "../core/menu.js"
 import { matchMoves } from "../core/san.js"
+import { tr } from "../core/i18n.js"
 
 const boards = new Set()
 const EMPTY = "8/8/8/8/8/8/8/8"
@@ -129,9 +130,9 @@ class Board {
     let promotion
     if (options.length > 1) {
       promotion = await openMenu({
-        title: "Promote to",
+        title: tr("Promote to"),
         anchor: this.cgEl,
-        items: [["q", "Queen"], ["r", "Rook"], ["b", "Bishop"], ["n", "Knight"]].map(([key, label]) => ({ label, key, keys: [key], value: key })),
+        items: [["q", tr("Queen")], ["r", tr("Rook")], ["b", tr("Bishop")], ["n", tr("Knight")]].map(([key, label]) => ({ label, key, keys: [key], value: key })),
       })
       if (!promotion) return this.refresh()
     }
@@ -219,7 +220,7 @@ class Board {
     this.evalBar.classList.toggle("is-black", white < 50)
     this.evalBar.classList.toggle("is-top", (white < 50) !== flipped)
     this.evalBar.querySelector("[data-evaltext]").textContent = score.text
-    this.evalBar.title = `Evaluation ${score.text} (white's view)`
+    this.evalBar.title = tr("Evaluation {score} (white's view)", { score: score.text })
   }
 
   onShapes(shapes) {
@@ -320,7 +321,7 @@ class Board {
   async leaveSetup() {
     const check = await this.validate()
     if (check && !check.ok && !this.setup.diagram) {
-      status(`Not a legal position: ${check.problems.map((p) => p.message).join("; ")}${check.fixed ? " · a fixes it" : ""} · D: keep it as a diagram`, { kind: "error", timeout: 8000 })
+      status(`${tr("Not a legal position: {problems}", { problems: check.problems.map((p) => p.message).join("; ") })}${check.fixed ? ` · ${tr("a fixes it")}` : ""} · ${tr("D: keep it as a diagram")}`, { kind: "error", timeout: 8000 })
       return false
     }
     const fen = this.fullFen()
@@ -331,7 +332,7 @@ class Board {
     if (this.focused && ctx.layer === "setup") setLayer("normal")
     const owner = lines.delegateOf(this.key) // an analysis: the correction goes to its tree (spec 06 §4)
     if (owner) owner.setStart(fen)
-    else lines.load(this.key, { start: fen }, { undo: "Set up position" })
+    else lines.load(this.key, { start: fen }, { undo: tr("Set up position") })
     this.refresh()
   }
 
@@ -345,7 +346,7 @@ class Board {
   // ── Move entry ───────────────────────────────────────────────────────────────────────────────────────────
 
   enterEntry() {
-    if (!this.chess) return status("This position can't be played (a diagram)", { kind: "error" }) || false
+    if (!this.chess) return status(tr("This position can't be played (a diagram)"), { kind: "error" }) || false
     this.entry = { text: "", index: 0, candidates: [], previous: ctx.layer }
     this.layer = "entry"
     this.el.dataset.layer = "entry"
@@ -377,7 +378,7 @@ class Board {
     else if (token === "enter") return this.playEntry()
     else if (token.length === 1 && /[a-hA-H1-8KQRBNDTLSkqrnstlxXoO0=\-]/.test(token)) entry.text += token
     else return "fallthrough" // leader, focus keys … still work; the entry stays open
-    const { candidates, exact } = matchMoves(entry.text, this.chess.moves({ verbose: true }))
+    const { candidates, exact } = matchMoves(entry.text, this.chess.moves({ verbose: true }), window.SPOS.settings?.["board.letters"])
     entry.candidates = candidates
     entry.exact = exact
     if (token !== "tab") entry.index = exact ? candidates.indexOf(exact) : 0
@@ -391,9 +392,9 @@ class Board {
     if (!move) {
       if (entry.candidates.length > 1) {
         entry.tabbed = true
-        return status(`Which one? ${entry.candidates.map((m) => m.san).join(" / ")} · ⇥ choose, ↵ play`, { timeout: 4000 })
+        return status(tr("Which one? {moves} · ⇥ choose, ↵ play", { moves: entry.candidates.map((m) => m.san).join(" / ") }), { timeout: 4000 })
       }
-      return status(entry.text ? `No legal move matches “${entry.text}”` : "Type a move, e.g. Nf3, Sf3 or g1f3", { kind: "error", timeout: 3000 })
+      return status(entry.text ? tr("No legal move matches “{text}”", { text: entry.text }) : tr("Type a move, e.g. Nf3, Sf3 or g1f3"), { kind: "error", timeout: 3000 })
     }
     const chess = chessOf(lines.fenAt(this.line))
     Object.assign(entry, { text: "", index: 0, candidates: [], exact: null, tabbed: false })
@@ -418,7 +419,7 @@ class Board {
       const check = s.check
       if (check && !check.ok) {
         const problems = span(`board__problems${s.diagram ? "" : " is-error"}`, check.problems.map((p) => p.message).join(" · "))
-        if (check.fixed) problems.append(text(" · a: fix"))
+        if (check.fixed) problems.append(text(` · ${tr("a: fix")}`))
         parts.push(problems)
       }
       if (this.duplicate) parts.push(span("board__problems", ` · duplicate of ${this.duplicate.short} ${this.duplicate.title}`))
@@ -432,16 +433,17 @@ class Board {
       }
     } else if (this.layer === "entry") {
       const e = this.entry
-      parts.push(text("Type a move: "), span("board__entry mono", `${e.text}▏`))
+      parts.push(text(tr("Type a move: ")), span("board__entry mono", `${e.text}▏`))
       if (e.candidates.length) parts.push(text(" · " + e.candidates.map((m, i) => (i === e.index ? `[${m.san}]` : m.san)).join(" ")))
-      parts.push(text(" · ↵ play · ⇥ next · Esc done"))
+      parts.push(text(` · ${tr("↵ play · ⇥ next · Esc done")}`))
     } else if (this.layer === "solving") {
-      parts.push(text(`Solve as ${this.solver} · click/drag or i to type the move · h hint · s solution`))
+      parts.push(text(this.solver === "black" ? tr("Solve as black · click/drag or i to type the move · h hint · s solution")
+                                               : tr("Solve as white · click/drag or i to type the move · h hint · s solution")))
     } else {
       const fen = lines.fenAt(line)
-      parts.push(text(this.chess ? `${fen.split(" ")[1] === "b" ? "Black" : "White"} to move` : "Diagram: not playable"))
-      parts.push(text(` · move ${line.ply} of ${line.moves.length}`))
-      parts.push(text(this.squareTool ? " · right-click: fill a square (⇧ red · ⌥ blue)" : " · click/drag: move · right-drag: arrow (⇧ red · ⌥ blue · ⇧⌥ yellow)"))
+      parts.push(text(this.chess ? (fen.split(" ")[1] === "b" ? tr("Black to move") : tr("White to move")) : tr("Diagram: not playable")))
+      parts.push(text(` · ${tr("move {n} of {total}", { n: line.ply, total: line.moves.length })}`))
+      parts.push(text(` · ${this.squareTool ? tr("right-click: fill a square (⇧ red · ⌥ blue)") : tr("click/drag: move · right-drag: arrow (⇧ red · ⌥ blue · ⇧⌥ yellow)")}`))
     }
     this.strip.replaceChildren(...parts)
   }
@@ -546,7 +548,7 @@ handle("board.flip", withBoard((b) => {
   b.cg.set({ orientation: b.orientation })
   if (b.score) b.setEval(b.score)
 }))
-const notSolving = (fn) => withBoard((b, args) => (b.solving ? status("Not while solving a puzzle", { timeout: 2000 }) || false : fn(b, args)))
+const notSolving = (fn) => withBoard((b, args) => (b.solving ? status(tr("Not while solving a puzzle"), { timeout: 2000 }) || false : fn(b, args)))
 handle("board.back", notSolving((b) => lines.goTo(b.key, b.line.ply - 1)))
 handle("board.forward", notSolving((b) => lines.goTo(b.key, b.line.ply + 1)))
 handle("board.start", notSolving((b) => lines.goTo(b.key, 0)))
@@ -554,7 +556,7 @@ handle("board.end", notSolving((b) => lines.goTo(b.key, b.line.moves.length)))
 handle("board.squaretool", withBoard((b) => {
   b.squareTool = !b.squareTool
   b.renderStrip()
-  status(b.squareTool ? "Square tool: right-click fills a square" : "Square tool off: right-drag draws arrows", { timeout: 2500 })
+  status(b.squareTool ? tr("Square tool: right-click fills a square") : tr("Square tool off: right-drag draws arrows"), { timeout: 2500 })
 }))
 handle("board.cleardrawings", withBoard((b) => {
   lines.setShapes(b.key, [])
@@ -573,7 +575,7 @@ handle("puzzle.create", async () => {
   if (!board) return false
   const line = board.line
   const moves = line.moves.slice(0, line.ply).map((m) => m.uci)
-  if (!moves.length) return status("Play the solution on the board first, then :puzzle", { kind: "error" }) || false
+  if (!moves.length) return status(tr("Play the solution on the board first, then :puzzle"), { kind: "error" }) || false
   const response = await fetch("/puzzles/from-line/", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content },
@@ -588,9 +590,9 @@ handle("board.setup", notSolving((b) => (b.layer === "setup" ? b.leaveSetup() : 
 async function copy(text, what) {
   try {
     await navigator.clipboard.writeText(text)
-    status(`Copied ${what}`, { kind: "good", timeout: 2500 })
+    status(tr("Copied {what}", { what }), { kind: "good", timeout: 2500 })
   } catch {
-    status(`Could not copy the ${what}: the browser refused`, { kind: "error" })
+    status(tr("Could not copy the {what}: the browser refused", { what }), { kind: "error" })
   }
 }
 handle("board.copyfen", () => {
@@ -604,7 +606,7 @@ handle("board.lichess", () => {
   const fen = board?.layer === "setup" ? board.fullFen() : lines.fenAt(lines.getLine(focusedKey()))
   if (!fen) return false
   window.open(`https://lichess.org/analysis/standard/${fen.replaceAll(" ", "_")}`, "_blank", "noopener")
-  status("Opened in lichess (a new tab)", { timeout: 2500 })
+  status(tr("Opened in lichess (a new tab)"), { timeout: 2500 })
 })
 
 // Setup commands (layer.setup)
@@ -626,15 +628,15 @@ handle("board.mirror", withSetup((b, s) => {
 }))
 handle("board.diagram", withSetup((b, s) => { s.diagram = !s.diagram; b.validate() }))
 handle("board.fix", withSetup((b, s) => {
-  if (!s.check?.fixed) return status("Nothing to fix automatically", { timeout: 2500 }) || false
+  if (!s.check?.fixed) return status(tr("Nothing to fix automatically"), { timeout: 2500 }) || false
   b.applyFen(s.check.fixed)
 }))
 handle("board.castling", withSetup(async (b, s) => {
   const rights = s.castling === "-" ? "" : s.castling
   const choice = await openMenu({
-    title: "Castling rights",
+    title: tr("Castling rights"),
     anchor: b.palette,
-    items: [["K", "White O-O"], ["Q", "White O-O-O"], ["k", "Black O-O"], ["q", "Black O-O-O"]].map(([key, label]) => ({
+    items: [["K", tr("White O-O")], ["Q", tr("White O-O-O")], ["k", tr("Black O-O")], ["q", tr("Black O-O-O")]].map(([key, label]) => ({
       label: `${label} ${rights.includes(key) ? "✓" : ""}`, key, keys: [key], value: key,
     })),
   })
@@ -651,9 +653,9 @@ handle("board.ep", withSetup(async (b, s) => {
     return pawn?.role === "pawn" && pawn.color === (white ? "black" : "white") && !pieces.get(`${f}${white ? 6 : 3}`) && !pieces.get(`${f}${white ? 7 : 2}`)
   }).map((f) => `${f}${white ? 6 : 3}`)
   const choice = await openMenu({
-    title: "En passant square",
+    title: tr("En passant square"),
     anchor: b.palette,
-    items: [{ label: "none", key: "0", keys: ["0"], value: "-" }, ...candidates.map((sq, i) => ({ label: sq, key: String(i + 1), keys: [String(i + 1)], value: sq }))],
+    items: [{ label: tr("none"), key: "0", keys: ["0"], value: "-" }, ...candidates.map((sq, i) => ({ label: sq, key: String(i + 1), keys: [String(i + 1)], value: sq }))],
   })
   if (!choice) return false
   s.ep = choice
@@ -671,7 +673,7 @@ handle("board.pieces", async ([name]) => {
     const keys = "123456789abcdefghijklmnopqrstuvwxyz"
     const before = currentSet()
     name = await openMenu({
-      title: "Piece set · ↑↓ preview · ↵ keep · Esc back",
+      title: tr("Piece set · ↑↓ preview · ↵ keep · Esc back"),
       anchor: focusedBoard()?.el || null,
       start: Math.max(0, names.indexOf(before)),
       onCursor: (value) => { if (value) document.documentElement.dataset.pieces = value },
@@ -682,7 +684,7 @@ handle("board.pieces", async ([name]) => {
       return false
     }
   }
-  if (!sets[name]) return status(`No piece set '${name}'`, { kind: "error" }) || false
+  if (!sets[name]) return status(tr("No piece set '{name}'", { name }), { kind: "error" }) || false
   return run("pref.set", [`piece-set=${name}`])
 })
 

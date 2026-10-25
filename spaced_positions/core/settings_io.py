@@ -8,6 +8,9 @@ from __future__ import annotations
 import json
 import tomllib
 
+from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
+
 from spaced_positions.design import lib
 
 from . import keymap, registry, settings, themes, user_pieces
@@ -67,7 +70,7 @@ def import_toml(text: str) -> dict:
     try:
         data = tomllib.loads(text)
     except tomllib.TOMLDecodeError as e:
-        return {"ok": False, "message": f"not TOML: {e}", "problems": []}
+        return {"ok": False, "message": _("not TOML: {error}").format(error=e), "problems": []}
     if "extends" in data and ("color" in data or "board" in data) and "theme" not in data:
         return _import_theme(data)
     prefs = Preferences.current()
@@ -92,7 +95,7 @@ def import_toml(text: str) -> dict:
             stored[name] = str(value)[:50_000]
             continue
         if name == "engine.path":  # which program runs is set by hand, never by a pasted file
-            problems.append("engine.path is set by hand in Settings → Engine, not imported")
+            problems.append(_("engine.path is set by hand in Settings → Engine, not imported"))
             continue
         raw = {True: "on", False: "off"}.get(value, value) if isinstance(value, bool) else str(value)
         checked, error = settings.parse(name, raw)
@@ -105,7 +108,7 @@ def import_toml(text: str) -> dict:
         if theme in ("auto", "") or theme in themes.all_themes():
             prefs.theme = "" if theme == "auto" else theme
         else:
-            problems.append(f"no theme '{theme}'")
+            problems.append(_("no theme '{name}'").format(name=theme))
     prefs.tokens = tokens
     prefs.settings = stored
     prefs.save()
@@ -123,7 +126,7 @@ def import_toml(text: str) -> dict:
             problems.append(str(e))
             continue
         if cid not in commands:
-            problems.append(f"{seq}: no command '{cid}'")
+            problems.append(_("{keys}: no command '{command}'").format(keys=seq, command=cid))
             continue
         errors = keymap.problems_with(context, seq, cid, args)
         if errors:
@@ -143,11 +146,12 @@ def import_toml(text: str) -> dict:
         try:
             tree = json.loads(layout["layout"])
         except (KeyError, ValueError, TypeError):
-            problems.append(f"layout {layout.get('name', '?')}: unreadable")
+            problems.append(_("layout {name}: unreadable").format(name=layout.get("name", "?")))
             continue
         NamedLayout.objects.update_or_create(user=LOCAL_USER, name=str(layout["name"])[:60], defaults={"mode": layout.get("mode", ""), "layout": tree})
         applied += 1
-    message = f"Imported {applied} setting{'s' if applied != 1 else ''}" + (f" · {len(problems)} skipped: {problems[0]}" if problems else "")
+    message = ngettext("Imported {n} setting", "Imported {n} settings", applied).format(n=applied) + (
+        " · " + _("{n} skipped: {first}").format(n=len(problems), first=problems[0]) if problems else "")
     return {"ok": True, "message": message, "problems": problems,
             "effects": _theme_effects(prefs) | {"settings": settings.values(prefs.settings), "themes": themes.all_themes()} | _keymap_effects()}
 
@@ -160,7 +164,7 @@ def _import_theme(data: dict) -> dict:
     builtin = registry.themes()["themes"]
     extends = data.get("extends", "paper")
     if extends not in builtin:
-        return {"ok": False, "message": f"a theme extends a built-in theme ({', '.join(builtin)}), not '{extends}'", "problems": []}
+        return {"ok": False, "message": _("a theme extends a built-in theme ({themes}), not '{name}'").format(themes=", ".join(builtin), name=extends), "problems": []}
     schema = registry.themes()["schema"]
     values, problems = {}, []
     for table in ("color", "board", "tokens"):
@@ -176,6 +180,7 @@ def _import_theme(data: dict) -> dict:
     label = str(data.get("label") or name)[:80]
     UserTheme.objects.update_or_create(user=LOCAL_USER, name=name, defaults={"label": label, "extends": extends, "values": values})
     warnings = themes.contrast_problems(builtin[extends]["values"] | values)
-    message = f"Theme {label} imported (:theme {name})" + (f" · check contrast: {warnings[0]}" if warnings else "")
+    message = _("Theme {label} imported (:theme {name})").format(label=label, name=name) + (
+        " · " + _("check contrast: {problems}").format(problems=warnings[0]) if warnings else "")
     return {"ok": True, "message": message, "problems": problems,
             "effects": _theme_effects(Preferences.current()) | {"themes": themes.all_themes()}}

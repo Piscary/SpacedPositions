@@ -1,5 +1,4 @@
-"""Training and collection metrics (spec 04 · Stats), computed from the tables only; the rules are chess-study-manager's
-(training/metrics.py there), kept.
+"""Training and collection metrics (spec 04 · Stats), computed from the tables only.
 
 Card stages (from the schedule)
     new        never solved yet
@@ -31,6 +30,8 @@ from types import SimpleNamespace
 
 from django.db import IntegrityError, transaction
 from django.utils import timezone
+from django.utils.formats import number_format
+from django.utils.translation import get_language, gettext, gettext_noop, ngettext
 
 from spaced_positions.training import srs
 from spaced_positions.training.models import Attempt, Card, Position, Session
@@ -48,14 +49,29 @@ PRIOR, PRIOR_WEIGHT = 0.8, 4
 WEAK_MIN_ATTEMPTS = 3
 REVIEWS_FOR_RETENTION = 5
 ROBUST_MIN, ROBUST_GAP = 10, 0.10
-FAMILIES = [("motif", "Tactical motifs"), ("mate", "Mating patterns"), ("goal", "Objectives"), ("endgame", "Endgame types"),
-            ("technique", "Endgame technique"), ("strategy", "Positional themes")]
-LEVELS = [("Learning", 0, 0.0), ("Familiar", 1, 0.0), ("Solid", 5, 0.75), ("Strong", 15, 0.80), ("Expert", 40, 0.85), ("Master", 100, 0.90)]
+# Texts are marked here (gettext_noop) and translated where they are used: results are cached per language.
+FAMILIES = [("motif", gettext_noop("Tactical motifs")), ("mate", gettext_noop("Mating patterns")), ("goal", gettext_noop("Objectives")),
+            ("endgame", gettext_noop("Endgame types")), ("technique", gettext_noop("Endgame technique")),
+            ("strategy", gettext_noop("Positional themes"))]
+LEVELS = [(gettext_noop("Learning"), 0, 0.0), (gettext_noop("Familiar"), 1, 0.0), (gettext_noop("Solid"), 5, 0.75),
+          (gettext_noop("Strong"), 15, 0.80), (gettext_noop("Expert"), 40, 0.85), (gettext_noop("Master"), 100, 0.90)]
 MILESTONE_TEXT = {
-    "library": "{v:,} patterns in your library", "daystreak": "{v} days in a row", "retention": "{v} % retention over 30 days",
-    "storm": "{v} puzzles in one Storm", "streak": "A streak of {v}",
+    "library": gettext_noop("{v} patterns in your library"), "daystreak": gettext_noop("{v} days in a row"),
+    "retention": gettext_noop("{v} % retention over 30 days"), "storm": gettext_noop("{v} puzzles in one Storm"),
+    "streak": gettext_noop("A streak of {v}"),
 }
-NOT_STARTED = {"level": -1, "name": "Not started", "next": "", "progress": 0}
+
+
+def not_started() -> dict:
+    return {"level": -1, "name": gettext("Not started"), "next": "", "progress": 0}
+
+
+def level_name(i: int) -> str:
+    return gettext(LEVELS[i][0])
+
+
+def milestone_text(kind: str, value: int) -> str:
+    return gettext(MILESTONE_TEXT[kind]).format(v=number_format(value, force_grouping=True))
 
 
 def stage(card) -> str:
@@ -314,16 +330,16 @@ def mastery(established, ret, proven=True) -> dict:
         missing = []
         if established < need:
             more = max(1, math.ceil(need - established - 1e-9))
-            missing.append(f"{more} more established card{'s' if more != 1 else ''}")
+            missing.append(ngettext("{n} more established card", "{n} more established cards", more).format(n=more))
         if need_ret and not proven:
-            missing.append(f"{REVIEWS_FOR_RETENTION} due reviews to prove retention")
+            missing.append(gettext("{n} due reviews to prove retention").format(n=REVIEWS_FOR_RETENTION))
         elif need_ret and (ret or 0) < need_ret:
-            missing.append(f"retention {need_ret:.0%}")
-        nxt = f"{name}: " + " and ".join(missing)
+            missing.append(gettext("retention {rate}").format(rate=f"{need_ret:.0%}"))
+        nxt = f"{gettext(name)}: " + gettext(" and ").join(missing)
         progress = min(0.99, min(1.0, established / need) if need else 1.0)
     else:
         nxt, progress = "", 1.0
-    return {"level": level, "name": LEVELS[level][0], "next": nxt, "progress": progress}
+    return {"level": level, "name": level_name(level), "next": nxt, "progress": progress}
 
 
 def weight(card) -> float:
@@ -332,8 +348,9 @@ def weight(card) -> float:
 
 
 def tag_rows(d: Data) -> list[dict]:
-    if "tag_rows" in d.memo:  # computed once per loaded data; callers get their own row dicts
-        return [dict(r) for r in d.memo["tag_rows"]]
+    memo_key = f"tag_rows:{get_language()}"  # mastery texts are in the language of the request
+    if memo_key in d.memo:  # computed once per loaded data; callers get their own row dicts
+        return [dict(r) for r in d.memo[memo_key]]
     rows = {}
     card_stage = {c.pk: stage(c) for c in d.cards}
     for c in d.cards:
@@ -363,11 +380,11 @@ def tag_rows(d: Data) -> list[dict]:
         r["smoothed"] = smoothed(r["ok"], r["n"])
         r["retention"] = rate(r["rok"], r["rn"]) if r["rn"] >= REVIEWS_FOR_RETENTION else None
         r["median_s"] = statistics.median(r["ms"]) / 1000 if r["ms"] else None
-        r["mastery"] = mastery(r["established"], r["retention"], proven=r["retention"] is not None) if r["n"] else NOT_STARTED
+        r["mastery"] = mastery(r["established"], r["retention"], proven=r["retention"] is not None) if r["n"] else not_started()
         del r["ms"]
         out.append(r)
     out.sort(key=lambda r: (r["tag"].field.order, -r["cards"], r["tag"].name))
-    d.memo["tag_rows"] = out
+    d.memo[memo_key] = out
     return [dict(r) for r in out]
 
 
@@ -381,8 +398,8 @@ def families(rows: list[dict]) -> list[dict]:
         rn, rok = sum(r["rn"] for r in members), sum(r["rok"] for r in members)
         est = sum(r["established"] for r in members)
         out.append({
-            "key": key, "label": label, "tags": members, "n": n, "accuracy": rate(ok, n), "retention": rate(rok, rn) if rn else None,
-            "established": est, "mastery": mastery(est, rate(rok, rn), proven=rn >= REVIEWS_FOR_RETENTION) if n else NOT_STARTED,
+            "key": key, "label": gettext(label), "tags": members, "n": n, "accuracy": rate(ok, n), "retention": rate(rok, rn) if rn else None,
+            "established": est, "mastery": mastery(est, rate(rok, rn), proven=rn >= REVIEWS_FOR_RETENTION) if n else not_started(),
             "weakest": min((r for r in members if r["n"] >= WEAK_MIN_ATTEMPTS), key=lambda r: r["smoothed"], default=None),
         })
     return out
@@ -500,9 +517,9 @@ def robustness(d: Data) -> list[dict]:
         return {"n": len(rs), "rate": rate(sum(a.success for a in rs), len(rs))}
 
     pairs = [
-        ("Colour", "as White", group(lambda a: a.solved_as == "w"), "as Black", group(lambda a: a.solved_as == "b")),
-        ("Mirroring", "original", group(lambda a: not a.mirrored), "mirrored", group(lambda a: a.mirrored)),
-        ("Board", "side below", group(lambda a: not a.flipped), "side on top", group(lambda a: a.flipped)),
+        (gettext("Colour"), gettext("as White"), group(lambda a: a.solved_as == "w"), gettext("as Black"), group(lambda a: a.solved_as == "b")),
+        (gettext("Mirroring"), gettext("original"), group(lambda a: not a.mirrored), gettext("mirrored"), group(lambda a: a.mirrored)),
+        (gettext("Board"), gettext("side below"), group(lambda a: not a.flipped), gettext("side on top"), group(lambda a: a.flipped)),
     ]
     out = []
     for label, a_label, a, b_label, b in pairs:
@@ -535,13 +552,13 @@ def activity(d: Data, weeks: int = 26) -> list[dict]:
     since = timezone.make_aware(datetime.combine(start, time.min))
     for created in Position.objects.filter(created_at__gte=since).values_list("created_at", flat=True):
         week = week_of(created)
-        if week in out:  # migrated positions keep the day they were collected in the old app
+        if week in out:  # imported positions keep the day they were collected
             out[week]["collect"] += 1
     for when in JournalEntry.objects.filter(created_at__gte=since, undone=False).values_list("created_at", flat=True):
         if week_of(when) in out:
             out[week_of(when)]["analyse"] += 1
     for kind, points, when in ActivityLog.objects.filter(at__gte=since).values_list("kind", "points", "at"):
-        if week_of(when) in out:  # the old app's analysis work and board moves (phase 7)
+        if week_of(when) in out:  # activity recorded without other traces (ActivityLog)
             out[week_of(when)][kind] += points
     for a in d.attempts:
         if a.success and a.at >= since and monday(a.day) in out:
@@ -555,7 +572,7 @@ def collection() -> dict:
     from django.db.models import Count, Exists, OuterRef
 
     from spaced_positions.analysis.models import Node
-    from spaced_positions.library.models import Game, PositionTag, TagField
+    from spaced_positions.library.models import Game, PositionTag, Tag, TagField
     from spaced_positions.training.models import Puzzle
 
     alive = Position.alive.all()
@@ -568,16 +585,20 @@ def collection() -> dict:
     by_field = []
     links = PositionTag.objects.filter(position__deleted_at=None).exclude(origin="suggested")
     for f in TagField.objects.filter(on_positions=True):
-        tags = list(links.filter(tag__field=f).values("tag__key", "tag__name").annotate(n=Count("id")).order_by("-n")[:8])
+        tags = list(links.filter(tag__field=f).values("tag_id", "tag__key").annotate(n=Count("id")).order_by("-n")[:8])
         if tags:
-            by_field.append({"key": f.key, "label": f.name, "tags": tags})
+            labels = {t.pk: t.label for t in Tag.objects.filter(pk__in=[t["tag_id"] for t in tags])}
+            for t in tags:
+                t["tag__name"] = labels.get(t["tag_id"], t["tag__key"])
+            by_field.append({"key": f.key, "label": f.label, "tags": tags})
     by_source = list(alive.exclude(source=None).values("source__title", "source__short").annotate(n=Count("id")).order_by("-n")[:8])
     by_difficulty = {d: n for d, n in alive.order_by().values_list("difficulty").annotate(n=Count("id")) if d}
     return {
         "total": total, "analysed": analysed, "with_puzzle": with_puzzle, "in_training": in_training, "mature": mature,
         "games": Game.objects.filter(deleted_at=None).count(),
         "by_field": by_field, "by_source": by_source, "by_difficulty": [(d, by_difficulty.get(d, 0)) for d in range(1, 6)],
-        "funnel": [("Collected", total), ("Analysed", analysed), ("Puzzle", with_puzzle), ("In training", in_training), ("Mature", mature)],
+        "funnel": [("collected", gettext("Collected"), total), ("analysed", gettext("Analysed"), analysed), ("puzzle", gettext("Puzzle"), with_puzzle),
+                   ("training", gettext("In training"), in_training), ("mature", gettext("Mature"), mature)],
     }
 
 
@@ -632,8 +653,14 @@ def records(d: Data) -> dict:
 def record_label(key: str, value: int) -> str:
     kind, n = key.split("-")
     if kind == "storm":
-        return f"▲ new best Storm {n}′: {value}"
-    return f"▲ new best Streak{' ♥' + n if n != '0' else ''}: {value}"
+        return "▲ " + gettext("new best Storm {minutes}′: {value}").format(minutes=n, value=value)
+    if n != "0":
+        return "▲ " + gettext("new best Streak ♥{lives}: {value}").format(lives=n, value=value)
+    return "▲ " + gettext("new best Streak: {value}").format(value=value)
+
+
+def level_text(tag, level: int) -> str:
+    return f"{tag.label}: {level_name(level - 1)} → {level_name(level)}"
 
 
 def sync_achievements(d: Data | None = None, session: Session | None = None) -> list:
@@ -645,14 +672,14 @@ def sync_achievements(d: Data | None = None, session: Session | None = None) -> 
     lib, ret = library(d), retention(d)
     found = []  # (kind, key, value, label, when, session)
     for (kind, value), when in milestone_candidates(d, lib, ret).items():
-        found.append((kind, "", value, MILESTONE_TEXT[kind].format(v=value), when, None))
+        found.append((kind, "", value, milestone_text(kind, value), when, None))
     for (key, value), (s, when) in records(d).items():
         found.append(("record", key, value, record_label(key, value), when, s))
     for r in tag_rows(d):
         level = r["mastery"]["level"]
         if level >= 2:  # Solid and above are worth announcing
             for lv in range(2, level + 1):
-                found.append(("level", r["tag"].key, lv, f"{r['tag'].name}: {LEVELS[lv - 1][0]} → {LEVELS[lv][0]}", d.now, None))
+                found.append(("level", r["tag"].key, lv, level_text(r["tag"], lv), d.now, None))
     existing = set(Achievement.objects.values_list("kind", "key", "value"))
     first_run = not existing
     new = [f for f in found if (f[0], f[1], f[2]) not in existing]
@@ -681,6 +708,7 @@ def sync_achievements(d: Data | None = None, session: Session | None = None) -> 
 def dashboard(now=None) -> dict:
     d = load(now)
     hour = timezone.localtime(d.now).strftime("%Y-%m-%d %H")  # the numbers of "today" and "due now" move with the clock
+    hour += f" {get_language()}"  # and the texts with the language
     if d.memo.get("dashboard", (None,))[0] == hour:
         return d.memo["dashboard"][1] | {"_data": d}
     rows = tag_rows(d)

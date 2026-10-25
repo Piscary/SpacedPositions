@@ -9,6 +9,7 @@ import { ctx, emit, on, status, storage } from "./context.js"
 import * as lines from "./lines.js"
 import { sanNodes } from "./san.js"
 import { addLine, current, currentKey, mainlineOf, saveEvals, treeOf } from "./analysis.js"
+import { tr, trn } from "./i18n.js"
 
 const WORKER = "/static/vendor/stockfish-17.1-lite-single-03e3232.js"
 const SAN_PLIES = 14
@@ -46,7 +47,7 @@ class LocalWorker {
     const commands = this.outbox.splice(0)
     const data = await fetch("/engine/local/", {
       method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() }, body: JSON.stringify({ commands }),
-    }).then((r) => r.json()).catch(() => ({ ok: false, message: "the app is not reachable" }))
+    }).then((r) => r.json()).catch(() => ({ ok: false, message: tr("the app is not reachable") }))
     if (this.closed) return
     if (!data.ok) return this.onerror?.({ message: data.message })
     source = data.program
@@ -60,7 +61,7 @@ class LocalWorker {
     while (!this.closed) {
       const data = await fetch(`/engine/local/?after=${this.after}`).then((r) => r.json()).catch(() => null)
       if (this.closed) return
-      if (!data?.ok) return this.onerror?.({ message: data?.message || "the app is not reachable" })
+      if (!data?.ok) return this.onerror?.({ message: data?.message || tr("the app is not reachable") })
       this.after = data.next
       for (const line of data.lines) this.onmessage?.({ data: line })
     }
@@ -78,14 +79,14 @@ function start() {
   if (worker) return
   try {
     worker = local() ? new LocalWorker() : new Worker(WORKER)
-    source = local() ? "local engine" : "browser"
+    source = local() ? tr("local engine") : "browser"
   } catch (err) {
     enabled = false
-    return status(`The engine could not start: ${err.message}`, { kind: "error" })
+    return status(tr("The engine could not start: {error}", { error: err.message }), { kind: "error" })
   }
   worker.onmessage = (e) => onLine(String(e.data))
   worker.onerror = (e) => {
-    status(local() ? `Local engine: ${e?.message || "it stopped"}` : "The engine stopped with an error", { kind: "error" })
+    status(local() ? tr("Local engine: {error}", { error: e?.message || tr("it stopped") }) : tr("The engine stopped with an error"), { kind: "error" })
     stop()
   }
   send("uci")
@@ -163,7 +164,7 @@ function nextInBatch() {
   b.running = true
   b.i += 1
   b.best = null
-  status(`Evaluating ${Math.min(b.i + 1, b.items.length)} / ${b.items.length}…`, { timeout: 0 })
+  status(tr("Evaluating {i} / {n}…", { i: Math.min(b.i + 1, b.items.length), n: b.items.length }), { timeout: 0 })
   while (b.i < b.items.length) {
     const item = b.items[b.i]
     let game
@@ -302,9 +303,9 @@ function paint() {
     const stateEl = el.querySelector("[data-engine-state]")
     const info = el.querySelector("[data-engine-info]")
     const list = el.querySelector("[data-engine-lines]")
-    stateEl.textContent = !enabled ? "off" : !ready ? "starting…" : searching ? "thinking" : "done"
+    stateEl.textContent = !enabled ? tr("off") : !ready ? tr("starting…") : searching ? tr("thinking") : tr("done")
     stateEl.dataset.state = !enabled ? "off" : searching || !ready ? "busy" : "on"
-    info.textContent = enabled && search ? `${source === "browser" ? "Stockfish 17.1 (browser)" : source} · depth ${search.depth}/${depth()} · ${multipv} line${multipv > 1 ? "s" : ""}${search.nps ? ` · ${Math.round(search.nps / 1000)} kn/s` : ""}` : ""
+    info.textContent = enabled && search ? `${source === "browser" ? tr("Stockfish 17.1 (browser)") : source} · ${tr("depth {depth}/{max}", { depth: search.depth, max: depth() })} · ${trn("{n} line", "{n} lines", multipv)}${search.nps ? ` · ${Math.round(search.nps / 1000)} kn/s` : ""}` : ""
     list.replaceChildren(...(enabled && search ? search.lines.slice(0, multipv).filter(Boolean).map(lineRow) : [hint()]))
   }
 }
@@ -312,8 +313,10 @@ function paint() {
 function hint() {
   const p = document.createElement("p")
   p.className = "muted engine__off"
-  if (ctx.mode === "train") p.textContent = "The engine doesn't run in Train: it would show the solutions. Analyse the puzzle with a (beside the board) or A (in Analyse)."
-  else p.textContent = enabled ? "Waiting for a position…" : `The engine is off. e turns it on; it follows the board of this link group, runs ${local() ? "as a program through the app" : "in this browser"}, and stops in Train and when the app is in the background.`
+  if (ctx.mode === "train") p.textContent = tr("The engine doesn't run in Train: it would show the solutions. Analyse the puzzle with a (beside the board) or A (in Analyse).")
+  else p.textContent = enabled ? tr("Waiting for a position…") : local()
+    ? tr("The engine is off. e turns it on; it follows the board of this link group, runs as a program through the app, and stops in Train and when the app is in the background.")
+    : tr("The engine is off. e turns it on; it follows the board of this link group, runs in this browser, and stops in Train and when the app is in the background.")
   return p
 }
 
@@ -332,7 +335,7 @@ function lineRow(line, i) {
     b.className = "engine__move"
     b.append(...sanNodes(m.san))
     b.dataset.ply = j
-    b.title = "Add the line up to this move to the analysis"
+    b.title = tr("Add the line up to this move to the analysis")
     moves.append(b, " ")
   })
   row.append(score, moves)
@@ -367,13 +370,13 @@ function addToAnalysis(ucis) {
 handle("engine.toggle", () => {
   enabled = !enabled
   storage("engine.on", enabled)
-  status(enabled ? (local() ? "Engine on: the local engine through the app" : "Engine on: Stockfish 17.1 in this browser") : "Engine off", { timeout: 2000 })
+  status(enabled ? (local() ? tr("Engine on: the local engine through the app") : tr("Engine on: Stockfish 17.1 in this browser")) : tr("Engine off"), { timeout: 2000 })
   follow()
 })
 
 handle("engine.best", () => {
   const best = search?.lines[0]
-  if (!best) return status("The engine has no move yet", { timeout: 2000 }) || false
+  if (!best) return status(tr("The engine has no move yet"), { timeout: 2000 }) || false
   addToAnalysis(best.pv.slice(0, 1))
 })
 
@@ -381,7 +384,7 @@ handle("engine.best", () => {
 handle("engine.lines", async ([count]) => {
   const n = Number(count) || (multipv % 5) + 1
   await serverRun("pref.set", [`engine.lines=${n}`])
-  status(`Engine: ${n} line${n > 1 ? "s" : ""}`, { timeout: 1500 })
+  status(trn("Engine: {n} line", "Engine: {n} lines", n), { timeout: 1500 })
 })
 
 let lastSource = setting("engine.source", "browser")
@@ -410,8 +413,8 @@ Object.assign((window.SPOS ||= {}), { engine: { ready: () => ready && Boolean(se
 
 handle("engine.evaluate", async ([depth]) => {
   const t = current()
-  if (!t) return status("Open a position or a game first", { kind: "error" }) || false
-  if (batch) return status("Already evaluating", { timeout: 1500 }) || false
+  if (!t) return status(tr("Open a position or a game first"), { kind: "error" }) || false
+  if (batch) return status(tr("Already evaluating"), { timeout: 1500 }) || false
   const key = currentKey()
   const items = mainlineOf(t).map((n) => ({ id: n.id, fen: n.fen }))
   const results = await evaluate(items, Number(depth) || 14)

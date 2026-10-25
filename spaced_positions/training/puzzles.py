@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import chess
 from django.db import transaction
+from django.utils.translation import gettext as _
 
 from spaced_positions import chesslogic
 
@@ -30,7 +31,7 @@ def from_line(ucis: list[str]) -> dict:
     if len(ucis) % 2 == 0:
         ucis = ucis[:-1]
     if not ucis:
-        raise ValueError("a puzzle needs at least one move")
+        raise ValueError(_('a puzzle needs at least one move'))
 
     def point(i):
         option = {"uci": ucis[i], "replies": []}
@@ -62,16 +63,16 @@ def validate(start_fen: str, tree: dict) -> None:
 
     def walk(board, p):
         if not p.get("moves"):
-            raise ValueError("a point without moves")
+            raise ValueError(_('a point without moves'))
         for option in p["moves"]:
             move = chess.Move.from_uci(option["uci"])
             if move not in board.legal_moves:
-                raise ValueError(f"illegal solver move {option['uci']} in {board.fen()}")
+                raise ValueError(_("illegal solver move {uci} in {value}").format(uci=option['uci'], value=board.fen()))
             board.push(move)
             for reply in option.get("replies", []):
                 answer = chess.Move.from_uci(reply["uci"])
                 if answer not in board.legal_moves:
-                    raise ValueError(f"illegal answer {reply['uci']} in {board.fen()}")
+                    raise ValueError(_("illegal answer {uci} in {value}").format(uci=reply['uci'], value=board.fen()))
                 board.push(answer)
                 walk(board, reply["next"])
                 board.pop()
@@ -137,7 +138,7 @@ def create_from_line(start_fen: str, ucis: list[str], title: str = "", origin: s
 
     check = chesslogic.check_fen(start_fen)
     if not check["ok"]:
-        raise ValueError("the start position isn't legal: " + "; ".join(p["message"] for p in check["problems"]))
+        raise ValueError(_("the start position isn't legal: {problems}").format(problems="; ".join(p["message"] for p in check["problems"])))
     validate(check["fen"], from_line(ucis))
     position = Position.alive.filter(canonical=check["canonical"]).first()
     if position is None:
@@ -147,8 +148,8 @@ def create_from_line(start_fen: str, ucis: list[str], title: str = "", origin: s
     if existing is not None:
         if any(line[: len(ucis)] == list(ucis) for line in lines(existing.solution)):
             return existing  # the same puzzle again
-        raise ValueError(f"{position.short_id} already has a puzzle from this position: edit it in Analyse (p a, p o)")
-    with tree.change(position, "Puzzle from a board line"):
+        raise ValueError(_("{short_id} already has a puzzle from this position: edit it in Analyse (p a, p o)").format(short_id=position.short_id))
+    with tree.change(position, _('Puzzle from a board line')):
         end = tree.add_line(root, ucis)
         tree.promote(end)
         analysis_puzzles.act(root, "start")

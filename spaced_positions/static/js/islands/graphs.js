@@ -6,6 +6,7 @@
 import { on } from "../core/context.js"
 import { nodeOf } from "../core/layout.js"
 import { kidsOf, mainlineOf, moveTo, path, treeOf } from "../core/analysis.js"
+import { tr, trn } from "../core/i18n.js"
 
 const NS = "http://www.w3.org/2000/svg"
 const CLIP = 500
@@ -32,7 +33,7 @@ function value(n) {
 }
 
 function evalText(n) {
-  if (!n?.eval) return "not evaluated"
+  if (!n?.eval) return tr("not evaluated")
   if (n.eval.mate !== null && n.eval.mate !== undefined) return n.eval.mate === 0 ? "#" : `${n.eval.mate > 0 ? "+" : "−"}M${Math.abs(n.eval.mate)}`
   return `${n.eval.cp > 0 ? "+" : n.eval.cp < 0 ? "−" : ""}${Math.abs(n.eval.cp / 100).toFixed(2)}`
 }
@@ -43,7 +44,7 @@ function drawEval(island) {
   const readout = island.querySelector("[data-readout]")
   if (!t) {
     box.replaceChildren()
-    readout.textContent = "Open a game or a position in this link group."
+    readout.textContent = tr("Open a game or a position in this link group.")
     return
   }
   const line = mainlineOf(t)
@@ -73,10 +74,10 @@ function drawEval(island) {
     if (mistake && i) svg.append(el("circle", { cx: (i * step).toFixed(1), cy: y(v ?? 0).toFixed(1), r: 3, class: "evalgraph__mistake" }))
     if (i === at) {
       svg.append(el("line", { x1: (i * step).toFixed(1), y1: 0, x2: (i * step).toFixed(1), y2: H, class: "evalgraph__cursor" }))
-      readout.textContent = `${i ? `${Math.ceil(i / 2)}${white ? "." : "…"}${n.san}` : "Start"} · ${evalText(n)}`
+      readout.textContent = `${i ? `${Math.ceil(i / 2)}${white ? "." : "…"}${n.san}` : tr("Start")} · ${evalText(n)}`
     }
   })
-  if (!known.length) readout.textContent = "No evaluations yet: :evaluate runs the engine over the main line."
+  if (!known.length) readout.textContent = tr("No evaluations yet: :evaluate runs the engine over the main line.")
   box.replaceChildren(svg)
 }
 
@@ -85,7 +86,7 @@ function drawVariations(island) {
   const box = island.querySelector("[data-graph]")
   if (!t) {
     box.replaceChildren()
-    island.querySelector("[data-readout]").textContent = "Open a game or a position in this link group."
+    island.querySelector("[data-readout]").textContent = tr("Open a game or a position in this link group.")
     return
   }
   // layout: depth-first, the main child continues the row, other children open new rows below
@@ -123,7 +124,7 @@ function drawVariations(island) {
   box.replaceChildren(svg)
   box.querySelector(".is-cursor")?.scrollIntoView({ block: "nearest", inline: "nearest" })
   const n = t.nodes.get(t.cursor)
-  island.querySelector("[data-readout]").textContent = `${pos.size - 1} moves in ${rows + 1} line${rows ? "s" : ""}${n?.san ? ` · at ${n.san}` : ""}`
+  island.querySelector("[data-readout]").textContent = `${trn("{n} move", "{n} moves", pos.size - 1)} · ${trn("{n} line", "{n} lines", rows + 1)}${n?.san ? ` · ${tr("at {move}", { move: n.san })}` : ""}`
 }
 
 function draw(island) {

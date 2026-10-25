@@ -11,6 +11,7 @@ from contextlib import contextmanager
 
 import chess
 from django.db import transaction
+from django.utils.translation import gettext as _
 
 from spaced_positions import chesslogic
 from spaced_positions.core.models import LOCAL_USER
@@ -25,7 +26,11 @@ MOVE_NAGS = (1, 2, 3, 4, 5, 6, 7)
 
 
 class TreeError(ValueError):
-    """Shown to the user in the status line."""
+    """Shown to the user in the status line. `conflict`: a question for the user rather than an error."""
+
+    def __init__(self, message: str, conflict: bool = False):
+        super().__init__(message)
+        self.conflict = conflict
 
 
 def is_game(owner) -> bool:
@@ -160,9 +165,9 @@ def _move(fen: str, uci: str) -> tuple[chess.Board, chess.Move]:
     try:
         move = chess.Move.from_uci(uci)
     except ValueError:
-        raise TreeError(f"not a move: {uci}") from None
+        raise TreeError(_("not a move: {move}").format(move=uci)) from None
     if move not in board.legal_moves:
-        raise TreeError(f"{uci} is not legal here")
+        raise TreeError(_("{move} is not legal here").format(move=uci))
     return board, move
 
 
@@ -190,7 +195,7 @@ def add_line(parent: Node, ucis: list[str]) -> Node:
 
 def delete(node: Node) -> Node:
     if node.is_root:
-        raise TreeError("the start position can't be deleted")
+        raise TreeError(_("the start position can't be deleted"))
     parent = node.parent
     node.delete()
     for i, kid in enumerate(parent.kids.order_by("order", "id")):
@@ -267,10 +272,10 @@ def change_root(position: Position, fen: str, force: bool = False) -> int:
     """Correct the position (spec 06 §4): the analysis is kept when every move is still legal; otherwise, with
     `force`, the moves are dropped. Returns the number of moves dropped."""
     if is_game(position):
-        raise TreeError("a game's start position can't be changed")
+        raise TreeError(_("a game's start position can't be changed"))
     check = chesslogic.check_fen(fen)
     if not check["readable"]:
-        raise TreeError("not a FEN")
+        raise TreeError(_("not a FEN"))
     all_nodes = nodes(position)
     kids = kids_map(all_nodes)
     r = next(n for n in all_nodes if n.parent_id is None)
@@ -303,7 +308,7 @@ def change_root(position: Position, fen: str, force: bool = False) -> int:
         return 0
     if not force:
         dropped = len(all_nodes) - 1
-        raise TreeError(f"the analysis has moves that aren't legal in the corrected position ({dropped} moves would go)")
+        raise TreeError(_("the analysis has moves that aren't legal in the corrected position ({n} moves would go)").format(n=dropped), conflict=True)
     dropped = len(all_nodes) - 1
     position.save(update_fields=["fen", "canonical"])
     r.kids.all().delete()
@@ -325,7 +330,7 @@ def create_position(start_fen: str, ucis: list[str], title: str = "", origin: st
     """A new position with these moves as its main line (paste → analyse, a board line → analyse)."""
     check = chesslogic.check_fen(start_fen)
     if not check["ok"]:
-        raise TreeError("not a legal position: " + "; ".join(p["message"] for p in check["problems"]))
+        raise TreeError(_("not a legal position: {problems}").format(problems="; ".join(p["message"] for p in check["problems"])))
     position = Position.objects.create(fen=check["fen"], canonical=check["canonical"], title=title[:200], origin=origin)
     add_line(root(position), ucis)
     return position

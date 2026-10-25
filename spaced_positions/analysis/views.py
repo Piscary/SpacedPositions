@@ -7,6 +7,8 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import render as render_template
+from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
 from django.views.decorators.http import require_GET, require_POST
 
 from spaced_positions.core.models import LOCAL_USER
@@ -82,7 +84,7 @@ def line(request, pid):
     parent = _node(position, data.get("parent"))
     ucis = [str(u) for u in data.get("ucis", [])][:60]
     try:
-        with tree.change(position, "Add engine line"):
+        with tree.change(position, _("Add engine line")):
             node = tree.add_line(parent, ucis)
     except tree.TreeError as e:
         return _fail(str(e))
@@ -94,9 +96,9 @@ def edit(request, pid):
     position, data = _position(pid), _json(request)
     node = _node(position, data.get("node"))
     fields = {k: data[k] for k in ("comment", "nags", "mark", "color", "shapes", "squares") if k in data}
-    label = {"comment": "Comment", "nags": "Annotation", "mark": "Mark", "color": "Line colour",
-             "shapes": "Drawing", "squares": "Drawing"}.get(next(iter(fields), ""), "Edit")
-    with tree.change(position, f"{label} {node.san or 'start'}"):
+    label = {"comment": _("Comment"), "nags": _("Annotation"), "mark": _("Mark"), "color": _("Line colour"),
+             "shapes": _("Drawing"), "squares": _("Drawing")}.get(next(iter(fields), ""), _("Edit"))
+    with tree.change(position, f"{label} {node.san or _('start')}"):
         tree.edit(node, fields)
     return _state(position, node=node.id, journaled=True)
 
@@ -106,7 +108,7 @@ def delete(request, pid):
     position, data = _position(pid), _json(request)
     node = _node(position, data.get("node"))
     try:
-        with tree.change(position, f"Delete from {node.san}"):
+        with tree.change(position, _("Delete from {move}").format(move=node.san)):
             parent = tree.delete(node)
     except tree.TreeError as e:
         return _fail(str(e))
@@ -117,7 +119,7 @@ def delete(request, pid):
 def promote(request, pid):
     position, data = _position(pid), _json(request)
     node = _node(position, data.get("node"))
-    with tree.change(position, f"Main line {node.san}"):
+    with tree.change(position, _("Main line {move}").format(move=node.san)):
         tree.promote(node)
     return _state(position, node=node.id, journaled=True)
 
@@ -126,7 +128,7 @@ def promote(request, pid):
 def reorder(request, pid):
     position, data = _position(pid), _json(request)
     node = _node(position, data.get("node"))
-    with tree.change(position, f"Move variation {node.san}"):
+    with tree.change(position, _("Move variation {move}").format(move=node.san)):
         tree.reorder(node, -1 if data.get("step") == "up" else 1)
     return _state(position, node=node.id, journaled=True)
 
@@ -136,12 +138,13 @@ def set_position(request, pid):
     """Correct the start position (the board editor in Analyse)."""
     position, data = _position(pid), _json(request)
     try:
-        with tree.change(position, "Correct the position"):
+        with tree.change(position, _("Correct the position")):
             dropped = tree.change_root(position, str(data.get("fen", "")), force=bool(data.get("force")))
     except tree.TreeError as e:
         # a conflict is a question for the user (drop the moves?), not an error
-        return JsonResponse({"ok": False, "message": str(e), "conflict": "moves would go" in str(e)}, status=200 if "moves would go" in str(e) else 422)
-    message = f"Position corrected; {dropped} moves of the analysis were dropped" if dropped else "Position corrected; the analysis is kept"
+        return JsonResponse({"ok": False, "message": str(e), "conflict": e.conflict}, status=200 if e.conflict else 422)
+    message = (ngettext("Position corrected; {n} move of the analysis was dropped", "Position corrected; {n} moves of the analysis were dropped", dropped).format(n=dropped)
+               if dropped else _("Position corrected; the analysis is kept"))
     return _state(position, node=tree.root(position).id, message=message, journaled=True)
 
 
@@ -151,7 +154,7 @@ def replace(request, pid):
     position, data = _position(pid), _json(request)
     ucis = [str(u) for u in data.get("moves", [])]
     try:
-        with tree.change(position, "Replace the moves"):
+        with tree.change(position, _("Replace the moves")):
             if data.get("start") and data["start"] != position.fen:
                 tree.change_root(position, data["start"], force=True)
             r = tree.root(position)
@@ -195,9 +198,9 @@ def inspector(request, pid):
         return render_template(request, "analysis/inspector_game.html", {
             "game": position, "node": node,
             "nags": [(n, s, n in node.nags) for n, s in tree.NAGS.items() if n in tree.MOVE_NAGS],
-            "headers": [(k, v) for k, v in [("White", position.white_name), ("Black", position.black_name), ("Result", position.result),
-                        ("Date", position.date), ("Event", position.event), ("Site", position.site), ("Round", position.round),
-                        ("ECO", position.eco), ("White Elo", position.white_elo), ("Black Elo", position.black_elo),
+            "headers": [(k, v) for k, v in [(_("White"), position.white_name), (_("Black"), position.black_name), (_("Result"), position.result),
+                        (_("Date"), position.date), (_("Event"), position.event), (_("Site"), position.site), (_("Round"), position.round),
+                        ("ECO", position.eco), (_("White Elo"), position.white_elo), (_("Black Elo"), position.black_elo),
                         *position.headers.items()] if v],
             "positions": position.positions.filter(deleted_at=None)[:20],
         })
@@ -217,7 +220,7 @@ def inspector(request, pid):
 
 @require_GET
 def search(request):
-    """Positions for `:analyse <text>` (the library and its query language arrive in phase 4)."""
+    """Positions for `:analyse <text>` (searched like the Library's query)."""
     q = request.GET.get("q", "").strip()
     rows = Position.alive.all()
     if q:
@@ -280,7 +283,7 @@ def new_position(request, pid):
     if tree.is_game(owner):
         position.game, position.game_node = owner, node
         position.save(update_fields=["game", "game_node"])
-    return JsonResponse({"ok": True, "position": str(position.uuid), "message": f"New position {position.short_id}"})
+    return JsonResponse({"ok": True, "position": str(position.uuid), "message": _("New position {id}").format(id=position.short_id)})
 
 
 @require_POST
@@ -298,7 +301,7 @@ def evals(request, pid):
         node.eval_mate = int(value["mate"]) if value.get("mate") is not None else None
         node.eval_depth = int(value.get("depth") or 0) or None
         node.save(update_fields=["eval_cp", "eval_mate", "eval_depth"])
-    return _state(owner, message=f"Evaluated {len(nodes)} moves")
+    return _state(owner, message=ngettext("Evaluated {n} move", "Evaluated {n} moves", len(nodes)).format(n=len(nodes)))
 
 
 @require_POST
@@ -308,8 +311,11 @@ def moments(request, pid):
 
     owner = _position(pid)
     result = found.run(owner)
-    how = {"local": "with the local engine", "stored": "with the stored evaluations", "": "without evaluations (:evaluate, or a local engine)"}[result["engine"]]
-    message = f"Moments {how}: {result['tags']} new tag{'s' if result['tags'] != 1 else ''} on {result['moves']} move{'s' if result['moves'] != 1 else ''}"
+    how = {"local": _("with the local engine"), "stored": _("with the stored evaluations"),
+           "": _("without evaluations (:evaluate, or a local engine)")}[result["engine"]]
+    message = _("Moments {how}: {tags} on {moves}").format(
+        how=how, tags=ngettext("{n} new tag", "{n} new tags", result["tags"]).format(n=result["tags"]),
+        moves=ngettext("{n} move", "{n} moves", result["moves"]).format(n=result["moves"]))
     if result["withdrawn"]:
-        message += f" · {result['withdrawn']} withdrawn"
+        message += " · " + _("{n} withdrawn").format(n=result["withdrawn"])
     return _state(owner, message=message)

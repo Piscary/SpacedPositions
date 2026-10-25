@@ -6,14 +6,15 @@ import { handle } from "./commands.js"
 import { ctx, emit, keycaps, setLayer, status } from "./context.js"
 import { setOverlayHandler } from "./keys.js"
 import { openImport } from "./importer.js"
+import { tr, trn } from "./i18n.js"
 
 const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content || ""
 let open = null
 
 export async function importPack(file) {
-  status(`Reading ${file.name}…`, { timeout: 0 })
+  status(tr("Reading {file}…", { file: file.name }), { timeout: 0 })
   const data = await fetch("/packs/scan/", { method: "POST", headers: { "Content-Type": "application/zip", "X-CSRFToken": csrf() }, body: file })
-    .then((r) => r.json()).catch(() => ({ ok: false, message: "the app is not reachable" }))
+    .then((r) => r.json()).catch(() => ({ ok: false, message: tr("the app is not reachable") }))
   if (!data.ok) return status(data.message, { kind: "error" }) || false
   status("", { timeout: 1 })
   show(data)
@@ -23,7 +24,7 @@ function show(data) {
   close()
   const el = Object.assign(document.createElement("div"), { className: "importer packview" })
   el.setAttribute("role", "dialog")
-  el.setAttribute("aria-label", `Puzzle pack ${data.title}`)
+  el.setAttribute("aria-label", tr("Puzzle pack {title}", { title: data.title }))
   open = { el, data, ready: true, previousLayer: ctx.layer }
   document.body.append(el)
   ctx.overlay = "pack"
@@ -38,20 +39,23 @@ function line(className, text) {
 function paint() {
   const { el, data, ready } = open
   const c = data.counts
-  const what = [`${c.new} new`, c.update ? `${c.update} updated (you had version ${data.earlier})` : "",
-                c.duplicate ? `${c.duplicate} already in your library` : "", c.yours ? `${c.yours} yours already` : ""].filter(Boolean).join(" · ")
-  const head = Object.assign(document.createElement("div"), { className: "importer__head", textContent: `Puzzle pack · ${data.title} · version ${data.version}` })
+  const what = [tr("{n} new", { n: c.new }), c.update ? tr("{n} updated (you had version {version})", { n: c.update, version: data.earlier }) : "",
+                c.duplicate ? tr("{n} already in your library", { n: c.duplicate }) : "", c.yours ? tr("{n} yours already", { n: c.yours }) : ""].filter(Boolean).join(" · ")
+  const head = Object.assign(document.createElement("div"), { className: "importer__head",
+    textContent: tr("Puzzle pack · {title} · version {version}", { title: data.title, version: data.version }) })
   const body = Object.assign(document.createElement("div"), { className: "packview__body" })
   body.append(
-    line("", [data.author ? `from ${data.author}` : "", data.for ? `for ${data.for}` : ""].filter(Boolean).join(" ") || "no author given"),
+    line("", [data.author ? tr("from {name}", { name: data.author }) : "", data.for ? tr("for {name}", { name: data.for }) : ""].filter(Boolean).join(" ") || tr("no author given")),
     ...(data.description ? [line("muted", data.description)] : []),
-    line("", `${data.positions} positions, ${data.puzzles} puzzles: ${what}`),
-    ...(data.unknown_tags.length ? [line("muted", `New tags: ${data.unknown_tags.join(", ")}`)] : []),
-    line("packview__licence", `Licence: ${data.licence || "none given"}`),
-    line("muted", `Puzzles ${ready ? "go straight into training" : "come as drafts (not in training yet)"}`),
+    line("", `${trn("{n} position", "{n} positions", data.positions)}, ${trn("{n} puzzle", "{n} puzzles", data.puzzles)}: ${what}`),
+    ...(data.games ? [line("", `${trn("{n} game", "{n} games", data.games)}: ${tr("{n} new", { n: data.game_counts.new })}` +
+                              (data.game_counts.update ? `, ${tr("{n} updated", { n: data.game_counts.update })}` : ""))] : []),
+    ...(data.unknown_tags.length ? [line("muted", tr("New tags: {tags}", { tags: data.unknown_tags.join(", ") }))] : []),
+    line("packview__licence", tr("Licence: {licence}", { licence: data.licence || tr("none given") })),
+    line("muted", ready ? tr("Puzzles go straight into training") : tr("Puzzles come as drafts (not in training yet)")),
   )
   const foot = Object.assign(document.createElement("div"), { className: "importer__foot" })
-  for (const [seq, label] of [[["enter"], "accept the licence and import"], [["r"], "training on / off"], [["esc"], "cancel"]]) {
+  for (const [seq, label] of [[["enter"], tr("accept the licence and import")], [["r"], tr("training on / off")], [["esc"], tr("cancel")]]) {
     const hint = Object.assign(document.createElement("span"), { className: "keyhint" })
     hint.append(keycaps(seq), ` ${label}`)
     foot.append(hint)
@@ -72,9 +76,9 @@ function onKey(e, token) {
 async function run() {
   const { data, ready } = open
   close()
-  status("Importing the pack…", { timeout: 0 })
+  status(tr("Importing the pack…"), { timeout: 0 })
   const result = await fetch("/packs/run/", { method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() },
-    body: JSON.stringify({ token: data.token, ready }) }).then((r) => r.json()).catch(() => ({ ok: false, message: "the app is not reachable" }))
+    body: JSON.stringify({ token: data.token, ready }) }).then((r) => r.json()).catch(() => ({ ok: false, message: tr("the app is not reachable") }))
   if (!result.ok) return status(result.message, { kind: "error" })
   status(result.message, { kind: "good", timeout: 8000 })
   emit("effects", result.effects || {})
@@ -106,5 +110,5 @@ document.addEventListener("drop", async (e) => {
   e.preventDefault()
   if (file.name.endsWith(".sppack")) return importPack(file)
   if (/\.(pgn|txt)$/i.test(file.name)) return openImport(await file.text())
-  status(`${file.name}: drop a puzzle pack (.sppack) or a PGN`, { kind: "error" })
+  status(tr("{file}: drop a puzzle pack (.sppack) or a PGN", { file: file.name }), { kind: "error" })
 })

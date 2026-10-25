@@ -12,6 +12,8 @@ import chess
 import chess.pgn
 from django.db import transaction
 from django.http import JsonResponse
+from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
 from django.views.decorators.http import require_POST
 
 from spaced_positions import chesslogic
@@ -55,7 +57,7 @@ def dedupe_of(game) -> str:
 def title_of(game, kind) -> str:
     h = game.headers
     if kind == "puzzle":
-        return h.get("Event", "") if not _empty(h.get("Event")) else "Puzzle"
+        return h.get("Event", "") if not _empty(h.get("Event")) else _("Puzzle")
     year = (h.get("Date", "") or "")[:4]
     players = f"{h.get('White', '?')} – {h.get('Black', '?')}"
     return " ".join(x for x in [players, h.get("Result", "") if h.get("Result") != "*" else "", year if year.isdigit() else ""] if x)
@@ -187,10 +189,10 @@ def _body(request) -> dict:
 def scan_view(request):
     text = str(_body(request).get("text", ""))
     if len(text) > MAX_TEXT:
-        return JsonResponse({"ok": False, "message": "the file is larger than 20 MB: split it"}, status=422)
+        return JsonResponse({"ok": False, "too_large": True, "message": _("the file is larger than 20 MB: split it")}, status=422)
     items = scan(text)
     if not items:
-        return JsonResponse({"ok": False, "message": "no games in this text"}, status=422)
+        return JsonResponse({"ok": False, "message": _("no games in this text")}, status=422)
     return JsonResponse({"ok": True, "items": items, "more": len(items) >= MAX_GAMES})  # more: import it in the background
 
 
@@ -199,18 +201,19 @@ def run_view(request):
     data = _body(request)
     text = str(data.get("text", ""))
     if len(text) > MAX_TEXT:
-        return JsonResponse({"ok": False, "message": "the file is larger than 20 MB"}, status=422)
+        return JsonResponse({"ok": False, "message": _("the file is larger than 20 MB")}, status=422)
     selected = {int(i) for i in data.get("selected", []) if str(i).isdigit()} if "selected" in data else None
     result = run(text, selected, bool(data.get("ready")))
     g, p = len(result["games"]), len(result["positions"])
-    parts = [f"Imported {g} game{'s' if g != 1 else ''}"] if g else []
+    parts = [ngettext("Imported {n} game", "Imported {n} games", g).format(n=g)] if g else []
     if p:
-        parts.append(f"{p} puzzle{'s' if p != 1 else ''}" + (" in training" if data.get("ready") else " as drafts"))
+        parts.append((ngettext("{n} puzzle in training", "{n} puzzles in training", p) if data.get("ready")
+                      else ngettext("{n} puzzle as a draft", "{n} puzzles as drafts", p)).format(n=p))
     if result["failed"]:
-        parts.append(f"{result['failed']} could not be read")
+        parts.append(_("{n} could not be read").format(n=result["failed"]))
     added = {"games": [x.short_id for x in result["games"]], "positions": [x.short_id for x in result["positions"]]}
     return JsonResponse({
-        "ok": True, "message": " · ".join(parts) or "Nothing imported", "added": added,
+        "ok": True, "message": " · ".join(parts) or _("Nothing imported"), "added": added,
         "first": str((result["games"] or result["positions"])[0].uuid) if (g or p) else None,
         "undo": {"command": "library.trashmany", "args": [json.dumps(added | {"restore": False})]},
         "redo": {"command": "library.trashmany", "args": [json.dumps(added | {"restore": True})]},
@@ -324,7 +327,7 @@ def upload_view(request):
             out.write(chunk)
     if not path.stat().st_size:
         path.unlink()
-        return JsonResponse({"ok": False, "message": "an empty file"}, status=422)
+        return JsonResponse({"ok": False, "message": _("an empty file")}, status=422)
     job = Job(path, ready=request.GET.get("ready") == "1")
     job.start()
     return JsonResponse(job.state())
@@ -333,7 +336,7 @@ def upload_view(request):
 def job_view(request, job_id):
     job = JOBS.get(job_id)
     if job is None:
-        return JsonResponse({"ok": False, "message": "no such import (the app was restarted?)"}, status=404)
+        return JsonResponse({"ok": False, "message": _("no such import (the app was restarted?)")}, status=404)
     state = job.state()
     if job.done and not job.error:
         added = state["added"]

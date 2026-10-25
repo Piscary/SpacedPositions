@@ -7,6 +7,9 @@ import statistics
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy
+from django.utils.translation import ngettext
 from django.views.decorators.http import require_GET, require_POST
 
 from spaced_positions.library.models import SavedQuery
@@ -36,7 +39,7 @@ def _session(sid) -> Session:
 def _options(data: dict) -> tuple[str, dict]:
     mode = data.get("mode")
     if mode not in Session.Mode.values:
-        raise ValueError("mode must be review, storm or streak")
+        raise ValueError(_("mode must be review, storm or streak"))
     options = {
         "look": data.get("look") if data.get("look") in LOOKS else "normal",
         "side": data.get("side") if data.get("side") in SIDES else "move",
@@ -54,9 +57,9 @@ def _options(data: dict) -> tuple[str, dict]:
 
         weak = metrics.weakest(metrics.tag_rows(metrics.load()), k=4)
         if not weak:
-            raise ValueError("no weak spots yet: they show after 3 attempts on a motif")
+            raise ValueError(_("no weak spots yet: they show after 3 attempts on a motif"))
         options["filter"] = "tag:" + ",".join(r["tag"].key for r in weak)
-        options["weakest"] = [r["tag"].name for r in weak]
+        options["weakest"] = [r["tag"].key for r in weak]
     cards = data.get("cards")
     if isinstance(cards, list) and cards:
         options["cards"] = [str(c) for c in cards][:200]
@@ -73,9 +76,10 @@ def start(request):
     queue = session.options["queue"]
     if not queue:
         session.delete()
-        message = "Nothing due right now." if mode == Session.Mode.REVIEW else "No puzzles yet: make one from a board with :puzzle"
+        message = _("Nothing due right now.") if mode == Session.Mode.REVIEW else _("No puzzles yet: make one from a board with :puzzle")
         if options.get("filter"):
-            message = f"No puzzles in training match “{options['filter']}”" + (" that are due" if mode == Session.Mode.REVIEW else "")
+            message = (_("No due puzzles match “{filter}”") if mode == Session.Mode.REVIEW
+                       else _("No puzzles in training match “{filter}”")).format(filter=options["filter"])
         return JsonResponse({"ok": False, "empty": True, "message": message}, status=200)
     return JsonResponse(
         {
@@ -233,13 +237,32 @@ def launcher_context() -> dict:
         "storm_paces": user_settings.BY_NAME["training.storm-pace"].values,
         "streak_best": records["streak"].get(0, 0),
         "again": selection.last_options(),
-        "weakest": [f"{r['tag'].name} {round(100 * r['smoothed'])}%" for r in weak],
+        "again_label": again_label(selection.last_options()),
+        "weakest": [f"{r['tag'].label} {round(100 * r['smoothed'])}%" for r in weak],
         "saved_queries": SavedQuery.objects.filter(collection__in=["positions", "puzzles"])[:9],
-        "custom_modes": [("review", "Review", "b"), ("storm", "Storm 3′", "n"), ("streak", "Streak", "m")],
-        "custom_looks": [("normal", "Normal", "q"), ("silhouette", "Silhouette", "w"), ("blind", "Blind", "e")],
-        "custom_sides": [("move", "To move", "a"), ("white", "White", "s"), ("black", "Black", "d"), ("random", "Random", "f")],
+        "custom_modes": [("review", _("Review"), "b"), ("storm", _("Storm 3′"), "n"), ("streak", _("Streak"), "m")],
+        "custom_looks": [(v, LOOK_LABELS[v], k) for v, k in (("normal", "q"), ("silhouette", "w"), ("blind", "e"))],
+        "custom_sides": [("move", _("To move"), "a"), ("white", _("White"), "s"), ("black", _("Black"), "d"), ("random", _("Random"), "f")],
         "custom_lives": [("0", "0", "z"), ("1", "1", "x"), ("3", "3", "c"), ("5", "5", "v")],
     }
+
+
+LOOK_LABELS = {"normal": gettext_lazy("Normal"), "silhouette": gettext_lazy("Silhouette"), "blind": gettext_lazy("Blind")}
+MODE_LABELS = {"review": gettext_lazy("Review"), "storm": gettext_lazy("Storm"), "streak": gettext_lazy("Streak")}
+
+
+def again_label(again: dict | None) -> str:
+    """The last session's options, for the Again button: `Storm 5′ · silhouette`."""
+    if not again:
+        return ""
+    text = str(MODE_LABELS.get(again.get("mode"), again.get("mode", "")))
+    if again.get("minutes"):
+        text += f" {again['minutes']}′"
+    if again.get("lives"):
+        text += f" ♥{again['lives']}"
+    if again.get("look") and again["look"] != "normal":
+        text += f" · {LOOK_LABELS.get(again['look'], again['look'])}"
+    return text
 
 
 @require_POST
@@ -253,7 +276,8 @@ def from_line(request):
     except ValueError as e:
         return JsonResponse({"ok": False, "message": str(e)}, status=422)
     cards = puzzle.cards.filter(in_solution=True).count()
-    return JsonResponse({"ok": True, "puzzle": str(puzzle.uuid), "cards": cards, "message": f"Puzzle saved: {cards} card{'s' if cards != 1 else ''} in training"})
+    return JsonResponse({"ok": True, "puzzle": str(puzzle.uuid), "cards": cards,
+                         "message": ngettext("Puzzle saved: {n} card in training", "Puzzle saved: {n} cards in training", cards).format(n=cards)})
 
 
 @require_POST

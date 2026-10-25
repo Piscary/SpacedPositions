@@ -16,6 +16,8 @@ import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from django.utils.translation import gettext as _
+
 # ── Sources ───────────────────────────────────────────────────────────────────────────────────────────────────────
 
 
@@ -81,22 +83,22 @@ def validate_token(schema: dict, name: str, value) -> tuple[object, str | None]:
     """Check and normalise one token value. Returns (value, error)."""
     spec = schema.get(name)
     if spec is None:
-        return value, f"unknown token '{name}'"
+        return value, _("unknown token '{name}'").format(name=name)
     kind = spec["type"]
     if kind == "color":
         hexed = normalise_hex(str(value))
-        return (hexed, None) if hexed else (value, f"{name}: '{value}' is not a hex colour")
+        return (hexed, None) if hexed else (value, _("{name}: '{value}' is not a hex colour").format(name=name, value=value))
     if kind in ("px", "number", "ms"):
         try:
             number = float(value)
         except (TypeError, ValueError):
-            return value, f"{name}: '{value}' is not a number"
+            return value, _("{name}: '{value}' is not a number").format(name=name, value=value)
         lo, hi = spec.get("min"), spec.get("max")
         if (lo is not None and number < lo) or (hi is not None and number > hi):
-            return value, f"{name}: {value} is outside {lo}–{hi}"
+            return value, _("{name}: {value} is outside {lo}–{hi}").format(name=name, value=value, lo=lo, hi=hi)
         return (int(number) if number.is_integer() else number), None
     if kind == "enum":
-        return (value, None) if value in spec["values"] else (value, f"{name}: choose one of {', '.join(spec['values'])}")
+        return (value, None) if value in spec["values"] else (value, _("{name}: choose one of {value}").format(name=name, value=', '.join(spec['values'])))
     if kind == "bool":
         if isinstance(value, bool):
             return value, None
@@ -104,11 +106,11 @@ def validate_token(schema: dict, name: str, value) -> tuple[object, str | None]:
             return True, None
         if str(value).lower() in ("false", "off", "no", "0"):
             return False, None
-        return value, f"{name}: use true or false"
+        return value, _("{name}: use true or false").format(name=name)
     if kind == "font":
         text = str(value).strip()
         if not text or any(c in text for c in ";{}<>"):
-            return value, f"{name}: not a valid font list"
+            return value, _("{name}: not a valid font list").format(name=name)
         return text, None
     return value, f"{name}: unknown type {kind}"
 

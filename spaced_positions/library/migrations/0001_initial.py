@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('kind', models.CharField(choices=[('book', 'Book'), ('website', 'Website'), ('own', 'Own analysis'), ('public', 'Public domain'), ('course', 'Course')], default='book', max_length=8)),
                 ('title', models.CharField(max_length=300)),
-                ('short', models.CharField(blank=True, help_text="Citation stem shown in lists: 'Polgár 5334'", max_length=80)),
+                ('short', models.CharField(blank=True, help_text="Citation stem shown in lists: 'Réti 1922'", max_length=80)),
                 ('authors', models.CharField(blank=True, max_length=300)),
                 ('year', models.PositiveSmallIntegerField(blank=True, null=True)),
                 ('publisher', models.CharField(blank=True, max_length=200)),

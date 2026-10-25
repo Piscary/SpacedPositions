@@ -1,4 +1,4 @@
-"""The Storm clock: how much time a right answer adds, measured on your own solving (the old app's rules, kept).
+"""The Storm clock: how much time a right answer adds, measured on your own solving.
 
     typical time   the median of your last WINDOW successful Storm solves (at least MIN_SAMPLES of them), else
                    DEFAULT_MS, clamped to MIN_MS … MAX_MS. A median over a long window follows you as you get

@@ -6,6 +6,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from django.utils.translation import gettext as _t
+from django.utils.translation import gettext_lazy as _
+
 
 @dataclass(frozen=True)
 class Setting:
@@ -21,28 +24,33 @@ class Setting:
 
 
 SETTINGS = [
-    Setting("training.new-per-day", "Training", "New cards a day", "int", 20, "How many new cards Review introduces a day", low=0, high=200),
-    Setting("training.storm-pace", "Training", "Storm pace", "enum", "medium", "The Storm clock: fast, medium or slow (adaptive to your solving times)",
+    Setting("ui.language", "Language", _("Language"), "enum", "auto", _("The language of the app: automatic follows the browser"),
+            values=("auto", "en", "de", "fr", "it")),
+    Setting("tags.language", "Language", _("Tag names"), "enum", "ui", _("The language of tag names: as the app, or one of its own"),
+            values=("ui", "en", "de", "fr", "it")),
+    Setting("training.new-per-day", "Training", _("New cards a day"), "int", 20, _("How many new cards Review introduces a day"), low=0, high=200),
+    Setting("training.storm-pace", "Training", _("Storm pace"), "enum", "medium", _("The Storm clock: fast, medium or slow (adaptive to your solving times)"),
             values=("fast", "medium", "slow")),
-    Setting("keys.keycaps", "Keys", "Keycaps", "enum", "full", "Keys on buttons: full, compact (only the key strips), off",
+    Setting("keys.keycaps", "Keys", _("Keycaps"), "enum", "full", _("Keys on buttons: full, compact (only the key strips), off"),
             values=("full", "compact", "off")),
-    Setting("keys.teach", "Keys", "Teach keys", "bool", True, "After a click, the status line shows the key for it"),
-    Setting("keys.whichkey", "Keys", "Which-key panel", "bool", True, "The panel that lists what can follow a prefix (␣, g …)"),
-    Setting("board.letters", "Board", "Piece letters", "enum", "en", "Letters in the board editor and typed moves shown: English (KQRBN) or German (KDTLS)",
-            values=("en", "de")),
-    Setting("engine.source", "Engine", "Engine", "enum", "browser", "Stockfish in the browser (WASM), or a local Stockfish program through the app",
+    Setting("keys.teach", "Keys", _("Teach keys"), "bool", True, _("After a click, the status line shows the key for it")),
+    Setting("keys.whichkey", "Keys", _("Which-key panel"), "bool", True, _("The panel that lists what can follow a prefix (␣, g …)")),
+    Setting("board.letters", "Board", _("Piece letters"), "enum", "en",
+            _("Letters of the pieces in moves, typed and shown: English (KQRBN), German (KDTLS), French (RDTFC) or Italian (RDTAC)"),
+            values=("en", "de", "fr", "it")),
+    Setting("engine.source", "Engine", _("Engine"), "enum", "browser", _("Stockfish in the browser (WASM), or a local Stockfish program through the app"),
             values=("browser", "local")),
-    Setting("engine.path", "Engine", "Local engine", "text", "", "Path of a UCI engine program (empty: stockfish on the PATH)"),
-    Setting("engine.lines", "Engine", "Lines", "int", 3, "How many best lines the engine shows", low=1, high=5),
-    Setting("engine.depth", "Engine", "Depth", "int", 24, "How deep the engine searches", low=8, high=40),
-    Setting("engine.threads", "Engine", "Threads", "int", 2, "Threads of the local engine", low=1, high=64),
-    Setting("engine.hash", "Engine", "Hash (MB)", "int", 256, "Hash table of the local engine", low=16, high=4096),
-    Setting("engine.arrows", "Engine", "Arrows", "bool", True, "The engine's best moves as arrows on the board"),
-    Setting("sound.on", "Sound and motion", "Sounds", "bool", False, "A click on a move, a tone on right and wrong, a chord on a record"),
-    Setting("display.ticker", "Sound and motion", "Counting numbers", "bool", True, "Numbers count up on the result screen and in Stats"),
-    Setting("packs.author", "Packs", "Your name in packs", "text", "", "Shown to students with the packs you make (else the player marked as you)"),
-    Setting("app.updates", "App", "Look for updates", "bool", False, "At most once a day, ask GitHub whether there is a newer version (nothing else is sent)"),
-    Setting("app.autostop", "App", "Stop by itself", "bool", False, "The app stops 10 minutes after the last tab was closed (started without a console: on)"),
+    Setting("engine.path", "Engine", _("Local engine"), "text", "", _("Path of a UCI engine program (empty: stockfish on the PATH)")),
+    Setting("engine.lines", "Engine", _("Lines"), "int", 3, _("How many best lines the engine shows"), low=1, high=5),
+    Setting("engine.depth", "Engine", _("Depth"), "int", 24, _("How deep the engine searches"), low=8, high=40),
+    Setting("engine.threads", "Engine", _("Threads"), "int", 2, _("Threads of the local engine"), low=1, high=64),
+    Setting("engine.hash", "Engine", _("Hash (MB)"), "int", 256, _("Hash table of the local engine"), low=16, high=4096),
+    Setting("engine.arrows", "Engine", _("Arrows"), "bool", True, _("The engine's best moves as arrows on the board")),
+    Setting("sound.on", "Sound and motion", _("Sounds"), "bool", False, _("A click on a move, a tone on right and wrong, a chord on a record")),
+    Setting("display.ticker", "Sound and motion", _("Counting numbers"), "bool", True, _("Numbers count up on the result screen and in Stats")),
+    Setting("packs.author", "Packs", _("Your name in packs"), "text", "", _("Shown to students with the packs you make (else the player marked as you)")),
+    Setting("app.updates", "App", _("Look for updates"), "bool", False, _("At most once a day, ask GitHub whether there is a newer version (nothing else is sent)")),
+    Setting("app.autostop", "App", _("Stop by itself"), "bool", False, _("The app stops 10 minutes after the last tab was closed (started without a console: on)")),
 ]
 BY_NAME = {s.name: s for s in SETTINGS}
 
@@ -51,25 +59,41 @@ def parse(name: str, raw: str) -> tuple[object, str | None]:
     """(value, error) for `:set name=raw`."""
     s = BY_NAME.get(name)
     if s is None:
-        return None, f"no setting '{name}'"
+        return None, _t("no setting '{name}'").format(name=name)
     raw = raw.strip().strip("'\"")
     if s.type == "bool":
         if raw.lower() in ("on", "true", "yes", "1"):
             return True, None
         if raw.lower() in ("off", "false", "no", "0"):
             return False, None
-        return None, f"{name}: on or off"
+        return None, _t("{name}: on or off").format(name=name)
     if s.type == "enum":
-        return (raw, None) if raw in s.values else (None, f"{name}: one of {', '.join(s.values)}")
+        return (raw, None) if raw in s.values else (None, _t("{name}: one of {values}").format(name=name, values=", ".join(s.values)))
     if s.type == "int":
         try:
             value = int(raw)
         except ValueError:
-            return None, f"{name}: a number"
+            return None, _t("{name}: a number").format(name=name)
         if not s.low <= value <= s.high:
-            return None, f"{name}: {s.low}–{s.high}"
+            return None, f"{name}: {s.low}–{s.high}"  # noqa: i18n (numbers only)
         return value, None
     return raw[:500], None
+
+
+LANGUAGE_NAMES = {"en": "English", "de": "Deutsch", "fr": "Français", "it": "Italiano"}
+
+
+def value_label(value) -> str:
+    """How a setting's value is shown (a language by its own name, everything else translated)."""
+    from django.utils.translation import pgettext
+
+    if value in LANGUAGE_NAMES:
+        return LANGUAGE_NAMES[value]
+    if value == "auto":
+        return _t("automatic")
+    if value == "ui":
+        return _t("as the app")
+    return pgettext("setting value", str(value))
 
 
 def values(stored: dict | None = None) -> dict:

@@ -7,6 +7,7 @@ from django.db.models import Count, Exists, OuterRef, Q, Subquery
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.utils.translation import gettext
 from django.views.decorators.http import require_GET, require_POST
 
 from spaced_positions.analysis.models import Node
@@ -105,21 +106,21 @@ def results(request):
 def group_label(collection: str, key: str, r) -> str:
     if key == "difficulty":
         d = r.difficulty if collection == "positions" else r.position.difficulty
-        return stars(d) if d else "No difficulty"
+        return stars(d) if d else gettext("No difficulty")
     if key == "source":
         p = r if collection == "positions" else r.position
-        return p.source.label if p.source_id else "No source"
+        return p.source.label if p.source_id else gettext("No source")
     if key == "year":
-        return str(r.year) if r.year else "No year"
+        return str(r.year) if r.year else gettext("No year")
     if key in ("white", "black"):
         return getattr(r, f"{key}_name") or "?"
     if key == "event":
-        return r.event or "No event"
+        return r.event or gettext("No event")
     if key == "role":
-        return r.get_role_display() if r.role else "No role"
+        return r.get_role_display() if r.role else gettext("No role")
     if key == "kind":
         return r.get_kind_display()
-    return r.field.name  # tags by field
+    return r.field.label  # tags by field
 
 
 def mark_groups(collection: str, key: str, rows: list) -> None:
@@ -284,28 +285,28 @@ def facets(request):
     for f in TagField.objects.filter(on_positions=True).prefetch_related("tags"):
         tags = sorted((t for t in f.tags.all() if tag_counts.get(t.id)), key=lambda t: -tag_counts[t.id])[:12]
         if tags:
-            groups.append({"label": f.name, "key": f.key, "items": [
-                {"term": f"{f.key}:{t.key}", "label": t.name, "count": tag_counts[t.id], "on": f"{f.key}:{t.key}" in words}
+            groups.append({"label": f.label, "key": f.key, "items": [
+                {"term": f"{f.key}:{t.key}", "label": t.label, "count": tag_counts[t.id], "on": f"{f.key}:{t.key}" in words}
                 for t in tags
             ]})
     diffs = dict(result.queryset.order_by().values_list("difficulty").annotate(n=Count("id")))
-    groups.append({"label": "Difficulty", "key": "diff", "items": [
+    groups.append({"label": gettext("Difficulty"), "key": "diff", "items": [
         {"term": f"diff:{d}", "label": "★" * d, "count": diffs.get(d, 0), "on": f"diff:{d}" in words} for d in range(1, 6) if diffs.get(d)
     ]})
     sources = result.queryset.order_by().exclude(source=None).values_list("source", "source__title", "source__short").annotate(n=Count("id")).order_by("-n")[:12]
-    groups.append({"label": "Source", "key": "src", "items": [
+    groups.append({"label": gettext("Source"), "key": "src", "items": [
         {"term": source_term(short or title), "label": short or title, "count": n, "on": source_term(short or title) in words}
         for _, title, short, n in sources
     ]})
-    labels = [("has:solution", "In training"), ("no:solution", "No puzzle in training"), ("has:analysis", "Analysed"),
-              ("no:analysis", "Not analysed"), ("is:diagram", "Diagrams"), ("is:flagged", "Flagged")]
+    labels = [("has:solution", gettext("In training")), ("no:solution", gettext("No puzzle in training")), ("has:analysis", gettext("Analysed")),
+              ("no:analysis", gettext("Not analysed")), ("is:diagram", gettext("Diagrams")), ("is:flagged", gettext("Flagged"))]
     compiler = q.Compiler("positions")  # one query counts them all: each status is a filtered count of the results
     counts = result.queryset.order_by().aggregate(**{f"n{i}": Count("pk", filter=compiler.where(q.parse(term))) for i, (term, _) in enumerate(labels)})
     status = [{"term": term, "label": label, "count": counts[f"n{i}"], "on": term in words} for i, (term, label) in enumerate(labels)]
     trash = "is:trash"  # the trash isn't in the results unless asked for: counted on its own
     n = result.queryset.count() if trash in words else q.run(f"{text} {trash}", "positions").queryset.count()
-    status.append({"term": trash, "label": "Trash", "count": n, "on": trash in words})
-    groups.append({"label": "Status", "key": "status", "items": status})
+    status.append({"term": trash, "label": gettext("Trash"), "count": n, "on": trash in words})
+    groups.append({"label": gettext("Status"), "key": "status", "items": status})
     return render(request, "library/facets.html", {"groups": [g for g in groups if g["items"]], "total": result.queryset.count()})
 
 
@@ -382,7 +383,7 @@ def export(request):
     elif collection == "games":
         text = "\n\n".join(export_game(g) for g in found)
     else:
-        return HttpResponse("Only positions and games export as PGN", status=400)
+        return HttpResponse(gettext("Only positions and games export as PGN"), status=400)
     response = HttpResponse(text, content_type="application/x-chess-pgn; charset=utf-8")
     response["Content-Disposition"] = f'attachment; filename="spaced-positions-{collection}.pgn"'
     return response

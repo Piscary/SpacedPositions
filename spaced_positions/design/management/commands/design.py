@@ -1,4 +1,4 @@
-"""manage.py design build | check  (spec 07 §8)."""
+"""manage.py design build | check  (spec 07 §8). check also checks the translations (manage.py i18n check)."""
 
 import sys
 
@@ -39,8 +39,13 @@ class Command(BaseCommand):
         )
         for problem in problems:
             self.stdout.write(str(problem))
-        errors = sum(p.level == "error" for p in problems)
-        warnings = len(problems) - errors
+        from spaced_positions.core import i18n_catalog
+
+        translation_problems = i18n_catalog.check()
+        for problem in translation_problems:
+            self.stdout.write(f"error: translations: {problem}")
+        warnings = sum(p.level != "error" for p in problems)
+        errors = len(problems) - warnings + len(translation_problems)
         self.stdout.write(f"design check: {errors} error(s), {warnings} warning(s)")
         if errors:
             sys.exit(1)

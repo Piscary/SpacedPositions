@@ -8,6 +8,7 @@ Journal   every change to an analysis keeps a snapshot of the tree before and af
 
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from spaced_positions.core.models import LOCAL_USER
 from spaced_positions.training.models import Position
@@ -15,10 +16,10 @@ from spaced_positions.training.models import Position
 
 class Node(models.Model):
     class Mark(models.TextChoices):
-        NONE = "", "None"
-        GOOD = "good", "Good"
-        DUBIOUS = "dubious", "Dubious"
-        BAD = "bad", "Bad"
+        NONE = "", _("None")
+        GOOD = "good", _("Good")
+        DUBIOUS = "dubious", _("Dubious")
+        BAD = "bad", _("Bad")
 
     # The owner of the tree: a position or a game, exactly one of the two (spec 11 §1 Game). No index of their own:
     # the (position, parent) and (game, parent) indexes start with them.

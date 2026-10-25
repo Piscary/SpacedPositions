@@ -11,6 +11,8 @@ import tempfile
 from datetime import date, datetime
 from pathlib import Path
 
+from django.utils.translation import gettext as _
+
 KEEP = {"daily": 14}
 KEEP_OTHER = 5
 SUFFIX = ".sqlite3.xz"
@@ -55,7 +57,7 @@ def daily(db: Path) -> Path | None:
 
 
 def kind(path: Path) -> str:
-    """'daily', 'before-migrate', 'before-csm' …: the label between db- and the date."""
+    """'daily', 'before-migrate', 'before-restore' …: the label between db- and the date."""
     name = path.name.removeprefix("db-")
     parts = name.split("-")
     out = []
@@ -88,7 +90,7 @@ def restore(backup: Path, db: Path) -> Path:
     """Put a backup back (the app must not be running). The current database is backed up first."""
     backup, db = Path(backup), Path(db)
     if not backup.is_file():
-        raise FileNotFoundError(f"{backup} doesn't exist")
+        raise FileNotFoundError(_("{backup} doesn't exist").format(backup=backup))
     if db.exists():
         make(db, "before-restore")
     tmp = db.with_suffix(".restoring")

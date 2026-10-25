@@ -1,8 +1,8 @@
 <div class="engine" data-island="engine">
   <div class="engine__head">
-    <span class="engine__state" data-engine-state>off</span>
+    <span class="engine__state" data-engine-state>{% translate "off" %}</span>
     <span class="engine__info mono muted" data-engine-info></span>
-    <span class="actionbar">{% cmd "engine.toggle" label="On / off" size="sm" %}{% cmd "engine.lines" label="Lines" size="sm" %}</span>
+    <span class="actionbar">{% cmd "engine.toggle" label=_("On / off") size="sm" %}{% cmd "engine.lines" label=_("Lines") size="sm" %}</span>
   </div>
   <div class="engine__lines" data-engine-lines></div>
 </div>

@@ -10,16 +10,17 @@ import * as lines from "./lines.js"
 import { openMenu } from "./menu.js"
 import { openCmdline } from "./cmdline.js"
 import { setCollapsed } from "./lists.js"
+import { tr, trn } from "./i18n.js"
 
 const trees = new Map() // "analyse:A" → tree
 const NAG_SYMBOLS = { 1: "!", 2: "?", 3: "!!", 4: "??", 5: "!?", 6: "?!", 7: "□", 10: "=", 13: "∞", 14: "⩲", 15: "⩱", 16: "±", 17: "∓", 18: "+−", 19: "−+" }
-const LINE_COLOURS = [["Blue", "#2f80ed"], ["Violet", "#9b51e0"], ["Orange", "#f2994a"], ["Green", "#27ae60"], ["Red", "#eb5757"], ["Grey", "#828282"]]
+const LINE_COLOURS = [[tr("Blue"), "#2f80ed"], [tr("Violet"), "#9b51e0"], [tr("Orange"), "#f2994a"], [tr("Green"), "#27ae60"], [tr("Red"), "#eb5757"], [tr("Grey"), "#828282"]]
 
 const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content || ""
 const post = (url, body) =>
   fetch(url, { method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() }, body: JSON.stringify(body) })
     .then(async (r) => ({ status: r.status, data: await r.json().catch(() => ({ ok: false, message: `error ${r.status}` })) }))
-    .catch(() => ({ status: 0, data: { ok: false, message: "the app is not reachable" } }))
+    .catch(() => ({ status: 0, data: { ok: false, message: tr("the app is not reachable") } }))
 
 // ── The tree of a key ─────────────────────────────────────────────────────────────────────────────────────────
 
@@ -124,12 +125,12 @@ async function journal(id, action) {
 export async function openPosition(pid, { node = null, key = "analyse:A", list = null, show = true } = {}) {
   if (show && ctx.mode !== "analyse") await switchMode("analyse")
   const { data } = await fetch(`/analysis/${pid}/`).then(async (r) => ({ data: await r.json() })).catch(() => ({ data: { ok: false } }))
-  if (!data.ok) return status("Could not open that position", { kind: "error" }) || false
+  if (!data.ok) return status(tr("Could not open that position"), { kind: "error" }) || false
   attach(key)
   apply(key, data, { cursor: node })
   const t = trees.get(key)
   if (list) t.list = list
-  if (show) status(`${t.position.title || "Position"}${t.list ? ` · ${t.list.index + 1} / ${t.list.ids.length}` : ""}`, { timeout: 3000 })
+  if (show) status(`${t.position.title || tr("Position")}${t.list ? ` · ${t.list.index + 1} / ${t.list.ids.length}` : ""}`, { timeout: 3000 })
 }
 
 // ── The board's line goes to the tree ─────────────────────────────────────────────────────────────────────────
@@ -224,7 +225,8 @@ async function change(key, action, body, { cursor } = {}) {
 
 function loadIntoAnalysis(key, game) {
   const t = trees.get(key)
-  offer(`Replace the moves of “${t.position.title || "this position"}” with the pasted ${game.moves.length ? "game" : "position"}? y / n`, {
+  offer((game.moves.length ? tr("Replace the moves of “{title}” with the pasted game? y / n", { title: t.position.title || tr("this position") })
+                           : tr("Replace the moves of “{title}” with the pasted position? y / n", { title: t.position.title || tr("this position") })), {
     y: () => change(key, "replace", { start: game.start, moves: game.moves }),
   })
 }
@@ -233,8 +235,8 @@ function loadIntoAnalysis(key, game) {
 export async function correctPosition(key, fen) {
   const t = trees.get(key)
   const result = await change(key, "position", { fen })
-  if (result && !result.ok && result.message?.includes("moves would go")) {
-    offer(`The corrected position makes moves of the analysis illegal: ${result.message.split("(")[1]?.replace(")", "") || ""}. Drop them? y / n`, {
+  if (result && !result.ok && result.conflict) {
+    offer(`${result.message}. ${tr("Drop them? y / n")}`, {
       y: () => change(key, "position", { fen, force: true }),
     })
   }
@@ -454,7 +456,7 @@ on("workspace", ({ mode, el }) => {
 const withTree = (fn) => (args) => {
   const key = currentKey()
   const t = trees.get(key)
-  if (!t) return status("No position open: :analyse, or paste one (⌘V, a)", { kind: "error" }) || false
+  if (!t) return status(tr("No position open: :analyse, or paste one (⌘V, a)"), { kind: "error" }) || false
   return fn(key, t, args)
 }
 
@@ -475,7 +477,7 @@ handle("analysis.sibling", withTree((key, t, [step]) => {
   const siblings = kidsOf(t, node.parent)
   const i = siblings.findIndex((n) => n.id === node.id)
   const next = siblings[(i + (step === "prev" ? -1 : 1) + siblings.length) % siblings.length]
-  return siblings.length > 1 ? moveTo(key, next.id) : status("No other move here", { timeout: 1500 }) && false
+  return siblings.length > 1 ? moveTo(key, next.id) : status(tr("No other move here"), { timeout: 1500 }) && false
 }))
 handle("analysis.branch", withTree((key, t, [step]) => {
   if (step === "prev") {
@@ -489,7 +491,7 @@ handle("analysis.branch", withTree((key, t, [step]) => {
   return id === t.cursor ? false : moveTo(key, id)
 }))
 handle("analysis.moments", withTree(async (key, t) => {
-  status("Looking for the key moments…", { timeout: 0 })
+  status(tr("Looking for the key moments…"), { timeout: 0 })
   const { data } = await post(`/analysis/${t.position.id}/moments/`, {})
   if (!data.ok) return status(data.message, { kind: "error" }) || false
   apply(key, data)
@@ -499,7 +501,7 @@ handle("analysis.moments", withTree(async (key, t) => {
 handle("analysis.fold", withTree((key, t) => {
   const el = panesFor(key, "moves")[0]
   const cursor = el?.querySelector(".mt-move.is-cursor")
-  if (!cursor) return status("Open the moves pane to fold variations", { kind: "error" }) || false
+  if (!cursor) return status(tr("Open the moves pane to fold variations"), { kind: "error" }) || false
   // in a variation: that one; on the main line: the alternatives to the cursor's move, else to the next move
   const blockAfter = (mv) => {
     let next = mv?.nextElementSibling
@@ -513,7 +515,7 @@ handle("analysis.fold", withTree((key, t) => {
   }
   let targets = cursor.closest(".mt-variation") ? [cursor.closest(".mt-variation")] : blockAfter(cursor)
   if (!targets.length && !cursor.closest(".mt-variation")) targets = blockAfter(nextMove(cursor))
-  if (!targets.length) return status("No variation here", { timeout: 1500 }) || false
+  if (!targets.length) return status(tr("No variation here"), { timeout: 1500 }) || false
   const ids = targets.map((v) => Number(v.dataset.variation))
   const fold = !foldsOf(t).has(ids[0])
   setFolds(key, (f) => ids.forEach((id) => (fold ? f.add(id) : f.delete(id))))
@@ -524,11 +526,11 @@ handle("analysis.fold", withTree((key, t) => {
 handle("analysis.foldall", withTree((key, t) => {
   const el = panesFor(key, "moves")[0]
   const all = [...(el?.querySelectorAll("[data-variation]") || [])].map((v) => Number(v.dataset.variation))
-  if (!all.length) return status("No variations", { timeout: 1500 }) || false
+  if (!all.length) return status(tr("No variations"), { timeout: 1500 }) || false
   const unfold = foldsOf(t).size > 0
   setFolds(key, (f) => (unfold ? f.clear() : all.forEach((id) => f.add(id))))
   if (!unfold) unfoldAround(key, el)
-  status(unfold ? "All variations open" : "All variations folded · z opens one", { timeout: 1500 })
+  status(unfold ? tr("All variations open") : tr("All variations folded · z opens one"), { timeout: 1500 })
 }))
 
 handle("analysis.mainline", withTree((key, t) => {
@@ -545,11 +547,11 @@ handle("analysis.subject", withTree((key, t, [step]) => {
   const list = t.list
   if (!list) return false
   const index = Math.max(0, Math.min(list.ids.length - 1, list.index + (step === "prev" ? -1 : 1)))
-  if (index === list.index) return status(step === "prev" ? "This is the first" : "This is the last", { timeout: 1500 }) && false
+  if (index === list.index) return status(step === "prev" ? tr("This is the first") : tr("This is the last"), { timeout: 1500 }) && false
   return openPosition(list.ids[index], { key, list: { ...list, index } })
 }))
 
-const onMove = (fn) => withTree((key, t, args) => (t.cursor === t.root ? status("Go to a move first", { timeout: 2000 }) || false : fn(key, t, args)))
+const onMove = (fn) => withTree((key, t, args) => (t.cursor === t.root ? status(tr("Go to a move first"), { timeout: 2000 }) || false : fn(key, t, args)))
 handle("analysis.nag", onMove((key, t, [n]) => {
   const node = t.nodes.get(t.cursor)
   const value = Number(n)
@@ -560,7 +562,7 @@ handle("analysis.annotate", onMove(async (key, t) => {
   const node = t.nodes.get(t.cursor)
   const keys = "1234567890abcdefgh"
   const value = await openMenu({
-    title: "Annotation",
+    title: tr("Annotation"),
     items: Object.entries(NAG_SYMBOLS).map(([n, symbol], i) => ({ label: `${symbol}${node.nags.includes(Number(n)) ? "  ✓" : ""}`, key: keys[i], keys: [keys[i]], value: n })),
   })
   if (!value) return false
@@ -573,7 +575,7 @@ handle("analysis.mark", onMove(async (key, t, [mark]) => {
   const node = t.nodes.get(t.cursor)
   if (mark === "clear") return change(key, "edit", { node: node.id, mark: "", color: "" })
   if (mark === "color") {
-    const color = await openMenu({ title: "Line colour", items: LINE_COLOURS.map(([label, hex], i) => ({ label, key: String(i + 1), keys: [String(i + 1)], value: hex })) })
+    const color = await openMenu({ title: tr("Line colour"), items: LINE_COLOURS.map(([label, hex], i) => ({ label, key: String(i + 1), keys: [String(i + 1)], value: hex })) })
     return color ? change(key, "edit", { node: node.id, color }) : false
   }
   return change(key, "edit", { node: node.id, mark: node.mark === mark ? "" : mark })
@@ -586,7 +588,7 @@ handle("analysis.puzzle", withTree((key, t, [action]) => change(key, "puzzle", {
 
 async function focusComment(key) {
   const pane = panesFor(key, "inspector")[0]?.closest("[data-pane]")
-  if (!pane) return status("Open an Inspector pane to write comments: ␣ w v, then i", { kind: "error" }) || false
+  if (!pane) return status(tr("Open an Inspector pane to write comments: ␣ w v, then i"), { kind: "error" }) || false
   // The comment field must be the one of the move at the cursor, not of the move shown before it. Insert at once:
   // what is typed while the inspector loads must not run commands.
   setLayer("insert")
@@ -604,7 +606,7 @@ async function focusComment(key) {
 /** Focus the Inspector of the current analysis and unfold one of its sections (by key: v c z i). */
 export function focusInspector(section) {
   const pane = panesFor(currentKey(), "inspector")[0]?.closest("[data-pane]")
-  if (!pane) return status("Open an Inspector pane: ␣ w v, then i", { kind: "error" }) || false
+  if (!pane) return status(tr("Open an Inspector pane: ␣ w v, then i"), { kind: "error" }) || false
   focusPane(pane.dataset.pane)
   const open = () => {
     const el = pane.querySelector(`[data-section][data-section-key="${section}"]`)
@@ -626,7 +628,7 @@ handle("analysis.newposition", withTree(async (key, t, [moves]) => {
   const { data } = await post(`/analysis/${t.position.id}/new-position/`, { node: t.cursor, moves: moves === "moves" })
   if (!data.ok) return status(data.message, { kind: "error" }) || false
   await openPosition(data.position, { key })
-  status(`${data.message} · its own analysis${moves ? ", with the continuation" : ""}`, { kind: "good", timeout: 4000 })
+  status(`${data.message} · ${moves ? tr("its own analysis, with the continuation") : tr("its own analysis")}`, { kind: "good", timeout: 4000 })
 }))
 
 handle("analysis.open", async ([pid]) => {

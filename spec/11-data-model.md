@@ -1,8 +1,7 @@
 # 11 · Data model and the query language
 
-What the app stores and how the Library finds it. Phases 0–3 built Position (minimal), Puzzle, Card, Session,
-Attempt and the analysis tree (Node, JournalEntry); this document is the contract for phase 4 (Library + Collect),
-which completes the objects of 04 · *Objects the modes work with*. Phase 7 (migration) maps the old app onto it.
+What the app stores and how the Library finds it: positions, puzzles, cards and the training history, the analysis
+trees, and the Library's games, tags, sources, players and saved queries (04 · *Objects the modes work with*).
 
 Rules for every model:
 
@@ -18,7 +17,7 @@ Rules for every model:
 
 ### Position
 
-What phase 2 built, plus:
+The training fields (puzzles, cards), plus:
 
 | Field | |
 |---|---|
@@ -26,7 +25,7 @@ What phase 2 built, plus:
 | `notes` | Private working notes (Markdown) |
 | `source` → Source, `source_page`, `source_ref` | Where it is from: page(s) in a book, puzzle id or URL path on a website. Replaces the text field `source` (kept as `source_text` for what can't be matched) |
 | `tags` (through PositionTag) | See *Tags* |
-| `difficulty_override`, `difficulty_auto`, `difficulty` | 1–5. `difficulty` is the override, else the automatic value (the highest `base_difficulty` of its objective and motif tags; phase 5 adds how hard it was to solve) |
+| `difficulty_override`, `difficulty_auto`, `difficulty` | 1–5. `difficulty` is the override, else the automatic value (the highest `base_difficulty` of its objective and motif tags) |
 | `diagram` | An illustration: shown, never trained, may be illegal |
 | `game` → Game, `game_node` → Node | When it was taken from a game, the move it was taken at |
 | `deleted_at` | In the trash |
@@ -37,7 +36,7 @@ Derived on save, indexed for the query language: `side` (w/b), `material` (e.g. 
 never out of date. `task` is the objective line: `objective` when set, else the task of its objective tag for the
 side that solves (`White to play and mate in 2`).
 
-The analysis tree (Node) and `canonical` stay as built in phase 3.
+The analysis tree (Node) and `canonical` are described in 06 and 09.
 
 ### Game
 
@@ -53,7 +52,7 @@ The analysis tree (Node) and `canonical` stay as built in phase 3.
 A game has a move tree like a position. **Node gets a `game` foreign key next to `position`; exactly one of the two
 is set** (a check constraint), and `tree.py` works on "the owner" of a tree. The journal (JournalEntry) gets the same
 pair. Analyse opens a game like a position (05 · MoveTree), with the game's headers in the Inspector and the eval
-graph (phase 5) below the board.
+graph below the board.
 
 Each node can hold the engine's evaluation of the position after it (`eval_cp` or `eval_mate` from white's side,
 `eval_depth`): `:evaluate` fills them for the main line, the eval graph shows them. They are not part of the journal
@@ -64,13 +63,13 @@ set; its own analysis starts empty (`:new position --with-moves` copies the game
 
 ### Tags
 
-Tags are grouped in **fields**. The starter vocabulary is the old app's (decision 18): 10 fields, 205 tags,
+Tags are grouped in **fields**. The built-in vocabulary (decision 18) has 10 fields and 205 tags,
 German names with English names and aliases for search (decision 6: English UI, German tags).
 
 | Model | Fields |
 |---|---|
 | `TagField` | `key` (`motif`, `mate`, `goal`, `phase`, `strategy`, `endgame`, `technique`, `level`, `moment`, `custom`), `name`, `name_en`, `selection` (single: one tag of the field per object · multi), `on_positions`, `on_moves`, `color` (a chart/chip token, `--chart-1` … `--chart-6`), `order` |
-| `Tag` | `field`, `key` (slug, unique, from the old app: `fork`, `knight-fork`), `name` (German: `Gabel`), `name_en` (`Fork`), `aliases` (more search terms, any language), `parent` → Tag (hierarchy: Doppelangriff → Gabel → Springergabel), `description`, `task` and `task_en` (for objective tags: the printed task, `{side}` = the side to move), `base_difficulty` (1–5), `weight` and `analysis_weight` (for the automatic difficulty), `order` |
+| `Tag` | `field`, `key` (slug, unique: `fork`, `knight-fork`), `name` (the base name, German for the built-in tags: `Gabel`), `name_en` (`Fork`), `name_fr` (`Fourchette`), `name_it` (`Forchetta`), `aliases` (more search terms, any language), `parent` → Tag (hierarchy: Doppelangriff → Gabel → Springergabel), `description`, `task` and `task_en` (for objective tags: the printed task, `{side}` = the side to move), `base_difficulty` (1–5), `weight` and `analysis_weight` (for the automatic difficulty), `order` |
 | `TagDismissal` | A tag the user removed from a position or a move: `position` or `node`, `tag` (detection respects it) |
 | `Position` (search fields) | `search` (the folded title, task, description, notes and citation, kept up to date on save), `page_number` and `ref_number` (the first number of the page and of the reference: sorting a book in its order) |
 | `PositionTag`, `NodeTag`, `GameTag` | the link, plus `origin` (`manual` · `auto` · `suggested`), `detector` (which detector set it), `evidence` (`Ne5 forks Kg8, Qd7`); the unique (owner, tag) index is the only index on the owner |
@@ -89,8 +88,8 @@ German names with English names and aliases for search (decision 6: English UI, 
   storing: a tag the user removed is never detected there again (`TagDismissal`, also for move tags; adding it back
   by hand lifts it; undoing a tag is not a dismissal), a manual tag is never touched, and detection withdraws only the
   tags it set itself. The solution's first moves get move tags too.
-- **Moments** (`:moments` in Analyse, phase 6; `library/moments.py`): the key moments of a game's or an analysis's
-  main line as move tags of the `moment` field, from the old app's three detectors. The engine, Lichess style, in
+- **Moments** (`:moments` in Analyse; `library/moments.py`): the key moments of a game's or an analysis's
+  main line as move tags of the `moment` field, from three detectors. The engine, Lichess style, in
   winning chances (wc = 2 / (1 + e^(−0.00368208·cp)) − 1 for the mover): a drop of ≥ 0.3 blunder, ≥ 0.2 mistake,
   ≥ 0.1 inaccuracy; a missed win (≥ 0.6 → ≤ 0.2); a turning point (≥ +0.3 → ≤ −0.3); with the local engine (two
   lines a position) also the only move (best by ≥ 0.3 and played, with at least 4 legal moves), the critical
@@ -99,7 +98,7 @@ German names with English names and aliases for search (decision 6: English UI, 
   when it could be avoided, and tactical explosions (3 captures in 4 plies); the annotator's symbols become moments
   too (`!!` brilliant … `□` only move) and win over the other sources. Stored with `detector = moments` by the
   rules above (dismissals respected, manual tags untouched, only its own tags withdrawn).
-- **Editing** (phase 6): tags, sources and players are edited in the Library (04 · Library): new tags, names,
+- **Editing**: tags, sources and players are edited in the Library (04 · Library): new tags, names,
   aliases, the hierarchy (no loops), weights and base difficulty; deleting only what nothing uses.
 - **Difficulty** (automatic): the weighted base difficulty of the position's tags (`weight`), plus at most one step
   from the move tags of its analysis (`analysis_weight`, each tag once, auto tags at 0.8); rounded to 1–5. The
@@ -107,12 +106,12 @@ German names with English names and aliases for search (decision 6: English UI, 
 
 ### Source
 
-One model instead of the old Book/Website split:
+One model for every kind of source:
 
 | Field | |
 |---|---|
 | `kind` | `book` · `website` · `own` (own analysis) · `public` (public domain, no source needed) · `course` |
-| `title`, `authors`, `year`, `publisher`, `isbn`, `url`, `notes`, `short` | `short` is the citation stem (`Polgár 5334`), shown in lists |
+| `title`, `authors`, `year`, `publisher`, `isbn`, `url`, `notes`, `short` | `short` is the citation stem (`Manual`), shown in lists |
 
 Positions and games point to a source with `page` and `ref`. The Collect entry session remembers source, page and
 the next diagram number (04 · Collect).
@@ -162,15 +161,15 @@ group    = "(" query { " or " query } ")"        -- (motif:gabel or mate:anastas
 Matching is case- and accent-insensitive (`spiess` finds Spieß). Unknown keys and values are underlined with the
 reason and ignored, so a half-typed query still shows results. `sort:` is a term too.
 
-**Words** (phase 7 cleanup): each word, or quoted phrase, must occur somewhere: the title, task, description, notes or
+**Words**: each word, or quoted phrase, must occur somewhere: the title, task, description, notes or
 citation (the position's folded `search` column), the source (title, short name, authors, publisher), a tag (name,
 English name, alias; not suggestions) or a comment of the analysis. Two words need not be next to each other
 (`only good`); a quoted phrase must (`"only good"`). A `*` is ignored (`fork*` = `fork`): words match anywhere already.
 
-**Sources**: `src:` with a source's whole title or short name (`src:"Chess Monkeys Level 1"`), or its id (`src:s5`),
+**Sources**: `src:` with a source's whole title or short name (`src:"Endgame Manual"`), or its id (`src:s5`),
 is exactly that source: the filter pane and the completion write this form. Any other value matches every source
-that has all its words, in any order, in its title, short name, authors or publisher (`src:monkeys`, `src:polgar`,
-`src:"monkeys 2"`); a citation that is only text (an import that matched no source) is matched by all the words too.
+that has all its words, in any order, in its title, short name, authors or publisher (`src:manual`, `src:dvoretsky`,
+`src:"endgame manual"`); a citation that is only text (an import that matched no source) is matched by all the words too.
 
 ### Keys
 
@@ -190,7 +189,7 @@ that has all its words, in any order, in its title, short name, authors or publi
 | `result`, `eco`, `event`, `year`, `elo` | games | `result:1-0`, `eco:B9`, `elo:>=2600` (either player) |
 | `due`, `state`, `lapses`, `success`, `last`, `attempts` | puzzles, cards | Training: `due:today`, `state:new`, `lapses:>=2`, `success:<50%`, `last:>30d`, `attempts:0` |
 | `game` | positions | Taken from this game (`game:g12`) |
-| `in` | all | In a saved query (`in:q:name`) or a pack (phase 8) |
+| `in` | all | In a saved query (`in:q:name`) or a pack |
 | `sort` | all | positions: `created` (default newest first), `updated`, `difficulty`, `title`, `source` (title, then page, then diagram number: a book in its order), `diagram`, `page`; puzzles: the same plus `due`, `success`, `lapses`, `last`; games: `year`, `white`, `black`, `event`; players `name`, `role`; sources `title`, `kind`; tags `name`, `field`. `-` reverses (`sort:-difficulty`). Page and diagram numbers sort as numbers (Nr. 9 before Nr. 10) |
 
 The Library's collections: `1` positions · `2` games · `3` puzzles (one row per puzzle, its cards inside) · `4`
@@ -218,46 +217,13 @@ few values (difficulty, source, year, a player, event, role, kind, field).
 - Headers map onto Game fields; `Annotator`, `PlyCount` and others stay in `headers`. Players are matched (§1).
 - An import runs while the status line says *Importing…* (up to 5,000 games or 20 MB at once, with the list to
   choose from). A bigger file, or a paste with more games (asked first), is uploaded as it is into the data folder
-  and imported **in the background** (phase 7): a game at a time, in batches of 200 in short transactions so the app
+  and imported **in the background**: a game at a time, in batches of 200 in short transactions so the app
   stays usable, duplicates left out; the status line shows how far it is. Afterwards the Library shows what arrived
   (`created:<1d`). An import is one step of the undo stack: `u` moves what it added to the trash (`U` brings it back).
 - Text that holds neither moves nor a `FEN` header isn't a game and is skipped.
 
-## 5 · From the current models (phase 4 migrations)
+## 5 · Migrations
 
-- `Position.source` (text) → `source_text`; `Position.tag_names` → real tags, matched by name or alias against the
-  vocabulary (unmatched names become `custom` tags).
-- `:puzzle` now makes its puzzle through the analysis (the line becomes the main line from the start, the solution
-  ends where the line ends); the same line again returns the same puzzle, a different line on a position that has
-  a puzzle is refused (edit it in Analyse). There were no older `:puzzle` puzzles to convert.
-- Untouched default layouts move to the new defaults (`core/layouts.OLD_DEFAULTS`): a saved layout that is exactly
-  an earlier default (the Library with its demo list) becomes the current one; changed layouts stay.
-- Node and JournalEntry get the `game` owner (§1 Game).
-- All migrations are additive; `spos` backs up the database before migrating (09 §11).
-
-## 6 · From chess-study-manager (phase 7)
-
-`spaced_positions/csm.py`, run with `spos import-csm <db.sqlite3> [--dry-run]`, `manage.py import_csm`, or from
-Settings → Data (the path is filled in when an old database sits next to the app; `⌘↵` shows what would be added,
-`y` imports it). The old database is copied (with what is still in its WAL) and only that copy is read; this app's
-database is backed up first (`<data folder>/backups/db-before-csm-…`).
-
-| Old | New |
-|---|---|
-| `sources_book`, `sources_website` | `Source` (kind book/website); a phase 4 source titled "Authors, Title" is matched and gets the title and the authors in their own fields |
-| `positions_player` | `Player` (aliases kept; matched by name) |
-| `positions_game` + its `variationnode`s | `Game` with its tree (headers, Elo, the original PGN, notes and source notes) |
-| `positions_position` + its `variationnode`s | `Position` with its tree: comments, NAGs, drawings, marks, colours; the citation as source, page and `Nr. <ref>`; a position from a game keeps its game and move |
-| `positiontag` · `nodetag` | `PositionTag` · `NodeTag` with origin, detector and evidence; tags the vocabulary doesn't have are named in the report and left out |
-| `tagsuggestion` open · dismissed | a suggested tag · a `TagDismissal` |
-| `boards_board`/`column`/`positioninboard` | not migrated: the pipeline is the filters here (`has:analysis`, `has:solution`, `is:draft` …); the tags an earlier import made of it are removed by migration `library 0007` |
-| `trainingpuzzle` · `trainingcard` | `Puzzle` (made through the analysis, as `:puzzle` does) · its cards, matched by their line |
-| `trainingsession` · `trainingattempt` | `Session` (custom → review with the old options) · `Attempt` |
-| `core_activityevent` (analysis, annotation, drawing, board moves) | `stats.ActivityLog`, counted in Stats' activity; positions and games count by their creation date |
-| milestones | found again from the joined history (`sync_achievements`), logged as seen |
-
-Every object keeps its origin (`csm-position:12`, `csm-attempt:5378` …), so the import can run again and adds only
-what is new in the old app since. It never deletes or overwrites what was done here: an analysis changed here (its
-journal) keeps its moves, otherwise old moves that are missing are added; empty text fields are filled in; a tag
-removed here stays removed; a card trained in both apps takes the schedule of the app that saw it last, and its
-counters are counted again from the joined attempt log. Publishing (documents) is not migrated (out of scope).
+All migrations are additive: they add fields and fill them, and never delete what the user made. `spos` backs up
+the database before it migrates (09 §11). Every object keeps where it came from (`origin`: `analysis`, `collect`,
+`pack:<id>` …), so an import that runs again adds only what is new.

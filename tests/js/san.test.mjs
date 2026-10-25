@@ -44,3 +44,17 @@ test("b is the b-file first, then the bishop", () => {
   assert.equal(matchMoves("be2", m).exact.san, "Be2")
   assert.deepEqual(sans(matchMoves("Q", m)), [])
 })
+
+test("French and Italian letters when chosen: their R is the king", () => {
+  const start = moves(START)
+  assert.equal(matchMoves("Cf3", start, "fr").exact.san, "Nf3")
+  assert.equal(matchMoves("Cf3", start, "it").exact.san, "Nf3")
+  const kings = moves("4k3/8/8/8/8/8/8/R3K3 w - - 0 1")
+  assert.equal(matchMoves("Rd1", kings, "fr").exact.san, "Kd1")
+  assert.equal(matchMoves("Rd1", kings, "en").exact.san, "Rd1")
+  assert.equal(matchMoves("Tb1", kings, "it").exact.san, "Rb1")
+  const promo = moves("8/1P6/8/8/8/8/8/k1K5 w - - 0 1")
+  assert.equal(matchMoves("b8=D", promo, "fr").exact.san, "b8=Q")
+  assert.equal(matchMoves("b8=F", promo, "fr").exact.san, "b8=B")
+  assert.equal(matchMoves("b8=A", promo, "it").exact.san, "b8=B")
+})

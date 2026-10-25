@@ -137,7 +137,7 @@ handler = "both"
 when = "library.hasTarget"
 reason = "select positions in the Library, or open one in Analyse"
 
-# Editing the vocabulary, sources and players (spec 04 · Library, 11 §1; phase 6).
+# Editing the vocabulary, sources and players (spec 04 · Library, 11 §1).
 
 ["library.edit"]
 title = "Edit the selected players, sources or tags"
@@ -222,7 +222,7 @@ when = "view.library"
 reason = "in the Library's results"
 
 ["pack.export"]
-title = "Export as a puzzle pack (for students)"
+title = "Export as a puzzle pack"
 group = "Library"
 aliases = ["pack-export"]
 args = [{ name = "title", type = "text" }]

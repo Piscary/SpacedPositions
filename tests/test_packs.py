@@ -1,4 +1,4 @@
-"""Phase 8: puzzle packs (spec 09 §12) from the coach to a student: export (format, personal copies, the log),
+"""Puzzle packs (spec 09 §12) from the coach to a student: export (format, personal copies, the log),
 import (preview, the pack as source, duplicates, unknown tags) and a newer version that keeps the student's training."""
 
 import io
@@ -78,7 +78,11 @@ def test_import_preview_and_training_survive_a_newer_version(coach):
     report = packs.run(data)
     assert report.counts["new"] == 3 and report.counts["puzzles"] == 3 and report.counts["tags"] == 1
     got = Position.objects.filter(uuid__in=uuids)
-    assert got.count() == 3 and {p.source.kind for p in got} == {"pack"}
+    assert got.count() == 3 and {p.source.title for p in got} == {"Mating Patterns"}  # the book stays the source
+    assert {p.pack_id for p in got} == {ReceivedPack.objects.get().pk}
+    from spaced_positions.library.query import run as query
+
+    assert query(f"src:s{ReceivedPack.objects.get().source_id}", "positions").queryset.count() == 3  # the pack finds them too
     p = got.get(title="Back rank 0")
     assert p.source_text == "MP · p. 12 · Nr. 1" and p.nodes.get(san="Rd8#").comment == "The back rank!"
     assert {t.key for t in p.tags.all()} == {"back-rank-mate", "coach-favourite"}
@@ -120,6 +124,52 @@ def test_yours_and_personal_copies_stay_out(coach):
         packs.build(Position.objects.all(), mine)
     _, manifest = packs.build(Position.objects.all(), mine, include_received=True)
     assert manifest["positions"] == 3
+
+
+def test_round_trip_keeps_games_marks_and_move_tags_and_can_be_packed_again(coach):
+    """The coach's own library moves to a new installation as packs, and is packed again for a student from there."""
+    from spaced_positions.library.importer import Players, import_game
+    from spaced_positions.library.models import Game, NodeTag
+
+    p = coach[0]
+    rd8 = p.nodes.get(san="Rd8#")
+    rd8.mark = "good"
+    rd8.save()
+    NodeTag.objects.create(node=rd8, tag=Tag.objects.get(key="fork"), origin="manual")
+    PositionTag.objects.create(position=p, tag=Tag.objects.get(key="mate-in-1"), origin="auto")
+    game = next(iter(analysis_puzzles_free_games()))
+    g = import_game(game, Players(), source=Source.objects.get(title="Mating Patterns"))
+    pack = Pack.objects.create(title="Mating Patterns", licence="For the owner of the book")
+    data, manifest = packs.build(Position.objects.filter(pk__in=[x.pk for x in coach]), pack, author="Coach C",
+                                 games=Game.objects.filter(pk=g.pk))
+    assert manifest["games"] == 1 and "games.jsonl" in files(data)
+    game_uuid = str(g.uuid)
+    forget(coach)
+    Game.objects.filter(pk=g.pk).delete()
+    assert packs.scan(data)["game_counts"] == {"new": 1, "update": 0, "yours": 0}
+    report = packs.run(data)
+    assert report.counts["new"] == 3 and report.counts["games"] == 1
+    p = Position.objects.get(title="Back rank 0")
+    rd8 = p.nodes.get(san="Rd8#")
+    assert rd8.mark == "good" and NodeTag.objects.filter(node=rd8, tag__key="fork").exists()
+    assert p.tag_links.get(tag__key="mate-in-1").origin == "auto" and p.tag_links.get(tag__key="back-rank-mate").origin == "manual"
+    g = Game.objects.get(uuid=game_uuid)
+    assert g.white_name == "Anderssen" and g.source.title == "Mating Patterns" and g.nodes.count() > 5
+    assert p.citation == "MP · p. 12 · Nr. 1"  # not a personal pack: the book alone
+    # packed again for a student, from the new installation: the book travels along
+    again, m2 = packs.build(Position.objects.filter(pack__isnull=False), Pack.objects.create(title="For Ben"), author="Coach C", student="Ben")
+    assert m2["positions"] == 3 and json.loads(files(again)["sources.json"])[0]["title"] == "Mating Patterns"
+
+
+def analysis_puzzles_free_games():
+    from spaced_positions.analysis import pgn as pgn_io
+
+    return pgn_io.read_games('''[White "Anderssen"]
+[Black "Kieseritzky"]
+[Result "1-0"]
+
+1. e4 e5 2. f4 exf4 3. Bc4 Qh4+ 4. Kf1 b5 5. Bxb5 Nf6 1-0
+''')
 
 
 def test_not_a_pack():
@@ -177,3 +227,15 @@ def test_update_check_is_opt_in_and_compares_versions(client, monkeypatch, setti
     client.get("/app/update/")
     assert len(calls) == 1 and calls[0].endswith("/releases/latest")  # once a day
     assert updates.version_tuple("v0.10.0") > updates.version_tuple("0.9.3")
+
+
+def test_licence_text_and_notices(client):
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    assert (root / "LICENSE").read_text() == (root / "spaced_positions/static/licences/GPL-3.0.txt").read_text()
+    text = client.get("/licences/notices.txt").content.decode()
+    for name in ("chessground.min.js", "Piece set Merida", "Django", "waitress", "python-chess" if "python-chess" in text else "chess",
+                 "Python Software Foundation", "GNU GENERAL PUBLIC LICENSE"):
+        assert name in text, name
+    assert text.count("Version 3, 29 June 2007") == 1  # the GPL once, at the end

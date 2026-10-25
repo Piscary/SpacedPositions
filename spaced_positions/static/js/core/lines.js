@@ -8,6 +8,7 @@ import { Chess } from "../../vendor/chess.js"
 import { pushUndo } from "./commands.js"
 import { ctx, emit, on, status } from "./context.js"
 import { sound } from "./sound.js"
+import { tr, trn } from "./i18n.js"
 
 export const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 const lines = new Map() // "mode:key" → line
@@ -64,7 +65,7 @@ export function play(key, move) {
   line.moves.push({ uci: move.from + move.to + (move.promotion || ""), san: move.san, fen: move.after })
   line.ply = line.moves.length
   setLine(key, line, { undo: `Move ${move.san}` })
-  if (replaced > 0) status(`${move.san} replaced ${replaced} move${replaced > 1 ? "s" : ""} (Analyse keeps variations)`, { timeout: 4000 })
+  if (replaced > 0) status(trn("{move} replaced {n} move (Analyse keeps variations)", "{move} replaced {n} moves (Analyse keeps variations)", replaced, { move: move.san }), { timeout: 4000 })
 }
 
 export function goTo(key, ply) {
@@ -98,7 +99,7 @@ export function setSquares(key, squares) {
 }
 
 /** Load a position or a game (from paste detection or the library cursor). */
-export function load(key, { start = START_FEN, moves = [], title = "" }, { undo = "Load position", persist = true } = {}) {
+export function load(key, { start = START_FEN, moves = [], title = "" }, { undo = tr("Load position"), persist = true } = {}) {
   if (delegates.has(key) && persist !== "local") return delegates.get(key).load({ start, moves, title })
   const line = emptyLine(start)
   line.title = title
@@ -109,7 +110,7 @@ export function load(key, { start = START_FEN, moves = [], title = "" }, { undo 
       line.moves.push({ uci, san: move.san, fen: move.after })
     }
   } catch (err) {
-    status(`could not replay the moves: ${err.message}`, { kind: "error" })
+    status(tr("could not replay the moves: {error}", { error: err.message }), { kind: "error" })
   }
   line.ply = line.moves.length
   setLine(key, line, { undo, persist })

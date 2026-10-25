@@ -13,16 +13,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='game',
             name='origin',
-            field=models.CharField(blank=True, db_index=True, help_text='Where it came from: csm-…:<id> (phase 7)', max_length=40),
+            field=models.CharField(blank=True, db_index=True, help_text='Where it came from: the id in what it was imported from, so importing again adds nothing twice', max_length=40),
         ),
         migrations.AddField(
             model_name='player',
             name='origin',
-            field=models.CharField(blank=True, db_index=True, help_text='Where it came from: csm-…:<id> (phase 7)', max_length=40),
+            field=models.CharField(blank=True, db_index=True, help_text='Where it came from: the id in what it was imported from, so importing again adds nothing twice', max_length=40),
         ),
         migrations.AddField(
             model_name='source',
             name='origin',
-            field=models.CharField(blank=True, db_index=True, help_text='Where it came from: csm-…:<id> (phase 7)', max_length=40),
+            field=models.CharField(blank=True, db_index=True, help_text='Where it came from: the id in what it was imported from, so importing again adds nothing twice', max_length=40),
         ),
     ]

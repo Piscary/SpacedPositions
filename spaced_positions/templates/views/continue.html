@@ -1,22 +1,22 @@
 {% home_continue as c %}<div class="home" data-island="home">
-  {% section "Continue" key="c" summary="analysis · collect" pinned=True %}
+  {% translate "analysis · collect" as continue_summary %}{% section _("Continue") key="c" summary=continue_summary pinned=True %}
     <div class="home__continue">
-      {% if c.analysis %}<div class="train__session">{% cmd "home.analysis" label="Analysis" keys_in="view.continue" %}
+      {% if c.analysis %}<div class="train__session">{% cmd "home.analysis" label=_("Analysis") keys_in="view.continue" %}
         <span class="train__session-info" data-continue-analysis="{{ c.analysis.id }}" data-node="{{ c.analysis.node|default:'' }}">{{ c.analysis.short }} {{ c.analysis.title|truncatechars:40 }}{% if c.analysis.move %} · {{ c.analysis.move }}{% endif %}</span></div>
-      {% else %}<p class="muted">No analysis open yet: <span class="mono">:analyse</span> or paste a game.</p>{% endif %}
-      <div class="train__session">{% cmd "home.collect" label="Collect" keys_in="view.continue" %}
-        <span class="train__session-info">{% if c.collect.source %}{{ c.collect.source }} · next Nr. {{ c.collect.ref }}{% if c.collect.page %} p.{{ c.collect.page }}{% endif %}{% else %}enter diagrams from a book{% endif %}</span></div>
+      {% else %}<p class="muted">{% blocktranslate trimmed %}No analysis open yet: <span class="mono">:analyse</span> or paste a game.{% endblocktranslate %}</p>{% endif %}
+      <div class="train__session">{% cmd "home.collect" label=_("Collect") keys_in="view.continue" %}
+        <span class="train__session-info">{% if c.collect.source %}{{ c.collect.source }} · {% blocktranslate trimmed with ref=c.collect.ref %}next Nr. {{ ref }}{% endblocktranslate %}{% if c.collect.page %} {% blocktranslate trimmed with page=c.collect.page %}p. {{ page }}{% endblocktranslate %}{% endif %}{% else %}{% translate "enter diagrams from a book" %}{% endif %}</span></div>
     </div>
   {% endsection %}
 
-  {% section "Paste" key="p" summary="FEN · PGN · lichess link" %}
+  {% translate "FEN · PGN · lichess link" as paste_summary %}{% section _("Paste") key="p" summary=paste_summary %}
     <form class="home__paste" data-paste-form>
-      <textarea class="field field--mono" name="text" aria-label="Paste a FEN, PGN or lichess link" placeholder="A FEN, a PGN or a lichess link, then {% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵ · or {% if is_mac %}⌘{% else %}Ctrl+{% endif %}V anywhere"></textarea>
+      <textarea class="field field--mono" name="text" aria-label="{% translate "Paste a FEN, PGN or lichess link" %}" placeholder="{% if is_mac %}{% translate "A FEN, a PGN or a lichess link, then ⌘↵ · or ⌘V anywhere" %}{% else %}{% translate "A FEN, a PGN or a lichess link, then Ctrl+↵ · or Ctrl+V anywhere" %}{% endif %}"></textarea>
     </form>
   {% endsection %}
 
-  {% section "Recent" key="r" summary="positions and games worked on last" %}
-    <div class="list" data-list role="listbox" aria-label="Recent">
+  {% translate "positions and games worked on last" as recent_summary %}{% section _("Recent") key="r" summary=recent_summary %}
+    <div class="list" data-list role="listbox" aria-label="{% translate "Recent" %}">
       {% for p in c.recent_positions %}<div class="list__row" role="option" aria-selected="false" data-row="{{ p.short_id }}" data-position="{{ p.uuid }}" data-title="{{ p.title }}" data-fen="{{ p.fen }}">
         <span class="list__mark" aria-hidden="true">▢</span><span class="list__id">{{ p.short_id }}</span><span class="list__title">{{ p.title|default:p.fen }}</span><span class="list__meta">{% for n in p.tag_names|slice:":3" %}<span class="chip chip--tag">{{ n }}</span>{% endfor %}</span></div>{% endfor %}
       {% for g in c.recent_games %}<div class="list__row" role="option" aria-selected="false" data-row="{{ g.short_id }}" data-game="{{ g.uuid }}" data-title="{{ g.title }}" data-fen="{{ g.start_fen }}">

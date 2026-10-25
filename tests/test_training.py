@@ -5,7 +5,6 @@ import sqlite3
 from datetime import timedelta
 
 import pytest
-from django.core.management import call_command
 from django.utils import timezone
 
 from spaced_positions.training import puzzles, selection, srs
@@ -197,56 +196,3 @@ class TestApi:
         assert Puzzle.objects.get().flagged
 
 
-# ── Import of chess-study-manager puzzles ─────────────────────────────────────────────────────────────────────
-
-
-def make_old_db(path):
-    """A chess-study-manager database with the real schema (tests/data/csm_schema.sql): one puzzle with its analysis."""
-    from tests.test_csm import Old
-
-    o = Old(path)
-    fen = "6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1"
-    o.add("positions_position", id=1, fen=fen, canonical_fen=fen, title="Back rank", difficulty=2, difficulty_override=2, book_id=1,
-          source_ref="7", source_page="3", created_at="2025-12-01 10:00:00", updated_at="2025-12-01 10:00:00", has_solution=1, diagram=0)
-    o.add("sources_book", id=1, title="Mating Patterns", authors="A. Author", year=1999, created_at="2025-12-01 10:00:00", updated_at="2025-12-01 10:00:00")
-    o.add("positions_variationnode", id=10, sort_order=0, uci="", san="", ply=0, fen_before=fen, fen_after=fen, position_id=1, comment="Back rank!")
-    o.add("positions_variationnode", id=11, sort_order=0, uci="d1d8", san="Rd8#", ply=1, fen_before=fen, fen_after="3R2k1/5ppp/8/8/8/8/5PPP/6K1 b - - 1 1",
-          position_id=1, parent_id=10, nags="[3]", quality="good",
-          shapes='{"arrows": [{"from": "d1", "to": "d8", "color": "R"}], "circles": [], "squares": [{"square": "g8", "color": "G"}]}')
-    o.add("positions_variationnode", id=12, sort_order=1, uci="d1e1", san="Re1", ply=1, fen_before=fen, fen_after="6k1/5ppp/8/8/8/8/5PPP/4R1K1 b - - 1 1",
-          position_id=1, parent_id=10)
-    o.add("training_trainingpuzzle", id=5, active=1, solution='{"also": [12]}', node_id=10, created_at="2025-12-01 10:00:00")
-    o.add("training_trainingcard", id=1, puzzle_id=5, line="", in_solution=1, state="review", due="2026-01-01 10:00:00", interval_days=12.5,
-          ease=2.4, step=0, reps=4, lapses=1, success_streak=2, attempts=6, successes=5, total_ms=30000, best_ms=2500, last_result=1,
-          last_seen="2025-12-20 10:00:00", created_at="2025-12-01 10:00:00")
-    o.add("positions_tagfield", id=1, key="goal", name="Aufgabe", order=1)
-    o.add("positions_tagfield", id=2, key="mate", name="Matt", order=2)
-    o.add("positions_tag", id=1, name="Matt in 1", name_en="Mate in 1", field_id=1, order=1, slug="mate-in-1")
-    o.add("positions_tag", id=2, name="Grundreihenmatt", name_en="Back-rank mate", field_id=2, order=1, slug="back-rank-mate")
-    for lid, tag, source in ((1, 1, "manual"), (2, 2, "auto"), (3, 99, "manual")):
-        o.add("positions_positiontag", id=lid, position_id=1, tag_id=tag, source=source, created_at="2025-12-01 10:00:00")
-
-
-@pytest.mark.django_db
-def test_import_csm(tmp_path):
-    path = tmp_path / "old.sqlite3"
-    make_old_db(path)
-    call_command("import_csm", str(path))
-    puzzle = Puzzle.objects.get()
-    assert puzzle.origin == "csm:5"
-    assert puzzle.solution == {"moves": [{"uci": "d1d8", "replies": []}, {"uci": "d1e1", "replies": []}]}
-    position = puzzle.position
-    assert (position.title, position.objective, position.tag_names) == ("Back rank", "Mate in 1", ["Matt in 1", "Grundreihenmatt"])
-    assert position.tag_links.get(tag__key="back-rank-mate").origin == "auto"  # an unknown old tag (99) is skipped
-    assert (position.source.title, position.source.authors, position.source.year) == ("Mating Patterns", "A. Author", 1999)
-    assert position.citation == "Mating Patterns · p. 3 · Nr. 7" and position.difficulty == 2
-    card = puzzle.cards.get()
-    assert (card.state, card.interval_days, card.lapses, card.attempts) == ("review", 12.5, 1, 6)
-    root = position.nodes.get(parent=None)
-    rd8 = position.nodes.get(uci="d1d8")
-    assert root.comment == "Back rank!" and puzzle.start_node == root
-    assert (rd8.nags, rd8.mark, rd8.squares) == ([3], "good", {"g8": "green"})
-    assert rd8.shapes == [{"orig": "d1", "dest": "d8", "brush": "red"}]
-    assert puzzle.marks == {"ends": [], "also": [position.nodes.get(uci="d1e1").id], "replies": []}
-    call_command("import_csm", str(path))  # again: skipped
-    assert Puzzle.objects.count() == 1

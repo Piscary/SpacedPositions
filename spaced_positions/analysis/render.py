@@ -4,6 +4,7 @@ under the move it replaces, comments in place, annotation symbols, marks as a co
 
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext as _
 
 from spaced_positions.library.models import NodeTag
 
@@ -13,15 +14,18 @@ from . import tree
 LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 FIGURINES = {"K": "♔", "Q": "♕", "R": "♖", "B": "♗", "N": "♘"}
 GERMAN = {"K": "K", "Q": "D", "R": "T", "B": "L", "N": "S"}
+FRENCH = {"K": "R", "Q": "D", "R": "T", "B": "F", "N": "C"}
+ITALIAN = {"K": "R", "Q": "D", "R": "T", "B": "A", "N": "C"}
 
 
 def san_html(san: str) -> str:
-    """A SAN whose piece letters carry their German letter and figurine; `html[data-letters]` and
+    """A SAN whose piece letters carry their German, French and Italian letter and figurine; `html[data-letters]` and
     `html[data-figurines]` draw those instead (07 · figurines, Settings → Board · piece letters). The text stays
     the SAN, so searching and copying find `Nf3` in every look."""
 
     def piece(letter: str) -> str:
-        return f'<span class="san-p" data-de="{GERMAN[letter]}" data-fig="{FIGURINES[letter]}"><span class="san-l">{letter}</span></span>'
+        return (f'<span class="san-p" data-de="{GERMAN[letter]}" data-fr="{FRENCH[letter]}" data-it="{ITALIAN[letter]}" '
+                f'data-fig="{FIGURINES[letter]}"><span class="san-l">{letter}</span></span>')
 
     out = escape(san)
     if out[:1] in FIGURINES:
@@ -70,7 +74,7 @@ def render(position) -> str:
     if kids.get(root.id):
         parts.append(_line(kids[root.id][0], kids, roles, fens, force_number=True, siblings=kids[root.id][1:], depth=0, tags=move_tags))
     else:
-        parts.append(mark_safe('<p class="muted mt-empty">No moves yet: play one on the board, paste a PGN, or let the engine suggest one.</p>'))
+        parts.append(format_html('<p class="muted mt-empty">{}</p>', _("No moves yet: play one on the board, paste a PGN, or let the engine suggest one.")))
     return format_html('<div class="movetree" data-movetree data-root="{}">{}</div>', root.id, mark_safe("".join(str(p) for p in parts)))
 
 

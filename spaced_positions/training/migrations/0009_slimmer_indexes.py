@@ -13,12 +13,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='attempt',
             name='origin',
-            field=models.CharField(blank=True, help_text='Where it came from: csm-…:<id> (phase 7)', max_length=40),
+            field=models.CharField(blank=True, help_text='Where it came from: the id in what it was imported from, so importing again adds nothing twice', max_length=40),
         ),
         migrations.AlterField(
             model_name='position',
             name='origin',
-            field=models.CharField(blank=True, help_text='Where it came from: board, csm:<id> …', max_length=40),
+            field=models.CharField(blank=True, help_text='Where it came from: analysis, collect, game, …', max_length=40),
         ),
         migrations.AlterField(
             model_name='puzzle',

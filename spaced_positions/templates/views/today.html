@@ -1,42 +1,41 @@
 {% home_today as t %}<div class="home" data-island="home">
-  {% if t.banner %}<div class="banner" data-banner role="status"><span class="achievement achievement--{{ t.banner.kind }}">{{ t.banner.label }}</span>
-    <span class="muted">{{ t.banner.reached_at|date:"j M" }}</span>{% cmd "home.dismiss" label="Dismiss" size="sm" variant="ghost" %}</div>{% endif %}
+  {% if t.banner %}<div class="banner" data-banner role="status"><span class="achievement achievement--{{ t.banner.kind }}">{{ t.banner.text }}</span>
+    <span class="muted">{{ t.banner.reached_at|date:"j M" }}</span>{% cmd "home.dismiss" label=_("Dismiss") size="sm" variant="ghost" %}</div>{% endif %}
 
-  {% if t.first_run %}{% section "Welcome" key="w" summary="your library is empty" pinned=True %}
+  {% if t.first_run %}{% translate "your library is empty" as empty %}{% section _("Welcome") key="w" summary=empty pinned=True %}
     <div class="settings__data home__welcome">
-      <p><b>Spaced Positions</b> trains chess patterns with spaced repetition: each puzzle comes back just before you would forget it.
-        Your library is empty, so here is how to fill it:</p>
-      <div class="actionbar">{% cmd "pack.import" variant="primary" label="Import a puzzle pack" %}{% cmd "mode.collect" label="Collect from a book" %}</div>
-      <p class="muted">A pack is a file your coach made for you (<span class="mono">.sppack</span>): drop it on this window, or choose it.
-        Or paste a FEN, a PGN or a lichess link anywhere ({% keycap "mod+v" %}), or import a PGN file (<span class="mono">:import</span>).</p>
-      {% if t.first_run.csm %}<p class="muted">A chess-study-manager library is next to the app: Settings → Data brings it over.
-        {% cmd "mode.settings" label="Settings" size="sm" %}</p>{% endif %}
+      <p>{% blocktranslate trimmed %}<b>Spaced Positions</b> trains chess patterns with spaced repetition: each puzzle comes back just before you would forget it.
+        Your library is empty, so here is how to fill it:{% endblocktranslate %}</p>
+      <div class="actionbar">{% cmd "pack.import" variant="primary" label=_("Import a puzzle pack") %}{% cmd "mode.collect" label=_("Collect from a book") %}</div>
+      <p class="muted">{% blocktranslate trimmed %}A pack is a file of positions and puzzles, for example from your coach (<span class="mono">.sppack</span>): drop it on this window, or choose it.{% endblocktranslate %}
+        {% keycap "mod+v" as paste_keys %}{% blocktranslate trimmed %}Or paste a FEN, a PGN or a lichess link anywhere ({{ paste_keys }}), or import a PGN file (<span class="mono">:import</span>).{% endblocktranslate %}</p>
     </div>
   {% endsection %}{% endif %}
-  {% section "Due now" key="d" summary=t.due|stringformat:"s"|add:" due" pinned=True %}
+  {% blocktranslate trimmed count n=t.due asvar due_summary %}{{ n }} due{% plural %}{{ n }} due{% endblocktranslate %}
+  {% section _("Due now") key="d" summary=due_summary pinned=True %}
     <div class="train__session">
-      {% cmd "train.review" variant="primary" label="Review" keys_in="view.today" %}
-      <span class="train__session-info">{% if t.due or t.counts.new %}<b data-ticker>{{ t.due }}</b> due · <b data-ticker>{{ t.counts.new }}</b> new{% else %}nothing due{% if t.next_due %} · next {{ t.next_due }}{% endif %}{% endif %}</span>
+      {% cmd "train.review" variant="primary" label=_("Review") keys_in="view.today" %}
+      <span class="train__session-info">{% if t.due or t.counts.new %}{% blocktranslate trimmed with due=t.due new=t.counts.new %}<b data-ticker>{{ due }}</b> due · <b data-ticker>{{ new }}</b> new{% endblocktranslate %}{% else %}{% translate "nothing due" %}{% if t.next_due %} · {% blocktranslate trimmed with when=t.next_due %}next {{ when }}{% endblocktranslate %}{% endif %}{% endif %}</span>
     </div>
   {% endsection %}
 
-  {% section "Quick start" key="q" summary="one key starts a session" pinned=True %}
+  {% translate "one key starts a session" as quick_summary %}{% section _("Quick start") key="q" summary=quick_summary pinned=True %}
     <div class="actionbar home__quick">
-      {% cmd "train.storm" args="3" label="Storm 3′" keys_in="view.today" %}{% cmd "train.storm" args="5" label="Storm 5′" keys_in="view.today" %}
-      {% cmd "train.streak" args="0" label="Streak" keys_in="view.today" %}{% cmd "train.streak" args="3" label="Streak ♥3" keys_in="view.today" %}
-      {% cmd "train.weakest" label="Weakest motifs" keys_in="view.today" %}{% cmd "train.again" label="Again" keys_in="view.today" %}
+      {% cmd "train.storm" args="3" label=_("Storm 3′") keys_in="view.today" %}{% cmd "train.storm" args="5" label=_("Storm 5′") keys_in="view.today" %}
+      {% cmd "train.streak" args="0" label=_("Streak") keys_in="view.today" %}{% cmd "train.streak" args="3" label=_("Streak ♥3") keys_in="view.today" %}
+      {% cmd "train.weakest" label=_("Weakest motifs") keys_in="view.today" %}{% cmd "train.again" label=_("Again") keys_in="view.today" %}
     </div>
-    {% if t.weakest %}<p class="muted">Weakest: {% for r in t.weakest %}{{ r.tag.name }} {% widthratio r.smoothed 1 100 %}%{% if not forloop.last %} · {% endif %}{% endfor %}</p>{% endif %}
+    {% if t.weakest %}<p class="muted">{% translate "Weakest:" %} {% for r in t.weakest %}{{ r.tag.label }} {% widthratio r.smoothed 1 100 %}%{% if not forloop.last %} · {% endif %}{% endfor %}</p>{% endif %}
   {% endsection %}
 
-  {% section "Today" key="t" summary="solved · accuracy · days in a row" pinned=True %}
+  {% translate "solved · accuracy · days in a row" as today_summary %}{% section _("Today") key="t" summary=today_summary pinned=True %}
     <div class="stats-row">
-      <div class="stat" data-drill="puzzles:last:<1d"><span class="stat__label">Solved today</span><span class="stat__value">{{ t.consistency.today_solved }}</span><span class="muted">of {{ t.consistency.today }}</span></div>
-      <div class="stat"><span class="stat__label">Accuracy</span><span class="stat__value">{% if t.accuracy is not None %}{{ t.accuracy }}%{% else %}–{% endif %}</span></div>
-      <div class="stat"><span class="stat__label">Days in a row</span><span class="stat__value">{{ t.consistency.current }}</span><span class="muted">{% if t.consistency.trained_today %}today counts{% else %}train today to keep it{% endif %}</span></div>
+      <div class="stat" data-drill="puzzles:last:<1d"><span class="stat__label">{% translate "Solved today" %}</span><span class="stat__value">{{ t.consistency.today_solved }}</span><span class="muted">{% blocktranslate trimmed with n=t.consistency.today %}of {{ n }}{% endblocktranslate %}</span></div>
+      <div class="stat"><span class="stat__label">{% translate "Accuracy" %}</span><span class="stat__value">{% if t.accuracy is not None %}{{ t.accuracy }}%{% else %}–{% endif %}</span></div>
+      <div class="stat"><span class="stat__label">{% translate "Days in a row" %}</span><span class="stat__value">{{ t.consistency.current }}</span><span class="muted">{% if t.consistency.trained_today %}{% translate "today counts" %}{% else %}{% translate "train today to keep it" %}{% endif %}</span></div>
     </div>
-    <div class="meter home__library"><div class="meter__top"><span>Pattern library <b data-ticker>{{ t.library.size }}</b>{% if t.library.next %} / {{ t.library.next }}{% endif %}</span>
-      <span class="muted">{% if t.library.on_course %}on course for {{ t.library.next }} by {{ t.library.on_course|date:"j M" }}{% elif t.library.next %}{{ t.library.established }} cards established{% endif %}</span></div>
+    <div class="meter home__library"><div class="meter__top"><span>{% translate "Pattern library" %} <b data-ticker>{{ t.library.size }}</b>{% if t.library.next %} / {{ t.library.next }}{% endif %}</span>
+      <span class="muted">{% if t.library.on_course %}{% blocktranslate trimmed with goal=t.library.next when=t.library.on_course|date:"j M" %}on course for {{ goal }} by {{ when }}{% endblocktranslate %}{% elif t.library.next %}{% blocktranslate trimmed with n=t.library.established %}{{ n }} cards established{% endblocktranslate %}{% endif %}</span></div>
       <div class="meter__track"><div class="meter__fill" style="--w: {% widthratio t.library.progress 1 100 %}%"></div></div></div>
   {% endsection %}
 </div>

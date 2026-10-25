@@ -5,29 +5,30 @@ import uuid
 
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from .text import fold
 
 
 class Source(models.Model):
     class Kind(models.TextChoices):
-        BOOK = "book", "Book"
-        WEBSITE = "website", "Website"
-        OWN = "own", "Own analysis"
-        PUBLIC = "public", "Public domain"
-        COURSE = "course", "Course"
-        PACK = "pack", "Puzzle pack"
+        BOOK = "book", _("Book")
+        WEBSITE = "website", _("Website")
+        OWN = "own", _("Own analysis")
+        PUBLIC = "public", _("Public domain")
+        COURSE = "course", _("Course")
+        PACK = "pack", _("Puzzle pack")
 
     kind = models.CharField(max_length=8, choices=Kind.choices, default=Kind.BOOK)
     title = models.CharField(max_length=300)
-    short = models.CharField(max_length=80, blank=True, help_text="Citation stem shown in lists: 'Polgár 5334'")
+    short = models.CharField(max_length=80, blank=True, help_text="Citation stem shown in lists: 'Réti 1922'")
     authors = models.CharField(max_length=300, blank=True)
     year = models.PositiveSmallIntegerField(null=True, blank=True)
     publisher = models.CharField(max_length=200, blank=True)
     isbn = models.CharField(max_length=20, blank=True)
     url = models.URLField(blank=True)
     notes = models.TextField(blank=True)
-    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: csm-…:<id> (phase 7)")
+    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: the id in what it was imported from, so importing again adds nothing twice")
     search = models.TextField(blank=True, editable=False)
     created_at = models.DateTimeField(default=timezone.now)
 
@@ -48,11 +49,11 @@ class Source(models.Model):
 
 class Player(models.Model):
     class Role(models.TextChoices):
-        NONE = "", "—"
-        ME = "me", "Me"
-        STUDENT = "student", "Student"
-        MODEL = "model", "Role model"
-        OPPONENT = "opponent", "Opponent"
+        NONE = "", _("—")
+        ME = "me", _("Me")
+        STUDENT = "student", _("Student")
+        MODEL = "model", _("Role model")
+        OPPONENT = "opponent", _("Opponent")
 
     key = models.SlugField(max_length=60, unique=True, help_text="@key in queries")
     name = models.CharField(max_length=150, help_text="'Tal, Mikhail'")
@@ -63,7 +64,7 @@ class Player(models.Model):
     fide_id = models.CharField(max_length=12, blank=True)
     born = models.PositiveSmallIntegerField(null=True, blank=True)
     notes = models.TextField(blank=True)
-    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: csm-…:<id> (phase 7)")
+    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: the id in what it was imported from, so importing again adds nothing twice")
     search = models.TextField(blank=True, editable=False)
     created_at = models.DateTimeField(default=timezone.now)
 
@@ -80,12 +81,14 @@ class Player(models.Model):
 
 class TagField(models.Model):
     class Selection(models.TextChoices):
-        SINGLE = "single", "One tag"
-        MULTI = "multi", "Several tags"
+        SINGLE = "single", _("One tag")
+        MULTI = "multi", _("Several tags")
 
     key = models.SlugField(max_length=40, unique=True)
-    name = models.CharField(max_length=80, help_text="German name")
+    name = models.CharField(max_length=80, help_text="The base name (German for the built-in fields)")
     name_en = models.CharField(max_length=80, blank=True)
+    name_fr = models.CharField(max_length=80, blank=True)
+    name_it = models.CharField(max_length=80, blank=True)
     selection = models.CharField(max_length=6, choices=Selection.choices, default=Selection.MULTI)
     on_positions = models.BooleanField(default=True)
     on_moves = models.BooleanField(default=True)
@@ -99,17 +102,38 @@ class TagField(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def label(self) -> str:
+        return localized(self, "name")
+
+
+def localized(obj, field: str) -> str:
+    """A name in the language of tag names (Settings → Language): `name_en`, `name_fr`, `name_it`, else the base
+    name, which is German for the built-in vocabulary and whatever the user typed for their own tags."""
+    from spaced_positions.core.i18n import tag_language
+
+    language = tag_language()
+    if language != "de":
+        value = getattr(obj, f"{field}_{language}", "")
+        if value:
+            return value
+    return getattr(obj, field)
+
 
 class Tag(models.Model):
     field = models.ForeignKey(TagField, on_delete=models.PROTECT, related_name="tags")
     key = models.SlugField(max_length=100, unique=True)
-    name = models.CharField(max_length=100, help_text="German display name")
+    name = models.CharField(max_length=100, help_text="The base name (German for the built-in tags)")
     name_en = models.CharField(max_length=100, blank=True)
+    name_fr = models.CharField(max_length=100, blank=True)
+    name_it = models.CharField(max_length=100, blank=True)
     aliases = models.JSONField(default=list, blank=True, help_text="More search terms, any language")
     parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL, related_name="children")
     description = models.TextField(blank=True)
-    task = models.CharField(max_length=120, blank=True, help_text="Objective tags: the task, {side} = Weiß/Schwarz")
+    task = models.CharField(max_length=120, blank=True, help_text="Objective tags: the task, {side} = Weiss/Schwarz")
     task_en = models.CharField(max_length=120, blank=True)
+    task_fr = models.CharField(max_length=120, blank=True)
+    task_it = models.CharField(max_length=120, blank=True)
     base_difficulty = models.PositiveSmallIntegerField(default=2)
     weight = models.FloatField(default=1.0, help_text="How much it counts for a position's difficulty (0: not at all)")
     analysis_weight = models.FloatField(default=0.0, help_text="How much it counts as a move tag of the analysis")
@@ -120,18 +144,41 @@ class Tag(models.Model):
         ordering = ["field__order", "order", "id"]
 
     def save(self, *args, **kwargs):
-        self.search = " | ".join(fold(x) for x in [self.key, self.name, self.name_en, *self.aliases] if x)
+        from .vocabulary import search_of
+
+        self.search = search_of(self)
         super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
 
+    @property
+    def label(self) -> str:
+        return localized(self, "name")
+
+    @property
+    def other_names(self) -> str:
+        """The tag's names in the other languages (the Library's tag list shows them muted)."""
+        names = [self.name, self.name_en, self.name_fr, self.name_it]
+        return " · ".join(dict.fromkeys(n for n in names if n and n != self.label))
+
+    def task_text(self, side: str) -> str:
+        """The objective line of an objective tag for the side to move, in the language of tag names."""
+        from spaced_positions.core.i18n import SIDES, tag_language
+
+        language = tag_language()
+        text = self.task if language == "de" else getattr(self, f"task_{language}", "")
+        if not text:
+            language, text = "en", self.task_en
+        long, short = SIDES[language][0 if side == "w" else 1]
+        return text.replace("{side_short}", short).replace("{side}", long)
+
 
 class TagLink(models.Model):
     class Origin(models.TextChoices):
-        MANUAL = "manual", "By hand"
-        AUTO = "auto", "Detected"
-        SUGGESTED = "suggested", "Suggested"
+        MANUAL = "manual", _("By hand")
+        AUTO = "auto", _("Detected")
+        SUGGESTED = "suggested", _("Suggested")
 
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name="+")
     origin = models.CharField(max_length=10, choices=Origin.choices, default=Origin.MANUAL)
@@ -220,8 +267,10 @@ class Game(models.Model):
     source = models.ForeignKey(Source, null=True, blank=True, on_delete=models.SET_NULL, related_name="games")
     source_ref = models.CharField(max_length=300, blank=True)
     notes = models.TextField(blank=True)
-    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: csm-…:<id> (phase 7)")
+    origin = models.CharField(max_length=40, blank=True, db_index=True, help_text="Where it came from: the id in what it was imported from, so importing again adds nothing twice")
     tags = models.ManyToManyField(Tag, through=GameTag, related_name="games", blank=True)
+    pack = models.ForeignKey("library.ReceivedPack", null=True, blank=True, on_delete=models.SET_NULL, related_name="games",
+                             help_text="The imported pack it came with")
     deleted_at = models.DateTimeField(null=True, blank=True, db_index=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
@@ -284,7 +333,8 @@ class PackExport(models.Model):
 
 
 class ReceivedPack(models.Model):
-    """A pack imported here: it is the source of its positions (spec 09 §12)."""
+    """A pack imported here (spec 09 §12). Its positions and games point to it and keep their books as sources; the
+    pack's own Source row lists it with the sources, so `src:` finds what came with it."""
 
     source = models.OneToOneField(Source, on_delete=models.CASCADE, related_name="pack")
     pack_id = models.CharField(max_length=36, unique=True, help_text="The pack's uuid: a newer version updates it")
@@ -299,5 +349,8 @@ class ReceivedPack(models.Model):
     @property
     def credit(self) -> str:
         """'from Anna Coach for Ben': shown with the pack's puzzles."""
-        return " ".join(x for x in [f"from {self.author}" if self.author else "", f"for {self.student}" if self.student else ""] if x)
+        from django.utils.translation import gettext
+
+        return " ".join(x for x in [gettext("from {name}").format(name=self.author) if self.author else "",
+                                    gettext("for {name}").format(name=self.student) if self.student else ""] if x)
 

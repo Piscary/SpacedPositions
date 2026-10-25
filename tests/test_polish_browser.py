@@ -1,4 +1,4 @@
-"""Phase 6 polish in a real browser: figurines and folded variations in the move tree, the Storm pace in the launcher,
+"""Polish in a real browser: figurines and folded variations in the move tree, the Storm pace in the launcher,
 German letters in the setup palette, coordinates outside the board, sounds and counting numbers."""
 
 import pytest

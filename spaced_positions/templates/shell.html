@@ -1,5 +1,5 @@
 {% load static %}<!doctype html>
-<html lang="en" data-pieces="{{ piece_set }}"{% if figurines %} data-figurines{% endif %} data-coords="{{ coords }}" data-letters="{{ letters }}">
+<html lang="{{ lang }}" data-pieces="{{ piece_set }}"{% if figurines %} data-figurines{% endif %} data-coords="{{ coords }}" data-letters="{{ letters }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,7 +16,7 @@
 <div class="shell" id="shell" data-layer="normal">
   <header class="appbar">
     <div class="appbar__logo"><span class="appbar__logo-mark" aria-hidden="true">♞</span><span>Spaced Positions</span></div>
-    <nav class="appbar__modes" aria-label="Modes">
+    <nav class="appbar__modes" aria-label="{% translate "Modes" %}">
       {% for m in modes %}{% if m.in_appbar %}
       <button type="button" class="modetab{% if m.key == mode.key %} is-active{% endif %}" data-cmd="mode.{{ m.key }}" data-mode-tab="{{ m.key }}">
         <span class="modetab__label">{{ m.label }}</span>{% keycap "space "|add:m.leader %}
@@ -25,7 +25,7 @@
     </nav>
     <div class="appbar__pulse"><a class="appbar__update" data-update hidden target="_blank" rel="noopener"></a><span title="Spaced Positions {{ app_version }}">v{{ app_version }}</span></div>
     <div class="appbar__end">
-      {% cmd "mode.ui" display="compact" variant="ghost" icon="◧" %}
+      {% if debug %}{% cmd "mode.ui" display="compact" variant="ghost" icon="◧" %}{% endif %}
       {% cmd "cmdline.open" display="compact" variant="ghost" icon="⌘" %}
       {% cmd "help.context" display="compact" variant="ghost" icon="?" %}
     </div>
@@ -37,15 +37,16 @@
 
   <footer class="statusline" id="statusline" aria-live="polite">
     <span class="status__mode" id="status-mode">{{ mode.label }}</span>
-    <span class="status__layer" id="status-layer">Normal</span>
+    <span class="status__layer" id="status-layer">{% translate "Normal" %}</span>
     <span class="status__pending" id="status-pending"></span>
     <span class="status__pane" id="status-pane"></span>
     <span class="status__subject" id="status-subject"></span>
     <span class="status__message" id="status-message"></span>
-    <span class="status__help">{% keycap "space" %}<span>leader</span>{% keycap ":" %}<span>commands</span>{% keycap "?" %}<span>keys</span></span>
+    <span class="status__help">{% keycap "space" %}<span>{% translate "leader" %}</span>{% keycap ":" %}<span>{% translate "commands" %}</span>{% keycap "?" %}<span>{% translate "keys" %}</span></span>
   </footer>
 </div>
 <div class="toasts" id="toasts"></div>
 {{ boot|json_script:"boot" }}
+{% if i18n_catalog %}{{ i18n_catalog|json_script:"i18n" }}{% endif %}
 </body>
 </html>

@@ -13,6 +13,8 @@ from pathlib import Path
 from django.conf import settings
 from django.http import FileResponse, Http404, JsonResponse
 from django.utils.text import slugify
+from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
 from django.views.decorators.http import require_GET, require_POST
 
 from spaced_positions.core import settings as user_settings
@@ -41,33 +43,40 @@ def pack_export(args, context, body):
     try:
         words = shlex.split(" ".join(args))
     except ValueError as e:
-        raise CommandError(f"unbalanced quotes: {e}") from None
+        raise CommandError(_("unbalanced quotes: {error}").format(error=e)) from None
     options = dict(w.split("=", 1) for w in words if "=" in w)
     title = " ".join(w for w in words if "=" not in w and w != "received").strip()
     if not title:
-        raise CommandError('a title: :pack-export "Back ranks" for=Ben')
+        raise CommandError(_('a title: :pack-export "Back ranks" for=Ben'))
     collection = body.get("c", "positions")
-    if collection not in ("positions", "puzzles"):
-        raise CommandError("packs hold positions: select positions or puzzles in the Library")
+    if collection not in ("positions", "puzzles", "games"):
+        raise CommandError(_("packs hold positions and games: select positions, puzzles or games in the Library"))
     found = objects(collection, body.get("ids", []), body.get("q", ""))
     from spaced_positions.training.models import Position
 
-    ids = found.values("pk") if collection == "positions" else found.values("position_id")
-    pack, _ = Pack.objects.get_or_create(title=title[:120])
+    from .models import Game
+
+    games = found if collection == "games" else Game.objects.none()
+    ids = Position.objects.none().values("pk") if collection == "games" else found.values("pk") if collection == "positions" else found.values("position_id")
+    pack, _made = Pack.objects.get_or_create(title=title[:120])
     if "licence" in options:
         pack.licence = options["licence"][:300]
     pack.query = body.get("q", "")[:500]
     pack.save()
     try:
         data, manifest = packs.build(Position.objects.filter(pk__in=ids), pack, author=author_name(), student=options.get("for", "")[:120],
-                                     include_received="received" in words)
+                                     include_received="received" in words, games=games)
     except packs.PackError as e:
         raise CommandError(str(e)) from None
     name = f"{slugify(title) or 'pack'}-v{manifest['version']}" + (f"-for-{slugify(manifest['for'])}" if manifest.get("for") else "") + packs.SUFFIX
     (_folder("exports") / name).write_bytes(data)
-    who = f" for {manifest['for']}" if manifest.get("for") else ""
-    return {"message": f"Pack {title} v{manifest['version']}{who}: {manifest['positions']} positions, {manifest['puzzles']} puzzles, "
-                       f"{len(data) / 1024:.0f} kB (exports/{name})",
+    who = " " + _("for {name}").format(name=manifest["for"]) if manifest.get("for") else ""
+    parts = [ngettext("{n} position", "{n} positions", manifest["positions"]).format(n=manifest["positions"]),
+             ngettext("{n} puzzle", "{n} puzzles", manifest["puzzles"]).format(n=manifest["puzzles"])]
+    if manifest.get("games"):
+        parts.append(ngettext("{n} game", "{n} games", manifest["games"]).format(n=manifest["games"]))
+    return {"message": _("Pack {title} v{version}{who}: {contents}, {size} kB (exports/{name})").format(
+                title=title, version=manifest["version"], who=who, contents=", ".join(parts), size=f"{len(data) / 1024:.0f}", name=name),
             "effects": {"download": f"/packs/download/{name}", "storage": True}}
 
 
@@ -105,7 +114,7 @@ def run_view(request):
     token = str(body.get("token", ""))
     path = _folder("imports") / f"{token}.sppack"
     if not re.fullmatch(r"[0-9a-f]{32}", token) or not path.is_file():
-        return JsonResponse({"ok": False, "message": "the preview has expired: open the pack again"}, status=422)
+        return JsonResponse({"ok": False, "message": _("the preview has expired: open the pack again")}, status=422)
     try:
         report = packs.run(path.read_bytes(), ready=bool(body.get("ready", True)))
     except packs.PackError as e:
@@ -113,8 +122,12 @@ def run_view(request):
     finally:
         path.unlink(missing_ok=True)
     c = report.counts
-    parts = [f"{c['new']} new", f"{c['updated']} updated" if c["updated"] else "", f"{c['puzzles']} puzzles" if c["puzzles"] else "",
-             f"{c['duplicate']} already here" if c["duplicate"] else "", f"{c['failed']} could not be read" if c["failed"] else ""]
+    parts = [_("{n} new").format(n=c["new"]), _("{n} updated").format(n=c["updated"]) if c["updated"] else "",
+             ngettext("{n} puzzle", "{n} puzzles", c["puzzles"]).format(n=c["puzzles"]) if c["puzzles"] else "",
+             ngettext("{n} game", "{n} games", c["games"]).format(n=c["games"]) if c["games"] else "",
+             _("{n} already here").format(n=c["duplicate"]) if c["duplicate"] else "",
+             _("{n} could not be read").format(n=c["failed"]) if c["failed"] else ""]
     source = report.source
-    return JsonResponse({"ok": True, "message": f"Pack {source.title}: " + ", ".join(p for p in parts if p), "problems": report.problems,
+    return JsonResponse({"ok": True, "message": _("Pack {title}: {contents}").format(title=source.title, contents=", ".join(p for p in parts if p)),
+                         "problems": report.problems,
                          "query": f'src:s{source.pk}', "effects": {"library": "changed"}})

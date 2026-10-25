@@ -1,40 +1,40 @@
 <div class="result" data-result="{{ session.uuid }}">
   <div class="result__head">
     <span class="result__label">{{ session.label }}</span>
-    {% for a in session.achievements.all %}<span class="achievement achievement--{{ a.kind }}">{{ a.label }}</span>{% endfor %}
+    {% for a in session.achievements.all %}<span class="achievement achievement--{{ a.kind }}">{{ a.text }}</span>{% endfor %}
   </div>
   <div class="stats-row">
-    <div class="stat"><span class="stat__label">{% if session.mode == "streak" %}Streak{% else %}Solved{% endif %}</span><span class="stat__value">{{ session.score }}</span></div>
-    <div class="stat"><span class="stat__label">Accuracy</span><span class="stat__value">{{ accuracy }}%</span></div>
+    <div class="stat"><span class="stat__label">{% if session.mode == "streak" %}{% translate "Streak" %}{% else %}{% translate "Solved" %}{% endif %}</span><span class="stat__value">{{ session.score }}</span></div>
+    <div class="stat"><span class="stat__label">{% translate "Accuracy" %}</span><span class="stat__value">{{ accuracy }}%</span></div>
     {% if session.mode == "storm" %}
-    <div class="stat"><span class="stat__label">Per minute</span><span class="stat__value">{{ per_minute }}</span></div>
-    <div class="stat"><span class="stat__label">Best combo</span><span class="stat__value">{{ session.best_combo }}</span></div>
+    <div class="stat"><span class="stat__label">{% translate "Per minute" %}</span><span class="stat__value">{{ per_minute }}</span></div>
+    <div class="stat"><span class="stat__label">{% translate "Best combo" %}</span><span class="stat__value">{{ session.best_combo }}</span></div>
     {% else %}
-    <div class="stat"><span class="stat__label">Median time</span><span class="stat__value">{{ median_s }}s</span></div>
-    <div class="stat"><span class="stat__label">Missed</span><span class="stat__value">{{ missed }}</span></div>
+    <div class="stat"><span class="stat__label">{% translate "Median time" %}</span><span class="stat__value">{{ median_s }}s</span></div>
+    <div class="stat"><span class="stat__label">{% translate "Missed" %}</span><span class="stat__value">{{ missed }}</span></div>
     {% endif %}
   </div>
 
   {% if chart.bars %}
-  <figure class="barchart" aria-label="Time per puzzle">
-    <figcaption class="muted">Time per puzzle · solved / missed · longest {{ chart.max_s }}s</figcaption>
+  <figure class="barchart" aria-label="{% translate "Time per puzzle" %}">
+    <figcaption class="muted">{% blocktranslate trimmed with s=chart.max_s %}Time per puzzle · solved / missed · longest {{ s }}s{% endblocktranslate %}</figcaption>
     <div class="barchart__bars">
-      {% for bar in chart.bars %}<span class="barchart__bar{% if not bar.ok %} is-bad{% endif %}" style="height: {{ bar.h }}%" title="{{ bar.n }}: {{ bar.s }}s {% if bar.ok %}solved{% else %}missed{% endif %}"></span>{% endfor %}
+      {% for bar in chart.bars %}<span class="barchart__bar{% if not bar.ok %} is-bad{% endif %}" style="height: {{ bar.h }}%" title="{{ bar.n }}: {{ bar.s }}s {% if bar.ok %}{% translate "solved" %}{% else %}{% translate "missed" %}{% endif %}"></span>{% endfor %}
     </div>
   </figure>
   {% endif %}
 
-  <div class="list" data-list role="listbox" aria-label="Puzzles of this session">
+  <div class="list" data-list role="listbox" aria-label="{% translate "Puzzles of this session" %}">
     {% for a in attempts %}
     <div class="list__row" role="option" data-row="{{ forloop.counter }}" data-title="{{ a.card.puzzle.position.title }}" data-fen="{{ a.card.puzzle.start_fen }}" data-position="{{ a.card.puzzle.position.uuid }}" data-node="{{ a.card.puzzle.start_node_id|default:'' }}" aria-selected="false">
       <span class="result__mark{% if a.success %} is-good{% else %} is-bad{% endif %}" aria-hidden="true">{% if a.success %}✓{% else %}✗{% endif %}</span>
       <span class="list__id">{{ a.seconds }}s</span>
-      <span class="list__title">{{ a.card.puzzle.position.title|default:"Puzzle" }}</span>
-      <span class="list__meta">{% if a.hinted %}<span class="chip">hint</span>{% endif %}{% if a.gave_up %}<span class="chip">solution shown</span>{% endif %}{% if not a.counted %}<span class="chip" title="Solved before it was due: the schedule didn't change">early</span>{% endif %}</span>
+      <span class="list__title">{% if a.card.puzzle.position.title %}{{ a.card.puzzle.position.title }}{% else %}{% translate "Puzzle" %}{% endif %}</span>
+      <span class="list__meta">{% if a.hinted %}<span class="chip">{% translate "hint" %}</span>{% endif %}{% if a.gave_up %}<span class="chip">{% translate "solution shown" %}</span>{% endif %}{% if not a.counted %}<span class="chip" title="{% translate "Solved before it was due: the schedule didn't change" %}">{% translate "early" %}</span>{% endif %}</span>
     </div>
     {% empty %}
-    <p class="muted">No puzzles played.</p>
+    <p class="muted">{% translate "No puzzles played." %}</p>
     {% endfor %}
   </div>
-  <div class="actionbar">{% cmd "train.again" variant="primary" label="Again" keys_in="state.result" %}{% cmd "train.missed" keys_in="state.result" %}{% cmd "train.analysemissed" keys_in="state.result" %}{% cmd "train.launcher" keys_in="state.result" %}{% cmd "train.copy" keys_in="state.result" %}</div>
+  <div class="actionbar">{% cmd "train.again" variant="primary" label=_("Again") keys_in="state.result" %}{% cmd "train.missed" keys_in="state.result" %}{% cmd "train.analysemissed" keys_in="state.result" %}{% cmd "train.launcher" keys_in="state.result" %}{% cmd "train.copy" keys_in="state.result" %}</div>
 </div>

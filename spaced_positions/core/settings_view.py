@@ -8,23 +8,27 @@ from dataclasses import dataclass, field
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.utils.translation import gettext as _t
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_GET, require_POST
 
 from . import keymap, registry, settings, themes, user_pieces
+from .i18n_names import token_label
 from .models import LOCAL_USER, KeymapOverride, Preferences
 
 SECTIONS = [
-    ("Colours", "c", ["bg", "bg-alt", "surface", "line", "text", "text-sub", "main", "main-text", "good", "bad", "warn", "info", "special"]),
-    ("Typography", "y", ["font-ui", "font-mono", "font-moves", "font-size", "type-ratio", "figurines"]),
-    ("Density and shape", "d", ["density", "radius", "rule"]),
-    ("Board", "b", ["sq-light", "sq-dark", "sq-lastmove", "sq-selected", "sq-check", "sq-hint", "arrow-green", "arrow-red",
+    (_("Language"), "n", ["ui.language", "tags.language"]),
+    (_("Colours"), "c", ["bg", "bg-alt", "surface", "line", "text", "text-sub", "main", "main-text", "good", "bad", "warn", "info", "special"]),
+    (_("Typography"), "y", ["font-ui", "font-mono", "font-moves", "font-size", "type-ratio", "figurines"]),
+    (_("Density and shape"), "d", ["density", "radius", "rule"]),
+    (_("Board"), "b", ["sq-light", "sq-dark", "sq-lastmove", "sq-selected", "sq-check", "sq-hint", "arrow-green", "arrow-red",
                     "arrow-blue", "arrow-yellow", "arrow-engine", "board-border", "board-coords", "piece-set", "board.letters"]),
-    ("Sound and motion", "m", ["motion", "board-motion", "sound.on", "display.ticker"]),
-    ("Keys", "k", ["keys.keycaps", "keys.teach", "keys.whichkey"]),
-    ("Training", "r", ["training.new-per-day", "training.storm-pace"]),
-    ("Engine", "e", ["engine.source", "engine.path", "engine.lines", "engine.depth", "engine.arrows", "engine.threads", "engine.hash"]),
-    ("Packs", "a", ["packs.author"]),
-    ("App", "p", ["app.updates", "app.autostop"]),
+    (_("Sound and motion"), "m", ["motion", "board-motion", "sound.on", "display.ticker"]),
+    (_("Keys"), "k", ["keys.keycaps", "keys.teach", "keys.whichkey"]),
+    (_("Training"), "r", ["training.new-per-day", "training.storm-pace"]),
+    (_("Engine"), "e", ["engine.source", "engine.path", "engine.lines", "engine.depth", "engine.arrows", "engine.threads", "engine.hash"]),
+    (_("Packs"), "a", ["packs.author"]),
+    (_("App"), "p", ["app.updates", "app.autostop"]),
 ]
 
 
@@ -48,6 +52,11 @@ class Row:
             return "on" if self.value else "off"
         return str(self.value)
 
+    @property
+    def options(self) -> list[tuple[str, str]]:
+        """(value, label) of an enum's values."""
+        return [(str(v), settings.value_label(v)) for v in self.values]
+
 
 def rows() -> list[dict]:
     prefs = Preferences.current()
@@ -69,7 +78,7 @@ def rows() -> list[dict]:
             elif name in schema:
                 spec = schema[name]
                 values = list(spec.get("values") or []) + (list(user_pieces.available()) if name == "piece-set" else [])
-                row = Row(name, name.replace("-", " ").capitalize(), spec.get("description", ""), spec["type"], current.get(name),
+                row = Row(name, _t(token_label(name)), _t(spec["description"]) if spec.get("description") else "", spec["type"], current.get(name),
                           theme_values.get(name), values, spec.get("min"), spec.get("max"), changed=name in prefs.tokens)
                 if spec["type"] == "color" and name in ("text", "text-sub", "main", "good", "bad", "warn"):
                     row.note = _contrast_note(name, current)
@@ -87,7 +96,7 @@ def _contrast_note(name: str, values: dict) -> str:
                 ratio = min(contrast(values[fg], values[bg]) for bg in bgs)
             except (KeyError, ValueError):
                 return ""
-            return f"{ratio:.1f}:1 {'✓' if ratio >= minimum else f'needs {minimum}:1'}"
+            return f"{ratio:.1f}:1 ✓" if ratio >= minimum else _t("{ratio}:1, needs {minimum}:1").format(ratio=f"{ratio:.1f}", minimum=minimum)
     return ""
 
 
@@ -95,12 +104,12 @@ def _contrast_note(name: str, values: dict) -> str:
 def settings_rows(request):
     prefs = Preferences.current()
     known = themes.all_themes()
-    theme_rows = [{"name": "auto", "label": "Follow the system (Paper / Ink)", "dark": None, "user": False}] + [
+    theme_rows = [{"name": "auto", "label": _t("Follow the system (Paper / Ink)"), "dark": None, "user": False}] + [
         {"name": n, "label": t["label"], "dark": t["dark"], "user": t.get("user", False)} for n, t in known.items()
     ]
     return render(request, "settings/rows.html", {
         "sections": rows(), "themes": theme_rows, "theme": prefs.theme or "auto",
-        "overrides": KeymapOverride.objects.filter(user=LOCAL_USER).count(), "csm_path": csm_guess(),
+        "overrides": KeymapOverride.objects.filter(user=LOCAL_USER).count(),
         "custom_css": prefs.settings.get("custom.css", ""),
         "storage": storage(),
         "packs_made": packs_made(), "packs_received": packs_received(), "licences": licences(),
@@ -121,7 +130,8 @@ def keymap_rows(request):
     commands = sorted(((cid, spec) for cid, spec in data["commands"].items() if not spec.get("hidden")),
                       key=lambda x: (x[1].get("group", ""), x[1]["title"]))
     return render(request, "settings/keymap.html", {
-        "rows": [{"id": cid, "title": spec["title"], "group": spec.get("group", ""), "keys": keys_of.get(cid, [])} for cid, spec in commands],
+        "rows": [{"id": cid, "title": _t(spec["title"]), "group": _t(spec["group"]) if spec.get("group") else "", "keys": keys_of.get(cid, [])}
+                 for cid, spec in commands],
         "unmapped": unmapped,
     })
 
@@ -179,47 +189,6 @@ def user_piece(request, name, code):
     return response
 
 
-# ── The migration from chess-study-manager (spaced_positions/csm.py) ──────────────────────────────────────────
-
-
-def csm_guess() -> str:
-    """Where an old database probably is: a chess-study-manager folder next to the app or in the home folder."""
-    from pathlib import Path
-
-    here = Path(__file__).resolve().parents[2]  # the folder the app is in (the repository, in development)
-    for folder in (here.parent, Path.home(), Path.cwd(), Path.cwd().parent):
-        candidate = folder / "chess-study-manager" / "db.sqlite3"
-        if candidate.is_file():
-            return str(candidate)
-    return ""
-
-
-@require_POST
-def import_csm(request):
-    """{path, dry_run}: run the migration (a real run backs up first) and say what it added."""
-    import json
-
-    from django.http import JsonResponse
-
-    from spaced_positions import csm
-
-    try:
-        data = json.loads(request.body or b"{}")
-    except ValueError:
-        data = {}
-    path, dry_run = str(data.get("path", "")).strip(), bool(data.get("dry_run"))
-    if not path:
-        return JsonResponse({"ok": False, "message": "the path of the old db.sqlite3"}, status=422)
-    try:
-        report = csm.run(path, dry_run=dry_run)
-    except (FileNotFoundError, ValueError) as e:
-        return JsonResponse({"ok": False, "message": str(e)}, status=422)
-    what = ", ".join(report.lines()) or "nothing new"
-    message = (f"Would add: {what}" if dry_run else f"Added: {what} · backup in {report.backup}")
-    return JsonResponse({"ok": True, "dry_run": dry_run, "message": message, "problems": report.problems,
-                         "new": sum(report.counts.values()), "effects": {} if dry_run else {"library": "changed"}})
-
-
 def storage() -> dict:
     """Settings → App: where the data is and how much of it there is."""
     from pathlib import Path
@@ -231,8 +200,12 @@ def storage() -> dict:
     db = Path(connection.settings_dict["NAME"])
     found = backups.listing(db.parent)
     size = sum(db.parent.joinpath(f"{db.name}{s}").stat().st_size for s in ("", "-wal") if db.parent.joinpath(f"{db.name}{s}").exists())
+    latest = found[0] | {"kind": str(BACKUP_KINDS.get(found[0]["kind"], found[0]["kind"]))} if found else None
     return {"folder": str(db.parent), "db_size": size, "backups": len(found), "backups_size": sum(b["size"] for b in found),
-            "latest": found[0] if found else None}
+            "latest": latest}
+
+
+BACKUP_KINDS = {"daily": _("daily"), "before-migrate": _("before an update"), "before-restore": _("before a restore"), "now": _("by hand")}
 
 
 def packs_made() -> list:
@@ -249,8 +222,8 @@ def packs_received() -> list:
 
 
 # Python packages the app runs on (and theirs): name → why it's there. Their licences come from their metadata.
-PACKAGES = {"django": "the web framework", "asgiref": "Django's", "sqlparse": "Django's", "waitress": "the server",
-            "whitenoise": "static files", "platformdirs": "the data folder", "chess": "python-chess: rules, PGN, engines"}
+PACKAGES = {"django": _("the web framework"), "asgiref": _("part of Django"), "sqlparse": _("part of Django"), "waitress": _("the server"),
+            "whitenoise": _("static files"), "platformdirs": _("the data folder"), "chess": _("python-chess: rules, PGN, engines")}
 
 
 def licences() -> dict:
@@ -273,5 +246,78 @@ def licences() -> dict:
             continue
         classifiers = [c.rsplit(" :: ", 1)[-1] for c in m.get_all("Classifier") or [] if c.startswith("License ::")]
         packages.append({"name": f"{m.get('Name')} {m.get('Version')}", "licence": m.get("License-Expression") or m.get("License") or ", ".join(classifiers),
-                         "source": role})
+                         "source": str(role)})
     return {"version": __version__, "source": SOURCE_URL, "files": files, "pieces": pieces, "packages": packages}
+
+
+def _python_licence() -> str:
+    """The Python runtime's licence: next to the standard library, or bundled with the double-click app."""
+    import sys
+    from pathlib import Path
+
+    for path in (Path(sys.base_prefix) / "lib" / f"python{sys.version_info.major}.{sys.version_info.minor}" / "LICENSE.txt",
+                 Path(sys.base_prefix) / "LICENSE.txt", Path(__file__).resolve().parents[1] / "static" / "licences" / "LICENSE.txt"):  # the app (packaging/spos.spec)
+        if path.is_file():
+            return path.read_text(errors="replace")
+    return "Python Software Foundation License Version 2: https://docs.python.org/3/license.html"
+
+
+def notices_text() -> str:
+    """Every licence text the app has to pass on (GPL §4–6, the BSD/MIT/ZPL notices): the app's own licence and where
+    its source is, the vendored files, the piece sets, the Python packages and Python itself."""
+    import json
+    import re
+    import sys
+    from importlib import metadata
+    from pathlib import Path
+
+    from spaced_positions import SOURCE_URL, __version__
+
+    static = Path(__file__).resolve().parents[1] / "static"
+    rule = "\n" + "=" * 100 + "\n"
+    out = [
+        f"Spaced Positions {__version__}\n\nFree software under the GNU General Public License, version 3 or later (the full text "
+        f"follows at the end). The source of this version: {SOURCE_URL}/tree/v{__version__} (all versions: {SOURCE_URL}).\n"
+        "The double-click apps are built from it with PyInstaller (packaging/ in the source).\n\n"
+        "Bundled with it: the components below, each under its own licence. The GPL components' sources are where their "
+        "entries say (chessground and stockfish.js at the versions named; python-chess on PyPI; the piece sets are SVG, "
+        "their own source).",
+    ]
+    gpl = (static / "licences" / "GPL-3.0.txt").read_text()
+
+    def licence_text(text: str) -> str:
+        """A licence file, unless it is the GPL version 3 again (once, at the end)."""
+        if " ".join(text.split())[:300] == " ".join(gpl.split())[:300]:
+            return "(the GNU General Public License, version 3: the full text is at the end)"
+        return text
+
+    data = json.loads((static / "design" / "licences.json").read_text()) if (static / "design" / "licences.json").exists() else {}
+    for name, v in data.get("vendor", {}).items():
+        text = f"{name}\nLicence: {v.get('licence', '')}\nSource: {v.get('source', '')}"
+        for file in re.findall(r"licences/(\S+)", v.get("source", "")):
+            if (static / "vendor" / "licences" / file).is_file():
+                text += "\n\n" + licence_text((static / "vendor" / "licences" / file).read_text(errors="replace"))
+        out.append(text)
+    for name, v in data.get("pieces", {}).items():
+        out.append(f"Piece set {v.get('label', name)} by {v.get('author', '')}\nLicence: {v.get('licence', '')}\nSource: {v.get('source', '')}")
+    for name in PACKAGES:
+        try:
+            dist = metadata.distribution(name)
+        except metadata.PackageNotFoundError:
+            continue
+        text = f"{dist.metadata['Name']} {dist.version}\nLicence: {dist.metadata.get('License-Expression') or dist.metadata.get('License') or ''}"
+        for f in dist.files or []:
+            if "dist-info" in str(f) and any(word in str(f).upper() for word in ("LICEN", "COPYING", "NOTICE", "AUTHORS")):
+                try:
+                    text += f"\n\n--- {Path(str(f)).name} ---\n" + licence_text(Path(dist.locate_file(f)).read_text(errors="replace"))
+                except OSError:
+                    continue
+        out.append(text)
+    out.append(f"Python {sys.version.split()[0]}\n\n" + _python_licence())
+    out.append("GNU General Public License, version 3\n\n" + gpl)
+    return rule.join(out) + "\n"
+
+
+@require_GET
+def notices(request):
+    return HttpResponse(notices_text(), content_type="text/plain; charset=utf-8")

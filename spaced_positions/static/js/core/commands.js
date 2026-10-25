@@ -3,6 +3,7 @@
 
 import { ctx, emit, keycaps, lookup, status } from "./context.js"
 import { evaluate } from "./when.js"
+import { tr } from "./i18n.js"
 
 let registry = { commands: {}, keymap: {}, prefixes: {} }
 const handlers = new Map()
@@ -25,9 +26,9 @@ export function handle(id, fn) {
 
 export function enabled(id) {
   const spec = registry.commands[id]
-  if (!spec) return { ok: false, reason: "unknown command" }
+  if (!spec) return { ok: false, reason: tr("unknown command") }
   try {
-    if (!evaluate(spec.when, lookup)) return { ok: false, reason: spec.reason || "not available here" }
+    if (!evaluate(spec.when, lookup)) return { ok: false, reason: spec.reason || tr("not available here") }
   } catch (err) {
     return { ok: false, reason: `bad when: ${err.message}` }
   }
@@ -64,7 +65,7 @@ export async function serverRun(id, args, extra = {}) {
       body: JSON.stringify({ args, context: serverContext(), ...extra }),
     })
   } catch {
-    status(`${registry.commands[id]?.title}: the app is not reachable`, { kind: "error" })
+    status(tr("{command}: the app is not reachable", { command: registry.commands[id]?.title }), { kind: "error" })
     return null
   }
   const result = await response.json().catch(() => ({ ok: false, message: `error ${response.status}` }))
@@ -84,7 +85,7 @@ export async function serverRun(id, args, extra = {}) {
 export async function run(id, args = [], { source = "key", silent = false } = {}) {
   const spec = registry.commands[id]
   if (!spec) {
-    status(`unknown command '${id}'`, { kind: "error" })
+    status(tr("unknown command '{id}'", { id }), { kind: "error" })
     return false
   }
   const state = enabled(id)
@@ -111,7 +112,7 @@ export async function run(id, args = [], { source = "key", silent = false } = {}
   } else {
     const fn = handlers.get(id)
     if (!fn) {
-      status(`${spec.title}: not implemented yet`, { kind: "error" })
+      status(tr("{command}: not implemented yet", { command: spec.title }), { kind: "error" })
       return false
     }
     const out = await fn(args, { source })
@@ -139,7 +140,7 @@ function syncDepth() {
   ctx.redoDepth = redoStack.length
 }
 
-const undoHint = () => ({ seq: primaryKeys("undo") || ["u"], label: "undo" })
+const undoHint = () => ({ seq: primaryKeys("undo") || ["u"], label: tr("undo") })
 
 handle("undo", async () => {
   const entry = undoStack.pop()
@@ -147,7 +148,7 @@ handle("undo", async () => {
   await entry.undo()
   redoStack.push(entry)
   syncDepth()
-  status(`Undone: ${entry.label}`, { keys: { seq: primaryKeys("redo") || ["U"], label: "redo" } })
+  status(tr("Undone: {what}", { what: entry.label }), { keys: { seq: primaryKeys("redo") || ["U"], label: tr("redo") } })
 })
 
 handle("redo", async () => {
@@ -156,7 +157,7 @@ handle("redo", async () => {
   await entry.redo()
   undoStack.push(entry)
   syncDepth()
-  status(`Redone: ${entry.label}`, { keys: undoHint() })
+  status(tr("Redone: {what}", { what: entry.label }), { keys: undoHint() })
 })
 
 handle("repeat", () => {
@@ -187,7 +188,7 @@ function teach(id, args) {
   const keys = primaryKeys(id, args)
   if (!keys) return
   const el = document.getElementById("status-message")
-  status("tip: ", { kind: "tip", timeout: 4000 })
+  status(tr("tip: "), { kind: "tip", timeout: 4000 })
   el.append(keycaps(keys), ` ${registry.commands[id].title.toLowerCase()}`)
 }
 

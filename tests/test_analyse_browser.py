@@ -225,7 +225,7 @@ def test_accessibility_with_a_position_open(page, ruy):
 
 
 def test_train_feedback_analyses_beside_the_board(page, ruy):
-    """Phase 7: `a` on the feedback shows the puzzle's analysis in Train, beside the board; the next puzzle closes it."""
+    """`a` on the feedback shows the puzzle's analysis in Train, beside the board; the next puzzle closes it."""
     root = tree.root(ruy)
     analysis_puzzles.act(root, "start")
     analysis_puzzles.act(root, "ready")

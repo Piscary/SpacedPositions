@@ -1,57 +1,60 @@
 <div class="inspector" data-inspector data-node="{{ node.id }}">
   {% if node.parent_id %}
-  {% section node.san key="v" summary="move · annotation · mark" %}
-    <div class="actionbar" aria-label="Annotation symbols">
+  {% translate "move · annotation · mark" as move_summary %}{% section node.san key="v" summary=move_summary %}
+    <div class="actionbar" aria-label="{% translate "Annotation symbols" %}">
       {% for n, symbol, on in nags %}<button type="button" class="keybutton keybutton--secondary keybutton--sm keybutton--full" data-cmd="analysis.nag" data-args="{{ n }}" aria-pressed="{% if on %}true{% else %}false{% endif %}"><span class="keybutton__label">{{ symbol }}</span>{% keycap n|stringformat:"s" %}</button>{% endfor %}
-      {% cmd "analysis.annotate" label="More…" size="sm" %}
+      {% cmd "analysis.annotate" label=_("More…") size="sm" %}
     </div>
     <div class="actionbar inspector__marks">
-      <button type="button" class="keybutton keybutton--secondary keybutton--sm keybutton--full mark-good" data-cmd="analysis.mark" data-args="good" aria-pressed="{% if node.mark == 'good' %}true{% else %}false{% endif %}"><span class="keybutton__label">Good</span>{% keycap "m g" %}</button>
-      <button type="button" class="keybutton keybutton--secondary keybutton--sm keybutton--full mark-dubious" data-cmd="analysis.mark" data-args="dubious" aria-pressed="{% if node.mark == 'dubious' %}true{% else %}false{% endif %}"><span class="keybutton__label">Dubious</span>{% keycap "m d" %}</button>
-      <button type="button" class="keybutton keybutton--secondary keybutton--sm keybutton--full mark-bad" data-cmd="analysis.mark" data-args="bad" aria-pressed="{% if node.mark == 'bad' %}true{% else %}false{% endif %}"><span class="keybutton__label">Bad</span>{% keycap "m b" %}</button>
-      {% cmd "analysis.mark" args="clear" label="Clear" size="sm" %}
+      <button type="button" class="keybutton keybutton--secondary keybutton--sm keybutton--full mark-good" data-cmd="analysis.mark" data-args="good" aria-pressed="{% if node.mark == 'good' %}true{% else %}false{% endif %}"><span class="keybutton__label">{% translate "Good" %}</span>{% keycap "m g" %}</button>
+      <button type="button" class="keybutton keybutton--secondary keybutton--sm keybutton--full mark-dubious" data-cmd="analysis.mark" data-args="dubious" aria-pressed="{% if node.mark == 'dubious' %}true{% else %}false{% endif %}"><span class="keybutton__label">{% translate "Dubious" %}</span>{% keycap "m d" %}</button>
+      <button type="button" class="keybutton keybutton--secondary keybutton--sm keybutton--full mark-bad" data-cmd="analysis.mark" data-args="bad" aria-pressed="{% if node.mark == 'bad' %}true{% else %}false{% endif %}"><span class="keybutton__label">{% translate "Bad" %}</span>{% keycap "m b" %}</button>
+      {% cmd "analysis.mark" args="clear" label=_("Clear") size="sm" %}
     </div>
     <div class="actionbar">{% cmd "analysis.promote" size="sm" %}{% cmd "analysis.moveup" size="sm" %}{% cmd "analysis.movedown" size="sm" %}{% cmd "analysis.delete" size="sm" %}</div>
   {% endsection %}
   {% endif %}
 
-  {% section "Comment" key="c" summary=node.comment|default:"none"|truncatechars:60 %}
+  {% translate "none" as none %}
+  {% section _("Comment") key="c" summary=node.comment|default:none|truncatechars:60 %}
     <form class="inspector__comment" data-comment-form data-node="{{ node.id }}">
-      <textarea class="field" name="comment" aria-label="Comment on {{ node.san|default:'the position' }}" placeholder="{% if node.parent_id %}A comment on {{ node.san }}{% else %}An introduction to the position{% endif %} · Alt+K Q R B N P insert ♔ ♕ ♖ ♗ ♘ ♙ (⇧ for black) · {% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵ saves">{{ node.comment }}</textarea>
+      <textarea class="field" name="comment" aria-label="{% if node.san %}{% blocktranslate trimmed with move=node.san %}Comment on {{ move }}{% endblocktranslate %}{% else %}{% translate "Comment on the position" %}{% endif %}" placeholder="{% if node.parent_id %}{% blocktranslate trimmed with move=node.san %}A comment on {{ move }}{% endblocktranslate %}{% else %}{% translate "An introduction to the position" %}{% endif %} · {% translate "Alt+K Q R B N P insert ♔ ♕ ♖ ♗ ♘ ♙ (⇧ for black)" %} · {% if is_mac %}{% translate "⌘↵ saves" %}{% else %}{% translate "Ctrl+↵ saves" %}{% endif %}">{{ node.comment }}</textarea>
     </form>
   {% endsection %}
 
-  {% section "Tags" key="t" summary=position.tag_names|join:", "|default:"none"|truncatechars:60 %}
-    <div class="formrow"><span class="formrow__label">Position</span><span class="inspector__tags">
-      {% for link in position_tags %}{% if link.origin == 'suggested' %}<button type="button" class="chip chip--tag chip--suggested" style="--tag: var(--{{ link.tag.field.color }})" data-cmd="library.tag" data-args="{{ link.tag.key }}" title="Suggested: {{ link.evidence }} · click accepts it">{{ link.tag.name }}?</button>{% else %}<button type="button" class="chip chip--tag{% if link.origin == 'auto' %} chip--auto{% endif %}" style="--tag: var(--{{ link.tag.field.color }})" data-cmd="library.untag" data-args="{{ link.tag.key }}" title="{{ link.tag.field.name }}{% if link.evidence %} · {{ link.evidence }}{% endif %} · click removes it">{{ link.tag.name }}</button>{% endif %}{% empty %}<span class="muted">none</span>{% endfor %}
-      {% cmd "analysis.positiontags" label="Add" size="sm" %}{% cmd "library.detect" label="Detect" size="sm" %}</span></div>
-    {% if node.parent_id %}<div class="formrow"><span class="formrow__label">Move {{ node.san }}</span><span class="inspector__tags">
-      {% for link in move_tags %}<button type="button" class="chip chip--tag{% if link.origin == 'auto' %} chip--auto{% endif %}" style="--tag: var(--{{ link.tag.field.color }})" data-cmd="analysis.untag" data-args="{{ link.tag.key }}" title="{{ link.tag.field.name }}{% if link.evidence %} · {{ link.evidence }}{% endif %} · click removes it">{{ link.tag.name }}</button>{% empty %}<span class="muted">none</span>{% endfor %}
-      {% cmd "analysis.tags" label="Add" size="sm" %}</span></div>{% endif %}
+  {% section _("Tags") key="t" summary=position.tag_names|join:", "|default:none|truncatechars:60 %}
+    <div class="formrow"><span class="formrow__label">{% translate "Position" %}</span><span class="inspector__tags">
+      {% for link in position_tags %}{% if link.origin == 'suggested' %}<button type="button" class="chip chip--tag chip--suggested" style="--tag: var(--{{ link.tag.field.color }})" data-cmd="library.tag" data-args="{{ link.tag.key }}" title="{% blocktranslate trimmed with why=link.evidence %}Suggested: {{ why }} · click accepts it{% endblocktranslate %}">{{ link.tag.label }}?</button>{% else %}<button type="button" class="chip chip--tag{% if link.origin == 'auto' %} chip--auto{% endif %}" style="--tag: var(--{{ link.tag.field.color }})" data-cmd="library.untag" data-args="{{ link.tag.key }}" title="{{ link.tag.field.label }}{% if link.evidence %} · {{ link.evidence }}{% endif %} · {% translate "click removes it" %}">{{ link.tag.label }}</button>{% endif %}{% empty %}<span class="muted">{% translate "none" %}</span>{% endfor %}
+      {% cmd "analysis.positiontags" label=_("Add") size="sm" %}{% cmd "library.detect" label=_("Detect") size="sm" %}</span></div>
+    {% if node.parent_id %}<div class="formrow"><span class="formrow__label">{% blocktranslate trimmed with move=node.san %}Move {{ move }}{% endblocktranslate %}</span><span class="inspector__tags">
+      {% for link in move_tags %}<button type="button" class="chip chip--tag{% if link.origin == 'auto' %} chip--auto{% endif %}" style="--tag: var(--{{ link.tag.field.color }})" data-cmd="analysis.untag" data-args="{{ link.tag.key }}" title="{{ link.tag.field.label }}{% if link.evidence %} · {{ link.evidence }}{% endif %} · {% translate "click removes it" %}">{{ link.tag.label }}</button>{% empty %}<span class="muted">{% translate "none" %}</span>{% endfor %}
+      {% cmd "analysis.tags" label=_("Add") size="sm" %}</span></div>{% endif %}
   {% endsection %}
 
-  {% section "Puzzle" key="z" summary=puzzle|yesno:"set up,none" %}
+  {% if puzzle %}{% translate "set up" as puzzle_summary %}{% else %}{% translate "none" as puzzle_summary %}{% endif %}
+  {% section _("Puzzle") key="z" summary=puzzle_summary %}
     {% if puzzle %}
-      <p class="inspector__puzzle">{% if puzzle.active %}<span class="chip chip--good">in training</span>{% else %}<span class="chip">draft</span>{% endif %}
-        {{ puzzle_cards }} card{{ puzzle_cards|pluralize }}{% if is_start %} · it starts here{% else %} · starts at {{ puzzle.start_node.san|default:"the start" }}{% endif %}</p>
+      <p class="inspector__puzzle">{% if puzzle.active %}<span class="chip chip--good">{% translate "in training" %}</span>{% else %}<span class="chip">{% translate "draft" %}</span>{% endif %}
+        {% blocktranslate trimmed count n=puzzle_cards %}{{ n }} card{% plural %}{{ n }} cards{% endblocktranslate %}{% if is_start %} · {% translate "it starts here" %}{% elif puzzle.start_node.san %} · {% blocktranslate trimmed with move=puzzle.start_node.san %}starts at {{ move }}{% endblocktranslate %}{% else %} · {% translate "starts at the start" %}{% endif %}</p>
       <div class="actionbar">
-        {% cmd "analysis.puzzle" args="end" label="Solution ends here" size="sm" %}
-        {% cmd "analysis.puzzle" args="also" label="Also correct" size="sm" %}
-        {% cmd "analysis.puzzle" args="answers" label="All answers count" size="sm" %}
-        {% cmd "analysis.puzzle" args="ready" label=puzzle.active|yesno:"Take out of training,Ready for training" size="sm" %}
-        {% cmd "analysis.puzzle" args="discard" label="Discard" size="sm" %}
+        {% cmd "analysis.puzzle" args="end" label=_("Solution ends here") size="sm" %}
+        {% cmd "analysis.puzzle" args="also" label=_("Also correct") size="sm" %}
+        {% cmd "analysis.puzzle" args="answers" label=_("All answers count") size="sm" %}
+        {% if puzzle.active %}{% cmd "analysis.puzzle" args="ready" label=_("Take out of training") size="sm" %}{% else %}{% cmd "analysis.puzzle" args="ready" label=_("Ready for training") size="sm" %}{% endif %}
+        {% cmd "analysis.puzzle" args="discard" label=_("Discard") size="sm" %}
       </div>
     {% else %}
-      <p class="muted">No puzzle here. Go to the move after which the puzzle starts (or the start position) and set one up: its solution is the analysis from there.</p>
-      <div class="actionbar">{% cmd "analysis.puzzle" args="start" label="Set up a puzzle from here" size="sm" %}</div>
+      <p class="muted">{% translate "No puzzle here. Go to the move after which the puzzle starts (or the start position) and set one up: its solution is the analysis from there." %}</p>
+      <div class="actionbar">{% cmd "analysis.puzzle" args="start" label=_("Set up a puzzle from here") size="sm" %}</div>
     {% endif %}
   {% endsection %}
 
-  {% section position.title|default:"Position" key="i" summary="source · objective · FEN" collapsed=True %}
-    <div class="formrow"><span class="formrow__label">Source</span><span>{{ position.citation|default:"—" }}</span></div>
-    <div class="formrow"><span class="formrow__label">Objective</span><span>{{ position.objective|default:"—" }}</span></div>
-    <div class="formrow"><span class="formrow__label">Difficulty</span><span>{{ position.difficulty|stars|default:"—" }}</span></div>
+  {% translate "Position" as position_word %}{% translate "source · objective · FEN" as info_summary %}
+  {% section position.title|default:position_word key="i" summary=info_summary collapsed=True %}
+    <div class="formrow"><span class="formrow__label">{% translate "Source" %}</span><span>{{ position.citation|default:"—" }}</span></div>
+    <div class="formrow"><span class="formrow__label">{% translate "Objective" %}</span><span>{{ position.objective|default:"—" }}</span></div>
+    <div class="formrow"><span class="formrow__label">{% translate "Difficulty" %}</span><span>{{ position.difficulty|stars|default:"—" }}</span></div>
     <div class="formrow"><span class="formrow__label">FEN</span><code class="line-text__fen">{{ node.fen }}</code></div>
-    <div class="formrow"><span class="formrow__label">Analysis</span><span>{{ move_count }} move{{ move_count|pluralize }}</span></div>
+    <div class="formrow"><span class="formrow__label">{% translate "Analysis" %}</span><span>{% blocktranslate trimmed count n=move_count %}{{ n }} move{% plural %}{{ n }} moves{% endblocktranslate %}</span></div>
   {% endsection %}
 </div>

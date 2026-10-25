@@ -33,7 +33,7 @@ def test_parse_terms_values_negation_and_spans():
 
 
 def test_parse_groups_or_and_problems():
-    parsed = parse("(src:polgar or src:nunn) -(motif:gabel) diff:")
+    parsed = parse("(src:reti or src:nunn) -(motif:gabel) diff:")
     root = parsed.root.alternatives[0]
     assert len(root[0].alternatives) == 2 and root[1].neg
     assert [p.message for p in parsed.problems] == ["diff: needs a value"]
@@ -52,9 +52,9 @@ def test_fold():
 
 @pytest.fixture
 def library(db):
-    polgar = Source.objects.create(title="5334 Problems", short="Polgár 5334", authors="László Polgár")
+    reti = Source.objects.create(title="Endgame Studies", short="Réti 1922", authors="Richard Réti")
     fork = tree.create_position(START, ["e2e4", "e7e5", "g1f3"], title="Fork drill")
-    fork.source, fork.source_page, fork.difficulty_override = polgar, "41", 4
+    fork.source, fork.source_page, fork.difficulty_override = reti, "41", 4
     fork.save()
     PositionTag.objects.create(position=fork, tag=Tag.objects.get(key="knight-fork"))
     ending = tree.create_position(ROOK_ENDING, [], title="Rook ending")
@@ -86,7 +86,7 @@ def test_numbers_text_source_and_states(library):
     assert titles("diff:>=3") == ["Fork drill"]
     assert titles("diff:1..2") == ["Rook ending"]
     assert titles("side:b") == ["Rook ending"]
-    assert titles("src:polgar page:41") == ["Fork drill"]
+    assert titles("src:reti page:41") == ["Fork drill"]
     assert titles("src:nunn") == ["Illustration"]
     assert titles('"rook end"') == ["Rook ending"]
     assert titles("knight") == ["Fork drill"]  # text finds tag names too
@@ -153,8 +153,8 @@ def test_games_players_sources_tags(db):
 @pytest.fixture
 def books(db):
     made = {}
-    for title, authors in (("Chess Monkeys Level 1", "Roman Vidonyak"), ("Chess Monkeys Level 2", "Roman Vidonyak"),
-                           ("CHESS - 5334 Problems", "László Polgár")):
+    for title, authors in (("Chess Ladder Level 1", "Anna Coach"), ("Chess Ladder Level 2", "Anna Coach"),
+                           ("CHESS - Endgame Studies", "Richard Réti")):
         source = Source.objects.create(title=title, authors=authors)
         for n in (12, 2, 9):
             p = tree.create_position(START, [], title=f"{title} {n}")
@@ -169,16 +169,16 @@ def count(text):
 
 
 def test_one_source_exactly_or_all_with_the_words(books):
-    assert count('src:"Chess Monkeys Level 1"') == 3  # exactly that one
-    assert count("src:chess") == 9 and count("src:monkeys") == 6
-    assert count('src:"monkeys 2"') == 3  # all the words, in any order
-    assert count("src:polgar") == 3  # the authors count too
-    source = Source.objects.get(title="CHESS - 5334 Problems")
+    assert count('src:"Chess Ladder Level 1"') == 3  # exactly that one
+    assert count("src:chess") == 9 and count("src:ladder") == 6
+    assert count('src:"ladder 2"') == 3  # all the words, in any order
+    assert count("src:reti") == 3  # the authors count too
+    source = Source.objects.get(title="CHESS - Endgame Studies")
     assert count(f"src:s{source.pk}") == 3
 
 
 def test_words_find_titles_sources_tags_and_comments(books):
-    p = books[("Chess Monkeys Level 1", 2)]
+    p = books[("Chess Ladder Level 1", 2)]
     p.description = "Ein Spieß gewinnt die Dame"
     p.save()
     root = tree.root(p)
@@ -187,32 +187,32 @@ def test_words_find_titles_sources_tags_and_comments(books):
     assert count("spiess") == 1 and count("SPIESS") == 1  # case and accents don't matter
     assert count("only good") == 1  # two words: both somewhere
     assert count('"only good"') == 1 and count('"good only"') == 0
-    assert count("vidonyak") == 6  # the source's authors
+    assert count("coach") == 6  # the source's authors
 
 
 def test_sort_by_source_page_and_diagram(books):
-    titles = [p.title for p in run('src:"Chess Monkeys Level 2" sort:source', "positions").queryset]
-    assert titles == ["Chess Monkeys Level 2 2", "Chess Monkeys Level 2 9", "Chess Monkeys Level 2 12"]  # 9 before 12
-    assert [p.ref_number for p in run("src:polgar sort:-diagram", "positions").queryset] == [12, 9, 2]
+    titles = [p.title for p in run('src:"Chess Ladder Level 2" sort:source', "positions").queryset]
+    assert titles == ["Chess Ladder Level 2 2", "Chess Ladder Level 2 9", "Chess Ladder Level 2 12"]  # 9 before 12
+    assert [p.ref_number for p in run("src:reti sort:-diagram", "positions").queryset] == [12, 9, 2]
 
 
 def test_facets_pick_one_source_and_training_follows_the_order(books, client):
     import json
     import re
 
-    html = client.get("/lib/facets/", {"q": 'src:"Chess Monkeys Level 1"'}).content.decode()
+    html = client.get("/lib/facets/", {"q": 'src:"Chess Ladder Level 1"'}).content.decode()
     from html import unescape
 
     on = [unescape(t) for t in re.findall(r'filters__row is-on"[^>]*data-term="([^"]*)"', html)]
-    assert on == ['src:"Chess Monkeys Level 1"']  # only the chosen one is on
+    assert on == ['src:"Chess Ladder Level 1"']  # only the chosen one is on
     for (title, n), p in books.items():
-        if title == "Chess Monkeys Level 1":
+        if title == "Chess Ladder Level 1":
             root = tree.root(p)
             tree.play(root, "e2e4")
             analysis_puzzles.act(root, "start")
             analysis_puzzles.act(root, "ready")
             analysis_puzzles.rebuild_all(p)
-    data = client.post("/lib/cards/", json.dumps({"c": "positions", "q": 'src:"Chess Monkeys Level 1" sort:diagram'}),
+    data = client.post("/lib/cards/", json.dumps({"c": "positions", "q": 'src:"Chess Ladder Level 1" sort:diagram'}),
                        content_type="application/json").json()
     from spaced_positions.training.models import Card
 
@@ -221,5 +221,5 @@ def test_facets_pick_one_source_and_training_follows_the_order(books, client):
 
 
 def test_a_star_is_ignored(books):
-    assert count("src:monkeys*") == 6 and count('src:"Chess Monkeys*"') == 6
+    assert count("src:ladder*") == 6 and count('src:"Chess Ladder*"') == 6
     assert count("Level*") == count("Level")

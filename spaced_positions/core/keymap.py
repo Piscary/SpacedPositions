@@ -6,6 +6,8 @@ from __future__ import annotations
 
 import copy
 
+from django.utils.translation import gettext
+
 from spaced_positions.design import check, lib
 
 from . import registry
@@ -21,6 +23,17 @@ def effective() -> dict:
             bindings[o.keys] = {"command": o.command, "args": list(o.args)}
         else:
             bindings.pop(o.keys, None)
+    return data
+
+
+def for_page(data: dict | None = None) -> dict:
+    """The registry as the page gets it: titles, groups, reasons and prefix names in the language of the request."""
+    data = copy.deepcopy(data) if data is not None else effective()
+    for spec in data["commands"].values():
+        for key in ("title", "group", "reason"):
+            if spec.get(key):
+                spec[key] = gettext(spec[key])
+    data["prefixes"] = {seq: gettext(label) for seq, label in data["prefixes"].items()}
     return data
 
 

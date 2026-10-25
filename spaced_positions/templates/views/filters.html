@@ -1,6 +1,6 @@
 <div class="filters" data-island="filters">
-  <div class="list filters__list" data-list data-filters role="listbox" aria-label="Filters">
-    <p class="muted filters__empty">Facets of the results of a Library pane in the same link group{% if node.group %} ({{ node.group }}){% endif %}:
-      ↵ adds or removes a term, - excludes it. Without a Library in this link group, this pane stays empty.</p>
+  <div class="list filters__list" data-list data-filters role="listbox" aria-label="{% translate "Filters" %}">
+    <p class="muted filters__empty">{% translate "Facets of the results of a Library pane in the same link group:" %}{% if node.group %} ({{ node.group }}){% endif %}
+      {% translate "↵ adds or removes a term, - excludes it. Without a Library in this link group, this pane stays empty." %}</p>
   </div>
 </div>

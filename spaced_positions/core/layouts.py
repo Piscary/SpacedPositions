@@ -2,12 +2,13 @@
 
 A layout is a tree: a split `{"type": "split", "dir": "row"|"col", "sizes": [...], "children": [...]}` or a pane
 `{"type": "pane", "id": "p1", "view": "board", "group": "A"|None, "pinned": False, "collapsed": False}`.
-Phase 0 ships the layouts with placeholder views; each placeholder names the phase that builds the real view.
 """
 
 import copy
 import re
 from dataclasses import dataclass
+
+from django.utils.translation import gettext_lazy as _
 
 
 @dataclass(frozen=True)
@@ -20,14 +21,14 @@ class Mode:
 
 
 MODES = [
-    Mode("home", "Home", "h", "What to do now: due cards, one-key sessions, a paste box, recent work."),
-    Mode("train", "Train", "t", "Solve puzzles: Review, Storm, Streak and custom sessions, with result screens."),
-    Mode("analyse", "Analyse", "a", "One position or game: moves, variations, comments, tags, engine, puzzles."),
-    Mode("collect", "Collect", "c", "Get material in fast: board editor, paste FEN/PGN, rapid entry from a book."),
-    Mode("library", "Library", "l", "Find and organise positions, games, puzzles, players, sources and tags."),
-    Mode("stats", "Stats", "s", "Progress: collection, analysis and training statistics, records, milestones."),
-    Mode("settings", "Settings", ",", "Theme, board, pieces, keymap, training rules and data."),
-    Mode("ui", "Style guide", "", "Every component in every state, and a playground for panes.", in_appbar=False),
+    Mode("home", _("Home"), "h", _("What to do now: due cards, one-key sessions, a paste box, recent work.")),
+    Mode("train", _("Train"), "t", _("Solve puzzles: Review, Storm, Streak and custom sessions, with result screens.")),
+    Mode("analyse", _("Analyse"), "a", _("One position or game: moves, variations, comments, tags, engine, puzzles.")),
+    Mode("collect", _("Collect"), "c", _("Get material in fast: board editor, paste FEN/PGN, rapid entry from a book.")),
+    Mode("library", _("Library"), "l", _("Find and organise positions, games, puzzles, players, sources and tags.")),
+    Mode("stats", _("Stats"), "s", _("Progress: collection, analysis and training statistics, records, milestones.")),
+    Mode("settings", _("Settings"), ",", _("Theme, board, pieces, keymap, training rules and data.")),
+    Mode("ui", _("Style guide"), "", _("Every component in every state, and a playground for panes."), in_appbar=False),
 ]
 MODES_BY_KEY = {m.key: m for m in MODES}
 
@@ -52,113 +53,113 @@ class View:
         return MODES_BY_KEY[self.lives_in].label if self.lives_in else ""
 
 
-PLACEHOLDER_HINTS = (("pane.view", "change view"), ("pane.split.vertical", "split"), ("help.context", "keys"))
+PLACEHOLDER_HINTS = (("pane.view", _("change view")), ("pane.split.vertical", _("split")), ("help.context", _("keys")))
 
 BOARD_HINTS = (
-    ("board.flip", "flip"),
-    ("board.back", "back"),
-    ("board.forward", "forward"),
-    ("board.entry", "type a move"),
-    ("board.setup", "set up"),
-    ("board.squaretool", "square tool"),
+    ("board.flip", _("flip")),
+    ("board.back", _("back")),
+    ("board.forward", _("forward")),
+    ("board.entry", _("type a move")),
+    ("board.setup", _("set up the position")),
+    ("board.squaretool", _("square tool")),
     ("board.copyfen", "FEN"),
     ("board.copypgn", "PGN"),
 )
 
 MOVES_HINTS = (
-    ("analysis.back", "back"),
-    ("analysis.forward", "forward"),
-    ("analysis.sibling next", "variation"),
+    ("analysis.back", _("back")),
+    ("analysis.forward", _("forward")),
+    ("analysis.sibling next", _("variation")),
     ("analysis.nag 1", "!"),
-    ("analysis.mark good", "mark"),
-    ("analysis.comment", "comment"),
-    ("analysis.promote", "main line"),
-    ("analysis.delete", "delete"),
+    ("analysis.mark good", _("mark")),
+    ("analysis.comment", _("comment")),
+    ("analysis.promote", _("main line")),
+    ("analysis.delete", _("delete")),
 )
 
 VIEWS = {
     v.key: v
     for v in [
         View(
-            "board", "Board", "b", "The interactive board: moves, drawings, setup, typed moves.", "views/board.html",
+            "board", _("Board"), "b", _("The interactive board: moves, drawings, setup, typed moves."), "views/board.html",
             hints=BOARD_HINTS,
         ),
         View(
-            "moves", "Moves", "m", "The analysis as a book-style move tree.", "views/moves.html",
+            "moves", _("Moves"), "m", _("The analysis as a book-style move tree."), "views/moves.html",
             hints=MOVES_HINTS,
         ),
         View(
-            "engine", "Engine", "e", "Stockfish lines and evaluation.", "views/engine.html",
-            hints=(("engine.toggle", "on / off"), ("engine.best", "play best"), ("engine.lines", "lines")),
+            "engine", _("Engine"), "e", _("Stockfish lines and evaluation."), "views/engine.html",
+            hints=(("engine.toggle", _("on / off")), ("engine.best", _("play best")), ("engine.lines", _("lines"))),
         ),
         View(
-            "inspector", "Inspector", "i", "The current move and position: comment, marks, puzzle setup.",
+            "inspector", _("Inspector"), "i", _("The current move and position: comment, marks, puzzle setup."),
             "views/inspector.html",
-            hints=(("analysis.comment", "comment"), ("analysis.annotate", "annotate"), ("analysis.puzzle start", "puzzle"),
-                   ("section.next", "next section"), ("section.toggle", "fold")),
+            hints=(("analysis.comment", _("comment")), ("analysis.annotate", _("annotate")), ("analysis.puzzle start", _("puzzle")),
+                   ("section.next", _("next section")), ("section.toggle", _("fold"))),
         ),
         View(
-            "evalgraph", "Eval graph", "g", "The engine's evaluation over the main line; mistakes marked.", "views/evalgraph.html",
-            hints=(("engine.evaluate", "evaluate"), ("analysis.back", "back"), ("analysis.forward", "forward")),
+            "evalgraph", _("Eval graph"), "g", _("The engine's evaluation over the main line; mistakes marked."), "views/evalgraph.html",
+            hints=(("engine.evaluate", _("evaluate")), ("analysis.back", _("back")), ("analysis.forward", _("forward"))),
         ),
         View(
-            "vargraph", "Variation graph", "r", "The move tree as a graph: the shape of a big analysis.", "views/vargraph.html",
-            hints=(("analysis.sibling next", "variation"), ("analysis.forward", "forward")),
+            "vargraph", _("Variation graph"), "r", _("The move tree as a graph: the shape of a big analysis."), "views/vargraph.html",
+            hints=(("analysis.sibling next", _("variation")), ("analysis.forward", _("forward"))),
         ),
         View(
-            "library", "Library", "l", "Positions, games, puzzles and more, with the query bar.", "views/library.html",
+            "library", _("Library"), "l", _("Positions, games, puzzles and more, with the query bar."), "views/library.html",
             list_view=True,
-            hints=(("search.open", "query"), ("list.select", "select"), ("library.tag", "tag"), ("library.train", "train"),
-                   ("library.analyse", "analyse"), ("library.trash", "trash"), ("library.display", "display")),
+            hints=(("search.open", _("query")), ("list.select", _("select")), ("library.tag", _("tag")), ("library.train", _("train")),
+                   ("library.analyse", _("analyse")), ("library.trash", _("trash")), ("library.display", _("display"))),
         ),
         View(
-            "filters", "Filters", "f", "Facets that write into the library query.", "views/filters.html", list_view=True,
-            hints=(("list.down", "down"), ("list.open", "add / remove"), ("library.exclude", "exclude")),
+            "filters", _("Filters"), "f", _("Facets that write into the library query."), "views/filters.html", list_view=True,
+            hints=(("list.down", _("down")), ("list.open", _("add / remove")), ("library.exclude", _("exclude"))),
         ),
         View(
-            "queue", "Session", "q", "Sessions to start, the running session (clock, combo, lives, prompt), the result.",
+            "queue", _("Session"), "q", _("Sessions to start, the running session (clock, combo, lives, prompt), the result."),
             "views/queue.html", lives_in="train",
         ),
         View(
-            "entry", "Entry session", "s", "Source, page, diagram number and presets for rapid entry.", "views/entry.html",
-            hints=(("collect.save", "save & next"), ("collect.source", "source"), ("collect.diagram up", "diagram +1"),
-                   ("collect.tag", "tag"), ("collect.ready", "ready")),
+            "entry", _("Entry session"), "s", _("Source, page, diagram number and presets for rapid entry."), "views/entry.html",
+            hints=(("collect.save", _("save & next")), ("collect.source", _("source")), ("collect.diagram up", _("diagram +1")),
+                   ("collect.tag", _("tag")), ("collect.ready", _("ready"))),
             lives_in="collect",
         ),
         View(
-            "chart", "Stats", "c", "Progress in charts and numbers: every number drills down.", "views/stats.html",
-            hints=(("chart.next next", "next chart"), ("chart.cursor next", "points"), ("chart.drill", "drill down"),
-                   ("chart.table", "table"), ("stats.period 30d", "period")),
+            "chart", _("Stats"), "c", _("Progress in charts and numbers: every number drills down."), "views/stats.html",
+            hints=(("chart.next next", _("next chart")), ("chart.cursor next", _("points")), ("chart.drill", _("drill down")),
+                   ("chart.table", _("table")), ("stats.period 30d", _("period"))),
         ),
         View(
-            "pgn", "PGN / FEN", "p", "The position or game as text; paste to load.", "views/pgn.html",
-            hints=(("pane.insert", "edit"), ("board.copyfen", "copy FEN"), ("board.copypgn", "copy PGN"), ("form.submit", "show what you pasted")),
+            "pgn", _("PGN / FEN"), "p", _("The position or game as text; paste to load."), "views/pgn.html",
+            hints=(("pane.insert", _("edit")), ("board.copyfen", _("copy FEN")), ("board.copypgn", _("copy PGN")), ("form.submit", _("show what you pasted"))),
         ),
         View(
-            "settings", "Settings", ",", "Every setting, searchable: themes, colours, type, board, keys, training, engine, data.",
+            "settings", _("Settings"), ",", _("Every setting, searchable: themes, colours, type, board, keys, training, engine, data."),
             "views/settings.html", list_view=True,
-            hints=(("search.open", "search"), ("settings.step next", "change"), ("settings.edit", "edit"), ("settings.reset", "reset"),
-                   ("section.next", "next section")),
+            hints=(("search.open", _("search")), ("settings.step next", _("change")), ("settings.edit", _("edit")), ("settings.reset", _("reset")),
+                   ("section.next", _("next section"))),
         ),
         View(
-            "keymap", "Keymap", "K", "Every command and its keys: ↵ binds new keys.", "views/keymap.html", list_view=True,
-            hints=(("search.open", "search"), ("keymap.bind", "new keys"), ("keymap.unbind", "remove")),
+            "keymap", _("Keymap"), "K", _("Every command and its keys: ↵ binds new keys."), "views/keymap.html", list_view=True,
+            hints=(("search.open", _("search")), ("keymap.bind", _("new keys")), ("keymap.unbind", _("remove"))),
         ),
         View(
-            "today", "Today", "h", "What to do now: due cards, one-key sessions, today's numbers, the pattern library.",
+            "today", _("Today"), "h", _("What to do now: due cards, one-key sessions, today's numbers, the pattern library."),
             "views/today.html",
-            hints=(("train.review", "review"), ("train.storm 3", "Storm"), ("train.weakest", "weakest"), ("section.next", "next section")),
+            hints=(("train.review", _("review")), ("train.storm 3", _("Storm")), ("train.weakest", _("weakest")), ("section.next", _("next section"))),
         ),
         View(
-            "continue", "Continue", "o", "The open analysis, the next diagram, a paste box, recent work.", "views/continue.html",
+            "continue", _("Continue"), "o", _("The open analysis, the next diagram, a paste box, recent work."), "views/continue.html",
             list_view=True,
-            hints=(("home.analysis", "analysis"), ("home.collect", "collect"), ("pane.insert", "paste box"), ("list.open", "open")),
+            hints=(("home.analysis", _("analysis")), ("home.collect", _("collect")), ("pane.insert", _("paste box")), ("list.open", _("open"))),
         ),
         View(
-            "components", "Components", "k", "Every component in every state.", "views/components.html",
+            "components", _("Components"), "k", _("Every component in every state."), "views/components.html",
             hints=(
-                ("pane.scroll down", "scroll"), ("pane.scroll halfdown", "half page"), ("section.next", "next section"),
-                ("section.toggle", "fold"), ("section.all", "fold all"), ("pane.insert", "edit a field"), ("demo.flash", "flash demo"),
+                ("pane.scroll down", _("scroll")), ("pane.scroll halfdown", _("half page")), ("section.next", _("next section")),
+                ("section.toggle", _("fold")), ("section.all", _("fold all")), ("pane.insert", _("edit a field")), ("demo.flash", _("flash demo")),
             ),
         ),
     ]

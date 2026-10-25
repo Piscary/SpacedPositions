@@ -1,12 +1,14 @@
 """Motifs that only show over a sequence of moves (python-chess): exchange and double-bishop sacrifices, intermezzo,
 trapped pieces, interference, self-block, batteries put to use, liquidation, breakthrough, triangulation, mate
-threats, windmills, perpetual check and the mad rook. chess-study-manager's detection/sequences.py, kept.
+threats, windmills, perpetual check and the mad rook.
 
 `line_features(board, moves, only=None)` walks a line from `board` and returns [(index, tag key, evidence)] for the
 moves of the side that plays moves[only] (default: the side to move at the start, the solver of a puzzle).
 """
 
 import chess
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_noop
 
 from .detect import NAMES, VALUE, balance, label, mates_in_one
 
@@ -86,11 +88,11 @@ def line_features(board, moves, only=None) -> list[tuple[int, str, str]]:  # noq
                        and moves[i].to_square in BACK_SQUARES[side] and boards[i + 1].is_capture(moves[i + 1])
                        and moves[i + 1].to_square == moves[i].to_square]
         if len(bishop_sacs) >= 2:
-            out.append((bishop_sacs[0], "double-bishop-sacrifice", f"Two bishop sacrifices: {label(boards[bishop_sacs[0]], moves[bishop_sacs[0]])} …"))
+            out.append((bishop_sacs[0], "double-bishop-sacrifice", _("Two bishop sacrifices: {value} …").format(value=label(boards[bishop_sacs[0]], moves[bishop_sacs[0]]))))
     start_pieces = [p for p in boards[first].piece_map().values() if p.piece_type not in (chess.KING, chess.PAWN)]
     if start_pieces and only_kings_and_pawns(final) and not final.is_checkmate() and len(moves) - first >= 2 \
             and balance(final, side) >= start_balance:
-        out.append((first, "liquidation", "Liquidation into a pawn ending"))
+        out.append((first, "liquidation", _('Liquidation into a pawn ending')))
 
     for i in idx:
         before, after, m = boards[i], boards[i + 1], moves[i]
@@ -100,7 +102,7 @@ def line_features(board, moves, only=None) -> list[tuple[int, str, str]]:  # noq
 
         if piece == chess.ROOK and reply is not None and after.is_capture(reply) and reply.to_square == m.to_square \
                 and after.piece_type_at(reply.from_square) in (chess.KNIGHT, chess.BISHOP, chess.PAWN) and ends_well:
-            out.append((i, "exchange-sacrifice", f"Exchange sacrifice {text}"))
+            out.append((i, "exchange-sacrifice", _("Exchange sacrifice {text}").format(text=text)))
 
         if i >= 1:  # intermezzo: the opponent just took something; a check or capture first, then the recapture
             prev, pb = moves[i - 1], boards[i - 1]
@@ -108,7 +110,7 @@ def line_features(board, moves, only=None) -> list[tuple[int, str, str]]:  # noq
             if pb.is_capture(prev) and pb.color_at(prev.to_square) == side and m.to_square != prev.to_square \
                     and (after.is_check() or before.is_capture(m)) and j is not None \
                     and moves[j].to_square == prev.to_square and boards[j].is_capture(moves[j]):
-                out.append((i, "zwischenzug", f"Intermezzo {text} before taking back"))
+                out.append((i, "zwischenzug", _("Intermezzo {text} before taking back").format(text=text)))
 
         for sq, p in after.piece_map().items():  # trapped piece: en prise, no safe square, falls within 4 plies
             if p.color == side or p.piece_type in (chess.KING, chess.PAWN) or VALUE[p.piece_type] < 3:
@@ -135,7 +137,7 @@ def line_features(board, moves, only=None) -> list[tuple[int, str, str]]:  # noq
                     break
             if falls:
                 key = "queen-trap" if p.piece_type == chess.QUEEN else "trapped-piece"
-                out.append((i, key, f"{text} traps the {NAMES[p.piece_type]} on {chess.square_name(sq)}"))
+                out.append((i, key, _("{text} traps the {value} on {value2}").format(text=text, value=_(NAMES[p.piece_type]), value2=chess.square_name(sq))))
                 break
 
         j = nxt(i)
@@ -146,13 +148,13 @@ def line_features(board, moves, only=None) -> list[tuple[int, str, str]]:  # noq
                     kind = before.piece_type_at(s)
                     if kind in (chess.BISHOP, chess.ROOK, chess.QUEEN) and m.to_square in chess.SquareSet(chess.between(s, target)) \
                             and boards[j].piece_type_at(s) == kind and s not in boards[j].attackers(not side, target) and s != m.to_square:
-                        out.append((i, "interference", f"{text} blocks the {NAMES[kind]} on {chess.square_name(s)}"))
+                        out.append((i, "interference", _("{text} blocks the {value} on {value2}").format(text=text, value=_(NAMES[kind]), value2=chess.square_name(s))))
                         break
 
         if piece in (chess.QUEEN, chess.BISHOP, chess.ROOK) and j is not None:  # a battery put to use
             if batteries(after, side) and boards[j].piece_type_at(moves[j].from_square) in (chess.QUEEN, chess.BISHOP, chess.ROOK) \
                     and (boards[j].gives_check(moves[j]) or boards[j].is_capture(moves[j])) and not batteries(before, side):
-                out.append((i, "battery", f"{text} builds a battery"))
+                out.append((i, "battery", _("{text} builds a battery").format(text=text)))
 
         if not after.is_check() and not before.is_capture(m) and not after.is_game_over():  # mate threat
             probe = after.copy(stack=False)
@@ -164,7 +166,7 @@ def line_features(board, moves, only=None) -> list[tuple[int, str, str]]:  # noq
 
         if piece == chess.PAWN and only_kings_and_pawns(before) and reply is not None and after.is_capture(reply) \
                 and reply.to_square == m.to_square and any(boards[k].turn == side and moves[k].promotion for k in range(i + 2, len(moves))):
-            out.append((i, "breakthrough", f"Breakthrough with {text}"))
+            out.append((i, "breakthrough", _("Breakthrough with {text}").format(text=text)))
 
         js = [i, nxt(i), nxt(i, 2)]  # triangulation
         if all(k is not None for k in js) and all(boards[k].piece_type_at(moves[k].from_square) == chess.KING for k in js) \
@@ -178,23 +180,23 @@ def line_features(board, moves, only=None) -> list[tuple[int, str, str]]:  # noq
             again = [k for k in (nxt(i), nxt(i, 2)) if k is not None and boards[k + 1].is_check()
                      and checker in boards[k + 1].checkers() and moves[k].to_square not in boards[k + 1].checkers()]
             if again:
-                out.append((i, "windmill", f"Windmill: discovered check {text} and again"))
+                out.append((i, "windmill", _("Windmill: discovered check {text} and again").format(text=text)))
 
         if len(moves) - i >= 4 and final.is_repetition(2) and all(boards[k + 1].is_check() for k in range(i, len(moves)) if boards[k].turn == side):
-            out.append((i, "perpetual-check", f"Perpetual check from {text}"))
+            out.append((i, "perpetual-check", _("Perpetual check from {text}").format(text=text)))
 
         if piece == chess.ROOK and after.is_check() and _taking_stalemates(after, m.to_square):  # mad rook
             more = [k for k in (nxt(i), nxt(i, 2)) if k is not None and boards[k].piece_type_at(moves[k].from_square) == chess.ROOK
                     and boards[k + 1].is_check() and _taking_stalemates(boards[k + 1], moves[k].to_square)]
             if more or final.is_stalemate():
-                out.append((i, "mad-rook", f"Mad rook: {text}, taking it stalemates"))
+                out.append((i, "mad-rook", _("Mad rook: {text}, taking it stalemates").format(text=text)))
 
     if final.is_checkmate() and final.turn != side:  # self-block
         king = final.king(final.turn)
         arrived = {moves[k].to_square for k in range(len(moves)) if boards[k].turn != side}
         blockers = [sq for sq in chess.SquareSet(chess.BB_KING_ATTACKS[king]) if final.color_at(sq) == final.turn and sq in arrived]
         if blockers:
-            out.append((idx[-1] if only is None else only, "self-block", f"Self-block on {chess.square_name(blockers[0])}"))
+            out.append((idx[-1] if only is None else only, "self-block", _("Self-block on {value}").format(value=chess.square_name(blockers[0]))))
 
     seen, unique = set(), []
     for i, key, text in out:

@@ -1,5 +1,4 @@
-"""The key moments of a game or an analysis as move tags (`:moments`, spec 11 §1 · Detection; the old app's
-`engine`, `moments` and `annotations` detectors).
+"""The key moments of a game or an analysis as move tags (`:moments`, spec 11 §1 · Detection).
 
 - Engine, Lichess style, in winning chances (−1 … +1 for the mover, wc = 2 / (1 + e^(−0.00368208·cp)) − 1):
   drop = wc(best) − wc(played): ≥ 0.3 blunder · ≥ 0.2 mistake · ≥ 0.1 inaccuracy; a missed win (from ≥ 0.6 to
@@ -20,6 +19,8 @@ import math
 
 import chess
 import chess.engine
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_noop
 
 from .detect import Finding, label, mates_in_one, move_findings
 
@@ -78,19 +79,19 @@ def _judge(node, mover: chess.Color, best: float, played: float, second: float |
     drop = best - played
     for key, threshold in THRESHOLDS:
         if drop >= threshold and not is_best:
-            out.append(Finding(key, f"Winning chances {best:+.2f} → {played:+.2f}", True))
+            out.append(Finding(key, _("Winning chances {best:+.2f} → {played:+.2f}").format(best=best, played=played), True))
             break
     if best >= 0.6 and played <= 0.2:
-        out.append(Finding("missed-win", f"A won position given away ({best:+.2f} → {played:+.2f})", True))
+        out.append(Finding("missed-win", _("A won position given away ({best:+.2f} → {played:+.2f})").format(best=best, played=played), True))
     if best >= 0.3 and played <= -0.3:
-        out.append(Finding("turning-point", "The advantage changes sides", True))
+        out.append(Finding("turning-point", _('The advantage changes sides'), True))
     if second is not None and best - second >= ONLY_MOVE_GAP and board.legal_moves.count() >= MIN_CHOICES:
         if is_best:
-            out.append(Finding("only-move", f"The only good move (the next best is {best - second:.2f} behind)", True))
+            out.append(Finding("only-move", _("The only good move (the next best is {value:.2f} behind)").format(value=best - second), True))
             if sacrifice and best < 0.9:
-                out.append(Finding("brilliant", "The only move, and a sacrifice", True))
+                out.append(Finding("brilliant", _('The only move, and a sacrifice'), True))
         else:
-            out.append(Finding("critical-moment", f"One good move, not found: {label(board, best_move)}", True))
+            out.append(Finding("critical-moment", _("One good move, not found: {value}").format(value=label(board, best_move)), True))
     return out
 
 
@@ -155,11 +156,11 @@ def chess_findings(nodes) -> dict[int, list[Finding]]:
         found = []
         mates = mates_in_one(before)
         if mates and not after.is_checkmate():
-            found.append(Finding("missed-mate", f"Mate in one was there: {label(before, mates[0])}", True))
+            found.append(Finding("missed-mate", _("Mate in one was there: {value}").format(value=label(before, mates[0])), True))
         if not after.is_game_over() and mates_in_one(after):
             safe = next((m for m in before.legal_moves if not _allows_mate(before, m)), None)
             if safe is not None:
-                found.append(Finding("allows-mate", f"Allows mate in one; {label(before, safe)} would have prevented it", True))
+                found.append(Finding("allows-mate", _("Allows mate in one; {value} would have prevented it").format(value=label(before, safe)), True))
         prev = by_id.get(node.parent_id)
         prev_capture = prev is not None and chess.Board(prev.parent.fen).is_capture(chess.Move.from_uci(prev.uci))
         if before.is_capture(move) and not prev_capture:
@@ -169,7 +170,7 @@ def chess_findings(nodes) -> dict[int, list[Finding]]:
                 captures += b.is_capture(m)
                 b.push(m)
             if captures >= EXPLOSION_CAPTURES:
-                found.append(Finding("tactical-explosion", f"{captures} captures in {EXPLOSION_PLIES} plies", True))
+                found.append(Finding("tactical-explosion", _("{captures} captures in {EXPLOSION_PLIES} plies").format(captures=captures, EXPLOSION_PLIES=EXPLOSION_PLIES), True))
         if found:
             out[node.id] = found
     return out

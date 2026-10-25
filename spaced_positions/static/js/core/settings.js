@@ -9,7 +9,7 @@ import { focusPane } from "./layout.js"
 import { cursorIndex, resetList, targetRows } from "./lists.js"
 import { openCmdline } from "./cmdline.js"
 import { inverse } from "./library.js"
-import { offer } from "./confirm.js"
+import { tr } from "./i18n.js"
 
 const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content || ""
 const settingsPanes = () => [...document.querySelectorAll("[data-island='settings']")]
@@ -117,7 +117,7 @@ handle("settings.step", ([direction]) => {
   const row = currentRow("[data-settings-list]")
   if (!row?.dataset.set) return false
   const value = stepped(row, direction)
-  if (value === null) return status("↵ edits this one on the command line", { timeout: 2000 }) || false
+  if (value === null) return status(tr("↵ edits this one on the command line"), { timeout: 2000 }) || false
   row.dataset.value = value // the next step starts here, before the rows come back
   return run("pref.set", [`${row.dataset.set}=${value}`])
 })
@@ -132,7 +132,7 @@ handle("settings.edit", () => {
 handle("settings.reset", () => {
   const row = currentRow("[data-settings-list]")
   if (!row?.dataset.set) return false
-  if (!row.classList.contains("is-changed")) return status("Already the default", { timeout: 1500 }) || false
+  if (!row.classList.contains("is-changed")) return status(tr("Already the default"), { timeout: 1500 }) || false
   return run("pref.reset", [row.dataset.set])
 })
 
@@ -147,7 +147,7 @@ handle("settings.export", () => {
   document.body.append(link)
   link.click()
   link.remove()
-  status("Settings exported as TOML: Settings → Data imports them on another machine", { timeout: 4000 })
+  status(tr("Settings exported as TOML: Settings → Data imports them on another machine"), { timeout: 4000 })
 })
 
 /** Settings → Data: pasted settings or a theme (TOML), with ⌘↵. */
@@ -156,24 +156,9 @@ export async function importSettings(text) {
     method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() }, body: JSON.stringify({ text }),
   }).catch(() => null)
   const data = response ? await response.json().catch(() => null) : null
-  if (!data) return status("Import: the app is not reachable", { kind: "error" })
+  if (!data) return status(tr("Import: the app is not reachable"), { kind: "error" })
   status(data.message, { kind: data.ok ? "good" : "error", timeout: 8000 })
   if (data.ok && data.effects) emit("effects", data.effects)
-}
-
-/** Settings → Data: the migration from chess-study-manager. First what it would add, then `y` imports it. */
-export async function importCsm(path, dryRun = true) {
-  status(dryRun ? "Reading the old database…" : "Importing (after a backup)…", { timeout: 0 })
-  const response = await fetch("/settings/csm/", {
-    method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() }, body: JSON.stringify({ path, dry_run: dryRun }),
-  }).catch(() => null)
-  const data = response ? await response.json().catch(() => null) : null
-  if (!data) return status("Import: the app is not reachable", { kind: "error" })
-  if (!data.ok) return status(data.message, { kind: "error", timeout: 8000 })
-  const problems = data.problems.length ? ` · ${data.problems.length} left out: ${data.problems[0]}` : ""
-  if (dryRun && data.new) return offer(`${data.message}${problems} · import it? y / n`, { y: () => importCsm(path, false) })
-  status(`${data.message}${problems}`, { kind: "good", timeout: 0 })
-  if (data.effects) emit("effects", data.effects)
 }
 
 // ── Keymap editor ─────────────────────────────────────────────────────────────────────────────────────────────
@@ -183,13 +168,13 @@ handle("keymap.bind", () => {
   if (!row) return false
   const command = row.dataset.command
   const keys = []
-  const show = () => status(`New keys for “${row.dataset.title}”: ${keys.map((k) => displayKey(k)).join(" ") || "…"} · ↵ keep · Esc cancel`, { timeout: 0 })
+  const show = () => status(tr("New keys for “{command}”: {keys} · ↵ keep · Esc cancel", { command: row.dataset.title, keys: keys.map((k) => displayKey(k)).join(" ") || "…" }), { timeout: 0 })
   show()
   ctx.overlay = "record"
   setOverlayHandler((e, token) => {
     if (token === "esc") {
       finish()
-      return status("Cancelled", { timeout: 1500 })
+      return status(tr("Cancelled"), { timeout: 1500 })
     }
     if (token === "enter" && keys.length) {
       finish()
@@ -208,14 +193,14 @@ handle("keymap.bind", () => {
 async function bind(args) {
   const result = await serverRun("key.map", args)
   if (!result) return false
-  status(result.message, { kind: "good", keys: { seq: ["u"], label: "undo" } })
+  status(result.message, { kind: "good", keys: { seq: ["u"], label: tr("undo") } })
   if (result.undo) pushUndo(inverse(result))
 }
 
 handle("keymap.unbind", async () => {
   const row = currentRow("[data-keymap-list]")
   const binding = row?.querySelector(".keymap__binding.is-mine") || row?.querySelector(".keymap__binding")
-  if (!binding) return status("No keys to remove here", { timeout: 1500 }) || false
+  if (!binding) return status(tr("No keys to remove here"), { timeout: 1500 }) || false
   const where = binding.dataset.context === "global" ? [] : [`@${binding.dataset.context}`]
   const id = binding.classList.contains("is-mine") ? "key.reset" : "key.unmap"
   const result = await serverRun(id, [...where, ...binding.dataset.keys.split(" ")])

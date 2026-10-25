@@ -1,4 +1,4 @@
-<div class="filters__total muted">{{ total }} position{{ total|pluralize }}</div>
+<div class="filters__total muted">{% blocktranslate trimmed count n=total %}{{ n }} position{% plural %}{{ n }} positions{% endblocktranslate %}</div>
 {% for group in groups %}
   <div class="filters__group">{{ group.label }}</div>
   {% for item in group.items %}

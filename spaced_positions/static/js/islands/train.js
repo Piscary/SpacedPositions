@@ -11,6 +11,9 @@ import * as lines from "../core/lines.js"
 import { sound } from "../core/sound.js"
 import { setNumber } from "../core/ticker.js"
 import { trainBoard } from "./board.js"
+import { tr, trn } from "../core/i18n.js"
+
+const STAGES = { new: tr("new"), learning: tr("learning"), relearning: tr("relearning"), young: tr("young"), mature: tr("mature"), review: tr("review") }
 
 const REPLY_MS = 280
 const BATCH_LEFT = 5
@@ -87,11 +90,11 @@ async function start(params) {
   if (T.state === "solving" || T.state === "feedback") await finish({ quiet: true })
   if (ctx.mode !== "train") await switchMode("train")
   const board = trainBoard()
-  if (!board) return status("Train needs a board pane: ␣ w v, then b", { kind: "error" }) || false
+  if (!board) return status(tr("Train needs a board pane: ␣ w v, then b"), { kind: "error" }) || false
   const response = await post("/train/start/", params).catch(() => null)
   const data = response ? await response.json().catch(() => null) : null
-  if (!data) return status("Could not start: the app is not reachable", { kind: "error" }) || false
-  if (!data.ok) return status(data.message || "Could not start", { kind: data.empty ? "info" : "error" }) || false
+  if (!data) return status(tr("Could not start: the app is not reachable"), { kind: "error" }) || false
+  if (!data.ok) return status(data.message || tr("Could not start"), { kind: data.empty ? "info" : "error" }) || false
   Object.assign(T, {
     session: data,
     params,
@@ -152,7 +155,7 @@ function countMatches() {
     const el = T.el?.querySelector("[data-train-match]")
     if (!el) return
     const data = await post("/lib/cards/", { c: "puzzles", q: T.custom.filter || "", count: true }).then((r) => r.json()).catch(() => null)
-    el.textContent = data ? `${data.count} card${data.count === 1 ? "" : "s"} match` : ""
+    el.textContent = data ? trn("{n} card matches", "{n} cards match", data.count) : ""
   }, 250)
 }
 document.addEventListener("click", (e) => {
@@ -317,7 +320,7 @@ function miss({ wrong = "", gaveUp = false }) {
 
 function record(c, success, ms) {
   if (c.p.retry) {
-    $("[data-hud-last]").textContent = `${success ? "✓" : "✗"} retry (not scored) · ${(ms / 1000).toFixed(1)}s`
+    $("[data-hud-last]").textContent = `${success ? "✓" : "✗"} ${tr("retry (not scored)")} · ${(ms / 1000).toFixed(1)}s`
     T.results.push({ card: c.p.card, success, ms, retry: true, reply: Promise.resolve(null) })
     return
   }
@@ -337,7 +340,7 @@ function record(c, success, ms) {
   result.reply = post(`/train/r/${T.session.session}/attempt/`, body)
     .then((r) => r.json())
     .catch(() => null)
-  $("[data-hud-last]").textContent = `${success ? "✓" : "✗"} ${c.p.title || "Puzzle"} · ${(ms / 1000).toFixed(1)}s`
+  $("[data-hud-last]").textContent = `${success ? "✓" : "✗"} ${c.p.title || tr("Puzzle")} · ${(ms / 1000).toFixed(1)}s`
   renderHud()
 }
 
@@ -352,7 +355,7 @@ function pieceList(fen) {
   for (const row of chess.board()) for (const sq of row) if (sq) out[sq.color].push(`${LETTER[sq.type]}${sq.square}`)
   const rank = (piece) => ("KQRBN".includes(piece[0]) ? "KQRBN".indexOf(piece[0]) : 5) // pawns last
   const order = (list) => list.sort((a, b) => rank(a) - rank(b))
-  return `White: ${order(out.w).join(" ")}\nBlack: ${order(out.b).join(" ")}`
+  return `${tr("White: {pieces}", { pieces: order(out.w).join(" ") })}\n${tr("Black: {pieces}", { pieces: order(out.b).join(" ") })}`
 }
 
 function renderHud() {
@@ -366,15 +369,15 @@ function renderHud() {
     const clock = T.session.clock
     const level = clock.levels.reduce((lvl, need, i) => (T.combo >= need ? i : lvl), 0)
     const next = clock.levels[level + 1]
-    $("[data-hud-combo-level]").textContent = `×${level + 1} combo · +${(bonus() / 1000).toFixed(1)}s a puzzle`
+    $("[data-hud-combo-level]").textContent = tr("×{level} combo · +{seconds}s a puzzle", { level: level + 1, seconds: (bonus() / 1000).toFixed(1) })
     $("[data-hud-combo-next]").textContent = next ? `${T.combo} → ${next}` : `${T.combo}`
     const from = clock.levels[level]
     $("[data-hud-combo-fill]").style.width = `${next ? (100 * (T.combo - from)) / (next - from) : 100}%`
   }
   if (c) {
     const look = T.session.options.look
-    $("[data-hud-side]").textContent = `${c.p.solver === "b" ? "Black" : "White"} to play`
-    $("[data-hud-objective]").textContent = c.p.objective || (c.p.firstOnly ? "Find the first move" : "Find the best continuation")
+    $("[data-hud-side]").textContent = c.p.solver === "b" ? tr("Black to play") : tr("White to play")
+    $("[data-hud-objective]").textContent = c.p.objective || (c.p.firstOnly ? tr("Find the first move") : tr("Find the best continuation"))
     $("[data-hud-pieces]").hidden = look !== "blind"
     if (look === "blind") $("[data-hud-pieces]").textContent = pieceList(c.p.fen)
   }
@@ -435,7 +438,7 @@ handle("train.hint", () => {
   const shapes = [{ orig: uci.slice(0, 2), brush: "paleGreen" }]
   if (c.hinted > 1) shapes.push({ orig: uci.slice(0, 2), dest: uci.slice(2, 4), brush: "paleGreen" })
   trainBoard().hint(shapes)
-  status(c.hinted > 1 ? "The move is on the board · this puzzle counts as missed" : "The piece to move is circled · this puzzle counts as missed", { timeout: 3000 })
+  status(c.hinted > 1 ? tr("The move is on the board · this puzzle counts as missed") : tr("The piece to move is circled · this puzzle counts as missed"), { timeout: 3000 })
 })
 
 handle("train.giveup", () => {
@@ -482,20 +485,22 @@ function feedback(c, success, ms) {
   }
   T.current = { ...c, done: true }
   const verdict = $("[data-fb-verdict]")
-  verdict.textContent = success ? `✓ Solved · ${(ms / 1000).toFixed(1)}s` : c.gaveUp ? "✗ Solution shown" : c.hinted ? `✓ Solved with a hint · counts as missed` : `✗ Missed${c.wrong ? ` (${c.wrong.slice(0, 2)}–${c.wrong.slice(2, 4)} was not it)` : ""}`
+  verdict.textContent = success ? `✓ ${tr("Solved")} · ${(ms / 1000).toFixed(1)}s` : c.gaveUp ? `✗ ${tr("Solution shown")}` : c.hinted ? `✓ ${tr("Solved with a hint · counts as missed")}`
+    : `✗ ${tr("Missed")}${c.wrong ? ` (${tr("{move} was not it", { move: `${c.wrong.slice(0, 2)}–${c.wrong.slice(2, 4)}` })})` : ""}`
   verdict.className = `train__verdict ${success ? "is-good" : "is-bad"}`
   const schedule = $("[data-fb-schedule]")
   schedule.textContent = "…"
   T.results.at(-1).reply?.then((data) => {
     if (!data || T.current?.token !== c.token) return
-    schedule.textContent = data.counted ? `next ${data.due} · ${data.stage}` : `solved before it was due: the schedule stays (next ${data.due})`
+    schedule.textContent = data.counted ? `${tr("next {when}", { when: data.due })} · ${STAGES[data.stage] || data.stage}`
+      : tr("solved before it was due: the schedule stays (next {when})", { when: data.due })
   })
   renderSolution(c, key)
   const tags = $("[data-fb-tags]")
   tags.replaceChildren(...(c.p.tags || []).map((t) => Object.assign(document.createElement("span"), { className: "chip chip--tag", textContent: t })))
   $("[data-fb-title]").textContent = c.p.title || ""
   $("[data-fb-source]").textContent = c.p.source || ""
-  if (T.session.mode === "streak" && T.over) $("[data-fb-schedule]").textContent += " · the run is over: ↵ shows the result"
+  if (T.session.mode === "streak" && T.over) $("[data-fb-schedule]").textContent += ` · ${tr("the run is over: ↵ shows the result")}`
   setState("feedback")
 }
 
@@ -556,7 +561,7 @@ handle("train.analyse", async () => {
   if (!p) return false
   const group = await openBeside()
   await window.SPOS.analysis.open(p.position, { key: `train:${group}`, show: false, node: p.startNode })
-  status("The analysis beside the board · ↵ next puzzle closes it · A opens it in Analyse", { timeout: 3000 })
+  status(tr("The analysis beside the board · ↵ next puzzle closes it · A opens it in Analyse"), { timeout: 3000 })
 })
 handle("train.analysemode", () => openInAnalyse(false))
 handle("train.edit", () => openInAnalyse(true))
@@ -564,7 +569,7 @@ handle("train.edit", () => openInAnalyse(true))
 handle("train.flag", async () => {
   if (!T.current) return false
   const r = await post("/train/flag/", { puzzle: T.current.p.puzzle }).then((x) => x.json()).catch(() => null)
-  status(r?.ok ? "Flagged as broken: is:flagged in the Library lists it" : "Could not flag it", { kind: r?.ok ? "good" : "error" })
+  status(r?.ok ? tr("Flagged as broken: is:flagged in the Library lists it") : tr("Could not flag it"), { kind: r?.ok ? "good" : "error" })
 })
 
 // ── Ending, result ─────────────────────────────────────────────────────────────────────────────────────────────
@@ -600,7 +605,7 @@ handle("train.quit", () => {
   const done = T.results.filter((r) => !r.retry).length
   const left = T.session.mode === "review" ? Math.max(0, T.session.total - done) : 0
   T.paused = null
-  status(`Stopped after ${done} puzzle${done === 1 ? "" : "s"}${left ? ` · the ${left} not reached stay due` : ""}`, { timeout: 5000 })
+  status(trn("Stopped after {n} puzzle", "Stopped after {n} puzzles", done) + (left ? ` · ${tr("the {n} not reached stay due", { n: left })}` : ""), { timeout: 5000 })
   return finish()
 })
 
@@ -630,9 +635,9 @@ handle("train.copy", async () => {
   const text = [box.querySelector(".result__label")?.textContent, ...[...box.querySelectorAll(".stat")].map((s) => `${s.querySelector(".stat__label").textContent}: ${s.querySelector(".stat__value").textContent}`)].join(" · ")
   try {
     await navigator.clipboard.writeText(text)
-    status("Copied the result", { kind: "good", timeout: 2500 })
+    status(tr("Copied the result"), { kind: "good", timeout: 2500 })
   } catch {
-    status("The browser didn't allow copying", { kind: "error" })
+    status(tr("The browser didn't allow copying"), { kind: "error" })
   }
 })
 
@@ -642,15 +647,15 @@ handle("train.copy", async () => {
 window.SPOS.trainEscape = () => {
   if (ctx.mode !== "train" || !["solving", "feedback"].includes(T.state)) return false
   if (T.state === "feedback") {
-    offer("↵ next puzzle · q end the session and see the result", { enter: () => run("train.next"), q: () => finish() })
+    offer(tr("↵ next puzzle · q end the session and see the result"), { enter: () => run("train.next"), q: () => finish() })
     return true
   }
   if (T.session.mode === "storm") {
-    offer("Quit the Storm? y / n", { y: () => finish(), n: () => {} })
+    offer(tr("Quit the Storm? y / n"), { y: () => finish(), n: () => {} })
     return true
   }
   T.paused = performance.now()
-  offer("Paused · ↵ resume · q quit · r restart", {
+  offer(tr("Paused · ↵ resume · q quit · r restart"), {
     enter: resume,
     q: () => finish(),
     r: () => { T.paused = null; start(T.params) },

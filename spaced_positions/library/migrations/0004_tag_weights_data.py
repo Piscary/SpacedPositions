@@ -1,4 +1,4 @@
-"""The difficulty weights of the starter tags (the old app's values, decision 18)."""
+"""The difficulty weights of the starter tags (decision 18)."""
 
 import json
 

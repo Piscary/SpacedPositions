@@ -4,11 +4,13 @@
 {% cmd "board.flip" %}                      a KeyButton rendered from the command registry
 {% cmd "pane.split.vertical" display="compact" variant="ghost" label="Split" args="pgn" %}
 {% section "Tags" key="t" summary="5 tags" %} … {% endsection %}
+Texts are translated by the caller (`label=_("Split")`); a command's own title is translated here.
 """
 
 from django import template
 from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext
 
 from spaced_positions.core import registry
 from spaced_positions.design import lib
@@ -40,7 +42,7 @@ def cmd(context, cid: str, display="full", variant="secondary", label="", args="
     spec = registry.command(cid)
     arg_list = args.split() if args else []
     keys = registry.primary_keys(cid, arg_list or None, keys_in or None) or registry.primary_keys(cid)
-    title = label or spec["title"]
+    title = label or gettext(spec["title"])
     classes = [f"keybutton keybutton--{variant} keybutton--{size} keybutton--{display}"]
     if spec.get("danger"):
         classes.append("keybutton--danger")
@@ -60,8 +62,8 @@ def cmd(context, cid: str, display="full", variant="secondary", label="", args="
         " ".join(classes),
         cid,
         " ".join(arg_list),
-        spec["title"],
-        format_html(' aria-label="{}"', spec["title"]) if display != "full" else "",
+        gettext(spec["title"]),
+        format_html(' aria-label="{}"', gettext(spec["title"])) if display != "full" else "",
         mark_safe("".join(str(p) for p in parts)),
     )
 
@@ -139,8 +141,8 @@ def miniboard(fen: str, size: int = 120, flip: bool = False, extra: str = ""):
 
     query = urlencode({"fen": fen, "size": size, "flip": "1" if flip else "", "t": colors_hash()})
     return format_html(
-        '<img class="miniboard {}" src="/svg/board/?{}" width="{}" height="{}" alt="Position {}" loading="lazy" data-fen="{}">',
-        extra, query, size, size, fen, fen,
+        '<img class="miniboard {}" src="/svg/board/?{}" width="{}" height="{}" alt="{}" loading="lazy" data-fen="{}">',
+        extra, query, size, size, gettext("Position {fen}").format(fen=fen), fen,
     )
 
 

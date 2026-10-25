@@ -1,6 +1,5 @@
-"""Fixture rows for the phase-0 demo views (the style guide and placeholder layouts). Famous public-domain
-positions; replaced by real library rows in phase 4.
-Rows: (id, title, tags, has solution, FEN or None). The FENs were taken from chess-study-manager's seed data."""
+"""Fixture rows for the style guide's demo list: famous public-domain positions.
+Rows: (id, title, tags, has solution, FEN or None)."""
 
 DEMO_ROWS = [
     ("p1", "Légal's Mate: 5.Nxe5!", ("Opfer", "Matt in 3"), True, "rn1qkbnr/ppp2p1p/3p2p1/4p3/2B1P1b1/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 5"),

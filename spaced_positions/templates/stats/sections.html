@@ -1,35 +1,36 @@
-{% load ui %}<div class="stats__periods segmented" role="radiogroup" aria-label="Period"><span class="segmented__label">Period</span><span class="segmented__options">
-  {% for p in periods %}<button type="button" class="segmented__option" role="radio" aria-checked="{% if p == period %}true{% else %}false{% endif %}" data-cmd="stats.period" data-args="{{ p }}">{{ p }} {% keycap forloop.counter|stringformat:"s" %}</button>{% endfor %}
+{% load ui %}<div class="stats__periods segmented" role="radiogroup" aria-label="{% translate "Period" %}"><span class="segmented__label">{% translate "Period" %}</span><span class="segmented__options">
+  {% for p, label in periods %}<button type="button" class="segmented__option" role="radio" aria-checked="{% if p == period %}true{% else %}false{% endif %}" data-cmd="stats.period" data-args="{{ p }}">{{ label }} {% keycap forloop.counter|stringformat:"s" %}</button>{% endfor %}
 </span></div>
 
-{% section "Overview" key="o" summary="positions · training · library · days in a row" %}
+{% translate "positions · training · library · days in a row" as s_overview %}{% section _("Overview") key="o" summary=s_overview %}
   <div class="stats-row">
     {% for label, value, drill in tiles %}<div class="stat" data-drill="{{ drill }}" role="button" tabindex="-1"><span class="stat__label">{{ label }}</span><span class="stat__value">{{ value }}</span></div>{% endfor %}
   </div>
 {% endsection %}
 
-{% section "Pattern library" key="l" summary=data.library.size|stringformat:"s"|add:" mature cards" %}
+{% blocktranslate trimmed count n=data.library.size asvar s_library %}{{ n }} mature card{% plural %}{{ n }} mature cards{% endblocktranslate %}
+{% section _("Pattern library") key="l" summary=s_library %}
   <div class="stats__lead">
-    <div class="meter"><div class="meter__top"><span><b data-ticker>{{ data.library.size }}</b> mature{% if data.library.next %} · next milestone {{ data.library.next }}{% endif %}</span>
-      <span class="mono">{% if milestone_eta %}on course for {{ data.library.next }} by {{ milestone_eta|date:"j M" }}{% elif data.library.next %}keep up with the reviews to get there{% endif %}</span></div>
+    <div class="meter"><div class="meter__top"><span>{% blocktranslate trimmed with n=data.library.size %}<b data-ticker>{{ n }}</b> mature{% endblocktranslate %}{% if data.library.next %} · {% blocktranslate trimmed with goal=data.library.next %}next milestone {{ goal }}{% endblocktranslate %}{% endif %}</span>
+      <span class="mono">{% if milestone_eta %}{% blocktranslate trimmed with goal=data.library.next when=milestone_eta|date:"j M" %}on course for {{ goal }} by {{ when }}{% endblocktranslate %}{% elif data.library.next %}{% translate "keep up with the reviews to get there" %}{% endif %}</span></div>
       <div class="meter__track"><div class="meter__fill" style="--w: {% widthratio data.library.progress 1 100 %}%"></div></div></div>
-    <p class="muted">{{ data.library.counts.young|default:0 }} young · {{ data.library.counts.learning|default:0 }} learning · {{ data.library.counts.new|default:0 }} new · {{ data.library.maturing_soon }} become mature in the next 30 days if you keep up</p>
+    <p class="muted">{% blocktranslate trimmed with young=data.library.counts.young|default:0 learning=data.library.counts.learning|default:0 new=data.library.counts.new|default:0 soon=data.library.maturing_soon %}{{ young }} young · {{ learning }} learning · {{ new }} new · {{ soon }} become mature in the next 30 days if you keep up{% endblocktranslate %}</p>
   </div>
   {{ library_chart }}
 {% endsection %}
 
-{% section "Card stages" key="c" summary="new · learning · young · mature per day" %}
+{% translate "new · learning · young · mature per day" as s_stages %}{% section _("Card stages") key="c" summary=s_stages %}
   {{ stages_chart }}
 {% endsection %}
 
-{% section "Retention" key="r" summary=data.retention.d30.rate|default_if_none:"–"|stringformat:"s" %}
+{% section _("Retention") key="r" summary=data.retention.d30.rate|default_if_none:"–"|stringformat:"s" %}
   <div class="stats-row">
-    {% for label, w in retention_rows %}<div class="stat"><span class="stat__label">{{ label }}</span><span class="stat__value">{% if w.rate is not None %}{% widthratio w.rate 1 100 %}%{% else %}–{% endif %}</span><span class="muted">{{ w.ok }} of {{ w.n }} due reviews</span></div>{% endfor %}
-    <div class="stat"><span class="stat__label">Young / mature</span><span class="stat__value">{% if data.retention.young.rate is not None %}{% widthratio data.retention.young.rate 1 100 %}%{% else %}–{% endif %} / {% if data.retention.mature.rate is not None %}{% widthratio data.retention.mature.rate 1 100 %}%{% else %}–{% endif %}</span><span class="muted">{{ data.retention.young.n }} / {{ data.retention.mature.n }} reviews</span></div>
+    {% for label, w in retention_rows %}<div class="stat"><span class="stat__label">{{ label }}</span><span class="stat__value">{% if w.rate is not None %}{% widthratio w.rate 1 100 %}%{% else %}–{% endif %}</span><span class="muted">{% blocktranslate trimmed with ok=w.ok n=w.n %}{{ ok }} of {{ n }} due reviews{% endblocktranslate %}</span></div>{% endfor %}
+    <div class="stat"><span class="stat__label">{% translate "Young / mature" %}</span><span class="stat__value">{% if data.retention.young.rate is not None %}{% widthratio data.retention.young.rate 1 100 %}%{% else %}–{% endif %} / {% if data.retention.mature.rate is not None %}{% widthratio data.retention.mature.rate 1 100 %}%{% else %}–{% endif %}</span><span class="muted">{% blocktranslate trimmed with young=data.retention.young.n mature=data.retention.mature.n %}{{ young }} / {{ mature }} reviews{% endblocktranslate %}</span></div>
   </div>
 {% endsection %}
 
-{% section "Mastery" key="m" summary="Learning → Familiar → Solid → Strong → Expert → Master" %}
+{% translate "Learning → Familiar → Solid → Strong → Expert → Master" as s_mastery %}{% section _("Mastery") key="m" summary=s_mastery %}
   <div class="stats-row stats__families">
     {% for f in data.families %}<div class="stat" data-drill="tag:{{ f.key }}"><span class="stat__label">{{ f.label }}</span><span class="stat__value">{{ f.mastery.name }}</span><span class="muted">{{ f.mastery.next|default:"" }}</span></div>{% endfor %}
   </div>
@@ -37,45 +38,46 @@
     <figcaption class="chart__title">{{ ladder.title }}</figcaption>
     <div class="chart__readout mono" data-readout aria-live="polite"></div>
     {% if ladder_rows %}<table class="ladder"><thead><tr><th></th>{% for l in levels %}<th>{{ l }}</th>{% endfor %}</tr></thead><tbody>
-      {% for r in ladder_rows %}<tr data-i="{{ forloop.counter0 }}"><th>{{ r.tag.name }}</th>{% for l in levels %}<td class="{% if forloop.counter0 <= r.mastery.level %}is-on{% endif %}"></td>{% endfor %}</tr>{% endfor %}
+      {% for r in ladder_rows %}<tr data-i="{{ forloop.counter0 }}"><th>{{ r.tag.label }}</th>{% for l in levels %}<td class="{% if forloop.counter0 <= r.mastery.level %}is-on{% endif %}"></td>{% endfor %}</tr>{% endfor %}
     </tbody></table>{% else %}<p class="muted chart__empty">{{ ladder.empty }}</p>{% endif %}
   </figure>
 {% endsection %}
 
-{% section "Weak spots" key="w" summary="weakest motifs · robustness" %}
+{% translate "weakest motifs · robustness" as s_weak %}{% section _("Weak spots") key="w" summary=s_weak %}
   {{ weak_chart }}
   <div class="stats-row">
-    {% for r in data.robustness %}<div class="stat{% if r.flag %} is-flag{% endif %}"><span class="stat__label">{{ r.label }}</span><span class="stat__value">{% if r.a.rate is not None %}{% widthratio r.a.rate 1 100 %}%{% else %}–{% endif %} / {% if r.b.rate is not None %}{% widthratio r.b.rate 1 100 %}%{% else %}–{% endif %}</span><span class="muted">{{ r.a_label }} / {{ r.b_label }}{% if r.flag %} · weaker {{ r.weaker }}{% endif %}</span></div>{% endfor %}
+    {% for r in data.robustness %}<div class="stat{% if r.flag %} is-flag{% endif %}"><span class="stat__label">{{ r.label }}</span><span class="stat__value">{% if r.a.rate is not None %}{% widthratio r.a.rate 1 100 %}%{% else %}–{% endif %} / {% if r.b.rate is not None %}{% widthratio r.b.rate 1 100 %}%{% else %}–{% endif %}</span><span class="muted">{{ r.a_label }} / {{ r.b_label }}{% if r.flag %} · {% blocktranslate trimmed with side=r.weaker %}weaker {{ side }}{% endblocktranslate %}{% endif %}</span></div>{% endfor %}
   </div>
 {% endsection %}
 
-{% section "Records" key="b" summary="Storm · Streak" %}
+{% section _("Records") key="b" summary="Storm · Streak" %}
   <div class="stats-row">
     {% for m, v in data.storm.best.items %}<div class="stat"><span class="stat__label">Storm {{ m }}′</span><span class="stat__value">{{ v|default:"–" }}</span></div>{% endfor %}
-    <div class="stat"><span class="stat__label">Streak</span><span class="stat__value">{{ data.streak.longest|default:"–" }}</span></div>
-    {% for lives, v in data.streak.with_lives %}<div class="stat"><span class="stat__label">Streak ♥{{ lives }}</span><span class="stat__value">{{ v }}</span></div>{% endfor %}
-    <div class="stat"><span class="stat__label">Best combo</span><span class="stat__value">{{ data.storm.best_combo|default:"–" }}</span></div>
+    <div class="stat"><span class="stat__label">{% translate "Streak" %}</span><span class="stat__value">{{ data.streak.longest|default:"–" }}</span></div>
+    {% for lives, v in data.streak.with_lives %}<div class="stat"><span class="stat__label">{% translate "Streak" %} ♥{{ lives }}</span><span class="stat__value">{{ v }}</span></div>{% endfor %}
+    <div class="stat"><span class="stat__label">{% translate "Best combo" %}</span><span class="stat__value">{{ data.storm.best_combo|default:"–" }}</span></div>
   </div>
   {{ storm_chart }}
 {% endsection %}
 
-{% section "Activity" key="a" summary="training days · points per week" %}
+{% translate "training days · points per week" as s_activity %}{% section _("Activity") key="a" summary=s_activity %}
   <div class="stats-row">
-    <div class="stat"><span class="stat__label">Days in a row</span><span class="stat__value">{{ data.consistency.current }}</span><span class="muted">longest {{ data.consistency.longest }}</span></div>
-    <div class="stat"><span class="stat__label">Training weeks in a row</span><span class="stat__value">{{ data.consistency.weeks }}</span><span class="muted">{{ data.consistency.week_goal }}+ days a week · this week {{ data.consistency.this_week_days }}</span></div>
-    <div class="stat"><span class="stat__label">Due reviews on time</span><span class="stat__value">{% if data.consistency.on_time is not None %}{% widthratio data.consistency.on_time 1 100 %}%{% else %}–{% endif %}</span><span class="muted">{{ data.consistency.overdue }} overdue now</span></div>
+    <div class="stat"><span class="stat__label">{% translate "Days in a row" %}</span><span class="stat__value">{{ data.consistency.current }}</span><span class="muted">{% blocktranslate trimmed with n=data.consistency.longest %}longest {{ n }}{% endblocktranslate %}</span></div>
+    <div class="stat"><span class="stat__label">{% translate "Training weeks in a row" %}</span><span class="stat__value">{{ data.consistency.weeks }}</span><span class="muted">{% blocktranslate trimmed with goal=data.consistency.week_goal days=data.consistency.this_week_days %}{{ goal }}+ days a week · this week {{ days }}{% endblocktranslate %}</span></div>
+    <div class="stat"><span class="stat__label">{% translate "Due reviews on time" %}</span><span class="stat__value">{% if data.consistency.on_time is not None %}{% widthratio data.consistency.on_time 1 100 %}%{% else %}–{% endif %}</span><span class="muted">{% blocktranslate trimmed with n=data.consistency.overdue %}{{ n }} overdue now{% endblocktranslate %}</span></div>
   </div>
   {{ calendar_chart }}
   {{ activity_chart }}
 {% endsection %}
 
-{% section "Collection" key="k" summary=data.collection.total|stringformat:"s"|add:" positions" %}
+{% blocktranslate trimmed count n=data.collection.total asvar s_collection %}{{ n }} position{% plural %}{{ n }} positions{% endblocktranslate %}
+{% section _("Collection") key="k" summary=s_collection %}
   {{ funnel_chart }}
   <div class="stats__grid">{{ source_chart }}{{ difficulty_chart }}{% for c in field_charts %}{{ c }}{% endfor %}</div>
 {% endsection %}
 
-{% section "Timeline" key="t" summary="records, milestones and level-ups" %}
+{% translate "records, milestones and level-ups" as s_timeline %}{% section _("Timeline") key="t" summary=s_timeline %}
   {% if achievements %}<div class="list stats__timeline" role="list">
-    {% for a in achievements %}<div class="list__row" role="listitem"><span class="list__id">{{ a.reached_at|date:"j M Y" }}</span><span class="list__title"><span class="achievement achievement--{{ a.kind }}">{{ a.label }}</span></span></div>{% endfor %}
-  </div>{% else %}<p class="muted">Records, milestones and level-ups appear here as you reach them.</p>{% endif %}
+    {% for a in achievements %}<div class="list__row" role="listitem"><span class="list__id">{{ a.reached_at|date:"j M Y" }}</span><span class="list__title"><span class="achievement achievement--{{ a.kind }}">{{ a.text }}</span></span></div>{% endfor %}
+  </div>{% else %}<p class="muted">{% translate "Records, milestones and level-ups appear here as you reach them." %}</p>{% endif %}
 {% endsection %}

@@ -4,7 +4,7 @@
     <span class="pane__n" data-pane-n>{{ node.n }}</span>
     <span class="pane__title">{{ view.label|default:node.view }}</span>
     <span class="pane__subject" data-pane-subject></span>
-    <span class="pane__link" data-pane-link{% if node.group %} data-group="{{ node.group }}"{% endif %}{% if not node.group and not node.pinned %} hidden{% endif %}>{% if node.pinned %}⊙ pinned{% else %}⛓ {{ node.group }}{% endif %}</span>
+    <span class="pane__link" data-pane-link{% if node.group %} data-group="{{ node.group }}"{% endif %}{% if not node.group and not node.pinned %} hidden{% endif %}>{% if node.pinned %}⊙ {% translate "pinned" %}{% else %}⛓ {{ node.group }}{% endif %}</span>
     <span class="pane__tabs" data-pane-tabs></span>
     <span class="pane__actions">
       {% cmd "pane.split.vertical" display="key" variant="ghost" size="sm" icon="◫" %}
@@ -17,7 +17,7 @@
       <div class="placeholder">
         <div class="placeholder__card">
           <div class="placeholder__title">{{ node.view }}</div>
-          <p class="placeholder__text">The app no longer has this view: a saved layout still names it. Pick another view for this pane, or close it.</p>
+          <p class="placeholder__text">{% translate "The app no longer has this view: a saved layout still names it. Pick another view for this pane, or close it." %}</p>
           <div class="actionbar">{% cmd "pane.view" %}{% cmd "pane.close" %}</div>
         </div>
       </div>
@@ -26,7 +26,7 @@
         <div class="placeholder__card">
           <div class="placeholder__title">{{ view.label }}</div>
           <p class="placeholder__text">{{ view.summary }}</p>
-          <p class="placeholder__text">It works in {{ view.home_label }}: its keys and the session belong there. Here, pick another view for this pane.</p>
+          <p class="placeholder__text">{% blocktranslate trimmed with mode=view.home_label %}It works in {{ mode }}: its keys and the session belong there. Here, pick another view for this pane.{% endblocktranslate %}</p>
           <div class="actionbar">{% cmd view.home_command variant="primary" %}{% cmd "pane.view" %}</div>
         </div>
       </div>

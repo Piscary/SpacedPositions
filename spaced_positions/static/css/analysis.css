@@ -126,9 +126,12 @@
 .evalbar.is-top .evalbar__text { inset: var(--s-half) 0 auto; }
 .evalbar.is-black .evalbar__text { color: var(--eval-white); }
 
-/* Piece letters (07 · figurines, board.letters): the text is the SAN; German letters and figurines are drawn */
-:is([data-letters="de"], [data-figurines]) .san-l { display: none; }
+/* Piece letters (07 · figurines, board.letters): the text is the SAN; German, French or Italian letters and figurines
+   are drawn */
+:is([data-letters="de"], [data-letters="fr"], [data-letters="it"], [data-figurines]) .san-l { display: none; }
 [data-letters="de"] .san-p::before { content: attr(data-de); }
+[data-letters="fr"] .san-p::before { content: attr(data-fr); }
+[data-letters="it"] .san-p::before { content: attr(data-it); }
 [data-figurines] .san-p::before { content: attr(data-fig); }
 
 /* Fold carets (05 · MoveTree): a folded variation shows its first move and how many follow */

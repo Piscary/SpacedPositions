@@ -1118,7 +1118,7 @@
    "handler": "client"
   },
   "pack.export": {
-   "title": "Export as a puzzle pack (for students)",
+   "title": "Export as a puzzle pack",
    "group": "Library",
    "aliases": [
     "pack-export"

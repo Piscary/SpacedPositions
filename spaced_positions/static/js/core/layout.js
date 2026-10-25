@@ -5,6 +5,7 @@
 import { ctx, emit, setLayer, status, storage, updateStatus } from "./context.js"
 import { command, enabled, handle, primaryKeys, pushUndo, run, serverRun } from "./commands.js"
 import { openMenu } from "./menu.js"
+import { tr } from "./i18n.js"
 
 const workspaces = new Map() // mode → ws
 const recent = [] // modes, most recent last: at most KEEP_ALIVE stay in the DOM (spec 03 §6)
@@ -121,7 +122,7 @@ async function loadPane(ws, node, el) {
     html = await fetch(`/v/${node.view}/?${params}`).then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
   } catch (err) {
     el.querySelector(".pane__loading")?.remove()
-    el.querySelector(".pane__body").textContent = `Could not load this view (${err}).`
+    el.querySelector(".pane__body").textContent = tr("Could not load this view ({error}).", { error: err })
     return
   }
   const template = document.createElement("template")
@@ -151,7 +152,7 @@ function decorate(ws, node) {
     if (node.group && !node.pinned) link.dataset.group = node.group
     else delete link.dataset.group
     link.dataset.cmd = "pane.group"
-    link.title = "Link group: click to cycle"
+    link.title = tr("Link group: click to cycle")
   }
   const tabs = el.querySelector("[data-pane-tabs]")
   if (tabs) {
@@ -258,7 +259,7 @@ function save(ws) {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() },
       body: JSON.stringify({ layout: strip(ws.tree), focus: ws.focus }),
-    }).catch(() => status("layout not saved: the app is not reachable", { kind: "error" }))
+    }).catch(() => status(tr("layout not saved: the app is not reachable"), { kind: "error" }))
   }, 500)
 }
 
@@ -349,7 +350,7 @@ function loadWorkspace(mode) {
 }
 
 export async function switchMode(mode, { push = true } = {}) {
-  if (!window.SPOS.modes[mode]) return fail(`no mode '${mode}'`)
+  if (!window.SPOS.modes[mode]) return fail(tr("no mode '{name}'", { name: mode }))
   const ticket = ++switchTicket // fast keys: only the last requested mode becomes active
   if (mode === ctx.mode) return
   let ws = workspaces.get(mode)
@@ -409,7 +410,7 @@ function startDrag(ws, gutter, e) {
     document.body.classList.remove("is-resizing")
     const after = snapshot(ws)
     if (JSON.stringify(after.tree) !== JSON.stringify(snap.tree)) {
-      pushUndo({ label: "Resize", undo: () => restore(ws, snap), redo: () => restore(ws, after) })
+      pushUndo({ label: tr("Resize"), undo: () => restore(ws, snap), redo: () => restore(ws, after) })
       save(ws)
     }
   }
@@ -429,7 +430,7 @@ function onContextMenu(ws, e) {
     "pane.group", "pane.pin", "pane.swap", "pane.close",
   ]
   openMenu({
-      title: "Pane",
+      title: tr("Pane"),
       anchor: { x: e.clientX, y: e.clientY },
       items: ids.map((id, i) => ({
         label: command(id).title,
@@ -444,7 +445,7 @@ function onContextMenu(ws, e) {
 
 // ── View picker ────────────────────────────────────────────────────────────────────────────────────────────────
 
-export function pickView(title = "View") {
+export function pickView(title = tr("View")) {
   const items = Object.entries(window.SPOS.views)
     .filter(([, v]) => v.picker)
     .map(([key, v]) => ({ label: v.label, key: v.picker, keys: [v.picker], value: key }))
@@ -454,7 +455,7 @@ export function pickView(title = "View") {
 async function viewArg(args, title) {
   if (args[0]) {
     if (!window.SPOS.views[args[0]]) {
-      status(`no view '${args[0]}'`, { kind: "error" })
+      status(tr("no view '{name}'", { name: args[0] }), { kind: "error" })
       return null
     }
     return args[0]
@@ -488,7 +489,7 @@ handle("pane.focus.next", () => cycleFocus(1))
 handle("pane.focus.prev", () => cycleFocus(-1))
 handle("pane.focus", ([n]) => {
   const pane = panesOf(current().tree)[Number(n) - 1]
-  if (!pane) return fail(`no pane ${n}`, { kind: "error" })
+  if (!pane) return fail(tr("no pane {n}", { n }), { kind: "error" })
   focusPane(pane.id)
 })
 handle("pane.focus.dir", ([dir]) => {
@@ -507,15 +508,15 @@ handle("pane.focus.dir", ([dir]) => {
     const dist = Math.hypot(r.left + r.width / 2 - cx, r.top + r.height / 2 - cy) - Math.max(0, overlap)
     if (!best || dist < best.dist) best = { id: pane.id, dist }
   }
-  if (!best) return fail(`no pane ${dir}`, { timeout: 2000 })
+  if (!best) return fail(tr("no pane in that direction"), { timeout: 2000 })
   focusPane(best.id)
 })
 
 async function split(dir, args) {
-  const view = await viewArg(args, dir === "row" ? "Split: view of the new pane" : "Split below: view of the new pane")
+  const view = await viewArg(args, dir === "row" ? tr("Split: view of the new pane") : tr("Split below: view of the new pane"))
   if (!view) return false
   const ws = current()
-  return change(ws, "Split", () => {
+  return change(ws, tr("Split"), () => {
     const hit = focusedHit(ws)
     const fresh = { type: "pane", id: newId(ws), view, group: hit.node.group || null, pinned: false, collapsed: false }
     if (hit.parent && hit.parent.dir === dir) {
@@ -537,7 +538,7 @@ export async function openBeside() {
   const mine = panesOf(ws.tree).find((p) => p.view === "moves" && p.group)
   if (mine) return mine.group
   const group = [..."BCDEFGH"].find((g) => !used.has(g)) || "H"
-  await change(ws, "Open in a split", () => {
+  await change(ws, tr("Open in a split"), () => {
     const hit = focusedHit(ws)
     const n = Number(newId(ws).slice(1))
     const pane = (view, id) => ({ type: "pane", id, view, group, pinned: false, collapsed: false })
@@ -588,11 +589,11 @@ function removeFocused(ws) {
   return hit.node
 }
 
-handle("pane.close", () => change(current(), "Close pane", () => (removeFocused(current()) ? undefined : false)))
+handle("pane.close", () => change(current(), tr("Close pane"), () => (removeFocused(current()) ? undefined : false)))
 
 handle("pane.only", () => {
   const ws = current()
-  return change(ws, "Only this pane", () => {
+  return change(ws, tr("Only this pane"), () => {
     const hit = focusedHit(ws)
     ws.buffers.push(...panesOf(ws.tree).filter((p) => p.id !== hit.node.id))
     ws.tree = hit.node
@@ -603,7 +604,7 @@ handle("pane.only", () => {
 handle("pane.buffers", async () => {
   const ws = current()
   const choice = await openMenu({
-    title: "Hidden buffers",
+    title: tr("Hidden buffers"),
     anchor: ctx.pane?.el?.querySelector(".pane__header"),
     items: ws.buffers.map((b, i) => ({ label: window.SPOS.views[b.view]?.label || b.view, key: String(i + 1), keys: [String(i + 1)], note: b.id, value: b.id })),
   })
@@ -614,8 +615,8 @@ handle("pane.buffers", async () => {
 handle("pane.buffer", ([id]) => {
   const ws = current()
   const index = ws.buffers.findIndex((b) => b.id === id || b.view === id)
-  if (index < 0) return fail(`no hidden buffer '${id}'`, { kind: "error" })
-  return change(ws, "Show buffer", () => {
+  if (index < 0) return fail(tr("no hidden buffer '{id}'", { id }), { kind: "error" })
+  return change(ws, tr("Show buffer"), () => {
     const [node] = ws.buffers.splice(index, 1)
     const hit = focusedHit(ws)
     replaceNode(ws, hit, { type: "split", dir: "row", sizes: [50, 50], children: [hit.node, node] })
@@ -624,10 +625,10 @@ handle("pane.buffer", ([id]) => {
 })
 
 handle("pane.view", async (args) => {
-  const view = await viewArg(args, "Change view")
+  const view = await viewArg(args, tr("Change view"))
   if (!view) return false
   const ws = current()
-  return change(ws, "Change view", () => {
+  return change(ws, tr("Change view"), () => {
     focusedHit(ws).node.view = view
   })
 })
@@ -636,12 +637,12 @@ handle("pane.maximize", () => {
   const ws = current()
   ws.max = ws.max ? null : ws.focus
   render(ws, { persist: false })
-  status(ws.max ? "Maximised · the other panes are tabs in its header" : "Restored", { timeout: 2500 })
+  status(ws.max ? tr("Maximised · the other panes are tabs in its header") : tr("Restored"), { timeout: 2500 })
 })
 
 handle("pane.collapse", () => {
   const ws = current()
-  return change(ws, "Collapse", () => {
+  return change(ws, tr("Collapse"), () => {
     const node = focusedHit(ws).node
     node.collapsed = !node.collapsed
   })
@@ -649,7 +650,7 @@ handle("pane.collapse", () => {
 
 handle("pane.swap", () => {
   const ws = current()
-  return change(ws, "Swap panes", () => {
+  return change(ws, tr("Swap panes"), () => {
     const panes = panesOf(ws.tree)
     const i = panes.findIndex((p) => p.id === ws.focus)
     const a = find(ws.tree, panes[i].id)
@@ -661,7 +662,7 @@ handle("pane.swap", () => {
 
 handle("pane.rotate", () => {
   const ws = current()
-  return change(ws, "Rotate split", () => {
+  return change(ws, tr("Rotate split"), () => {
     const hit = focusedHit(ws)
     hit.parent.dir = hit.parent.dir === "row" ? "col" : "row"
   })
@@ -669,7 +670,7 @@ handle("pane.rotate", () => {
 
 handle("pane.equalize", () => {
   const ws = current()
-  return change(ws, "Equal sizes", () => {
+  return change(ws, tr("Equal sizes"), () => {
     const walk = (node) => {
       if (node.type !== "split") return
       node.sizes = node.children.map(() => 100 / node.children.length)
@@ -684,8 +685,8 @@ handle("pane.resize", ([dir]) => {
   const wantDir = dir === "<" || dir === ">" ? "row" : "col"
   const hit = focusedHit(ws)
   const level = [...hit.path].reverse().find((p) => p.split.dir === wantDir)
-  if (!level) return fail(`no ${wantDir === "row" ? "side-by-side" : "stacked"} split to resize`, { timeout: 2000 })
-  return change(ws, "Resize", () => {
+  if (!level) return fail(wantDir === "row" ? tr("no side-by-side split to resize") : tr("no stacked split to resize"), { timeout: 2000 })
+  return change(ws, tr("Resize"), () => {
     const { split, index } = level
     const total = split.sizes.reduce((a, b) => a + b, 0)
     const delta = (dir === ">" || dir === "+" ? 1 : -1) * total * 0.05
@@ -699,27 +700,27 @@ handle("pane.resize", ([dir]) => {
 
 handle("pane.group", () => {
   const ws = current()
-  return change(ws, "Link group", () => {
+  return change(ws, tr("Link group"), () => {
     const node = focusedHit(ws).node
     node.pinned = false
     node.group = node.group === "A" ? "B" : node.group === "B" ? null : "A"
-    status(node.group ? `Link group ${node.group}` : "Not linked", { timeout: 2000 })
+    status(node.group ? tr("Link group {group}", { group: node.group }) : tr("Not linked"), { timeout: 2000 })
   })
 })
 
 handle("pane.pin", () => {
   const ws = current()
-  return change(ws, "Pin", () => {
+  return change(ws, tr("Pin"), () => {
     const node = focusedHit(ws).node
     node.pinned = !node.pinned
-    status(node.pinned ? "Pinned: this pane keeps its subject" : "Unpinned", { timeout: 2000 })
+    status(node.pinned ? tr("Pinned: this pane keeps its subject") : tr("Unpinned"), { timeout: 2000 })
   })
 })
 
 handle("layout.reset", async () => {
   const ws = current()
   const { layout } = await fetch(`/m/${ws.mode}/default`).then((r) => r.json())
-  return change(ws, "Reset layout", () => {
+  return change(ws, tr("Reset layout"), () => {
     ws.tree = layout
     ws.buffers = []
     ws.max = null
@@ -737,9 +738,9 @@ handle("layout.load", async ([...words]) => {
   const name = words.join(" ").trim()
   const { layouts } = await fetch("/layouts/").then((r) => r.json())
   const saved = layouts.find((l) => l.name === name)
-  if (!saved) return fail(`no layout '${name}'`, { kind: "error" })
+  if (!saved) return fail(tr("no layout '{name}'", { name }), { kind: "error" })
   const ws = current()
-  return change(ws, `Load layout ${name}`, () => {
+  return change(ws, tr("Load layout {name}", { name }), () => {
     ws.tree = clone(saved.layout)
     ws.max = null
   })

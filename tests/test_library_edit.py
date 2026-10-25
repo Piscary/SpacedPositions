@@ -1,4 +1,4 @@
-"""Phase 6: editing the vocabulary, sources and players (`:edit`, `:new-tag`, `:new-player`, `:new-source`,
+"""Editing the vocabulary, sources and players (`:edit`, `:new-tag`, `:new-player`, `:new-source`,
 `:delete`, `:player-link`), each with its undo."""
 
 import json
@@ -107,13 +107,13 @@ def test_players_new_edit_link_and_delete(client):
 
 
 def test_sources_new_edit_and_delete_in_use(client):
-    made = run(client, "source.new", '"Chess: 5334 Problems" short="Polgár" year=1994 kind=book')
+    made = run(client, "source.new", '"Chess: Endgame Studies" short="Réti" year=1922 kind=book')
     assert made["ok"], made
-    source = Source.objects.get(short="Polgár")
-    assert source.year == 1994
-    assert run(client, "library.edit", f"s{source.pk} authors=\"Polgár, László\"")["ok"]
+    source = Source.objects.get(short="Réti")
+    assert source.year == 1922
+    assert run(client, "library.edit", f"s{source.pk} authors=\"Réti, Richard\"")["ok"]
     source.refresh_from_db()
-    assert source.authors == "Polgár, László"
+    assert source.authors == "Réti, Richard"
     assert not run(client, "library.edit", f"s{source.pk} kind=magazine")["ok"]
     p = tree.create_position(back_rank(0), ["d1d8"])
     p.source = source
@@ -209,7 +209,7 @@ def test_moments_endpoint(client, monkeypatch):
 
 @pytest.mark.django_db(transaction=True)
 def test_big_import_in_the_background(client, monkeypatch):
-    """Phase 7: a big PGN is uploaded as it is and imported in batches in the background; duplicates are left out."""
+    """A big PGN is uploaded as it is and imported in batches in the background; duplicates are left out."""
     import time
 
     from spaced_positions.library import importer

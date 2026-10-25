@@ -4,6 +4,7 @@ import hashlib
 import json
 
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.utils.translation import gettext
 from django.views.decorators.http import require_GET, require_POST
 
 from spaced_positions import chesslogic
@@ -48,7 +49,7 @@ def paste(request):
     except ValueError:
         return HttpResponseBadRequest("not JSON")
     if len(text) > MAX_PASTE:
-        return JsonResponse({"kind": "unknown", "message": "too large to paste: import it as a file (:import)"})
+        return JsonResponse({"kind": "unknown", "message": gettext("too large to paste: import it as a file (:import)")})
     return JsonResponse(chesslogic.parse_paste(text))
 
 

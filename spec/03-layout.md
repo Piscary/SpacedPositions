@@ -12,7 +12,7 @@ The screen always has three horizontal bands. Only the workspace changes.
 │                                    WORKSPACE (layout of panes)                               │
 │                                                                                              │
 ├──────────────────────────────────────────────────────────────────────────────────────────────┤
-│ ANALYSE │ NORMAL │ 2 Moves │ p123 Polgár Nr. 102 · 12…Nf6 (var B) │ ● saved │ ␣ leader  ? keys │  ← status line (22px)
+│ ANALYSE │ NORMAL │ 2 Moves │ p123 Manual Nr. 102 · 12…Nf6 (var B) │ ● saved │ ␣ leader  ? keys │  ← status line (22px)
 └──────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -28,7 +28,7 @@ The screen always has three horizontal bands. Only the workspace changes.
    accent, Setup indigo, Move entry teal).
 2. **Pending keys** (`␣ w …`) while a sequence is open.
 3. **Focused pane**: number and view.
-4. **Subject + cursor**: `p123 Polgár Nr. 102 · 12…Nf6 (var B)`, or `Library · 38 of 2,002 · 12 selected`.
+4. **Subject + cursor**: `p123 Manual Nr. 102 · 12…Nf6 (var B)`, or `Library · 38 of 2,002 · 12 selected`.
 5. **Messages**: the last command's result with its undo key, errors, inline confirmations (`y / n`), tips.
 6. **Activity**: saving, engine depth, import progress, each with a key to stop or open it.
 7. Right: `␣ leader · ? keys` (always, so the two entry points are never forgotten).
@@ -100,7 +100,7 @@ different* lines.
 - A link group can follow the **library cursor**: put the Library in one pane and a Board in a pane linked to it,
   and `j/k` in the list previews each position on the board. This is how browsing works in Library mode.
 
-**Every view in every mode** (phase 7 cleanup). The user may build any arrangement; a view either works wherever
+**Every view in every mode**. The user may build any arrangement; a view either works wherever
 it is, or says plainly why not:
 - An **analysis** (Moves, Inspector, Engine, Eval graph, Variation graph, and the boards of its link group) works in
   any mode: `:analyse` opens one into the focused link group's panes when the mode has a move tree there, `o` in the

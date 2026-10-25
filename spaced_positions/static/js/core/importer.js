@@ -7,22 +7,23 @@ import { inverse } from "./library.js"
 import { ctx, keycaps, setLayer, status } from "./context.js"
 import { setOverlayHandler } from "./keys.js"
 import { offer } from "./confirm.js"
+import { locale, tr, trn } from "./i18n.js"
 
 const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content || ""
 const post = (url, body) =>
   fetch(url, { method: "POST", headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() }, body: JSON.stringify(body) })
     .then(async (r) => ({ status: r.status, data: await r.json().catch(() => ({ ok: false, message: `error ${r.status}` })) }))
-    .catch(() => ({ status: 0, data: { ok: false, message: "the app is not reachable" } }))
+    .catch(() => ({ status: 0, data: { ok: false, message: tr("the app is not reachable") } }))
 
 let open = null
 
 export async function openImport(text) {
-  status("Reading the PGN…", { timeout: 0 })
+  status(tr("Reading the PGN…"), { timeout: 0 })
   const { data } = await post("/lib/import/scan/", { text })
-  if (data.message?.startsWith("the file is larger")) return importInBackground(new Blob([text]))
+  if (data.too_large) return importInBackground(new Blob([text]))
   if (!data.ok) return status(data.message, { kind: "error" }) || false
   if (data.more) {
-    return offer("More than 5,000 games: import all of them in the background (duplicates left out)? y · r with the puzzles in training · n", {
+    return offer(tr("More than 5,000 games: import all of them in the background (duplicates left out)? y · r with the puzzles in training · n"), {
       y: () => importInBackground(new Blob([text])),
       r: () => importInBackground(new Blob([text]), true),
     })
@@ -36,25 +37,25 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 /** A big PGN: uploaded as it is, imported in the background (the app stays usable); the status line follows it. */
 export async function importInBackground(blob, ready = false) {
-  status("Uploading the PGN…", { timeout: 0 })
+  status(tr("Uploading the PGN…"), { timeout: 0 })
   const data = await fetch(`/lib/import/upload/?ready=${ready ? 1 : 0}`, {
     method: "POST", headers: { "Content-Type": "application/octet-stream", "X-CSRFToken": csrf() }, body: blob,
-  }).then((r) => r.json()).catch(() => ({ ok: false, message: "the app is not reachable" }))
+  }).then((r) => r.json()).catch(() => ({ ok: false, message: tr("the app is not reachable") }))
   if (!data.ok) return status(data.message, { kind: "error" }) || false
   for (;;) {
     await sleep(1000)
     const job = await fetch(`/lib/import/job/${data.id}/`).then((r) => r.json()).catch(() => null)
-    if (!job?.ok) return status(job?.message || job?.error || "The import stopped", { kind: "error" }) || false
+    if (!job?.ok) return status(job?.message || job?.error || tr("The import stopped"), { kind: "error" }) || false
     if (!job.done) {
-      status(`Importing in the background · ${job.imported.toLocaleString()} so far · ${job.percent} %`, { timeout: 0 })
+      status(tr("Importing in the background · {n} so far · {percent} %", { n: job.imported.toLocaleString(locale), percent: job.percent }), { timeout: 0 })
       continue
     }
-    const parts = [`Imported ${job.games.toLocaleString()} game${job.games === 1 ? "" : "s"}`]
-    if (job.positions) parts.push(`${job.positions} puzzle${job.positions === 1 ? "" : "s"}`)
-    if (job.duplicates) parts.push(`${job.duplicates} already here`)
-    if (job.failed) parts.push(`${job.failed} could not be read`)
+    const parts = [trn("Imported {n} game", "Imported {n} games", job.games)]
+    if (job.positions) parts.push(trn("{n} puzzle", "{n} puzzles", job.positions))
+    if (job.duplicates) parts.push(tr("{n} already here", { n: job.duplicates }))
+    if (job.failed) parts.push(tr("{n} could not be read", { n: job.failed }))
     job.message = parts.join(" · ")
-    status(job.message, { kind: "good", keys: { seq: ["u"], label: "undo" } })
+    status(job.message, { kind: "good", keys: { seq: ["u"], label: tr("undo") } })
     pushUndo(inverse(job))
     if (job.games) window.SPOS.library?.setQuery?.("created:<1d", "games")
     return true
@@ -67,7 +68,7 @@ function show(text, items) {
   const el = document.createElement("div")
   el.className = "importer"
   el.setAttribute("role", "dialog")
-  el.setAttribute("aria-label", "Import")
+  el.setAttribute("aria-label", tr("Import"))
   const head = document.createElement("div")
   head.className = "importer__head"
   const list = document.createElement("div")
@@ -75,7 +76,7 @@ function show(text, items) {
   list.setAttribute("role", "listbox")
   const foot = document.createElement("div")
   foot.className = "importer__foot"
-  for (const [seq, label] of [[["j"], "down"], [["x"], "select"], [["a"], "all / none"], [["r"], "puzzles into training"], [["enter"], "import"], [["esc"], "cancel"]]) {
+  for (const [seq, label] of [[["j"], tr("down")], [["x"], tr("select")], [["a"], tr("all / none")], [["r"], tr("puzzles into training")], [["enter"], tr("import")], [["esc"], tr("cancel")]]) {
     const hint = document.createElement("span")
     hint.className = "keyhint"
     hint.append(keycaps(seq), ` ${label}`)
@@ -95,8 +96,9 @@ function paint() {
   const puzzles = o.items.length - games
   const dups = o.items.filter((i) => i.duplicate).length
   o.el.querySelector(".importer__head").textContent =
-    `Import · ${games} game${games === 1 ? "" : "s"}, ${puzzles} puzzle${puzzles === 1 ? "" : "s"}${dups ? ` · ${dups} already in the library` : ""} · ${o.selected.size} selected` +
-    (puzzles ? ` · puzzles ${o.ready ? "into training" : "as drafts"}` : "")
+    `${tr("Import")} · ${trn("{n} game", "{n} games", games)}, ${trn("{n} puzzle", "{n} puzzles", puzzles)}` +
+    `${dups ? ` · ${tr("{n} already in the library", { n: dups })}` : ""} · ${tr("{n} selected", { n: o.selected.size })}` +
+    (puzzles ? ` · ${o.ready ? tr("puzzles into training") : tr("puzzles as drafts")}` : "")
   const list = o.el.querySelector(".importer__list")
   list.replaceChildren(...o.items.slice(0, 1000).map((item, index) => {
     const row = document.createElement("div")
@@ -105,11 +107,11 @@ function paint() {
     row.setAttribute("aria-selected", String(o.selected.has(item.i)))
     row.append(
       Object.assign(document.createElement("span"), { className: "list__mark", textContent: o.selected.has(item.i) ? "▣" : "▢" }),
-      Object.assign(document.createElement("span"), { className: "list__id", textContent: item.kind === "game" ? "game" : "puzzle" }),
+      Object.assign(document.createElement("span"), { className: "list__id", textContent: item.kind === "game" ? tr("game") : tr("puzzle") }),
       Object.assign(document.createElement("span"), { className: "list__title", textContent: item.title }),
       Object.assign(document.createElement("span"), {
         className: `list__meta${item.duplicate || item.error ? " importer__warn" : ""}`,
-        textContent: item.error ? `error: ${item.error}` : item.duplicate ? `duplicate of ${item.duplicate}` : `${item.plies} plies`,
+        textContent: item.error ? tr("error: {error}", { error: item.error }) : item.duplicate ? tr("duplicate of {id}", { id: item.duplicate }) : tr("{n} plies", { n: item.plies }),
       }),
     )
     row.addEventListener("click", () => { o.cursor = index; toggle() })
@@ -141,13 +143,13 @@ function onKey(e, token) {
 
 async function importSelected() {
   const o = open
-  if (!o.selected.size) return status("Nothing selected", { kind: "error" })
+  if (!o.selected.size) return status(tr("Nothing selected"), { kind: "error" })
   const body = { text: o.text, selected: [...o.selected], ready: o.ready }
   close()
-  status("Importing…", { timeout: 0 })
+  status(tr("Importing…"), { timeout: 0 })
   const { data } = await post("/lib/import/run/", body)
   if (!data.ok) return status(data.message, { kind: "error" })
-  status(data.message, { kind: "good", keys: { seq: ["u"], label: "undo" } })
+  status(data.message, { kind: "good", keys: { seq: ["u"], label: tr("undo") } })
   pushUndo(inverse(data))
   if (window.SPOS.library?.setQuery) {
     const games = data.added.games.length

@@ -7,6 +7,7 @@ import { handle } from "./commands.js"
 import { ctx, status } from "./context.js"
 import { switchMode } from "./layout.js"
 import { tickIn } from "./ticker.js"
+import { tr } from "./i18n.js"
 
 const cursors = new WeakMap() // figure → index
 
@@ -60,7 +61,7 @@ export function mountStats(el) {
 
 async function load(el, period) {
   const html = await fetch(`/stats/sections/${period ? `?period=${period}` : ""}`).then((r) => r.text()).catch(() => null)
-  if (html === null) return status("Stats: the app is not reachable", { kind: "error" })
+  if (html === null) return status(tr("Stats: the app is not reachable"), { kind: "error" })
   el.innerHTML = html
   tickIn(el)
   window.htmx?.process(el)
@@ -109,7 +110,7 @@ handle("chart.cursor", withChart((figure, root, [step]) => {
 }))
 handle("chart.drill", withChart((figure) => {
   const p = pointsOf(figure)[cursors.get(figure) ?? -1]
-  if (!p?.drill) return status("Nothing to drill into here", { timeout: 1500 }) || false
+  if (!p?.drill) return status(tr("Nothing to drill into here"), { timeout: 1500 }) || false
   return drill(p.drill)
 }))
 handle("chart.table", withChart((figure) => {
@@ -128,14 +129,14 @@ handle("stats.period", async ([period]) => {
     headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() },
     body: JSON.stringify({ subject: { period } }),
   }).catch(() => {})
-  status(`Period: ${period}`, { timeout: 1500 })
+  status(tr("Period: {period}", { period }), { timeout: 1500 })
 })
 
 // ── Home ──────────────────────────────────────────────────────────────────────────────────────────────────────
 
 handle("home.analysis", () => {
   const el = document.querySelector("[data-continue-analysis]")
-  if (!el) return status("No analysis to continue: :analyse opens one", { kind: "error" }) || false
+  if (!el) return status(tr("No analysis to continue: :analyse opens one"), { kind: "error" }) || false
   return window.SPOS.analysis.open(el.dataset.continueAnalysis, { node: Number(el.dataset.node) || null })
 })
 handle("home.collect", () => switchMode("collect"))

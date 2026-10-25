@@ -83,7 +83,7 @@ graph · `l` library · `f` filters · `s` entry session · `q` queue · `c` sta
 | `j k` / `↓ ↑` | Cursor down / up (grids: `h l` / `← →` too) |
 | `g g` / `G` | First / last |
 | `↵` | Open (default command of the object, see 05 matrix) |
-| `o` | Open beside the list: a board and its move tree, linked to each other (Library, phase 7) |
+| `o` | Open beside the list: a board and its move tree, linked to each other (Library) |
 | `s` | Sort by a column (a menu; the same column again reverses: the query's `sort:` term) |
 | `z` / `Z` | Fold or open the group at the cursor / all groups (results sorted by a field with few values) |
 | `x` | Toggle selection of the cursor row |
@@ -134,7 +134,7 @@ The Train keys live in state contexts (`state.launcher`, `state.solving`, `state
 context per Train state, checked after layers and before the focused view (02 §5).
 
 **Launcher** · Sessions: `r` Review · `1` `2` `3` Storm 3′/5′/10′ · `4` Streak · `5` Streak ♥3 · `6` Blind streak ·
-`7` Weakest motifs (phase 5) · `8` Again. Global: `␣ r` starts a Review from anywhere.
+`7` Weakest motifs · `8` Again. Global: `␣ r` starts a Review from anywhere.
 **Launcher** · Custom (rows mirror keyboard rows): Mode `b n m` (Review, Storm, Streak) · Look `q w e` · Side
 `a s d f` · Lives `z x c v` · `o` first move only · `↵` start. (Mode moved from `1 2 3`, which start Storms.)
 
@@ -198,7 +198,7 @@ Mode-level: these work whether the board, the moves or the inspector pane has fo
 | `a` | Annotation menu: all move, position and evaluation symbols (`+−  ±  ⩲  =  ∞  ⩱  ∓  −+` …) |
 | `m` | Mark: `g` good · `d` dubious · `b` bad · `c` colour · `x` clear |
 | `c` / `C` | Comment on this move / on the position (root) |
-| `t` / `T` | Move tags / position tags (phase 4) |
+| `t` / `T` | Move tags / position tags |
 | `⇧↑ ⇧↓` | Move the variation up / down |
 | `P` | Promote to main line |
 | `d` | Delete from here (undoable) |
@@ -326,7 +326,7 @@ Command line: `:set <name>=<value>` (tokens and settings), `:unset <name>`, `:th
 
 ## Paste offers (after a paste, in the status line)
 
-`b` show on a board · `a` analyse (a new position; a game's moves become its main line) · `c` collect (phase 4) · `i` import (phase 4) · `Esc` dismiss. Any other
+`b` show on a board · `a` analyse (a new position; a game's moves become its main line) · `c` collect · `i` import · `Esc` dismiss. Any other
 key dismisses the offer and does what it always does.
 
 See 06 for the board layers: Setup §4, Move entry §5, Solving §1.

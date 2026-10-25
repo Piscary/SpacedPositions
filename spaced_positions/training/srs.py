@@ -1,4 +1,4 @@
-"""Spaced repetition from solved / missed only: no self-rating (the rules of chess-study-manager, kept).
+"""Spaced repetition from solved / missed only: no self-rating.
 
     new, learning   steps of LEARNING_STEPS (10 minutes, 1 day); solving the last step graduates the card to review
                     with an interval of GRADUATE_DAYS
@@ -107,14 +107,17 @@ def record(card, success: bool, ms: int = 0, now=None) -> Outcome:
 
 def describe_due(due, now=None) -> str:
     """'in 10 minutes', 'tomorrow', 'in 9 days'."""
+    from django.utils.translation import gettext, ngettext
+
     now = now or timezone.now()
     seconds = (due - now).total_seconds()
     if seconds < 90:
-        return "now"
+        return gettext("now")
     if seconds < 3600:
-        return f"in {round(seconds / 60)} minutes"
+        n = round(seconds / 60)
+        return ngettext("in {n} minute", "in {n} minutes", n).format(n=n)
     if seconds < 86400:
-        hours = round(seconds / 3600)
-        return f"in {hours} hour{'s' if hours != 1 else ''}"
+        n = round(seconds / 3600)
+        return ngettext("in {n} hour", "in {n} hours", n).format(n=n)
     days = round(seconds / 86400)
-    return "tomorrow" if days == 1 else f"in {days} days"
+    return gettext("tomorrow") if days == 1 else ngettext("in {n} day", "in {n} days", days).format(n=days)

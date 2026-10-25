@@ -62,11 +62,7 @@ def continue_() -> dict:
     }
 
 
-def first_run() -> dict | None:
-    """An empty library: Home starts with the ways in (spec 10 · decision 16). None once there is anything."""
-    from spaced_positions.core.settings_view import csm_guess
-
-    if Position.objects.exists():
-        return None
-    return {"csm": csm_guess()}
+def first_run() -> bool:
+    """An empty library: Home starts with the ways in (spec 10 · decision 16)."""
+    return not Position.objects.exists()
 

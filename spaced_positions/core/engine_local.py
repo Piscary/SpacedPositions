@@ -18,6 +18,7 @@ from collections import deque
 from pathlib import Path
 
 from django.http import JsonResponse
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
 
 KEEP = 2000  # lines kept for readers
@@ -85,9 +86,9 @@ def program() -> tuple[str | None, str]:
         path = Path(configured).expanduser()
         if path.is_file() and os.access(path, os.X_OK):
             return str(path), ""
-        return None, f"engine.path {configured} is not a program (Settings → Engine)"
+        return None, _("engine.path {path} is not a program (Settings → Engine)").format(path=configured)
     found = shutil.which("stockfish")
-    return (found, "") if found else (None, "no stockfish on the PATH: install it, or set engine.path (Settings → Engine)")
+    return (found, "") if found else (None, _("no stockfish on the PATH: install it, or set engine.path (Settings → Engine)"))
 
 
 def engine() -> Engine:
@@ -123,7 +124,7 @@ def local(request):
         except ValueError:
             after = 0
         if _engine is None or not _engine.alive:
-            return JsonResponse({"ok": False, "message": "the local engine is not running"})
+            return JsonResponse({"ok": False, "message": _("the local engine is not running")})
         lines, seq = _engine.read(after)
         return JsonResponse({"ok": True, "lines": lines, "next": seq})
     except (RuntimeError, OSError) as e:

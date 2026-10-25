@@ -11,6 +11,7 @@ import { ctx, keycaps, status } from "./context.js"
 import { setOverlayHandler } from "./keys.js"
 import { nodeOf } from "./layout.js"
 import * as lines from "./lines.js"
+import { tr, trn } from "./i18n.js"
 
 let detected = null // the last detected paste, for the offer commands
 let pasted = "" // its text (the import reads it again)
@@ -27,22 +28,22 @@ export async function detect(text) {
       body: JSON.stringify({ text }),
     }).then((r) => r.json())
   } catch {
-    return status("Paste: the app is not reachable", { kind: "error" })
+    return status(tr("Paste: the app is not reachable"), { kind: "error" })
   }
-  if (!["fen", "fens", "pgn"].includes(result.kind)) return status(`Paste: ${result.message}`, { kind: "error" })
+  if (!["fen", "fens", "pgn"].includes(result.kind)) return status(tr("Paste: {message}", { message: result.message }), { kind: "error" })
   detected = result
   offer(result)
 }
 
 function describe(result) {
   if (result.kind === "fen") {
-    const side = result.fen.split(" ")[1] === "b" ? "black" : "white"
-    const problems = result.check.ok ? "" : ` · not legal: ${result.check.problems.map((p) => p.message).join(", ")}`
-    return `${result.source === "FEN" ? "FEN" : "Lichess position"} · ${side} to move${problems}`
+    const side = result.fen.split(" ")[1] === "b" ? tr("black to move") : tr("white to move")
+    const problems = result.check.ok ? "" : ` · ${tr("not legal: {problems}", { problems: result.check.problems.map((p) => p.message).join(", ") })}`
+    return `${result.source === "FEN" ? "FEN" : tr("Lichess position")} · ${side}${problems}`
   }
-  if (result.kind === "fens") return `${result.fens.length} FENs${result.bad ? ` (${result.bad} not legal)` : ""}`
-  const games = result.games > 1 ? ` · ${result.games} games (the first is shown)` : ""
-  return `PGN · ${result.title} · ${result.moves.length} moves${games}`
+  if (result.kind === "fens") return `${trn("{n} FEN", "{n} FENs", result.fens.length)}${result.bad ? ` (${tr("{n} not legal", { n: result.bad })})` : ""}`
+  const games = result.games > 1 ? ` · ${tr("{n} games (the first is shown)", { n: result.games })}` : ""
+  return `PGN · ${result.title} · ${trn("{n} move", "{n} moves", result.moves.length)}${games}`
 }
 
 const OFFERS = [
@@ -103,7 +104,7 @@ handle("paste.detect", async () => {
   try {
     text = await navigator.clipboard.readText()
   } catch {
-    return status("The browser didn't allow reading the clipboard: press ⌘V instead", { kind: "error" }) || false
+    return status(tr("The browser didn't allow reading the clipboard: press ⌘V instead"), { kind: "error" }) || false
   }
   return detect(text)
 })
@@ -116,15 +117,15 @@ handle("paste.board", async () => {
     key = focusedKey()
   }
   if (detected.kind === "pgn") {
-    lines.load(key, { start: detected.start, moves: detected.moves.map((m) => m.uci), title: detected.title }, { undo: "Paste game" })
+    lines.load(key, { start: detected.start, moves: detected.moves.map((m) => m.uci), title: detected.title }, { undo: tr("Paste game") })
   } else {
     const fen = detected.kind === "fen" ? detected.fen : detected.fens[0]
     if (detected.kind === "fen" && !detected.check.ok) {
-      lines.load(key, { start: fen }, { undo: "Paste position" })
-      status("Not a legal position: shown as a diagram. S opens the board editor to fix it.", { timeout: 6000 })
+      lines.load(key, { start: fen }, { undo: tr("Paste position") })
+      status(tr("Not a legal position: shown as a diagram. S opens the board editor to fix it."), { timeout: 6000 })
       return
     }
-    lines.load(key, { start: fen }, { undo: "Paste position" })
+    lines.load(key, { start: fen }, { undo: tr("Paste position") })
   }
   focusedBoard()?.refresh()
 })
@@ -137,7 +138,7 @@ handle("paste.analyse", async () => {
   }
   const fen = detected.kind === "fen" ? detected.fen : detected.fens[0]
   if (detected.kind === "fen" && !detected.check.ok) {
-    return status("Not a legal position: show it on a board (b) and fix it in the board editor first", { kind: "error" }) || false
+    return status(tr("Not a legal position: show it on a board (b) and fix it in the board editor first"), { kind: "error" }) || false
   }
   return analyseNew({ start: fen, origin: "paste" })
 })

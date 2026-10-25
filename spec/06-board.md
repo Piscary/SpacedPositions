@@ -108,7 +108,7 @@ large).
 - Engine settings (depth, lines, threads, hash, arrows) in the EngineLines header ⚙ and in Settings → Engine.
 - Where it runs: Stockfish WASM in a Web Worker by default; the local Stockfish binary through the server when it
   is configured (stronger, deeper). The EngineLines header shows which one is running.
-- As built (phase 6): `engine.source = local` runs `engine.path` (an executable file) or `stockfish` on the PATH.
+- As built: `engine.source = local` runs `engine.path` (an executable file) or `stockfish` on the PATH.
   The browser posts UCI commands to `/engine/local/` and reads the engine's lines from it (a read waits up to half a
   second for new lines), so the engine module treats it like its worker. One process for the app, ended with it;
   `engine.threads` and `engine.hash` are sent as options. Only the user sets `engine.path` (imports refuse it), so a
@@ -121,9 +121,9 @@ All tokens, see 07 · Board tokens: square colours, highlight colours, arrow col
 off), piece set, board border, animation speed, legal-move dots on/off, last-move highlight on/off, annotation badges
 on/off, blindfold (pieces invisible), silhouette (all pieces of one colour look the same, for training).
 
-As built in phase 1: the squares are a CSS conic gradient of `sq-light`/`sq-dark` (a theme change needs no image);
+the squares are a CSS conic gradient of `sq-light`/`sq-dark` (a theme change needs no image);
 coordinates sit inside the board (ranks on the right edge, files along the bottom) in the colour of the other
-square; `board-coords = off` hides them, `outside` (phase 6) puts the ranks left of the board and the files below
+square; `board-coords = off` hides them, `outside` puts the ranks left of the board and the files below
 it in the text colour (the board shrinks by that margin). Square highlights from
 the square tool are chessground custom square classes (under the pieces), not SVG shapes.
 
@@ -132,7 +132,7 @@ the square tool are chessground custom square classes (under the pieces), not SV
 | Option | Pros | Cons |
 |---|---|---|
 | **chessground** (lichess) | Exactly the lichess feel: drawing, animations, premove-ready, battle-tested | GPL-3.0 (fine for a personal app; matters if the app is ever distributed); needs a small build step or the prebuilt ESM file |
-| **cm-chessboard** (used in the old app) | MIT, small, extensions for arrows and markers | Drawing interactions have to be written ourselves; less polished animation |
+| **cm-chessboard** | MIT, small, extensions for arrows and markers | Drawing interactions have to be written ourselves; less polished animation |
 
 **Decision: chessground.** The app is free and GPL-3.0 (10 · decision 13), so its licence fits. It is wrapped in our
 own `board` island, so the rest of the app never touches its API and the library could still be replaced later

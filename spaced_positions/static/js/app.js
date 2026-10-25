@@ -14,7 +14,8 @@ import "./core/scroll.js"
 import { detect } from "./core/paste.js"
 import { loadJournal } from "./core/analysis.js"
 import { announce } from "./core/charts.js"
-import { importCsm, importSettings } from "./core/settings.js"
+import { importSettings } from "./core/settings.js"
+import { tr } from "./core/i18n.js"
 
 const boot = JSON.parse(document.getElementById("boot").textContent)
 // Modules may have added to window.SPOS while they loaded (imports run first): add, don't replace.
@@ -39,7 +40,7 @@ document.addEventListener("keydown", function safeMode(e) {
   const css = document.getElementById("custom-css")
   if (e.key === "Escape" && css?.textContent.trim()) {
     css.textContent = ""
-    status("Your CSS is off for this page (Esc while loading): Settings → Advanced", { kind: "good", timeout: 6000 })
+    status(tr("Your CSS is off for this page (Esc while loading): Settings → Advanced"), { kind: "good", timeout: 6000 })
   }
 }, true)
 
@@ -55,7 +56,7 @@ if (boot.settings["app.updates"]) {
   fetch("/app/update/").then((r) => r.json()).then(({ available, url }) => {
     const link = document.querySelector("[data-update]")
     if (!available || !link) return
-    Object.assign(link, { href: url, textContent: `update ${available} available` })
+    Object.assign(link, { href: url, textContent: tr("update {version} available", { version: available }) })
     link.hidden = false
   }).catch(() => null)
 }
@@ -96,16 +97,9 @@ handle("form.submit", () => {
     setLayer("normal")
     serverRun("pref.css", [], { css: field.value }).then((r) => {
       if (!r) return
-      status(r.message, { kind: "good", keys: { seq: ["u"], label: "undo" } })
+      status(r.message, { kind: "good", keys: { seq: ["u"], label: tr("undo") } })
       if (r.undo) pushUndo({ label: r.message, undo: () => serverRun(r.undo.command, r.undo.args), redo: () => serverRun(r.redo.command, r.redo.args) })
     })
-    return
-  }
-  if (form.hasAttribute("data-csm-import")) {
-    const field = form.querySelector("input")
-    document.activeElement?.blur()
-    setLayer("normal")
-    importCsm(field.value)
     return
   }
   if (form.hasAttribute("data-settings-import")) {
@@ -124,7 +118,12 @@ handle("form.submit", () => {
 })
 
 on("effects", (effects) => {
-  if (effects.settings) applySettings(effects.settings)
+  if (effects.settings) {
+    const before = window.SPOS.settings
+    applySettings(effects.settings)
+    // a new language (of the app or of tag names): the page comes back in it
+    if (before && ["ui.language", "tags.language"].some((k) => before[k] !== effects.settings[k])) setTimeout(() => location.reload(), 400)
+  }
   if (effects.registry) setRegistry(effects.registry) // :map, :unmap: the keys work at once
   if (effects.themes) window.SPOS.themes.themes = effects.themes
   if (effects.customCss !== undefined) document.getElementById("custom-css").textContent = effects.customCss
@@ -134,7 +133,7 @@ on("effects", (effects) => {
     link.click()
     link.remove()
   }
-  if (effects.copy) navigator.clipboard?.writeText(effects.copy).catch(() => status("The browser didn't allow copying", { kind: "error" }))
+  if (effects.copy) navigator.clipboard?.writeText(effects.copy).catch(() => status(tr("The browser didn't allow copying"), { kind: "error" }))
   if (effects.theme) {
     document.getElementById("theme").textContent = effects.theme.css
     ctx.theme = effects.theme.name
@@ -154,7 +153,7 @@ on("effects", (effects) => {
       document.getElementById("workspaces").replaceChildren(
         Object.assign(document.createElement("div"), {
           className: "empty",
-          textContent: "Spaced Positions has stopped. Start it again from its icon or with spos.",
+          textContent: tr("Spaced Positions has stopped. Start it again from its icon or with spos."),
         }),
       )
     }, 600)

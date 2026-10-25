@@ -8,6 +8,8 @@ import re
 import tomllib
 from pathlib import Path
 
+from django.utils.translation import gettext as _
+
 from spaced_positions import paths
 from spaced_positions.design import lib
 
@@ -24,11 +26,11 @@ def problems_of(set_dir: Path) -> list[str]:
     out = []
     missing = [code for code in lib.PIECE_CODES if not (set_dir / f"{code}.svg").is_file()]
     if missing:
-        out.append(f"missing {', '.join(missing)}")
+        out.append(_("missing {value}").format(value=', '.join(missing)))
     for code in lib.PIECE_CODES:
         svg = set_dir / f"{code}.svg"
         if svg.is_file() and (svg.stat().st_size > MAX_BYTES or UNSAFE.search(svg.read_text(errors="replace"))):
-            out.append(f"{code}.svg: too large, or scripts or external references")
+            out.append(_("{code}.svg: too large, or scripts or external references").format(code=code))
     return out
 
 
@@ -49,8 +51,8 @@ def available() -> dict[str, dict]:
             except (tomllib.TOMLDecodeError, UnicodeDecodeError):
                 about = {}
         out[set_dir.name] = {"label": str(about.get("label") or set_dir.name.replace("-", " ").title())[:40],
-                             "author": str(about.get("author") or "yours")[:60],
-                             "licence": str(about.get("licence") or "your own")[:40], "user": True}
+                             "author": str(about.get("author") or _("yours"))[:60],
+                             "licence": str(about.get("licence") or _("your own"))[:40], "user": True}
     return out
 
 

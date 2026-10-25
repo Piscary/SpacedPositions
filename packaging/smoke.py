@@ -1,5 +1,5 @@
 """Smoke test of the built app (release workflow): it starts on a fresh data folder, creates its database, answers,
-shows the home page and stops."""
+shows the home page and the licence notices (every bundled package with its licence text), and stops."""
 
 import json
 import subprocess
@@ -38,6 +38,10 @@ def main():
             assert "Spaced Positions" in html, html[:500]
             with browser.open(f"http://127.0.0.1:{info['port']}/static/design/commands.json", timeout=5) as response:
                 assert response.status == 200
+            with browser.open(f"http://127.0.0.1:{info['port']}/licences/notices.txt", timeout=5) as response:
+                notices = response.read().decode()
+            for name in ("Django", "waitress", "whitenoise", "platformdirs", "chess", "Python Software Foundation", "GNU GENERAL PUBLIC LICENSE"):
+                assert name in notices, f"the notices lack {name}"
             print(f"ok: {info['url'].split('?')[0]}, database {(Path(data) / 'db.sqlite3').stat().st_size // 1024} kB")
         finally:
             subprocess.run([str(APP), "stop", "--data-dir", data], timeout=60)

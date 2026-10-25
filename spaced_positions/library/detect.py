@@ -1,4 +1,4 @@
-"""Tag detection with python-chess (spec 11 · Tags): chess-study-manager's autotagger, kept.
+"""Tag detection with python-chess (spec 11 · Tags).
 
 `detect(position)` looks at the position and at the main line of its analysis and returns findings
 (tag key, evidence, apply): applied findings become tags with origin "auto", the rest are suggestions (shown dashed
@@ -21,10 +21,12 @@ import time
 from dataclasses import dataclass
 
 import chess
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_noop
 
 VALUE = {chess.PAWN: 1, chess.KNIGHT: 3, chess.BISHOP: 3, chess.ROOK: 5, chess.QUEEN: 9, chess.KING: 100}
 PHASE = {chess.KNIGHT: 1, chess.BISHOP: 1, chess.ROOK: 2, chess.QUEEN: 4}
-NAMES = {chess.PAWN: "pawn", chess.KNIGHT: "knight", chess.BISHOP: "bishop", chess.ROOK: "rook", chess.QUEEN: "queen", chess.KING: "king"}
+NAMES = {chess.PAWN: gettext_noop("pawn"), chess.KNIGHT: gettext_noop("knight"), chess.BISHOP: gettext_noop("bishop"), chess.ROOK: gettext_noop("rook"), chess.QUEEN: gettext_noop("queen"), chess.KING: gettext_noop("king")}
 MAX_PLIES = 24  # longer main lines are game continuations, not puzzle solutions
 MOTIF_PLIES = 12  # motifs are looked for in the first moves only
 SEARCH_SECONDS = 1.5
@@ -78,7 +80,7 @@ def phase(board) -> tuple[str, str]:
                                          (chess.B8, chess.KNIGHT), (chess.G8, chess.KNIGHT), (chess.C8, chess.BISHOP), (chess.F8, chess.BISHOP))
                       if board.piece_type_at(sq) == kind)
     if score >= 22 and pawns >= 14 and (1 < board.fullmove_number <= 10 or home_minors >= 3):
-        return "opening", desc + f", {home_minors} minor pieces still at home"
+        return "opening", desc + _(", {home_minors} minor pieces still at home").format(home_minors=home_minors)
     return "middlegame", desc
 
 
@@ -395,15 +397,15 @@ def solution_features(board, moves, first_only=False) -> list[Finding]:  # noqa:
     elif len(moves) <= MAX_PLIES and final.is_checkmate() and len(moves) % 2 == 1:
         n = (len(moves) + 1) // 2
         last = label(boards[-1], moves[-1])
-        out.append(Finding({1: "mate-in-1", 2: "mate-in-2", 3: "mate-in-3"}.get(n, "mate-in-4-plus"), f"The solution ends with {last}", True))
+        out.append(Finding({1: "mate-in-1", 2: "mate-in-2", 3: "mate-in-3"}.get(n, "mate-in-4-plus"), _("The solution ends with {last}").format(last=last), True))
         for key in mate_patterns(final):
-            out.append(Finding(key, f"Mating pattern after {last}", True))
+            out.append(Finding(key, _("Mating pattern after {last}").format(last=last), True))
     elif final.is_stalemate() and len(moves) <= MAX_PLIES:
-        out.append(Finding("stalemate-trick", f"The solution ends in stalemate after {label(boards[-1], moves[-1])}", True))
+        out.append(Finding("stalemate-trick", _("The solution ends in stalemate after {value}").format(value=label(boards[-1], moves[-1])), True))
     elif len(moves) <= MAX_PLIES and len(moves) >= 4 and final.is_repetition(2) and all(boards[i].gives_check(moves[i]) for i in range(0, len(moves), 2)):
-        out.append(Finding("perpetual-check", "Checks until the position repeats", True))
+        out.append(Finding("perpetual-check", _('Checks until the position repeats'), True))
     elif len(moves) <= MAX_PLIES and balance(final, mover) >= start_balance + 3:
-        out.append(Finding("win-material", f"Wins material by {label(boards[-1], moves[-1])}", False))
+        out.append(Finding("win-material", _("Wins material by {value}").format(value=label(boards[-1], moves[-1])), False))
 
     checks_given, discovered = 0, 0
     lowest, lowest_at = start_balance, None
@@ -424,17 +426,17 @@ def solution_features(board, moves, first_only=False) -> list[Finding]:  # noqa:
         if checkers:
             checks_given += 1
         if len(checkers) >= 2:
-            out.append(Finding("double-check", f"Double check with {text}", True))
+            out.append(Finding("double-check", _("Double check with {text}").format(text=text), True))
         elif checkers and m.to_square not in checkers:
-            out.append(Finding("discovered-check", f"Discovered check with {text}", True))
+            out.append(Finding("discovered-check", _("Discovered check with {text}").format(text=text), True))
             discovered += 1
         if m.promotion:
             out.append(Finding("promotion" if m.promotion == chess.QUEEN else "underpromotion", f"Promotion {text}", True))
         if before.is_en_passant(m):
-            out.append(Finding("en-passant", f"En passant {text}", True))
+            out.append(Finding("en-passant", _("En passant {text}").format(text=text), True))
         if i == 0 and piece.piece_type == chess.BISHOP and before.is_capture(m) and checkers \
                 and m.to_square in (chess.H7, chess.H2, chess.A7, chess.A2) and before.piece_type_at(m.to_square) == chess.PAWN:
-            out.append(Finding("greek-gift", f"Bishop sacrifice {text}", True))
+            out.append(Finding("greek-gift", _("Bishop sacrifice {text}").format(text=text), True))
         later = _later_captures(boards + [final], moves, i)
 
         mover_piece = after.piece_at(m.to_square)
@@ -450,7 +452,7 @@ def solution_features(board, moves, first_only=False) -> list[Finding]:  # noqa:
                 key = {chess.KNIGHT: "knight-fork", chess.PAWN: "pawn-fork", chess.QUEEN: "queen-fork"}.get(mover_piece.piece_type, "fork")
                 if key == "knight-fork" and {chess.KING, chess.QUEEN} <= kinds:
                     key = "family-fork"
-                out.append(Finding(key, f"Fork with {text}", True))
+                out.append(Finding(key, _("Fork with {text}").format(text=text), True))
             # pins and skewers made by the moved slider
             if mover_piece.piece_type in (chess.BISHOP, chess.ROOK, chess.QUEEN):
                 for ray in _slider_rays(after, m.to_square):
@@ -458,11 +460,11 @@ def solution_features(board, moves, first_only=False) -> list[Finding]:  # noqa:
                         continue
                     front, back = after.piece_type_at(ray[0]), after.piece_type_at(ray[1])
                     if back == chess.KING and front != chess.KING:
-                        out.append(Finding("absolute-pin", f"{text} pins the {NAMES[front]} on {chess.square_name(ray[0])}", ray[0] in later))
+                        out.append(Finding("absolute-pin", _("{text} pins the {value} on {value2}").format(text=text, value=_(NAMES[front]), value2=chess.square_name(ray[0])), ray[0] in later))
                     elif front != chess.KING and VALUE[back] > VALUE[front] and back != chess.PAWN and ray[0] in later:
-                        out.append(Finding("relative-pin", f"{text} pins to {chess.square_name(ray[1])}", False))
+                        out.append(Finding("relative-pin", _("{text} pins to {value}").format(text=text, value=chess.square_name(ray[1])), False))
                     elif (front == chess.KING or VALUE[front] > VALUE[back]) and back != chess.PAWN and ray[1] in later:
-                        out.append(Finding("skewer", f"Skewer with {text}", True))
+                        out.append(Finding("skewer", _("Skewer with {text}").format(text=text), True))
         # discovered attack (no check): another slider now attacks something valuable, taken later
         if not checkers:
             for sq in before.pieces(chess.BISHOP, mover) | before.pieces(chess.ROOK, mover) | before.pieces(chess.QUEEN, mover):
@@ -471,19 +473,19 @@ def solution_features(board, moves, first_only=False) -> list[Finding]:  # noqa:
                 for t in after.attacks(sq) & ~before.attacks(sq):
                     if after.color_at(t) == (not mover) and after.piece_type_at(t) not in (chess.PAWN, chess.KING) \
                             and later.get(t) is not None and moves[later[t]].from_square == sq:
-                        out.append(Finding("discovered-attack", f"Discovered attack with {text}", True))
+                        out.append(Finding("discovered-attack", _("Discovered attack with {text}").format(text=text), True))
         if i == 0 and before.is_capture(m) and not before.is_en_passant(m):
             victim = before.piece_type_at(m.to_square)
             if victim and VALUE[victim] >= 3 and not before.is_attacked_by(not mover, m.to_square):
-                out.append(Finding("hanging-piece", f"{text} takes an undefended piece", False))
+                out.append(Finding("hanging-piece", _("{text} takes an undefended piece").format(text=text), False))
         if i == 0 and not checkers and not before.is_capture(m) and not m.promotion and len(moves) >= 3 \
                 and (final.is_checkmate() or balance(final, mover) >= start_balance + 3):
-            out.append(Finding("quiet-move", f"{text}: no check, no capture", False))
+            out.append(Finding("quiet-move", _("{text}: no check, no capture").format(text=text), False))
         if i + 1 < len(moves):
             reply, rb = moves[i + 1], boards[i + 1]
             if reply.to_square == m.to_square and rb.is_capture(reply):
                 if rb.piece_type_at(reply.from_square) == chess.KING and i + 2 < len(moves) and boards[i + 2].gives_check(moves[i + 2]):
-                    out.append(Finding("decoy", f"{text} lures the king to {chess.square_name(m.to_square)}", False))
+                    out.append(Finding("decoy", _("{text} lures the king to {value}").format(text=text, value=chess.square_name(m.to_square)), False))
             if i + 2 < len(moves):
                 nxt = moves[i + 2]
                 guard_before = rb.attacks(reply.from_square)
@@ -491,32 +493,32 @@ def solution_features(board, moves, first_only=False) -> list[Finding]:  # noqa:
                 if nxt.to_square in guard_before and nxt.to_square not in after_reply.attacks(reply.to_square) \
                         and reply.to_square != m.to_square and rb.piece_type_at(reply.from_square) != chess.KING \
                         and (after_reply.is_capture(nxt) or after_reply.gives_check(nxt)):
-                    out.append(Finding("deflection", f"{text} deflects the defender", False))
+                    out.append(Finding("deflection", _("{text} deflects the defender").format(text=text), False))
                 if before.is_capture(m) and before.piece_type_at(m.to_square) not in (chess.PAWN, None):
                     if nxt.to_square in before.attacks(m.to_square) and nxt.to_square != m.to_square \
                             and (after_reply.is_capture(nxt) or after_reply.gives_check(nxt)):
-                        out.append(Finding("removal-of-guard", f"{text} removes the defender", False))
+                        out.append(Finding("removal-of-guard", _("{text} removes the defender").format(text=text), False))
                 if nxt.from_square != m.to_square:
                     path = chess.SquareSet(chess.between(nxt.from_square, nxt.to_square))
                     if nxt.to_square == m.from_square:
                         out.append(Finding("square-clearance", f"{text} clears {chess.square_name(m.from_square)}", False))
                     elif m.from_square in path:
-                        out.append(Finding("line-clearance", f"{text} clears the line", False))
+                        out.append(Finding("line-clearance", _("{text} clears the line").format(text=text), False))
 
     if first_only:
         return out
     if discovered >= 2:
-        out.append(Finding("windmill", "Discovered checks one after the other", False))
+        out.append(Finding("windmill", _('Discovered checks one after the other'), False))
     if lowest_at is not None and lowest <= start_balance - 2 and (final.is_checkmate() or balance(final, mover) >= start_balance - 1):
         if queen_lost_at is not None:
-            out.append(Finding("queen-sacrifice", f"Queen sacrifice (after {label(boards[queen_lost_at], moves[queen_lost_at])})", True))
+            out.append(Finding("queen-sacrifice", _("Queen sacrifice (after {value})").format(value=label(boards[queen_lost_at], moves[queen_lost_at])), True))
         else:
-            out.append(Finding("sacrifice", f"Sacrifice: down {start_balance - lowest} points on the way", True))
+            out.append(Finding("sacrifice", _("Sacrifice: down {value} points on the way").format(value=start_balance - lowest), True))
     king_start = board.king(not mover)
     king_moves = sum(1 for i in range(1, min(len(moves), MAX_PLIES), 2) if boards[i].piece_type_at(moves[i].from_square) == chess.KING)
     if checks_given >= 4 and king_moves >= 4 and king_start is not None and final.king(not mover) is not None \
             and chess.square_distance(king_start, final.king(not mover)) >= 3:
-        out.append(Finding("king-hunt", f"{checks_given} checks, the king walks {chess.square_name(king_start)}–{chess.square_name(final.king(not mover))}", False))
+        out.append(Finding("king-hunt", _("{checks_given} checks, the king walks {value}–{value2}").format(checks_given=checks_given, value=chess.square_name(king_start), value2=chess.square_name(final.king(not mover))), False))
     return out
 
 
@@ -571,7 +573,7 @@ def detect(position, search: bool = True) -> list[Finding]:
         from .sequences import APPLIED, line_features
 
         found += solution_features(board, moves)
-        found += [Finding(key, text, key in APPLIED) for _, key, text in line_features(board, moves)]
+        found += [Finding(key, text, key in APPLIED) for _i, key, text in line_features(board, moves)]
     elif search and not board.is_game_over():  # no solution yet: a short mate?
         mates = mates_in_one(board)
         if mates:
@@ -579,7 +581,7 @@ def detect(position, search: bool = True) -> list[Finding]:
             if len(mates) == 1:
                 b = board.copy(stack=False)
                 b.push(mates[0])
-                found += [Finding(key, f"Mating pattern after {label(board, mates[0])}", True) for key in mate_patterns(b)]
+                found += [Finding(key, _("Mating pattern after {value}").format(value=label(board, mates[0])), True) for key in mate_patterns(b)]
         else:
             first = mate_in_two(board.copy(), time.monotonic() + SEARCH_SECONDS)
             if first is not None:
@@ -612,7 +614,7 @@ def move_findings(node) -> list[Finding]:
     after = board.copy(stack=False)
     after.push(line[0])
     if after.is_checkmate():
-        out += [Finding(key, f"Mating pattern after {label(board, line[0])}", True) for key in mate_patterns(after)]
+        out += [Finding(key, _("Mating pattern after {value}").format(value=label(board, line[0])), True) for key in mate_patterns(after)]
     if len(line) >= 3:
         mover, start = board.turn, balance(board, board.turn)
         b = board.copy(stack=False)
@@ -624,7 +626,7 @@ def move_findings(node) -> list[Finding]:
             for m in line[2:]:
                 b.push(m)
             if b.is_checkmate() or balance(b, mover) >= start - 1:
-                out.append(Finding("queen-sacrifice" if moved == chess.QUEEN else "sacrifice", f"{label(board, line[0])} sacrifices material", True))
+                out.append(Finding("queen-sacrifice" if moved == chess.QUEEN else "sacrifice", _("{value} sacrifices material").format(value=label(board, line[0])), True))
     seen, unique = set(), []
     for f in out:
         if f.tag not in seen:
@@ -711,7 +713,7 @@ TRUST = {"manual": 1.0, "auto": 0.8}
 
 
 def auto_difficulty(position) -> int | None:
-    """chess-study-manager's model: the weighted base difficulty of the position's tags, plus a capped bonus from
+    """The weighted base difficulty of the position's tags, plus a capped bonus from
     the move tags of its analysis (each tag once; a move tag that repeats a position tag adds nothing)."""
     from .models import NodeTag
 

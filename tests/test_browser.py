@@ -198,7 +198,7 @@ def test_scroll_and_sections_by_keyboard(page):
 def test_i_edits_the_panes_field(page):
     keys(page, "Space", "1", "i")
     assert layer(page) == "insert" and page.evaluate("document.activeElement.id") == "gallery-field"
-    page.keyboard.type("Polgár")
+    page.keyboard.type("Réti")
     keys(page, "Escape")
     assert layer(page) == "normal"
     keys(page, "Space", "2", "i")  # the Library: its query bar

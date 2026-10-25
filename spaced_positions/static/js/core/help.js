@@ -4,12 +4,13 @@
 import { command, enabled, handle, keymap, run } from "./commands.js"
 import { ctx, keycaps, setLayer } from "./context.js"
 import { activeContexts, setOverlayHandler } from "./keys.js"
+import { tr } from "./i18n.js"
 
 const CONTEXT_LABELS = {
-  global: "Everywhere",
-  pane: "Any pane",
-  "layer.insert": "In a text field (Insert)",
-  "view.list": "Lists",
+  global: tr("Everywhere"),
+  pane: tr("Any pane"),
+  "layer.insert": tr("In a text field (Insert)"),
+  "view.list": tr("Lists"),
 }
 
 let open = null
@@ -17,8 +18,8 @@ let open = null
 function label(context) {
   if (CONTEXT_LABELS[context]) return CONTEXT_LABELS[context]
   const [kind, name] = context.split(".")
-  if (kind === "view") return `View: ${window.SPOS.views[name]?.label || name}`
-  if (kind === "mode") return `Mode: ${window.SPOS.modes[name]?.label || name}`
+  if (kind === "view") return tr("View: {name}", { name: window.SPOS.views[name]?.label || name })
+  if (kind === "mode") return tr("Mode: {name}", { name: window.SPOS.modes[name]?.label || name })
   return context
 }
 
@@ -51,7 +52,7 @@ function render(all) {
     group.append(h, table)
     open.groups.append(group)
   }
-  open.mode.textContent = all ? "all contexts · a: this context" : "this context · a: all contexts"
+  open.mode.textContent = all ? tr("all contexts · a: this context") : tr("this context · a: all contexts")
 }
 
 function show(all = false) {
@@ -63,10 +64,10 @@ function show(all = false) {
   const top = document.createElement("div")
   top.className = "help__top"
   const title = document.createElement("h2")
-  title.textContent = "Keys"
+  title.textContent = tr("Keys")
   const filter = document.createElement("input")
   filter.className = "field help__filter"
-  filter.placeholder = "/ filter"
+  filter.placeholder = tr("/ filter")
   const mode = document.createElement("span")
   mode.className = "muted"
   top.append(title, filter, mode, keycaps(["esc"]))
