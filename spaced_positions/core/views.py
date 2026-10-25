@@ -4,6 +4,8 @@ from django.conf import settings
 from django.db import IntegrityError, transaction
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect, render
+from django.template import TemplateDoesNotExist
+from django.template.loader import get_template
 from django.views.decorators.http import require_GET, require_POST
 
 from . import i18n, keymap, layouts, registry, server_commands, themes, user_pieces
@@ -86,7 +88,9 @@ def mode_page(request, mode):
             "theme": prefs.theme,
             "tokens": prefs.tokens,
             "settings": user_settings.values(prefs.settings),
-            "settingsSchema": [{"name": s.name, "label": s.label, "help": s.help, "type": s.type, "values": list(s.values)}
+            "settingsSchema": [{"name": s.name, "label": s.label, "help": s.help, "type": s.type, "values": list(s.values),
+                                "labels": {v: user_settings.value_label(v) for v in s.values},
+                                "words": {v: user_settings.value_words(v) for v in s.values}, "low": s.low, "high": s.high}
                                for s in user_settings.SETTINGS],
             "launched": settings.SPOS_LAUNCHED,
             "registry": keymap.for_page(),  # the default keymap with the user's overrides, in the page's language
@@ -127,6 +131,20 @@ def view_fragment(request, view):
     mode = request.GET.get("mode", "home")
     context = {"node": node, "views": layouts.VIEWS, "mode": _mode(mode), "placeholder_hints": layouts.PLACEHOLDER_HINTS}
     return render(request, "components/pane.html", context)
+
+
+@require_GET
+def help_page(request, topic):
+    """A guide for the help overlay (`?`): one per view (templates/help/<view>.html), the query language (search)
+    and panes in general (pane). In the language of the app, with the keys of the keymap."""
+    known = set(layouts.VIEWS) | {"search", "pane"}
+    name = topic if topic in known else "pane"
+    try:
+        get_template(f"help/{name}.html")
+    except TemplateDoesNotExist:
+        name = "pane"
+    view = layouts.VIEWS.get(name)
+    return render(request, f"help/{name}.html", {"view": view, "views": layouts.VIEWS})
 
 
 @require_POST

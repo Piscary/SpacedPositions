@@ -35,7 +35,7 @@ msgstr "Cattiva"
 msgid "Clear"
 msgstr "Rimuovi"
 
-#: templates/analysis/inspector.html templates/analysis/inspector_game.html static/js/islands/board.js:658
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html static/js/islands/board.js:664
 msgid "none"
 msgstr "nessuno"
 
@@ -71,11 +71,11 @@ msgstr "⌘↵ salva"
 msgid "Ctrl+↵ saves"
 msgstr "Ctrl+↵ salva"
 
-#: templates/analysis/inspector.html templates/views/entry.html templates/views/library.html
+#: templates/analysis/inspector.html templates/help/inspector.html templates/views/entry.html
 msgid "Tags"
 msgstr "Tag"
 
-#: templates/analysis/inspector.html static/js/core/analysis.js:133 static/js/core/library.js:500
+#: templates/analysis/inspector.html static/js/core/analysis.js:134 static/js/core/library.js:610
 msgid "Position"
 msgstr "Posizione"
 
@@ -177,7 +177,7 @@ msgstr "Fonte"
 msgid "Objective"
 msgstr "Obiettivo"
 
-#: templates/analysis/inspector.html templates/library/results.html library/views.py:293
+#: templates/analysis/inspector.html templates/library/results.html library/views.py:341
 msgid "Difficulty"
 msgstr "Difficoltà"
 
@@ -223,13 +223,1029 @@ msgstr "Questa vista non esiste più: un layout salvato la nomina ancora. Scegli
 msgid "It works in %(mode)s: its keys and the session belong there. Here, pick another view for this pane."
 msgstr "Funziona in %(mode)s: i suoi tasti e la sessione appartengono lì. Qui scegli un'altra vista per questo riquadro."
 
+#: templates/help/base.html
+msgid "How to"
+msgstr "Come fare"
+
+#: templates/help/base.html
+msgid "Works with"
+msgstr "Funziona con"
+
+#: templates/help/base.html templates/help/search.html
+msgid "Good to know"
+msgstr "Buono a sapersi"
+
+#: templates/help/base.html
+msgid "Everywhere: %(leader)s shows what can follow · %(colon)s runs any command by its name · %(hints)s puts a letter on everything clickable · %(next_pane)s goes to the next pane · %(undo)s undoes · %(help)s opens this help, 1 2 3 switch between guide, keys and search."
+msgstr "Ovunque: %(leader)s mostra cosa può seguire · %(colon)s esegue qualsiasi comando per nome · %(hints)s mette una lettera su tutto ciò che si può cliccare · %(next_pane)s passa al riquadro successivo · %(undo)s annulla · %(help)s apre questo aiuto, 1 2 3 passano da guida a tasti e ricerca."
+
+#: templates/help/board.html
+msgid "The board shows the position of its link group: the open analysis, the row under the Library's cursor, the puzzle you are solving. A move made here goes where the board belongs."
+msgstr "La scacchiera mostra la posizione del suo gruppo collegato: l'analisi aperta, la riga sotto il cursore della Biblioteca, l'esercizio che stai risolvendo. Una mossa giocata qui va dove appartiene la scacchiera."
+
+#: templates/help/board.html
+msgid "Make a move"
+msgstr "Fare una mossa"
+
+#: templates/help/board.html
+msgid "Click a piece and then a square, or drag it. Or type it: %(entry)s, then for example <code>Nf3</code> (German, French and Italian letters work too)."
+msgstr "Clicca un pezzo e poi una casa, oppure trascinalo. Oppure digitala: %(entry)s, poi per esempio <code>Nf3</code> (funzionano anche le lettere tedesche, francesi e italiane)."
+
+#: templates/help/board.html
+msgid "Draw"
+msgstr "Disegnare"
+
+#: templates/help/board.html
+msgid "Right-drag for an arrow, right-click for a circle; with ⇧ red, with ⌥ blue. %(clear)s clears the drawings of this move."
+msgstr "Trascina con il destro per una freccia, clic destro per un cerchio; con ⇧ rosso, con ⌥ blu. %(clear)s cancella i disegni di questa mossa."
+
+#: templates/help/board.html
+msgid "Go through the moves"
+msgstr "Scorrere le mosse"
+
+#: templates/help/board.html
+msgid "%(back)s back, %(forward)s forward, %(start)s to the start, %(end)s to the end."
+msgstr "%(back)s indietro, %(forward)s avanti, %(start)s all'inizio, %(end)s alla fine."
+
+#: templates/help/board.html
+msgid "Set up a position"
+msgstr "Impostare una posizione"
+
+#: templates/help/board.html
+msgid "%(setup)s opens the board editor: place pieces by their letter, set the side to move and castling. Problems show at once, most with a key that fixes them."
+msgstr "%(setup)s apre l'editor della scacchiera: metti i pezzi con la loro lettera, imposta il tratto e l'arrocco. I problemi si vedono subito, quasi tutti con un tasto che li corregge."
+
+#: templates/help/board.html
+msgid "Turn the board"
+msgstr "Girare la scacchiera"
+
+#: templates/help/board.html
+msgid "Copy and paste"
+msgstr "Copiare e incollare"
+
+#: templates/help/board.html
+msgid "%(fen)s copies the position as FEN, %(pgn)s the moves as PGN. Paste a FEN, a PGN or a lichess link anywhere with %(paste)s."
+msgstr "%(fen)s copia la posizione come FEN, %(pgn)s le mosse come PGN. Incolla una FEN, una PGN o un link di lichess ovunque con %(paste)s."
+
+#: templates/help/board.html
+msgid "Every pane of the same link group: the move tree, the engine (its arrow and the eval bar), the graphs, the Library's cursor. A board in another group is on its own."
+msgstr "Ogni riquadro dello stesso gruppo collegato: l'albero delle mosse, il motore (la sua freccia e la barra di valutazione), i grafici, il cursore della Biblioteca. Una scacchiera di un altro gruppo resta a sé."
+
+#: templates/help/board.html
+msgid "%(squares)s turns on the square tool: right-click colours a square, for diagrams and lessons."
+msgstr "%(squares)s attiva lo strumento case: il clic destro colora una casa, per diagrammi e lezioni."
+
+#: templates/help/board.html
+msgid "The board keeps its size when the eval bar comes and goes, and when you switch modes."
+msgstr "La scacchiera mantiene la sua dimensione quando la barra di valutazione compare o sparisce e quando cambi modalità."
+
+#: templates/help/board.html
+msgid "Settings → Board: piece set, coordinates, letters for typed moves, sounds."
+msgstr "Impostazioni → Scacchiera: set di pezzi, coordinate, lettere per le mosse digitate, suoni."
+
+#: templates/help/chart.html
+msgid "Your progress in charts and numbers: what you collected and analysed, how well you remember, which motifs are weak. Every number leads to the puzzles behind it."
+msgstr "I tuoi progressi in grafici e numeri: cosa hai inserito e analizzato, quanto ricordi, quali motivi sono deboli. Ogni numero porta agli esercizi che ci stanno dietro."
+
+#: templates/help/chart.html
+msgid "Go from chart to chart"
+msgstr "Passare da un grafico all'altro"
+
+#: templates/help/chart.html
+msgid "%(next)s next chart (k back), %(section)s next section."
+msgstr "%(next)s grafico successivo (k indietro), %(section)s sezione successiva."
+
+#: templates/help/chart.html
+msgid "Read a value"
+msgstr "Leggere un valore"
+
+#: templates/help/chart.html
+msgid "%(point)s moves over the points (h back), or point with the mouse."
+msgstr "%(point)s scorre i punti (h indietro), oppure punta con il mouse."
+
+#: templates/help/chart.html
+msgid "See the puzzles behind it"
+msgstr "Vedere gli esercizi dietro"
+
+#: templates/help/chart.html
+msgid "%(drill)s opens them in the Library, a weak spot as a Streak."
+msgstr "%(drill)s li apre nella Biblioteca, un punto debole come Streak."
+
+#: templates/help/chart.html
+msgid "Change the period"
+msgstr "Cambiare il periodo"
+
+#: templates/help/chart.html
+msgid "1 to 5: 7 days … everything (%(period)s is 30 days)."
+msgstr "Da 1 a 5: 7 giorni … tutto (%(period)s sono 30 giorni)."
+
+#: templates/help/chart.html
+msgid "Exact numbers"
+msgstr "Numeri esatti"
+
+#: templates/help/chart.html
+msgid "%(table)s shows the chart as a table."
+msgstr "%(table)s mostra il grafico come tabella."
+
+#: templates/help/chart.html
+msgid "The Library and Train: a drill-down is a search, a weak spot becomes a session."
+msgstr "La Biblioteca e l'Allenamento: un approfondimento è una ricerca, un punto debole diventa una sessione."
+
+#: templates/help/chart.html
+msgid "Retention is the share of reviews you solved."
+msgstr "La ritenzione è la quota di ripassi che hai risolto."
+
+#: templates/help/continue.html
+msgid "Where you left off: the open analysis, the next diagram of your book, recent work, and a box to paste a FEN or PGN into."
+msgstr "Dove avevi lasciato: l'analisi aperta, il prossimo diagramma del tuo libro, il lavoro recente e un campo per incollare una FEN o una PGN."
+
+#: templates/help/continue.html
+msgid "Carry on"
+msgstr "Riprendere"
+
+#: templates/help/continue.html
+msgid "%(analysis)s back to the analysis, %(collect)s the next diagram."
+msgstr "%(analysis)s torna all'analisi, %(collect)s il prossimo diagramma."
+
+#: templates/help/continue.html
+msgid "Open something recent"
+msgstr "Aprire qualcosa di recente"
+
+#: templates/help/continue.html
+msgid "Move to it and %(open)s."
+msgstr "Vacci e %(open)s."
+
+#: templates/help/continue.html
+msgid "Start from text"
+msgstr "Partire da un testo"
+
+#: templates/help/continue.html
+msgid "%(paste)s into the paste box, paste a FEN or a PGN."
+msgstr "%(paste)s nel campo per incollare, incolla una FEN o una PGN."
+
+#: templates/help/continue.html
+msgid "Analyse and Collect."
+msgstr "Analisi e Inserimento."
+
+#: templates/help/continue.html
+msgid "Pasting works anywhere, not only here."
+msgstr "Incollare funziona ovunque, non solo qui."
+
+#: templates/help/engine.html
+msgid "Stockfish looks at the position on the board of the link group: its best lines, the evaluation and an arrow for the best move."
+msgstr "Stockfish esamina la posizione sulla scacchiera del gruppo collegato: le sue linee migliori, la valutazione e una freccia per la mossa migliore."
+
+#: templates/help/engine.html
+msgid "Turn it on and off"
+msgstr "Accenderlo e spegnerlo"
+
+#: templates/help/engine.html
+msgid "Play the best move"
+msgstr "Giocare la mossa migliore"
+
+#: templates/help/engine.html
+msgid "%(best)s: it goes into the analysis like your own move."
+msgstr "%(best)s: entra nell'analisi come una tua mossa."
+
+#: templates/help/engine.html
+msgid "More lines"
+msgstr "Più linee"
+
+#: templates/help/engine.html
+msgid "%(lines)s sets how many lines are shown."
+msgstr "%(lines)s imposta quante linee vengono mostrate."
+
+#: templates/help/engine.html
+msgid "Evaluate a whole game"
+msgstr "Valutare una partita intera"
+
+#: templates/help/engine.html
+msgid "%(evaluate)s goes through the main line and fills the eval graph; the evaluations are saved."
+msgstr "%(evaluate)s percorre la linea principale e riempie il grafico di valutazione; le valutazioni vengono salvate."
+
+#: templates/help/engine.html
+msgid "The board (arrow and eval bar), the move tree and the eval graph of the same link group."
+msgstr "La scacchiera (freccia e barra di valutazione), l'albero delle mosse e il grafico di valutazione dello stesso gruppo collegato."
+
+#: templates/help/engine.html
+msgid "The engine runs in your browser. Settings → Engine can use a Stockfish installed on this computer instead."
+msgstr "Il motore gira nel tuo browser. Impostazioni → Motore può usare invece uno Stockfish installato su questo computer."
+
+#: templates/help/engine.html
+msgid "In Train the engine stays off, so it can't give a solution away."
+msgstr "In Allenamento il motore resta spento, così non può svelare una soluzione."
+
+#: templates/help/entry.html
+msgid "Rapid entry from a book: set the source once, then set up each diagram on the board and save. Page and diagram number count up by themselves."
+msgstr "Inserimento rapido da un libro: scegli la fonte una volta, poi imposta ogni diagramma sulla scacchiera e salva. Pagina e numero di diagramma avanzano da soli."
+
+#: templates/help/entry.html
+msgid "Choose the book"
+msgstr "Scegliere il libro"
+
+#: templates/help/entry.html
+msgid "%(source)s: type a few letters of the source, or a new title."
+msgstr "%(source)s: digita alcune lettere della fonte, o un nuovo titolo."
+
+#: templates/help/entry.html
+msgid "Enter a diagram"
+msgstr "Inserire un diagramma"
+
+#: templates/help/entry.html
+msgid "%(setup)s sets up the position (or paste a FEN), then %(save)s saves it and gets ready for the next one; %(saveopen)s saves and opens it in Analyse."
+msgstr "%(setup)s imposta la posizione (o incolla una FEN), poi %(save)s la salva e prepara la successiva; %(saveopen)s la salva e la apre nell'Analisi."
+
+#: templates/help/entry.html
+msgid "Page and number"
+msgstr "Pagina e numero"
+
+#: templates/help/entry.html
+msgid "%(page_up)s next page (− back), %(diagram_up)s next diagram number (↓ back)."
+msgstr "%(page_up)s pagina successiva (− indietro), %(diagram_up)s numero di diagramma successivo (↓ indietro)."
+
+#: templates/help/entry.html
+msgid "Tag as you go"
+msgstr "Taggare strada facendo"
+
+#: templates/help/entry.html
+msgid "%(tag)s adds a tag to the next positions, %(untag)s removes the last one; %(preset)s … 9 switch saved sets of tags on and off."
+msgstr "%(tag)s aggiunge un tag alle prossime posizioni, %(untag)s toglie l'ultimo; %(preset)s … 9 attivano e disattivano set di tag salvati."
+
+#: templates/help/entry.html
+msgid "Straight into training"
+msgstr "Direttamente in allenamento"
+
+#: templates/help/entry.html
+msgid "%(ready)s: with the solution entered, the puzzle goes into training when you save."
+msgstr "%(ready)s: con la soluzione inserita, l'esercizio va in allenamento quando salvi."
+
+#: templates/help/entry.html
+msgid "The board of the same link group, where you set up the diagram, and the PGN pane for pasting. When a position is already in the library, %(duplicate)s goes to it."
+msgstr "La scacchiera dello stesso gruppo collegato, dove imposti il diagramma, e il riquadro PGN per incollare. Se una posizione è già nella biblioteca, %(duplicate)s ci porta."
+
+#: templates/help/entry.html
+msgid "Diagrams that can't happen in a game (an illegal position in a book) are saved as diagrams: D in the board editor."
+msgstr "I diagrammi impossibili in una partita (una posizione illegale in un libro) vengono salvati come diagrammi: D nell'editor della scacchiera."
+
+#: templates/help/entry.html
+msgid "Afterwards, the Library finds what still needs a solution: no:solution src:… sort:source."
+msgstr "Poi la Biblioteca trova cosa aspetta ancora una soluzione: no:solution src:… sort:source."
+
+#: templates/help/evalgraph.html
+msgid "The evaluation along the main line: above the middle White is better, below Black. Where the line drops steeply, the game turned."
+msgstr "La valutazione lungo la linea principale: sopra la metà sta meglio il Bianco, sotto il Nero. Dove la linea scende di colpo, la partita è girata."
+
+#: templates/help/evalgraph.html
+msgid "Fill the graph"
+msgstr "Riempire il grafico"
+
+#: templates/help/evalgraph.html
+msgid "%(evaluate)s lets the engine go through the main line; the evaluations are saved with the analysis."
+msgstr "%(evaluate)s fa percorrere al motore la linea principale; le valutazioni vengono salvate con l'analisi."
+
+#: templates/help/evalgraph.html
+msgid "Jump to a move"
+msgstr "Saltare a una mossa"
+
+#: templates/help/evalgraph.html
+msgid "Click the graph, or %(back)s and %(forward)s."
+msgstr "Clicca il grafico, oppure %(back)s e %(forward)s."
+
+#: templates/help/evalgraph.html
+msgid "Find the turning points"
+msgstr "Trovare le svolte"
+
+#: templates/help/evalgraph.html
+msgid "%(moments)s marks the key moments of a game: good candidates for puzzles."
+msgstr "%(moments)s segna i momenti chiave di una partita: buoni candidati per esercizi."
+
+#: templates/help/evalgraph.html
+msgid "The move tree, the board and the engine of the same link group."
+msgstr "L'albero delle mosse, la scacchiera e il motore dello stesso gruppo collegato."
+
+#: templates/help/evalgraph.html
+msgid "Without evaluations the graph stays flat: the engine has to look at the moves first."
+msgstr "Senza valutazioni il grafico resta piatto: il motore deve prima guardare le mosse."
+
+#: templates/help/filters.html
+msgid "Facets of the Library's results: tags, difficulty, source and status, each with how many positions have it. Clicking one writes the term into the search, so you see what the search says."
+msgstr "Le faccette dei risultati della Biblioteca: tag, difficoltà, fonte e stato, ciascuna con il numero di posizioni. Un clic scrive il termine nella ricerca, così vedi cosa dice la ricerca."
+
+#: templates/help/filters.html
+msgid "Narrow down"
+msgstr "Restringere"
+
+#: templates/help/filters.html
+msgid "Move to a facet, %(enter)s adds it to the search (● on); %(enter)s again takes it out."
+msgstr "Vai su una faccetta, %(enter)s la aggiunge alla ricerca (● attiva); di nuovo %(enter)s la toglie."
+
+#: templates/help/filters.html
+msgid "Leave something out"
+msgstr "Escludere qualcosa"
+
+#: templates/help/filters.html
+msgid "%(exclude)s on a facet: everything except it (⊘, struck through). %(exclude)s again takes the exclusion out."
+msgstr "%(exclude)s su una faccetta: tutto tranne lei (⊘, barrata). Di nuovo %(exclude)s toglie l'esclusione."
+
+#: templates/help/filters.html
+msgid "Take a filter out"
+msgstr "Togliere un filtro"
+
+#: templates/help/filters.html
+msgid "“In the search” at the top lists every term, also the typed ones: %(enter)s on one takes it out."
+msgstr "«Nella ricerca», in alto, elenca ogni termine, anche quelli digitati: %(enter)s su uno lo toglie."
+
+#: templates/help/filters.html
+msgid "Start over"
+msgstr "Ricominciare"
+
+#: templates/help/filters.html
+msgid "%(clear)s clears the whole search, %(unfilter)s takes out the last term. u brings it back."
+msgstr "%(clear)s svuota tutta la ricerca, %(unfilter)s toglie l'ultimo termine. u la ripristina."
+
+#: templates/help/filters.html
+msgid "The Library pane of the same link group: it shows the results, and its search bar shows the terms. %(search_help)s explains them."
+msgstr "Il riquadro Biblioteca dello stesso gruppo collegato: mostra i risultati, e la sua barra di ricerca mostra i termini. %(search_help)s li spiega."
+
+#: templates/help/filters.html
+msgid "Facets are counted for the current results: the numbers show what you get when you add one."
+msgstr "Le faccette sono contate sui risultati attuali: i numeri mostrano cosa ottieni aggiungendone una."
+
+#: templates/help/filters.html static/js/core/library.js:307
+msgid "Facets are shown for positions (collection 1)."
+msgstr "Le faccette sono mostrate per le posizioni (raccolta 1)."
+
+#: templates/help/inspector.html
+msgid "Everything about the move at the cursor and its position, in sections: comment, symbols and marks, tags, the puzzle that starts here, the position's source and details."
+msgstr "Tutto sulla mossa al cursore e sulla sua posizione, in sezioni: commento, simboli e segni, tag, l'esercizio che inizia qui, la fonte e i dettagli della posizione."
+
+#: templates/help/inspector.html
+msgid "Go to a section"
+msgstr "Andare a una sezione"
+
+#: templates/help/inspector.html
+msgid "%(next)s next, %(prev)s previous, %(fold)s folds it."
+msgstr "%(next)s successiva, %(prev)s precedente, %(fold)s la comprime."
+
+#: templates/help/inspector.html
+msgid "Edit a field"
+msgstr "Modificare un campo"
+
+#: templates/help/inspector.html
+msgid "%(edit)s (or a click) puts you into the first field of the section; ⇥ to the next field, Esc back."
+msgstr "%(edit)s (o un clic) ti porta nel primo campo della sezione; ⇥ al campo successivo, Esc per tornare."
+
+#: templates/help/inspector.html
+msgid "%(tags)s tags the move, %(ptags)s the position. %(detect)s detects the motifs and suggests tags; suggestions are kept apart until you accept them."
+msgstr "%(tags)s tagga la mossa, %(ptags)s la posizione. %(detect)s rileva i motivi e suggerisce tag; i suggerimenti restano a parte finché non li accetti."
+
+#: templates/help/inspector.html
+msgid "Set up a puzzle"
+msgstr "Preparare un esercizio"
+
+#: templates/help/inspector.html
+msgid "%(puzzle)s on the move after which it starts; the puzzle section then shows its solution, its cards and whether it is in training."
+msgstr "%(puzzle)s sulla mossa dopo la quale inizia; la sezione dell'esercizio mostra poi la soluzione, le sue carte e se è in allenamento."
+
+#: templates/help/inspector.html
+msgid "The move tree of the same link group: the inspector shows its cursor. Next to the Library, the row under the list's cursor."
+msgstr "L'albero delle mosse dello stesso gruppo collegato: l'ispettore mostra il suo cursore. Accanto alla Biblioteca, la riga sotto il cursore della lista."
+
+#: templates/help/inspector.html
+msgid "Analyse's keys work here too: h and l move through the moves while you read."
+msgstr "Anche qui funzionano i tasti dell'Analisi: h e l scorrono le mosse mentre leggi."
+
+#: templates/help/keymap.html
+msgid "Every command and its keys. Change any key to suit you; buttons and help show your keys from then on."
+msgstr "Ogni comando e i suoi tasti. Cambia qualsiasi tasto come preferisci; da lì in poi pulsanti e aiuto mostrano i tuoi tasti."
+
+#: templates/help/keymap.html
+msgid "Find a command"
+msgstr "Trovare un comando"
+
+#: templates/help/keymap.html
+msgid "%(slash)s and a word of its name or its key."
+msgstr "%(slash)s e una parola del suo nome o il suo tasto."
+
+#: templates/help/keymap.html
+msgid "Give it new keys"
+msgstr "Dargli nuovi tasti"
+
+#: templates/help/keymap.html
+msgid "%(bind)s, press the new keys, ↵ keeps them, Esc cancels. u undoes the change."
+msgstr "%(bind)s, premi i nuovi tasti, ↵ li tiene, Esc annulla. u annulla la modifica."
+
+#: templates/help/keymap.html
+msgid "Remove keys"
+msgstr "Togliere tasti"
+
+#: templates/help/keymap.html
+msgid "%(unbind)s removes keys; on keys you set yourself, the default comes back."
+msgstr "%(unbind)s toglie tasti; per quelli che hai impostato tu torna il predefinito."
+
+#: templates/help/keymap.html
+msgid "Every pane: the keys you set here are the ones on every button."
+msgstr "Ogni riquadro: i tasti impostati qui sono quelli di ogni pulsante."
+
+#: templates/help/keymap.html
+msgid "Keys belong to a context: the same key can do different things in a list and on the board."
+msgstr "I tasti appartengono a un contesto: lo stesso tasto può fare cose diverse in una lista e sulla scacchiera."
+
+#: templates/help/library.html
+msgid "Everything you collected, searchable: positions, games, puzzles, players, sources and tags. Search, select, then act on the selection, or on everything the search found when nothing is selected."
+msgstr "Tutto ciò che hai raccolto, consultabile: posizioni, partite, esercizi, giocatori, fonti e tag. Cerca, seleziona, poi agisci sulla selezione, o su tutto ciò che la ricerca ha trovato se non è selezionato nulla."
+
+#: templates/help/library.html static/js/core/help.js:21
+msgid "Search"
+msgstr "Cercare"
+
+#: templates/help/library.html
+msgid "%(slash)s, type, %(enter)s to the results. %(search_help)s explains the search language."
+msgstr "%(slash)s, digita, %(enter)s ai risultati. %(search_help)s spiega il linguaggio di ricerca."
+
+#: templates/help/library.html
+msgid "Remove a filter"
+msgstr "Togliere un filtro"
+
+#: templates/help/library.html
+msgid "%(unfilter)s takes the last term out, %(clear)s clears the search (also the ✕ in the bar). The filter pane shows every term, each with a way out."
+msgstr "%(unfilter)s toglie l'ultimo termine, %(clear)s svuota la ricerca (anche la ✕ nella barra). Il riquadro dei filtri mostra ogni termine, ognuno con un modo per toglierlo."
+
+#: templates/help/library.html
+msgid "Switch the collection"
+msgstr "Cambiare raccolta"
+
+#: templates/help/library.html
+msgid "%(one)s positions … %(six)s tags, or click the tabs. %(enter)s on a player, a source or a tag shows its positions or games."
+msgstr "%(one)s posizioni … %(six)s tag, oppure clicca le schede. %(enter)s su un giocatore, una fonte o un tag mostra le sue posizioni o partite."
+
+#: templates/help/library.html
+msgid "Select"
+msgstr "Selezionare"
+
+#: templates/help/library.html
+msgid "%(select)s selects a row, %(visual)s a range as you move. Without a selection, a command acts on everything the search found."
+msgstr "%(select)s seleziona una riga, %(visual)s un intervallo mentre ti muovi. Senza selezione, un comando agisce su tutto ciò che la ricerca ha trovato."
+
+#: templates/help/library.html
+msgid "Work on them"
+msgstr "Lavorarci"
+
+#: templates/help/library.html
+msgid "%(tag)s tag, %(train)s train, %(analyse)s analyse one after the other, %(export)s export as PGN or puzzle pack, %(trash)s to the trash."
+msgstr "%(tag)s taggare, %(train)s allenare, %(analyse)s analizzare una dopo l'altra, %(export)s esportare come PGN o pacchetto di esercizi, %(trash)s nel cestino."
+
+#: templates/help/library.html
+msgid "Look at one"
+msgstr "Guardarne una"
+
+#: templates/help/library.html
+msgid "%(enter)s opens it in Analyse, %(beside)s beside the list. The board of the same link group follows the cursor, and so does a Moves pane."
+msgstr "%(enter)s la apre nell'Analisi, %(beside)s accanto alla lista. La scacchiera dello stesso gruppo collegato segue il cursore, e così un riquadro Mosse."
+
+#: templates/help/library.html
+msgid "Order and groups"
+msgstr "Ordine e gruppi"
+
+#: templates/help/library.html
+msgid "%(sort)s sorts by a column (again: reversed). Sorted by source or difficulty, the rows come in groups: %(fold)s folds one. %(display)s switches between table, list and grid."
+msgstr "%(sort)s ordina per una colonna (di nuovo: al contrario). Ordinate per fonte o difficoltà, le righe arrivano in gruppi: %(fold)s ne comprime uno. %(display)s passa tra tabella, lista e griglia."
+
+#: templates/help/library.html
+msgid "A work list"
+msgstr "Una lista di lavoro"
+
+#: templates/help/library.html
+msgid "Search for what is still to do, for example <code>no:solution src:\"…\" sort:source</code>, and press %(analyse)s with nothing selected. Analyse opens the first one; once its puzzle is in training it drops out of the list, and %(next)s opens the next one still to do. With a Moves pane beside the list (in the same link group) you can also work right here: the moves follow the cursor."
+msgstr "Cerca ciò che resta da fare, per esempio <code>no:solution src:\"…\" sort:source</code>, e premi %(analyse)s senza selezionare nulla. L'Analisi apre la prima; appena il suo esercizio è in allenamento, esce dalla lista, e %(next)s apre la prossima ancora da fare. Con un riquadro Mosse accanto alla lista (nello stesso gruppo collegato) puoi anche lavorare proprio qui: le mosse seguono il cursore."
+
+#: templates/help/library.html
+msgid "The filter pane of the same link group shows facets of the results. Boards, Moves and Inspector panes of the group show the row under the cursor. Analyse and Train take the selection, or the whole search."
+msgstr "Il riquadro dei filtri dello stesso gruppo collegato mostra faccette dei risultati. I riquadri Scacchiera, Mosse e Ispettore del gruppo mostrano la riga sotto il cursore. Analisi e Allenamento prendono la selezione, o tutta la ricerca."
+
+#: templates/help/library.html
+msgid "The count next to the search bar says how many were found."
+msgstr "Il numero accanto alla barra di ricerca dice quanti sono stati trovati."
+
+#: templates/help/library.html
+msgid "Tagging, the trash and imports can be undone with u."
+msgstr "Tag, cestino e importazioni si annullano con u."
+
+#: templates/help/library.html
+msgid "Drop a PGN or .sppack file on the window to import it."
+msgstr "Trascina un file PGN o .sppack sulla finestra per importarlo."
+
+#: templates/help/moves.html
+msgid "The analysis of a position or game as a book-style move tree: the main line in bold, variations below it, with comments, symbols and marks. Puzzles are set up here too."
+msgstr "L'analisi di una posizione o partita come un albero delle mosse da libro: la linea principale in grassetto, le varianti sotto, con commenti, simboli e segni. Anche gli esercizi si preparano qui."
+
+#: templates/help/moves.html
+msgid "Add moves"
+msgstr "Aggiungere mosse"
+
+#: templates/help/moves.html
+msgid "Play them on the board. A move that differs from the one in the tree starts a variation."
+msgstr "Giocale sulla scacchiera. Una mossa diversa da quella nell'albero inizia una variante."
+
+#: templates/help/moves.html templates/help/vargraph.html
+msgid "Move around"
+msgstr "Muoversi"
+
+#: templates/help/moves.html
+msgid "%(back)s back, %(forward)s forward, %(sibling)s to the next variation at this move, %(mainline)s back to the main line. Or click a move."
+msgstr "%(back)s indietro, %(forward)s avanti, %(sibling)s alla variante successiva di questa mossa, %(mainline)s torna alla linea principale. Oppure clicca una mossa."
+
+#: templates/help/moves.html
+msgid "Comment and annotate"
+msgstr "Commentare e annotare"
+
+#: templates/help/moves.html
+msgid "%(comment)s comment on the move; %(good)s … 7 symbols like ! and ?; %(annotate)s all symbols; %(mark)s marks the move as good."
+msgstr "%(comment)s commenta la mossa; %(good)s … 7 simboli come ! e ?; %(annotate)s tutti i simboli; %(mark)s segna la mossa come buona."
+
+#: templates/help/moves.html
+msgid "Tidy up"
+msgstr "Riordinare"
+
+#: templates/help/moves.html
+msgid "%(promote)s makes a variation the main line, %(delete)s deletes from the cursor on, %(fold)s folds a variation away."
+msgstr "%(promote)s rende una variante la linea principale, %(delete)s cancella dal cursore in poi, %(fold)s comprime una variante."
+
+#: templates/help/moves.html
+msgid "Make a puzzle"
+msgstr "Creare un esercizio"
+
+#: templates/help/moves.html
+msgid "Go to the move after which the puzzle starts, %(start)s; at the last move of the solution %(end)s; %(ready)s puts it into training."
+msgstr "Vai alla mossa dopo la quale inizia l'esercizio, %(start)s; all'ultima mossa della soluzione %(end)s; %(ready)s lo mette in allenamento."
+
+#: templates/help/moves.html
+msgid "Next position"
+msgstr "Posizione successiva"
+
+#: templates/help/moves.html
+msgid "Opened from a list (the Library, a training result), %(next)s and %(prev)s go through it. A list from a search stays live: what is done drops out."
+msgstr "Aperta da una lista (la Biblioteca, un risultato di allenamento), %(next)s e %(prev)s la percorrono. Una lista da una ricerca resta viva: ciò che è fatto ne esce."
+
+#: templates/help/moves.html
+msgid "The board, engine, inspector and graphs of the same link group. Next to the Library (same link group), the tree shows the row under the list's cursor."
+msgstr "La scacchiera, il motore, l'ispettore e i grafici dello stesso gruppo collegato. Accanto alla Biblioteca (stesso gruppo collegato), l'albero mostra la riga sotto il cursore della lista."
+
+#: templates/help/moves.html
+msgid "Every change can be undone with u, also after a reload."
+msgstr "Ogni modifica si annulla con u, anche dopo un ricaricamento."
+
+#: templates/help/pane.html
+msgid "The workspace is made of panes. Each pane shows one view: a board, a move tree, the Library, a chart … You choose what goes where."
+msgstr "L'area di lavoro è fatta di riquadri. Ognuno mostra una vista: una scacchiera, un albero delle mosse, la Biblioteca, un grafico … Decidi tu cosa va dove."
+
+#: templates/help/pane.html
+msgid "Choose what a pane shows"
+msgstr "Scegliere cosa mostra un riquadro"
+
+#: templates/help/pane.html
+msgid "%(view_key)s, then the letter of a view."
+msgstr "%(view_key)s, poi la lettera di una vista."
+
+#: templates/help/pane.html
+msgid "Split a pane"
+msgstr "Dividere un riquadro"
+
+#: templates/help/pane.html
+msgid "%(vsplit)s side by side, %(hsplit)s above and below; %(close)s closes the pane again."
+msgstr "%(vsplit)s affiancati, %(hsplit)s uno sopra l'altro; %(close)s richiude il riquadro."
+
+#: templates/help/pane.html
+msgid "Make one pane big"
+msgstr "Ingrandire un riquadro"
+
+#: templates/help/pane.html
+msgid "%(maximize)s; the same keys bring the others back."
+msgstr "%(maximize)s; gli stessi tasti riportano gli altri."
+
+#: templates/help/pane.html
+msgid "Move between panes"
+msgstr "Passare da un riquadro all'altro"
+
+#: templates/help/pane.html
+msgid "%(next_pane)s, or click into a pane. The focused pane has a coloured header."
+msgstr "%(next_pane)s, oppure clicca in un riquadro. Il riquadro attivo ha l'intestazione colorata."
+
+#: templates/help/pane.html
+msgid "Link panes"
+msgstr "Collegare riquadri"
+
+#: templates/help/pane.html
+msgid "Panes with the same letter in their header (A, B …) work together: a list, a board and a move tree of group A show the same thing. %(group)s changes the letter."
+msgstr "I riquadri con la stessa lettera nell'intestazione (A, B …) lavorano insieme: una lista, una scacchiera e un albero delle mosse del gruppo A mostrano la stessa cosa. %(group)s cambia la lettera."
+
+#: templates/help/pane.html
+msgid "Every pane works with the panes of its link group. A new pane gets the group of the pane it was split from."
+msgstr "Ogni riquadro lavora con i riquadri del suo gruppo collegato. Un nuovo riquadro riceve il gruppo del riquadro da cui è stato diviso."
+
+#: templates/help/pane.html
+msgid "Every change of the layout can be undone with %(undo)s."
+msgstr "Ogni modifica della disposizione si annulla con %(undo)s."
+
+#: templates/help/pane.html
+msgid "Each mode remembers its layout. %(layouts)s saves a layout under a name or goes back to the default."
+msgstr "Ogni modalità ricorda la sua disposizione. %(layouts)s salva una disposizione con un nome o torna a quella predefinita."
+
+#: templates/help/pgn.html
+msgid "The position or game of the link group as text: FEN and PGN to copy, and a field to paste text into."
+msgstr "La posizione o partita del gruppo collegato come testo: FEN e PGN da copiare e un campo per incollare testo."
+
+#: templates/help/pgn.html
+msgid "Copy"
+msgstr "Copiare"
+
+#: templates/help/pgn.html
+msgid "%(fen)s the FEN, %(pgn)s the PGN."
+msgstr "%(fen)s la FEN, %(pgn)s la PGN."
+
+#: templates/help/pgn.html
+msgid "Load text"
+msgstr "Caricare un testo"
+
+#: templates/help/pgn.html
+msgid "%(edit)s into the field, paste a FEN, a PGN or a lichess link, %(submit)s shows it on the board."
+msgstr "%(edit)s nel campo, incolla una FEN, una PGN o un link di lichess, %(submit)s la mostra sulla scacchiera."
+
+#: templates/help/pgn.html
+msgid "The board of the same link group, and Collect's entry session."
+msgstr "La scacchiera dello stesso gruppo collegato e la sessione di inserimento."
+
+#: templates/help/pgn.html
+msgid "Pasting works anywhere else too: the app asks what to do with what you pasted."
+msgstr "Incollare funziona anche ovunque: l'app chiede cosa fare con ciò che hai incollato."
+
+#: templates/help/queue.html
+msgid "Train solves puzzles. Pick a session, solve on the board, see how it went. Review brings back each puzzle just before you would forget it; Storm and Streak are games against the clock and against mistakes."
+msgstr "L'Allenamento risolve esercizi. Scegli una sessione, risolvi sulla scacchiera, guarda com'è andata. Il Ripasso ripropone ogni esercizio poco prima che tu lo dimentichi; Storm e Streak sono giochi contro il tempo e contro gli errori."
+
+#: templates/help/queue.html
+msgid "Start a session"
+msgstr "Avviare una sessione"
+
+#: templates/help/queue.html
+msgid "%(review)s Review (what is due today), %(storm)s a 3-minute Storm, %(streak)s a Streak until the first miss, %(weakest)s your weakest motifs."
+msgstr "%(review)s Ripasso (ciò che scade oggi), %(storm)s uno Storm di 3 minuti, %(streak)s uno Streak fino al primo errore, %(weakest)s i tuoi motivi più deboli."
+
+#: templates/help/queue.html
+msgid "Your own session"
+msgstr "La tua sessione"
+
+#: templates/help/queue.html
+msgid "Choose the kind, the look of the board, the side and the lives with the letters shown next to each option, a search for the puzzles, then %(custom)s."
+msgstr "Scegli il tipo, l'aspetto della scacchiera, il lato e le vite con le lettere accanto a ogni opzione, una ricerca per gli esercizi, poi %(custom)s."
+
+#: templates/help/queue.html
+msgid "Solve"
+msgstr "Risolvere"
+
+#: templates/help/queue.html
+msgid "Play the moves on the board, or type them with %(entry)s. %(hint)s shows a hint (the puzzle then counts as missed), %(giveup)s the solution."
+msgstr "Gioca le mosse sulla scacchiera, o digitale con %(entry)s. %(hint)s mostra un suggerimento (l'esercizio conta allora come sbagliato), %(giveup)s la soluzione."
+
+#: templates/help/queue.html
+msgid "After each puzzle"
+msgstr "Dopo ogni esercizio"
+
+#: templates/help/queue.html
+msgid "%(next)s next puzzle, %(retry)s once more (not scored), %(analyse)s look at it beside the board, %(flag)s mark it as broken."
+msgstr "%(next)s esercizio successivo, %(retry)s ancora una volta (non conta), %(analyse)s guardalo accanto alla scacchiera, %(flag)s segnalalo come difettoso."
+
+#: templates/help/queue.html templates/views/queue.html
+msgid "Stop"
+msgstr "Ferma"
+
+#: templates/help/queue.html
+msgid "%(quit)s at any time: the result shows what you solved and missed."
+msgstr "%(quit)s in qualsiasi momento: il risultato mostra cosa hai risolto e sbagliato."
+
+#: templates/help/queue.html
+msgid "The board of the same link group is the one you solve on. Puzzles come from Analyse (a puzzle put into training) and from imported packs; custom sessions take a Library search."
+msgstr "Risolvi sulla scacchiera dello stesso gruppo collegato. Gli esercizi vengono dall'Analisi (un esercizio messo in allenamento) e dai pacchetti importati; le sessioni personalizzate prendono una ricerca della Biblioteca."
+
+#: templates/help/queue.html
+msgid "A missed puzzle comes back soon, a solved one later and later: there is no need to rate yourself."
+msgstr "Un esercizio sbagliato torna presto, uno risolto sempre più tardi: non serve valutarti da solo."
+
+#: templates/help/queue.html
+msgid "On the result screen, missed puzzles can be reviewed again or opened in Analyse one after the other."
+msgstr "Nella schermata del risultato gli esercizi sbagliati si possono ripassare di nuovo o aprire nell'Analisi uno dopo l'altro."
+
+#: templates/help/search.html
+msgid "The search finds positions, games, puzzles, players, sources and tags. Type a few words, or say exactly what you want with <code>key:value</code> terms. %(slash)s starts typing, %(tab)s completes the word you are typing and shows what fits there, %(enter)s goes to the results."
+msgstr "La ricerca trova posizioni, partite, esercizi, giocatori, fonti e tag. Digita qualche parola, o di' esattamente cosa vuoi con termini <code>chiave:valore</code>. %(slash)s inizia a digitare, %(tab)s completa la parola che stai digitando e mostra cosa ci sta, %(enter)s va ai risultati."
+
+#: templates/help/search.html
+msgid "Words"
+msgstr "Parole"
+
+#: templates/help/search.html
+msgid "both words, in the title, the source, the tags or the comments"
+msgstr "entrambe le parole, nel titolo, nella fonte, nei tag o nei commenti"
+
+#: templates/help/search.html
+msgid "the words together, as written"
+msgstr "le parole insieme, come scritte"
+
+#: templates/help/search.html
+msgid "positions with this tag"
+msgstr "posizioni con questo tag"
+
+#: templates/help/search.html
+msgid "Terms: key:value"
+msgstr "Termini: chiave:valore"
+
+#: templates/help/search.html
+msgid "a tag of the motifs, with all the tags under it (a knight fork is a fork)"
+msgstr "un tag dei motivi, con tutti i tag sotto (una forchetta di cavallo è una forchetta)"
+
+#: templates/help/search.html
+msgid "only this tag, not the ones under it"
+msgstr "solo questo tag, non quelli sotto"
+
+#: templates/help/search.html
+msgid "either of the two (a comma means “or”)"
+msgstr "uno dei due (una virgola significa «o»)"
+
+#: templates/help/search.html
+msgid "one source; quotes keep a name with spaces together"
+msgstr "una fonte; le virgolette tengono insieme un nome con spazi"
+
+#: templates/help/search.html
+msgid "with a puzzle in training; also has:analysis, has:comment, has:puzzle, has:tags"
+msgstr "con un esercizio in allenamento; anche has:analysis, has:comment, has:puzzle, has:tags"
+
+#: templates/help/search.html
+msgid "without a puzzle in training yet: the ones still to do"
+msgstr "ancora senza esercizio in allenamento: quelli ancora da fare"
+
+#: templates/help/search.html
+msgid "diagrams (positions that may be illegal and are not played); also is:draft, is:flagged, is:trash"
+msgstr "diagrammi (posizioni forse illegali e non giocate); anche is:draft, is:flagged, is:trash"
+
+#: templates/help/search.html
+msgid "White to move (b: Black)"
+msgstr "Muove il Bianco (b: Nero)"
+
+#: templates/help/search.html
+msgid "Numbers and dates"
+msgstr "Numeri e date"
+
+#: templates/help/search.html
+msgid "difficulty 3 (of 1 to 5)"
+msgstr "difficoltà 3 (da 1 a 5)"
+
+#: templates/help/search.html
+msgid "3 or more; also >, <, <="
+msgstr "3 o più; anche >, <, <="
+
+#: templates/help/search.html
+msgid "from 2 to 4"
+msgstr "da 2 a 4"
+
+#: templates/help/search.html
+msgid "page 12 of the source; ref: the diagram number"
+msgstr "pagina 12 della fonte; ref: il numero del diagramma"
+
+#: templates/help/search.html
+msgid "added in the last 7 days; also created:today, created:2026-10"
+msgstr "aggiunte negli ultimi 7 giorni; anche created:today, created:2026-10"
+
+#: templates/help/search.html
+msgid "at most 7 pieces on the board"
+msgstr "al massimo 7 pezzi sulla scacchiera"
+
+#: templates/help/search.html
+msgid "Not"
+msgstr "Non"
+
+#: templates/help/search.html
+msgid "a minus in front leaves these out: everything that is not a diagram"
+msgstr "un meno davanti le esclude: tutto ciò che non è un diagramma"
+
+#: templates/help/search.html
+msgid "the same in words; !is:diagram and is:!=diagram work too"
+msgstr "lo stesso a parole; funzionano anche !is:diagram e is:!=diagram"
+
+#: templates/help/search.html
+msgid "no fork among the tags"
+msgstr "nessuna forchetta tra i tag"
+
+#: templates/help/search.html
+msgid "a whole group left out"
+msgstr "un intero gruppo escluso"
+
+#: templates/help/search.html
+msgid "Or, and brackets"
+msgstr "O, e parentesi"
+
+#: templates/help/search.html
+msgid "terms side by side must all be true"
+msgstr "i termini affiancati devono essere tutti veri"
+
+#: templates/help/search.html
+msgid "or: one of them is enough"
+msgstr "or: ne basta uno"
+
+#: templates/help/search.html
+msgid "brackets group terms"
+msgstr "le parentesi raggruppano i termini"
+
+#: templates/help/search.html
+msgid "Order"
+msgstr "Ordine"
+
+#: templates/help/search.html
+msgid "in the order of the book: source, page, diagram number, in groups per source"
+msgstr "nell'ordine del libro: fonte, pagina, numero di diagramma, in gruppi per fonte"
+
+#: templates/help/search.html
+msgid "hardest first (a minus reverses)"
+msgstr "i più difficili prima (un meno inverte)"
+
+#: templates/help/search.html
+msgid "oldest first; sort:-created newest first"
+msgstr "le più vecchie prima; sort:-created le più recenti prima"
+
+#: templates/help/search.html
+msgid "Recipes"
+msgstr "Ricette"
+
+#: templates/help/search.html
+msgid "Work through a book"
+msgstr "Lavorare un libro"
+
+#: templates/help/search.html
+msgid "<code>no:solution -is:diagram src:\"…\" sort:source</code>, then %(analyse)s: Analyse opens the first one. Once a puzzle is in training, it leaves the list and %(next)s opens the next one still to do."
+msgstr "<code>no:solution -is:diagram src:\"…\" sort:source</code>, poi %(analyse)s: l'Analisi apre la prima. Appena un esercizio è in allenamento, lascia la lista e %(next)s apre il prossimo ancora da fare."
+
+#: templates/help/search.html
+msgid "Train one motif"
+msgstr "Allenare un motivo"
+
+#: templates/help/search.html
+msgid "<code>motif:fork has:solution</code>, then %(train)s."
+msgstr "<code>motif:fork has:solution</code>, poi %(train)s."
+
+#: templates/help/search.html
+msgid "Find what is missing"
+msgstr "Trovare cosa manca"
+
+#: templates/help/search.html
+msgid "<code>no:tags</code> positions without tags, <code>no:source</code> without a source, <code>is:draft</code> puzzles not yet in training."
+msgstr "<code>no:tags</code> posizioni senza tag, <code>no:source</code> senza fonte, <code>is:draft</code> esercizi non ancora in allenamento."
+
+#: templates/help/search.html
+msgid "Keep a search"
+msgstr "Conservare una ricerca"
+
+#: templates/help/search.html
+msgid "<code>:save-query name</code> saves it; <code>in:q:name</code> uses it in another search and in custom training sessions."
+msgstr "<code>:save-query name</code> la salva; <code>in:q:name</code> la usa in un'altra ricerca e nelle sessioni di allenamento personalizzate."
+
+#: templates/help/search.html
+msgid "Capitals and accents don't matter, and tags are found in every language: motif:gabel finds forks too."
+msgstr "Maiuscole e accenti non contano, e i tag si trovano in ogni lingua: motif:gabel trova anche le forchette."
+
+#: templates/help/search.html
+msgid "Something the search doesn't understand is underlined, with the reason below the bar."
+msgstr "Ciò che la ricerca non capisce viene sottolineato, con il motivo sotto la barra."
+
+#: templates/help/search.html
+msgid "%(clear)s clears the search, %(unfilter)s takes the last term out; both can be undone with u."
+msgstr "%(clear)s svuota la ricerca, %(unfilter)s toglie l'ultimo termine; entrambi si annullano con u."
+
+#: templates/help/search.html
+msgid "The filter pane writes terms for you: click a facet, and see what the search says."
+msgstr "Il riquadro dei filtri scrive termini per te: clicca una faccetta e guarda cosa dice la ricerca."
+
+#: templates/help/settings.html
+msgid "Every setting in one list, in sections: theme and colours, board and pieces, keys, training, engine, language, data. Changes apply at once and can be undone."
+msgstr "Tutte le impostazioni in una lista, in sezioni: tema e colori, scacchiera e pezzi, tasti, allenamento, motore, lingua, dati. Le modifiche valgono subito e si possono annullare."
+
+#: templates/help/settings.html
+msgid "Find a setting"
+msgstr "Trovare un'impostazione"
+
+#: templates/help/settings.html
+msgid "%(slash)s and a word, or %(section)s from section to section."
+msgstr "%(slash)s e una parola, oppure %(section)s di sezione in sezione."
+
+#: templates/help/settings.html
+msgid "Change it"
+msgstr "Cambiarla"
+
+#: templates/help/settings.html
+msgid "%(step)s next value, %(back)s previous one, or click a choice."
+msgstr "%(step)s valore successivo, %(back)s precedente, oppure clicca una scelta."
+
+#: templates/help/settings.html
+msgid "Type a value"
+msgstr "Digitare un valore"
+
+#: templates/help/settings.html
+msgid "%(edit)s opens the command line with the setting: the choices are listed, %(tab)s completes, ↵ sets it."
+msgstr "%(edit)s apre la riga di comando con l'impostazione: le scelte sono elencate, %(tab)s completa, ↵ la imposta."
+
+#: templates/help/settings.html design/commands/settings.toml:settings.reset
+msgid "Back to the default"
+msgstr "Torna al valore predefinito"
+
+#: templates/help/settings.html
+msgid "Change keys"
+msgstr "Cambiare i tasti"
+
+#: templates/help/settings.html
+msgid "%(keymap)s goes to the keymap."
+msgstr "%(keymap)s va alle scorciatoie."
+
+#: templates/help/settings.html
+msgid "Everything. A theme shows while the cursor is on it; it stays when you choose it."
+msgstr "Tutto. Un tema si vede finché il cursore ci sta sopra; resta quando lo scegli."
+
+#: templates/help/settings.html
+msgid "All settings are one text file: :settings-export saves it, and it can be read back on another computer."
+msgstr "Tutte le impostazioni sono un file di testo: :settings-export lo salva, e si può rileggere su un altro computer."
+
+#: templates/help/settings.html
+msgid "Settings → Licences lists every part of the app with its licence."
+msgstr "Impostazioni → Licenze elenca ogni parte dell'app con la sua licenza."
+
+#: templates/help/today.html
+msgid "What to do now: the puzzles due today, sessions that start with one key, today's numbers and your pattern library."
+msgstr "Cosa fare ora: gli esercizi in scadenza oggi, sessioni che partono con un tasto, i numeri di oggi e la tua biblioteca di schemi."
+
+#: templates/help/today.html core/layouts.py:25 design/commands/shell.toml:mode.train
+msgid "Train"
+msgstr "Allenamento"
+
+#: templates/help/today.html
+msgid "%(review)s today's review, %(storm)s a Storm, %(weakest)s your weakest motifs; the numbers next to each session start it."
+msgstr "%(review)s il ripasso di oggi, %(storm)s uno Storm, %(weakest)s i tuoi motivi più deboli; i numeri accanto a ogni sessione la avviano."
+
+#: templates/help/today.html
+msgid "Look around"
+msgstr "Guardarsi intorno"
+
+#: templates/help/today.html
+msgid "%(section)s from section to section; a number or a motif opens what is behind it."
+msgstr "%(section)s di sezione in sezione; un numero o un motivo apre ciò che c'è dietro."
+
+#: templates/help/today.html
+msgid "Train, Stats and the Library."
+msgstr "Allenamento, Statistiche e la Biblioteca."
+
+#: templates/help/today.html
+msgid "When the library is empty, Home shows how to fill it: a puzzle pack, a book, or pasted games."
+msgstr "Quando la biblioteca è vuota, la Home mostra come riempirla: un pacchetto di esercizi, un libro o partite incollate."
+
+#: templates/help/vargraph.html
+msgid "The move tree as a picture: each dot a move, each branch a variation. Good for finding your way in a big analysis."
+msgstr "L'albero delle mosse come immagine: ogni punto una mossa, ogni ramo una variante. Utile per orientarsi in una grande analisi."
+
+#: templates/help/vargraph.html
+msgid "Click a dot, or %(back)s %(forward)s along the line and %(sibling)s to the next variation."
+msgstr "Clicca un punto, oppure %(back)s %(forward)s lungo la linea e %(sibling)s alla variante successiva."
+
+#: templates/help/vargraph.html
+msgid "The move tree and the board of the same link group: the cursor is the same everywhere."
+msgstr "L'albero delle mosse e la scacchiera dello stesso gruppo collegato: il cursore è lo stesso ovunque."
+
+#: templates/help/vargraph.html
+msgid "A wide picture means many variations: %(fold)s in the move tree folds one away."
+msgstr "Un'immagine larga vuol dire molte varianti: %(fold)s nell'albero delle mosse ne comprime una."
+
 #: templates/library/facets.html templates/stats/sections.html
 msgid "%(n)s position"
 msgid_plural "%(n)s positions"
 msgstr[0] "%(n)s posizione"
 msgstr[1] "%(n)s posizioni"
 
-#: templates/library/results.html
+#: templates/library/facets.html
+msgid "In the search"
+msgstr "Nella ricerca"
+
+#: templates/library/facets.html
+msgid "↵ takes one out"
+msgstr "↵ ne toglie uno"
+
+#: templates/library/facets.html
+msgid "↵ takes it out of the search"
+msgstr "↵ lo toglie dalla ricerca"
+
+#: templates/library/facets.html static/js/core/library.js:379 design/commands/library.toml:library.clear
+msgid "Clear the search"
+msgstr "Svuotare la ricerca"
+
+#: templates/library/facets.html
+msgid "excluded"
+msgstr "esclusa"
+
+#: templates/library/results.html static/js/islands/board.js:429
 msgid "diagram"
 msgstr "diagramma"
 
@@ -242,8 +1258,12 @@ msgid "training"
 msgstr "allenamento"
 
 #: templates/library/results.html
-msgid "solution"
-msgstr "soluzione"
+msgid "No moves yet: no:analysis finds these"
+msgstr "Ancora nessuna mossa: no:analysis le trova"
+
+#: templates/library/results.html
+msgid "no moves"
+msgstr "nessuna mossa"
 
 #: templates/library/results.html
 msgid "%(rate)s%% of %(n)s"
@@ -353,11 +1373,11 @@ msgid_plural "%(n)s settings"
 msgstr[0] "%(n)s impostazione"
 msgstr[1] "%(n)s impostazioni"
 
-#: templates/settings/rows.html
+#: templates/settings/rows.html static/js/core/cmdline.js:130
 msgid "on"
 msgstr "sì"
 
-#: templates/settings/rows.html templates/views/engine.html static/js/core/engine.js:306
+#: templates/settings/rows.html templates/views/engine.html static/js/core/cmdline.js:130
 msgid "off"
 msgstr "no"
 
@@ -511,7 +1531,7 @@ msgstr "Incolla impostazioni esportate o un tema (TOML), poi Ctrl+↵"
 msgid "Modes"
 msgstr "Modalità"
 
-#: templates/shell.html training/views.py:250 static/js/core/context.js:63
+#: templates/shell.html training/views.py:250 static/js/core/context.js:64
 msgid "Normal"
 msgstr "Normale"
 
@@ -986,8 +2006,8 @@ msgid "↵ adds or removes a term, - excludes it. Without a Library in this link
 msgstr "↵ aggiunge o toglie un termine, - lo esclude. Senza una Biblioteca in questo gruppo collegato, il riquadro resta vuoto."
 
 #: templates/views/inspector.html
-msgid "The move at the cursor of this link group's analysis appears here: its annotation, mark, comment and puzzle. Open a position in a move tree of the same link group."
-msgstr "Qui compare la mossa al cursore dell'analisi di questo gruppo collegato: annotazione, segno, commento ed esercizio. Apri una posizione in un albero delle mosse dello stesso gruppo collegato."
+msgid "The move at the cursor of this link group's analysis appears here: its annotation, mark, comment and puzzle. Open a position in a move tree of the same link group, or move the cursor in a Library list of that group."
+msgstr "Qui compare la mossa al cursore dell'analisi di questo gruppo collegato: simbolo, segno, commento ed esercizio. Apri una posizione in un albero delle mosse dello stesso gruppo collegato, o muovi il cursore in una lista della Biblioteca di quel gruppo."
 
 #: templates/views/keymap.html
 msgid "Search commands"
@@ -997,7 +2017,7 @@ msgstr "Cerca comandi"
 msgid "search commands · ↵ new keys · ⌫ remove your binding"
 msgstr "cerca comandi · ↵ nuovi tasti · ⌫ rimuovi la tua scorciatoia"
 
-#: templates/views/keymap.html templates/views/settings.html
+#: templates/views/keymap.html templates/views/settings.html static/js/core/help.js:83
 msgid "Loading…"
 msgstr "Caricamento…"
 
@@ -1066,8 +2086,8 @@ msgid "%(colon)s <code>analyse</code> finds one, or paste a FEN or PGN (%(paste)
 msgstr "%(colon)s <code>analyse</code> ne trova una, oppure incolla un FEN o un PGN (%(paste)s) e scegli %(key_a)s."
 
 #: templates/views/moves.html
-msgid "This pane shows the analysis of its link group, here in %(mode)s: %(colon)s <code>analyse</code> opens one here, %(key_o)s in the Library opens a row beside the list, %(key_a)s on Train's feedback the puzzle. The board, engine, inspector and graphs of the same link group follow it, and Analyse's keys work while one of them has the focus."
-msgstr "Questo riquadro mostra l'analisi del suo gruppo collegato, qui in %(mode)s: %(colon)s <code>analyse</code> ne apre una qui, %(key_o)s nella Biblioteca apre una riga accanto alla lista, %(key_a)s nel riscontro dell'allenamento l'esercizio. Scacchiera, motore, ispettore e grafici dello stesso gruppo collegato la seguono, e i tasti dell'Analisi funzionano finché uno di essi ha il focus."
+msgid "This pane shows the analysis of its link group, here in %(mode)s. Move the cursor in a Library list of the same link group and the moves of that row show here. %(colon)s <code>analyse</code> opens a position here, %(key_a)s on Train's feedback the puzzle. The board, engine, inspector and graphs of the same link group follow it, and Analyse's keys work while one of them has the focus."
+msgstr "Questo riquadro mostra l'analisi del suo gruppo collegato, qui in %(mode)s. Muovi il cursore in una lista della Biblioteca dello stesso gruppo collegato e qui compaiono le mosse di quella riga. %(colon)s <code>analyse</code> apre qui una posizione, %(key_a)s sul riscontro dell'Allenamento l'esercizio. Scacchiera, motore, ispettore e grafici dello stesso gruppo collegato la seguono, e i tasti dell'Analisi funzionano finché uno di loro ha il focus."
 
 #: templates/views/pgn.html
 msgid "A FEN, a PGN or a lichess link, then ⌘↵"
@@ -1088,10 +2108,6 @@ msgstr "Oppure premi Ctrl+V ovunque fuori da un campo di testo."
 #: templates/views/pgn.html
 msgid "Show"
 msgstr "Mostra"
-
-#: templates/views/queue.html
-msgid "Stop"
-msgstr "Ferma"
 
 #: templates/views/settings.html
 msgid "Search settings"
@@ -1331,7 +2347,7 @@ msgstr "Momenti {how}: {tags} su {moves}"
 msgid "Add engine line"
 msgstr "Aggiungi la linea del motore"
 
-#: analysis/views.py:99 static/js/core/analysis.js:565
+#: analysis/views.py:99 static/js/core/analysis.js:581
 msgid "Annotation"
 msgstr "Annotazione"
 
@@ -1339,7 +2355,7 @@ msgstr "Annotazione"
 msgid "Mark"
 msgstr "Segno"
 
-#: analysis/views.py:99 static/js/core/analysis.js:578
+#: analysis/views.py:99 static/js/core/analysis.js:594
 msgid "Line colour"
 msgstr "Colore della linea"
 
@@ -1550,10 +2566,6 @@ msgstr "Home"
 #: core/layouts.py:24
 msgid "What to do now: due cards, one-key sessions, a paste box, recent work."
 msgstr "Cosa fare ora: schede da ripassare, sessioni con un tasto, un riquadro per incollare, il lavoro recente."
-
-#: core/layouts.py:25 design/commands/shell.toml:mode.train design/commands/train.toml:train.review
-msgid "Train"
-msgstr "Allenamento"
 
 #: core/layouts.py:25
 msgid "Solve puzzles: Review, Storm, Streak and custom sessions, with result screens."
@@ -1915,7 +2927,7 @@ msgstr "riquadro per incollare"
 msgid "open"
 msgstr "apri"
 
-#: core/layouts.py:161
+#: core/layouts.py:161 static/js/core/help.js:149
 msgid "scroll"
 msgstr "scorri"
 
@@ -2060,6 +3072,22 @@ msgstr "impossibile aprire {folder}: {error}"
 #: core/server_commands.py:268 core/settings_io.py:184
 msgid "check contrast: {problems}"
 msgstr "controlla il contrasto: {problems}"
+
+#: core/settings.py:84
+msgid "English"
+msgstr "inglese"
+
+#: core/settings.py:84
+msgid "German"
+msgstr "tedesco"
+
+#: core/settings.py:84
+msgid "French"
+msgstr "francese"
+
+#: core/settings.py:84
+msgid "Italian"
+msgstr "italiano"
 
 #: core/settings.py:27 core/settings_view.py:20
 msgid "Language"
@@ -2209,11 +3237,11 @@ msgstr "Fermati da solo"
 msgid "The app stops 10 minutes after the last tab was closed (started without a console: on)"
 msgstr "L'app si ferma 10 minuti dopo la chiusura dell'ultima scheda (avviata senza console: sì)"
 
-#: core/settings.py:93
+#: core/settings.py:100
 msgid "automatic"
 msgstr "automatico"
 
-#: core/settings.py:95
+#: core/settings.py:102
 msgid "as the app"
 msgstr "come l'app"
 
@@ -2323,7 +3351,7 @@ msgstr "Densità e forma"
 msgid "Sound and motion"
 msgstr "Suono e movimento"
 
-#: core/settings_view.py:27 static/js/core/help.js:67
+#: core/settings_view.py:27 static/js/core/help.js:20
 msgid "Keys"
 msgstr "Tasti"
 
@@ -2347,7 +3375,7 @@ msgstr "Come il sistema (Paper / Ink)"
 msgid "{ratio}:1, needs {minimum}:1"
 msgstr "{ratio}:1, serve {minimum}:1"
 
-#: core/templatetags/ui.py:145
+#: core/templatetags/ui.py:155
 msgid "Position {fen}"
 msgstr "Posizione {fen}"
 
@@ -2787,7 +3815,7 @@ msgstr "{name} è un numero"
 msgid "{name} is below {name2}: that would make a loop"
 msgstr "{name} è sotto {name2}: sarebbe un ciclo"
 
-#: library/edit.py:276 library/pack_views.py:74 static/js/core/library.js:315
+#: library/edit.py:276 library/pack_views.py:74 static/js/core/library.js:425
 msgid "{n} position"
 msgid_plural "{n} positions"
 msgstr[0] "{n} posizione"
@@ -2859,7 +3887,7 @@ msgstr "Pubblico dominio"
 msgid "Course"
 msgstr "Corso"
 
-#: library/models.py:20 library/packs.py:316 static/js/core/library.js:572
+#: library/models.py:20 library/packs.py:316 static/js/core/library.js:684
 msgid "Puzzle pack"
 msgstr "Pacchetto di esercizi"
 
@@ -3025,35 +4053,35 @@ msgstr "non è un pacchetto di esercizi ({error})"
 msgid "p. {page}"
 msgstr "p. {page}"
 
-#: library/query.py:187
+#: library/query.py:209
 msgid "this ( isn't closed"
 msgstr "questa ( non è chiusa"
 
-#: library/query.py:130
+#: library/query.py:143
 msgid "{key}: needs a value"
 msgstr "{key}: serve un valore"
 
-#: library/query.py:337
+#: library/query.py:359
 msgid "{key}: not a key for {collection}"
 msgstr "{key}: non è una chiave per {collection}"
 
-#: library/query.py:166
+#: library/query.py:179
 msgid "no ( for this )"
 msgstr "nessuna ( per questa )"
 
-#: library/query.py:318
+#: library/query.py:340
 msgid "{key}: can't read '{value}'"
 msgstr "{key}: impossibile leggere «{value}»"
 
-#: library/query.py:295
+#: library/query.py:317
 msgid "no tag '{value}'"
 msgstr "nessun tag «{value}»"
 
-#: library/query.py:615
+#: library/query.py:637
 msgid "sort: not '{value}' here ({value2})"
 msgstr "sort: non «{value}» qui ({value2})"
 
-#: library/query.py:295
+#: library/query.py:317
 msgid " in {field_key}"
 msgstr " in {field_key}"
 
@@ -3233,61 +4261,289 @@ msgstr "Opposizione a distanza ({value}/{value2})"
 msgid "Rule of the square: pawn {value} against king {value2}"
 msgstr "Regola del quadrato: pedone {value} contro re {value2}"
 
-#: library/views.py:109
+#: library/views.py:36
+msgid "a tag of any field"
+msgstr "un tag di qualsiasi campo"
+
+#: library/views.py:36
+msgid "difficulty 1–5: diff:3, diff:>=3, diff:2..4"
+msgstr "difficoltà 1–5: diff:3, diff:>=3, diff:2..4"
+
+#: library/views.py:37
+msgid "who is to move: w or b"
+msgstr "chi muove: w o b"
+
+#: library/views.py:37
+msgid "a source: its name, or words of it"
+msgstr "una fonte: il suo nome, o parole di esso"
+
+#: library/views.py:38
+msgid "page in the source"
+msgstr "pagina nella fonte"
+
+#: library/views.py:38
+msgid "diagram number in the source"
+msgstr "numero di diagramma nella fonte"
+
+#: library/views.py:39
+msgid "has a solution, an analysis, a puzzle …"
+msgstr "ha una soluzione, un'analisi, un esercizio …"
+
+#: library/views.py:39
+msgid "has no solution, analysis, puzzle …"
+msgstr "non ha soluzione, analisi, esercizio …"
+
+#: library/views.py:40
+msgid "is a diagram, flagged, a draft, in the trash"
+msgstr "è un diagramma, segnalata, una bozza, nel cestino"
+
+#: library/views.py:40
+msgid "material: material:Q+R-R"
+msgstr "materiale: material:Q+R-R"
+
+#: library/views.py:41
+msgid "number of pieces: pieces:<=7"
+msgstr "numero di pezzi: pieces:<=7"
+
+#: library/views.py:41
+msgid "part of the position's FEN"
+msgstr "parte della FEN della posizione"
+
+#: library/views.py:42
+msgid "added: created:today, created:<7d, created:2026-10"
+msgstr "aggiunta: created:today, created:<7d, created:2026-10"
+
+#: library/views.py:42
+msgid "changed: updated:<7d"
+msgstr "modificata: updated:<7d"
+
+#: library/views.py:43
+msgid "from a game: game:yes"
+msgstr "da una partita: game:yes"
+
+#: library/views.py:43
+msgid "in a saved query: in:q:name"
+msgstr "in una ricerca salvata: in:q:name"
+
+#: library/views.py:44
+msgid "order: sort:diagram, sort:-difficulty"
+msgstr "ordine: sort:diagram, sort:-difficulty"
+
+#: library/views.py:44
+msgid "the white player"
+msgstr "il giocatore col Bianco"
+
+#: library/views.py:45
+msgid "the black player"
+msgstr "il giocatore col Nero"
+
+#: library/views.py:45
+msgid "either player"
+msgstr "uno dei due giocatori"
+
+#: library/views.py:45
+msgid "1-0, 0-1 or draw"
+msgstr "1-0, 0-1 o patta (draw)"
+
+#: library/views.py:46
+msgid "opening code: eco:B90"
+msgstr "codice d'apertura: eco:B90"
+
+#: library/views.py:46
+msgid "words of the event"
+msgstr "parole dell'evento"
+
+#: library/views.py:46
+msgid "year: year:>=1990"
+msgstr "anno: year:>=1990"
+
+#: library/views.py:47
+msgid "either player's Elo: elo:>2500"
+msgstr "Elo di uno dei giocatori: elo:>2500"
+
+#: library/views.py:47
+msgid "due for review: due:today"
+msgstr "da ripassare: due:today"
+
+#: library/views.py:48
+msgid "card stage: new, learning, young, mature"
+msgstr "fase della carta: new, learning, young, mature"
+
+#: library/views.py:48
+msgid "times forgotten: lapses:>=2"
+msgstr "volte dimenticato: lapses:>=2"
+
+#: library/views.py:49
+msgid "success rate: success:<60%"
+msgstr "percentuale di successo: success:<60%"
+
+#: library/views.py:49
+msgid "last trained: last:>30d"
+msgstr "ultimo allenamento: last:>30d"
+
+#: library/views.py:50
+msgid "times trained: attempts:0"
+msgstr "volte allenato: attempts:0"
+
+#: library/views.py:50
+msgid "me, student, model, opponent"
+msgstr "io (me), allievo (student), modello (model), avversario (opponent)"
+
+#: library/views.py:51
+msgid "book, website, own analysis …"
+msgstr "libro, sito web, analisi propria …"
+
+#: library/views.py:51
+msgid "a tag field: field:motif"
+msgstr "un campo di tag: field:motif"
+
+#: library/views.py:54
+msgid "a puzzle in training"
+msgstr "un esercizio in allenamento"
+
+#: library/views.py:54
+msgid "moves analysed"
+msgstr "mosse analizzate"
+
+#: library/views.py:54
+msgid "a puzzle, also a draft"
+msgstr "un esercizio, anche in bozza"
+
+#: library/views.py:55
+msgid "a comment in its analysis"
+msgstr "un commento nella sua analisi"
+
+#: library/views.py:55
+msgid "a source"
+msgstr "una fonte"
+
+#: library/views.py:55
+msgid "any tag"
+msgstr "un tag qualsiasi"
+
+#: library/views.py:56
+msgid "from a game"
+msgstr "da una partita"
+
+#: library/views.py:56
+msgid "positions taken from it"
+msgstr "posizioni tratte da essa"
+
+#: library/views.py:56
+msgid "may be illegal, not played"
+msgstr "può essere illegale, non giocata"
+
+#: library/views.py:57
+msgid "marked as broken in training"
+msgstr "segnalato come difettoso in allenamento"
+
+#: library/views.py:57
+msgid "a puzzle not yet in training"
+msgstr "un esercizio non ancora in allenamento"
+
+#: library/views.py:58
+msgid "in the trash"
+msgstr "nel cestino"
+
+#: library/views.py:58
+msgid "a name without a player"
+msgstr "un nome senza giocatore"
+
+#: library/views.py:140
 msgid "No difficulty"
 msgstr "Senza difficoltà"
 
-#: library/views.py:112
+#: library/views.py:143
 msgid "No source"
 msgstr "Senza fonte"
 
-#: library/views.py:114
+#: library/views.py:145
 msgid "No year"
 msgstr "Senza anno"
 
-#: library/views.py:118
+#: library/views.py:149
 msgid "No event"
 msgstr "Senza evento"
 
-#: library/views.py:120
+#: library/views.py:151
 msgid "No role"
 msgstr "Senza ruolo"
 
-#: library/views.py:301 stats/metrics.py:601 stats/views.py:128
+#: library/views.py:349 stats/metrics.py:601 stats/views.py:128
 msgid "In training"
 msgstr "In allenamento"
 
-#: library/views.py:301
+#: library/views.py:349
 msgid "No puzzle in training"
 msgstr "Nessun esercizio in allenamento"
 
-#: library/views.py:301 stats/metrics.py:600 stats/views.py:81
+#: library/views.py:349 stats/metrics.py:600 stats/views.py:81
 msgid "Analysed"
 msgstr "Analizzate"
 
-#: library/views.py:302
+#: library/views.py:350
 msgid "Not analysed"
 msgstr "Non analizzate"
 
-#: library/views.py:302
+#: library/views.py:350
 msgid "Diagrams"
 msgstr "Diagrammi"
 
-#: library/views.py:302
+#: library/views.py:350
 msgid "Flagged"
 msgstr "Segnalati"
 
-#: library/views.py:308
+#: library/views.py:356
 msgid "Trash"
 msgstr "Cestino"
 
-#: library/views.py:309
+#: library/views.py:357
 msgid "Status"
 msgstr "Stato"
 
-#: library/views.py:386
+#: library/views.py:377
+msgid "a group in brackets"
+msgstr "un gruppo tra parentesi"
+
+#: library/views.py:394
+msgid "Tag"
+msgstr "Tag"
+
+#: library/views.py:371
+msgid "either side of “or”"
+msgstr "uno dei lati di «or»"
+
+#: library/views.py:390
+msgid "words: {text}"
+msgstr "parole: {text}"
+
+#: library/views.py:399
+msgid "order: {by}"
+msgstr "ordine: {by}"
+
+#: library/views.py:477
 msgid "Only positions and games export as PGN"
 msgstr "Solo posizioni e partite si esportano in PGN"
+
+#: library/views.py:381
+msgid "not: {what}"
+msgstr "non: {what}"
+
+#: library/views.py:309
+msgid "not: -is:diagram excludes diagrams"
+msgstr "non: -is:diagram esclude i diagrammi"
+
+#: library/views.py:310
+msgid "either: motif:fork or motif:pin"
+msgstr "o: motif:fork or motif:pin"
+
+#: library/views.py:311
+msgid "a group: -(motif:fork or motif:pin)"
+msgstr "un gruppo: -(motif:fork or motif:pin)"
+
+#: library/views.py:302
+msgid "in groups"
+msgstr "in gruppi"
 
 #: stats/charts.py:39
 msgid "No data yet."
@@ -3623,7 +4879,7 @@ msgstr "mossa della soluzione illegale {uci} in {value}"
 msgid "illegal answer {uci} in {value}"
 msgstr "risposta illegale {uci} in {value}"
 
-#: training/srs.py:115
+#: training/srs.py:115 static/js/core/cmdline.js:128
 msgid "now"
 msgstr "ora"
 
@@ -3699,11 +4955,11 @@ msgstr "Il tuo CSS è disattivato per questa pagina (Esc al caricamento): Impost
 msgid "update {version} available"
 msgstr "aggiornamento {version} disponibile"
 
-#: static/js/app.js:100 static/js/core/commands.js:143 static/js/core/importer.js:58
+#: static/js/app.js:100 static/js/core/commands.js:149 static/js/core/importer.js:58
 msgid "undo"
 msgstr "annulla"
 
-#: static/js/app.js:136 static/js/core/library.js:562 static/js/islands/train.js:640
+#: static/js/app.js:136 static/js/core/library.js:674 static/js/islands/train.js:640
 msgid "The browser didn't allow copying"
 msgstr "Il browser non ha permesso la copia"
 
@@ -3739,83 +4995,91 @@ msgstr "Grigio"
 msgid "the app is not reachable"
 msgstr "l'app non è raggiungibile"
 
-#: static/js/core/analysis.js:128
+#: static/js/core/analysis.js:129
 msgid "Could not open that position"
 msgstr "Impossibile aprire questa posizione"
 
-#: static/js/core/analysis.js:228
+#: static/js/core/analysis.js:229
 msgid "Replace the moves of “{title}” with the pasted game? y / n"
 msgstr "Sostituire le mosse di «{title}» con la partita incollata? y / n"
 
-#: static/js/core/analysis.js:228 static/js/core/analysis.js:229
+#: static/js/core/analysis.js:229 static/js/core/analysis.js:230
 msgid "this position"
 msgstr "questa posizione"
 
-#: static/js/core/analysis.js:229
+#: static/js/core/analysis.js:230
 msgid "Replace the moves of “{title}” with the pasted position? y / n"
 msgstr "Sostituire le mosse di «{title}» con la posizione incollata? y / n"
 
-#: static/js/core/analysis.js:239
+#: static/js/core/analysis.js:240
 msgid "Drop them? y / n"
 msgstr "Eliminarle? y / n"
 
-#: static/js/core/analysis.js:459
+#: static/js/core/analysis.js:460
 msgid "No position open: :analyse, or paste one (⌘V, a)"
 msgstr "Nessuna posizione aperta: :analyse o incollane una (⌘V, a)"
 
-#: static/js/core/analysis.js:480
+#: static/js/core/analysis.js:481
 msgid "No other move here"
 msgstr "Nessun'altra mossa qui"
 
-#: static/js/core/analysis.js:494
+#: static/js/core/analysis.js:495
 msgid "Looking for the key moments…"
 msgstr "Cerco i momenti chiave…"
 
-#: static/js/core/analysis.js:504
+#: static/js/core/analysis.js:505
 msgid "Open the moves pane to fold variations"
 msgstr "Apri il riquadro delle mosse per comprimere le varianti"
 
-#: static/js/core/analysis.js:518
+#: static/js/core/analysis.js:519
 msgid "No variation here"
 msgstr "Nessuna variante qui"
 
-#: static/js/core/analysis.js:529
+#: static/js/core/analysis.js:530
 msgid "No variations"
 msgstr "Nessuna variante"
 
-#: static/js/core/analysis.js:533
+#: static/js/core/analysis.js:534
 msgid "All variations open"
 msgstr "Tutte le varianti aperte"
 
-#: static/js/core/analysis.js:533
+#: static/js/core/analysis.js:534
 msgid "All variations folded · z opens one"
 msgstr "Tutte le varianti compresse · z ne apre una"
 
-#: static/js/core/analysis.js:550
+#: static/js/core/analysis.js:549
+msgid "No list here: a in the Library analyses what a search found, n goes through it"
+msgstr "Nessuna lista qui: a nella Biblioteca analizza ciò che una ricerca ha trovato, n la percorre"
+
+#: static/js/core/analysis.js:557
+msgid "Nothing left in this list: all done"
+msgstr "Niente più in questa lista: tutto fatto"
+
+#: static/js/core/analysis.js:564
 msgid "This is the first"
 msgstr "Questa è la prima"
 
-#: static/js/core/analysis.js:550
+#: static/js/core/analysis.js:564
 msgid "This is the last"
 msgstr "Questa è l'ultima"
 
-#: static/js/core/analysis.js:554
+#: static/js/core/analysis.js:570
 msgid "Go to a move first"
 msgstr "Vai prima a una mossa"
 
-#: static/js/core/analysis.js:591
+#: static/js/core/analysis.js:607
 msgid "Open an Inspector pane to write comments: ␣ w v, then i"
 msgstr "Apri un riquadro Ispettore per scrivere commenti: ␣ w v, poi i"
 
-#: static/js/core/analysis.js:609
+#: static/js/core/analysis.js:625
 msgid "Open an Inspector pane: ␣ w v, then i"
 msgstr "Apri un riquadro Ispettore: ␣ w v, poi i"
 
-#: static/js/core/analysis.js:631
+#: static/js/core/analysis.js:647
 msgid "its own analysis, with the continuation"
 msgstr "una propria analisi, con il seguito"
 
-#: static/js/core/analysis.js:631
+#: static/js/core/analysis.js:647
 msgid "its own analysis"
 msgstr "una propria analisi"
 
@@ -3835,7 +5099,7 @@ msgstr "Periodo: {period}"
 msgid "No analysis to continue: :analyse opens one"
 msgstr "Nessuna analisi da continuare: :analyse ne apre una"
 
-#: static/js/core/cmdline.js:31 static/js/core/context.js:63
+#: static/js/core/cmdline.js:31 static/js/core/context.js:64
 msgid "Command"
 msgstr "Comando"
 
@@ -3843,23 +5107,31 @@ msgstr "Comando"
 msgid "auto · follow the system"
 msgstr "auto · come il sistema"
 
-#: static/js/core/cmdline.js:103
+#: static/js/core/cmdline.js:105
 msgid "saved layout"
 msgstr "layout salvato"
 
-#: static/js/core/cmdline.js:107
+#: static/js/core/cmdline.js:109
 msgid "hidden buffer"
 msgstr "riquadro nascosto"
 
-#: static/js/core/cmdline.js:161
+#: static/js/core/cmdline.js:134
+msgid "a number from {low} to {high} · now {value}"
+msgstr "un numero da {low} a {high} · ora {value}"
+
+#: static/js/core/cmdline.js:143
+msgid "a number from {low} to {high}"
+msgstr "un numero da {low} a {high}"
+
+#: static/js/core/cmdline.js:192
 msgid "optional"
 msgstr "facoltativo"
 
-#: static/js/core/cmdline.js:170
+#: static/js/core/cmdline.js:202
 msgid "type a command · Tab completes · ↑ history"
 msgstr "digita un comando · Tab completa · ↑ cronologia"
 
-#: static/js/core/cmdline.js:269
+#: static/js/core/cmdline.js:301
 msgid "no command '{name}'"
 msgstr "nessun comando «{name}»"
 
@@ -3935,43 +5207,43 @@ msgstr "{command}: l'app non è raggiungibile"
 msgid "unknown command '{id}'"
 msgstr "comando sconosciuto «{id}»"
 
-#: static/js/core/commands.js:115
+#: static/js/core/commands.js:121
 msgid "{command}: not implemented yet"
 msgstr "{command}: non ancora disponibile"
 
-#: static/js/core/commands.js:151
+#: static/js/core/commands.js:157
 msgid "Undone: {what}"
 msgstr "Annullato: {what}"
 
-#: static/js/core/commands.js:151
+#: static/js/core/commands.js:157
 msgid "redo"
 msgstr "ripristina"
 
-#: static/js/core/commands.js:160
+#: static/js/core/commands.js:166
 msgid "Redone: {what}"
 msgstr "Ripristinato: {what}"
 
-#: static/js/core/commands.js:191
+#: static/js/core/commands.js:197
 msgid "tip: "
 msgstr "suggerimento: "
 
-#: static/js/core/context.js:63
+#: static/js/core/context.js:64
 msgid "Insert"
 msgstr "Inserimento"
 
-#: static/js/core/context.js:63
+#: static/js/core/context.js:64
 msgid "Pending"
 msgstr "In attesa"
 
-#: static/js/core/context.js:63
+#: static/js/core/context.js:64
 msgid "Visual"
 msgstr "Visuale"
 
-#: static/js/core/context.js:63
+#: static/js/core/context.js:64
 msgid "Hint"
 msgstr "Suggerimento"
 
-#: static/js/core/context.js:99 static/js/core/importer.js:100 static/js/core/library.js:226
+#: static/js/core/context.js:100 static/js/core/importer.js:100 static/js/core/library.js:231
 msgid "{n} selected"
 msgstr "{n} selezionati"
 
@@ -4075,41 +5347,77 @@ msgid_plural "Engine: {n} lines"
 msgstr[0] "Motore: {n} linea"
 msgstr[1] "Motore: {n} linee"
 
-#: static/js/core/help.js:10
+#: static/js/core/help.js:13
 msgid "Everywhere"
 msgstr "Ovunque"
 
-#: static/js/core/help.js:11
+#: static/js/core/help.js:14
 msgid "Any pane"
 msgstr "Ogni riquadro"
 
-#: static/js/core/help.js:12
+#: static/js/core/help.js:15
 msgid "In a text field (Insert)"
 msgstr "In un campo di testo (Inserimento)"
 
-#: static/js/core/help.js:13 design/commands/ui.toml:list.down design/commands/ui.toml:list.up
+#: static/js/core/help.js:16 design/commands/ui.toml:list.down design/commands/ui.toml:list.up
 msgid "Lists"
 msgstr "Liste"
 
-#: static/js/core/help.js:21
+#: static/js/core/help.js:19
+msgid "Guide"
+msgstr "Guida"
+
+#: static/js/core/help.js:32
 msgid "View: {name}"
 msgstr "Vista: {name}"
 
-#: static/js/core/help.js:22
+#: static/js/core/help.js:33
 msgid "Mode: {name}"
 msgstr "Modalità: {name}"
 
-#: static/js/core/help.js:55
+#: static/js/core/help.js:66
+msgid "No key matches the filter"
+msgstr "Nessun tasto corrisponde al filtro"
+
+#: static/js/core/help.js:67
 msgid "all contexts · a: this context"
 msgstr "tutti i contesti · a: questo contesto"
 
-#: static/js/core/help.js:55
+#: static/js/core/help.js:67
 msgid "this context · a: all contexts"
 msgstr "questo contesto · a: tutti i contesti"
 
-#: static/js/core/help.js:70
+#: static/js/core/help.js:86
+msgid "The guide could not be loaded"
+msgstr "Non è stato possibile caricare la guida"
+
+#: static/js/core/help.js:119
+msgid "Help: {name}"
+msgstr "Aiuto: {name}"
+
+#: static/js/core/help.js:119 static/js/core/help.js:123 static/js/core/layout.js:433
+msgid "Pane"
+msgstr "Riquadro"
+
+#: static/js/core/help.js:127
+msgid "Help"
+msgstr "Aiuto"
+
+#: static/js/core/help.js:143
 msgid "/ filter"
 msgstr "/ filtra"
+
+#: static/js/core/help.js:144
+msgid "Filter the keys"
+msgstr "Filtrare i tasti"
+
+#: static/js/core/help.js:149
+msgid "close"
+msgstr "chiudi"
+
+#: static/js/core/help.js:149
+msgid "tabs"
+msgstr "schede"
 
 #: static/js/core/importer.js:21
 msgid "Reading the PGN…"
@@ -4171,7 +5479,7 @@ msgstr "duplicato di {id}"
 msgid "{n} plies"
 msgstr "{n} semimosse"
 
-#: static/js/core/importer.js:146 static/js/core/library.js:472
+#: static/js/core/importer.js:146 static/js/core/library.js:582
 msgid "Nothing selected"
 msgstr "Niente selezionato"
 
@@ -4202,10 +5510,6 @@ msgstr "nessuna modalità «{name}»"
 #: static/js/core/layout.js:413 static/js/core/layout.js:689
 msgid "Resize"
 msgstr "Ridimensiona"
-
-#: static/js/core/layout.js:433
-msgid "Pane"
-msgstr "Riquadro"
 
 #: static/js/core/layout.js:448
 msgid "View"
@@ -4331,141 +5635,169 @@ msgstr "nessun layout «{name}»"
 msgid "Load layout {name}"
 msgstr "Carica il layout {name}"
 
-#: static/js/core/library.js:295
+#: static/js/core/library.js:254
+msgid "Done: it left the list ({n} to go) · n opens the next"
+msgstr "Fatto: ha lasciato la lista (ne restano {n}) · n apre la prossima"
+
+#: static/js/core/library.js:354 static/js/core/library.js:366
+msgid "Filter removed"
+msgstr "Filtro tolto"
+
+#: static/js/core/library.js:356
+msgid "Filter added"
+msgstr "Filtro aggiunto"
+
+#: static/js/core/library.js:377 static/js/core/library.js:385
+msgid "The search is already empty"
+msgstr "La ricerca è già vuota"
+
+#: static/js/core/library.js:378
+msgid "Search cleared · u brings it back"
+msgstr "Ricerca svuotata · u la ripristina"
+
+#: static/js/core/library.js:386
+msgid "Took out {term} · u puts it back"
+msgstr "{term} tolto · u lo rimette"
+
+#: static/js/core/library.js:387 design/commands/library.toml:library.unfilter
+msgid "Take the last term out of the search"
+msgstr "Togliere l'ultimo termine dalla ricerca"
+
+#: static/js/core/library.js:405
 msgid "The Library has no results pane: ␣ w v, then l"
 msgstr "La Biblioteca non ha un riquadro dei risultati: ␣ w v, poi l"
 
-#: static/js/core/library.js:329
+#: static/js/core/library.js:439
 msgid "Sort by · the same again reverses · ▤ groups"
 msgstr "Ordina per · lo stesso di nuovo inverte · ▤ gruppi"
 
-#: static/js/core/library.js:334
+#: static/js/core/library.js:444
 msgid "↑ now"
 msgstr "↑ ora"
 
-#: static/js/core/library.js:334
+#: static/js/core/library.js:444
 msgid "↓ now"
 msgstr "↓ ora"
 
-#: static/js/core/library.js:379 static/js/core/library.js:385
+#: static/js/core/library.js:489 static/js/core/library.js:495
 msgid "Groups come with a sort by difficulty, source, year …: s"
 msgstr "I gruppi arrivano ordinando per difficoltà, fonte, anno …: s"
 
-#: static/js/core/library.js:388
+#: static/js/core/library.js:498
 msgid "All groups open"
 msgstr "Tutti i gruppi aperti"
 
-#: static/js/core/library.js:388
+#: static/js/core/library.js:498
 msgid "All groups folded · z opens the one at the cursor"
 msgstr "Tutti i gruppi compressi · z apre quello al cursore"
 
-#: static/js/core/library.js:407
+#: static/js/core/library.js:517
 msgid "Results as a table"
 msgstr "Risultati come tabella"
 
-#: static/js/core/library.js:407
+#: static/js/core/library.js:517
 msgid "Results as a list"
 msgstr "Risultati come lista"
 
-#: static/js/core/library.js:407
+#: static/js/core/library.js:517
 msgid "Results as a grid"
 msgstr "Risultati come griglia"
 
-#: static/js/core/library.js:464
+#: static/js/core/library.js:574
 msgid "Nothing to tag here"
 msgstr "Niente da taggare qui"
 
-#: static/js/core/library.js:479
+#: static/js/core/library.js:589
 msgid "Nothing here"
 msgstr "Niente qui"
 
-#: static/js/core/library.js:485
+#: static/js/core/library.js:595
 msgid "Select positions, or open one in Analyse"
 msgstr "Seleziona posizioni o aprine una nell'Analisi"
 
-#: static/js/core/library.js:486
+#: static/js/core/library.js:596
 msgid "Detecting…"
 msgstr "Rilevamento…"
 
-#: static/js/core/library.js:496
+#: static/js/core/library.js:606
 msgid "o opens positions, puzzles and games beside the list"
 msgstr "o apre posizioni, esercizi e partite accanto alla lista"
 
-#: static/js/core/library.js:500
+#: static/js/core/library.js:610
 msgid "{title} beside the list · ↵ opens it in Analyse"
 msgstr "{title} accanto alla lista · ↵ la apre nell'Analisi"
 
-#: static/js/core/library.js:518
+#: static/js/core/library.js:628
 msgid "Select players, sources or tags in the Library (4 5 6)"
 msgstr "Seleziona giocatori, fonti o tag nella Biblioteca (4 5 6)"
 
-#: static/js/core/library.js:524
+#: static/js/core/library.js:634
 msgid "Empty the trash? Its positions and games are deleted for good (trained ones stay). y / n"
 msgstr "Svuotare il cestino? Le sue posizioni e partite vengono eliminate definitivamente (quelle allenate restano). y / n"
 
-#: static/js/core/library.js:543
+#: static/js/core/library.js:653
 msgid "No puzzles in training among these (p r in Analyse puts one into training)"
 msgstr "Nessun esercizio in allenamento tra queste (p r nell'Analisi ne mette uno in allenamento)"
 
-#: static/js/core/library.js:550
+#: static/js/core/library.js:660
 msgid "Nothing to analyse here"
 msgstr "Niente da analizzare qui"
 
-#: static/js/core/library.js:570
+#: static/js/core/library.js:682
 msgid "Export"
 msgstr "Esporta"
 
-#: static/js/core/library.js:571
+#: static/js/core/library.js:683
 msgid "for any chess program"
 msgstr "per qualsiasi programma di scacchi"
 
-#: static/js/core/library.js:577
+#: static/js/core/library.js:689
 msgid "Positions and games export as PGN"
 msgstr "Solo posizioni e partite si esportano in PGN"
 
-#: static/js/core/library.js:585
+#: static/js/core/library.js:697
 msgid "Exporting everything the query found"
 msgstr "Esporto tutto ciò che la ricerca ha trovato"
 
-#: static/js/core/library.js:585
+#: static/js/core/library.js:697
 msgid "Exporting {n}"
 msgstr "Esporto {n}"
 
-#: static/js/core/library.js:592
+#: static/js/core/library.js:704
 msgid "Packs are made in the Library: search, select, then :pack-export"
 msgstr "I pacchetti si creano nella Biblioteca: cerca, seleziona, poi :pack-export"
 
-#: static/js/core/library.js:594
+#: static/js/core/library.js:706
 msgid "Packs hold positions and games: collection 1, 2 or 3"
 msgstr "I pacchetti contengono posizioni e partite: collezione 1, 2 o 3"
 
-#: static/js/core/library.js:596
+#: static/js/core/library.js:708
 msgid "Making the pack…"
 msgstr "Creo il pacchetto…"
 
-#: static/js/core/library.js:603
+#: static/js/core/library.js:715
 msgid "Go to a move first (T tags the position)"
 msgstr "Vai prima a una mossa (T tagga la posizione)"
 
-#: static/js/core/library.js:316
+#: static/js/core/library.js:426
 msgid "{n} player"
 msgid_plural "{n} players"
 msgstr[0] "{n} giocatore"
 msgstr[1] "{n} giocatori"
 
-#: static/js/core/library.js:316
+#: static/js/core/library.js:426
 msgid "{n} source"
 msgid_plural "{n} sources"
 msgstr[0] "{n} fonte"
 msgstr[1] "{n} fonti"
 
-#: static/js/core/library.js:316
+#: static/js/core/library.js:426
 msgid "{n} tag"
 msgid_plural "{n} tags"
 msgstr[0] "{n} tag"
 msgstr[1] "{n} tag"
 
-#: static/js/core/library.js:560
+#: static/js/core/library.js:672
 msgid "Copied {n} FEN"
 msgid_plural "Copied {n} FENs"
 msgstr[0] "{n} FEN copiato"
@@ -4607,27 +5939,27 @@ msgstr "Questo riquadro non ha un campo di testo"
 msgid "↵ edits this one on the command line"
 msgstr "↵ modifica questa sulla riga di comando"
 
-#: static/js/core/settings.js:135
+#: static/js/core/settings.js:137
 msgid "Already the default"
 msgstr "Già il valore predefinito"
 
-#: static/js/core/settings.js:150
+#: static/js/core/settings.js:152
 msgid "Settings exported as TOML: Settings → Data imports them on another machine"
 msgstr "Impostazioni esportate come TOML: Impostazioni → Dati le importa su un altro dispositivo"
 
-#: static/js/core/settings.js:159
+#: static/js/core/settings.js:161
 msgid "Import: the app is not reachable"
 msgstr "Importazione: l'app non è raggiungibile"
 
-#: static/js/core/settings.js:171
+#: static/js/core/settings.js:173
 msgid "New keys for “{command}”: {keys} · ↵ keep · Esc cancel"
 msgstr "Nuovi tasti per «{command}»: {keys} · ↵ tieni · Esc annulla"
 
-#: static/js/core/settings.js:177
+#: static/js/core/settings.js:179
 msgid "Cancelled"
 msgstr "Annullato"
 
-#: static/js/core/settings.js:203
+#: static/js/core/settings.js:205
 msgid "No keys to remove here"
 msgstr "Nessun tasto da rimuovere qui"
 
@@ -4687,111 +6019,139 @@ msgstr "Nessuna mossa legale corrisponde a «{text}»"
 msgid "Type a move, e.g. Nf3, Sf3 or g1f3"
 msgstr "Digita una mossa, ad es. Nf3, Cf3 o g1f3"
 
-#: static/js/islands/board.js:422
+#: static/js/islands/board.js:419
 msgid "a: fix"
 msgstr "a: correggi"
 
-#: static/js/islands/board.js:436
-msgid "Type a move: "
-msgstr "Digita una mossa: "
+#: static/js/islands/board.js:422
+msgid "duplicate of {short} {title}"
+msgstr "duplicato di {short} {title}"
 
-#: static/js/islands/board.js:438
-msgid "↵ play · ⇥ next · Esc done"
-msgstr "↵ gioca · ⇥ successiva · Esc fatto"
+#: static/js/islands/board.js:424
+msgid "click: place {piece} (white) · ⇧click: black · right-click: empty"
+msgstr "clic: metti {piece} (bianco) · ⇧clic: nero · clic destro: svuota"
 
-#: static/js/islands/board.js:440
-msgid "Solve as black · click/drag or i to type the move · h hint · s solution"
-msgstr "Risolvi col Nero · clic/trascina o i per digitare la mossa · h suggerimento · s soluzione"
+#: static/js/islands/board.js:425
+msgid "click: place {piece} (black) · ⇧click: white · right-click: empty"
+msgstr "clic: metti {piece} (nero) · ⇧clic: bianco · clic destro: svuota"
 
-#: static/js/islands/board.js:441
-msgid "Solve as white · click/drag or i to type the move · h hint · s solution"
-msgstr "Risolvi col Bianco · clic/trascina o i per digitare la mossa · h suggerimento · s soluzione"
+#: static/js/islands/board.js:426
+msgid "click: empty a square"
+msgstr "clic: svuota una casa"
 
-#: static/js/islands/board.js:444
-msgid "Black to move"
-msgstr "Muove il Nero"
+#: static/js/islands/board.js:427
+msgid "drag: move pieces freely"
+msgstr "trascina: sposta i pezzi liberamente"
 
-#: static/js/islands/board.js:444
+#: static/js/islands/board.js:429 static/js/islands/board.js:449
 msgid "White to move"
 msgstr "Muove il Bianco"
 
-#: static/js/islands/board.js:444
+#: static/js/islands/board.js:429 static/js/islands/board.js:449
+msgid "Black to move"
+msgstr "Muove il Nero"
+
+#: static/js/islands/board.js:429
+msgid "castling {rights}"
+msgstr "arrocco {rights}"
+
+#: static/js/islands/board.js:429
+msgid "e.p. {square}"
+msgstr "e.p. {square}"
+
+#: static/js/islands/board.js:441
+msgid "Type a move: "
+msgstr "Digita una mossa: "
+
+#: static/js/islands/board.js:443
+msgid "↵ play · ⇥ next · Esc done"
+msgstr "↵ gioca · ⇥ successiva · Esc fatto"
+
+#: static/js/islands/board.js:445
+msgid "Solve as black · click/drag or i to type the move · h hint · s solution"
+msgstr "Risolvi col Nero · clic/trascina o i per digitare la mossa · h suggerimento · s soluzione"
+
+#: static/js/islands/board.js:446
+msgid "Solve as white · click/drag or i to type the move · h hint · s solution"
+msgstr "Risolvi col Bianco · clic/trascina o i per digitare la mossa · h suggerimento · s soluzione"
+
+#: static/js/islands/board.js:449
 msgid "Diagram: not playable"
 msgstr "Diagramma: non giocabile"
 
-#: static/js/islands/board.js:445
+#: static/js/islands/board.js:450
 msgid "move {n} of {total}"
 msgstr "mossa {n} di {total}"
 
-#: static/js/islands/board.js:446
+#: static/js/islands/board.js:451
 msgid "right-click: fill a square (⇧ red · ⌥ blue)"
 msgstr "clic destro: riempi una casa (⇧ rosso · ⌥ blu)"
 
-#: static/js/islands/board.js:446
+#: static/js/islands/board.js:451
 msgid "click/drag: move · right-drag: arrow (⇧ red · ⌥ blue · ⇧⌥ yellow)"
 msgstr "clic/trascina: mossa · trascina col destro: freccia (⇧ rosso · ⌥ blu · ⇧⌥ giallo)"
 
-#: static/js/islands/board.js:551
+#: static/js/islands/board.js:557
 msgid "Not while solving a puzzle"
 msgstr "Non mentre risolvi un esercizio"
 
-#: static/js/islands/board.js:559 design/commands/board.toml:board.squaretool
+#: static/js/islands/board.js:565 design/commands/board.toml:board.squaretool
 msgid "Square tool: right-click fills a square"
 msgstr "Strumento case: il clic destro riempie una casa"
 
-#: static/js/islands/board.js:559
+#: static/js/islands/board.js:565
 msgid "Square tool off: right-drag draws arrows"
 msgstr "Strumento case spento: trascinare col destro disegna frecce"
 
-#: static/js/islands/board.js:578
+#: static/js/islands/board.js:584
 msgid "Play the solution on the board first, then :puzzle"
 msgstr "Gioca prima la soluzione sulla scacchiera, poi :puzzle"
 
-#: static/js/islands/board.js:593
+#: static/js/islands/board.js:599
 msgid "Copied {what}"
 msgstr "{what} copiato"
 
-#: static/js/islands/board.js:595
+#: static/js/islands/board.js:601
 msgid "Could not copy the {what}: the browser refused"
 msgstr "Impossibile copiare il {what}: il browser ha rifiutato"
 
-#: static/js/islands/board.js:609
+#: static/js/islands/board.js:615
 msgid "Opened in lichess (a new tab)"
 msgstr "Aperto su lichess (una nuova scheda)"
 
-#: static/js/islands/board.js:631
+#: static/js/islands/board.js:637
 msgid "Nothing to fix automatically"
 msgstr "Niente da correggere automaticamente"
 
-#: static/js/islands/board.js:637 design/commands/board.toml:board.castling
+#: static/js/islands/board.js:643 design/commands/board.toml:board.castling
 msgid "Castling rights"
 msgstr "Diritti di arrocco"
 
-#: static/js/islands/board.js:639
+#: static/js/islands/board.js:645
 msgid "White O-O"
 msgstr "Bianco O-O"
 
-#: static/js/islands/board.js:639
+#: static/js/islands/board.js:645
 msgid "White O-O-O"
 msgstr "Bianco O-O-O"
 
-#: static/js/islands/board.js:639
+#: static/js/islands/board.js:645
 msgid "Black O-O"
 msgstr "Nero O-O"
 
-#: static/js/islands/board.js:639
+#: static/js/islands/board.js:645
 msgid "Black O-O-O"
 msgstr "Nero O-O-O"
 
-#: static/js/islands/board.js:656 design/commands/board.toml:board.ep
+#: static/js/islands/board.js:662 design/commands/board.toml:board.ep
 msgid "En passant square"
 msgstr "Casa en passant"
 
-#: static/js/islands/board.js:676
+#: static/js/islands/board.js:682
 msgid "Piece set · ↑↓ preview · ↵ keep · Esc back"
 msgstr "Set di pezzi · ↑↓ anteprima · ↵ tieni · Esc indietro"
 
-#: static/js/islands/board.js:687
+#: static/js/islands/board.js:693
 msgid "No piece set '{name}'"
 msgstr "Nessun set di pezzi «{name}»"
 
@@ -5331,6 +6691,10 @@ msgstr "Annulla o ripeti un'importazione"
 msgid "Import a PGN file"
 msgstr "Importa un file PGN"
 
+#: design/commands/library.toml:library.clear design/commands/library.toml:library.unfilter
+msgid "in the Library or its filter pane"
+msgstr "nella Biblioteca o nel suo riquadro dei filtri"
+
 #: design/commands/library.toml:library.exclude
 msgid "Exclude the facet (-term)"
 msgstr "Escludi la faccetta (-termine)"
@@ -5543,10 +6907,6 @@ msgstr "nel riquadro Impostazioni"
 msgid "Edit the setting (or choose the theme)"
 msgstr "Modifica l'impostazione (o scegli il tema)"
 
-#: design/commands/settings.toml:settings.reset
-msgid "Back to the default"
-msgstr "Torna al valore predefinito"
-
 #: design/commands/settings.toml:settings.export
 msgid "Export the settings (TOML)"
 msgstr "Esporta le impostazioni (TOML)"
@@ -5584,8 +6944,12 @@ msgid "this view has no search yet"
 msgstr "questa vista non ha ancora una ricerca"
 
 #: design/commands/shell.toml:help.context
-msgid "Keys of this context"
-msgstr "Tasti di questo contesto"
+msgid "Help: this pane's guide and keys"
+msgstr "Aiuto: guida e tasti di questo riquadro"
+
+#: design/commands/shell.toml:help.search
+msgid "How to search: the query language"
+msgstr "Come cercare: il linguaggio di ricerca"
 
 #: design/commands/shell.toml:help.all
 msgid "All keys of every context"

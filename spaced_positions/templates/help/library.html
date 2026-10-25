@@ -1,0 +1,29 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "Everything you collected, searchable: positions, games, puzzles, players, sources and tags. Search, select, then act on the selection, or on everything the search found when nothing is selected." %}{% endblock %}
+{% block how %}
+  {% key "search.open" as slash %}{% key "help.search" as search_help %}{% key "library.collection" "positions" as one %}{% key "library.collection" "tags" as six %}
+  {% key "list.select" as select %}{% key "list.visual" as visual %}{% key "library.tag" as tag %}{% key "library.train" as train %}
+  {% key "library.analyse" as analyse %}{% key "list.open" as enter %}{% key "library.beside" as beside %}{% key "library.export" as export %}
+  {% key "library.trash" as trash %}{% key "library.sort" as sort %}{% key "library.fold" as fold %}{% key "library.clear" as clear %}
+  {% key "library.unfilter" as unfilter %}{% key "library.display" as display %}
+  <dt>{% translate "Search" %}</dt><dd>{% blocktranslate trimmed %}{{ slash }}, type, {{ enter }} to the results. {{ search_help }} explains the search language.{% endblocktranslate %}</dd>
+  <dt>{% translate "Remove a filter" %}</dt><dd>{% blocktranslate trimmed %}{{ unfilter }} takes the last term out, {{ clear }} clears the search (also the ✕ in the bar). The filter pane shows every term, each with a way out.{% endblocktranslate %}</dd>
+  <dt>{% translate "Switch the collection" %}</dt><dd>{% blocktranslate trimmed %}{{ one }} positions … {{ six }} tags, or click the tabs. {{ enter }} on a player, a source or a tag shows its positions or games.{% endblocktranslate %}</dd>
+  <dt>{% translate "Select" %}</dt><dd>{% blocktranslate trimmed %}{{ select }} selects a row, {{ visual }} a range as you move. Without a selection, a command acts on everything the search found.{% endblocktranslate %}</dd>
+  <dt>{% translate "Work on them" %}</dt><dd>{% blocktranslate trimmed %}{{ tag }} tag, {{ train }} train, {{ analyse }} analyse one after the other, {{ export }} export as PGN or puzzle pack, {{ trash }} to the trash.{% endblocktranslate %}</dd>
+  <dt>{% translate "Look at one" %}</dt><dd>{% blocktranslate trimmed %}{{ enter }} opens it in Analyse, {{ beside }} beside the list. The board of the same link group follows the cursor, and so does a Moves pane.{% endblocktranslate %}</dd>
+  <dt>{% translate "Order and groups" %}</dt><dd>{% blocktranslate trimmed %}{{ sort }} sorts by a column (again: reversed). Sorted by source or difficulty, the rows come in groups: {{ fold }} folds one. {{ display }} switches between table, list and grid.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block extra %}
+  {% key "library.analyse" as analyse %}{% key "analysis.subject" "next" as next %}
+  <h3>{% translate "A work list" %}</h3>
+  <p>{% blocktranslate trimmed %}Search for what is still to do, for example <code>no:solution src:"…" sort:source</code>, and press {{ analyse }} with nothing
+    selected. Analyse opens the first one; once its puzzle is in training it drops out of the list, and {{ next }} opens the next one still to do.
+    With a Moves pane beside the list (in the same link group) you can also work right here: the moves follow the cursor.{% endblocktranslate %}</p>
+{% endblock %}
+{% block with %}{% translate "The filter pane of the same link group shows facets of the results. Boards, Moves and Inspector panes of the group show the row under the cursor. Analyse and Train take the selection, or the whole search." %}{% endblock %}
+{% block tips %}
+  <li>{% translate "The count next to the search bar says how many were found." %}</li>
+  <li>{% translate "Tagging, the trash and imports can be undone with u." %}</li>
+  <li>{% translate "Drop a PGN or .sppack file on the window to import it." %}</li>
+{% endblock %}

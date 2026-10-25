@@ -1,0 +1,10 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "Every command and its keys. Change any key to suit you; buttons and help show your keys from then on." %}{% endblock %}
+{% block how %}
+  {% key "search.open" as slash %}{% key "keymap.bind" as bind %}{% key "keymap.unbind" as unbind %}
+  <dt>{% translate "Find a command" %}</dt><dd>{% blocktranslate trimmed %}{{ slash }} and a word of its name or its key.{% endblocktranslate %}</dd>
+  <dt>{% translate "Give it new keys" %}</dt><dd>{% blocktranslate trimmed %}{{ bind }}, press the new keys, ↵ keeps them, Esc cancels. u undoes the change.{% endblocktranslate %}</dd>
+  <dt>{% translate "Remove keys" %}</dt><dd>{% blocktranslate trimmed %}{{ unbind }} removes keys; on keys you set yourself, the default comes back.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% translate "Every pane: the keys you set here are the ones on every button." %}{% endblock %}
+{% block tips %}<li>{% translate "Keys belong to a context: the same key can do different things in a list and on the board." %}</li>{% endblock %}

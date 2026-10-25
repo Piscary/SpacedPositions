@@ -43,6 +43,19 @@ def test_parse_groups_or_and_problems():
     assert parse("").terms() == []
 
 
+def test_every_way_of_saying_not():
+    for text in ("-is:diagram", "!is:diagram", "not is:diagram", "is:!=diagram", "is:<>diagram", "is!=diagram",
+                 "is<>diagram", "is:!diagram"):
+        [term] = parse(text).terms()
+        assert (term.key, term.op, term.values, term.neg) == ("is", "", ["diagram"], True), text
+    [diff] = parse("diff:<>3").terms()
+    assert (diff.key, diff.op, diff.values, diff.neg) == ("diff", "", ["3"], True)
+    [good] = parse("tag:!").terms()  # the annotation tag "!" stays a value
+    assert (good.values, good.neg) == (["!"], False)
+    assert parse("not (src:a or src:b)").root.alternatives[0][0].neg
+    assert parse("!(src:a)").root.alternatives[0][0].neg
+
+
 def test_fold():
     assert fold("Spieß") == "spiess" and fold("Qualitätsopfer") == "qualitatsopfer"
 
@@ -93,6 +106,8 @@ def test_numbers_text_source_and_states(library):
     assert titles("has:analysis") == ["Fork drill"]
     assert titles("has:puzzle is:draft") == ["Fork drill"]
     assert titles("no:analysis -is:diagram") == ["Rook ending"]
+    assert titles("no:analysis is:<>diagram") == ["Rook ending"]
+    assert titles("not is:diagram diff:<>4") == ["Rook ending"]
     assert titles("material:KRvKR") == ["Rook ending"]
     assert titles("pieces:<=4") == ["Rook ending"]
     assert titles("is:diagram or diff:4") == ["Fork drill", "Illustration"]

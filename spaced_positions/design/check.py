@@ -265,7 +265,8 @@ def _check_args(context, seq, cid, command, args) -> list[Problem]:
     required = [a for a in specs if not a.get("optional")]
     if len(args) > len(specs):
         return [err("keymap", f"{context} '{seq}': {cid} takes {len(specs)} argument(s)")]
-    if len(args) < len(required) and command.get("handler", "client") == "server":
+    if len(args) < len(required) and command.get("handler", "client") == "server" and not command.get("aliases"):
+        # with an alias, the key opens the command line to ask for the rest (commands.js run)
         return [err("keymap", f"{context} '{seq}': {cid} needs {len(required)} argument(s)")]
     problems = []
     for value, spec in zip(args, specs):
@@ -285,6 +286,8 @@ def check_reachability(sources: lib.Sources) -> list[Problem]:
     ]
 
 
+# Buttons that need no key of their own: the choices of a setting (h / l steps through them), the style guide.
+KEYLESS_BUTTONS = {"pref.set", "mode.ui", "app.quit"}
 CMD_IN_TEMPLATE = re.compile(r"""\{%\s*cmd\s+["']([\w.]+)["']|data-cmd=["']([\w.]+)["']""")
 JS_HANDLER = re.compile(r"""handle\(\s*["']([\w.]+)["']""")
 JS_RUN = re.compile(r"""\brun\(\s*["']([\w.]+)["']""")
@@ -292,11 +295,16 @@ JS_RUN = re.compile(r"""\brun\(\s*["']([\w.]+)["']""")
 
 def check_references(sources: lib.Sources, templates_dir: Path, js_dir: Path, server_handlers: set[str]) -> list[Problem]:
     problems = []
+    bound = {lib.parse_binding(v)[0] for b in sources.keymap.values() for v in b.values()}
     for path in sorted(templates_dir.rglob("*.html")):
         for m in CMD_IN_TEMPLATE.finditer(path.read_text()):
             cid = m.group(1) or m.group(2)
             if cid not in sources.commands:
                 problems.append(err("references", f"{path.relative_to(templates_dir)}: unknown command '{cid}'"))
+            # every button shows its key (spec 01, idea 1): a button whose command has no key is a dead end for the
+            # keyboard. The style guide is for developers; a setting's own choices are reached with h / l.
+            elif cid not in bound and cid not in KEYLESS_BUTTONS and path.name != "components.html":
+                problems.append(err("keys", f"{path.relative_to(templates_dir)}: the button '{cid}' has no key"))
     client_handlers = set()
     for path in sorted(js_dir.rglob("*.js")):
         text = path.read_text()

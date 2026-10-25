@@ -29,7 +29,8 @@ const derived = {
   "redo.available": () => ctx.redoDepth > 0,
   "repeat.available": () => Boolean(ctx.lastRepeat),
   "app.launched": () => ctx.launched,
-  "pane.sections": () => Boolean(ctx.pane?.sections),
+  // live: a pane's content may load later. A list's groups count as sections too (`]` to the next group).
+  "pane.sections": () => Boolean(ctx.pane?.el?.querySelector("[data-section], [data-group-head], .filters__group")),
   "pane.search": () => Boolean(ctx.pane?.search),
   "pane.fields": () => Boolean(ctx.pane?.el?.querySelector(FIELDS)),
   "train.solving": () => ctx.mode === "train" && ctx.trainState === "solving",

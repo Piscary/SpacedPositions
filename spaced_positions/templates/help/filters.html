@@ -1,0 +1,14 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "Facets of the Library's results: tags, difficulty, source and status, each with how many positions have it. Clicking one writes the term into the search, so you see what the search says." %}{% endblock %}
+{% block how %}
+  {% key "list.open" as enter %}{% key "library.exclude" as exclude %}{% key "library.clear" as clear %}{% key "library.unfilter" as unfilter %}{% key "help.search" as search_help %}
+  <dt>{% translate "Narrow down" %}</dt><dd>{% blocktranslate trimmed %}Move to a facet, {{ enter }} adds it to the search (● on); {{ enter }} again takes it out.{% endblocktranslate %}</dd>
+  <dt>{% translate "Leave something out" %}</dt><dd>{% blocktranslate trimmed %}{{ exclude }} on a facet: everything except it (⊘, struck through). {{ exclude }} again takes the exclusion out.{% endblocktranslate %}</dd>
+  <dt>{% translate "Take a filter out" %}</dt><dd>{% blocktranslate trimmed %}“In the search” at the top lists every term, also the typed ones: {{ enter }} on one takes it out.{% endblocktranslate %}</dd>
+  <dt>{% translate "Start over" %}</dt><dd>{% blocktranslate trimmed %}{{ clear }} clears the whole search, {{ unfilter }} takes out the last term. u brings it back.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% key "help.search" as search_help %}{% blocktranslate trimmed %}The Library pane of the same link group: it shows the results, and its search bar shows the terms. {{ search_help }} explains them.{% endblocktranslate %}{% endblock %}
+{% block tips %}
+  <li>{% translate "Facets are counted for the current results: the numbers show what you get when you add one." %}</li>
+  <li>{% translate "Facets are shown for positions (collection 1)." %}</li>
+{% endblock %}

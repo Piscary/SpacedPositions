@@ -39,6 +39,7 @@ async function refresh(el, { keep = false, clear = false } = {}) {
   const list = el.querySelector("[data-library-results]")
   const ticket = ++st.ticket
   const index = keep ? Math.max(0, cursorIndex(list)) : 0
+  const keptRow = keep ? list.querySelector(".list__row.is-cursor")?.dataset.row : null
   const params = new URLSearchParams({ q: st.q, c: st.c, display: st.display })
   const html = await fetch(`/lib/results/?${params}`).then((r) => r.text()).catch(() => null)
   if (html === null || ticket !== st.ticket) return // a newer query is on its way
@@ -50,10 +51,14 @@ async function refresh(el, { keep = false, clear = false } = {}) {
   list.dataset.display = st.display
   el.dataset.collection = st.c
   el.dataset.display = st.display
+  el.toggleAttribute("data-has-query", Boolean(st.q.trim()))
   const info = JSON.parse(list.querySelector("#query-info")?.textContent || "{}")
   paintInfo(el, info)
   paintFolds(el)
-  resetList(list, { index, clear })
+  st.count = info.count
+  // the cursor stays on its row; when the row left the results (solved, retagged), on the one that took its place
+  const kept = keptRow ? [...list.querySelectorAll("[data-row]")].findIndex((r) => r.dataset.row === keptRow) : -1
+  resetList(list, { index: kept >= 0 ? kept : index, clear })
   for (const tab of el.querySelectorAll(".library__tabs [role=radio]")) tab.setAttribute("aria-checked", String(tab.dataset.args === st.c))
   emit("library:query", { group: groupOf(el), q: st.q, c: st.c })
   save(el)
@@ -232,6 +237,60 @@ on("effects", (effects) => {
   emit("library:changed", {})
 })
 
+// ── Work lists: the Library and the analysis of its link group work together ─────────────────────────────────
+
+// An analysis changed (a move, a comment, a puzzle put into training): the Library's results follow, so a query
+// like `no:solution src:"…" sort:source` is a work list that loses each position once it is done.
+let changedTimer = null
+on("analysis:changed", ({ position }) => {
+  clearTimeout(changedTimer)
+  changedTimer = setTimeout(async () => {
+    for (const el of libraries()) {
+      const list = el.querySelector("[data-library-results]")
+      const had = Boolean(list.querySelector(`[data-position="${CSS.escape(position)}"]`))
+      await refresh(el, { keep: true })
+      const gone = had && !list.querySelector(`[data-position="${CSS.escape(position)}"]`)
+      if (gone && !el.closest(".workspace[hidden]")) {
+        status(tr("Done: it left the list ({n} to go) · n opens the next", { n: stateOf(el).count ?? 0 }), { kind: "good", timeout: 5000 })
+      }
+    }
+  }, 300)
+})
+
+// Browsing the results opens the cursor's position or game in the analysis of the link group, when this mode shows
+// one (a Moves or Inspector pane in the same group): the move tree follows the list like the board does.
+const followTimers = new Map()
+on("list:cursor", ({ list, row }) => {
+  const el = list.closest("[data-island='library']")
+  const id = row?.dataset.position || row?.dataset.game
+  if (!el || !id || !list.matches("[data-library-results]")) return
+  const group = groupOf(el)
+  const key = `${ctx.mode}:${group}`
+  if (!window.SPOS.analysis?.shownIn(key)) return
+  const st = stateOf(el)
+  clearTimeout(followTimers.get(key))
+  followTimers.set(key, setTimeout(() => {
+    const index = [...list.querySelectorAll("[data-row]")].indexOf(row)
+    window.SPOS.analysis.open(id, { key, show: false, node: Number(row.dataset.node) || null,
+                                    list: { ids: [], q: st.q, c: st.c, index: Math.max(0, index) } })
+  }, 120))
+})
+
+// `n` / `N` in the analysis moved on: the Library of that link group puts its cursor on the same row (no reopening).
+on("analysis:subject", ({ key, position }) => {
+  const [mode, group] = key.split(":")
+  for (const el of libraries()) {
+    if (!el.closest(`#ws-${mode}`) || groupOf(el) !== group) continue
+    const list = el.querySelector("[data-library-results]")
+    const rows = [...list.querySelectorAll("[data-row]")]
+    const index = rows.findIndex((r) => (r.dataset.position || r.dataset.game) === position)
+    if (index >= 0) {
+      resetList(list, { index })
+      rows[index].scrollIntoView({ block: "nearest" })
+    }
+  }
+})
+
 // ── The filter pane ───────────────────────────────────────────────────────────────────────────────────────────
 
 const facetTimers = new WeakMap()
@@ -245,7 +304,7 @@ export function mountFilters(el) {
 async function loadFacets(el, { q, c }) {
   const list = el.querySelector("[data-filters]")
   if (c !== "positions") {
-    list.innerHTML = '<p class="muted filters__empty">Facets are shown for positions (collection 1).</p>'
+    list.innerHTML = `<p class="muted filters__empty">${tr("Facets are shown for positions (collection 1).")}</p>`
     return resetList(list)
   }
   const html = await fetch(`/lib/facets/?${new URLSearchParams({ q })}`).then((r) => r.text()).catch(() => null)
@@ -267,15 +326,66 @@ on("library:query", ({ group, q, c }) => {
 /** The terms of a query, a quoted value kept whole: `src:"Endgame Manual" diff:3` → two terms. */
 const termsOf = (q) => q.match(/(?:[^\s"]+|"[^"]*"?)+/g) || []
 
-function toggleTerm(term, row) {
-  const el = row ? libraries().find((l) => groupOf(l) === groupOf(row) && l.closest(".workspace") === row.closest(".workspace")) : currentLibrary()
-  if (!el) return false
-  const st = stateOf(el)
-  const words = termsOf(st.q)
-  st.q = words.includes(term) ? words.filter((w) => w !== term).join(" ") : [...words, term].join(" ")
-  el.querySelector("[data-querybar]").value = st.q
-  return refresh(el)
+/** The library a filter pane row (or the focused pane) works on: the one of the same link group. */
+function libraryFor(row) {
+  if (!row) return currentLibrary()
+  return libraries().find((l) => groupOf(l) === groupOf(row) && l.closest(".workspace") === row.closest(".workspace")) || null
 }
+
+/** A new query for a library, undoable with `u` (the filter pane and the clear keys change it without typing). */
+function changeQuery(el, text, label) {
+  const st = stateOf(el)
+  const before = st.q
+  const put = (value) => {
+    st.q = value
+    el.querySelector("[data-querybar]").value = value
+    return refresh(el)
+  }
+  if (text === before) return false
+  pushUndo({ label, undo: () => put(before), redo: () => put(text) })
+  return put(text)
+}
+
+function toggleTerm(term, row) {
+  const el = libraryFor(row)
+  if (!el) return false
+  const words = termsOf(stateOf(el).q)
+  const opposite = term.startsWith("-") ? term.slice(1) : `-${term}`
+  if (words.includes(term)) return changeQuery(el, words.filter((w) => w !== term).join(" "), tr("Filter removed"))
+  // a facet that is excluded comes back in (and the other way round): one term, never both
+  return changeQuery(el, [...words.filter((w) => w !== opposite), term].join(" "), tr("Filter added"))
+}
+
+/** Take a part of the query out (a row of “In the search”): its span in the text. */
+function removeSpan(span, row) {
+  const el = libraryFor(row)
+  if (!el) return false
+  const [start, end] = span.split(":").map(Number)
+  const text = stateOf(el).q
+  const next = `${text.slice(0, start)} ${text.slice(end)}`.replace(/\s+/g, " ").trim()
+  return changeQuery(el, next, tr("Filter removed"))
+}
+
+const filterTarget = () => {
+  const pane = ctx.pane?.el
+  const row = pane?.querySelector("[data-island='filters']")
+  return row ? libraryFor(row) : currentLibrary()
+}
+
+handle("library.clear", () => {
+  const el = filterTarget()
+  if (!el || !stateOf(el).q.trim()) return status(tr("The search is already empty"), { timeout: 2000 }) || false
+  status(tr("Search cleared · u brings it back"), { timeout: 3000 })
+  return changeQuery(el, "", tr("Clear the search"))
+})
+
+handle("library.unfilter", () => {
+  const el = filterTarget()
+  const words = el ? termsOf(stateOf(el).q) : []
+  if (!words.length) return status(tr("The search is already empty"), { timeout: 2000 }) || false
+  status(tr("Took out {term} · u puts it back", { term: words.at(-1) }), { timeout: 3000 })
+  return changeQuery(el, words.slice(0, -1).join(" "), tr("Take the last term out of the search"))
+})
 
 handle("library.exclude", () => {
   const list = ctx.pane?.el?.querySelector("[data-filters]")
@@ -548,8 +658,10 @@ handle("library.analyse", libraryTarget(async (t, st) => {
   const all = !targetRows(t.el.querySelector("[data-library-results]")).selected
   const data = await fetch(`/lib/subject/?${params(all ? { ids: [] } : t, st)}`).then((r) => r.json()).catch(() => null)
   if (!data?.ids?.length) return status(tr("Nothing to analyse here"), { kind: "error" }) || false
-  if (st.c === "games") return window.SPOS.analysis.openGame?.(data.ids[0], { list: { ids: data.ids, index: 0, kind: "game" } })
-  return window.SPOS.analysis.open(data.ids[0], { list: { ids: data.ids, index: 0 } })
+  // nothing selected: the query itself goes along, so `n` finds what is still left (a live work list)
+  const list = all ? { ids: data.ids, index: 0, q: st.q, c: st.c } : { ids: data.ids, index: 0 }
+  if (st.c === "games") return window.SPOS.analysis.openGame?.(data.ids[0], { list: { ...list, kind: "game" } })
+  return window.SPOS.analysis.open(data.ids[0], { list })
 }))
 
 handle("library.copyfen", libraryTarget(async (t, st) => {
@@ -626,6 +738,7 @@ handle("train.tag", () => {
 Object.assign((window.SPOS ||= {}), {
   library: {
     toggleTerm,
+    removeSpan,
     setQuery,
     pendingMoveTags: false,
     hasTarget: () => Boolean(target()),

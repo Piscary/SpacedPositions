@@ -268,6 +268,16 @@ Find, filter, organise, start training from any search.
 - `␣ u v` cycles the result display: **table** (dense rows) · **list** (row with a mini board) · **grid** (cards
   with boards). All three share cursor, selection and keys.
 - The filter pane writes into the query (and the query updates the filters): one source of truth, the query string.
+  Its top group, *In the search*, lists every term of the query (typed ones too) with what it means; `↵` on one takes
+  it out. `-` excludes a facet (shown struck through, `↵` brings it back). `C` clears the query, `Backspace` takes its
+  last term out, both here and in the results, both undoable; the ✕ in the query bar clears too.
+- `]` / `[` jump from group to group (results sorted into groups, the filter pane's facet groups), like sections
+  elsewhere.
+- Panes of the list's link group follow the cursor: the board shows the row; a Moves or Inspector pane in the same
+  group opens the row's analysis (debounced), so a Library with a Moves pane beside it is a place to work through a
+  list without leaving it.
+- **Work lists**: `a` with nothing selected takes the search along to Analyse; `n` opens the next position that still
+  matches, so with `no:solution … sort:source` each position drops out once its puzzle is in training (11 §3).
 - Bulk commands act on the selection, or on the cursor row if nothing is selected. A bulk bar appears as the pane
   footer while something is selected.
 - `T` starts a training session with the puzzles in the results; `:save-query <name>` saves the search (usable as
@@ -369,5 +379,17 @@ As built: the mode opens with Settings and the keymap editor side by side.
 
 ## Help  `?`
 
-An overlay over the focused pane: every key that works right now, grouped (this view, this mode, global), with
-`/` to search. Inside it, `a` switches to the full keymap of every context (also `:help keys`).
+An overlay over the focused pane, in three tabs (`1` `2` `3`, or `h` / `l`; the last tab used comes back):
+
+1. **Guide**: the pane's own documentation (templates/help/<view>.html), always in the same parts: what the pane
+   is for, *How to* (the usual tasks, each with its keys), *Works with* (the panes of its link group and the modes it
+   feeds), *Good to know*, and a footer with the keys that work everywhere. Keys are written with `{% key %}` and
+   filled in from the keymap in the page, so a rebound key shows as the user has it. Every view has a guide; an
+   unknown view gets the guide to panes in general.
+2. **Keys**: every key that works right now, grouped (this view, this mode, global), with `/` to filter; `a`
+   switches to the full keymap of every context (also `:help`).
+3. **Search**: the query language (11 §3) with examples and recipes; `g ?` in the Library or the filter pane opens
+   it directly (`:help-search`).
+
+`j` / `k` scroll, `Esc` closes. Writing a guide is part of making a view: a new view without
+`templates/help/<view>.html` falls back to the general one, and every text goes through the translations.

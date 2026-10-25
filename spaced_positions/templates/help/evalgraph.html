@@ -1,0 +1,10 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "The evaluation along the main line: above the middle White is better, below Black. Where the line drops steeply, the game turned." %}{% endblock %}
+{% block how %}
+  {% key "engine.evaluate" as evaluate %}{% key "analysis.back" as back %}{% key "analysis.forward" as forward %}{% key "analysis.moments" as moments %}
+  <dt>{% translate "Fill the graph" %}</dt><dd>{% blocktranslate trimmed %}{{ evaluate }} lets the engine go through the main line; the evaluations are saved with the analysis.{% endblocktranslate %}</dd>
+  <dt>{% translate "Jump to a move" %}</dt><dd>{% blocktranslate trimmed %}Click the graph, or {{ back }} and {{ forward }}.{% endblocktranslate %}</dd>
+  <dt>{% translate "Find the turning points" %}</dt><dd>{% blocktranslate trimmed %}{{ moments }} marks the key moments of a game: good candidates for puzzles.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% translate "The move tree, the board and the engine of the same link group." %}{% endblock %}
+{% block tips %}<li>{% translate "Without evaluations the graph stays flat: the engine has to look at the moves first." %}</li>{% endblock %}

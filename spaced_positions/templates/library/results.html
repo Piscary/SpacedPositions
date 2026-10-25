@@ -11,7 +11,7 @@
     <span class="list__meta library__tags">{% for t in r.tag_names|slice:":5" %}<span class="chip chip--tag">{{ t }}</span>{% endfor %}</span>
     <span class="list__meta library__diff" title="{% translate "Difficulty" %}">{% if r.difficulty %}{{ r.difficulty|stars }}{% endif %}</span>
     <span class="list__meta library__src">{{ r.citation }}</span>
-    <span class="list__meta library__status">{% if r.in_training %}<span class="chip chip--good">✓ {% translate "training" %}</span>{% elif r.has_puzzle %}<span class="chip">{% translate "draft" %}</span>{% elif not r.has_analysis %}<span class="chip chip--bad">✗ {% translate "solution" %}</span>{% endif %}</span>
+    <span class="list__meta library__status">{% if r.in_training %}<span class="chip chip--good">✓ {% translate "training" %}</span>{% elif r.has_puzzle %}<span class="chip">{% translate "draft" %}</span>{% elif not r.has_analysis %}<span class="chip chip--bad" title="{% translate "No moves yet: no:analysis finds these" %}">{% translate "no moves" %}</span>{% endif %}</span>
   </div>
 {% elif collection == "puzzles" %}
   <div class="list__row library__row library__row--{{ display }}" role="option" aria-selected="false"{% if r.group %} data-group="{{ r.group }}"{% endif %} data-row="z{{ r.pk }}" data-id="z{{ r.pk }}"

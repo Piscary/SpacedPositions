@@ -126,7 +126,9 @@ handle("settings.edit", () => {
   const row = currentRow("[data-settings-list]")
   if (row?.dataset.theme) return run("theme.set", [row.dataset.theme])
   if (!row?.dataset.set) return false
-  return openCmdline(`set ${row.dataset.set}=${row.dataset.value === "—" ? "" : row.dataset.value}`)
+  // a choice: the list of choices (the current one marked) to pick from; a number or a text: the value to change
+  const choice = ["enum", "bool"].includes(row.dataset.type)
+  return openCmdline(`set ${row.dataset.set}=${choice || row.dataset.value === "—" ? "" : row.dataset.value}`)
 })
 
 handle("settings.reset", () => {

@@ -204,7 +204,7 @@ def test_moments_endpoint(client, monkeypatch):
     game = Game.objects.get()
     data = client.post(f"/analysis/{game.uuid}/moments/", "{}", content_type="application/json").json()
     assert data["ok"] and data["message"].startswith("Moments without evaluations")  # python-chess and the symbols only
-    assert "Erlaubt Matt" in data["html"] and "Verpasstes Matt" in data["html"]
+    assert "Allows mate" in data["html"] and "Missed mate" in data["html"]  # tag names in the language of the app
 
 
 @pytest.mark.django_db(transaction=True)

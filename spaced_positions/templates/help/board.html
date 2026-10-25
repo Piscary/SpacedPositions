@@ -1,0 +1,20 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "The board shows the position of its link group: the open analysis, the row under the Library's cursor, the puzzle you are solving. A move made here goes where the board belongs." %}{% endblock %}
+{% block how %}
+  {% key "board.entry" as entry %}{% key "board.cleardrawings" as clear %}{% key "board.back" as back %}{% key "board.forward" as forward %}
+  {% key "board.start" as start %}{% key "board.end" as end %}{% key "board.setup" as setup %}{% key "board.flip" as flip %}
+  {% key "board.copyfen" as fen %}{% key "board.copypgn" as pgn %}{% keycap "mod+v" as paste %}
+  <dt>{% translate "Make a move" %}</dt><dd>{% blocktranslate trimmed %}Click a piece and then a square, or drag it. Or type it: {{ entry }}, then for example <code>Nf3</code> (German, French and Italian letters work too).{% endblocktranslate %}</dd>
+  <dt>{% translate "Draw" %}</dt><dd>{% blocktranslate trimmed %}Right-drag for an arrow, right-click for a circle; with ⇧ red, with ⌥ blue. {{ clear }} clears the drawings of this move.{% endblocktranslate %}</dd>
+  <dt>{% translate "Go through the moves" %}</dt><dd>{% blocktranslate trimmed %}{{ back }} back, {{ forward }} forward, {{ start }} to the start, {{ end }} to the end.{% endblocktranslate %}</dd>
+  <dt>{% translate "Set up a position" %}</dt><dd>{% blocktranslate trimmed %}{{ setup }} opens the board editor: place pieces by their letter, set the side to move and castling. Problems show at once, most with a key that fixes them.{% endblocktranslate %}</dd>
+  <dt>{% translate "Turn the board" %}</dt><dd>{{ flip }}</dd>
+  <dt>{% translate "Copy and paste" %}</dt><dd>{% blocktranslate trimmed %}{{ fen }} copies the position as FEN, {{ pgn }} the moves as PGN. Paste a FEN, a PGN or a lichess link anywhere with {{ paste }}.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% translate "Every pane of the same link group: the move tree, the engine (its arrow and the eval bar), the graphs, the Library's cursor. A board in another group is on its own." %}{% endblock %}
+{% block tips %}
+  {% key "board.squaretool" as squares %}
+  <li>{% blocktranslate trimmed %}{{ squares }} turns on the square tool: right-click colours a square, for diagrams and lessons.{% endblocktranslate %}</li>
+  <li>{% translate "The board keeps its size when the eval bar comes and goes, and when you switch modes." %}</li>
+  <li>{% translate "Settings → Board: piece set, coordinates, letters for typed moves, sounds." %}</li>
+{% endblock %}

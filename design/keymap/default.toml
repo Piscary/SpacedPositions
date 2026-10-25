@@ -80,6 +80,7 @@ accept = ["[", "]"]
 "space u t" = "ui.themepair"
 "space u p" = "board.pieces"
 "space u v" = "library.display"
+"space o" = "analysis.open"
 
 [context.pane]
 "z" = "section.toggle"
@@ -137,6 +138,7 @@ accept = ["[", "]"]
 [context."view.engine"]
 "e" = "engine.toggle"
 "enter" = "engine.best"
+"+" = "engine.lines"
 
 [context."view.pgn"]
 "y" = "board.copyfen"
@@ -286,8 +288,16 @@ accept = ["[", "]"]
 "enter" = "engine.best"
 "y" = "board.copyfen"
 "Y" = "board.copypgn"
+"O" = "analysis.newposition"
+"backspace" = "analysis.untag"
+"shift+backspace" = "library.untag"
+"D" = "library.detect"
+"+" = "engine.lines"
+"E" = "engine.evaluate"
+"g m" = "analysis.moments"
 
 [context."view.library"]
+"g ?" = "help.search"
 "1" = "library.collection positions"
 "2" = "library.collection games"
 "3" = "library.collection puzzles"
@@ -306,6 +316,9 @@ accept = ["[", "]"]
 "s" = "library.sort"
 "z" = "library.fold"
 "Z" = "library.foldall"
+"C" = "library.clear"
+"backspace" = "library.unfilter"
+"D" = "library.detect"
 
 [context."mode.collect"]
 "mod+enter" = "collect.save"
@@ -332,7 +345,10 @@ accept = ["[", "]"]
 "9" = "collect.preset 9"
 
 [context."view.filters"]
+"g ?" = "help.search"
 "-" = "library.exclude"
+"C" = "library.clear"
+"backspace" = "library.unfilter"
 
 [context."view.chart"]
 "j" = "chart.next next"
@@ -362,6 +378,7 @@ accept = ["[", "]"]
 "5" = "train.weakest"
 "6" = "train.again"
 "x" = "home.dismiss"
+"I" = "pack.import"
 
 [context."view.continue"]
 "a" = "home.analysis"
@@ -375,6 +392,11 @@ accept = ["[", "]"]
 "enter" = "settings.edit"
 "backspace" = "settings.reset"
 "K" = "settings.keymap"
+"y" = "theme.export"
+"S" = "theme.save"
+"E" = "settings.export"
+"B" = "app.backup"
+"O" = "app.folder"
 
 [context."view.keymap"]
 "enter" = "keymap.bind"

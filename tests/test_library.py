@@ -130,6 +130,12 @@ def test_results_completion_and_facets(client, two):
     assert comp["items"][0]["value"] == "motif:fork" and comp["start"] == 0
     keys = client.get("/lib/complete/", {"q": "di", "c": "positions"}).json()["items"]
     assert keys[0]["value"] == "diff:"
+    unequal = client.get("/lib/complete/", {"q": "motif:<>pi", "c": "positions"}).json()["items"]
+    assert unequal[0]["value"] == "-motif:pin"  # "not" is a minus in front, never a part of the value
+    assert client.get("/lib/complete/", {"q": "is!=dia", "c": "positions"}).json()["items"][0]["value"] == "-is:diagram"
+    assert client.get("/lib/complete/", {"q": "-no:", "c": "positions"}).json()["items"][0]["value"] == "-no:solution"
+    empty = client.get("/lib/complete/", {"q": "", "c": "positions"}).json()["items"]
+    assert [i["value"] for i in empty[:3]] == ["-", "or", "("] and all(i.get("note") for i in empty[:3])
     exact = client.get("/lib/complete/", {"kind": "tag", "q": "opfer"}).json()["items"]
     assert exact[0]["value"] == "sacrifice"  # the exact name before tags that only contain it
     PositionTag.objects.create(position=two[0], tag=Tag.objects.get(key="pin"))

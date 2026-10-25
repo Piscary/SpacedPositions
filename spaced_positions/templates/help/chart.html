@@ -1,0 +1,13 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "Your progress in charts and numbers: what you collected and analysed, how well you remember, which motifs are weak. Every number leads to the puzzles behind it." %}{% endblock %}
+{% block how %}
+  {% key "chart.next" "next" as next %}{% key "chart.cursor" "next" as point %}{% key "chart.drill" as drill %}{% key "chart.table" as table %}
+  {% key "stats.period" "30d" as period %}{% key "section.next" as section %}
+  <dt>{% translate "Go from chart to chart" %}</dt><dd>{% blocktranslate trimmed %}{{ next }} next chart (k back), {{ section }} next section.{% endblocktranslate %}</dd>
+  <dt>{% translate "Read a value" %}</dt><dd>{% blocktranslate trimmed %}{{ point }} moves over the points (h back), or point with the mouse.{% endblocktranslate %}</dd>
+  <dt>{% translate "See the puzzles behind it" %}</dt><dd>{% blocktranslate trimmed %}{{ drill }} opens them in the Library, a weak spot as a Streak.{% endblocktranslate %}</dd>
+  <dt>{% translate "Change the period" %}</dt><dd>{% blocktranslate trimmed %}1 to 5: 7 days … everything ({{ period }} is 30 days).{% endblocktranslate %}</dd>
+  <dt>{% translate "Exact numbers" %}</dt><dd>{% blocktranslate trimmed %}{{ table }} shows the chart as a table.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% translate "The Library and Train: a drill-down is a search, a weak spot becomes a session." %}{% endblock %}
+{% block tips %}<li>{% translate "Retention is the share of reviews you solved." %}</li>{% endblock %}

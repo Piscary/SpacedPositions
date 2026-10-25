@@ -94,8 +94,7 @@
 @property --white { syntax: "<percentage>"; inherits: false; initial-value: 50%; }
 
 /* ── Eval bar: left of the board, white from the bottom (from the top when the board is flipped) ───────────── */
-.board.has-eval { --eval-space: calc(var(--evalbar-w) + var(--s-1)); }
-.board.has-eval .board__frame { width: min(calc(100cqw - var(--eval-space) * 2), 100cqh); }
+/* Its room is kept on every board, shown or not (board.css: --eval-space), so the board doesn't change size. */
 .evalbar {
   position: absolute;
   top: 0;
@@ -110,7 +109,7 @@
   transition: --white var(--dur-slow);
 }
 .evalbar.is-flipped { background: linear-gradient(to bottom, var(--eval-white) var(--white, 50%), var(--eval-black) var(--white, 50%)); }
-.evalbar[hidden] { display: none; }
+.evalbar[hidden] { display: block; visibility: hidden; } /* absolutely placed: hidden or not, nothing moves */
 /* The number sits at the end of the side that is better, in the other side's colour. */
 .evalbar__text {
   position: absolute;

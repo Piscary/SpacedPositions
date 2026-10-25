@@ -148,15 +148,22 @@ tokenises it (05 · QueryBar), saved queries store it.
 
 ```
 query    = term { " " term }                    -- terms are AND-ed
-term     = [ "-" ] ( keyterm | tagterm | text )  -- "-" negates
+term     = [ not ] ( keyterm | tagterm | text )  -- negated: everything else
+not      = "-" | "!" | "not "                    -- -is:diagram  !is:diagram  not is:diagram
+keyterm  = key ( ":!=" | ":<>" | "!=" | "<>" ) values  -- is:!=diagram, is<>diagram: the same as -is:diagram
 keyterm  = key ":" [ op ] values                 -- motif:gabel  diff:>=3  white:tal
 values   = value { "," value }                   -- motif:gabel,spiess = gabel OR spiess
 op       = ">" | ">=" | "<" | "<=" | "="         -- numbers and dates; "=" for an exact tag
 range    = number ".." number                    -- diff:2..4  year:1950..1960
 tagterm  = "#" tagkey                            -- #gabel = a tag in any field
 text     = word | '"' words '"'                  -- title, task, description, notes, citation, source, tags, comments
-group    = "(" query { " or " query } ")"        -- (motif:gabel or mate:anastasia) diff:>=3
+group    = [ not ] "(" query { " or " query } ")" -- (motif:gabel or mate:anastasia) diff:>=3, -(src:a or src:b)
 ```
+
+**Not** has one meaning in every form: the term is left out. `-is:diagram`, `!is:diagram`, `not is:diagram`,
+`is:!=diagram` and `is:<>diagram` are the same term; the completion always writes the first form (typing `<>` or `!=`
+after a key turns the suggestions into `-key:value`). A value that is itself `!` stays a value (`tag:!`, the good-move
+annotation tag).
 
 Matching is case- and accent-insensitive (`spiess` finds Spieß). Unknown keys and values are underlined with the
 reason and ignored, so a half-typed query still shows results. `sort:` is a term too.
@@ -199,12 +206,21 @@ players · `5` sources · `6` tags. Players, sources and tags take text and `sor
 
 `library/query.py` parses the string into a small AST (with positions for the QueryBar's underlines), then compiles
 it to Django `Q` objects per collection. The parser is pure Python and unit-tested on its own; completions come from
-`GET /library/complete/?q=…&at=…` (keys, tag keys and names, sources, players). Counts per facet for the filter pane
+`GET /lib/complete/?q=…&at=…` (keys with what they mean, values with what they mean, tag keys and names, sources,
+players; on an empty word also `-` not, `or` and `(`), and the help overlay's *Search* tab (`g ?` in the Library)
+explains the language with examples and recipes (templates/help/search.html). Counts per facet for the filter pane
 come from the same compiled query without the facet's own term; the status counts are one query (filtered counts).
 Conditions on related rows (tags, moves, puzzles, cards) compile to `IN (subquery)`, not `EXISTS` per row: SQLite
 computes the subquery once (4–20× faster at 50,000 positions). `T` (train these) and `a` (analyse these) keep the
 query's order when it has a `sort:`; the Library's results are grouped (and foldable) when the sort is a field with
 few values (difficulty, source, year, a player, event, role, kind, field).
+
+**Work lists.** `a` with nothing selected passes the query itself to Analyse (`{q, c, ids, index}`): `n` / `N` run
+it again, so a position that no longer matches (its puzzle went into training for `no:solution`) is skipped and the
+next one still to do opens; the status says how many are left. Every change of an analysis (`analysis:changed`)
+refreshes the Library's results, the cursor staying on its row or, when the row dropped out, on the one that took its
+place. The filter pane lists the query's terms at the top (*In the search*, each removable with `↵`), marks excluded
+facets (⊘, `↵` brings them back), and `C` / `Backspace` clear the query or take its last term out (undoable).
 
 ## 4 · PGN import
 

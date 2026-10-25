@@ -2,6 +2,8 @@
 
     motif:gabel,spiess diff:>=3 -is:diagram "back rank" (src:reti or src:nunn) sort:-difficulty
 
+Not: `-term`, `not term`, `!term`, `key:!=value` and `key:<>value` all exclude; `-( … )` and `not ( … )` a group.
+
 `parse` turns the string into a tree of terms with their places in the string (for the QueryBar's chips and
 underlines) and never fails: what it can't read becomes a problem. `compile` turns the tree into a Django filter for
 one collection; terms it can't use become problems too, and are left out, so a half-typed query still shows results.
@@ -92,8 +94,8 @@ def _tokens(text: str):
             yield ("open" if c == "(" else "close", c, i, i + 1)
             i += 1
             continue
-        if c == "-" and i + 1 < n and text[i + 1] == "(":
-            yield ("not", "-", i, i + 1)
+        if c in "-!" and i + 1 < n and text[i + 1] == "(":
+            yield ("not", c, i, i + 1)
             i += 1
             continue
         start, buf, quoted = i, [], False
@@ -110,15 +112,26 @@ def _tokens(text: str):
         yield ("word", "".join(buf), start, i)
 
 
-def _term(word: str, start: int, end: int, problems: list[Problem]) -> Term:
-    neg = word.startswith("-") and len(word) > 1
-    body = word[1:] if neg else word
+NOT_FORMS = ("!=", "<>", "!")  # key:!=value, key:<>value, key:!value: not
+
+
+def _term(word: str, start: int, end: int, problems: list[Problem], neg: bool = False) -> Term:
+    if word[:1] in "-!" and len(word) > 1:
+        neg, word = not neg, word[1:]
+    body = word
+    m = re.match(r"^([a-z]+)(!=|<>)(.*)$", body, re.I)  # key!=value: as key:!=value
+    if m:
+        body = f"{m.group(1)}:{m.group(2)}{m.group(3)}"
     if body.startswith("#") and len(body) > 1:
         return Term(start, end, neg, "#", "", [_unquote(body[1:])])
     m = re.match(r"^([a-z]+):(.*)$", body, re.I)
     if not m:
         return Term(start, end, neg, "", "", [_unquote(body)])
     key, rest = m.group(1).lower(), m.group(2)
+    for form in NOT_FORMS:
+        if rest.startswith(form) and len(rest) > len(form):  # `tag:!` alone is the tag of the good move
+            neg, rest = not neg, rest[len(form):]
+            break
     op = ""
     for candidate in (">=", "<=", ">", "<", "="):
         if rest.startswith(candidate):
@@ -172,6 +185,15 @@ def parse(text: str) -> Parsed:
             pos += 1
             if kind == "word" and value.lower() == "or":
                 g.alternatives.append([])
+            elif kind == "word" and value.lower() == "not" and pos < len(tokens):
+                nxt = tokens[pos]  # `not term` or `not ( … )`
+                if nxt[0] == "open":
+                    pos += 1
+                    g.alternatives[-1].append(group(s, True, depth + 1))
+                elif nxt[0] == "word":
+                    pos += 1
+                    term = _term(nxt[1], s, nxt[3], problems, neg=True)
+                    g.alternatives[-1].append(term)
             elif kind == "open" or kind == "not":
                 negate = kind == "not"
                 if negate:

@@ -97,6 +97,12 @@ export async function run(id, args = [], { source = "key", silent = false } = {}
   if (source === "mouse") teach(id, args)
 
   if (spec.handler === "server") {
+    const required = (spec.args || []).filter((a) => !a.optional).length
+    if (args.length < required && spec.aliases?.length) {
+      // a key or button without the value it needs: the command line asks for it, with completion
+      const { openCmdline } = await import("./cmdline.js")
+      return openCmdline(`${spec.aliases[0]} ${args.join(" ")}${args.length ? " " : ""}`)
+    }
     const result = await serverRun(id, args)
     if (!result) return false
     if (!silent && result.message) {

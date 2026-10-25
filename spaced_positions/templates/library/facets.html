@@ -1,10 +1,25 @@
-<div class="filters__total muted">{% blocktranslate trimmed count n=total %}{{ n }} position{% plural %}{{ n }} positions{% endblocktranslate %}</div>
+{% load ui %}<div class="filters__total muted">{% blocktranslate trimmed count n=total %}{{ n }} position{% plural %}{{ n }} positions{% endblocktranslate %}</div>
+{% if active %}
+  <div class="filters__group filters__group--active">{% translate "In the search" %} <span class="muted">· {% translate "↵ takes one out" %}</span></div>
+  {% for item in active %}
+  <div class="list__row filters__row is-on filters__row--active" role="option" aria-selected="false" data-row="@{{ item.start }}:{{ item.end }}"
+       data-span="{{ item.start }}:{{ item.end }}" data-title="{{ item.text }}" title="{% translate "↵ takes it out of the search" %}">
+    <span class="filters__check" aria-hidden="true">✕</span>
+    <span class="list__title"><span class="mono">{{ item.text }}</span> <span class="muted">{{ item.note }}</span></span>
+  </div>
+  {% endfor %}
+  <div class="list__row filters__row filters__row--clear" role="option" aria-selected="false" data-row="@clear" data-clear data-title="{% translate "Clear the search" %}">
+    <span class="filters__check" aria-hidden="true">✕</span>
+    <span class="list__title">{% translate "Clear the search" %}</span>
+    <span class="list__meta">{% cmd "library.clear" display="keys" size="sm" variant="ghost" %}</span>
+  </div>
+{% endif %}
 {% for group in groups %}
   <div class="filters__group">{{ group.label }}</div>
   {% for item in group.items %}
-  <div class="list__row filters__row{% if item.on %} is-on{% endif %}" role="option" aria-selected="false" data-row="{{ item.term }}" data-term="{{ item.term }}" data-title="{{ item.label }}">
-    <span class="filters__check" aria-hidden="true">{% if item.on %}●{% else %}○{% endif %}</span>
-    <span class="list__title">{{ item.label }}</span>
+  <div class="list__row filters__row{% if item.on %} is-on{% endif %}{% if item.off %} is-off{% endif %}" role="option" aria-selected="false" data-row="{{ item.term }}" data-term="{{ item.term }}" data-title="{{ item.label }}">
+    <span class="filters__check" aria-hidden="true">{% if item.on %}●{% elif item.off %}⊘{% else %}○{% endif %}</span>
+    <span class="list__title">{{ item.label }}{% if item.off %} <span class="muted">· {% translate "excluded" %}</span>{% endif %}</span>
     <span class="list__meta mono">{{ item.count }}</span>
   </div>
   {% endfor %}

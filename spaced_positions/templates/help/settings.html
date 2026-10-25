@@ -1,0 +1,16 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "Every setting in one list, in sections: theme and colours, board and pieces, keys, training, engine, language, data. Changes apply at once and can be undone." %}{% endblock %}
+{% block how %}
+  {% key "search.open" as slash %}{% key "settings.step" "next" as step %}{% key "settings.step" "prev" as back %}{% key "settings.edit" as edit %}
+  {% key "settings.reset" as reset %}{% key "section.next" as section %}{% key "settings.keymap" as keymap %}{% keycap "tab" as tab %}
+  <dt>{% translate "Find a setting" %}</dt><dd>{% blocktranslate trimmed %}{{ slash }} and a word, or {{ section }} from section to section.{% endblocktranslate %}</dd>
+  <dt>{% translate "Change it" %}</dt><dd>{% blocktranslate trimmed %}{{ step }} next value, {{ back }} previous one, or click a choice.{% endblocktranslate %}</dd>
+  <dt>{% translate "Type a value" %}</dt><dd>{% blocktranslate trimmed %}{{ edit }} opens the command line with the setting: the choices are listed, {{ tab }} completes, ↵ sets it.{% endblocktranslate %}</dd>
+  <dt>{% translate "Back to the default" %}</dt><dd>{{ reset }}</dd>
+  <dt>{% translate "Change keys" %}</dt><dd>{% blocktranslate trimmed %}{{ keymap }} goes to the keymap.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% translate "Everything. A theme shows while the cursor is on it; it stays when you choose it." %}{% endblock %}
+{% block tips %}
+  <li>{% translate "All settings are one text file: :settings-export saves it, and it can be read back on another computer." %}</li>
+  <li>{% translate "Settings → Licences lists every part of the app with its licence." %}</li>
+{% endblock %}

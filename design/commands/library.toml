@@ -123,6 +123,21 @@ title = "Import a PGN file"
 group = "Library"
 aliases = ["import"]
 
+["library.clear"]
+title = "Clear the search"
+group = "Library"
+aliases = ["clear"]
+when = "view.library || view.filters"
+reason = "in the Library or its filter pane"
+undoable = true
+
+["library.unfilter"]
+title = "Take the last term out of the search"
+group = "Library"
+when = "view.library || view.filters"
+reason = "in the Library or its filter pane"
+undoable = true
+
 ["library.exclude"]
 title = "Exclude the facet (-term)"
 group = "Library"

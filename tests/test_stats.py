@@ -130,7 +130,7 @@ def test_knight_fork_is_found_and_confirmed():
 def test_store_respects_the_user_and_withdraws_its_own():
     p = tree.create_position(back_rank(0), ["d1d8"])
     result = detect.run(p)
-    assert "Grundreihenmatt" in result["added"] and "Endspiel" in result["added"]
+    assert "Back-rank mate" in result["added"] and "Endgame" in result["added"]  # labels in the language of the app
     assert p.tag_links.get(tag__key="back-rank-mate").detector == "pychess"
     # the user removes a detected tag: it is not detected again
     TagDismissal.objects.create(position=p, tag=Tag.objects.get(key="back-rank-mate"))

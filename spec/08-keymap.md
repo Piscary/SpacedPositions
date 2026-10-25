@@ -29,7 +29,7 @@ Keymap overrides use the same notation: `"space o" = "train.start storm 5"` (a c
 | `⎋` | `layer.escape` | One step towards Normal (02 §2) |
 | `:` | `cmdline.open` | Command line |
 | `/` | `search.open` | Search in the focused view (or library search) |
-| `?` | `help.context` | Keys of the current context (inside: `a` all contexts, `/` search) |
+| `?` | `help.context` | Help over the focused pane: `1` its guide · `2` its keys (`a` all contexts, `/` filter) · `3` the search language |
 | `F` | `hint.open` | Hint labels on every clickable element |
 | `u` / `U` | `undo` / `redo` | Also `mod+z` / `mod+shift+z` |
 | `.` | `repeat` | Repeat the last repeatable command |
@@ -45,6 +45,7 @@ Keymap overrides use the same notation: `"space o" = "train.start storm 5"` (a c
 | `␣ ␣` | Previous mode |
 | `␣ 1` … `␣ 9` | Focus pane N |
 | `␣ r` | Start a Review now (from anywhere) |
+| `␣ o` | Analyse a position (`:analyse`, with completion over titles and sources) |
 | `␣ f` | **Find anything**: fuzzy finder over positions, games, tags, sources, players, saved queries, commands |
 | `␣ n` | New … : `p` position (Collect) · `g` import PGN · `t` tag · `s` source |
 | `␣ w` | Window menu (below) |
@@ -108,7 +109,7 @@ event, role, kind or field, the rows come in foldable groups. Grids move with `j
 | `J K` | Half a page |
 | `PgDn PgUp` | A page |
 | `g g` / `G`, `Home` / `End` | Top / bottom (lists: first / last item) |
-| `]` / `[` | Next / previous section |
+| `]` / `[` | Next / previous section (in a list with groups: the next / previous group) |
 | `z` / `Z` | Fold the section under the cursor / all |
 | `g` + letter | Jump to a section (its letter is in its header) |
 | `i` | Edit the pane's text field (Insert layer) |
@@ -124,6 +125,7 @@ event, role, kind or field, the rows come in foldable groups. Grids move with `j
 | `r` | Review (the Today pane) |
 | `1`–`6` | Quick sessions (Storm 3′, Storm 5′, Streak, Streak ♥3, weakest motifs, again) |
 | `x` | Dismiss the announcement banner |
+| `I` | Import a puzzle pack |
 | `a` | Continue the last analysis (the Continue pane) |
 | `c` | Continue collecting (last source, next diagram) |
 | `i` | Focus the paste box (`p` would collide with Analyse's puzzle keys when the pane is placed there) |
@@ -193,7 +195,7 @@ Mode-level: these work whether the board, the moves or the inspector pane has fo
 | `g p` / `g n` | Previous / next branch point |
 | `M` | Back to the main line |
 | `z` / `Z` | Fold or open the variation (in a variation: that one; on the main line: the alternatives to this or the next move) / fold or open all; the cursor never hides in a folded variation |
-| `n` / `N` | Next / previous subject (when opened from a list) |
+| `n` / `N` | Next / previous subject (when opened from a list; a list from a search runs again, so what is done is skipped) |
 | `1`–`7` | `!  ?  !!  ??  !?  ?!  □` (toggle) |
 | `a` | Annotation menu: all move, position and evaluation symbols (`+−  ±  ⩲  =  ∞  ⩱  ∓  −+` …) |
 | `m` | Mark: `g` good · `d` dubious · `b` bad · `c` colour · `x` clear |
@@ -206,6 +208,12 @@ Mode-level: these work whether the board, the moves or the inspector pane has fo
 | `e` | Engine on / off (also in the Engine pane, in any mode but Train) |
 | `↵` | Play the engine's best move (also in the Engine pane) |
 | `y` / `Y` | Copy FEN / PGN |
+| `⌫` / `⇧⌫` | Remove a tag from the move / from the position |
+| `D` | Detect tags (python-chess) |
+| `O` | New position from this move |
+| `+` | Engine lines: 1 → 5 (also in the Engine pane) |
+| `E` | Evaluate the main line (the eval graph) |
+| `g m` | Find the key moments |
 | `u` / `U` | Undo / redo: every change of the analysis, also after a reload (the journal, 09 §5) |
 
 With the board pane focused, its own keys (06): `f` flip · `S` setup (correcting the position keeps the analysis when
@@ -214,12 +222,13 @@ drawings on this move. In the comment field (Insert): `⌥K Q R B N P` insert �
 pieces), `mod+↵` saves and leaves the field (leaving it saves too). In the Engine pane, clicking a move adds the
 line up to it to the analysis.
 
-Without a key, command line only: `:analyse <title>` (open a position; the completions search titles and sources),
-`:engine.lines <1–5>`, `:new-position` (the position after this move becomes a position of its own, linked to its
-game; `:new-position moves` takes the continuation along), `:untag-move`, `:detect` (python-chess tag detection, also
-on a Library selection), `:evaluate [depth]` (the engine over the main line, for the eval graph), `:moments` (the
-key moments of the main line as move tags: the local engine or the stored evaluations, python-chess, the
-annotator's symbols; 11 §1), `:lichess` (open the position in lichess).
+Also on the command line: `:analyse <title>`, `:engine.lines <1–5>`, `:new-position moves` (takes the continuation
+along), `:evaluate [depth]`, `:moments` (the key moments of the main line as move tags: the local engine or the stored
+evaluations, python-chess, the annotator's symbols; 11 §1), `:lichess` (open the position in lichess).
+
+**Every button has a key** (01): `design check` fails on a button (`{% cmd %}`, `data-cmd`) whose command has no
+binding; only a setting's own choices (stepped with `h` / `l`) and the style guide are exempt. A key bound to a server
+command that needs a value opens the command line to ask for it (`S` in Settings: `:theme-save `).
 
 ## Collect
 
@@ -260,8 +269,13 @@ adds · `↵` accept the licence and import · `r` ready for training on/off · 
 | `t T d r a y e` | Bulk keys (lists above); on players, sources and tags `d` deletes the ones nothing uses; `e` on positions and puzzles asks *PGN* or *Pack* (`:pack-export`) |
 | `c` | Edit the selected players, sources or tags (`:edit field=value …`) |
 | `↵` | Positions and puzzles open in Analyse (the results are the subject list), games too; a player, source or tag shows its positions or games |
-| Filters pane: `↵` | Toggle the facet (adds/removes the query term) |
-| Filters pane: `-` | Exclude the facet (`-motif:…`) |
+| `D` | Detect tags of the selection |
+| `C` | Clear the search (also in the filter pane; undoable) |
+| `⌫` | Take the last term out of the search (also in the filter pane; undoable) |
+| `] [` | Next / previous group of the results |
+| `g ?` | The search language (help, tab 3; also in the filter pane) |
+| Filters pane: `↵` | Toggle the facet (adds/removes the query term); on a term of *In the search*: take it out |
+| Filters pane: `-` | Exclude the facet (`-motif:…`; again: include it) |
 
 In the query bar: `⇥` takes the completion (keys, tags with their place in the hierarchy, sources, players, saved
 queries), `↑ ↓` choose one, `↵` goes to the results, `Esc` leaves the bar. `:save-query <name>`, `:trash-empty`,
@@ -286,10 +300,12 @@ Library), `:pack-export <title> [for=<student>] [licence="…"] [received]` (the
 |---|---|
 | `j k` | Rows (on a theme: live preview) |
 | `h l` | Step the value (on/off, a choice, a number) |
-| `↵` | Edit on the command line (`:set name=…`) · on a theme: choose it |
+| `↵` | Edit on the command line (`:set name=`: a choice lists every value with its name, the current one marked, and a value is found by what it means, `ger` → `de`) · on a theme: choose it |
 | `⌫` | Reset to the default |
 | `/` | Filter settings |
 | `K` | Keymap editor |
+| `y` · `S` · `E` | Copy the theme as TOML · save the colours as a theme · export the settings |
+| `B` · `O` | Back up now · open the data folder |
 | Keymap editor: `↵` | Record new keys for the command (up to three, `↵` keeps, `Esc` cancels) |
 | Keymap editor: `⌫` | Remove your binding, or unmap the default one |
 

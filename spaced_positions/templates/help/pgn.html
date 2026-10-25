@@ -1,0 +1,9 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "The position or game of the link group as text: FEN and PGN to copy, and a field to paste text into." %}{% endblock %}
+{% block how %}
+  {% key "pane.insert" as edit %}{% key "board.copyfen" as fen %}{% key "board.copypgn" as pgn %}{% key "form.submit" as submit %}
+  <dt>{% translate "Copy" %}</dt><dd>{% blocktranslate trimmed %}{{ fen }} the FEN, {{ pgn }} the PGN.{% endblocktranslate %}</dd>
+  <dt>{% translate "Load text" %}</dt><dd>{% blocktranslate trimmed %}{{ edit }} into the field, paste a FEN, a PGN or a lichess link, {{ submit }} shows it on the board.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% translate "The board of the same link group, and Collect's entry session." %}{% endblock %}
+{% block tips %}<li>{% translate "Pasting works anywhere else too: the app asks what to do with what you pasted." %}</li>{% endblock %}

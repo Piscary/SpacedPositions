@@ -389,3 +389,105 @@ def test_a_pane_of_another_mode_says_where_it_works(page):
     page.wait_for_selector("#ws-library [data-view=queue] >> text=It works in Train")
     page.click("#ws-library [data-view=queue] [data-cmd='mode.train']")
     page.wait_for_function("window.SPOS.ctx.mode === 'train'")
+
+
+@pytest.fixture
+def unsolved():
+    """Three diagrams of a book with their moves but no puzzle yet: a work list for `no:solution`."""
+    book = Source.objects.create(title="Puzzle Book", short="Book")
+    made = []
+    for i in range(3):
+        p = tree.create_position(back_rank(i), ["d1d8"], title=f"Diagram {i + 1}")
+        p.source, p.source_ref = book, str(i + 1)
+        p.save()
+        made.append(p)
+    return made
+
+
+def test_a_work_list_loses_what_is_done(page, unsolved):
+    """`a` without a selection takes the query along: once a puzzle is in training, `n` skips it and the Library
+    drops it, with the cursor on the one that took its place."""
+    library(page)
+    query(page, "no:solution sort:source")
+    assert rows(page) == [f"p{p.pk}" for p in unsolved]
+    keys(page, "a")
+    page.wait_for_selector("#ws-analyse [data-movetree] >> text=Rd8#")
+    keys(page, "p", "s")
+    wait_status(page, "Puzzle set up from here")
+    keys(page, "p", "r")
+    wait_status(page, "Ready for training")
+    keys(page, "n")
+    page.wait_for_function(f"window.SPOS.analysis.current()?.position.id === {str(unsolved[1].uuid)!r}")
+    wait_status(page, "Diagram 2 · 1 / 2")
+    keys(page, "N")
+    wait_status(page, "This is the first")
+    # the Library's list followed, its cursor on the open position
+    keys(page, "Space", "l")
+    page.wait_for_function("window.SPOS.ctx.mode === 'library'")
+    page.wait_for_function("document.querySelector('#ws-library [data-query-count]').textContent === '2 positions'")
+    assert rows(page) == [f"p{unsolved[1].pk}", f"p{unsolved[2].pk}"]
+    assert page.get_attribute("#ws-library [data-library-results] .list__row.is-cursor", "data-row") == f"p{unsolved[1].pk}"
+
+
+def test_a_moves_pane_follows_the_list(page, unsolved):
+    """A Moves pane in the list's link group shows the analysis of the row under the cursor."""
+    library(page)
+    query(page, "src:book sort:source")
+    page.click("#ws-library [data-view=board] .pane__title")
+    keys(page, "Space", "w", "s")
+    page.wait_for_selector(".menu")
+    keys(page, "m")
+    page.wait_for_selector("#ws-library [data-island=moves]")
+    page.click("#ws-library [data-view=library] .pane__title")
+    keys(page, "j")
+    page.wait_for_selector("#ws-library [data-island=moves] [data-movetree] >> text=Rd8#")
+    title = page.evaluate("document.querySelector('#ws-library [data-view=moves] [data-pane-subject]')?.textContent")
+    assert title == "Diagram 2"
+
+
+def test_filters_show_the_search_and_come_out_again(page, positions):
+    """Every term of the search is in the filter pane with a way out; C clears, Backspace takes the last one, u undoes."""
+    library(page)
+    query(page, "motif:fork -is:diagram")
+    page.click("#ws-library [data-view=filters] .pane__title")
+    page.wait_for_selector("#ws-library [data-filters] [data-span]")
+    active = page.eval_on_selector_all("#ws-library [data-filters] [data-span]", "els => els.map(e => e.dataset.title)")
+    assert active == ["motif:fork", "-is:diagram"]
+    keys(page, "Enter")  # the cursor starts on the first one: out it goes
+    page.wait_for_function("window.SPOS.library.state().q === '-is:diagram'")
+    keys(page, "u")
+    page.wait_for_function("window.SPOS.library.state().q === 'motif:fork -is:diagram'")
+    wait_status(page, "Undone")
+    keys(page, "Backspace")
+    page.wait_for_function("window.SPOS.library.state().q === 'motif:fork'")
+    keys(page, "C")
+    page.wait_for_function("window.SPOS.library.state().q === ''")
+    wait_status(page, "Search cleared")
+    keys(page, "u")
+    page.wait_for_function("window.SPOS.library.state().q === 'motif:fork'")
+    # an excluded facet shows as excluded, and ↵ brings it back in
+    page.wait_for_selector("#ws-library [data-filters] [data-term='motif:knight-fork']")
+    keys(page, "g", "g")
+    term = page.eval_on_selector_all("#ws-library [data-filters] [data-row]", "els => els.map(e => e.dataset.row)").index("motif:knight-fork")
+    keys(page, *(["j"] * term), "-")
+    page.wait_for_function("window.SPOS.library.state().q === 'motif:fork -motif:knight-fork'")
+    page.wait_for_selector("#ws-library [data-filters] [data-term='motif:knight-fork'].is-off")
+    # `]` jumps from facet group to facet group
+    keys(page, "g", "g", "]")
+    first_group = page.get_attribute("#ws-library [data-filters] .is-cursor", "data-row")
+    assert first_group != page.eval_on_selector_all("#ws-library [data-filters] [data-row]", "els => els[0].dataset.row")
+
+
+def test_help_has_a_guide_keys_and_the_search(page, positions):
+    library(page)
+    keys(page, "?")
+    page.wait_for_selector(".help .guide >> text=A work list")
+    assert page.locator(".help .guide [data-keys-for='library.analyse'] .keycap").first.inner_text() == "a"
+    keys(page, "2")
+    page.wait_for_selector(".help .help__table")
+    keys(page, "3")
+    page.wait_for_selector(".help .guide >> text=sort:source")
+    keys(page, "Escape")
+    page.wait_for_selector(".help", state="detached")
+    keys(page, "g", "?")  # straight to the search language
+    page.wait_for_selector(".help .guide >> text=-is:diagram")

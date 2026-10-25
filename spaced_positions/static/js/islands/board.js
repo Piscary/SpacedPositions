@@ -412,17 +412,22 @@ class Board {
     if (this.layer === "setup") {
       const s = this.setup
       const glyph = GLYPHS[s.color][s.role]
-      const tool = { piece: `click: place ${glyph} ${s.color} · ⇧click: the other colour · right-click: empty`, eraser: "click: empty a square", hand: "drag: move pieces freely" }[s.tool]
-      parts.push(text(tool), text(` · ${s.side === "w" ? "white" : "black"} to move · castling ${s.castling || "-"} · e.p. ${s.ep || "-"}${s.diagram ? " · diagram" : ""}`))
-      const fen = span("board__fen mono", this.fullFen())
-      parts.push(fen)
+      // one line: what is wrong first (it must not be cut off), then what a click does, then the details
       const check = s.check
       if (check && !check.ok) {
         const problems = span(`board__problems${s.diagram ? "" : " is-error"}`, check.problems.map((p) => p.message).join(" · "))
         if (check.fixed) problems.append(text(` · ${tr("a: fix")}`))
-        parts.push(problems)
+        parts.push(problems, text(" · "))
       }
-      if (this.duplicate) parts.push(span("board__problems", ` · duplicate of ${this.duplicate.short} ${this.duplicate.title}`))
+      if (this.duplicate) parts.push(span("board__problems", tr("duplicate of {short} {title}", { short: this.duplicate.short, title: this.duplicate.title })), text(" · "))
+      const tool = {
+        piece: s.color === "white" ? tr("click: place {piece} (white) · ⇧click: black · right-click: empty", { piece: glyph })
+                                   : tr("click: place {piece} (black) · ⇧click: white · right-click: empty", { piece: glyph }),
+        eraser: tr("click: empty a square"),
+        hand: tr("drag: move pieces freely"),
+      }[s.tool]
+      parts.push(text(tool), text(` · ${s.side === "w" ? tr("White to move") : tr("Black to move")} · ${tr("castling {rights}", { rights: s.castling || "-" })} · ${tr("e.p. {square}", { square: s.ep || "-" })}${s.diagram ? ` · ${tr("diagram")}` : ""} · `))
+      parts.push(span("board__fen mono", this.fullFen()))
       this.palette?.querySelectorAll("[data-cmd='board.piece']").forEach((b) => {
         b.setAttribute("aria-pressed", String(s.tool === "piece" && b.dataset.args === s.role))
         const icon = b.querySelector(".keybutton__icon")
@@ -446,6 +451,7 @@ class Board {
       parts.push(text(` · ${this.squareTool ? tr("right-click: fill a square (⇧ red · ⌥ blue)") : tr("click/drag: move · right-drag: arrow (⇧ red · ⌥ blue · ⇧⌥ yellow)")}`))
     }
     this.strip.replaceChildren(...parts)
+    this.strip.title = this.strip.textContent // the strip is one line: the whole text on hover
   }
 }
 

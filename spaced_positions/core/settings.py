@@ -81,6 +81,13 @@ def parse(name: str, raw: str) -> tuple[object, str | None]:
 
 
 LANGUAGE_NAMES = {"en": "English", "de": "Deutsch", "fr": "Français", "it": "Italiano"}
+LANGUAGES_TRANSLATED = {"en": _("English"), "de": _("German"), "fr": _("French"), "it": _("Italian")}
+
+
+def value_words(value) -> str:
+    """What a value can be found by in the completion: its label, and a language also by its name in the app's
+    language (`ger` finds `de`, Deutsch)."""
+    return f"{value_label(value)} {LANGUAGES_TRANSLATED.get(value, '')} {value}".strip()
 
 
 def value_label(value) -> str:

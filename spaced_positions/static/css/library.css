@@ -34,6 +34,7 @@
   font-size: var(--fs-md);
 }
 .querybar__count { color: var(--text-sub); font-size: var(--fs-xs); white-space: nowrap; }
+.library:not([data-has-query]) .querybar__clear { visibility: hidden; } /* keeps its place: the bar doesn't jump */
 .querybar__problems { display: flex; flex-wrap: wrap; gap: var(--s-half); margin: 0 var(--s-2); }
 .querybar__problems:not(:empty) { margin-top: var(--s-half); }
 .querybar__problem { text-decoration: underline wavy var(--bad); text-underline-offset: calc(var(--rule) * 2); }
@@ -141,6 +142,13 @@
 .filters__check { color: var(--text-muted); }
 .filters__row.is-on .filters__check, .filters__row.is-on .list__title { color: var(--main); font-weight: 600; }
 .filters__empty { padding: var(--s-2); font-size: var(--fs-sm); }
+.filters__row.is-off .filters__check, .filters__row.is-off .list__title { color: var(--bad); text-decoration: line-through; }
+.filters__row.is-off .list__title .muted { text-decoration: none; }
+.filters__group--active { color: var(--main); }
+.filters__group--active .muted { text-transform: none; letter-spacing: 0; font-weight: 400; }
+.filters__row--active .list__title { font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.filters__row--active .filters__check, .filters__row--clear .filters__check { color: var(--bad); }
+.filters__row--clear { border-bottom: var(--rule) solid var(--line); }
 
 /* ── Collect: the entry session ───────────────────────────────────────────────────────────────────────────── */
 .entry { display: flex; flex-direction: column; gap: var(--s-1); padding: var(--s-1) var(--s-2); }

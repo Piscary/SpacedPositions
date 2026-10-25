@@ -1,0 +1,17 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "Rapid entry from a book: set the source once, then set up each diagram on the board and save. Page and diagram number count up by themselves." %}{% endblock %}
+{% block how %}
+  {% key "collect.source" as source %}{% key "board.setup" as setup %}{% key "collect.save" as save %}{% key "collect.saveopen" as saveopen %}
+  {% key "collect.page" "up" as page_up %}{% key "collect.diagram" "up" as diagram_up %}{% key "collect.tag" as tag %}{% key "collect.untag" as untag %}
+  {% key "collect.preset" "1" as preset %}{% key "collect.ready" as ready %}{% key "collect.duplicate" as duplicate %}
+  <dt>{% translate "Choose the book" %}</dt><dd>{% blocktranslate trimmed %}{{ source }}: type a few letters of the source, or a new title.{% endblocktranslate %}</dd>
+  <dt>{% translate "Enter a diagram" %}</dt><dd>{% blocktranslate trimmed %}{{ setup }} sets up the position (or paste a FEN), then {{ save }} saves it and gets ready for the next one; {{ saveopen }} saves and opens it in Analyse.{% endblocktranslate %}</dd>
+  <dt>{% translate "Page and number" %}</dt><dd>{% blocktranslate trimmed %}{{ page_up }} next page (− back), {{ diagram_up }} next diagram number (↓ back).{% endblocktranslate %}</dd>
+  <dt>{% translate "Tag as you go" %}</dt><dd>{% blocktranslate trimmed %}{{ tag }} adds a tag to the next positions, {{ untag }} removes the last one; {{ preset }} … 9 switch saved sets of tags on and off.{% endblocktranslate %}</dd>
+  <dt>{% translate "Straight into training" %}</dt><dd>{% blocktranslate trimmed %}{{ ready }}: with the solution entered, the puzzle goes into training when you save.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% key "collect.duplicate" as duplicate %}{% blocktranslate trimmed %}The board of the same link group, where you set up the diagram, and the PGN pane for pasting. When a position is already in the library, {{ duplicate }} goes to it.{% endblocktranslate %}{% endblock %}
+{% block tips %}
+  <li>{% translate "Diagrams that can't happen in a game (an illegal position in a book) are saved as diagrams: D in the board editor." %}</li>
+  <li>{% translate "Afterwards, the Library finds what still needs a solution: no:solution src:… sort:source." %}</li>
+{% endblock %}

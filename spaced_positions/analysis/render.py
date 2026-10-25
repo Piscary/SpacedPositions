@@ -63,8 +63,8 @@ def render(position) -> str:
     fens = {n.id: n.fen for n in all_nodes}
     roles = analysis_puzzles.roles(position, kids)
     move_tags = {}
-    for node_id, name in NodeTag.objects.filter(node__in=[n.id for n in all_nodes]).order_by("tag__field__order").values_list("node_id", "tag__name"):
-        move_tags.setdefault(node_id, []).append(name)
+    for link in NodeTag.objects.filter(node__in=[n.id for n in all_nodes]).order_by("tag__field__order").select_related("tag"):
+        move_tags.setdefault(link.node_id, []).append(link.tag.label)
     parts = []
     start_role = roles.get(root.id)
     if start_role:

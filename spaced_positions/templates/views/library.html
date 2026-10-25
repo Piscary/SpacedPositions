@@ -4,6 +4,8 @@
     <input class="querybar__input" type="text" data-search data-querybar spellcheck="false" autocomplete="off"
            aria-label="{% translate "Query" %}" placeholder="{% translate "motif:fork diff:>=3 no:solution · ⇥ completes · ↵ to the results" %}">
     <span class="querybar__count mono" data-query-count></span>
+    {% cmd "library.clear" display="keys" size="sm" variant="ghost" icon="✕" extra="querybar__clear" %}
+    {% cmd "help.search" display="keys" size="sm" variant="ghost" icon="?" extra="querybar__help" %}
   </div>
   <div class="querybar__problems" data-query-problems aria-live="polite"></div>
   <div class="querybar__complete" data-query-complete hidden role="listbox" aria-label="{% translate "Completions" %}"></div>

@@ -1,0 +1,14 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "Stockfish looks at the position on the board of the link group: its best lines, the evaluation and an arrow for the best move." %}{% endblock %}
+{% block how %}
+  {% key "engine.toggle" as toggle %}{% key "engine.best" as best %}{% key "engine.lines" as lines %}{% key "engine.evaluate" as evaluate %}
+  <dt>{% translate "Turn it on and off" %}</dt><dd>{{ toggle }}</dd>
+  <dt>{% translate "Play the best move" %}</dt><dd>{% blocktranslate trimmed %}{{ best }}: it goes into the analysis like your own move.{% endblocktranslate %}</dd>
+  <dt>{% translate "More lines" %}</dt><dd>{% blocktranslate trimmed %}{{ lines }} sets how many lines are shown.{% endblocktranslate %}</dd>
+  <dt>{% translate "Evaluate a whole game" %}</dt><dd>{% blocktranslate trimmed %}{{ evaluate }} goes through the main line and fills the eval graph; the evaluations are saved.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% translate "The board (arrow and eval bar), the move tree and the eval graph of the same link group." %}{% endblock %}
+{% block tips %}
+  <li>{% translate "The engine runs in your browser. Settings → Engine can use a Stockfish installed on this computer instead." %}</li>
+  <li>{% translate "In Train the engine stays off, so it can't give a solution away." %}</li>
+{% endblock %}

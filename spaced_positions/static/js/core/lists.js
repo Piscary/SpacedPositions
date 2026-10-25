@@ -55,7 +55,10 @@ function moveTo(list, index) {
   rows[st.cursor].scrollIntoView({ block: "nearest" })
   const row = rows[st.cursor]
   emit("list:cursor", { list, row })
-  if (ctx.pane?.group) emit("cursor", { group: ctx.pane.group, from: ctx.pane.id, id: row.dataset.row, title: row.dataset.title, fen: row.dataset.fen })
+  if (ctx.pane?.group) {
+    emit("cursor", { group: ctx.pane.group, from: ctx.pane.id, id: row.dataset.row, title: row.dataset.title, fen: row.dataset.fen,
+                     position: row.dataset.position || row.dataset.game || null })
+  }
 }
 
 /** The rows a bulk command acts on: the selected ones, else the row under the cursor. */
@@ -125,6 +128,8 @@ handle("list.open", withList((list, st) => {
   void row.offsetWidth
   row.classList.add("is-flash-row")
   if (row.dataset.term) return window.SPOS.library.toggleTerm(row.dataset.term, row) // a facet of the filter pane
+  if (row.dataset.span) return window.SPOS.library.removeSpan(row.dataset.span, row) // a term of the search: out
+  if (row.hasAttribute("data-clear")) return run("library.clear")
   if (row.dataset.query) return window.SPOS.library.setQuery(row.dataset.query, row.dataset.queryCollection) // a player, source or tag
   if (row.dataset.game) return window.SPOS.analysis.openGame?.(row.dataset.game)
   if (row.dataset.position) {
@@ -209,14 +214,40 @@ handle("section.toggle", () => {
   setCollapsed(section, !section.classList.contains("is-collapsed"))
 })
 
+/** The heads of a list's groups (the Library sorted by source, the filter pane's facets): its "sections". */
+const GROUP_HEADS = "[data-group-head], .filters__group"
+
+/** `]` / `[` in a list with groups: the cursor to the first row of the next / previous group. */
+function moveGroup(step) {
+  const list = focusedList()
+  const heads = list ? [...list.querySelectorAll(GROUP_HEADS)] : []
+  if (!heads.length) return false
+  const rows = rowsOf(list)
+  const firstOf = (head) => rows.find((r) => head.compareDocumentPosition(r) & Node.DOCUMENT_POSITION_FOLLOWING)
+  const cursorRow = rows[listState(list).cursor]
+  const index = cursorRow ? heads.filter((h) => h.compareDocumentPosition(cursorRow) & Node.DOCUMENT_POSITION_FOLLOWING).length - 1 : -1
+  // back: to the start of this group first, when the cursor is inside it
+  const atStart = cursorRow && index >= 0 && firstOf(heads[index]) === cursorRow
+  const target = step > 0 ? index + 1 : (atStart || index < 0 ? index - 1 : index)
+  const head = heads[Math.max(0, Math.min(heads.length - 1, target))]
+  const row = firstOf(head)
+  if (!row) return false
+  moveTo(list, rows.indexOf(row))
+  head.scrollIntoView({ block: "nearest" })
+}
+
 function moveSection(step) {
   const sections = [...(ctx.pane?.el?.querySelectorAll("[data-section]") || [])]
-  if (!sections.length) return false
+  if (!sections.length) return moveGroup(step)
   const current = currentSection()
   const index = current ? sections.indexOf(current) : -1
   const next = sections[Math.max(0, Math.min(sections.length - 1, index + step))]
   setSectionCursor(next)
   next.scrollIntoView({ block: "start" })
+  // in a list made of sections (Settings), the list's cursor goes along to the section's first row
+  const list = next.closest("[data-list]")
+  const row = list && [...next.querySelectorAll("[data-row]")].find((r) => !r.closest("[hidden]"))
+  if (row) moveTo(list, rowsOf(list).indexOf(row))
 }
 handle("section.next", () => moveSection(1))
 handle("section.prev", () => moveSection(-1))

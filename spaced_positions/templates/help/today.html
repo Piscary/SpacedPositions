@@ -1,0 +1,10 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "What to do now: the puzzles due today, sessions that start with one key, today's numbers and your pattern library." %}{% endblock %}
+{% block how %}
+  {% key "train.review" "" "view.today" as review %}{% key "train.storm" "3" "view.today" as storm %}{% key "train.weakest" "" "view.today" as weakest %}
+  {% key "section.next" as section %}
+  <dt>{% translate "Train" %}</dt><dd>{% blocktranslate trimmed %}{{ review }} today's review, {{ storm }} a Storm, {{ weakest }} your weakest motifs; the numbers next to each session start it.{% endblocktranslate %}</dd>
+  <dt>{% translate "Look around" %}</dt><dd>{% blocktranslate trimmed %}{{ section }} from section to section; a number or a motif opens what is behind it.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% translate "Train, Stats and the Library." %}{% endblock %}
+{% block tips %}<li>{% translate "When the library is empty, Home shows how to fill it: a puzzle pack, a book, or pasted games." %}</li>{% endblock %}

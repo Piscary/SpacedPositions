@@ -93,3 +93,21 @@ def test_settings_accessibility(page):
         }"""
     )
     assert result == [], result
+
+
+def test_enter_lists_the_choices_and_finds_one_by_its_meaning(page):
+    """↵ on a choice opens `:set name=` with every choice listed by name; typing what it means is enough."""
+    settings(page)
+    page.fill("#ws-settings [data-settings-filter]", "piece letters")
+    keys(page, "Escape")
+    page.click("#ws-settings [data-row='board.letters']")
+    keys(page, "Enter")
+    page.wait_for_selector(".cmdline__row >> text=Deutsch")
+    rows = page.eval_on_selector_all(".cmdline__row", "els => els.map(e => e.textContent)")
+    assert len(rows) == 4 and rows[0].startswith("en"), rows
+    assert any("now" in r for r in rows), rows  # the current value is marked
+    page.keyboard.type("ger")
+    page.wait_for_function("document.querySelectorAll('.cmdline__row').length === 1")
+    keys(page, "Enter")
+    page.wait_for_selector("#ws-settings [data-row='board.letters'].is-changed")
+    assert Preferences.current().settings == {"board.letters": "de"}

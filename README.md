@@ -14,8 +14,9 @@ German, French and Italian.
   browser (or a local engine), the evaluation graph, key moments of a game, and puzzles set up straight from the
   analysis.
 - **Library**: positions, games, puzzles, players, sources and tags with a search language
-  (`motif:fork diff:>=3 src:"Endgame Manual" sort:source`), filters, bulk tagging and automatic tag detection for
-  205 tactical, mating, positional and endgame motifs.
+  (`motif:fork diff:>=3 -is:diagram src:"Endgame Manual" sort:source`), filters, bulk tagging and automatic tag
+  detection for 205 tactical, mating, positional and endgame motifs. A search is also a work list: analyse what it
+  found, and each position drops out once its puzzle is in training.
 - **Stats**: the pattern library, retention, mastery per motif, weak spots, records and activity; every number
   leads to the puzzles behind it.
 - **Puzzle packs**: share positions, puzzles and games as one file, for example as a coach with your students, or
@@ -54,8 +55,10 @@ home, with the same one-time link).
    positions become puzzles by themselves.
 3. **Train.** `␣ t`, then `r` for today's review, `1`–`3` for a Storm, `4` for a Streak.
 
-Every action has a key, and every button shows it. `?` lists the keys that work where you are, `␣` (space) shows
-what can follow, `:` opens the command line, `F` puts a letter on everything clickable.
+Every action has a key, and every button shows it. `?` opens the help of the pane you are in: a short guide to it
+(what it is for, how to do the usual things, what it works with), the keys that work there, and the search language.
+`␣` (space) shows what can follow, `:` opens the command line (with completion, also for the values of settings), `F`
+puts a letter on everything clickable.
 
 | Keys | |
 |---|---|
@@ -65,7 +68,7 @@ what can follow, `:` opens the command line, `F` puts a letter on everything cli
 | `u` `U` | Undo, redo (also every change of an analysis, after a reload too) |
 | On a board | Click or drag to move · right-drag for arrows (⇧ red, ⌥ blue) · `i` type a move (`Nf3`, also German, French or Italian letters) · `S` board editor · `f` flip |
 | While solving | `h` hint (counts as missed) · `s` solution · `Esc` pause |
-| `␣ l` Library | `/` search (`⇥` completes) · `x` select · `t` tag · `T` train · `a` analyse · `e` export (PGN or pack) |
+| `␣ l` Library | `/` search (`⇥` completes, `g ?` explains it) · `C` clear it · `x` select · `t` tag · `T` train · `a` analyse · `e` export (PGN or pack) |
 | `␣ w v` · `␣ w s` | Split side by side · above and below; `␣ w q` closes, `␣ w m` maximises |
 
 ## Languages
@@ -129,7 +132,10 @@ node --experimental-default-type=module --test tests/js/
 sh packaging/build-macos.sh                      # the double-click app and its .dmg in dist/ (with the venv active)
 ```
 
-Texts are marked for translation with `_()` (Python), `{% translate %}` (templates) and `tr()` / `trn()`
+Every view has its guide for the help overlay in `templates/help/<view>.html` (the same parts in each: what it is for,
+*How to*, *Works with*, *Good to know*; keys written as `{% key "command" %}`, so they follow the keymap): a new view
+or a new workflow gets its guide in the same change. Texts are marked for translation with `_()` (Python),
+`{% translate %}` (templates) and `tr()` / `trn()`
 (JavaScript); `manage.py i18n missing` lists what still needs a translation. A version tag (`git tag v0.2.0 && git
 push --tags`) builds and tests the macOS and Windows apps in GitHub Actions and attaches them to a draft release;
 bump `version` in `pyproject.toml` and `__version__` in `spaced_positions/__init__.py` first. The design and the

@@ -1,11 +1,18 @@
 /* The board (spec 05 · F, 06): chessground styled by the board tokens. The squares are a conic gradient of
    sq-light / sq-dark, so a theme change needs no image. The frame shows the board layer. */
 
-.board { display: grid; grid-template-rows: minmax(0, 1fr) auto auto; height: 100%; }
+/* The board has the same size in every mode and layer: room for the eval bar is kept on both sides whether the
+   engine runs or not (and in modes without one), and the strip below is always one line high. */
+.board {
+  --eval-space: calc(var(--evalbar-w) + var(--s-1));
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  height: 100%;
+}
 .board__area { container-type: size; display: grid; place-items: center; min-height: 0; padding: var(--s-2); }
 .board__frame {
   position: relative;
-  width: min(100cqw, 100cqh);
+  width: min(calc(100cqw - var(--eval-space) * 2), 100cqh);
   aspect-ratio: 1;
   border-radius: var(--radius);
   box-shadow: 0 0 0 var(--board-border) var(--line);
@@ -35,16 +42,17 @@
 }
 .board__palette .keybutton__icon { font-size: var(--fs-lg); }
 .board__status {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-half) var(--s-2);
-  min-height: var(--row-sm);
-  padding: var(--s-1) var(--s-2);
+  height: var(--row-sm);
+  padding: 0 var(--s-2);
+  overflow: hidden;
+  line-height: var(--row-sm);
+  white-space: nowrap;
+  text-overflow: ellipsis;
   border-top: var(--rule) solid var(--line);
   font-size: var(--fs-xs);
   color: var(--text-sub);
 }
-.board__fen { color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.board__fen { color: var(--text); }
 .board__problems { color: var(--warn); }
 .board__problems.is-error { color: var(--bad); font-weight: 600; }
 .board__entry { color: var(--text); font-weight: 700; }
@@ -94,7 +102,7 @@
 /* Coordinates outside the board (board-coords = outside): ranks on the left, files below, in the text colour */
 [data-coords="outside"] .board { --coord-gutter: calc(var(--fs-xs) * 1.8); }
 [data-coords="outside"] .board__frame {
-  width: min(calc(100cqw - var(--coord-gutter)), calc(100cqh - var(--coord-gutter)));
+  width: min(calc(100cqw - var(--coord-gutter) - var(--eval-space) * 2), calc(100cqh - var(--coord-gutter)));
   margin: 0 0 var(--coord-gutter) var(--coord-gutter);
 }
 [data-coords="outside"] .board .cg-wrap coords.ranks { left: calc(-1 * var(--coord-gutter)); right: auto; width: var(--coord-gutter); }

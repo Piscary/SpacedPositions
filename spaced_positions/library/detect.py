@@ -664,10 +664,10 @@ def store(position, findings: list[Finding]) -> dict:
             l.tag.field_id == tag.field_id and l.origin != PositionTag.Origin.SUGGESTED for l in links.values())
         origin = PositionTag.Origin.AUTO if f.apply and not taken else PositionTag.Origin.SUGGESTED
         links[tag.pk] = PositionTag.objects.create(position=position, tag=tag, origin=origin, detector=DETECTOR, evidence=f.evidence[:200])
-        (added if origin == PositionTag.Origin.AUTO else suggested).append(tag.name)
+        (added if origin == PositionTag.Origin.AUTO else suggested).append(tag.label)
     found = {tags[f.tag].pk for f in findings if f.tag in tags}
     withdrawn = position.tag_links.filter(detector=DETECTOR).exclude(origin=PositionTag.Origin.MANUAL).exclude(tag_id__in=found)
-    gone = list(withdrawn.values_list("tag__name", flat=True))
+    gone = [link.tag.label for link in withdrawn.select_related("tag")]
     withdrawn.delete()
     refresh_difficulty(position)
     return {"added": added, "suggested": suggested, "withdrawn": gone}

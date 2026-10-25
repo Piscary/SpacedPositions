@@ -8,6 +8,7 @@ from django.db.models.functions import Coalesce
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy
 from django.views.decorators.http import require_GET, require_POST
 
 from spaced_positions.analysis.models import Node
@@ -30,6 +31,35 @@ KEYS = {
     "sources": ["kind", "sort"],
     "tags": ["field", "sort"],
 }
+# What each key means, shown next to it in the completion (spec 11 §3)
+KEY_NOTES = {
+    "tag": gettext_lazy("a tag of any field"), "diff": gettext_lazy("difficulty 1–5: diff:3, diff:>=3, diff:2..4"),
+    "side": gettext_lazy("who is to move: w or b"), "src": gettext_lazy("a source: its name, or words of it"),
+    "page": gettext_lazy("page in the source"), "ref": gettext_lazy("diagram number in the source"),
+    "has": gettext_lazy("has a solution, an analysis, a puzzle …"), "no": gettext_lazy("has no solution, analysis, puzzle …"),
+    "is": gettext_lazy("is a diagram, flagged, a draft, in the trash"), "material": gettext_lazy("material: material:Q+R-R"),
+    "pieces": gettext_lazy("number of pieces: pieces:<=7"), "fen": gettext_lazy("part of the position's FEN"),
+    "created": gettext_lazy("added: created:today, created:<7d, created:2026-10"), "updated": gettext_lazy("changed: updated:<7d"),
+    "game": gettext_lazy("from a game: game:yes"), "in": gettext_lazy("in a saved query: in:q:name"),
+    "sort": gettext_lazy("order: sort:diagram, sort:-difficulty"), "white": gettext_lazy("the white player"),
+    "black": gettext_lazy("the black player"), "player": gettext_lazy("either player"), "result": gettext_lazy("1-0, 0-1 or draw"),
+    "eco": gettext_lazy("opening code: eco:B90"), "event": gettext_lazy("words of the event"), "year": gettext_lazy("year: year:>=1990"),
+    "elo": gettext_lazy("either player's Elo: elo:>2500"), "due": gettext_lazy("due for review: due:today"),
+    "state": gettext_lazy("card stage: new, learning, young, mature"), "lapses": gettext_lazy("times forgotten: lapses:>=2"),
+    "success": gettext_lazy("success rate: success:<60%"), "last": gettext_lazy("last trained: last:>30d"),
+    "attempts": gettext_lazy("times trained: attempts:0"), "role": gettext_lazy("me, student, model, opponent"),
+    "kind": gettext_lazy("book, website, own analysis …"), "field": gettext_lazy("a tag field: field:motif"),
+}
+VALUE_NOTES = {
+    "solution": gettext_lazy("a puzzle in training"), "analysis": gettext_lazy("moves analysed"), "puzzle": gettext_lazy("a puzzle, also a draft"),
+    "comment": gettext_lazy("a comment in its analysis"), "source": gettext_lazy("a source"), "tags": gettext_lazy("any tag"),
+    "game": gettext_lazy("from a game"), "positions": gettext_lazy("positions taken from it"), "diagram": gettext_lazy("may be illegal, not played"),
+    "flagged": gettext_lazy("marked as broken in training"), "draft": gettext_lazy("a puzzle not yet in training"),
+    "trash": gettext_lazy("in the trash"), "unlinked": gettext_lazy("a name without a player"),
+}
+
+# Keys that compare numbers or dates (`diff:>=3`, `created:<7d`); the others name things
+NUMERIC = {"diff", "page", "ref", "pieces", "year", "elo", "lapses", "success", "attempts", "created", "updated", "due", "last"}
 VALUES = {
     "has": ["solution", "analysis", "puzzle", "comment", "source", "tags", "game", "positions"],
     "no": ["solution", "analysis", "puzzle", "comment", "source", "tags", "game"],
@@ -38,6 +68,7 @@ VALUES = {
     "state": ["new", "learning", "young", "mature", "relearning"],
     "due": ["today"],
     "result": ["1-0", "0-1", "draw"],
+    "diff": ["1", "2", "3", "4", "5"],
     "role": ["me", "student", "model", "opponent"],
     "kind": [k for k, _ in Source.Kind.choices],
 }
@@ -211,9 +242,9 @@ def _tag_items(prefix: str, field_key: str | None, limit=12):
     for _, tag in sorted(ranked, key=lambda x: x[0])[:limit]:
         path, parent = [], tag.parent
         while parent is not None and len(path) < 3:
-            path.insert(0, parent.name)
+            path.insert(0, parent.label)
             parent = parent.parent
-        out.append({"value": tag.key, "label": " › ".join(path + [tag.name]), "note": tag.field.name})
+        out.append({"value": tag.key, "label": " › ".join(path + [tag.label]), "note": tag.field.label})
     return out
 
 
@@ -230,15 +261,26 @@ def complete(request):
     collection = _collection(request)
     at = int(request.GET.get("at", len(text)) or 0)
     start, end, word = _word_at(text, max(0, min(at, len(text))))
-    neg = word.startswith("-")
+    neg = word[:1] in "-!" and len(word) > 0
     body = word[1:] if neg else word
     items = []
     if body.startswith("#"):
         items = [{**i, "value": f"#{i['value']}"} for i in _tag_items(body[1:], None)]
-    elif ":" in body:
+    elif ":" in body or "!=" in body or "<>" in body:
+        if ":" not in body:  # key!=value
+            body = body.replace("!=", ":!=", 1).replace("<>", ":<>", 1)
         key, value = body.split(":", 1)
         key = key.lower()
-        last = value.split(",")[-1].lstrip("><=")
+        for form in q.NOT_FORMS:  # key:!=value, key:<>value, key:!value: completed as -key:value
+            if value.startswith(form):
+                neg, value = not neg, value[len(form):]
+                break
+        last = value.split(",")[-1]
+        if key in NUMERIC:
+            last = last.lstrip("><=")  # diff:>=3: the comparison stays
+        else:
+            value = value.lstrip("><=")  # no comparisons on names
+            last = last.lstrip("><=")
         head = value[: len(value) - len(last)]
         fields = {f.key for f in TagField.objects.all()}
         if key in fields or key == "tag":
@@ -256,12 +298,17 @@ def complete(request):
             items = [{"value": f"in:q:{s.key}", "label": s.name, "note": s.query} for s in SavedQuery.objects.all()[:12]]
         elif key in VALUES or key == "sort":
             values = [v for name in q.SORTS[collection] for v in (name, f"-{name}")] if key == "sort" else VALUES[key]
-            items = [{"value": f"{key}:{head}{v}", "label": v, "note": "groups" if key == "sort" and v.lstrip("-") in q.GROUPS[collection] else ""}
+            items = [{"value": f"{key}:{head}{v}", "label": v,
+                      "note": gettext("in groups") if key == "sort" and v.lstrip("-") in q.GROUPS[collection] else str(VALUE_NOTES.get(v, ""))}
                      for v in values if v.startswith(last)]
     else:
-        fields = [(f.key, f.name) for f in TagField.objects.all()] if collection in ("positions", "games", "puzzles") else []
-        keys = [(f"{k}:", n) for k, n in fields] + [(f"{k}:", "") for k in KEYS[collection]]
+        fields = [(f.key, f.label) for f in TagField.objects.all()] if collection in ("positions", "games", "puzzles") else []
+        keys = [(f"{k}:", n) for k, n in fields] + [(f"{k}:", str(KEY_NOTES.get(k, ""))) for k in KEYS[collection]]
         items = [{"value": k, "label": k, "note": n} for k, n in keys if k.startswith(body.lower())][:14]
+        if not body and not neg:  # an empty word: the grammar first
+            items = [{"value": "-", "label": "-", "note": gettext("not: -is:diagram excludes diagrams")},
+                     {"value": "or", "label": "or", "note": gettext("either: motif:fork or motif:pin")},
+                     {"value": "(", "label": "( )", "note": gettext("a group: -(motif:fork or motif:pin)")}] + items
         if body and collection in ("positions", "games", "puzzles"):
             items += [{**i, "value": f"#{i['value']}"} for i in _tag_items(body, None, 6)]
     if neg:
@@ -284,9 +331,10 @@ def facets(request):
     groups = []
     for f in TagField.objects.filter(on_positions=True).prefetch_related("tags"):
         tags = sorted((t for t in f.tags.all() if tag_counts.get(t.id)), key=lambda t: -tag_counts[t.id])[:12]
+        tags += [t for t in f.tags.all() if f"-{f.key}:{t.key}" in words and t not in tags]  # excluded: shown, to bring back
         if tags:
             groups.append({"label": f.label, "key": f.key, "items": [
-                {"term": f"{f.key}:{t.key}", "label": t.label, "count": tag_counts[t.id], "on": f"{f.key}:{t.key}" in words}
+                {"term": f"{f.key}:{t.key}", "label": t.label, "count": tag_counts.get(t.id, 0), "on": f"{f.key}:{t.key}" in words}
                 for t in tags
             ]})
     diffs = dict(result.queryset.order_by().values_list("difficulty").annotate(n=Count("id")))
@@ -307,7 +355,50 @@ def facets(request):
     n = result.queryset.count() if trash in words else q.run(f"{text} {trash}", "positions").queryset.count()
     status.append({"term": trash, "label": gettext("Trash"), "count": n, "on": trash in words})
     groups.append({"label": gettext("Status"), "key": "status", "items": status})
-    return render(request, "library/facets.html", {"groups": [g for g in groups if g["items"]], "total": result.queryset.count()})
+    for item in (i for g in groups for i in g["items"]):
+        item["off"] = f"-{item['term']}" in words  # excluded: ↵ takes the exclusion out again
+    return render(request, "library/facets.html", {
+        "groups": [g for g in groups if g["items"]], "total": result.queryset.count(), "active": active_terms(text),
+    })
+
+
+def active_terms(text: str) -> list[dict]:
+    """What the query asks for, one row per term or group at its top level: each can be taken out on its own."""
+    parsed = q.parse(text)
+    if not text.strip():
+        return []
+    if len(parsed.root.alternatives) != 1:  # `a or b` at the top: one whole
+        return [{"start": 0, "end": len(text), "text": text.strip(), "note": gettext("either side of “or”")}]
+    fields = {f.key: f for f in TagField.objects.all()}
+    out = []
+    for item in parsed.root.alternatives[0]:
+        piece = text[item.start:item.end]
+        if isinstance(item, q.Group):
+            note = gettext("a group in brackets")
+        else:
+            note = describe_term(item, fields)
+        if item.neg:
+            note = gettext("not: {what}").format(what=note)
+        out.append({"start": item.start, "end": item.end, "text": piece, "note": note})
+    return out
+
+
+def describe_term(term, fields) -> str:
+    """A term in words, for the filter pane: `motif:pin` → “Motif: Pin”, `no:solution` → “no: a puzzle in training”."""
+    value = term.values[0] if term.values else ""
+    if term.key == "":
+        return gettext("words: {text}").format(text=" ".join(term.values))
+    if term.key in ("#", "tag") or term.key in fields:
+        tag = Tag.objects.filter(key=value).select_related("field").first()
+        name = tag.label if tag else value
+        field_label = fields[term.key].label if term.key in fields else gettext("Tag")
+        return f"{field_label}: {name}"
+    if term.key in ("has", "no", "is") and value in VALUE_NOTES:
+        return f"{term.key}: {VALUE_NOTES[value]}"
+    if term.key == "sort":
+        return gettext("order: {by}").format(by=value)
+    note = KEY_NOTES.get(term.key)
+    return f"{note.split(':')[0]}: {term.op}{', '.join(term.values)}" if note else f"{term.key}: {term.op}{', '.join(term.values)}"
 
 
 def source_term(name: str) -> str:

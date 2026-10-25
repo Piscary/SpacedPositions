@@ -17,9 +17,14 @@ when = "pane.search"
 reason = "this view has no search yet"
 
 ["help.context"]
-title = "Keys of this context"
+title = "Help: this pane's guide and keys"
 group = "Global"
 aliases = ["keys"]
+
+["help.search"]
+title = "How to search: the query language"
+group = "Global"
+aliases = ["help-search", "query-help"]
 
 ["help.all"]
 title = "All keys of every context"

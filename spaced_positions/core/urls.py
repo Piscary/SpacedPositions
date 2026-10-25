@@ -14,6 +14,7 @@ urlpatterns = [
     path("v/<str:view>/", views.view_fragment, name="view"),
     path("state/<str:mode>/", views.save_state, name="save_state"),
     path("layouts/", views.named_layouts, name="layouts"),
+    path("help/<str:topic>/", views.help_page, name="help"),
     path("cmd/<str:cid>/", views.run_command, name="command"),
     path("chess/fen/", chess_views.fen_check, name="fen_check"),
     path("chess/paste/", chess_views.paste, name="paste"),

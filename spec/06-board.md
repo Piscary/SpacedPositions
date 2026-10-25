@@ -127,6 +127,12 @@ square; `board-coords = off` hides them, `outside` puts the ranks left of the bo
 it in the text colour (the board shrinks by that margin). Square highlights from
 the square tool are chessground custom square classes (under the pieces), not SVG shapes.
 
+**A steady size.** A board pane never changes the board's size by itself: room for the eval bar is kept on both
+sides in every mode and layer, shown or not (`--eval-space`), so turning the engine on, stepping through moves while
+it thinks or switching modes doesn't move the squares; the strip below the board is always one line (the whole text
+on hover; in Setup the problems come first, so they are never cut off). Only the pane's own size, the Setup palette
+and outside coordinates change it.
+
 ## 9 · Library choice
 
 | Option | Pros | Cons |

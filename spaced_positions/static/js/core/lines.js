@@ -182,7 +182,9 @@ on("workspace", ({ mode, el }) => {
 })
 
 // Browsing a list moves the boards of its link group (spec 03 §4: Library browsing).
-on("cursor", ({ group, fen, title }) => {
+on("cursor", ({ group, fen, title, position }) => {
   if (!fen) return
-  load(`${ctx.mode}:${group}`, { start: fen, title }, { undo: null })
+  const key = `${ctx.mode}:${group}`
+  if (position && window.SPOS?.analysis?.shownIn(key)) return // an analysis shows this group: it opens the row's position itself
+  load(key, { start: fen, title }, { undo: null })
 })

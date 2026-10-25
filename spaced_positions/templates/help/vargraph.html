@@ -1,0 +1,8 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "The move tree as a picture: each dot a move, each branch a variation. Good for finding your way in a big analysis." %}{% endblock %}
+{% block how %}
+  {% key "analysis.sibling" "next" as sibling %}{% key "analysis.forward" as forward %}{% key "analysis.back" as back %}
+  <dt>{% translate "Move around" %}</dt><dd>{% blocktranslate trimmed %}Click a dot, or {{ back }} {{ forward }} along the line and {{ sibling }} to the next variation.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% translate "The move tree and the board of the same link group: the cursor is the same everywhere." %}{% endblock %}
+{% block tips %}{% key "analysis.fold" as fold %}<li>{% blocktranslate trimmed %}A wide picture means many variations: {{ fold }} in the move tree folds one away.{% endblocktranslate %}</li>{% endblock %}

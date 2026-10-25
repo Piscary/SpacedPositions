@@ -93,7 +93,7 @@ function moveTo(key, id) {
   showCursor(key)
 }
 
-function apply(key, data, { cursor = null } = {}) {
+function apply(key, data, { cursor = null, changed = false } = {}) {
   const old = trees.get(key)
   const t = build(data.tree)
   t.cursor = cursor ?? (old?.position.id === t.position.id ? survivor(old, t) : t.root)
@@ -102,6 +102,7 @@ function apply(key, data, { cursor = null } = {}) {
   t.html = data.html
   renderMoves(key)
   emit("analysis:tree", { key })
+  if (changed) emit("analysis:changed", { key, position: t.position.id }) // the Library's work lists follow
   if (data.journal) {
     const entry = data.journal
     pushUndo({ label: entry.label, undo: () => journal(entry.id, "undo"), redo: () => journal(entry.id, "redo") })
@@ -118,7 +119,7 @@ function survivor(old, t) {
 async function journal(id, action) {
   const { data } = await post(`/journal/${id}/${action}/`, {})
   if (!data.ok) return status(data.message, { kind: "error" })
-  for (const [key, t] of trees) if (t.position.id === data.tree.position.id) apply(key, { tree: data.tree, html: data.html })
+  for (const [key, t] of trees) if (t.position.id === data.tree.position.id) apply(key, { tree: data.tree, html: data.html }, { changed: true })
 }
 
 /** Open a position for analysis in a link group (switches to Analyse). */
@@ -169,7 +170,7 @@ async function playMove(key, move) {
     status(data.message, { kind: "error" })
     return showCursor(key)
   }
-  apply(key, data, { cursor: data.node })
+  apply(key, data, { cursor: data.node, changed: true })
 }
 
 /** The main line from the start (the eval graph, `:evaluate`). */
@@ -190,7 +191,7 @@ export async function saveEvals(key, evals) {
   const t = trees.get(key)
   const { data } = await post(`/analysis/${t.position.id}/evals/`, { evals })
   if (!data.ok) return status(data.message, { kind: "error" }) || false
-  apply(key, data)
+  apply(key, data, { changed: true })
   status(data.message, { kind: "good", timeout: 3000 })
 }
 
@@ -218,7 +219,7 @@ async function change(key, action, body, { cursor } = {}) {
     status(data.message, { kind: "error" })
     return data
   }
-  apply(key, data, { cursor: cursor ?? data.node ?? t.cursor })
+  apply(key, data, { cursor: cursor ?? data.node ?? t.cursor, changed: true })
   if (data.message) status(data.message, { kind: "good", timeout: 4000 })
   return { ...data, code }
 }
@@ -494,7 +495,7 @@ handle("analysis.moments", withTree(async (key, t) => {
   status(tr("Looking for the key moments…"), { timeout: 0 })
   const { data } = await post(`/analysis/${t.position.id}/moments/`, {})
   if (!data.ok) return status(data.message, { kind: "error" }) || false
-  apply(key, data)
+  apply(key, data, { changed: true })
   status(data.message, { kind: "good", timeout: 5000 })
 }))
 
@@ -543,12 +544,27 @@ handle("analysis.mainline", withTree((key, t) => {
   }
   return moveTo(key, last.id)
 }))
-handle("analysis.subject", withTree((key, t, [step]) => {
-  const list = t.list
-  if (!list) return false
-  const index = Math.max(0, Math.min(list.ids.length - 1, list.index + (step === "prev" ? -1 : 1)))
-  if (index === list.index) return status(step === "prev" ? tr("This is the first") : tr("This is the last"), { timeout: 1500 }) && false
-  return openPosition(list.ids[index], { key, list: { ...list, index } })
+handle("analysis.subject", withTree(async (key, t, [step]) => {
+  let list = t.list
+  if (!list) return status(tr("No list here: a in the Library analyses what a search found, n goes through it"), { timeout: 3000 }) || false
+  const back = step === "prev"
+  let index = list.index + (back ? -1 : 1)
+  if (list.q !== undefined) {
+    // a live work list: the query runs again, so what was done in the meantime is no longer in it
+    const params = new URLSearchParams({ q: list.q, c: list.c || "positions" })
+    const data = await fetch(`/lib/subject/?${params}`).then((r) => r.json()).catch(() => null)
+    if (!data) return false
+    if (!data.ids.length) return status(tr("Nothing left in this list: all done"), { kind: "good", timeout: 4000 }) || false
+    const here = data.ids.indexOf(t.position.id)
+    // still in the list: its neighbour; done and gone: the one that took its place
+    index = here >= 0 ? here + (back ? -1 : 1) : (back ? list.index - 1 : list.index)
+    list = { ...list, ids: data.ids }
+  }
+  if (index < 0 || index >= list.ids.length) {
+    return status(back ? tr("This is the first") : tr("This is the last"), { timeout: 1500 }) || false
+  }
+  await openPosition(list.ids[index], { key, list: { ...list, index } })
+  emit("analysis:subject", { key, position: list.ids[index] })
 }))
 
 const onMove = (fn) => withTree((key, t, args) => (t.cursor === t.root ? status(tr("Go to a move first"), { timeout: 2000 }) || false : fn(key, t, args)))
@@ -660,6 +676,7 @@ Object.assign((window.SPOS ||= {}), {
     hasList: () => Boolean(current()?.list),
     open: openPosition,
     openGame: (id, options = {}) => openPosition(id, options), // a game opens like a position (its tree, no puzzles)
+    shownIn: (key) => panesFor(key, "moves").length > 0 || panesFor(key, "inspector").length > 0,
     current,
     focusInspector,
     analyseNew,

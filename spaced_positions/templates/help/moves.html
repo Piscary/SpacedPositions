@@ -1,0 +1,18 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "The analysis of a position or game as a book-style move tree: the main line in bold, variations below it, with comments, symbols and marks. Puzzles are set up here too." %}{% endblock %}
+{% block how %}
+  {% key "analysis.back" as back %}{% key "analysis.forward" as forward %}{% key "analysis.sibling" "next" as sibling %}{% key "analysis.mainline" as mainline %}
+  {% key "analysis.comment" as comment %}{% key "analysis.nag" "1" as good %}{% key "analysis.annotate" as annotate %}{% key "analysis.mark" "good" as mark %}
+  {% key "analysis.promote" as promote %}{% key "analysis.delete" as delete %}{% key "analysis.puzzle" "start" as start %}{% key "analysis.puzzle" "end" as end %}
+  {% key "analysis.puzzle" "ready" as ready %}{% key "analysis.subject" "next" as next %}{% key "analysis.subject" "prev" as prev %}{% key "analysis.fold" as fold %}
+  <dt>{% translate "Add moves" %}</dt><dd>{% translate "Play them on the board. A move that differs from the one in the tree starts a variation." %}</dd>
+  <dt>{% translate "Move around" %}</dt><dd>{% blocktranslate trimmed %}{{ back }} back, {{ forward }} forward, {{ sibling }} to the next variation at this move, {{ mainline }} back to the main line. Or click a move.{% endblocktranslate %}</dd>
+  <dt>{% translate "Comment and annotate" %}</dt><dd>{% blocktranslate trimmed %}{{ comment }} comment on the move; {{ good }} … 7 symbols like ! and ?; {{ annotate }} all symbols; {{ mark }} marks the move as good.{% endblocktranslate %}</dd>
+  <dt>{% translate "Tidy up" %}</dt><dd>{% blocktranslate trimmed %}{{ promote }} makes a variation the main line, {{ delete }} deletes from the cursor on, {{ fold }} folds a variation away.{% endblocktranslate %}</dd>
+  <dt>{% translate "Make a puzzle" %}</dt><dd>{% blocktranslate trimmed %}Go to the move after which the puzzle starts, {{ start }}; at the last move of the solution {{ end }}; {{ ready }} puts it into training.{% endblocktranslate %}</dd>
+  <dt>{% translate "Next position" %}</dt><dd>{% blocktranslate trimmed %}Opened from a list (the Library, a training result), {{ next }} and {{ prev }} go through it. A list from a search stays live: what is done drops out.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% translate "The board, engine, inspector and graphs of the same link group. Next to the Library (same link group), the tree shows the row under the list's cursor." %}{% endblock %}
+{% block tips %}
+  <li>{% translate "Every change can be undone with u, also after a reload." %}</li>
+{% endblock %}

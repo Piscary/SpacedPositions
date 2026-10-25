@@ -117,3 +117,22 @@ def test_token_access(client):
     assert response.status_code == 302 and response["Location"] == "/home/?x=1"
     assert client.get("/home/").status_code == 200  # the cookie was set
     assert client.get("/static/css/app.css").status_code == 200
+
+
+def test_every_view_has_a_guide_with_bound_keys(client):
+    """`?` shows each pane's own guide (spec 04 · Help): one per view, and every key it names is bound."""
+    import re
+    from pathlib import Path
+
+    from django.conf import settings
+
+    from spaced_positions.core import layouts
+
+    folder = Path(settings.PACKAGE_DIR) / "templates" / "help"
+    for view in [*layouts.VIEWS, "search", "pane"]:
+        if view == "components":  # the style guide is for developers
+            continue
+        assert (folder / f"{view}.html").exists(), f"no guide for the view '{view}'"
+        html = client.get(f"/help/{view}/").content.decode()
+        assert 'class="guide' in html
+        assert not re.findall(r">:[\w.]+<", html), f"{view}: a key in the guide has no binding"

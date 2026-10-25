@@ -958,6 +958,25 @@
    ],
    "handler": "client"
   },
+  "library.clear": {
+   "title": "Clear the search",
+   "group": "Library",
+   "aliases": [
+    "clear"
+   ],
+   "when": "view.library || view.filters",
+   "reason": "in the Library or its filter pane",
+   "undoable": true,
+   "handler": "client"
+  },
+  "library.unfilter": {
+   "title": "Take the last term out of the search",
+   "group": "Library",
+   "when": "view.library || view.filters",
+   "reason": "in the Library or its filter pane",
+   "undoable": true,
+   "handler": "client"
+  },
   "library.exclude": {
    "title": "Exclude the facet (-term)",
    "group": "Library",
@@ -1528,10 +1547,19 @@
    "handler": "client"
   },
   "help.context": {
-   "title": "Keys of this context",
+   "title": "Help: this pane's guide and keys",
    "group": "Global",
    "aliases": [
     "keys"
+   ],
+   "handler": "client"
+  },
+  "help.search": {
+   "title": "How to search: the query language",
+   "group": "Global",
+   "aliases": [
+    "help-search",
+    "query-help"
    ],
    "handler": "client"
   },
@@ -2425,6 +2453,10 @@
    "space u v": {
     "command": "library.display",
     "args": []
+   },
+   "space o": {
+    "command": "analysis.open",
+    "args": []
    }
   },
   "pane": {
@@ -2640,6 +2672,10 @@
    },
    "enter": {
     "command": "engine.best",
+    "args": []
+   },
+   "+": {
+    "command": "engine.lines",
     "args": []
    }
   },
@@ -3338,9 +3374,41 @@
    "Y": {
     "command": "board.copypgn",
     "args": []
+   },
+   "O": {
+    "command": "analysis.newposition",
+    "args": []
+   },
+   "backspace": {
+    "command": "analysis.untag",
+    "args": []
+   },
+   "shift+backspace": {
+    "command": "library.untag",
+    "args": []
+   },
+   "D": {
+    "command": "library.detect",
+    "args": []
+   },
+   "+": {
+    "command": "engine.lines",
+    "args": []
+   },
+   "E": {
+    "command": "engine.evaluate",
+    "args": []
+   },
+   "g m": {
+    "command": "analysis.moments",
+    "args": []
    }
   },
   "view.library": {
+   "g ?": {
+    "command": "help.search",
+    "args": []
+   },
    "1": {
     "command": "library.collection",
     "args": [
@@ -3423,6 +3491,18 @@
    },
    "Z": {
     "command": "library.foldall",
+    "args": []
+   },
+   "C": {
+    "command": "library.clear",
+    "args": []
+   },
+   "backspace": {
+    "command": "library.unfilter",
+    "args": []
+   },
+   "D": {
+    "command": "library.detect",
     "args": []
    }
   },
@@ -3537,8 +3617,20 @@
    }
   },
   "view.filters": {
+   "g ?": {
+    "command": "help.search",
+    "args": []
+   },
    "-": {
     "command": "library.exclude",
+    "args": []
+   },
+   "C": {
+    "command": "library.clear",
+    "args": []
+   },
+   "backspace": {
+    "command": "library.unfilter",
     "args": []
    }
   },
@@ -3682,6 +3774,10 @@
    "x": {
     "command": "home.dismiss",
     "args": []
+   },
+   "I": {
+    "command": "pack.import",
+    "args": []
    }
   },
   "view.continue": {
@@ -3729,6 +3825,26 @@
    },
    "K": {
     "command": "settings.keymap",
+    "args": []
+   },
+   "y": {
+    "command": "theme.export",
+    "args": []
+   },
+   "S": {
+    "command": "theme.save",
+    "args": []
+   },
+   "E": {
+    "command": "settings.export",
+    "args": []
+   },
+   "B": {
+    "command": "app.backup",
+    "args": []
+   },
+   "O": {
+    "command": "app.folder",
     "args": []
    }
   },

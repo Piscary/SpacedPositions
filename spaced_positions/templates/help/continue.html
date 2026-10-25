@@ -1,0 +1,10 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "Where you left off: the open analysis, the next diagram of your book, recent work, and a box to paste a FEN or PGN into." %}{% endblock %}
+{% block how %}
+  {% key "home.analysis" as analysis %}{% key "home.collect" as collect %}{% key "pane.insert" as paste %}{% key "list.open" as open %}
+  <dt>{% translate "Carry on" %}</dt><dd>{% blocktranslate trimmed %}{{ analysis }} back to the analysis, {{ collect }} the next diagram.{% endblocktranslate %}</dd>
+  <dt>{% translate "Open something recent" %}</dt><dd>{% blocktranslate trimmed %}Move to it and {{ open }}.{% endblocktranslate %}</dd>
+  <dt>{% translate "Start from text" %}</dt><dd>{% blocktranslate trimmed %}{{ paste }} into the paste box, paste a FEN or a PGN.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% translate "Analyse and Collect." %}{% endblock %}
+{% block tips %}<li>{% translate "Pasting works anywhere, not only here." %}</li>{% endblock %}

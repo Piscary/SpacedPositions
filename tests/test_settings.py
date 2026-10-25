@@ -81,13 +81,13 @@ def test_theme_export_is_toml_that_imports(client):
 
 
 def test_map_unmap_and_reset(client):
-    result = run(client, "key.map", "space o train.storm 5")
+    result = run(client, "key.map", "space y train.storm 5")
     assert result["ok"], result
-    assert keymap.effective()["keymap"]["global"]["space o"] == {"command": "train.storm", "args": ["5"]}
-    assert result["undo"] == {"command": "key.reset", "args": ["space", "o"]}
-    assert result["effects"]["registry"]["keymap"]["global"]["space o"]["command"] == "train.storm"
+    assert keymap.effective()["keymap"]["global"]["space y"] == {"command": "train.storm", "args": ["5"]}
+    assert result["undo"] == {"command": "key.reset", "args": ["space", "y"]}
+    assert result["effects"]["registry"]["keymap"]["global"]["space y"]["command"] == "train.storm"
     run(client, result["undo"]["command"], *result["undo"]["args"])
-    assert "space o" not in keymap.effective()["keymap"]["global"]
+    assert "space y" not in keymap.effective()["keymap"]["global"]
     # removing a default binding, in another context
     seq = next(iter(keymap.effective()["keymap"]["view.library"]))
     unmapped = run(client, "key.unmap", f"@view.library {seq}")
@@ -109,7 +109,7 @@ def test_map_refuses_conflicts_and_unknown_keys(client):
 
 
 def test_keymap_rows_mark_the_users_bindings(client):
-    run(client, "key.map", "space o train.storm 5")
+    run(client, "key.map", "space y train.storm 5")
     html = client.get("/settings/keymap/").content.decode()
     assert 'data-command="train.storm"' in html and "is-mine" in html
 
@@ -121,16 +121,16 @@ def test_export_then_import_on_a_fresh_setup(client):
     run(client, "theme.set", "forest")
     run(client, "pref.set", "density=compact")
     run(client, "pref.set", "training.storm-pace=slow")
-    run(client, "key.map", "space o train.storm 5")
+    run(client, "key.map", "space y train.storm 5")
     text = client.get("/settings/export/").content.decode()
-    assert 'theme = "forest"' in text and "storm-pace" in text and '"space o" = "train.storm 5"' in text
+    assert 'theme = "forest"' in text and "storm-pace" in text and '"space y" = "train.storm 5"' in text
     Preferences.objects.all().delete()
     KeymapOverride.objects.all().delete()
     response = client.post("/settings/import/", json.dumps({"text": text}), content_type="application/json").json()
     assert response["ok"], response
     prefs = Preferences.current()
     assert prefs.theme == "forest" and prefs.tokens.get("density") == "compact" and prefs.settings["training.storm-pace"] == "slow"
-    assert KeymapOverride.objects.get(keys="space o").command == "train.storm"
+    assert KeymapOverride.objects.get(keys="space y").command == "train.storm"
 
 
 def test_import_skips_what_it_cannot_use(client):

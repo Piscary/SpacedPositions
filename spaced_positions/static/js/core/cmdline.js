@@ -94,6 +94,8 @@ function completions(type) {
     case "view":
       return Object.entries(window.SPOS.views).map(([k, v]) => ({ value: k, label: v.label }))
     case "token":
+      if ((parse().rest || "").includes("=")) return valuesOf(parse().rest.split("=")[0].trim())
+      // falls through: the names first
     case "tokenname":
       return [
         ...Object.entries(themes.schema).map(([k, v]) => ({ value: type === "token" ? `${k}=` : k, label: tr(v.description) })),
@@ -112,6 +114,35 @@ function completions(type) {
     default:
       return []
   }
+}
+
+/** The values a setting or token can take, for `:set name=`: the choices with their names, the current one marked,
+ *  so a value can be found by what it means ("ger" finds board.letters=de, German). Numbers show their range. */
+function valuesOf(name) {
+  const themes = window.SPOS.themes
+  const setting = (window.SPOS.settingsSchema || []).find((s) => s.name === name)
+  const token = themes.schema[name]
+  const current = setting ? window.SPOS.settings?.[name] : window.SPOS.tokens?.[name]
+  const row = (value, label, words = label) => ({
+    value: `${name}=${value}`, title: String(value), search: `${words} ${value}`,
+    label: `${label}${String(value) === String(current) || value === (current === true ? "on" : current === false ? "off" : null) ? ` · ${tr("now")}` : ""}`,
+  })
+  const onOff = () => [row("on", tr("on")), row("off", tr("off"))]
+  if (setting) {
+    if (setting.type === "enum") return setting.values.map((v) => row(v, setting.labels?.[v] || v, setting.words?.[v]))
+    if (setting.type === "bool") return onOff()
+    if (setting.type === "int") return [{ value: `${name}=`, title: `${setting.low}–${setting.high}`, label: tr("a number from {low} to {high} · now {value}", { low: setting.low, high: setting.high, value: current }), search: "" }]
+    return []
+  }
+  if (!token) return []
+  if (token.type === "enum") {
+    return token.values.map((v) => row(v, name === "piece-set" ? (themes.pieces?.[v]?.label || v) : v))
+  }
+  if (token.type === "bool") return onOff()
+  if (["px", "number", "ms"].includes(token.type)) {
+    return [{ value: `${name}=`, title: `${token.min}–${token.max}`, label: tr("a number from {low} to {high}", { low: token.min, high: token.max }), search: "" }]
+  }
+  return []
 }
 
 // Positions and tags come from the server (the rows follow the text as it is typed).
@@ -160,8 +191,9 @@ function refresh() {
     const arg = spec.args?.[0]
     hint.textContent = arg ? `${spec.title} · ${arg.name}${arg.optional ? ` (${tr("optional")})` : ""}` : spec.title
     const values = arg ? (arg.type === "enum" ? arg.values.map((v) => ({ value: v, label: v })) : completions(arg.type)) : []
+    const typedValue = (rest || "").includes("=") ? rest.slice(rest.indexOf("=") + 1) : null
     rows = values
-      .map((c) => ({ ...c, match: c.server ? { score: 0 } : fuzzy(rest, c.value) }))
+      .map((c) => ({ ...c, match: c.server ? { score: 0 } : fuzzy(rest, c.value) || (typedValue && c.search ? fuzzy(typedValue, c.search) : null) }))
       .filter((c) => c.match)
       .sort((a, b) => b.match.score - a.match.score)
       .slice(0, MAX_ROWS)
@@ -280,6 +312,8 @@ async function accept() {
     const closed = arg && ["enum", "theme", "view", "tokenname", "layout", "buffer", "pieceset", "position", "tag", "source"].includes(arg.type)
     const choice = rows[cursor]
     if (closed && choice && "value" in choice && !rows.some((r) => r.value === args[0])) args = [choice.value]
+    // `:set name=ger`: a value found by its meaning is the highlighted choice
+    if (arg?.type === "token" && choice?.search && !choice.value.endsWith("=") && !rows.some((r) => r.value === args[0])) args = [choice.value]
   }
   remember(input.value.trim())
   close()

@@ -1,0 +1,18 @@
+{% comment %}A pane's guide in the help overlay (`?`, tab 1). Every guide has the same parts, so people know where to look:
+   what the pane is for, how to do the usual things, what it works with, and what is good to know.{% endcomment %}
+<article class="guide">
+  <p class="guide__lead">{% block lead %}{{ view.summary }}{% endblock %}</p>
+  {% block body %}
+  <h3>{% translate "How to" %}</h3>
+  <dl class="guide__how">{% block how %}{% endblock %}</dl>
+  {% block extra %}{% endblock %}
+  <h3>{% translate "Works with" %}</h3>
+  <p>{% block with %}{% endblock %}</p>
+  <h3>{% translate "Good to know" %}</h3>
+  <ul>{% block tips %}{% endblock %}</ul>
+  {% endblock %}
+  {% keycap "space" as leader %}{% key "cmdline.open" as colon %}{% key "hint.open" as hints %}{% key "pane.focus.next" as next_pane %}{% key "undo" as undo %}{% key "help.context" as help %}
+  <p class="guide__everywhere">{% blocktranslate trimmed %}Everywhere: {{ leader }} shows what can follow · {{ colon }} runs any command by its name ·
+    {{ hints }} puts a letter on everything clickable · {{ next_pane }} goes to the next pane · {{ undo }} undoes · {{ help }} opens
+    this help, 1 2 3 switch between guide, keys and search.{% endblocktranslate %}</p>
+</article>

@@ -10,7 +10,7 @@ reference is `spec/08-keymap.md`.
 | `Esc` | Back to Normal | `layer.escape` |
 | `:` | Command line | `cmdline.open` |
 | `/` | Search in this view | `search.open` |
-| `?` | Keys of this context | `help.context` |
+| `?` | Help: this pane's guide and keys | `help.context` |
 | `F` | Hint labels: click anything by keyboard | `hint.open` |
 | `u` | Undo | `undo` |
 | `U` | Redo | `redo` |
@@ -65,6 +65,7 @@ reference is `spec/08-keymap.md`.
 | `␣` `u` `t` | Switch between the light and dark theme | `ui.themepair` |
 | `␣` `u` `p` | Piece set | `board.pieces` |
 | `␣` `u` `v` | Results as table · list · grid | `library.display` |
+| `␣` `o` | Analyse a position | `analysis.open` |
 
 ## pane
 
@@ -140,6 +141,7 @@ reference is `spec/08-keymap.md`.
 |---|---|---|
 | `e` | Engine on / off | `engine.toggle` |
 | `↵` | Play the engine's best move | `engine.best` |
+| `+` | Engine lines | `engine.lines` |
 
 ## view.pgn
 
@@ -312,11 +314,19 @@ reference is `spec/08-keymap.md`.
 | `↵` | Play the engine's best move | `engine.best` |
 | `y` | Copy FEN | `board.copyfen` |
 | `Y` | Copy PGN | `board.copypgn` |
+| `O` | New position from this move | `analysis.newposition` |
+| `⌫` | Remove a tag from the move | `analysis.untag` |
+| `⇧⌫` | Remove a tag from the selection | `library.untag` |
+| `D` | Detect tags (python-chess) | `library.detect` |
+| `+` | Engine lines | `engine.lines` |
+| `E` | Evaluate the main line (the eval graph) | `engine.evaluate` |
+| `g` `m` | Find the key moments (engine, python-chess, annotations) | `analysis.moments` |
 
 ## view.library
 
 | Keys | Command | Id |
 |---|---|---|
+| `g` `?` | How to search: the query language | `help.search` |
 | `1` | Collection positions | `library.collection` |
 | `2` | Collection games | `library.collection` |
 | `3` | Collection puzzles | `library.collection` |
@@ -335,6 +345,9 @@ reference is `spec/08-keymap.md`.
 | `s` | Sort by a column (again: reverse) | `library.sort` |
 | `z` | Fold or open the group | `library.fold` |
 | `Z` | Fold or open all groups | `library.foldall` |
+| `C` | Clear the search | `library.clear` |
+| `⌫` | Take the last term out of the search | `library.unfilter` |
+| `D` | Detect tags (python-chess) | `library.detect` |
 
 ## mode.collect
 
@@ -370,7 +383,10 @@ reference is `spec/08-keymap.md`.
 
 | Keys | Command | Id |
 |---|---|---|
+| `g` `?` | How to search: the query language | `help.search` |
 | `-` | Exclude the facet (-term) | `library.exclude` |
+| `C` | Clear the search | `library.clear` |
+| `⌫` | Take the last term out of the search | `library.unfilter` |
 
 ## view.chart
 
@@ -406,6 +422,7 @@ reference is `spec/08-keymap.md`.
 | `5` | Streak on your weakest motifs | `train.weakest` |
 | `6` | The same session again | `train.again` |
 | `x` | Dismiss the announcement | `home.dismiss` |
+| `I` | Import a puzzle pack | `pack.import` |
 
 ## view.continue
 
@@ -425,6 +442,11 @@ reference is `spec/08-keymap.md`.
 | `↵` | Edit the setting (or choose the theme) | `settings.edit` |
 | `⌫` | Back to the default | `settings.reset` |
 | `K` | Edit the keymap | `settings.keymap` |
+| `y` | Copy the theme as TOML | `theme.export` |
+| `S` | Save the current colours as a theme | `theme.save` |
+| `E` | Export the settings (TOML) | `settings.export` |
+| `B` | Back up now | `app.backup` |
+| `O` | Open the data folder | `app.folder` |
 
 ## view.keymap
 

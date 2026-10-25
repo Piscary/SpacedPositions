@@ -36,6 +36,16 @@ def keycap(context, seq: str, on_accent=False):
 
 
 @register.simple_tag(takes_context=True)
+def key(context, cid: str, args: str = "", keys_in: str = ""):
+    """The keys of a command, for a guide (help/*.html): the default keys, replaced in the page by the user's own
+    (help.js fills `data-keys-for`), so a guide never names a key that was rebound. keys_in: as for {% cmd %}."""
+    arg_list = args.split() if args else None
+    keys = registry.primary_keys(cid, arg_list, keys_in or None) or []
+    return format_html('<span class="guide__keys" data-keys-for="{}" data-keys-args="{}" data-keys-in="{}">{}</span>', cid, args,
+                       keys_in, keycaps_html(keys, _is_mac(context)) if keys else ":" + cid)
+
+
+@register.simple_tag(takes_context=True)
 def cmd(context, cid: str, display="full", variant="secondary", label="", args="", size="md", icon="", extra="", keys_in=""):
     """A KeyButton. Label, keys and disabled reason come from the registry, so a button and its key can't differ.
     keys_in: show the key of that context (e.g. "state.result") when the command has several."""

@@ -82,7 +82,46 @@
   padding: var(--s-2) var(--s-3) var(--s-4);
   font-size: var(--fs-sm);
 }
-.help__top { display: flex; align-items: center; gap: var(--s-3); margin-bottom: var(--s-2); }
+.help__top {
+  position: sticky;
+  top: calc(var(--s-2) * -1);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-3);
+  margin: calc(var(--s-2) * -1) calc(var(--s-3) * -1) var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  border-bottom: var(--rule) solid var(--line);
+  background: var(--bg);
+  z-index: 1;
+}
+.help__top h2 { font-size: var(--fs-md); }
+.help__close { margin-left: auto; font-size: var(--fs-xs); }
+.help__body { max-width: 52rem; }
+
+/* A guide (templates/help/*.html): the same parts in every pane's help, so people know where to look */
+.guide { line-height: 1.5; }
+.guide__lead { font-size: var(--fs-md); color: var(--text); margin-bottom: var(--s-2); }
+.guide h3 {
+  margin: var(--s-3) 0 var(--s-1);
+  color: var(--text-sub);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.guide__how { display: grid; grid-template-columns: minmax(10rem, max-content) minmax(0, 1fr); gap: var(--s-1) var(--s-3); }
+.guide__how dt { font-weight: 600; }
+.guide__how dd { margin: 0; color: var(--text-sub); }
+.guide ul { margin: 0; padding-left: 1.2em; color: var(--text-sub); }
+.guide li + li { margin-top: var(--s-half); }
+.guide code { font-family: var(--font-mono); color: var(--text); background: var(--bg-alt); padding: 0 var(--s-half); border-radius: var(--radius); }
+.guide__keys { white-space: nowrap; }
+.guide__keys .keys { display: inline-flex; vertical-align: baseline; }
+.guide__examples { display: grid; grid-template-columns: minmax(0, 28ch) minmax(0, 1fr); gap: var(--s-half) var(--s-3); }
+.guide__examples code { justify-self: start; }
+.guide__examples span { color: var(--text-sub); }
+.guide__everywhere { margin-top: var(--s-4); padding-top: var(--s-2); border-top: var(--rule) solid var(--line); color: var(--text-sub); font-size: var(--fs-xs); }
+@media (max-width: 40rem) { .guide__how, .guide__examples { grid-template-columns: minmax(0, 1fr); } }
 .help__filter { flex: 1 1 auto; max-width: 24rem; }
 .help__group { margin-top: var(--s-3); }
 .help__group h3 { color: var(--text-sub); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--s-1); }

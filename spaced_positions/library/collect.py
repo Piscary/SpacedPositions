@@ -163,7 +163,7 @@ def save_preset(request):
 
 def presets() -> list[dict]:
     return [
-        {"name": p.name, "tags": [{"key": t.key, "name": t.name} for t in p.tags.all()],
-         "keys": ",".join(t.key for t in p.tags.all()), "names": "|".join(t.name for t in p.tags.all())}
+        {"name": p.name, "tags": [{"key": t.key, "name": t.label} for t in p.tags.all()],
+         "keys": ",".join(t.key for t in p.tags.all()), "names": "|".join(t.label for t in p.tags.all())}
         for p in TagPreset.objects.prefetch_related("tags")[:9]
     ]

@@ -1,0 +1,17 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "The workspace is made of panes. Each pane shows one view: a board, a move tree, the Library, a chart … You choose what goes where." %}{% endblock %}
+{% block how %}
+  {% key "pane.view" as view_key %}{% key "pane.split.vertical" as vsplit %}{% key "pane.split.horizontal" as hsplit %}{% key "pane.close" as close %}
+  {% key "pane.maximize" as maximize %}{% key "pane.group" as group %}{% key "pane.focus.next" as next_pane %}
+  <dt>{% translate "Choose what a pane shows" %}</dt><dd>{% blocktranslate trimmed %}{{ view_key }}, then the letter of a view.{% endblocktranslate %}</dd>
+  <dt>{% translate "Split a pane" %}</dt><dd>{% blocktranslate trimmed %}{{ vsplit }} side by side, {{ hsplit }} above and below; {{ close }} closes the pane again.{% endblocktranslate %}</dd>
+  <dt>{% translate "Make one pane big" %}</dt><dd>{% blocktranslate trimmed %}{{ maximize }}; the same keys bring the others back.{% endblocktranslate %}</dd>
+  <dt>{% translate "Move between panes" %}</dt><dd>{% blocktranslate trimmed %}{{ next_pane }}, or click into a pane. The focused pane has a coloured header.{% endblocktranslate %}</dd>
+  <dt>{% translate "Link panes" %}</dt><dd>{% blocktranslate trimmed %}Panes with the same letter in their header (A, B …) work together: a list, a board and a move tree of group A show the same thing. {{ group }} changes the letter.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% translate "Every pane works with the panes of its link group. A new pane gets the group of the pane it was split from." %}{% endblock %}
+{% block tips %}
+  {% key "undo" as undo %}{% key "layout.menu" as layouts %}
+  <li>{% blocktranslate trimmed %}Every change of the layout can be undone with {{ undo }}.{% endblocktranslate %}</li>
+  <li>{% blocktranslate trimmed %}Each mode remembers its layout. {{ layouts }} saves a layout under a name or goes back to the default.{% endblocktranslate %}</li>
+{% endblock %}

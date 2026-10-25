@@ -1,0 +1,81 @@
+{# The query language (spec 11 §3), for the Library's search bar, the filter pane and custom training sessions. #}
+<article class="guide">
+  {% key "search.open" as slash %}{% keycap "tab" as tab %}{% keycap "enter" as enter %}
+  <p class="guide__lead">{% blocktranslate trimmed %}The search finds positions, games, puzzles, players, sources and tags. Type a few words, or
+    say exactly what you want with <code>key:value</code> terms. {{ slash }} starts typing, {{ tab }} completes the word you are typing
+    and shows what fits there, {{ enter }} goes to the results.{% endblocktranslate %}</p>
+
+  <h3>{% translate "Words" %}</h3>
+  <div class="guide__examples">
+    <code>rook ending</code><span>{% translate "both words, in the title, the source, the tags or the comments" %}</span>
+    <code>"back rank"</code><span>{% translate "the words together, as written" %}</span>
+    <code>#pin</code><span>{% translate "positions with this tag" %}</span>
+  </div>
+
+  <h3>{% translate "Terms: key:value" %}</h3>
+  <div class="guide__examples">
+    <code>motif:fork</code><span>{% translate "a tag of the motifs, with all the tags under it (a knight fork is a fork)" %}</span>
+    <code>motif:=fork</code><span>{% translate "only this tag, not the ones under it" %}</span>
+    <code>motif:fork,pin</code><span>{% translate "either of the two (a comma means “or”)" %}</span>
+    <code>src:"Endgame Manual"</code><span>{% translate "one source; quotes keep a name with spaces together" %}</span>
+    <code>has:solution</code><span>{% translate "with a puzzle in training; also has:analysis, has:comment, has:puzzle, has:tags" %}</span>
+    <code>no:solution</code><span>{% translate "without a puzzle in training yet: the ones still to do" %}</span>
+    <code>is:diagram</code><span>{% translate "diagrams (positions that may be illegal and are not played); also is:draft, is:flagged, is:trash" %}</span>
+    <code>side:w</code><span>{% translate "White to move (b: Black)" %}</span>
+  </div>
+
+  <h3>{% translate "Numbers and dates" %}</h3>
+  <div class="guide__examples">
+    <code>diff:3</code><span>{% translate "difficulty 3 (of 1 to 5)" %}</span>
+    <code>diff:>=3</code><span>{% translate "3 or more; also >, <, <=" %}</span>
+    <code>diff:2..4</code><span>{% translate "from 2 to 4" %}</span>
+    <code>page:12</code><span>{% translate "page 12 of the source; ref: the diagram number" %}</span>
+    <code>created:&lt;7d</code><span>{% translate "added in the last 7 days; also created:today, created:2026-10" %}</span>
+    <code>pieces:&lt;=7</code><span>{% translate "at most 7 pieces on the board" %}</span>
+  </div>
+
+  <h3>{% translate "Not" %}</h3>
+  <div class="guide__examples">
+    <code>-is:diagram</code><span>{% translate "a minus in front leaves these out: everything that is not a diagram" %}</span>
+    <code>not is:diagram</code><span>{% translate "the same in words; !is:diagram and is:!=diagram work too" %}</span>
+    <code>-motif:fork</code><span>{% translate "no fork among the tags" %}</span>
+    <code>-(src:a or src:b)</code><span>{% translate "a whole group left out" %}</span>
+  </div>
+
+  <h3>{% translate "Or, and brackets" %}</h3>
+  <div class="guide__examples">
+    <code>motif:fork diff:>=3</code><span>{% translate "terms side by side must all be true" %}</span>
+    <code>motif:fork or motif:pin</code><span>{% translate "or: one of them is enough" %}</span>
+    <code>(src:a or src:b) diff:>=3</code><span>{% translate "brackets group terms" %}</span>
+  </div>
+
+  <h3>{% translate "Order" %}</h3>
+  <div class="guide__examples">
+    <code>sort:source</code><span>{% translate "in the order of the book: source, page, diagram number, in groups per source" %}</span>
+    <code>sort:-difficulty</code><span>{% translate "hardest first (a minus reverses)" %}</span>
+    <code>sort:created</code><span>{% translate "oldest first; sort:-created newest first" %}</span>
+  </div>
+
+  <h3>{% translate "Recipes" %}</h3>
+  {% key "library.analyse" as analyse %}{% key "analysis.subject" "next" as next %}{% key "library.train" as train %}
+  <dl class="guide__how">
+    <dt>{% translate "Work through a book" %}</dt>
+    <dd>{% blocktranslate trimmed %}<code>no:solution -is:diagram src:"…" sort:source</code>, then {{ analyse }}: Analyse opens the first one. Once a puzzle
+      is in training, it leaves the list and {{ next }} opens the next one still to do.{% endblocktranslate %}</dd>
+    <dt>{% translate "Train one motif" %}</dt>
+    <dd>{% blocktranslate trimmed %}<code>motif:fork has:solution</code>, then {{ train }}.{% endblocktranslate %}</dd>
+    <dt>{% translate "Find what is missing" %}</dt>
+    <dd>{% blocktranslate trimmed %}<code>no:tags</code> positions without tags, <code>no:source</code> without a source, <code>is:draft</code> puzzles not yet in training.{% endblocktranslate %}</dd>
+    <dt>{% translate "Keep a search" %}</dt>
+    <dd>{% blocktranslate trimmed %}<code>:save-query name</code> saves it; <code>in:q:name</code> uses it in another search and in custom training sessions.{% endblocktranslate %}</dd>
+  </dl>
+
+  <h3>{% translate "Good to know" %}</h3>
+  {% key "library.clear" as clear %}{% key "library.unfilter" as unfilter %}
+  <ul>
+    <li>{% translate "Capitals and accents don't matter, and tags are found in every language: motif:gabel finds forks too." %}</li>
+    <li>{% blocktranslate trimmed %}Something the search doesn't understand is underlined, with the reason below the bar.{% endblocktranslate %}</li>
+    <li>{% blocktranslate trimmed %}{{ clear }} clears the search, {{ unfilter }} takes the last term out; both can be undone with u.{% endblocktranslate %}</li>
+    <li>{% translate "The filter pane writes terms for you: click a facet, and see what the search says." %}</li>
+  </ul>
+</article>
