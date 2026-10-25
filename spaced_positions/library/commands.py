@@ -11,6 +11,7 @@ from django.db.models import Exists, OuterRef
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
+from django.views.decorators.http import require_POST
 
 from spaced_positions.core.server_commands import CommandError, command
 from spaced_positions.training.models import Attempt, Position
@@ -120,6 +121,46 @@ def untag(args, context, body):
     change = {"c": collection, "add": [], "remove": [[getattr(link, owner), link.tag_id, link.origin] for link in links]}
     n = len(change["remove"])
     return _relink_result(ngettext("Removed {tag} from {n} item", "Removed {tag} from {n} items", n).format(n=n, tag=t.label), change)
+
+
+@command("library.tagtoggle")
+def tag_toggle(args, context, body):
+    """The tag picker's ↵: a tag every target has (as a real tag) comes off, otherwise it goes on."""
+    if not args:
+        raise CommandError(_("which tag? e.g. :tag fork"))
+    t = _tag(args[0])
+    collection, ids = _targets(body)
+    if not ids:
+        raise CommandError(_("nothing selected"))
+    Link, owner = LINKS[collection]
+    have = Link.objects.filter(**{f"{owner}__in": ids, "tag": t}).exclude(origin="suggested").count()
+    return untag([t.key], context, body) if have == len(ids) else tag([t.key], context, body)
+
+
+@require_POST
+def tags_of(request):
+    """POST {c, ids, q}: the tags the targets have, for the tag picker: each with how many of them have it, and
+    whether it is only a suggestion of the detection."""
+    from django.http import JsonResponse
+
+    try:
+        body = json.loads(request.body or b"{}")
+        collection, ids = _targets(body)
+    except (ValueError, CommandError):
+        return JsonResponse({"n": 0, "tags": []})
+    Link, owner = LINKS[collection]
+    counts: dict[int, dict] = {}
+    for link in Link.objects.filter(**{f"{owner}__in": ids}).select_related("tag__field", "tag__parent"):
+        row = counts.setdefault(link.tag_id, {"tag": link.tag, "n": 0, "suggested": 0})
+        if link.origin == "suggested":
+            row["suggested"] += 1
+        else:
+            row["n"] += 1
+    rows = sorted(counts.values(), key=lambda r: (r["n"] == 0, r["tag"].field.order, r["tag"].order))
+    return JsonResponse({"n": len(ids), "tags": [
+        {"value": r["tag"].key, "label": r["tag"].label, "note": r["tag"].field.label, "n": r["n"], "suggested": r["suggested"]}
+        for r in rows
+    ]})
 
 
 @command("library.relink")

@@ -154,7 +154,7 @@ reason = "no position open: :analyse"
 undoable = true
 
 ["analysis.tags"]
-title = "Tag the move"
+title = "Tags of the move: add and remove"
 group = "Analyse"
 when = "analysis.onMove"
 reason = "go to a move first"
@@ -177,7 +177,7 @@ when = "analysis.loaded"
 reason = "no position or game open"
 
 ["analysis.positiontags"]
-title = "Tag the position"
+title = "Tags of the position: add and remove"
 group = "Analyse"
 when = "analysis.loaded"
 reason = "no position open: :analyse"

@@ -242,3 +242,93 @@ def test_train_feedback_analyses_beside_the_board(page, ruy):
     assert page.evaluate("window.SPOS.ctx.mode") == "train"
     keys(page, "Enter")  # the next puzzle (the same card again, or the result): the analysis goes
     page.wait_for_function("!document.querySelector('#ws-train [data-island=moves]')")
+
+
+# ── A Library pane in Analyse: previews, opening, pasting, the tag picker ───────────────────────────────────
+
+
+@pytest.fixture
+def book():
+    from spaced_positions.library.models import Source
+    from tests.factories import back_rank
+
+    source = Source.objects.create(title="Puzzle Book", short="Book")
+    made = []
+    for i in range(3):
+        p = tree.create_position(back_rank(i), ["d1d8"], title=f"Diagram {i + 1}")
+        p.source, p.source_ref = source, str(i + 1)
+        p.save()
+        made.append(p)
+    return made
+
+
+def library_below_the_board(page, position):
+    analyse(page, position)
+    focus(page, "board")
+    keys(page, "Space", "w", "s")
+    page.wait_for_selector(".menu")
+    keys(page, "l")
+    page.wait_for_selector("#ws-analyse [data-island=library] #query-info", state="attached")
+    page.fill("#ws-analyse [data-querybar]", "src:book sort:source")
+    page.wait_for_selector("#ws-analyse [data-library-results] [data-group-head]")  # the search's results (grouped by source)
+    page.wait_for_timeout(300)
+    page.click("#ws-analyse [data-view=library] .pane__title")
+
+
+def current_id(page):
+    return page.evaluate("window.SPOS.analysis.current()?.position.id")
+
+
+def test_browsing_a_list_previews_and_never_replaces(page, book):
+    library_below_the_board(page, book[0])
+    keys(page, "j")  # the second diagram: a preview, the analysis stays
+    page.wait_for_selector("#ws-analyse [data-island=board].is-preview")
+    page.wait_for_selector("#ws-analyse .moves__preview >> text=Diagram 2")
+    assert page.evaluate("window.SPOS.ctx.overlay") is None  # no question
+    assert current_id(page) == str(book[0].uuid)
+    # leaving the list: the board and the moves are the open analysis again
+    focus(page, "moves")
+    page.wait_for_selector("#ws-analyse [data-island=board]:not(.is-preview)")
+    page.wait_for_selector("#ws-analyse .moves__preview", state="detached")
+    assert page.evaluate("document.querySelector('#ws-analyse [data-island=board]').board.line.title") == "Diagram 1"
+    # ↵ opens the row under the cursor here, in Analyse
+    page.click("#ws-analyse [data-view=library] .pane__title")
+    keys(page, "Enter")
+    page.wait_for_function(f"window.SPOS.analysis.current()?.position.id === {str(book[1].uuid)!r}")
+    assert page.evaluate("window.SPOS.ctx.mode") == "analyse"
+    keys(page, "j", "a")  # a: the same for the next one
+    page.wait_for_function(f"window.SPOS.analysis.current()?.position.id === {str(book[2].uuid)!r}")
+
+
+def test_a_pasted_game_adds_its_moves(page, book):
+    from tests.factories import back_rank
+
+    analyse(page, book[0])
+    focus(page, "board")
+    fen = back_rank(0)
+    page.evaluate("""(text) => { const dt = new DataTransfer(); dt.setData('text/plain', text)
+      document.body.dispatchEvent(new ClipboardEvent('paste', {clipboardData: dt, bubbles: true})) }""",
+                  f'[FEN "{fen}"]\n[SetUp "1"]\n\n1. Rd7 *')
+    page.wait_for_selector("#status-message .keyhint")
+    keys(page, "b")  # onto the board: into this analysis, as a variation
+    page.wait_for_function("document.getElementById('status-message').textContent.includes('Added 1 pasted move')")
+    sans = page.eval_on_selector_all("#ws-analyse .mt-move .mt-san", "els => els.map(e => e.textContent)")
+    assert "Rd8#" in "".join(sans) and "Rd7" in "".join(sans)
+
+
+def test_the_tag_picker_adds_and_removes(page, book):
+    analyse(page, book[0])
+    keys(page, "l")  # 1.Rd8#
+    keys(page, "t")
+    page.wait_for_selector(".tagpicker:not([hidden])")
+    page.keyboard.type("pin")
+    page.wait_for_selector(".tagpicker .cmdline__row.is-cursor >> text=Pin")
+    keys(page, "Enter")
+    page.wait_for_selector(".tagpicker", state="hidden")
+    page.wait_for_selector("#ws-analyse .mt-tag >> text=Pin")
+    keys(page, "t")  # nothing typed: what the move has, ↵ takes it off
+    page.wait_for_selector(".tagpicker .cmdline__row.is-cursor >> text=●")
+    keys(page, "Enter")
+    page.wait_for_selector("#ws-analyse .mt-tag >> text=Pin", state="detached")
+    keys(page, "u")  # and back
+    page.wait_for_selector("#ws-analyse .mt-tag >> text=Pin")

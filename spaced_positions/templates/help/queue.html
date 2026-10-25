@@ -5,11 +5,11 @@
   {% key "train.weakest" "" "state.launcher" as weakest %}{% key "train.custom" "" "state.launcher" as custom %}
   {% key "train.hint" "" "state.solving" as hint %}{% key "train.giveup" "" "state.solving" as giveup %}{% key "train.quit" "" "state.solving" as quit %}
   {% key "train.next" "" "state.feedback" as next %}{% key "train.retry" "" "state.feedback" as retry %}{% key "train.analyse" "" "state.feedback" as analyse %}
-  {% key "train.flag" "" "state.feedback" as flag %}{% key "board.entry" as entry %}
+  {% key "train.flag" "" "state.feedback" as flag %}{% key "train.tag" "" "state.feedback" as tag %}{% key "board.entry" as entry %}
   <dt>{% translate "Start a session" %}</dt><dd>{% blocktranslate trimmed %}{{ review }} Review (what is due today), {{ storm }} a 3-minute Storm, {{ streak }} a Streak until the first miss, {{ weakest }} your weakest motifs.{% endblocktranslate %}</dd>
   <dt>{% translate "Your own session" %}</dt><dd>{% blocktranslate trimmed %}Choose the kind, the look of the board, the side and the lives with the letters shown next to each option, a search for the puzzles, then {{ custom }}.{% endblocktranslate %}</dd>
   <dt>{% translate "Solve" %}</dt><dd>{% blocktranslate trimmed %}Play the moves on the board, or type them with {{ entry }}. {{ hint }} shows a hint (the puzzle then counts as missed), {{ giveup }} the solution.{% endblocktranslate %}</dd>
-  <dt>{% translate "After each puzzle" %}</dt><dd>{% blocktranslate trimmed %}{{ next }} next puzzle, {{ retry }} once more (not scored), {{ analyse }} look at it beside the board, {{ flag }} mark it as broken.{% endblocktranslate %}</dd>
+  <dt>{% translate "After each puzzle" %}</dt><dd>{% blocktranslate trimmed %}{{ next }} next puzzle, {{ retry }} once more (not scored), {{ analyse }} look at it beside the board, {{ flag }} mark it as broken, {{ tag }} its tags.{% endblocktranslate %}</dd>
   <dt>{% translate "Stop" %}</dt><dd>{% blocktranslate trimmed %}{{ quit }} at any time: the result shows what you solved and missed.{% endblocktranslate %}</dd>
 {% endblock %}
 {% block with %}{% translate "The board of the same link group is the one you solve on. Puzzles come from Analyse (a puzzle put into training) and from imported packs; custom sessions take a Library search." %}{% endblock %}

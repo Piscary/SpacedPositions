@@ -4,9 +4,10 @@
   {% key "analysis.back" as back %}{% key "analysis.forward" as forward %}{% key "analysis.sibling" "next" as sibling %}{% key "analysis.mainline" as mainline %}
   {% key "analysis.comment" as comment %}{% key "analysis.nag" "1" as good %}{% key "analysis.annotate" as annotate %}{% key "analysis.mark" "good" as mark %}
   {% key "analysis.promote" as promote %}{% key "analysis.delete" as delete %}{% key "analysis.puzzle" "start" as start %}{% key "analysis.puzzle" "end" as end %}
-  {% key "analysis.puzzle" "ready" as ready %}{% key "analysis.subject" "next" as next %}{% key "analysis.subject" "prev" as prev %}{% key "analysis.fold" as fold %}
+  {% key "analysis.puzzle" "ready" as ready %}{% key "analysis.tags" as tags %}{% key "analysis.positiontags" as ptags %}{% key "analysis.subject" "next" as next %}{% key "analysis.subject" "prev" as prev %}{% key "analysis.fold" as fold %}
   <dt>{% translate "Add moves" %}</dt><dd>{% translate "Play them on the board. A move that differs from the one in the tree starts a variation." %}</dd>
   <dt>{% translate "Move around" %}</dt><dd>{% blocktranslate trimmed %}{{ back }} back, {{ forward }} forward, {{ sibling }} to the next variation at this move, {{ mainline }} back to the main line. Or click a move.{% endblocktranslate %}</dd>
+  <dt>{% translate "Tags" %}</dt><dd>{% blocktranslate trimmed %}{{ tags }} the move's tags, {{ ptags }} the position's: what it has is listed first, ↵ adds or takes one off, ⇥ does it and stays open for the next.{% endblocktranslate %}</dd>
   <dt>{% translate "Comment and annotate" %}</dt><dd>{% blocktranslate trimmed %}{{ comment }} comment on the move; {{ good }} … 7 symbols like ! and ?; {{ annotate }} all symbols; {{ mark }} marks the move as good.{% endblocktranslate %}</dd>
   <dt>{% translate "Tidy up" %}</dt><dd>{% blocktranslate trimmed %}{{ promote }} makes a variation the main line, {{ delete }} deletes from the cursor on, {{ fold }} folds a variation away.{% endblocktranslate %}</dd>
   <dt>{% translate "Make a puzzle" %}</dt><dd>{% blocktranslate trimmed %}Go to the move after which the puzzle starts, {{ start }}; at the last move of the solution {{ end }}; {{ ready }} puts it into training.{% endblocktranslate %}</dd>

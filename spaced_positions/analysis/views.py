@@ -79,12 +79,13 @@ def play(request, pid):
 
 @require_POST
 def line(request, pid):
-    """Add a line (from the engine): the moves that exist are reused."""
+    """Add a line (from the engine, or pasted moves): the moves that exist are reused."""
     position, data = _position(pid), _json(request)
     parent = _node(position, data.get("parent"))
-    ucis = [str(u) for u in data.get("ucis", [])][:60]
+    pasted = data.get("origin") == "paste"
+    ucis = [str(u) for u in data.get("ucis", [])][: 1000 if pasted else 60]
     try:
-        with tree.change(position, _("Add engine line")):
+        with tree.change(position, _("Add pasted moves") if pasted else _("Add engine line")):
             node = tree.add_line(parent, ucis)
     except tree.TreeError as e:
         return _fail(str(e))

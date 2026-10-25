@@ -8,6 +8,7 @@ urlpatterns = [
     path("lib/results/", views.results, name="results"),
     path("lib/complete/", views.complete, name="complete"),
     path("lib/facets/", views.facets, name="facets"),
+    path("lib/tags-of/", commands.tags_of, name="tags_of"),
     path("lib/cards/", views.cards, name="cards"),
     path("lib/subject/", views.subject, name="subject"),
     path("lib/fens/", views.fens, name="fens"),

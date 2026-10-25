@@ -24,6 +24,10 @@
 .board .board__frame { transition: box-shadow var(--dur); }
 .board.is-good .board__frame { box-shadow: 0 0 0 calc(var(--rule) * 4) var(--good); }
 .board.is-bad .board__frame { box-shadow: 0 0 0 calc(var(--rule) * 4) var(--bad); }
+/* A preview (the row under a list's cursor, 06 §8): dashed frame, slightly faded, no moves possible. */
+.board.is-preview .board__frame { outline: calc(var(--rule) * 2) dashed var(--info); outline-offset: calc(var(--rule) * 2); }
+.board.is-preview .cg-wrap { opacity: 0.85; }
+.board__preview { color: var(--info); font-weight: 700; }
 
 /* Training looks (spec 06 §8): blind hides the pieces; silhouette shows each piece as a disc of its colour. */
 .board.is-blind .cg-wrap piece { visibility: hidden; }

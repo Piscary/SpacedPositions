@@ -5,7 +5,7 @@
   {% key "analysis.tags" as tags %}{% key "analysis.positiontags" as ptags %}{% key "library.detect" as detect %}{% key "analysis.puzzle" "start" as puzzle %}
   <dt>{% translate "Go to a section" %}</dt><dd>{% blocktranslate trimmed %}{{ next }} next, {{ prev }} previous, {{ fold }} folds it.{% endblocktranslate %}</dd>
   <dt>{% translate "Edit a field" %}</dt><dd>{% blocktranslate trimmed %}{{ edit }} (or a click) puts you into the first field of the section; ⇥ to the next field, Esc back.{% endblocktranslate %}</dd>
-  <dt>{% translate "Tags" %}</dt><dd>{% blocktranslate trimmed %}{{ tags }} tags the move, {{ ptags }} the position. {{ detect }} detects the motifs and suggests tags; suggestions are kept apart until you accept them.{% endblocktranslate %}</dd>
+  <dt>{% translate "Tags" %}</dt><dd>{% blocktranslate trimmed %}{{ tags }} the move's tags, {{ ptags }} the position's: the picker lists what it has, ↵ adds or takes one off. {{ detect }} detects the motifs and suggests tags (marked ?); ↵ in the picker confirms a suggestion.{% endblocktranslate %}</dd>
   <dt>{% translate "Set up a puzzle" %}</dt><dd>{% blocktranslate trimmed %}{{ puzzle }} on the move after which it starts; the puzzle section then shows its solution, its cards and whether it is in training.{% endblocktranslate %}</dd>
 {% endblock %}
 {% block with %}{% translate "The move tree of the same link group: the inspector shows its cursor. Next to the Library, the row under the list's cursor." %}{% endblock %}

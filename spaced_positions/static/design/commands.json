@@ -257,7 +257,7 @@
    "handler": "client"
   },
   "analysis.tags": {
-   "title": "Tag the move",
+   "title": "Tags of the move: add and remove",
    "group": "Analyse",
    "when": "analysis.onMove",
    "reason": "go to a move first",
@@ -301,7 +301,7 @@
    "handler": "client"
   },
   "analysis.positiontags": {
-   "title": "Tag the position",
+   "title": "Tags of the position: add and remove",
    "group": "Analyse",
    "when": "analysis.loaded",
    "reason": "no position open: :analyse",
@@ -679,7 +679,7 @@
    "handler": "client"
   },
   "collect.tag": {
-   "title": "Tag the next positions",
+   "title": "Tags of the next positions: add and remove",
    "group": "Collect",
    "args": [
     {
@@ -796,7 +796,7 @@
    "handler": "client"
   },
   "library.tag": {
-   "title": "Tag the selection",
+   "title": "Tags of the selection: add and remove",
    "group": "Library",
    "aliases": [
     "tag"
@@ -826,6 +826,23 @@
     }
    ],
    "handler": "both",
+   "when": "library.hasTarget",
+   "reason": "select something in the Library, or open a position in Analyse",
+   "undoable": true
+  },
+  "library.tagtoggle": {
+   "title": "Switch a tag on or off (the tag picker)",
+   "group": "Library",
+   "aliases": [
+    "toggle-tag"
+   ],
+   "args": [
+    {
+     "name": "tag",
+     "type": "tag"
+    }
+   ],
+   "handler": "server",
    "when": "library.hasTarget",
    "reason": "select something in the Library, or open a position in Analyse",
    "undoable": true
@@ -1901,7 +1918,7 @@
    "handler": "client"
   },
   "train.tag": {
-   "title": "Tag the position",
+   "title": "Tags of the position: add and remove",
    "group": "Train",
    "handler": "client"
   },

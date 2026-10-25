@@ -430,7 +430,7 @@ def test_a_work_list_loses_what_is_done(page, unsolved):
 
 
 def test_a_moves_pane_follows_the_list(page, unsolved):
-    """A Moves pane in the list's link group shows the analysis of the row under the cursor."""
+    """A Moves pane in the list's link group previews the row under the cursor; ↵ opens it right there."""
     library(page)
     query(page, "src:book sort:source")
     page.click("#ws-library [data-view=board] .pane__title")
@@ -440,9 +440,12 @@ def test_a_moves_pane_follows_the_list(page, unsolved):
     page.wait_for_selector("#ws-library [data-island=moves]")
     page.click("#ws-library [data-view=library] .pane__title")
     keys(page, "j")
+    page.wait_for_selector("#ws-library .moves__preview >> text=Diagram 2")
     page.wait_for_selector("#ws-library [data-island=moves] [data-movetree] >> text=Rd8#")
-    title = page.evaluate("document.querySelector('#ws-library [data-view=moves] [data-pane-subject]')?.textContent")
-    assert title == "Diagram 2"
+    keys(page, "Enter")
+    page.wait_for_function(f"window.SPOS.analysis.current()?.position.id === {str(unsolved[1].uuid)!r}")
+    assert page.evaluate("window.SPOS.ctx.mode") == "library"
+    page.wait_for_selector("#ws-library .moves__preview", state="detached")
 
 
 def test_filters_show_the_search_and_come_out_again(page, positions):

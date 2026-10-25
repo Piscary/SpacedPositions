@@ -127,6 +127,16 @@ square; `board-coords = off` hides them, `outside` puts the ranks left of the bo
 it in the text colour (the board shrinks by that margin). Square highlights from
 the square tool are chessground custom square classes (under the pieces), not SVG shapes.
 
+**Preview.** A board whose line belongs to something (an analysis, a training puzzle, Collect's diagram) shows the
+row under a list's cursor as a preview: a dashed frame, *Preview* in the strip, no moves possible. The line itself is
+untouched (lines.js `setPreview`), and the preview ends when the list loses the focus.
+
+**Pasting onto an analysis.** A pasted game or position goes into the analysis where it fits: from the cursor's
+position, the start or any position in the tree with the same FEN, its moves are added (existing ones reused, the
+rest a variation; one undo step). The status line then offers `r` replace the analysis or `n` analyse it as a new
+position, without stopping the work (`suggest`, any other key goes on). A position that isn't in the tree offers the
+same two.
+
 **A steady size.** A board pane never changes the board's size by itself: room for the eval bar is kept on both
 sides in every mode and layer, shown or not (`--eval-space`), so turning the engine on, stepping through moves while
 it thinks or switching modes doesn't move the squares; the strip below the board is always one line (the whole text

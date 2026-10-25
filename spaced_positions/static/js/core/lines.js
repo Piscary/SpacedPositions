@@ -43,6 +43,33 @@ export function getLine(key) {
 
 export const fenAt = (line, ply = line.ply) => (ply ? line.moves[ply - 1].fen : line.start)
 
+// ── Previews ──────────────────────────────────────────────────────────────────────────────────────────────────
+// Browsing a list (the Library) shows the row under the cursor on the boards of its link group as a *preview* when
+// the line belongs to something you are working on (an analysis, a puzzle in training): the line itself stays as it
+// was. Leaving the list ends the preview and the boards show the line again; ↵ or a opens the row for real.
+
+const previews = new Map() // "mode:key" → a line shown instead of the real one
+
+/** What the boards of a key show: the preview while there is one, else the line. */
+export const shownLine = (key) => previews.get(key) || getLine(key)
+export const previewOf = (key) => previews.get(key) || null
+
+export function setPreview(key, { start, title = "" }) {
+  previews.set(key, { ...emptyLine(start), title, preview: true })
+  emit("line", { key })
+}
+
+export function clearPreview(key) {
+  if (!previews.delete(key)) return false
+  emit("line", { key })
+  emit("preview:end", { key })
+  return true
+}
+
+export function clearPreviews() {
+  for (const key of [...previews.keys()]) clearPreview(key)
+}
+
 /** Replace a line (loading a position, leaving setup, undo). `undo`: label of the undo step, or null. */
 export function setLine(key, next, { undo = null, persist = true } = {}) {
   const before = clone(getLine(key))
@@ -181,10 +208,21 @@ on("workspace", ({ mode, el }) => {
   }
 })
 
-// Browsing a list moves the boards of its link group (spec 03 §4: Library browsing).
-on("cursor", ({ group, fen, title, position }) => {
+// Browsing a list moves the boards of its link group (spec 03 §4: Library browsing). In the Library a free board
+// simply shows the row; anywhere else, or when an analysis owns the line, the boards get a preview, so the position
+// you are working on (an analysis, a puzzle, a diagram being entered) is never replaced by browsing.
+on("cursor", ({ group, fen, title }) => {
   if (!fen) return
   const key = `${ctx.mode}:${group}`
-  if (position && window.SPOS?.analysis?.shownIn(key)) return // an analysis shows this group: it opens the row's position itself
+  if (ctx.mode !== "library" || delegates.has(key)) return setPreview(key, { start: fen, title })
   load(key, { start: fen, title }, { undo: null })
 })
+
+// The preview lasts while the list has the focus: another pane, another mode, and the boards show their line again.
+on("focus", ({ pane } = {}) => {
+  for (const key of [...previews.keys()]) {
+    const [mode, group] = key.split(":")
+    if (mode !== ctx.mode || !pane?.el?.querySelector("[data-list]") || pane.group !== group) clearPreview(key)
+  }
+})
+on("mode", () => clearPreviews())

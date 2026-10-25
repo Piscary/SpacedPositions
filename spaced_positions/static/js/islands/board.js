@@ -93,7 +93,7 @@ class Board {
   get mode() { return this.pane.closest(".workspace")?.dataset.mode || ctx.mode }
   get node() { return nodeOf(this.pane) || { id: this.pane.dataset.pane } }
   get key() { return lines.keyOf(this.mode, this.node) }
-  get line() { return lines.getLine(this.key) }
+  get line() { return lines.shownLine(this.key) }
   get alive() { return this.el.isConnected }
   get focused() { return ctx.pane?.el === this.pane }
 
@@ -114,12 +114,13 @@ class Board {
       turnColor: turn,
       lastMove: last ? [last.slice(0, 2), last.slice(2, 4)] : [],
       check: Boolean(chess?.inCheck()),
-      movable: { free: false, color: chess && this.layer !== "readonly" && (this.layer !== "solving" || turn === this.solver) ? turn : undefined, dests },
+      movable: { free: false, color: chess && !line.preview && this.layer !== "readonly" && (this.layer !== "solving" || turn === this.solver) ? turn : undefined, dests },
       draggable: { deleteOnDropOff: false },
       drawable: { enabled: true, shapes: line.shapes[line.ply] || [] },
       highlight: { custom: new Map(Object.entries(line.squares?.[line.ply] || {}).map(([k, b]) => [k, `hl-${b}`])) },
     })
     this.chess = chess
+    this.el.classList.toggle("is-preview", Boolean(line.preview))
     this.renderStrip()
   }
 
@@ -436,6 +437,8 @@ class Board {
       for (const [id, on] of [["board.eraser", s.tool === "eraser"], ["board.hand", s.tool === "hand"], ["board.diagram", s.diagram]]) {
         this.palette?.querySelector(`[data-cmd='${id}']`)?.setAttribute("aria-pressed", String(on))
       }
+    } else if (line.preview) {
+      parts.push(span("board__preview", tr("Preview")), text(` · ${line.title || ""} · ${tr("↵ or a opens it · leave the list to go back")}`))
     } else if (this.layer === "entry") {
       const e = this.entry
       parts.push(text(tr("Type a move: ")), span("board__entry mono", `${e.text}▏`))
@@ -534,7 +537,7 @@ export function renderLineText(el) {
   const pane = el.closest("[data-pane]")
   if (!pane?.isConnected) return
   const key = lines.keyOf(pane.closest(".workspace").dataset.mode, nodeOf(pane) || { id: pane.dataset.pane })
-  const line = lines.getLine(key)
+  const line = lines.shownLine(key)
   el.querySelector("[data-line-fen]").textContent = lines.fenAt(line)
   el.querySelector("[data-line-pgn]").textContent = lines.pgnOf(line)
   const title = el.querySelector("[data-line-title]")

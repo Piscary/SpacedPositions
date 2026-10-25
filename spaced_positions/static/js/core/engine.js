@@ -278,7 +278,7 @@ function follow() {
   }
   if (!worker) return start()
   const key = engineKey()
-  if (key) analyse(key, lines.fenAt(lines.getLine(key)))
+  if (key) analyse(key, lines.fenAt(lines.shownLine(key)))
 }
 
 on("line", ({ key }) => { if (enabled && key === engineKey()) follow() })

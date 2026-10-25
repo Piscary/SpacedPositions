@@ -5,6 +5,7 @@
 import { handle } from "./commands.js"
 import { ctx, on, status } from "./context.js"
 import { offer } from "./confirm.js"
+import { openTagPicker } from "./tagpicker.js"
 import { openCmdline } from "./cmdline.js"
 import { focusPane, switchMode } from "./layout.js"
 import * as lines from "./lines.js"
@@ -125,7 +126,9 @@ async function saveBoard({ open = false, how = null } = {}) {
   }
   const { data } = await post("/lib/collect/save/", body)
   if (data.duplicate) {
-    return offer(tr("Duplicate of {id} {title}: m merge into it · s save anyway · g go there · Esc cancel", { id: data.duplicate.short, title: data.duplicate.title }), {
+    // ↵ merges: the usual answer, so rapid entry goes on with one more key
+    return offer(tr("Duplicate of {id} {title}: ↵ or m merge into it · s save anyway · g go there · Esc cancel", { id: data.duplicate.short, title: data.duplicate.title }), {
+      enter: () => saveBoard({ open, how: "merge" }),
       m: () => saveBoard({ open, how: "merge" }),
       s: () => saveBoard({ open, how: "new" }),
       g: () => window.SPOS.analysis.open(data.duplicate.id),
@@ -173,7 +176,20 @@ handle("collect.page", step("page"))
 handle("collect.diagram", step("ref"))
 
 handle("collect.tag", async ([key]) => {
-  if (!key) return openCmdline("collect.tag ")
+  if (!key) {
+    // the picker on the session's tags: ↵ adds one, or takes one the session has off again
+    return openTagPicker({
+      title: tr("Tags of the next positions"),
+      local: {
+        tags: () => session.tags.map((t) => ({ key: t.key, label: t.name })),
+        toggle: (item) => {
+          const had = session.tags.some((t) => t.key === item.value)
+          session.tags = had ? session.tags.filter((t) => t.key !== item.value) : [...session.tags, { key: item.value, name: item.label.split(" › ").pop() }]
+          save()
+        },
+      },
+    })
+  }
   const data = await fetch(`/lib/complete/?kind=tag&q=${encodeURIComponent(key)}`).then((r) => r.json()).catch(() => ({ items: [] }))
   const tag = data.items.find((i) => i.value === key) || data.items[0]
   if (!tag) return status(tr("No tag '{tag}'", { tag: key }), { kind: "error" }) || false

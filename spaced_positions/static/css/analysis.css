@@ -2,6 +2,19 @@
 
 /* ── Move tree ─────────────────────────────────────────────────────────────────────────────────────────────── */
 .movetree { padding: var(--s-1) var(--s-2) var(--s-4); font-family: var(--font-moves); line-height: 1.75; }
+/* A preview (the row under a list's cursor): a banner, the tree faded; nothing here is the open analysis. */
+.moves__preview {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: var(--s-half) var(--s-2);
+  border-bottom: var(--rule) dashed var(--info);
+  background: var(--bg-alt);
+  color: var(--info);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+[data-previewing] .movetree { opacity: 0.8; }
 .mt-move {
   display: inline-block;
   padding: 0 var(--s-half);

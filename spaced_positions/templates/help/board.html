@@ -9,12 +9,13 @@
   <dt>{% translate "Go through the moves" %}</dt><dd>{% blocktranslate trimmed %}{{ back }} back, {{ forward }} forward, {{ start }} to the start, {{ end }} to the end.{% endblocktranslate %}</dd>
   <dt>{% translate "Set up a position" %}</dt><dd>{% blocktranslate trimmed %}{{ setup }} opens the board editor: place pieces by their letter, set the side to move and castling. Problems show at once, most with a key that fixes them.{% endblocktranslate %}</dd>
   <dt>{% translate "Turn the board" %}</dt><dd>{{ flip }}</dd>
-  <dt>{% translate "Copy and paste" %}</dt><dd>{% blocktranslate trimmed %}{{ fen }} copies the position as FEN, {{ pgn }} the moves as PGN. Paste a FEN, a PGN or a lichess link anywhere with {{ paste }}.{% endblocktranslate %}</dd>
+  <dt>{% translate "Copy and paste" %}</dt><dd>{% blocktranslate trimmed %}{{ fen }} copies the position as FEN, {{ pgn }} the moves as PGN. Paste a FEN, a PGN or a lichess link anywhere with {{ paste }}. Pasted onto an analysis' board, the moves are added to it; replacing it is offered, never done by itself.{% endblocktranslate %}</dd>
 {% endblock %}
 {% block with %}{% translate "Every pane of the same link group: the move tree, the engine (its arrow and the eval bar), the graphs, the Library's cursor. A board in another group is on its own." %}{% endblock %}
 {% block tips %}
   {% key "board.squaretool" as squares %}
   <li>{% blocktranslate trimmed %}{{ squares }} turns on the square tool: right-click colours a square, for diagrams and lessons.{% endblocktranslate %}</li>
+  <li>{% translate "A dashed frame means a preview: the row under a list's cursor. Leave the list and the board shows your position again." %}</li>
   <li>{% translate "The board keeps its size when the eval bar comes and goes, and when you switch modes." %}</li>
   <li>{% translate "Settings → Board: piece set, coordinates, letters for typed moves, sounds." %}</li>
 {% endblock %}

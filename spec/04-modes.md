@@ -273,9 +273,17 @@ Find, filter, organise, start training from any search.
   last term out, both here and in the results, both undoable; the ✕ in the query bar clears too.
 - `]` / `[` jump from group to group (results sorted into groups, the filter pane's facet groups), like sections
   elsewhere.
-- Panes of the list's link group follow the cursor: the board shows the row; a Moves or Inspector pane in the same
-  group opens the row's analysis (debounced), so a Library with a Moves pane beside it is a place to work through a
-  list without leaving it.
+- Panes of the list's link group follow the cursor as a **preview**: in the Library a free board simply shows the
+  row; where the board belongs to something (an analysis, a puzzle, a diagram being entered; any mode but Library)
+  it shows the row with a dashed frame and the strip says *Preview*, and a Moves pane of the group shows the row's
+  tree under a *Preview* banner. Nothing is replaced and nothing asks: leaving the list (another pane, another mode)
+  shows the open position again. `↵` or `a` opens the row: right there when the mode shows an analysis of that group
+  (Analyse with its own Library pane, a Moves pane beside the Library), else in Analyse.
+- **Tags** (`t` on the results, `t` / `T` in Analyse and on Train's feedback, `t` in Collect's session): the tag
+  picker, at the bottom like the command line. Nothing typed, it lists what the target has (● all, ◐ some of a
+  selection, ? suggested by the detection); typing searches every tag. `↵` switches the tag under the cursor on or off
+  and closes, `⇥` does it and stays open, `↑ ↓` move, `Esc` closes; a click works like `⇥`. Every change is one undo
+  step. `:tag` and `:untag` still add and remove by name.
 - **Work lists**: `a` with nothing selected takes the search along to Analyse; `n` opens the next position that still
   matches, so with `no:solution … sort:source` each position drops out once its puzzle is in training (11 §3).
 - Bulk commands act on the selection, or on the cursor row if nothing is selected. A bulk bar appears as the pane

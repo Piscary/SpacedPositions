@@ -71,7 +71,7 @@ title = "Analyse this puzzle beside the board"
 group = "Train"
 
 ["train.tag"]
-title = "Tag the position"
+title = "Tags of the position: add and remove"
 group = "Train"
 
 ["train.edit"]

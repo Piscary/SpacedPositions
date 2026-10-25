@@ -192,8 +192,12 @@ the trash in Library), but never two things in the same view. Global keys (7) ar
   so it survives a reload. `:undolist` shows it.
 - After a mutation the status line shows what happened, with the undo key: `Moved 12 positions to trash · u undo`.
 - Because of undo, **confirmation dialogs are almost never needed**. They are kept for: emptying the trash,
-  permanently deleting, bulk operations over 100 items, and overwriting an analysis with a pasted PGN. A confirmation
-  is inline (in the status line: `Delete permanently? y / n`), not a modal.
+  permanently deleting, bulk operations over 100 items, and dropping moves when a corrected position makes them
+  illegal. A confirmation is inline (in the status line: `Delete permanently? y / n`), not a modal.
+- **Never interrupt the work** for something that can be done safely and undone: do the safe thing, say so, and
+  offer the alternatives as a *suggestion* in the status line (`Added 3 pasted moves · r replace instead · n as a
+  new position`): its keys act, any other key closes it and does what it always does. Browsing never changes what
+  you are working on: a list previews its rows on the boards of its group, opening is `↵` or `a`.
 
 ## 8 · Teaching keys
 

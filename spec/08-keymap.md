@@ -200,7 +200,7 @@ Mode-level: these work whether the board, the moves or the inspector pane has fo
 | `a` | Annotation menu: all move, position and evaluation symbols (`+−  ±  ⩲  =  ∞  ⩱  ∓  −+` …) |
 | `m` | Mark: `g` good · `d` dubious · `b` bad · `c` colour · `x` clear |
 | `c` / `C` | Comment on this move / on the position (root) |
-| `t` / `T` | Move tags / position tags |
+| `t` / `T` | Move tags / position tags: the tag picker (what it has first; `↵` on/off and close, `⇥` on/off and stay) |
 | `⇧↑ ⇧↓` | Move the variation up / down |
 | `P` | Promote to main line |
 | `d` | Delete from here (undoable) |
@@ -208,7 +208,7 @@ Mode-level: these work whether the board, the moves or the inspector pane has fo
 | `e` | Engine on / off (also in the Engine pane, in any mode but Train) |
 | `↵` | Play the engine's best move (also in the Engine pane) |
 | `y` / `Y` | Copy FEN / PGN |
-| `⌫` / `⇧⌫` | Remove a tag from the move / from the position |
+| `⌫` / `⇧⌫` | The tag picker for the move / the position (the same as `t` / `T`) |
 | `D` | Detect tags (python-chess) |
 | `O` | New position from this move |
 | `+` | Engine lines: 1 → 5 (also in the Engine pane) |

@@ -244,7 +244,7 @@ reference is `spec/08-keymap.md`.
 | `!` | Flag the puzzle as broken | `train.flag` |
 | `a` | Analyse this puzzle beside the board | `train.analyse` |
 | `A` | Analyse this puzzle in Analyse | `train.analysemode` |
-| `t` | Tag the position | `train.tag` |
+| `t` | Tags of the position: add and remove | `train.tag` |
 | `e` | Edit the puzzle in Analyse | `train.edit` |
 
 ## state.result
@@ -298,8 +298,8 @@ reference is `spec/08-keymap.md`.
 | `m` `x` | Mark the move clear | `analysis.mark` |
 | `c` | Comment on this move | `analysis.comment` |
 | `C` | Comment on the start position | `analysis.rootcomment` |
-| `t` | Tag the move | `analysis.tags` |
-| `T` | Tag the position | `analysis.positiontags` |
+| `t` | Tags of the move: add and remove | `analysis.tags` |
+| `T` | Tags of the position: add and remove | `analysis.positiontags` |
 | `⇧↑` | Move the variation up | `analysis.moveup` |
 | `⇧↓` | Move the variation down | `analysis.movedown` |
 | `P` | Make this the main line | `analysis.promote` |
@@ -333,7 +333,7 @@ reference is `spec/08-keymap.md`.
 | `4` | Collection players | `library.collection` |
 | `5` | Collection sources | `library.collection` |
 | `6` | Collection tags | `library.collection` |
-| `t` | Tag the selection | `library.tag` |
+| `t` | Tags of the selection: add and remove | `library.tag` |
 | `T` | Train these | `library.train` |
 | `d` | Move to the trash | `library.trash` |
 | `r` | Restore from the trash | `library.restore` |
@@ -366,7 +366,7 @@ reference is `spec/08-keymap.md`.
 | `-` | Page + / − down | `collect.page` |
 | `↑` | Diagram number + / − up | `collect.diagram` |
 | `↓` | Diagram number + / − down | `collect.diagram` |
-| `t` | Tag the next positions | `collect.tag` |
+| `t` | Tags of the next positions: add and remove | `collect.tag` |
 | `⌫` | Remove the last tag of the entry session | `collect.untag` |
 | `r` | Ready for training on / off | `collect.ready` |
 | `1` | Tag preset on / off 1 | `collect.preset` |

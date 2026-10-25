@@ -7,7 +7,7 @@
   <dt>{% translate "Choose the book" %}</dt><dd>{% blocktranslate trimmed %}{{ source }}: type a few letters of the source, or a new title.{% endblocktranslate %}</dd>
   <dt>{% translate "Enter a diagram" %}</dt><dd>{% blocktranslate trimmed %}{{ setup }} sets up the position (or paste a FEN), then {{ save }} saves it and gets ready for the next one; {{ saveopen }} saves and opens it in Analyse.{% endblocktranslate %}</dd>
   <dt>{% translate "Page and number" %}</dt><dd>{% blocktranslate trimmed %}{{ page_up }} next page (− back), {{ diagram_up }} next diagram number (↓ back).{% endblocktranslate %}</dd>
-  <dt>{% translate "Tag as you go" %}</dt><dd>{% blocktranslate trimmed %}{{ tag }} adds a tag to the next positions, {{ untag }} removes the last one; {{ preset }} … 9 switch saved sets of tags on and off.{% endblocktranslate %}</dd>
+  <dt>{% translate "Tag as you go" %}</dt><dd>{% blocktranslate trimmed %}{{ tag }} the tags of the next positions: ↵ adds one or takes one off, {{ untag }} removes the last one; {{ preset }} … 9 switch saved sets of tags on and off.{% endblocktranslate %}</dd>
   <dt>{% translate "Straight into training" %}</dt><dd>{% blocktranslate trimmed %}{{ ready }}: with the solution entered, the puzzle goes into training when you save.{% endblocktranslate %}</dd>
 {% endblock %}
 {% block with %}{% key "collect.duplicate" as duplicate %}{% blocktranslate trimmed %}The board of the same link group, where you set up the diagram, and the PGN pane for pasting. When a position is already in the library, {{ duplicate }} goes to it.{% endblocktranslate %}{% endblock %}

@@ -2,13 +2,14 @@
 // collections and three displays, bulk commands on the selection, and the filter pane that writes into the query.
 // The query string is the single source of truth; each library pane keeps {q, c, display} per link group.
 
-import { handle, pushUndo, serverRun } from "./commands.js"
+import { handle, pushUndo, run, serverRun } from "./commands.js"
 import { ctx, emit, on, setLayer, status } from "./context.js"
 import { offer } from "./confirm.js"
 import { focusPane, nodeOf, openBeside, switchMode } from "./layout.js"
 import { cursorIndex, resetList, targetRows } from "./lists.js"
 import { openCmdline } from "./cmdline.js"
 import { openMenu } from "./menu.js"
+import { openTagPicker } from "./tagpicker.js"
 import { locale, tr, trn } from "./i18n.js"
 
 const DISPLAYS = ["table", "list", "grid"]
@@ -257,24 +258,35 @@ on("analysis:changed", ({ position }) => {
   }, 300)
 })
 
-// Browsing the results opens the cursor's position or game in the analysis of the link group, when this mode shows
-// one (a Moves or Inspector pane in the same group): the move tree follows the list like the board does.
-const followTimers = new Map()
+// Browsing the results previews the cursor's position or game in the move trees of the link group (a Moves pane
+// beside the list shows its moves); nothing is opened until ↵ or a. Leaving the list ends the preview.
+const previewTimers = new Map()
 on("list:cursor", ({ list, row }) => {
   const el = list.closest("[data-island='library']")
   const id = row?.dataset.position || row?.dataset.game
   if (!el || !id || !list.matches("[data-library-results]")) return
-  const group = groupOf(el)
-  const key = `${ctx.mode}:${group}`
+  const key = `${ctx.mode}:${groupOf(el)}`
   if (!window.SPOS.analysis?.shownIn(key)) return
-  const st = stateOf(el)
-  clearTimeout(followTimers.get(key))
-  followTimers.set(key, setTimeout(() => {
-    const index = [...list.querySelectorAll("[data-row]")].indexOf(row)
-    window.SPOS.analysis.open(id, { key, show: false, node: Number(row.dataset.node) || null,
-                                    list: { ids: [], q: st.q, c: st.c, index: Math.max(0, index) } })
-  }, 120))
+  clearTimeout(previewTimers.get(key))
+  previewTimers.set(key, setTimeout(() => window.SPOS.analysis.preview(key, id, { title: row.dataset.title }), 120))
 })
+
+/** Open a result row for analysis: right here when this mode shows the analysis of the list's link group,
+ *  else in Analyse. A list from a search goes along live (n opens the next one still to do). */
+export function openRow(el, row, { list } = {}) {
+  const id = row.dataset.game || row.dataset.position
+  if (!id) return false
+  const key = `${ctx.mode}:${groupOf(el)}`
+  const here = window.SPOS.analysis?.shownIn(key) && ctx.mode !== "train"
+  clearTimeout(previewTimers.get(key))
+  return window.SPOS.analysis.open(id, { node: Number(row.dataset.node) || null, list, ...(here ? { key, stay: true } : {}) })
+}
+
+function liveList(el, row) {
+  const st = stateOf(el)
+  const rows = [...el.querySelectorAll("[data-library-results] [data-row]")]
+  return { ids: [], q: st.q, c: st.c, index: Math.max(0, rows.indexOf(row)), count: st.count }
+}
 
 // `n` / `N` in the analysis moved on: the Library of that link group puts its cursor on the same row (no reopening).
 on("analysis:subject", ({ key, position }) => {
@@ -519,7 +531,7 @@ handle("library.display", withLibrary((el, st, [display]) => {
 }))
 
 handle("library.query", async ([text]) => {
-  if (ctx.mode !== "library") await switchMode("library")
+  if (!currentLibrary()) await switchMode("library") // a Library pane on screen (e.g. in Analyse) is used where it is
   const el = currentLibrary()
   if (!el) return false
   if (text) return setQuery(text)
@@ -567,8 +579,20 @@ export function inverse(result) {
   }
 }
 
+/** The tag picker for a target: what it has, ↵ on / off (core/tagpicker.js). */
+function pickTags(t, title) {
+  if (!t?.ids.length) return status(tr("Nothing to tag here"), { kind: "error" }) || false
+  return openTagPicker({ title, target: { c: t.c, ids: t.ids } })
+}
+
+const selectionTitle = (t) => (t.ids.length > 1 ? tr("Tags of {n} selected", { n: t.ids.length }) : tr("Tags"))
+
 handle("library.tag", ([tag]) => {
-  if (!tag) return openCmdline("tag ")
+  if (!tag) {
+    const t = target({ moves: window.SPOS.library.pendingMoveTags })
+    window.SPOS.library.pendingMoveTags = false
+    return pickTags(t, selectionTitle(t || { ids: [] }))
+  }
   const t = target({ moves: window.SPOS.library.pendingMoveTags }) // `t` in Analyse: the move, not the position
   window.SPOS.library.pendingMoveTags = false
   if (!t?.ids.length) return status(tr("Nothing to tag here"), { kind: "error" }) || false
@@ -576,7 +600,7 @@ handle("library.tag", ([tag]) => {
 })
 
 handle("library.untag", ([tag]) => {
-  if (!tag) return openCmdline("untag ")
+  if (!tag) return run("library.tag") // the picker: ↵ on a tag it has takes it off
   const t = target({ moves: window.SPOS.library.pendingMoveTags })
   window.SPOS.library.pendingMoveTags = false
   if (!t?.ids.length) return status(tr("Nothing selected"), { kind: "error" }) || false
@@ -654,14 +678,19 @@ handle("library.train", libraryTarget(async (t, st) => {
   return window.SPOS.train.start({ mode: "review", cards: data.cards, look: "normal", side: "move" })
 }))
 
+// `a`: the cursor's row with the search as a live list (n opens the next one still to do), or the selection in order
 handle("library.analyse", libraryTarget(async (t, st) => {
-  const all = !targetRows(t.el.querySelector("[data-library-results]")).selected
-  const data = await fetch(`/lib/subject/?${params(all ? { ids: [] } : t, st)}`).then((r) => r.json()).catch(() => null)
+  const results = t.el.querySelector("[data-library-results]")
+  const row = results.querySelector(".list__row.is-cursor") || results.querySelector("[data-row]")
+  if (!targetRows(results).selected) {
+    if (!row?.dataset.position && !row?.dataset.game) return status(tr("Positions, puzzles and games can be analysed"), { kind: "error" }) || false
+    return openRow(t.el, row, { list: liveList(t.el, row) })
+  }
+  const data = await fetch(`/lib/subject/?${params(t, st)}`).then((r) => r.json()).catch(() => null)
   if (!data?.ids?.length) return status(tr("Nothing to analyse here"), { kind: "error" }) || false
-  // nothing selected: the query itself goes along, so `n` finds what is still left (a live work list)
-  const list = all ? { ids: data.ids, index: 0, q: st.q, c: st.c } : { ids: data.ids, index: 0 }
-  if (st.c === "games") return window.SPOS.analysis.openGame?.(data.ids[0], { list: { ...list, kind: "game" } })
-  return window.SPOS.analysis.open(data.ids[0], { list })
+  const first = results.querySelector(`[data-position="${CSS.escape(data.ids[0])}"], [data-game="${CSS.escape(data.ids[0])}"]`)
+  if (first) return openRow(t.el, first, { list: { ids: data.ids, index: 0 } })
+  return window.SPOS.analysis.open(data.ids[0], { list: { ids: data.ids, index: 0 } })
 }))
 
 handle("library.copyfen", libraryTarget(async (t, st) => {
@@ -711,35 +740,35 @@ handle("pack.export", async (args) => {
 })
 
 // Analyse: `t` tags the move, `T` the position (through :tag, with the tag's completion).
+const moveName = () => window.SPOS.analysis?.current()?.nodes.get(window.SPOS.analysis.current().cursor)?.san || ""
+
 handle("analysis.tags", () => {
-  if (!target({ moves: true })) return status(tr("Go to a move first (T tags the position)"), { kind: "error" }) || false
-  window.SPOS.library.pendingMoveTags = true
-  return openCmdline("tag ")
+  const t = target({ moves: true })
+  if (!t) return status(tr("Go to a move first (T tags the position)"), { kind: "error" }) || false
+  return pickTags(t, tr("Tags of the move {move}", { move: moveName() }))
 })
 handle("analysis.untag", ([tag]) => {
   const t = target({ moves: true })
-  if (!t) return false
-  if (!tag) {
-    window.SPOS.library.pendingMoveTags = true
-    return openCmdline("untag ")
-  }
+  if (!t) return status(tr("Go to a move first (T tags the position)"), { kind: "error" }) || false
+  if (!tag) return pickTags(t, tr("Tags of the move {move}", { move: moveName() }))
   return bulk("library.untag", [tag], t)
 })
 handle("analysis.positiontags", () => {
-  window.SPOS.library.pendingMoveTags = false
-  return openCmdline("tag ")
+  // in Analyse the position; in a Library pane its selection
+  const t = target()
+  return pickTags(t, focusedLibrary() ? selectionTitle(t || { ids: [] }) : tr("Tags of the position"))
 })
-handle("train.tag", () => {
-  if (!target()) return false
-  window.SPOS.library.pendingMoveTags = false
-  return openCmdline("tag ")
-})
+handle("train.tag", () => pickTags(target(), tr("Tags of the position")))
 
 Object.assign((window.SPOS ||= {}), {
   library: {
     toggleTerm,
     removeSpan,
     setQuery,
+    openRow: (row) => {
+      const el = row.closest("[data-island='library']")
+      return el ? openRow(el, row, { list: liveList(el, row) }) : false
+    },
     pendingMoveTags: false,
     hasTarget: () => Boolean(target()),
     state: () => {

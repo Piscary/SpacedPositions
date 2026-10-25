@@ -131,6 +131,8 @@ handle("list.open", withList((list, st) => {
   if (row.dataset.span) return window.SPOS.library.removeSpan(row.dataset.span, row) // a term of the search: out
   if (row.hasAttribute("data-clear")) return run("library.clear")
   if (row.dataset.query) return window.SPOS.library.setQuery(row.dataset.query, row.dataset.queryCollection) // a player, source or tag
+  // a row of the Library's results: opened right here when this mode shows its group's analysis, else in Analyse
+  if ((row.dataset.game || row.dataset.position) && list.matches("[data-library-results]")) return window.SPOS.library.openRow(row)
   if (row.dataset.game) return window.SPOS.analysis.openGame?.(row.dataset.game)
   if (row.dataset.position) {
     // Positions open in Analyse; n / N there step through the rest of the list.

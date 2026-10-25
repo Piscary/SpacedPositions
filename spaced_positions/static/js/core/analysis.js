@@ -4,7 +4,7 @@
 
 import { handle, pushUndo } from "./commands.js"
 import { ctx, emit, on, setLayer, status } from "./context.js"
-import { offer } from "./confirm.js"
+import { offer, suggest } from "./confirm.js"
 import { focusPane, nodeOf, switchMode } from "./layout.js"
 import * as lines from "./lines.js"
 import { openMenu } from "./menu.js"
@@ -122,17 +122,69 @@ async function journal(id, action) {
   for (const [key, t] of trees) if (t.position.id === data.tree.position.id) apply(key, { tree: data.tree, html: data.html }, { changed: true })
 }
 
-/** Open a position for analysis in a link group (switches to Analyse). */
-export async function openPosition(pid, { node = null, key = "analyse:A", list = null, show = true } = {}) {
-  if (show && ctx.mode !== "analyse") await switchMode("analyse")
+/** Open a position for analysis in a link group: in Analyse (switching to it), or with `stay` where it is (a mode
+ *  that shows an analysis of that group, e.g. Analyse's own Library pane or a Moves pane beside the Library). */
+export async function openPosition(pid, { node = null, key = "analyse:A", list = null, show = true, stay = false } = {}) {
+  if (show && !stay && ctx.mode !== "analyse") await switchMode("analyse")
+  endPreview(key)
   const { data } = await fetch(`/analysis/${pid}/`).then(async (r) => ({ data: await r.json() })).catch(() => ({ data: { ok: false } }))
   if (!data.ok) return status(tr("Could not open that position"), { kind: "error" }) || false
   attach(key)
   apply(key, data, { cursor: node })
   const t = trees.get(key)
   if (list) t.list = list
-  if (show) status(`${t.position.title || tr("Position")}${t.list ? ` · ${t.list.index + 1} / ${t.list.ids.length}` : ""}`, { timeout: 3000 })
+  const total = t.list ? t.list.count ?? t.list.ids.length : 0
+  if (show) status(`${t.position.title || tr("Position")}${total ? ` · ${t.list.index + 1} / ${total}` : ""}`, { timeout: 3000 })
 }
+
+// ── Preview: the row under a list's cursor, shown in the move trees of its group without opening it ─────────
+
+const previewing = new Map() // key → the position id shown as a preview
+let previewTicket = 0
+
+export async function previewPosition(key, pid, { title = "" } = {}) {
+  const ticket = ++previewTicket
+  previewing.set(key, pid)
+  const data = await fetch(`/analysis/${pid}/`).then((r) => r.json()).catch(() => null)
+  if (!data?.ok || ticket !== previewTicket || previewing.get(key) !== pid) return
+  for (const el of panesFor(key, "moves")) {
+    if (!el.dataset.previewing) originals.set(el, el.innerHTML)
+    el.dataset.previewing = "1"
+    const banner = document.createElement("div")
+    banner.className = "moves__preview"
+    banner.textContent = tr("Preview: {title} · ↵ or a opens it · leave the list to go back", { title: data.tree.position.title || title || tr("Position") })
+    el.innerHTML = data.html
+    el.prepend(banner)
+  }
+}
+
+const originals = new WeakMap() // a Moves pane → what it showed before the preview (an empty pane's hint)
+
+function endPreview(key) {
+  if (!previewing.delete(key)) return
+  previewTicket++
+  for (const el of panesFor(key, "moves")) {
+    if (!el.dataset.previewing) continue
+    delete el.dataset.previewing
+    if (trees.has(key)) {
+      el.innerHTML = trees.get(key).html
+      paintFolds(key, el)
+    } else {
+      el.innerHTML = originals.get(el) ?? ""
+    }
+  }
+  if (trees.has(key)) paintCursor(key)
+}
+
+on("preview:end", ({ key }) => endPreview(key))
+// The preview lasts while the list has the focus (as the boards' preview in lines.js).
+on("focus", ({ pane } = {}) => {
+  for (const key of [...previewing.keys()]) {
+    const [mode, group] = key.split(":")
+    if (mode !== ctx.mode || !pane?.el?.querySelector("[data-list]") || pane.group !== group) endPreview(key)
+  }
+})
+on("mode", () => { for (const key of [...previewing.keys()]) endPreview(key) })
 
 // ── The board's line goes to the tree ─────────────────────────────────────────────────────────────────────────
 
@@ -224,12 +276,27 @@ async function change(key, action, body, { cursor } = {}) {
   return { ...data, code }
 }
 
-function loadIntoAnalysis(key, game) {
+/** A position or game pasted onto the analysis' board: its moves are added (as a variation where they differ),
+ *  starting where the analysis has its position; replacing the analysis is offered, never the default. */
+async function loadIntoAnalysis(key, game) {
   const t = trees.get(key)
-  offer((game.moves.length ? tr("Replace the moves of “{title}” with the pasted game? y / n", { title: t.position.title || tr("this position") })
-                           : tr("Replace the moves of “{title}” with the pasted position? y / n", { title: t.position.title || tr("this position") })), {
-    y: () => change(key, "replace", { start: game.start, moves: game.moves }),
-  })
+  const title = t.position.title || tr("this position")
+  const same = (a, b) => a.split(" ").slice(0, 4).join(" ") === b.split(" ").slice(0, 4).join(" ")
+  const nodes = [t.nodes.get(t.cursor), t.nodes.get(t.root), ...t.nodes.values()]
+  const from = nodes.find((n) => n && same(n.fen, game.start))
+  const replace = { key: "r", label: tr("replace the moves of “{title}” instead", { title }), run: () => change(key, "replace", { start: game.start, moves: game.moves }) }
+  const asNew = { key: "n", label: tr("analyse it as a new position"), run: () => analyseNew({ start: game.start, moves: game.moves, title: game.title, origin: "paste" }) }
+  if (!from) {
+    // another position: nothing to add it to
+    return suggest(tr("The pasted position isn't in this analysis"), [asNew, replace])
+  }
+  if (!game.moves.length) {
+    moveTo(key, from.id)
+    return suggest(tr("Already in the analysis: the cursor went there"), [asNew])
+  }
+  const result = await change(key, "line", { parent: from.id, ucis: game.moves, origin: "paste" })
+  if (!result?.ok) return
+  suggest(trn("Added {n} pasted move to the analysis (u undoes)", "Added {n} pasted moves to the analysis (u undoes)", game.moves.length), [replace, asNew])
 }
 
 /** Correcting the position in the board editor (spec 06 §4): keep the analysis if its moves stay legal. */
@@ -558,12 +625,12 @@ handle("analysis.subject", withTree(async (key, t, [step]) => {
     const here = data.ids.indexOf(t.position.id)
     // still in the list: its neighbour; done and gone: the one that took its place
     index = here >= 0 ? here + (back ? -1 : 1) : (back ? list.index - 1 : list.index)
-    list = { ...list, ids: data.ids }
+    list = { ...list, ids: data.ids, count: data.ids.length }
   }
   if (index < 0 || index >= list.ids.length) {
     return status(back ? tr("This is the first") : tr("This is the last"), { timeout: 1500 }) || false
   }
-  await openPosition(list.ids[index], { key, list: { ...list, index } })
+  await openPosition(list.ids[index], { key, list: { ...list, index }, stay: true })
   emit("analysis:subject", { key, position: list.ids[index] })
 }))
 
@@ -677,6 +744,8 @@ Object.assign((window.SPOS ||= {}), {
     open: openPosition,
     openGame: (id, options = {}) => openPosition(id, options), // a game opens like a position (its tree, no puzzles)
     shownIn: (key) => panesFor(key, "moves").length > 0 || panesFor(key, "inspector").length > 0,
+    preview: previewPosition,
+    endPreview,
     current,
     focusInspector,
     analyseNew,

@@ -17,7 +17,7 @@ when = "view.library"
 reason = "in the Library's results"
 
 ["library.tag"]
-title = "Tag the selection"
+title = "Tags of the selection: add and remove"
 group = "Library"
 aliases = ["tag"]
 args = [{ name = "tag", type = "tag" }]
@@ -33,6 +33,16 @@ group = "Library"
 aliases = ["untag"]
 args = [{ name = "tag", type = "tag" }]
 handler = "both"
+when = "library.hasTarget"
+reason = "select something in the Library, or open a position in Analyse"
+undoable = true
+
+["library.tagtoggle"]
+title = "Switch a tag on or off (the tag picker)"
+group = "Library"
+aliases = ["toggle-tag"]
+args = [{ name = "tag", type = "tag" }]
+handler = "server"
 when = "library.hasTarget"
 reason = "select something in the Library, or open a position in Analyse"
 undoable = true

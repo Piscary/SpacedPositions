@@ -36,7 +36,7 @@ when = "mode.collect"
 reason = "in Collect"
 
 ["collect.tag"]
-title = "Tag the next positions"
+title = "Tags of the next positions: add and remove"
 group = "Collect"
 args = [{ name = "tag", type = "tag" }]
 when = "mode.collect"
