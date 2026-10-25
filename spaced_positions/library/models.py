@@ -16,6 +16,7 @@ class Source(models.Model):
         OWN = "own", "Own analysis"
         PUBLIC = "public", "Public domain"
         COURSE = "course", "Course"
+        PACK = "pack", "Puzzle pack"
 
     kind = models.CharField(max_length=8, choices=Kind.choices, default=Kind.BOOK)
     title = models.CharField(max_length=300)
@@ -244,3 +245,59 @@ class Game(models.Model):
 
     def __str__(self):
         return self.title
+
+
+# ── Puzzle packs (spec 09 §12) ────────────────────────────────────────────────────────────────────────────────
+
+
+class Pack(models.Model):
+    """A pack the user makes for students: what goes in (a query) and its details. Each export is a new version."""
+
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    title = models.CharField(max_length=120)
+    description = models.TextField(blank=True)
+    licence = models.CharField(max_length=300, blank=True)
+    query = models.CharField(max_length=500, blank=True, help_text="The Library query of its positions")
+    version = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["title"]
+
+    def __str__(self):
+        return self.title
+
+
+class PackExport(models.Model):
+    """The export log: which version of a pack went to whom, and when (Settings → Packs)."""
+
+    pack = models.ForeignKey(Pack, on_delete=models.CASCADE, related_name="exports")
+    version = models.PositiveIntegerField()
+    student = models.CharField(max_length=120, blank=True)
+    copy = models.CharField(max_length=32, blank=True, help_text="The id of this copy (personalised exports)")
+    positions = models.PositiveIntegerField(default=0)
+    at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["-at"]
+
+
+class ReceivedPack(models.Model):
+    """A pack imported here: it is the source of its positions (spec 09 §12)."""
+
+    source = models.OneToOneField(Source, on_delete=models.CASCADE, related_name="pack")
+    pack_id = models.CharField(max_length=36, unique=True, help_text="The pack's uuid: a newer version updates it")
+    version = models.PositiveIntegerField(default=1)
+    author = models.CharField(max_length=120, blank=True)
+    licence = models.CharField(max_length=300, blank=True)
+    student = models.CharField(max_length=120, blank=True, help_text="Personalised for (the manifest's `for`)")
+    copy = models.CharField(max_length=32, blank=True)
+    imported_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def credit(self) -> str:
+        """'from Anna Coach for Ben': shown with the pack's puzzles."""
+        return " ".join(x for x in [f"from {self.author}" if self.author else "", f"for {self.student}" if self.student else ""] if x)
+

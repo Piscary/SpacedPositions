@@ -29,6 +29,7 @@ def today() -> dict:
         "library": lib, "consistency": cons, "weakest": weak, "records": selection.records(),
         "accuracy": round(100 * cons["today_solved"] / cons["today"]) if cons["today"] else None,
         "banner": Achievement.objects.filter(seen=False).order_by("-reached_at").first(),
+        "first_run": first_run(),
         "again": selection.last_options(),
     }
 
@@ -59,3 +60,13 @@ def continue_() -> dict:
         "collect": {"source": (entry.get("source") or {}).get("label"), "ref": entry.get("ref"), "page": entry.get("page")} if entry else None,
         "recent_positions": recent_positions, "recent_games": Game.objects.filter(deleted_at=None).order_by("-updated_at")[:4],
     }
+
+
+def first_run() -> dict | None:
+    """An empty library: Home starts with the ways in (spec 10 · decision 16). None once there is anything."""
+    from spaced_positions.core.settings_view import csm_guess
+
+    if Position.objects.exists():
+        return None
+    return {"csm": csm_guess()}
+

@@ -187,3 +187,7 @@
 .library__caret { color: var(--text-muted); font-size: var(--fs-xs); }
 .library__caret::before { content: "▾"; }
 .library__group.is-folded .library__caret::before { content: "▸"; }
+
+/* A puzzle pack's preview (spec 09 §12): the importer's frame, a short text instead of a list */
+.packview__body { display: grid; gap: var(--s-1); padding: var(--s-2) var(--s-3); overflow: auto; }
+.packview__licence { padding: var(--s-1) var(--s-2); border-left: calc(var(--rule) * 3) solid var(--warn); background: var(--bg-alt); }

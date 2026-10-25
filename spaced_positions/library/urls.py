@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import collect, commands, edit, importer, views  # noqa: F401 (commands and edit register the server commands)
+from . import collect, commands, edit, importer, pack_views, views  # noqa: F401 (commands, edit, pack_views register commands)
 
 app_name = "library"
 
@@ -20,4 +20,7 @@ urlpatterns = [
     path("lib/import/run/", importer.run_view, name="import_run"),
     path("lib/import/upload/", importer.upload_view, name="import_upload"),
     path("lib/import/job/<str:job_id>/", importer.job_view, name="import_job"),
+    path("packs/scan/", pack_views.scan_view, name="pack_scan"),
+    path("packs/run/", pack_views.run_view, name="pack_run"),
+    path("packs/download/<str:name>", pack_views.download, name="pack_download"),
 ]

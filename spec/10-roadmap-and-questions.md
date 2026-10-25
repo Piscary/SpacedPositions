@@ -213,6 +213,33 @@ that match nobody.
 - Speed and size at 50,000 positions (09 §10): every page under 200 ms (Stats was 68 s), 19 % less on disk, backups
   a fifth of the database; the pack format of phase 8 is defined (09 §12: about 60 bytes a position, zipped).
 
+### Phase 8 status (2026-10-25)
+
+Built:
+- **Puzzle packs** (09 §12): `:pack-export` from the Library's selection or query (`e` → *Pack*), personalised copies
+  (`for=Ben`: the student's name and a copy id travel in the manifest), the licence (default: personal use by the
+  named student), versions under the same pack id, the export log and the received packs in Settings → Packs. Import
+  by dropping the file on the app or `:pack-import`: a preview with the licence and what is new, updated, a duplicate
+  or the user's own; a newer version updates the positions and keeps the student's cards and history. Received
+  packs are the source of their positions, cited as *from Coach for Ben* under each puzzle; a student's pack export
+  leaves personal copies out.
+- **The double-click app** (09 §11): PyInstaller (`packaging/`), a `.dmg` for macOS built and smoke-tested here (68 MB
+  app, 43 MB image; first start about a second), a `.zip` for Windows built by the release workflow on a version
+  tag. A double click starts the server in the background and opens the browser; later double clicks only open
+  the browser; it stops by itself 10 minutes after the last tab. The app icon (`packaging/icons.py`).
+- **First run**: Home's *Welcome* while the library is empty (import a pack, collect from a book, paste, the old
+  app's database if one is found).
+- **Licences** in Settings, with the link to the source; **update check** (opt-in, once a day, GitHub releases).
+- No backup of an empty database on the very first start.
+
+Not done, moved on:
+- **Starter pack** (decision 16): needs the lichess puzzle database (CC0, a large download) and a choice of motifs
+  and size; the first-run screen offers importing a pack instead.
+- Password on pack files: left out (09 §12).
+- Signing the apps (Apple Developer ID, Windows certificate): paid; until then the first open needs right click →
+  *Open* (macOS) or *Run anyway* (Windows).
+- The Windows build is untested until the first tag runs the workflow.
+
 ## Out of scope for now
 
 - **Publishing** (documents, print, PDF): the old app's document editor. The Diagram renderer is shared, so it can

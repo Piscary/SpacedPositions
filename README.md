@@ -21,6 +21,13 @@ board in Train, structure suggestions, and big PGN imports in the background. Th
 
 ## Start it
 
+Without a console: download the app from the [releases](https://github.com/Piscary/SpacedPositions/releases)
+(macOS `.dmg`: drag it to Applications; Windows `.zip`: unzip and double-click `Spaced Positions.exe`). It isn't
+signed, so the first open is right click → *Open* (macOS) or *More info → Run anyway* (Windows). A double click
+starts it in the background and opens the browser; it stops by itself when no tab has been open for 10 minutes.
+
+With Python:
+
 ```bash
 pipx install .        # or: pip install -e . in a virtual environment
 spos                  # starts the app and opens the browser
@@ -59,6 +66,7 @@ on macOS), with a compressed backup every day and before every update (in its `b
 | `␣ l` Library | `/` query (`motif:gabel diff:>=3 -is:diagram sort:-difficulty`, `⇥` completes) · `1`–`6` collections · `x` select · `t` tag · `T` train · `a` analyse · `d` trash · `e` PGN · `␣ u v` table/list/grid · `u` undoes any of it |
 | `␣ c` Collect | Paste a FEN and `c`, or set up with `S` · `⌘↵` save & next · in the entry pane: `s` source, `↑↓` diagram, `t` tags, `1`–`9` presets |
 | `:import` | A PGN file: games, and short set-up lines as puzzles (`r` into training) |
+| Packs | Coach: select in the Library, `e` → Pack, or `:pack-export "Back ranks" for=Ben` · student: drop the `.sppack` on the app (or `:pack-import`), `↵` |
 | `␣ s` Stats | `j`/`k` charts · `h`/`l` points · `↵` drill down · `t` table · `1`–`5` period · `g <key>` a section |
 | `␣ h` Home | `r` review · `1`–`6` sessions (`5` weakest motifs) · `a` continue the analysis · `c` continue collecting |
 | `:detect` · `:evaluate` | Tags from python-chess (Library selection or Analyse) · the engine over the main line (`␣ w v`, `g` the eval graph) |
@@ -82,7 +90,12 @@ python3 -m venv .venv && .venv/bin/pip install -e ".[dev]"
 .venv/bin/python -m pytest -m "not browser"      # Python tests
 node --experimental-default-type=module --test tests/js/
 .venv/bin/python -m playwright install chromium && .venv/bin/python -m pytest -m browser
+sh packaging/build-macos.sh                      # the double-click app and its .dmg in dist/ (with the venv active)
 ```
+
+A version tag (`git tag v0.2.0 && git push --tags`) builds the macOS and Windows apps in GitHub Actions and attaches
+them to a draft release (`.github/workflows/release.yml`). Bump `version` in `pyproject.toml` and `__version__` in
+`spaced_positions/__init__.py` first.
 
 ### Where things are
 
@@ -102,16 +115,18 @@ spaced_positions/
   training/              positions, puzzles (solution trees), cards, scheduler (srs.py), Storm pace, selection, API
   analysis/              move trees of positions and games, the journal (undo), puzzles from the analysis, PGN, API
   library/               sources, players, tags (data/tags.json: the starter vocabulary), games, saved queries,
-                         the query language (query.py), Collect, the PGN importer, bulk commands, tag detection
+                         the query language (query.py), Collect, the PGN importer, bulk commands, tag detection,
+                         puzzle packs (packs.py, pack_views.py)
   stats/                 metrics, achievements, the Stats sections, Home, SVG charts (charts.py)
   static/design/         generated: tokens.css, themes.json, commands.json (committed)
   static/css/            components (cascade layers; no literal colours or sizes)
   static/js/core/        keys, commands, layout, command line, hints, help, lists, menu, lines, paste, san,
                          analysis (tree, Moves and Inspector panes), engine (Stockfish worker, lines, eval bar),
-                         library (QueryBar, results, bulk), collect (entry session), importer, confirm
+                         library (QueryBar, results, bulk), collect (entry session), importer, packs, confirm
   static/js/islands/     the board (chessground + chess.js), the PGN/FEN view, the trainer
   static/vendor/         htmx, chessground, chess.js, Stockfish 17.1 lite (licences in licences/ and design/licences.toml)
   templates/             shell, components, views
+packaging/               the double-click app: entry (app.py), PyInstaller spec, icons, macOS build, smoke test
 docs/keymap.md           generated keymap reference
 tests/                   pytest (design, shell, chess, launcher, training, analysis, browser journeys, axe) and tests/js (node)
 ```

@@ -45,6 +45,9 @@ What to do now. Opens on start.
   Recent lists the positions analysed last and the newest games (`↵` opens them).
 - **Pasting anywhere** in Home (`Mod+V`, no field needed) detects FEN / PGN / lichess link / list of FENs and offers
   the matching commands in the status line: `Analyse a · Collect as position c · Import game g`.
+- **First run** (phase 8): while the library is empty, Today starts with *Welcome*: a sentence on what the app does,
+  *Import a puzzle pack* (`:pack-import`), *Collect from a book* (Collect), the paste hint, and, if a
+  chess-study-manager database is found next to the app, where to bring it over.
 
 ---
 
@@ -249,7 +252,7 @@ Find, filter, organise, start training from any search.
 │ ▾ Status              │                                                          │ no solution yet    │
 │   no solution  (231)  │                                                          │                    │
 ├───────────────────────┴──────────────────────────────────────────────────────────┴────────────────────┤
-│ 1 selected · t tag · d trash · T train these · a analyse · y copy FEN · e export PGN · v range        │
+│ 1 selected · t tag · d trash · T train these · a analyse · y copy FEN · e export … · v range          │
 └───────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -349,8 +352,14 @@ As built (phase 6): the mode opens with Settings and the keymap editor side by s
   binds in another context.
 - **Advanced**: your own CSS, applied after the theme (`⌘↵` applies it, `u` undoes; Esc held while loading, or
   `?safe`, starts without it).
-- **App**: the data folder with the size of the database and of the backups, *back up now*, *open the folder*, and
-  `app.autostop` (stop 10 minutes after the last tab; for double-click starts).
+- **Packs** (phase 8): `packs.author` (the name a pack carries; default: the player marked as you), the packs you
+  made with their export log (version, student, copy, date, positions) and the packs you received (author, *for*,
+  version, licence).
+- **App**: the data folder with the size of the database and of the backups, *back up now*, *open the folder*,
+  `app.autostop` (stop 10 minutes after the last tab; on by default for double-click starts) and `app.updates`
+  (check once a day for a new release; off by default).
+- **Licences** (folded): the app's GPL-3.0 with the link to its source, and every bundled component with its version
+  and licence (09 §13).
 - **Data**: export writes the theme, token overrides, settings, key bindings, your themes and named layouts as one
   TOML file (07 §5); pasting one (or a single theme) into the box imports it, value by value, listing what it skipped.
   `engine.path` is never exported or imported: which program runs is set by hand.

@@ -37,6 +37,7 @@ def main(argv=None):
     parser.add_argument("--port", type=int, help=f"port to use (default {DEFAULT_PORT} or the next free one)")
     parser.add_argument("--data-dir", help="use this data folder instead of the default one")
     parser.add_argument("--lan", action="store_true", help="also listen on the home network")
+    parser.add_argument("--double-click", action="store_true", help=argparse.SUPPRESS)  # the installed app: stops by itself
     parser.add_argument("--version", action="version", version=f"Spaced Positions {__version__}")
     args = parser.parse_args(argv)
 
@@ -155,7 +156,7 @@ def _serve(data: Path, args):
         threading.Timer(0.3, webbrowser.open, args=[url]).start()
 
     threading.Thread(target=_daily_backup, args=(data,), daemon=True, name="daily-backup").start()
-    threading.Thread(target=_autostop, daemon=True, name="autostop").start()
+    threading.Thread(target=_autostop, args=(args.double_click,), daemon=True, name="autostop").start()
 
     def stop(*_):
         raise KeyboardInterrupt
@@ -183,7 +184,7 @@ def _migrate(data: Path):
     from spaced_positions import backups
 
     db = data / "db.sqlite3"
-    if db.exists() and db.stat().st_size:
+    if connection.introspection.table_names():  # not on the first start: nothing to keep yet
         print(f"  Backup:      {backups.make(db, 'before-migrate')}")
     call_command("migrate", interactive=False, verbosity=0)
     connection.close()
@@ -244,15 +245,16 @@ def beat():
     last_beat = time.time()
 
 
-def _autostop():
+def _autostop(double_click: bool = False):
+    """A double-click start has no console to stop it from: it stops by itself unless the user turned that off."""
     from django.db import connection
 
-    from spaced_positions.core import settings as user_settings
+    from spaced_positions.core.models import Preferences
 
     while True:
         time.sleep(60)
         try:
-            on = user_settings.get("app.autostop")
+            on = Preferences.current().settings.get("app.autostop", double_click)
         finally:
             connection.close()
         if on and last_beat is not None and time.time() - last_beat > AUTOSTOP_SECONDS:

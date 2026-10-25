@@ -22,6 +22,15 @@
     <span class="list__meta settings__help">{{ r.help }}</span>
     <span class="list__meta mono">:set {{ r.name }}</span>
   </div>{% endfor %}</div>
+  {% if s.key == "a" %}<div class="settings__data">
+    <p class="muted">Packs share your own material with your students (<span class="mono">:pack-export "title" for=Ben</span> in the
+      Library, <span class="mono">:pack-import</span> or drop a <span class="mono">.sppack</span> file on the app).</p>
+    {% for p in packs_made %}<p><b>{{ p.title }}</b> <span class="muted">v{{ p.version }}{% if p.query %} · <span class="mono">{{ p.query }}</span>{% endif %}</span></p>
+      <ul class="settings__log">{% for e in p.exports.all|slice:":12" %}<li class="muted">v{{ e.version }} · {% if e.student %}for {{ e.student }}{% else %}for anyone{% endif %} · {{ e.positions }} positions · {{ e.at|date:"j M Y H:i" }}</li>{% endfor %}</ul>
+    {% empty %}<p class="muted">No packs made yet.</p>{% endfor %}
+    {% if packs_received %}<p><span class="muted">Received</span></p>
+      <ul class="settings__log">{% for r in packs_received %}<li>{{ r.source.title }} <span class="muted">v{{ r.version }}{% if r.credit %} · {{ r.credit }}{% endif %}{% if r.licence %} · {{ r.licence }}{% endif %}</span></li>{% endfor %}</ul>{% endif %}
+  </div>{% endif %}
   {% if s.key == "p" %}<div class="settings__data">
     <p><span class="muted">Data folder</span> <span class="mono">{{ storage.folder }}</span></p>
     <p class="muted">The database: {{ storage.db_size|filesizeformat }} · {{ storage.backups }} backup{{ storage.backups|pluralize }}, {{ storage.backups_size|filesizeformat }}{% if storage.latest %} · the newest {{ storage.latest.when|date:"j M H:i" }} ({{ storage.latest.kind }}){% endif %}.
@@ -37,6 +46,19 @@
     <textarea class="field field--mono settings__css" id="custom-css-field" name="css" spellcheck="false"
               placeholder=".board__frame { border-radius: 0; } · {% if is_mac %}⌘{% else %}Ctrl+{% endif %}↵ applies">{{ custom_css }}</textarea>
   </form>
+{% endsection %}
+{% section "Licences" key="l" summary="free software: GPL-3.0" collapsed=True %}
+  <div class="settings__data settings__licences">
+    <p><b>Spaced Positions {{ licences.version }}</b> is free software under the GNU General Public License, version 3 or later:
+      anyone may use it, read and change its source, and pass it on under the same licence.
+      The source: <a href="{{ licences.source }}" target="_blank" rel="noopener">{{ licences.source }}</a>. Puzzle packs are content, with the licence their author gives them.</p>
+    <table class="table settings__table"><caption class="muted">Bundled with it</caption>
+      <thead><tr><th scope="col">Component</th><th scope="col">Licence</th><th scope="col">Source</th></tr></thead>
+      <tbody>{% for r in licences.files %}<tr><td class="mono">{{ r.name }}</td><td>{{ r.licence }}</td><td class="muted">{{ r.source }}</td></tr>{% endfor %}
+      {% for r in licences.packages %}<tr><td class="mono">{{ r.name }}</td><td>{{ r.licence }}</td><td class="muted">{{ r.source }}</td></tr>{% endfor %}
+      {% for r in licences.pieces %}<tr><td>Pieces: {{ r.name }}</td><td>{{ r.licence }}</td><td class="muted">{{ r.source }}</td></tr>{% endfor %}</tbody>
+    </table>
+  </div>
 {% endsection %}
 {% section "Data" key="x" summary="export · import" %}
   <div class="settings__data">

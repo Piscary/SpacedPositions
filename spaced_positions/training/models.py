@@ -134,6 +134,10 @@ class Position(models.Model):
 
     @property
     def citation(self) -> str:
+        if self.source_id and self.source.kind == "pack":  # the pack, who it's from and for, then the book it cites
+            received = getattr(self.source, "pack", None)
+            name = f"{self.source.label} ({received.credit})" if received and received.credit else self.source.label
+            return " · ".join(x for x in [name, self.source_text] if x)
         if self.source_id:
             ref = " · ".join(x for x in [f"p. {self.source_page}" if self.source_page else "", self.source_ref] if x)
             return " · ".join(x for x in [self.source.label, ref] if x)

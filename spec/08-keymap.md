@@ -247,6 +247,9 @@ with the session's source and tags, `i` imports a PGN (below).
 straight into training · `↵` import · `Esc` cancel. Duplicates are marked and left out. `u` afterwards moves what
 was imported to the trash.
 
+**Pack import** (drop a `.sppack` on the app, or `:pack-import`): the preview shows the pack, its licence and what it
+adds · `↵` accept the licence and import · `r` ready for training on/off · `Esc` cancel (09 §12).
+
 ## Library
 
 | Key | Command |
@@ -254,7 +257,7 @@ was imported to the trash.
 | `1`–`6` | Positions · Games · Puzzles/cards · Players · Sources · Tags |
 | `/` | Query bar |
 | all list keys | above |
-| `t T d r a y e` | Bulk keys (lists above); on players, sources and tags `d` deletes the ones nothing uses |
+| `t T d r a y e` | Bulk keys (lists above); on players, sources and tags `d` deletes the ones nothing uses; `e` on positions and puzzles asks *PGN* or *Pack* (`:pack-export`) |
 | `c` | Edit the selected players, sources or tags (`:edit field=value …`) |
 | `↵` | Positions and puzzles open in Analyse (the results are the subject list), games too; a player, source or tag shows its positions or games |
 | Filters pane: `↵` | Toggle the facet (adds/removes the query term) |
@@ -263,7 +266,8 @@ was imported to the trash.
 In the query bar: `⇥` takes the completion (keys, tags with their place in the hierarchy, sources, players, saved
 queries), `↑ ↓` choose one, `↵` goes to the results, `Esc` leaves the bar. `:save-query <name>`, `:trash-empty`,
 `:import`, `:edit`, `:new-tag`, `:new-player`, `:new-source`, `:delete`, `:player-link "<name>" [@player]` (04 ·
-Library).
+Library), `:pack-export <title> [for=<student>] [licence="…"] [received]` (the selection, else the query) and
+`:pack-import` (09 §12).
 
 ## Stats
 

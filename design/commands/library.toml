@@ -220,3 +220,16 @@ title = "Fold or open all groups"
 group = "Library"
 when = "view.library"
 reason = "in the Library's results"
+
+["pack.export"]
+title = "Export as a puzzle pack (for students)"
+group = "Library"
+aliases = ["pack-export"]
+args = [{ name = "title", type = "text" }]
+handler = "both"
+undoable = false
+
+["pack.import"]
+title = "Import a puzzle pack"
+group = "Library"
+aliases = ["pack-import"]

@@ -400,6 +400,7 @@ def generated(sources: Sources, out_dir: Path, docs_dir: Path) -> dict[Path, str
         out_dir / "pieces.css": pieces_css(sources),
         out_dir / "themes.json": json.dumps(themes, indent=1, ensure_ascii=False) + "\n",
         out_dir / "commands.json": json.dumps(commands_json(sources), indent=1, ensure_ascii=False) + "\n",
+        out_dir / "licences.json": json.dumps(sources.licences, indent=1, ensure_ascii=False, sort_keys=True) + "\n",  # Settings → Licences
         docs_dir / "keymap.md": keymap_md(sources),
     }
 

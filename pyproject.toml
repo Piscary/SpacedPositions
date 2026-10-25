@@ -17,8 +17,11 @@ dependencies = [
     "chess>=1.10",
 ]
 
+[project.urls]
+Source = "https://github.com/Piscary/SpacedPositions"
+
 [project.optional-dependencies]
-dev = ["pytest>=8", "pytest-django>=4.9", "playwright>=1.48", "pillow>=10"]
+dev = ["pytest>=8", "pytest-django>=4.9", "playwright>=1.48", "pillow>=10", "pyinstaller>=6.10"]
 
 [project.scripts]
 spos = "spaced_positions.launcher:main"

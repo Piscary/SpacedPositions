@@ -194,8 +194,17 @@ migrations, settings files or a Python environment.
 **Install**
 - Console users: `pipx install spaced-positions` or `uv tool install spaced-positions` (one isolated environment, one
   command on the PATH).
-- Everyone else (phase 8): a **double-click installer** per platform (macOS `.dmg` with an `.app`, Windows `.exe`)
-  that bundles Python, built with PyInstaller or Briefcase in CI. No Python install needed.
+- Everyone else: a **double-click app** per platform that bundles Python (built in phase 8 with PyInstaller,
+  `packaging/`): macOS `Spaced-Positions-<version>-macOS.dmg` (drag the `.app` to Applications), Windows
+  `Spaced-Positions-<version>-Windows.zip` (unzip, double-click `Spaced Positions.exe`). No Python install needed.
+  The release workflow (`.github/workflows/release.yml`) builds both on a version tag (`v0.2.0`), smoke-tests them
+  (`packaging/smoke.py`) and attaches them to a draft release; `packaging/build-macos.sh` builds the `.dmg` locally.
+  The apps are **not signed** (that needs paid Apple and Windows certificates): the first open is right click →
+  *Open* on macOS, *More info → Run anyway* on Windows. The icon is drawn by `packaging/icons.py`.
+- **What a double click does** (`packaging/app.py`): if no instance answers, it starts the server as a background
+  process (`start --no-browser --double-click`, output in the data folder's `app.log`), waits until it answers,
+  opens the browser and exits. So every later double click only opens the browser again. If the server can't
+  start, a dialog says so and points to `app.log`. With arguments the bundled program is the `spos` command.
 
 **`spos`** (the command, and what the double-click runs):
 1. Finds the **data folder** (below) and takes a lock. If an instance is already running, it only opens the browser
@@ -236,8 +245,10 @@ newest 5. `spos restore <backup>` puts one back (the app must be stopped; the cu
 **Stopping by itself**: open tabs send a heartbeat each minute; with `app.autostop` on (Settings → App; meant for
 double-click starts, off for console starts) the app stops 10 minutes after the last one.
 
-**Updates**: an opt-in check at start shows `update 1.4 available` in the app bar's pulse area with a link. Updating
-is reinstalling. Data stays, and migrations run with a backup on the next start.
+**Updates** (`core/updates.py`): with `app.updates` on (Settings → App, off by default: the app asks no server
+unless told to), the app asks GitHub's releases API once a day for the newest release and shows `update 0.2.0` in
+the app bar with a link to the release page. Updating is reinstalling. Data stays, and migrations run with a backup
+on the next start.
 
 **Offline**: everything (fonts, pieces, Stockfish WASM, icons) is bundled. The app needs no network after install.
 
@@ -256,11 +267,16 @@ packs are the coach's own material**, made for their students and not for public
   JSON lines, 59 bytes zipped, so 50,000 puzzles make a pack of about 3 MB.
 - **Every object has a UUID** next to its database id, from day one. Packs, re-imports and the later migration
   depend on it.
-- **Export**: from a Library selection or a saved query (`e` → *Pack*), or `:pack export`. Training history is
-  never included.
-- **Import**: drag the file onto the app, paste it, or `:pack import`. A preview lists what is new, what is a
-  duplicate (canonical FEN) and which tags are unknown (mapped by key, or created as free tags). `↵` imports.
-  The pack becomes the **source** of its positions, so `source:` filters and training filters work on it.
+- **Export**: from a Library selection or the query (`e` → *Pack*), or
+  `:pack-export <title> [for=<student>] [licence="…"] [received]`. The file goes to the data folder's `exports/`
+  (`<title>-v<N>[-for-<student>].sppack`) and is downloaded. Exporting under the same title again is the next
+  version of the same pack (same pack id). Training history is never included.
+- **Import**: drag the file onto the app or `:pack-import` (a file chooser; the first-run screen has a button). A
+  preview lists the pack (title, author, *for*, version, licence), what is new, what updates an earlier version,
+  what is a duplicate (canonical FEN) or the user's own position (same uuid), and which tags are unknown (created
+  as free tags from `tags.json`). `↵` accepts the licence and imports, `r` toggles *ready to train* (on by
+  default), `Esc` cancels. The pack becomes the **source** of its positions (kind *pack*), so `src:` filters and
+  training filters work on it; the Library shows the result.
 - **Re-importing** a newer version of the same pack updates its content and keeps the student's cards and history.
 - Later: a **progress report** file (`.spreport`, export from Stats) a student can send to their coach, with
   retention, mastery and weak motifs. No server needed.
@@ -277,10 +293,13 @@ traceability:
 | **Pack licence** in the manifest (default for new packs: *personal use by the named student, do not share*) | Shown in the import preview, which the student confirms, and on the pack's source page |
 | **Personalised export**: `:pack export for <student>` | Writes the student's name into the manifest and a per-copy id. The app shows *"from <coach> for <student>"* on the pack's source page and in the Feedback line under each puzzle. A shared copy shows who it came from. |
 | **Coach's export log** | Settings → Packs lists which pack version went to which student and when, so updates go to the right people |
-| *(optional)* password on the pack file | Protects the file in transit (email, cloud folder). The student enters it once on import. Not a protection against the student. |
+| *(optional, not built)* password on the pack file | Would protect the file in transit (email, cloud folder); not a protection against the student. Left out in phase 8: a shared cloud folder or a direct message is enough for now. |
 
 Puzzles from a personalised pack can be trained, tagged and analysed like any other, but a pack export by the
-student leaves them out by default (`--include-received` to override), so packs don't spread by accident.
+student leaves them out by default (the `received` option of `:pack-export` to override), so packs don't spread by
+accident. Models: `Pack` and `PackExport` (the coach's packs and export log), `ReceivedPack` (one a pack source:
+pack id, version, author, student, copy id, licence). Code: `library/packs.py` (format, build, scan, run),
+`library/pack_views.py` (command, upload, download), `static/js/core/packs.js` (preview, drag and drop).
 
 ## 13 · Licences
 
@@ -302,5 +321,7 @@ program, and their licence is set by their author (§12).
 `design check` gets a **licence check**: Python and JS dependencies are compared to an allowlist of GPL-3.0-compatible
 licences (MIT, BSD, Apache-2.0, ISC, 0BSD, ZPL, LGPL, GPL-2.0+/3.0, OFL for fonts, CC0/CC BY/CC BY-SA for assets).
 Anything else fails CI unless it is a documented exception in this table. A **Licences** page in Settings → App lists
-every bundled component and its licence, and links the app's source. (This is an engineering summary, not legal
+every bundled component and its licence, and links the app's source (`SOURCE_URL`,
+https://github.com/Piscary/SpacedPositions); it is built from `design/licences.toml` into `static/design/licences.json`
+plus the installed Python packages' versions. (This is an engineering summary, not legal
 advice.)

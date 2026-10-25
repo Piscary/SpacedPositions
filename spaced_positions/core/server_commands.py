@@ -13,7 +13,7 @@ from . import settings as user_settings
 from .models import LOCAL_USER, NamedLayout, Preferences
 
 HANDLERS = {}
-MODULES = ("spaced_positions.library.commands", "spaced_positions.library.edit")  # other apps' server commands
+MODULES = ("spaced_positions.library.commands", "spaced_positions.library.edit", "spaced_positions.library.pack_views")  # other apps' server commands
 
 
 def handlers() -> dict:

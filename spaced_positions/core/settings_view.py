@@ -23,7 +23,8 @@ SECTIONS = [
     ("Keys", "k", ["keys.keycaps", "keys.teach", "keys.whichkey"]),
     ("Training", "r", ["training.new-per-day", "training.storm-pace"]),
     ("Engine", "e", ["engine.source", "engine.path", "engine.lines", "engine.depth", "engine.arrows", "engine.threads", "engine.hash"]),
-    ("App", "p", ["app.autostop"]),
+    ("Packs", "a", ["packs.author"]),
+    ("App", "p", ["app.updates", "app.autostop"]),
 ]
 
 
@@ -102,6 +103,7 @@ def settings_rows(request):
         "overrides": KeymapOverride.objects.filter(user=LOCAL_USER).count(), "csm_path": csm_guess(),
         "custom_css": prefs.settings.get("custom.css", ""),
         "storage": storage(),
+        "packs_made": packs_made(), "packs_received": packs_received(), "licences": licences(),
     })
 
 
@@ -231,3 +233,45 @@ def storage() -> dict:
     size = sum(db.parent.joinpath(f"{db.name}{s}").stat().st_size for s in ("", "-wal") if db.parent.joinpath(f"{db.name}{s}").exists())
     return {"folder": str(db.parent), "db_size": size, "backups": len(found), "backups_size": sum(b["size"] for b in found),
             "latest": found[0] if found else None}
+
+
+def packs_made() -> list:
+    """Settings → Packs: the packs you made, each with its export log (spec 09 §12)."""
+    from spaced_positions.library.models import Pack
+
+    return list(Pack.objects.prefetch_related("exports"))
+
+
+def packs_received() -> list:
+    from spaced_positions.library.models import ReceivedPack
+
+    return list(ReceivedPack.objects.select_related("source").order_by("-imported_at"))
+
+
+# Python packages the app runs on (and theirs): name → why it's there. Their licences come from their metadata.
+PACKAGES = {"django": "the web framework", "asgiref": "Django's", "sqlparse": "Django's", "waitress": "the server",
+            "whitenoise": "static files", "platformdirs": "the data folder", "chess": "python-chess: rules, PGN, engines"}
+
+
+def licences() -> dict:
+    """Settings → Licences (spec 09 §13): the app's own licence and source, and every bundled component."""
+    import json
+    from importlib import metadata
+    from pathlib import Path
+
+    from spaced_positions import SOURCE_URL, __version__
+
+    built = Path(__file__).resolve().parents[1] / "static" / "design" / "licences.json"  # from design/licences.toml (design build)
+    data = json.loads(built.read_text()) if built.exists() else {}
+    files = [{"name": name, "licence": v.get("licence", ""), "source": v.get("source", "")} for name, v in data.get("vendor", {}).items()]
+    pieces = [{"name": v.get("label", name), "licence": v.get("licence", ""), "source": v.get("author", "")} for name, v in data.get("pieces", {}).items()]
+    packages = []
+    for name, role in PACKAGES.items():
+        try:
+            m = metadata.metadata(name)
+        except metadata.PackageNotFoundError:
+            continue
+        classifiers = [c.rsplit(" :: ", 1)[-1] for c in m.get_all("Classifier") or [] if c.startswith("License ::")]
+        packages.append({"name": f"{m.get('Name')} {m.get('Version')}", "licence": m.get("License-Expression") or m.get("License") or ", ".join(classifiers),
+                         "source": role})
+    return {"version": __version__, "source": SOURCE_URL, "files": files, "pieces": pieces, "packages": packages}

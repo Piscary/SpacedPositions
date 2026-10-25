@@ -6,6 +6,7 @@ import { cancelPending, initKeys, keyPerf } from "./core/keys.js"
 import { initWorkspace, restoreToggles } from "./core/layout.js"
 import { escapeSelection } from "./core/lists.js"
 import "./core/cmdline.js"
+import "./core/packs.js"
 import "./core/help.js"
 import "./core/hints.js"
 import "./core/islands.js"
@@ -47,6 +48,16 @@ if (boot.launched) {
   const beat = () => fetch("/beat/", { method: "POST", headers: { "X-CSRFToken": document.querySelector('meta[name="csrf-token"]')?.content || "" } }).catch(() => null)
   beat()
   setInterval(beat, 60_000)
+}
+
+// The opt-in update check (Settings → App): a newer version shows in the app bar
+if (boot.settings["app.updates"]) {
+  fetch("/app/update/").then((r) => r.json()).then(({ available, url }) => {
+    const link = document.querySelector("[data-update]")
+    if (!available || !link) return
+    Object.assign(link, { href: url, textContent: `update ${available} available` })
+    link.hidden = false
+  }).catch(() => null)
 }
 
 setRegistry(boot.registry)
@@ -117,6 +128,12 @@ on("effects", (effects) => {
   if (effects.registry) setRegistry(effects.registry) // :map, :unmap: the keys work at once
   if (effects.themes) window.SPOS.themes.themes = effects.themes
   if (effects.customCss !== undefined) document.getElementById("custom-css").textContent = effects.customCss
+  if (effects.download) {
+    const link = Object.assign(document.createElement("a"), { href: effects.download, download: "" })
+    document.body.append(link)
+    link.click()
+    link.remove()
+  }
   if (effects.copy) navigator.clipboard?.writeText(effects.copy).catch(() => status("The browser didn't allow copying", { kind: "error" }))
   if (effects.theme) {
     document.getElementById("theme").textContent = effects.theme.css

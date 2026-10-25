@@ -552,7 +552,17 @@ handle("library.copyfen", libraryTarget(async (t, st) => {
   }
 }))
 
-handle("library.export", libraryTarget((t, st) => {
+// `e`: PGN (positions and games), or a puzzle pack for students (positions and puzzles)
+handle("library.export", libraryTarget(async (t, st) => {
+  if (["positions", "puzzles"].includes(st.c)) {
+    const kind = await openMenu({
+      title: "Export", anchor: t.el,
+      items: [{ label: "PGN", note: "for any chess program", key: "p", keys: ["p"], value: "pgn" },
+              { label: "Puzzle pack", note: "for students: :pack-export <title> for=<name>", key: "k", keys: ["k"], value: "pack" }],
+    })
+    if (kind === "pack") return openCmdline("pack-export ")
+    if (kind !== "pgn") return false
+  }
   if (!["positions", "games"].includes(st.c)) return status("Positions and games export as PGN", { kind: "error" }) || false
   const all = !targetRows(t.el.querySelector("[data-library-results]")).selected
   const link = document.createElement("a")
@@ -563,6 +573,19 @@ handle("library.export", libraryTarget((t, st) => {
   link.remove()
   status(all ? "Exporting everything the query found" : `Exporting ${t.ids.length}`, { timeout: 2500 })
 }))
+
+// `:pack-export <title> [for=<student>]`: the selection, else everything the query found
+handle("pack.export", async (args) => {
+  if (!args.length) return openCmdline("pack-export ")
+  const el = currentLibrary()
+  if (!el) return status("Packs are made in the Library: search, select, then :pack-export", { kind: "error" }) || false
+  const st = stateOf(el)
+  if (!["positions", "puzzles"].includes(st.c)) return status("Packs hold positions: collection 1 or 3", { kind: "error" }) || false
+  const rows = targetRows(el.querySelector("[data-library-results]"))
+  status("Making the pack…", { timeout: 0 })
+  const result = await serverRun("pack.export", args, { c: st.c, ids: rows.selected ? rows.ids : [], q: st.q })
+  if (result) status(result.message, { kind: "good", timeout: 8000 })
+})
 
 // Analyse: `t` tags the move, `T` the position (through :tag, with the tag's completion).
 handle("analysis.tags", () => {

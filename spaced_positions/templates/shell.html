@@ -23,7 +23,7 @@
       </button>
       {% endif %}{% endfor %}
     </nav>
-    <div class="appbar__pulse"><span title="Spaced Positions {{ app_version }}">v{{ app_version }}</span></div>
+    <div class="appbar__pulse"><a class="appbar__update" data-update hidden target="_blank" rel="noopener"></a><span title="Spaced Positions {{ app_version }}">v{{ app_version }}</span></div>
     <div class="appbar__end">
       {% cmd "mode.ui" display="compact" variant="ghost" icon="◧" %}
       {% cmd "cmdline.open" display="compact" variant="ghost" icon="⌘" %}

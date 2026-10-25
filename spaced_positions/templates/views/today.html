@@ -2,6 +2,17 @@
   {% if t.banner %}<div class="banner" data-banner role="status"><span class="achievement achievement--{{ t.banner.kind }}">{{ t.banner.label }}</span>
     <span class="muted">{{ t.banner.reached_at|date:"j M" }}</span>{% cmd "home.dismiss" label="Dismiss" size="sm" variant="ghost" %}</div>{% endif %}
 
+  {% if t.first_run %}{% section "Welcome" key="w" summary="your library is empty" pinned=True %}
+    <div class="settings__data home__welcome">
+      <p><b>Spaced Positions</b> trains chess patterns with spaced repetition: each puzzle comes back just before you would forget it.
+        Your library is empty, so here is how to fill it:</p>
+      <div class="actionbar">{% cmd "pack.import" variant="primary" label="Import a puzzle pack" %}{% cmd "mode.collect" label="Collect from a book" %}</div>
+      <p class="muted">A pack is a file your coach made for you (<span class="mono">.sppack</span>): drop it on this window, or choose it.
+        Or paste a FEN, a PGN or a lichess link anywhere ({% keycap "mod+v" %}), or import a PGN file (<span class="mono">:import</span>).</p>
+      {% if t.first_run.csm %}<p class="muted">A chess-study-manager library is next to the app: Settings → Data brings it over.
+        {% cmd "mode.settings" label="Settings" size="sm" %}</p>{% endif %}
+    </div>
+  {% endsection %}{% endif %}
   {% section "Due now" key="d" summary=t.due|stringformat:"s"|add:" due" pinned=True %}
     <div class="train__session">
       {% cmd "train.review" variant="primary" label="Review" keys_in="view.today" %}

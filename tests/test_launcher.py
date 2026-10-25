@@ -102,3 +102,22 @@ def test_backups_are_compressed_rotated_and_restore(tmp_path):
     backups.restore(first, db)
     assert sqlite3.connect(db).execute("select count(*) from t").fetchone()[0] == 5000
     assert list((tmp_path / "backups").glob("db-before-restore-*.sqlite3.xz"))  # what was there before is kept
+
+
+def test_double_click_starts_in_the_background_and_reopens(tmp_path):
+    """The installed app's entry (packaging/app.py): the first double click starts the server and returns, the second
+    only opens the browser at it; no backup of the empty database on the first start."""
+    app = os.path.join(os.path.dirname(__file__), "..", "packaging", "app.py")
+    env = {k: v for k, v in os.environ.items() if not k.startswith(("SPOS_", "DJANGO_"))} | {
+        "SPOS_DATA_DIR": str(tmp_path), "BROWSER": f"{sys.executable} -c \"print('OPEN', '%s')\""}
+    try:
+        first = subprocess.run([sys.executable, app], env=env, capture_output=True, text=True, timeout=60)
+        assert first.returncode == 0, first.stderr
+        info = json.loads((tmp_path / "runtime.json").read_text())
+        second = subprocess.run([sys.executable, app], env=env, capture_output=True, text=True, timeout=30)
+        assert json.loads((tmp_path / "runtime.json").read_text())["pid"] == info["pid"]  # the same server
+        assert second.returncode == 0 and info["url"] in first.stdout + second.stdout
+        assert "is running" in (tmp_path / "app.log").read_text()
+        assert not list((tmp_path / "backups").glob("db-before-migrate-*"))
+    finally:
+        _spos(tmp_path, "stop")
