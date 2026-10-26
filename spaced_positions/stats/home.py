@@ -33,6 +33,7 @@ def today() -> dict:
         "first_run": first_run(),
         "starter": starter_size(),
         "updates": bool(user_settings.get("app.updates")),
+        "intro": user_settings.get("keys.intro") is not False,
         "again": selection.last_options(),
     }
 

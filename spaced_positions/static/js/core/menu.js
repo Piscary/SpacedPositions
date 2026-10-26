@@ -24,6 +24,10 @@ export function openMenu({ title, items, anchor = null, onCursor = null, start =
         el.append(Object.assign(document.createElement("div"), { className: "menu__sep" }))
         continue
       }
+      if (item.heading) { // a group's name, not a choice
+        el.append(Object.assign(document.createElement("div"), { className: "menu__title menu__heading", textContent: item.heading }))
+        continue
+      }
       const row = document.createElement("div")
       row.className = `menu__item${item.disabled ? " is-disabled" : ""}`
       row.setAttribute("role", "menuitem")
@@ -51,10 +55,10 @@ export function openMenu({ title, items, anchor = null, onCursor = null, start =
       cursor = (i + rows.length) % rows.length
       rows.forEach((r, j) => r.classList.toggle("is-cursor", j === cursor))
       rows[cursor]?.scrollIntoView({ block: "nearest" })
-      onCursor?.(items.filter((x) => !x.separator)[cursor]?.value) // live preview (theme, piece set)
+      onCursor?.(items.filter((x) => !x.separator && !x.heading)[cursor]?.value) // live preview (theme, piece set)
     }
     const choose = (i) => {
-      const item = items.filter((x) => !x.separator)[i]
+      const item = items.filter((x) => !x.separator && !x.heading)[i]
       if (!item || item.disabled) return
       close(item.value)
     }
@@ -67,7 +71,7 @@ export function openMenu({ title, items, anchor = null, onCursor = null, start =
       if (token === "j" || token === "down") return setCursor(cursor + 1)
       if (token === "k" || token === "up") return setCursor(cursor - 1)
       if (token === "enter") return choose(cursor)
-      const index = items.filter((x) => !x.separator).findIndex((x) => x.key === token)
+      const index = items.filter((x) => !x.separator && !x.heading).findIndex((x) => x.key === token)
       if (index >= 0) return choose(index)
     })
     setTimeout(() => document.addEventListener("pointerdown", outside, true))

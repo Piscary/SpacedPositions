@@ -7,6 +7,7 @@
 #
 # Every app is smoke-tested after the build (packaging/smoke.py: it starts, serves its files, has its translations,
 # tags and starter pack). A platform that fails doesn't cancel the others, but nothing is published unless all pass.
+# Each release carries SHA256SUMS.txt and a signed provenance attestation per file (gh attestation verify).
 name: release
 
 on:
@@ -17,6 +18,9 @@ on:
 
 permissions:
   contents: write
+  id-token: write  # the signed provenance: a short-lived certificate from Sigstore
+  attestations: write
+  artifact-metadata: write
 
 concurrency:
   group: release-${{ github.ref }}
@@ -81,7 +85,15 @@ jobs:
         with:
           path: dist
           merge-multiple: true
-      - run: ls -la dist
+      - name: Checksums
+        run: cd dist && sha256sum * > SHA256SUMS.txt && cat SHA256SUMS.txt
+      # Signed build provenance: anyone can check that a download was built by this repository's public workflow
+      # from a given commit, and hasn't changed since: `gh attestation verify <file> --repo Piscary/SpacedPositions`
+      - uses: actions/attest@v4
+        with:
+          subject-path: |
+            dist/*.dmg
+            dist/*.zip
       - name: The release of a version tag
         if: startsWith(github.ref, 'refs/tags/v')
         run: |

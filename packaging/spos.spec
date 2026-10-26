@@ -33,15 +33,44 @@ a = Analysis(
     excludes=["tkinter", "pytest", "playwright", "PIL", "IPython"],
     noarchive=False,
 )
+# Windows: the .exe says what it is, who made it and which version (Properties → Details). A program without this
+# looks anonymous, which is one of the things virus scanners' heuristics react to.
+version_info = None
+if sys.platform == "win32":
+    from PyInstaller.utils.win32.versioninfo import (FixedFileInfo, StringFileInfo, StringStruct, StringTable,
+                                                     VarFileInfo, VarStruct, VSVersionInfo)
+
+    version = __import__("spaced_positions").__version__
+    numbers = tuple(int(n) for n in "".join(c if c.isdigit() or c == "." else " " for c in version).split()[0].split(".")[:3])
+    numbers = (numbers + (0, 0, 0, 0))[:4]
+    version_info = VSVersionInfo(
+        ffi=FixedFileInfo(filevers=numbers, prodvers=numbers),
+        kids=[
+            StringFileInfo([StringTable("040904B0", [
+                StringStruct("CompanyName", "Spaced Positions (open source, github.com/Piscary/SpacedPositions)"),
+                StringStruct("FileDescription", "Spaced Positions: chess puzzle training"),
+                StringStruct("FileVersion", version),
+                StringStruct("InternalName", name),
+                StringStruct("LegalCopyright", "Free software under the GNU GPL-3.0-or-later"),
+                StringStruct("OriginalFilename", f"{name}.exe"),
+                StringStruct("ProductName", name),
+                StringStruct("ProductVersion", version),
+            ])]),
+            VarFileInfo([VarStruct("Translation", [1033, 1200])]),
+        ],
+    )
+
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 exe = EXE(
     pyz, a.scripts, [], exclude_binaries=True, name=name, console=False, disable_windowed_traceback=False,
     icon=os.path.join(SPECPATH, "icon.icns" if sys.platform == "darwin" else "icon.ico"),
+    version=version_info,
 )
 coll = COLLECT(exe, a.binaries, a.zipfiles, a.datas, strip=False, upx=False, name=name)
 if sys.platform == "darwin":
     app = BUNDLE(
         coll, name=f"{name}.app", icon=os.path.join(SPECPATH, "icon.icns"), bundle_identifier="org.spacedpositions.app",
         info_plist={"CFBundleShortVersionString": __import__("spaced_positions").__version__, "LSUIElement": False,
-                    "NSHighResolutionCapable": True},
+                    "NSHighResolutionCapable": True, "CFBundleDisplayName": name,
+                    "NSHumanReadableCopyright": "Free software under the GNU GPL-3.0-or-later"},
     )

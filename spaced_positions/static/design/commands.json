@@ -1308,6 +1308,14 @@
    "hidden": true,
    "handler": "client"
   },
+  "pane.menu": {
+   "title": "This pane's menu: all its commands",
+   "group": "Panes",
+   "aliases": [
+    "menu"
+   ],
+   "handler": "client"
+  },
   "pane.view": {
    "title": "Change this pane's view",
    "group": "Panes",
@@ -2453,6 +2461,10 @@
    },
    "space w L": {
     "command": "layout.menu",
+    "args": []
+   },
+   "space w w": {
+    "command": "pane.menu",
     "args": []
    },
    "space u b": {

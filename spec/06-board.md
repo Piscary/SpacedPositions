@@ -119,7 +119,8 @@ large).
 
 All tokens, see 07 · Board tokens: square colours, highlight colours, arrow colours, coordinates (inside / outside /
 off), piece set, board border, animation speed, legal-move dots on/off, last-move highlight on/off, annotation badges
-on/off, blindfold (pieces invisible), silhouette (all pieces of one colour look the same, for training).
+on/off, blindfold (pieces invisible), silhouette (every piece a poker chip of its colour, for training: where the
+pieces are and whose, not which; drawn in CSS as its own layer in the theme's disc colours).
 
 the squares are a CSS conic gradient of `sq-light`/`sq-dark` (a theme change needs no image);
 coordinates sit inside the board (ranks on the right edge, files along the bottom) in the colour of the other

@@ -3,6 +3,8 @@
 {% block how %}
   {% key "pane.view" as view_key %}{% key "pane.split.vertical" as vsplit %}{% key "pane.split.horizontal" as hsplit %}{% key "pane.close" as close %}
   {% key "pane.maximize" as maximize %}{% key "pane.group" as group %}{% key "pane.focus.next" as next_pane %}
+  {% key "pane.menu" as menu %}
+  <dt>{% translate "Everything a pane can do" %}</dt><dd>{% blocktranslate trimmed %}The ⋯ in its header (or a right click on the header, or {{ menu }}) lists what the pane and its view can do, each with its key.{% endblocktranslate %}</dd>
   <dt>{% translate "Choose what a pane shows" %}</dt><dd>{% blocktranslate trimmed %}{{ view_key }}, then the letter of a view.{% endblocktranslate %}</dd>
   <dt>{% translate "Split a pane" %}</dt><dd>{% blocktranslate trimmed %}{{ vsplit }} side by side, {{ hsplit }} above and below; {{ close }} closes the pane again.{% endblocktranslate %}</dd>
   <dt>{% translate "Make one pane big" %}</dt><dd>{% blocktranslate trimmed %}{{ maximize }}; the same keys bring the others back.{% endblocktranslate %}</dd>

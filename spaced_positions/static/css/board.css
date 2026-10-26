@@ -29,11 +29,33 @@
 .board.is-preview .cg-wrap { opacity: 0.85; }
 .board__preview { color: var(--info); font-weight: 700; }
 
-/* Training looks (spec 06 §8): blind hides the pieces; silhouette shows each piece as a disc of its colour. */
+/* Training looks (spec 06 §8): blind hides the pieces; silhouette shows each piece as a poker chip of its colour, so
+   you know where the pieces are and whose they are, not which they are. The chip is its own layer (::before): the
+   piece pictures are background images, switched off here. Face and edge stripes in the theme's colours. */
 .board.is-blind .cg-wrap piece { visibility: hidden; }
 .board.is-silhouette .cg-wrap piece { background-image: none !important; }
-.board.is-silhouette .cg-wrap piece.white { background: radial-gradient(circle, var(--disc-white) 0 34%, var(--disc-black) 35% 38%, transparent 39%); }
-.board.is-silhouette .cg-wrap piece.black { background: radial-gradient(circle, var(--disc-black) 0 38%, transparent 39%); }
+.board.is-silhouette .cg-wrap piece::before {
+  content: "";
+  position: absolute;
+  inset: 10%;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side, var(--chip-face) 0 46%, var(--chip-edge) 46% 52%, var(--chip-face) 52% 62%, transparent 62.5%),
+    repeating-conic-gradient(from 10deg, var(--chip-edge) 0 14deg, var(--chip-face) 14deg 45deg);
+  box-shadow: 0 0 0 calc(var(--rule) * 1.5) var(--chip-outline), 0 calc(var(--rule) * 2) calc(var(--rule) * 3) var(--chip-shadow);
+}
+.board.is-silhouette .cg-wrap piece.white {
+  --chip-face: var(--disc-white);
+  --chip-edge: var(--disc-black);
+  --chip-outline: var(--disc-black);
+  --chip-shadow: color-mix(in oklab, var(--disc-black) 35%, transparent);
+}
+.board.is-silhouette .cg-wrap piece.black {
+  --chip-face: var(--disc-black);
+  --chip-edge: var(--disc-white);
+  --chip-outline: var(--disc-black);
+  --chip-shadow: color-mix(in oklab, var(--disc-black) 45%, transparent);
+}
 
 .board__palette {
   display: flex;

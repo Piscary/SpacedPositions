@@ -148,6 +148,7 @@
 .menu__label { flex: 1 1 auto; }
 .menu__note { color: var(--text-sub); font-size: var(--fs-xs); }
 .menu__sep { height: var(--rule); margin: var(--s-1) 0; background: var(--line); }
+.menu__heading { padding-top: var(--s-2); }
 
 /* ── Toast ───────────────────────────────────────────────────────────────────────────────────────────────────── */
 .toasts { position: fixed; top: calc(var(--appbar-h) + var(--s-2)); right: var(--s-2); display: grid; gap: var(--s-2); z-index: var(--z-toast); }

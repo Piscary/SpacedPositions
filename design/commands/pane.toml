@@ -65,6 +65,11 @@ reason = "no hidden buffers"
 undoable = true
 hidden = true
 
+["pane.menu"]
+title = "This pane's menu: all its commands"
+group = "Panes"
+aliases = ["menu"]
+
 ["pane.view"]
 title = "Change this pane's view"
 group = "Panes"

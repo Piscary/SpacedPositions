@@ -166,6 +166,66 @@ VIEWS = {
 }
 
 
+# The pane menu (`⋯` in the header, a right click on it, ␣ w w): each view's commands, so everything can be reached
+# with the mouse too. Entries are "command [args]" with a label where the command's own title isn't specific enough.
+# The pane's own commands (split, view, link group …) follow in every menu (static/js/core/panemenu.js).
+VIEW_MENUS = {
+    "board": [("board.start", None), ("board.back", None), ("board.forward", None), ("board.end", None), ("board.flip", None),
+              ("board.entry", None), ("board.setup", None), ("board.squaretool", None), ("board.cleardrawings", None),
+              ("board.copyfen", None), ("board.copypgn", None), ("board.lichess", None), ("board.pieces", None)],
+    "moves": [("analysis.start", None), ("analysis.back", None), ("analysis.forward", None), ("analysis.end", None),
+              ("analysis.sibling next", _("Next variation at this move")), ("analysis.sibling prev", _("Previous variation at this move")),
+              ("analysis.mainline", None), ("analysis.fold", None), ("analysis.foldall", None), ("analysis.comment", None),
+              ("analysis.rootcomment", None), ("analysis.annotate", None), ("analysis.mark good", _("Mark as good")),
+              ("analysis.mark bad", _("Mark as bad")), ("analysis.mark clear", _("Remove the mark")), ("analysis.tags", None),
+              ("analysis.positiontags", None), ("analysis.promote", None), ("analysis.moveup", None), ("analysis.movedown", None),
+              ("analysis.delete", None), ("analysis.puzzle start", _("Puzzle: starts after this move")),
+              ("analysis.puzzle end", _("Puzzle: the solution ends here")), ("analysis.puzzle ready", _("Puzzle: ready for training")),
+              ("analysis.subject next", _("Next position of the list")), ("analysis.subject prev", _("Previous position of the list")),
+              ("analysis.newposition", None), ("analysis.moments", None)],
+    "engine": [("engine.toggle", None), ("engine.best", None), ("engine.lines", None), ("engine.evaluate", None)],
+    "inspector": [("analysis.comment", None), ("analysis.annotate", None), ("analysis.tags", None), ("analysis.positiontags", None),
+                  ("library.detect", None), ("analysis.puzzle start", _("Puzzle: starts after this move")),
+                  ("analysis.puzzle end", _("Puzzle: the solution ends here")), ("analysis.puzzle ready", _("Puzzle: ready for training")),
+                  ("section.next", None), ("section.all", None)],
+    "evalgraph": [("engine.evaluate", None), ("analysis.moments", None), ("analysis.back", None), ("analysis.forward", None)],
+    "vargraph": [("analysis.back", None), ("analysis.forward", None), ("analysis.sibling next", _("Next variation at this move")),
+                 ("analysis.foldall", None)],
+    "library": [("search.open", None), ("library.clear", None), ("library.unfilter", None), ("help.search", None),
+                ("list.select", None), ("list.visual", None), ("list.selectall", None), ("library.tag", None), ("library.train", None),
+                ("library.analyse", None), ("library.beside", None), ("library.export", None), ("library.copyfen", None),
+                ("library.detect", None), ("library.trash", None), ("library.restore", None), ("library.sort", None),
+                ("library.foldall", None), ("library.display", None), ("library.savequery", None)],
+    "filters": [("library.exclude", None), ("library.clear", None), ("library.unfilter", None), ("help.search", None)],
+    "queue": [("train.review", None), ("train.storm 3", _("Storm, 3 minutes")), ("train.streak 0", _("Streak")), ("train.weakest", None),
+              ("train.again", None), ("train.hint", None), ("train.giveup", None), ("train.quit", None)],
+    "entry": [("collect.save", None), ("collect.saveopen", None), ("collect.source", None), ("collect.page up", _("Next page")),
+              ("collect.page down", _("Previous page")), ("collect.diagram up", _("Next diagram number")),
+              ("collect.diagram down", _("Previous diagram number")), ("collect.tag", None), ("collect.untag", None),
+              ("collect.ready", None), ("collect.duplicate", None), ("board.setup", None)],
+    "chart": [("chart.next next", _("Next chart")), ("chart.next prev", _("Previous chart")), ("chart.drill", None), ("chart.table", None),
+              ("stats.period 7d", _("Period: 7 days")), ("stats.period 30d", _("Period: 30 days")), ("stats.period 90d", _("Period: 90 days")),
+              ("stats.period 1y", _("Period: a year")), ("stats.period all", _("Period: everything"))],
+    "pgn": [("pane.insert", None), ("board.copyfen", None), ("board.copypgn", None), ("form.submit", _("Show what you pasted"))],
+    "settings": [("search.open", None), ("settings.step next", _("Next value")), ("settings.step prev", _("Previous value")),
+                 ("settings.edit", None), ("settings.reset", None), ("settings.keymap", None), ("settings.export", None),
+                 ("theme.save", None), ("theme.export", None), ("app.backup", None), ("app.folder", None)],
+    "keymap": [("search.open", None), ("keymap.bind", None), ("keymap.unbind", None)],
+    "today": [("train.review", None), ("train.storm 3", _("Storm, 3 minutes")), ("train.streak 0", _("Streak")), ("train.weakest", None),
+              ("train.again", None), ("pack.starter", None), ("pack.import", None), ("home.dismiss", None)],
+    "continue": [("home.analysis", None), ("home.collect", None), ("pane.insert", None), ("list.open", None)],
+}
+
+
+def menu_of(view: str) -> list[dict]:
+    """The pane menu's entries of a view, for the page (boot data)."""
+    out = []
+    for binding, label in VIEW_MENUS.get(view, []):
+        cid, *args = binding.split()
+        out.append({"cmd": cid, "args": args, "label": str(label) if label else ""})
+    return out
+
+
 def pane(view, group=None, **extra):
     return {"type": "pane", "view": view, "group": group, "pinned": False, "collapsed": False} | extra
 

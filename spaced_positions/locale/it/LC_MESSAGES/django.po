@@ -35,7 +35,7 @@ msgstr "Cattiva"
 msgid "Clear"
 msgstr "Rimuovi"
 
-#: templates/analysis/inspector.html templates/analysis/inspector_game.html static/js/islands/board.js:667
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html static/js/islands/board.js:676
 msgid "none"
 msgstr "nessuno"
 
@@ -808,6 +808,14 @@ msgid "The workspace is made of panes. Each pane shows one view: a board, a move
 msgstr "L'area di lavoro è fatta di riquadri. Ognuno mostra una vista: una scacchiera, un albero delle mosse, la Biblioteca, un grafico … Decidi tu cosa va dove."
 
 #: templates/help/pane.html
+msgid "Everything a pane can do"
+msgstr "Tutto ciò che fa un riquadro"
+
+#: templates/help/pane.html
+msgid "The ⋯ in its header (or a right click on the header, or %(menu)s) lists what the pane and its view can do, each with its key."
+msgstr "Il ⋯ nella sua intestazione (o un clic destro sull'intestazione, o %(menu)s) elenca cosa possono fare il riquadro e la sua vista, ognuno con il suo tasto."
+
+#: templates/help/pane.html
 msgid "Choose what a pane shows"
 msgstr "Scegliere cosa mostra un riquadro"
 
@@ -938,6 +946,14 @@ msgstr "Risolvi sulla scacchiera dello stesso gruppo collegato. Gli esercizi ven
 #: templates/help/queue.html
 msgid "A missed puzzle comes back soon, a solved one later and later: there is no need to rate yourself."
 msgstr "Un esercizio sbagliato torna presto, uno risolto sempre più tardi: non serve valutarti da solo."
+
+#: templates/help/queue.html
+msgid "Typing moves (i) shows arrows for the moves that fit and completes a move once only one fits: Settings → Training turns either off, for a harder test."
+msgstr "Digitando le mosse (i), le frecce mostrano le mosse che corrispondono e una mossa viene completata appena ne resta una sola: Impostazioni → Allenamento disattiva l'una o l'altra cosa, per una prova più dura."
+
+#: templates/help/queue.html
+msgid "The look silhouette shows each piece as a chip of its colour: you see where the pieces are and whose, not which."
+msgstr "L'aspetto silhouette mostra ogni pezzo come una fiche del suo colore: vedi dove sono i pezzi e di chi, non quali sono."
 
 #: templates/help/queue.html
 msgid "On the result screen, missed puzzles can be reviewed again or opened in Analyse one after the other."
@@ -1208,6 +1224,10 @@ msgid "Train, Stats and the Library."
 msgstr "Allenamento, Statistiche e la Biblioteca."
 
 #: templates/help/today.html
+msgid "Getting around lists seven keys to try; each one is ticked off once you use it. Settings → Keys hides or shows it."
+msgstr "Primi passi elenca sette tasti da provare; ognuno viene spuntato appena lo usi. Impostazioni → Tasti lo mostra o lo nasconde."
+
+#: templates/help/today.html
 msgid "When the library is empty, Home shows how to fill it: the starter pack that comes with the app, a puzzle pack, a book, or pasted games."
 msgstr "Quando la biblioteca è vuota, la Home mostra come riempirla: il pacchetto iniziale incluso nell'app, un pacchetto di esercizi, un libro o partite incollate."
 
@@ -1257,7 +1277,7 @@ msgstr "Svuotare la ricerca"
 msgid "excluded"
 msgstr "esclusa"
 
-#: templates/library/results.html static/js/islands/board.js:430
+#: templates/library/results.html static/js/islands/board.js:438
 msgid "diagram"
 msgstr "diagramma"
 
@@ -1737,7 +1757,7 @@ msgstr "Storm"
 msgid "How much time a quick solve earns (Settings → Training)"
 msgstr "Quanto tempo vale una soluzione rapida (Impostazioni → Allenamento)"
 
-#: templates/training/launcher.html core/settings.py:32
+#: templates/training/launcher.html core/settings.py:36
 msgid "Storm pace"
 msgstr "Ritmo dello Storm"
 
@@ -1957,7 +1977,7 @@ msgstr "Recenti"
 msgid "On / off"
 msgstr "Acceso / spento"
 
-#: templates/views/engine.html core/settings.py:44
+#: templates/views/engine.html core/settings.py:49
 msgid "Lines"
 msgstr "Linee"
 
@@ -2182,6 +2202,58 @@ msgstr "Un pacchetto è un file di posizioni ed esercizi, per esempio del tuo al
 #: templates/views/today.html
 msgid "Or paste a FEN, a PGN or a lichess link anywhere (%(paste_keys)s), or import a PGN file (<span class=\"mono\">:import</span>)."
 msgstr "Oppure incolla ovunque un FEN, un PGN o un link lichess (%(paste_keys)s), o importa un file PGN (<span class=\"mono\">:import</span>)."
+
+#: templates/views/today.html
+msgid "seven keys to try"
+msgstr "sette tasti da provare"
+
+#: templates/views/today.html
+msgid "Getting around"
+msgstr "Primi passi"
+
+#: templates/views/today.html
+msgid "Everything works with the mouse, and every button shows its key. The keys are what make it fast: try these seven, each one ticks itself off."
+msgstr "Tutto funziona con il mouse, e ogni pulsante mostra il suo tasto. Sono i tasti a renderlo veloce: prova questi sette, ognuno si spunta da solo."
+
+#: templates/views/today.html
+msgid "%(go_library)s goes to the Library, %(go_home)s back here. Space alone shows where else you can go."
+msgstr "%(go_library)s va alla Biblioteca, %(go_home)s torna qui. La barra spaziatrice da sola mostra dove altro andare."
+
+#: templates/views/today.html
+msgid "%(help)s opens the help of the panel you are in: a guide, its keys, and how to search."
+msgstr "%(help)s apre l'aiuto del riquadro in cui sei: una guida, i suoi tasti e come cercare."
+
+#: templates/views/today.html
+msgid "%(next_pane)s moves to the next panel. The one with the coloured header listens to your keys."
+msgstr "%(next_pane)s passa al riquadro successivo. Quello con l'intestazione colorata ascolta i tuoi tasti."
+
+#: templates/views/today.html
+msgid "%(down)s and %(up)s move down and up: through a list, a page, the moves of a game."
+msgstr "%(down)s e %(up)s scendono e salgono: in una lista, una pagina, le mosse di una partita."
+
+#: templates/views/today.html
+msgid "%(colon)s lets you type any command by its name, with suggestions: try <code>theme</code>."
+msgstr "%(colon)s ti fa digitare qualsiasi comando per nome, con suggerimenti: prova <code>theme</code>."
+
+#: templates/views/today.html
+msgid "%(hints)s puts a letter on everything you can click: press the letter to click it."
+msgstr "%(hints)s mette una lettera su tutto ciò che si può cliccare: premi la lettera per cliccarlo."
+
+#: templates/views/today.html
+msgid "%(undo)s undoes the last change, whatever it was. Nothing is lost by trying."
+msgstr "%(undo)s annulla l'ultima modifica, qualunque fosse. Provando non si perde nulla."
+
+#: templates/views/today.html
+msgid "<b>You know your way around.</b> The rest you'll pick up as you go: every button shows its key, and the status line says the key when you click."
+msgstr "<b>Ora sai orientarti.</b> Il resto lo imparerai strada facendo: ogni pulsante mostra il suo tasto, e la riga di stato dice il tasto quando clicchi."
+
+#: templates/views/today.html
+msgid "Hide this"
+msgstr "Nascondi"
+
+#: templates/views/today.html
+msgid "(Settings → Keys brings it back)"
+msgstr "(Impostazioni → Tasti lo fa tornare)"
 
 #: templates/views/today.html
 msgid "%(n)s due"
@@ -2581,15 +2653,15 @@ msgstr "torre non in {square}"
 msgid "too large to paste: import it as a file (:import)"
 msgstr "troppo grande da incollare: importalo come file (:import)"
 
-#: core/engine_local.py:91
+#: core/engine_local.py:104
 msgid "no stockfish on the PATH: install it, or set engine.path (Settings → Engine)"
 msgstr "nessuno stockfish nel PATH: installalo o imposta engine.path (Impostazioni → Motore)"
 
-#: core/engine_local.py:89
+#: core/engine_local.py:102
 msgid "engine.path {path} is not a program (Settings → Engine)"
 msgstr "engine.path {path} non è un programma (Impostazioni → Motore)"
 
-#: core/engine_local.py:127
+#: core/engine_local.py:140
 msgid "the local engine is not running"
 msgstr "il motore locale non è in esecuzione"
 
@@ -2701,6 +2773,106 @@ msgstr "linea principale"
 msgid "delete"
 msgstr "elimina"
 
+#: core/layouts.py:177 core/layouts.py:192
+msgid "Next variation at this move"
+msgstr "Variante successiva a questa mossa"
+
+#: core/layouts.py:177
+msgid "Previous variation at this move"
+msgstr "Variante precedente a questa mossa"
+
+#: core/layouts.py:179
+msgid "Mark as good"
+msgstr "Segna come buona"
+
+#: core/layouts.py:180
+msgid "Mark as bad"
+msgstr "Segna come cattiva"
+
+#: core/layouts.py:180
+msgid "Remove the mark"
+msgstr "Togli il segno"
+
+#: core/layouts.py:182 core/layouts.py:188
+msgid "Puzzle: starts after this move"
+msgstr "Esercizio: inizia dopo questa mossa"
+
+#: core/layouts.py:183 core/layouts.py:189
+msgid "Puzzle: the solution ends here"
+msgstr "Esercizio: la soluzione finisce qui"
+
+#: core/layouts.py:183 core/layouts.py:189
+msgid "Puzzle: ready for training"
+msgstr "Esercizio: pronto per l'allenamento"
+
+#: core/layouts.py:184
+msgid "Next position of the list"
+msgstr "Posizione successiva della lista"
+
+#: core/layouts.py:184
+msgid "Previous position of the list"
+msgstr "Posizione precedente della lista"
+
+#: core/layouts.py:200 core/layouts.py:214
+msgid "Storm, 3 minutes"
+msgstr "Storm, 3 minuti"
+
+#: core/layouts.py:202
+msgid "Next page"
+msgstr "Pagina successiva"
+
+#: core/layouts.py:203
+msgid "Previous page"
+msgstr "Pagina precedente"
+
+#: core/layouts.py:203
+msgid "Next diagram number"
+msgstr "Numero di diagramma successivo"
+
+#: core/layouts.py:204
+msgid "Previous diagram number"
+msgstr "Numero di diagramma precedente"
+
+#: core/layouts.py:206
+msgid "Next chart"
+msgstr "Grafico successivo"
+
+#: core/layouts.py:206
+msgid "Previous chart"
+msgstr "Grafico precedente"
+
+#: core/layouts.py:207
+msgid "Period: 7 days"
+msgstr "Periodo: 7 giorni"
+
+#: core/layouts.py:207
+msgid "Period: 30 days"
+msgstr "Periodo: 30 giorni"
+
+#: core/layouts.py:207
+msgid "Period: 90 days"
+msgstr "Periodo: 90 giorni"
+
+#: core/layouts.py:208
+msgid "Period: a year"
+msgstr "Periodo: un anno"
+
+#: core/layouts.py:208
+msgid "Period: everything"
+msgstr "Periodo: tutto"
+
+#: core/layouts.py:209
+msgid "Show what you pasted"
+msgstr "Mostra ciò che hai incollato"
+
+#: core/layouts.py:210
+msgid "Next value"
+msgstr "Valore successivo"
+
+#: core/layouts.py:210
+msgid "Previous value"
+msgstr "Valore precedente"
+
 #: core/layouts.py:84 core/settings_view.py:24 stats/metrics.py:522
 msgid "Board"
 msgstr "Scacchiera"
@@ -2717,7 +2889,7 @@ msgstr "Mosse"
 msgid "The analysis as a book-style move tree."
 msgstr "L'analisi come albero delle mosse, come in un libro."
 
-#: core/layouts.py:92 core/settings.py:41 core/settings_view.py:25
+#: core/layouts.py:92 core/settings.py:46 core/settings_view.py:25
 msgid "Engine"
 msgstr "Motore"
 
@@ -3107,19 +3279,19 @@ msgstr "impossibile aprire {folder}: {error}"
 msgid "check contrast: {problems}"
 msgstr "controlla il contrasto: {problems}"
 
-#: core/settings.py:84
+#: core/settings.py:89
 msgid "English"
 msgstr "inglese"
 
-#: core/settings.py:84
+#: core/settings.py:89
 msgid "German"
 msgstr "tedesco"
 
-#: core/settings.py:84
+#: core/settings.py:89
 msgid "French"
 msgstr "francese"
 
-#: core/settings.py:84
+#: core/settings.py:89
 msgid "Italian"
 msgstr "italiano"
 
@@ -3148,150 +3320,174 @@ msgid "How many new cards Review introduces a day"
 msgstr "Quante nuove schede il Ripasso introduce al giorno"
 
 #: core/settings.py:32
+msgid "Hints while typing a move"
+msgstr "Suggerimenti digitando una mossa"
+
+#: core/settings.py:33
+msgid "When you type a move in a puzzle (i), arrows show the moves that fit what you typed so far"
+msgstr "Quando digiti una mossa in un esercizio (i), le frecce mostrano le mosse che corrispondono a ciò che hai digitato"
+
+#: core/settings.py:34
+msgid "Complete typed moves"
+msgstr "Completare le mosse digitate"
+
+#: core/settings.py:35
+msgid "In a puzzle, a typed move is played as soon as only one legal move fits; off: type the whole move"
+msgstr "In un esercizio una mossa digitata viene giocata appena una sola mossa legale corrisponde; spento: digita la mossa intera"
+
+#: core/settings.py:36
 msgid "The Storm clock: fast, medium or slow (adaptive to your solving times)"
 msgstr "L'orologio dello Storm: veloce, medio o lento (si adatta ai tuoi tempi di soluzione)"
 
-#: core/settings.py:34
+#: core/settings.py:38
 msgid "Keycaps"
 msgstr "Tasti mostrati"
 
-#: core/settings.py:34
+#: core/settings.py:38
 msgid "Keys on buttons: full, compact (only the key strips), off"
 msgstr "Tasti sui pulsanti: completi, compatti (solo le strisce di tasti), nessuno"
 
-#: core/settings.py:36
+#: core/settings.py:40
+msgid "Key intro on Home"
+msgstr "Introduzione ai tasti nella Home"
+
+#: core/settings.py:40
+msgid "Home shows seven keys to try, each ticked off once you have used it"
+msgstr "La Home mostra sette tasti da provare, ognuno spuntato una volta usato"
+
+#: core/settings.py:41
 msgid "Teach keys"
 msgstr "Insegna i tasti"
 
-#: core/settings.py:36
+#: core/settings.py:41
 msgid "After a click, the status line shows the key for it"
 msgstr "Dopo un clic, la riga di stato mostra il tasto corrispondente"
 
-#: core/settings.py:37
+#: core/settings.py:42
 msgid "Which-key panel"
 msgstr "Aiuto tasti"
 
-#: core/settings.py:37
+#: core/settings.py:42
 msgid "The panel that lists what can follow a prefix (␣, g …)"
 msgstr "Il pannello che elenca cosa può seguire un prefisso (␣, g …)"
 
-#: core/settings.py:38
+#: core/settings.py:43
 msgid "Piece letters"
 msgstr "Lettere dei pezzi"
 
-#: core/settings.py:39
+#: core/settings.py:44
 msgid "Letters of the pieces in moves, typed and shown: English (KQRBN), German (KDTLS), French (RDTFC) or Italian (RDTAC)"
 msgstr "Lettere dei pezzi nelle mosse, digitate e mostrate: inglese (KQRBN), tedesco (KDTLS), francese (RDTFC) o italiano (RDTAC)"
 
-#: core/settings.py:41
+#: core/settings.py:46
 msgid "Stockfish in the browser (WASM), or a local Stockfish program through the app"
 msgstr "Stockfish nel browser (WASM) o un programma Stockfish locale tramite l'app"
 
-#: core/settings.py:43
+#: core/settings.py:48
 msgid "Local engine"
 msgstr "Motore locale"
 
-#: core/settings.py:43
+#: core/settings.py:48
 msgid "Path of a UCI engine program (empty: stockfish on the PATH)"
 msgstr "Percorso di un programma motore UCI (vuoto: stockfish nel PATH)"
 
-#: core/settings.py:44
+#: core/settings.py:49
 msgid "How many best lines the engine shows"
 msgstr "Quante linee migliori mostra il motore"
 
-#: core/settings.py:45
+#: core/settings.py:50
 msgid "Depth"
 msgstr "Profondità"
 
-#: core/settings.py:45
+#: core/settings.py:50
 msgid "How deep the engine searches"
 msgstr "Quanto in profondità cerca il motore"
 
-#: core/settings.py:46
+#: core/settings.py:51
 msgid "Threads"
 msgstr "Thread"
 
-#: core/settings.py:46
+#: core/settings.py:51
 msgid "Threads of the local engine"
 msgstr "Thread del motore locale"
 
-#: core/settings.py:47
+#: core/settings.py:52
 msgid "Hash (MB)"
 msgstr "Hash (MB)"
 
-#: core/settings.py:47
+#: core/settings.py:52
 msgid "Hash table of the local engine"
 msgstr "Tabella hash del motore locale"
 
-#: core/settings.py:48
+#: core/settings.py:53
 msgid "Arrows"
 msgstr "Frecce"
 
-#: core/settings.py:48
+#: core/settings.py:53
 msgid "The engine's best moves as arrows on the board"
 msgstr "Le mosse migliori del motore come frecce sulla scacchiera"
 
-#: core/settings.py:49
+#: core/settings.py:54
 msgid "Sounds"
 msgstr "Suoni"
 
-#: core/settings.py:49
+#: core/settings.py:54
 msgid "A click on a move, a tone on right and wrong, a chord on a record"
 msgstr "Un clic a ogni mossa, un suono per giusto e sbagliato, un accordo per un record"
 
-#: core/settings.py:50
+#: core/settings.py:55
 msgid "Counting numbers"
 msgstr "Numeri che contano"
 
-#: core/settings.py:50
+#: core/settings.py:55
 msgid "Numbers count up on the result screen and in Stats"
 msgstr "I numeri salgono nella schermata dei risultati e nelle Statistiche"
 
-#: core/settings.py:51
+#: core/settings.py:56
 msgid "Your name in packs"
 msgstr "Il tuo nome nei pacchetti"
 
-#: core/settings.py:51
+#: core/settings.py:56
 msgid "Shown to students with the packs you make (else the player marked as you)"
 msgstr "Mostrato con i pacchetti che crei (altrimenti il giocatore segnato come te)"
 
-#: core/settings.py:52
+#: core/settings.py:57
 msgid "Look for updates"
 msgstr "Cerca aggiornamenti"
 
-#: core/settings.py:52
+#: core/settings.py:57
 msgid "At most once a day, ask GitHub whether there is a newer version (nothing else is sent)"
 msgstr "Al massimo una volta al giorno, chiede a GitHub se c'è una versione più recente (non viene inviato altro)"
 
-#: core/settings.py:53
+#: core/settings.py:58
 msgid "Stop by itself"
 msgstr "Fermati da solo"
 
-#: core/settings.py:53
+#: core/settings.py:58
 msgid "The app stops 10 minutes after the last tab was closed (started without a console: on)"
 msgstr "L'app si ferma 10 minuti dopo la chiusura dell'ultima scheda (avviata senza console: sì)"
 
-#: core/settings.py:100
+#: core/settings.py:105
 msgid "automatic"
 msgstr "automatico"
 
-#: core/settings.py:102
+#: core/settings.py:107
 msgid "as the app"
 msgstr "come l'app"
 
-#: core/settings.py:62
+#: core/settings.py:67
 msgid "no setting '{name}'"
 msgstr "nessuna impostazione «{name}»"
 
-#: core/settings.py:69
+#: core/settings.py:74
 msgid "{name}: on or off"
 msgstr "{name}: on o off"
 
-#: core/settings.py:71
+#: core/settings.py:76
 msgid "{name}: one of {values}"
 msgstr "{name}: uno di {values}"
 
-#: core/settings.py:76
+#: core/settings.py:81
 msgid "{name}: a number"
 msgstr "{name}: un numero"
 
@@ -3417,19 +3613,19 @@ msgstr "{ratio}:1, serve {minimum}:1"
 msgid "Position {fen}"
 msgstr "Posizione {fen}"
 
-#: core/updates.py:72
+#: core/updates.py:76
 msgid "Install the new version the way you installed this one; your data stays where it is."
 msgstr "Installa la nuova versione come hai installato questa; i tuoi dati restano dove sono."
 
-#: core/updates.py:67
+#: core/updates.py:71
 msgid "Download the new version from the release page and replace the app: your data stays where it is."
 msgstr "Scarica la nuova versione dalla pagina delle release e sostituisci l'app: i tuoi dati restano dove sono."
 
-#: core/updates.py:69
+#: core/updates.py:73
 msgid "A development copy: git pull, then start it again."
 msgstr "Una copia di sviluppo: git pull, poi riavviala."
 
-#: core/updates.py:71
+#: core/updates.py:75
 msgid "In a terminal: spos update. It stops the app, updates it and starts it again; your data stays."
 msgstr "In un terminale: spos update. Ferma l'app, la aggiorna e la riavvia; i tuoi dati restano."
 
@@ -5005,23 +5201,23 @@ msgstr "Nessun esercizio da ripassare corrisponde a «{filter}»"
 msgid "No puzzles in training match “{filter}”"
 msgstr "Nessun esercizio in allenamento corrisponde a «{filter}»"
 
-#: static/js/app.js:43
+#: static/js/app.js:45
 msgid "Your CSS is off for this page (Esc while loading): Settings → Advanced"
 msgstr "Il tuo CSS è disattivato per questa pagina (Esc al caricamento): Impostazioni → Avanzate"
 
-#: static/js/app.js:60
+#: static/js/app.js:62
 msgid "update {version} available"
 msgstr "aggiornamento {version} disponibile"
 
-#: static/js/app.js:102 static/js/core/commands.js:149 static/js/core/importer.js:58
+#: static/js/app.js:104 static/js/core/commands.js:149 static/js/core/importer.js:58
 msgid "undo"
 msgstr "annulla"
 
-#: static/js/app.js:138 static/js/core/library.js:703 static/js/islands/train.js:640
+#: static/js/app.js:140 static/js/core/library.js:703 static/js/islands/train.js:640
 msgid "The browser didn't allow copying"
 msgstr "Il browser non ha permesso la copia"
 
-#: static/js/app.js:158
+#: static/js/app.js:160
 msgid "Spaced Positions has stopped. Start it again from its icon or with spos."
 msgstr "Spaced Positions si è fermato. Riavvialo dalla sua icona o con spos."
 
@@ -5566,6 +5762,18 @@ msgstr "Niente selezionato"
 #: static/js/core/importer.js:149
 msgid "Importing…"
 msgstr "Importazione…"
+
+#: static/js/core/intro.js:23
+msgid "{n} of {total}"
+msgstr "{n} di {total}"
+
+#: static/js/core/intro.js:38
+msgid "All seven: you know your way around"
+msgstr "Tutti e sette: ora sai orientarti"
+
+#: static/js/core/intro.js:38
+msgid "Tick: {n} of {total} keys tried"
+msgstr "Spuntato: {n} tasti provati su {total}"
 
 #: static/js/core/keys.js:134
 msgid "{keys} is not bound here"
@@ -6131,159 +6339,167 @@ msgstr "Imposta la posizione"
 msgid "This position can't be played (a diagram)"
 msgstr "Questa posizione non si può giocare (un diagramma)"
 
-#: static/js/islands/board.js:396
+#: static/js/islands/board.js:399
+msgid "Type the whole move (completion is off: Settings → Training)"
+msgstr "Digita la mossa intera (il completamento è spento: Impostazioni → Allenamento)"
+
+#: static/js/islands/board.js:403
 msgid "Which one? {moves} · ⇥ choose, ↵ play"
 msgstr "Quale? {moves} · ⇥ scegli, ↵ gioca"
 
-#: static/js/islands/board.js:398
+#: static/js/islands/board.js:405
+msgid "More than one move fits: type more of it"
+msgstr "Più di una mossa corrisponde: digitane di più"
+
+#: static/js/islands/board.js:406
 msgid "No legal move matches “{text}”"
 msgstr "Nessuna mossa legale corrisponde a «{text}»"
 
-#: static/js/islands/board.js:398
+#: static/js/islands/board.js:406
 msgid "Type a move, e.g. Nf3, Sf3 or g1f3"
 msgstr "Digita una mossa, ad es. Nf3, Cf3 o g1f3"
 
-#: static/js/islands/board.js:420
+#: static/js/islands/board.js:428
 msgid "a: fix"
 msgstr "a: correggi"
 
-#: static/js/islands/board.js:423
+#: static/js/islands/board.js:431
 msgid "duplicate of {short} {title}"
 msgstr "duplicato di {short} {title}"
 
-#: static/js/islands/board.js:425
+#: static/js/islands/board.js:433
 msgid "click: place {piece} (white) · ⇧click: black · right-click: empty"
 msgstr "clic: metti {piece} (bianco) · ⇧clic: nero · clic destro: svuota"
 
-#: static/js/islands/board.js:426
+#: static/js/islands/board.js:434
 msgid "click: place {piece} (black) · ⇧click: white · right-click: empty"
 msgstr "clic: metti {piece} (nero) · ⇧clic: bianco · clic destro: svuota"
 
-#: static/js/islands/board.js:427
+#: static/js/islands/board.js:435
 msgid "click: empty a square"
 msgstr "clic: svuota una casa"
 
-#: static/js/islands/board.js:428
+#: static/js/islands/board.js:436
 msgid "drag: move pieces freely"
 msgstr "trascina: sposta i pezzi liberamente"
 
-#: static/js/islands/board.js:430 static/js/islands/board.js:452
+#: static/js/islands/board.js:438 static/js/islands/board.js:461
 msgid "White to move"
 msgstr "Muove il Bianco"
 
-#: static/js/islands/board.js:430 static/js/islands/board.js:452
+#: static/js/islands/board.js:438 static/js/islands/board.js:461
 msgid "Black to move"
 msgstr "Muove il Nero"
 
-#: static/js/islands/board.js:430
+#: static/js/islands/board.js:438
 msgid "castling {rights}"
 msgstr "arrocco {rights}"
 
-#: static/js/islands/board.js:430
+#: static/js/islands/board.js:438
 msgid "e.p. {square}"
 msgstr "e.p. {square}"
 
-#: static/js/islands/board.js:441
+#: static/js/islands/board.js:449
 msgid "Preview"
 msgstr "Anteprima"
 
-#: static/js/islands/board.js:441
+#: static/js/islands/board.js:449
 msgid "↵ or a opens it · leave the list to go back"
 msgstr "↵ o a la apre · lascia la lista per tornare"
 
-#: static/js/islands/board.js:444
+#: static/js/islands/board.js:452
 msgid "Type a move: "
 msgstr "Digita una mossa: "
 
-#: static/js/islands/board.js:446
+#: static/js/islands/board.js:455
 msgid "↵ play · ⇥ next · Esc done"
 msgstr "↵ gioca · ⇥ successiva · Esc fatto"
 
-#: static/js/islands/board.js:448
+#: static/js/islands/board.js:457
 msgid "Solve as black · click/drag or i to type the move · h hint · s solution"
 msgstr "Risolvi col Nero · clic/trascina o i per digitare la mossa · h suggerimento · s soluzione"
 
-#: static/js/islands/board.js:449
+#: static/js/islands/board.js:458
 msgid "Solve as white · click/drag or i to type the move · h hint · s solution"
 msgstr "Risolvi col Bianco · clic/trascina o i per digitare la mossa · h suggerimento · s soluzione"
 
-#: static/js/islands/board.js:452
+#: static/js/islands/board.js:461
 msgid "Diagram: not playable"
 msgstr "Diagramma: non giocabile"
 
-#: static/js/islands/board.js:453
+#: static/js/islands/board.js:462
 msgid "move {n} of {total}"
 msgstr "mossa {n} di {total}"
 
-#: static/js/islands/board.js:454
+#: static/js/islands/board.js:463
 msgid "right-click: fill a square (⇧ red · ⌥ blue)"
 msgstr "clic destro: riempi una casa (⇧ rosso · ⌥ blu)"
 
-#: static/js/islands/board.js:454
+#: static/js/islands/board.js:463
 msgid "click/drag: move · right-drag: arrow (⇧ red · ⌥ blue · ⇧⌥ yellow)"
 msgstr "clic/trascina: mossa · trascina col destro: freccia (⇧ rosso · ⌥ blu · ⇧⌥ giallo)"
 
-#: static/js/islands/board.js:560
+#: static/js/islands/board.js:569
 msgid "Not while solving a puzzle"
 msgstr "Non mentre risolvi un esercizio"
 
-#: static/js/islands/board.js:568 design/commands/board.toml:board.squaretool
+#: static/js/islands/board.js:577 design/commands/board.toml:board.squaretool
 msgid "Square tool: right-click fills a square"
 msgstr "Strumento case: il clic destro riempie una casa"
 
-#: static/js/islands/board.js:568
+#: static/js/islands/board.js:577
 msgid "Square tool off: right-drag draws arrows"
 msgstr "Strumento case spento: trascinare col destro disegna frecce"
 
-#: static/js/islands/board.js:587
+#: static/js/islands/board.js:596
 msgid "Play the solution on the board first, then :puzzle"
 msgstr "Gioca prima la soluzione sulla scacchiera, poi :puzzle"
 
-#: static/js/islands/board.js:602
+#: static/js/islands/board.js:611
 msgid "Copied {what}"
 msgstr "{what} copiato"
 
-#: static/js/islands/board.js:604
+#: static/js/islands/board.js:613
 msgid "Could not copy the {what}: the browser refused"
 msgstr "Impossibile copiare il {what}: il browser ha rifiutato"
 
-#: static/js/islands/board.js:618
+#: static/js/islands/board.js:627
 msgid "Opened in lichess (a new tab)"
 msgstr "Aperto su lichess (una nuova scheda)"
 
-#: static/js/islands/board.js:640
+#: static/js/islands/board.js:649
 msgid "Nothing to fix automatically"
 msgstr "Niente da correggere automaticamente"
 
-#: static/js/islands/board.js:646 design/commands/board.toml:board.castling
+#: static/js/islands/board.js:655 design/commands/board.toml:board.castling
 msgid "Castling rights"
 msgstr "Diritti di arrocco"
 
-#: static/js/islands/board.js:648
+#: static/js/islands/board.js:657
 msgid "White O-O"
 msgstr "Bianco O-O"
 
-#: static/js/islands/board.js:648
+#: static/js/islands/board.js:657
 msgid "White O-O-O"
 msgstr "Bianco O-O-O"
 
-#: static/js/islands/board.js:648
+#: static/js/islands/board.js:657
 msgid "Black O-O"
 msgstr "Nero O-O"
 
-#: static/js/islands/board.js:648
+#: static/js/islands/board.js:657
 msgid "Black O-O-O"
 msgstr "Nero O-O-O"
 
-#: static/js/islands/board.js:665 design/commands/board.toml:board.ep
+#: static/js/islands/board.js:674 design/commands/board.toml:board.ep
 msgid "En passant square"
 msgstr "Casa en passant"
 
-#: static/js/islands/board.js:685
+#: static/js/islands/board.js:694
 msgid "Piece set · ↑↓ preview · ↵ keep · Esc back"
 msgstr "Set di pezzi · ↑↓ anteprima · ↵ tieni · Esc indietro"
 
-#: static/js/islands/board.js:696
+#: static/js/islands/board.js:705
 msgid "No piece set '{name}'"
 msgstr "Nessun set di pezzi «{name}»"
 
@@ -6946,6 +7162,10 @@ msgstr "nessun riquadro nascosto"
 #: design/commands/pane.toml:pane.buffer
 msgid "Show a hidden buffer in a split"
 msgstr "Mostra un riquadro nascosto in una divisione"
+
+#: design/commands/pane.toml:pane.menu
+msgid "This pane's menu: all its commands"
+msgstr "Il menu di questo riquadro: tutti i suoi comandi"
 
 #: design/commands/pane.toml:pane.view
 msgid "Change this pane's view"

@@ -35,7 +35,19 @@ The way ahead is in milestones with goals that have to be met before the next st
 **For the public beta (M1):** packs and books as collections (12 §2–4: where a puzzle comes from, training one
 collection, stats per collection), what the test group asks for, and:
 
-- **Signing** the apps (Apple Developer ID, a Windows certificate), so the first open needs no extra step.
+- **Signing** the apps, so the first open needs no extra step and virus scanners trust them (testers reported
+  "trojan" warnings: typical for unsigned PyInstaller apps). What is done: open source, builds only on GitHub Actions,
+  a signed provenance attestation and SHA256SUMS.txt with every release, version information in the Windows `.exe`,
+  the README's *Is it safe to install?*. What is left, in order:
+  1. **Report the false positives** with each release: Microsoft Defender (the Security Intelligence file submission),
+     and the vendors that flag it on VirusTotal (each has a false-positive form).
+  2. **Windows signing**: apply to the **SignPath Foundation** (free code signing for open-source projects, signing
+     from GitHub Actions), or Microsoft's **Artifact Signing** service (a monthly fee; check that it accepts
+     individuals in Switzerland), or a classic OV certificate. A signed `.exe` builds reputation with SmartScreen.
+  3. **macOS**: the **Apple Developer Program** (99 USD a year) for a Developer ID certificate and notarization; then
+     macOS opens the app without any warning.
+  4. If scanners still flag the PyInstaller **bootloader**: build it from source in the release workflow (heuristics
+     key on the prebuilt one).
 - **Third-party sources with each release**: the release workflow attaches the apps; the sources of the bundled GPL
   components (chessground, stockfish.js, python-chess) are linked from the notices. Attaching them to each release
   as an archive would make the release self-contained (GPL-3.0 §6).

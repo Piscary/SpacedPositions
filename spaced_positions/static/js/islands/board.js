@@ -383,18 +383,26 @@ class Board {
     entry.candidates = candidates
     entry.exact = exact
     if (token !== "tab") entry.index = exact ? candidates.indexOf(exact) : 0
-    this.setAuto("entry", candidates.map((m, i) => ({ orig: m.from, dest: m.to, brush: i === entry.index ? "paleGreen" : "paleBlue" })))
+    const hints = !this.solving || window.SPOS.settings?.["training.move-hints"] !== false // a puzzle: as the user chose
+    this.setAuto("entry", hints ? candidates.map((m, i) => ({ orig: m.from, dest: m.to, brush: i === entry.index ? "paleGreen" : "paleBlue" })) : [])
     this.renderStrip()
   }
 
   playEntry() {
     const entry = this.entry
-    const move = entry.exact || (entry.candidates.length === 1 ? entry.candidates[0] : null) || (entry.tabbed ? entry.candidates[entry.index] : null)
+    // in a puzzle with completion off, only the whole move counts (no single match, no choosing from the candidates)
+    const complete = !this.solving || window.SPOS.settings?.["training.move-complete"] !== false
+    const move = entry.exact || (complete && entry.candidates.length === 1 ? entry.candidates[0] : null) || (complete && entry.tabbed ? entry.candidates[entry.index] : null)
     if (!move) {
-      if (entry.candidates.length > 1) {
+      const hints = !this.solving || window.SPOS.settings?.["training.move-hints"] !== false
+      if (entry.candidates.length && !complete) {
+        return status(tr("Type the whole move (completion is off: Settings → Training)"), { timeout: 3000 })
+      }
+      if (entry.candidates.length > 1 && hints) {
         entry.tabbed = true
         return status(tr("Which one? {moves} · ⇥ choose, ↵ play", { moves: entry.candidates.map((m) => m.san).join(" / ") }), { timeout: 4000 })
       }
+      if (entry.candidates.length > 1) return status(tr("More than one move fits: type more of it"), { timeout: 3000 })
       return status(entry.text ? tr("No legal move matches “{text}”", { text: entry.text }) : tr("Type a move, e.g. Nf3, Sf3 or g1f3"), { kind: "error", timeout: 3000 })
     }
     const chess = chessOf(lines.fenAt(this.line))
@@ -442,7 +450,8 @@ class Board {
     } else if (this.layer === "entry") {
       const e = this.entry
       parts.push(text(tr("Type a move: ")), span("board__entry mono", `${e.text}▏`))
-      if (e.candidates.length) parts.push(text(" · " + e.candidates.map((m, i) => (i === e.index ? `[${m.san}]` : m.san)).join(" ")))
+      const hints = !this.solving || window.SPOS.settings?.["training.move-hints"] !== false
+      if (hints && e.candidates.length) parts.push(text(" · " + e.candidates.map((m, i) => (i === e.index ? `[${m.san}]` : m.san)).join(" ")))
       parts.push(text(` · ${tr("↵ play · ⇥ next · Esc done")}`))
     } else if (this.layer === "solving") {
       parts.push(text(this.solver === "black" ? tr("Solve as black · click/drag or i to type the move · h hint · s solution")

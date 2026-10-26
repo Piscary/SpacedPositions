@@ -59,6 +59,7 @@ reference is `spec/08-keymap.md`.
 | `␣` `w` `g` | Cycle link group (A → B → none) | `pane.group` |
 | `␣` `w` `p` | Pin / unpin pane | `pane.pin` |
 | `␣` `w` `L` | Layouts: save, load, reset | `layout.menu` |
+| `␣` `w` `w` | This pane's menu: all its commands | `pane.menu` |
 | `␣` `u` `b` | Show / hide the app bar | `ui.appbar` |
 | `␣` `u` `k` | Show / hide key strips in pane footers | `ui.keystrips` |
 | `␣` `u` `z` | Zen: hide app bar and footers | `ui.zen` |

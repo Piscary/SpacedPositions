@@ -14,6 +14,40 @@
         {% keycap "mod+v" as paste_keys %}{% blocktranslate trimmed %}Or paste a FEN, a PGN or a lichess link anywhere ({{ paste_keys }}), or import a PGN file (<span class="mono">:import</span>).{% endblocktranslate %}</p>
     </div>
   {% endsection %}{% endif %}
+  {% if t.intro %}{% translate "seven keys to try" as intro_summary %}{% section _("Getting around") key="k" summary=intro_summary pinned=True %}
+    <div class="home__intro" data-intro>
+      <p>{% blocktranslate trimmed %}Everything works with the mouse, and every button shows its key. The keys are what make it fast: try these seven,
+        each one ticks itself off.{% endblocktranslate %} <span class="muted" data-intro-count></span></p>
+      {% key "mode.library" as go_library %}{% key "mode.home" as go_home %}{% key "help.context" as help %}{% key "pane.focus.next" as next_pane %}
+      {% key "cmdline.open" as colon %}{% key "hint.open" as hints %}{% key "undo" as undo %}{% key "list.down" as down %}{% key "list.up" as up %}
+      <ol class="intro">
+        <li data-step="modes" data-commands="mode.library mode.train mode.analyse mode.collect mode.stats mode.settings">
+          <span class="intro__check" aria-hidden="true"></span><span>{% blocktranslate trimmed %}{{ go_library }} goes to the Library, {{ go_home }} back here.
+          Space alone shows where else you can go.{% endblocktranslate %}</span></li>
+        <li data-step="help" data-commands="help.context help.all help.search">
+          <span class="intro__check" aria-hidden="true"></span><span>{% blocktranslate trimmed %}{{ help }} opens the help of the panel you are in: a guide,
+          its keys, and how to search.{% endblocktranslate %}</span></li>
+        <li data-step="pane" data-commands="pane.focus.next pane.focus.prev pane.focus">
+          <span class="intro__check" aria-hidden="true"></span><span>{% blocktranslate trimmed %}{{ next_pane }} moves to the next panel. The one with the
+          coloured header listens to your keys.{% endblocktranslate %}</span></li>
+        <li data-step="list" data-commands="list.down list.up pane.scroll section.next section.prev">
+          <span class="intro__check" aria-hidden="true"></span><span>{% blocktranslate trimmed %}{{ down }} and {{ up }} move down and up: through a list, a
+          page, the moves of a game.{% endblocktranslate %}</span></li>
+        <li data-step="commands" data-commands="cmdline.open">
+          <span class="intro__check" aria-hidden="true"></span><span>{% blocktranslate trimmed %}{{ colon }} lets you type any command by its name, with
+          suggestions: try <code>theme</code>.{% endblocktranslate %}</span></li>
+        <li data-step="hints" data-commands="hint.open">
+          <span class="intro__check" aria-hidden="true"></span><span>{% blocktranslate trimmed %}{{ hints }} puts a letter on everything you can click:
+          press the letter to click it.{% endblocktranslate %}</span></li>
+        <li data-step="undo" data-commands="undo redo">
+          <span class="intro__check" aria-hidden="true"></span><span>{% blocktranslate trimmed %}{{ undo }} undoes the last change, whatever it was. Nothing
+          is lost by trying.{% endblocktranslate %}</span></li>
+      </ol>
+      <p class="intro__done" data-intro-done hidden>{% blocktranslate trimmed %}<b>You know your way around.</b> The rest you'll pick up as you go: every
+        button shows its key, and the status line says the key when you click.{% endblocktranslate %}</p>
+      <div class="actionbar">{% cmd "pref.set" args="keys.intro=off" label=_("Hide this") size="sm" variant="ghost" %}<span class="muted">{% translate "(Settings → Keys brings it back)" %}</span></div>
+    </div>
+  {% endsection %}{% endif %}
   {% blocktranslate trimmed count n=t.due asvar due_summary %}{{ n }} due{% plural %}{{ n }} due{% endblocktranslate %}
   {% section _("Due now") key="d" summary=due_summary pinned=True %}
     <div class="train__session">

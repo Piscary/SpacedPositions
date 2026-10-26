@@ -90,6 +90,21 @@ rect[class^="f-"] { fill: var(--c); }
 .home__quick { flex-wrap: wrap; }
 .home__library .meter__fill { width: var(--w); }
 .home__paste textarea { width: 100%; min-height: calc(var(--row-md) * 3); }
+
+/* The key intro ("Getting around"): seven keys to try, each ticked off when used */
+.home__intro { display: grid; gap: var(--s-1); padding: var(--s-1) var(--s-2) var(--s-2); }
+.intro { display: grid; gap: var(--s-half); margin: 0; padding: 0; list-style: none; }
+.intro li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s-1); align-items: baseline; color: var(--text-sub); }
+.intro__check {
+  width: 1em;
+  height: 1em;
+  border: var(--rule) solid var(--line-strong);
+  border-radius: 50%;
+  transform: translateY(0.15em);
+}
+.intro li.is-done { color: var(--text); }
+.intro li.is-done .intro__check { border-color: var(--good); background: radial-gradient(circle, var(--good) 0 45%, transparent 50%); }
+.intro__done { color: var(--good); }
 .banner { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; padding: var(--s-1) var(--s-2); border-bottom: var(--rule) solid var(--special); background: color-mix(in oklab, var(--special) 10%, var(--bg)); }
 
 /* ── Eval graph, variation graph ───────────────────────────────────────────────────────────────────────────── */

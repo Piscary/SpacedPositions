@@ -107,6 +107,9 @@ After a week you'll move through puzzles without touching the mouse. Some keys t
 | `u` | undo (changes to an analysis even after closing the app) |
 | `F` | put a letter on everything you can click, then press the letter |
 
+Every panel has a **⋯ menu** in its header (or right click the header) with everything it can do, each entry with
+its key. Home starts with **Getting around**: seven keys to try, ticked off as you use them.
+
 ## Your own puzzles
 
 - **From a book:** in **Collect** (`space` `c`), choose the book once, set up each diagram on the board, save, and
@@ -154,6 +157,24 @@ Everything stays on your computer, in its own folder (Settings → App shows whe
 
 A compressed backup is made every day and before every update, in the `backups/` folder; Settings → App also has
 *Back up now*. To use your library on another computer, export it as a pack, or copy the whole folder.
+
+## Is it safe to install?
+
+Yes, and you don't have to take our word for it:
+
+- **Open source.** Every line of the app is public in this repository, and anyone can read what it does.
+- **Built in public.** The apps are not made on someone's computer: GitHub builds them from this repository, and
+  every release says which commit it came from. Each file carries a signed record of that build, which anyone can
+  check: `gh attestation verify <file> --repo Piscary/SpacedPositions`. `SHA256SUMS.txt` in each release lists the
+  checksums.
+- **No network, no account.** The app only talks to your own browser. Nothing is sent anywhere unless you turn on
+  the update check.
+
+**Why does my computer warn me?** The app is not *signed* yet: signing is a paid certificate that tells Windows and
+macOS who made a program. Without it they show a warning the first time. Some virus scanners also flag programs packed
+with PyInstaller (the tool that turns the Python app into a double-click app) because malware sometimes uses the same
+tool: a false alarm we report to the vendors. If you prefer, install it with Python instead (below): then you run the
+code from this repository directly.
 
 ## Questions
 

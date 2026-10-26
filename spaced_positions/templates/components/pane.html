@@ -7,9 +7,9 @@
     <span class="pane__link" data-pane-link{% if node.group %} data-group="{{ node.group }}"{% endif %}{% if not node.group and not node.pinned %} hidden{% endif %}>{% if node.pinned %}⊙ {% translate "pinned" %}{% else %}⛓ {{ node.group }}{% endif %}</span>
     <span class="pane__tabs" data-pane-tabs></span>
     <span class="pane__actions">
-      {% cmd "pane.split.vertical" display="key" variant="ghost" size="sm" icon="◫" %}
       {% cmd "pane.maximize" display="key" variant="ghost" size="sm" icon="▢" %}
       {% cmd "pane.close" display="key" variant="ghost" size="sm" icon="×" %}
+      {% cmd "pane.menu" display="key" variant="ghost" size="sm" icon="⋯" extra="pane__menu" %}
     </span>
   </header>
   <div class="pane__body" data-pane-body tabindex="0">

@@ -51,8 +51,16 @@ A pane is the only container in the workspace. Each pane shows one view.
 ```
 
 **Header**: pane number · view name · subject (short) · link glyph and group letter (`⛓ A`) or pin glyph `⊙` · the
-view's 2–4 most important commands as compact key buttons · window buttons (collapse, split, maximise, close).
+view's 2–4 most important commands as compact key buttons · window buttons: maximise, close and the **pane menu** `⋯`.
 The header is the drag handle for moving the pane (drop zones: left/right/top/bottom half of another pane).
+
+**The pane menu** (`⋯`, a right click on the header, or `␣ w w`) makes the whole app usable with the mouse without
+crowding the headers: it lists what the view can do (`core/layouts.py` VIEW_MENUS, chosen per view: Moves has *to
+the start*, *to the end*, *main line*, the puzzle steps …) and then what can be done with the pane (split side by side
+or above and below, change the view, link group, pin, collapse, swap, rotate, equal sizes, hide the others, close).
+Every entry shows its keys and runs as a click would (the status line then teaches its key); entries that can't run
+here are greyed with the reason. It is the menu component (05 · C): `j k` / `↑ ↓`, `↵`, `Esc`, or the mouse. Rule of
+thumb for new views: the footer shows the few keys used all the time, the pane menu everything else.
 
 **Footer** (optional, per pane, `␣ u k`): the context key strip, or the view's own status (board: *what a click
 does*; library: *38 results · sort: added ↓*).

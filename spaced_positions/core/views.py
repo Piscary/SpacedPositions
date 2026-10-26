@@ -96,7 +96,7 @@ def mode_page(request, mode):
             "registry": keymap.for_page(),  # the default keymap with the user's overrides, in the page's language
             "themes": registry.themes() | {"themes": themes.all_themes(), "pieces": user_pieces.all_sets()},  # with the user's themes (and their CSS: live preview)
             "views": {
-                k: {"label": v.label, "picker": v.picker, "list": v.list_view}
+                k: {"label": v.label, "picker": v.picker, "list": v.list_view, "menu": layouts.menu_of(k)}
                 for k, v in layouts.VIEWS.items()
             },
             "modes": {m.key: {"label": m.label, "leader": m.leader} for m in layouts.MODES},

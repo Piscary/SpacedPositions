@@ -73,6 +73,7 @@ accept = ["[", "]"]
 "space w g" = "pane.group"
 "space w p" = "pane.pin"
 "space w L" = "layout.menu"
+"space w w" = "pane.menu"
 
 "space u b" = "ui.appbar"
 "space u k" = "ui.keystrips"
