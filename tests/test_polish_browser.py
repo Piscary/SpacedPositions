@@ -120,14 +120,10 @@ def test_sounds_when_on_and_numbers_that_count(page):
 
 
 def test_the_local_engine_in_analyse(page, tmp_path):
-    import sys
-
     from spaced_positions.core import engine_local
-    from tests.test_settings import FAKE_ENGINE
+    from tests.test_settings import write_fake_engine
 
-    fake = tmp_path / "fakefish"
-    fake.write_text(FAKE_ENGINE.format(python=sys.executable), encoding="utf-8")
-    fake.chmod(0o755)
+    fake = write_fake_engine(tmp_path)
     Preferences.objects.update_or_create(pk=Preferences.current().pk, defaults={"settings": {"engine.source": "local", "engine.path": str(fake)}})
     try:
         p = tree.create_position(START, [], title="Start")

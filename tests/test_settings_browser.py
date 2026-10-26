@@ -1,6 +1,7 @@
 """Journeys in a real browser: the Settings mode by keyboard (live theme preview, stepping a value, reset),
 binding a key in the keymap editor and using it, and importing settings."""
 
+import sys
 from pathlib import Path
 
 import pytest
@@ -68,7 +69,9 @@ def test_bind_a_key_in_the_keymap_editor_and_use_it(page):
     keys(page, "Enter", "Control+y", "Enter")
     page.wait_for_selector("#ws-settings [data-row='mode.ui'] .keymap__binding.is-mine")
     override = KeymapOverride.objects.get()
-    assert (override.keys, override.command) == ("ctrl+y", "mode.ui")
+    # Ctrl is the main modifier off the Mac: there the app stores it as mod (⌘ on a Mac, Ctrl elsewhere)
+    expected = "ctrl+y" if sys.platform == "darwin" else "mod+y"
+    assert (override.keys, override.command) == (expected, "mode.ui")
     keys(page, "Control+y")
     page.wait_for_function("window.SPOS.ctx.mode === 'ui'")
 

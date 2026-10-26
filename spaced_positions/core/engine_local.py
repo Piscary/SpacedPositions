@@ -131,7 +131,7 @@ def local(request):
             if not isinstance(commands, list) or not all(isinstance(c, str) for c in commands):
                 return JsonResponse({"ok": False, "message": "commands: a list of UCI commands"}, status=400)
             e = engine()
-            return JsonResponse({"ok": True, "after": e.send(commands), "program": Path(e.program).name})
+            return JsonResponse({"ok": True, "after": e.send(commands), "program": Path(e.program).stem})  # stockfish, not stockfish.exe
         try:
             after = int(request.GET.get("after", 0))
         except ValueError:

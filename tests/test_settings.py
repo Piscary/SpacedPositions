@@ -199,20 +199,26 @@ for line in sys.stdin:
 '''
 
 
-@pytest.fixture
-def fake_engine(tmp_path):
+def write_fake_engine(folder):
+    """A tiny UCI engine (Python) the system can start: a script with a #! line, on Windows (which starts programs by
+    their extension) a .cmd that runs it."""
     import sys
 
-    from spaced_positions.core import engine_local
-
-    path = tmp_path / "fakefish"
+    path = folder / "fakefish"
     path.write_text(FAKE_ENGINE.format(python=sys.executable), encoding="utf-8")
     path.chmod(0o755)
-    if sys.platform == "win32":  # Windows starts programs by their extension: a .cmd that runs the script
-        script = tmp_path / "fakefish.py"
-        path.rename(script)
-        path = tmp_path / "fakefish.cmd"
+    if sys.platform == "win32":
+        path.rename(folder / "fakefish.py")
+        path = folder / "fakefish.cmd"
         path.write_text(f'@"{sys.executable}" -u "%~dp0fakefish.py"\r\n', encoding="utf-8")
+    return path
+
+
+@pytest.fixture
+def fake_engine(tmp_path):
+    from spaced_positions.core import engine_local
+
+    path = write_fake_engine(tmp_path)
     yield path
     if engine_local._engine is not None:
         engine_local._engine.close()
@@ -237,7 +243,7 @@ def test_local_engine_through_the_app(client, fake_engine):
     assert not answer["ok"] and "is not a program" in answer["message"]
     run(client, "pref.set", f"engine.path={fake_engine}")
     answer = client.post("/engine/local/", json.dumps({"commands": ["uci", "isready"]}), content_type="application/json").json()
-    assert answer["ok"] and answer["program"].startswith("fakefish"), answer
+    assert answer["ok"] and answer["program"] == "fakefish", answer  # the name without .exe / .cmd
     assert read_until(client, answer["after"], "readyok")[:2] == ["id name Fakefish", "uciok"]
     answer = client.post("/engine/local/", json.dumps({"commands": ["position startpos", "go depth 5"]}), content_type="application/json").json()
     assert read_until(client, answer["after"], "bestmove e2e4")[0].startswith("info depth 5")

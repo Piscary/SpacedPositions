@@ -36,7 +36,7 @@ function build() {
   row.append(prompt, input, hint)
   el.append(results, row)
   document.getElementById("statusline").append(el)
-  input.addEventListener("input", () => search())
+  input.addEventListener("input", () => { if (state) state.searching = search() })
 }
 
 /**
@@ -55,7 +55,7 @@ export async function openTagPicker({ title, target = null, local = null }) {
   setOverlayHandler(onKey)
   input.focus()
   await loadOn()
-  search()
+  state.searching = search()
 }
 
 function close() {
@@ -137,6 +137,13 @@ function paint() {
 }
 
 async function toggle({ stay }) {
+  // ↵ right after typing: the rows of what was typed. Wait for the newest search; another may start meanwhile
+  let waited
+  while (state && waited !== state.searching) {
+    waited = state.searching
+    await waited
+  }
+  if (!state) return
   const item = state.rows[state.cursor]
   if (!item) return
   if (state.local) {

@@ -13,5 +13,14 @@ trap 'rm -rf "$stage"' EXIT
 cp -R "dist/Spaced Positions.app" "$stage/"
 ln -s /Applications "$stage/Applications"
 rm -f "dist/$name.dmg"
-hdiutil create -volname "Spaced Positions" -srcfolder "$stage" -format UDZO -ov "dist/$name.dmg"
-echo "dist/$name.dmg"
+# hdiutil sometimes fails with "Resource busy" while a scanner (XProtect, Spotlight) still holds the new files, most
+# often on CI machines: try a few times, a little later each time.
+for attempt in 1 2 3 4 5; do
+  if hdiutil create -volname "Spaced Positions" -srcfolder "$stage" -format UDZO -ov "dist/$name.dmg"; then
+    echo "dist/$name.dmg"
+    exit 0
+  fi
+  echo "hdiutil failed (attempt $attempt), trying again in $((attempt * 5)) s"
+  sleep $((attempt * 5))
+done
+exit 1

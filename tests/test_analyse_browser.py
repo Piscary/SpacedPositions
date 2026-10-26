@@ -332,3 +332,17 @@ def test_the_tag_picker_adds_and_removes(page, book):
     page.wait_for_selector("#ws-analyse .mt-tag >> text=Pin", state="detached")
     keys(page, "u")  # and back
     page.wait_for_selector("#ws-analyse .mt-tag >> text=Pin")
+
+
+def test_enter_right_after_typing_takes_what_was_typed(page, book):
+    """A slow search (here: delayed on purpose) doesn't swallow ↵: the picker waits for the rows of what was typed."""
+    analyse(page, book[0])
+    keys(page, "l")
+    page.evaluate("""() => { const fetch = window.fetch
+      window.fetch = (url, options) => String(url).includes('/lib/complete/')
+        ? new Promise((r) => setTimeout(r, 800)).then(() => fetch(url, options)) : fetch(url, options) }""")
+    keys(page, "t")
+    page.wait_for_selector(".tagpicker:not([hidden])")
+    page.keyboard.type("pin")
+    keys(page, "Enter")  # at once: the search is still on its way
+    page.wait_for_selector("#ws-analyse .mt-tag >> text=Pin")
