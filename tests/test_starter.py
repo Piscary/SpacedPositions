@@ -40,6 +40,9 @@ def test_selection_is_by_motif_band_and_quality(tmp_path):
     assert first["tags"][:3] == ["opening", "mate-in-1"] or "mate-in-1" in first["tags"]
     assert first["puzzles"] == [{"start": "0", "active": True, "ends": ["0.0"]}]
     assert first["moves"].startswith("4... a6 5. Qxf7#")
+    import time
+
+    time.sleep(1.1)  # another second: the zip's own times must not change the bytes
     assert starter.build(sample(tmp_path, rows), out=tmp_path / "again.sppack", per_band=2, version=1)["puzzles"] == 8
     assert (tmp_path / "again.sppack").read_bytes() == out.read_bytes()  # the same file gives the same pack
 

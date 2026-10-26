@@ -100,6 +100,32 @@ def main(argv=None):
     _serve(data, args)
 
 
+def _alive(pid: int) -> bool:
+    """Whether a process with this id is running. Not `os.kill(pid, 0)`: on Windows signal 0 is CTRL_C_EVENT, which
+    would interrupt the process (or the whole console) instead of asking about it."""
+    if sys.platform == "win32":
+        import ctypes
+        from ctypes import wintypes
+
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        kernel32.OpenProcess.restype = wintypes.HANDLE
+        handle = kernel32.OpenProcess(0x1000, False, int(pid))  # PROCESS_QUERY_LIMITED_INFORMATION
+        if not handle:
+            return ctypes.get_last_error() == 5  # access denied: it exists (another user's process)
+        try:
+            code = wintypes.DWORD()
+            return bool(kernel32.GetExitCodeProcess(handle, ctypes.byref(code))) and code.value == 259  # STILL_ACTIVE
+        finally:
+            kernel32.CloseHandle(handle)
+    try:
+        os.kill(int(pid), 0)
+    except PermissionError:
+        return True
+    except (OSError, ValueError):
+        return False
+    return True
+
+
 def _running_instance(data: Path):
     """The instance recorded in runtime.json, if its process is alive and answers."""
     path = data / RUNTIME
@@ -107,8 +133,10 @@ def _running_instance(data: Path):
         return None
     try:
         info = json.loads(path.read_text(encoding="utf-8"))
-        os.kill(info["pid"], 0)
-    except (OSError, ValueError, KeyError):
+        alive = _alive(info["pid"])
+    except (OSError, ValueError, KeyError, TypeError):
+        alive = False
+    if not alive:
         path.unlink(missing_ok=True)  # the process is gone: a stale file from a crash
         return None
     for _ in range(20):  # alive: wait briefly in case it is still starting up
@@ -118,7 +146,10 @@ def _running_instance(data: Path):
                     return info
         except OSError:
             time.sleep(0.25)
-    sys.exit(f"Another Spaced Positions process ({info['pid']}) holds {data} but doesn't answer. Stop it first.")
+    # The file is written once the server listens, so a process that doesn't answer is not ours: after a crash or a
+    # restart its number went to another program. The file is stale.
+    path.unlink(missing_ok=True)
+    return None
 
 
 def _free_port(host: str, wanted: int | None) -> int:
@@ -259,11 +290,16 @@ def _autostop(double_click: bool = False):
 
 
 def quit_soon():
-    """Stop the server shortly after the current response has gone out (`:quit`)."""
+    """Stop the server shortly after the current response has gone out (`:quit`, the automatic stop)."""
 
     def _stop():
         time.sleep(0.4)
-        os.kill(os.getpid(), signal.SIGTERM)
+        if sys.platform == "win32":  # SIGTERM to itself would end the process at once, without its cleanup
+            import _thread
+
+            _thread.interrupt_main()  # KeyboardInterrupt in the server loop, which wakes at least once a second
+        else:
+            os.kill(os.getpid(), signal.SIGTERM)
 
     threading.Thread(target=_stop, daemon=True).start()
 

@@ -31,6 +31,16 @@ def test_stale_runtime_file_is_ignored(tmp_path):
     assert not (tmp_path / "runtime.json").exists()
 
 
+def test_a_runtime_file_of_another_program_is_stale(tmp_path):
+    """After a crash or a restart the recorded process number may belong to another program (here: the tests): it
+    doesn't answer, so the file is stale and the app starts instead of refusing to."""
+    (tmp_path / "runtime.json").write_text(json.dumps({"pid": os.getpid(), "port": launcher._free_port("127.0.0.1", None), "url": "x"}),
+                                           encoding="utf-8")
+    assert launcher._alive(os.getpid())
+    assert launcher._running_instance(tmp_path) is None
+    assert not (tmp_path / "runtime.json").exists()
+
+
 def _spos(data, *args, **kwargs):
     env = {k: v for k, v in os.environ.items() if not k.startswith(("SPOS_", "DJANGO_"))}
     return subprocess.run(

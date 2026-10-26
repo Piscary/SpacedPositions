@@ -1,0 +1,10 @@
+# The same line endings on every system (a Windows checkout would otherwise get CRLF), and binary files untouched.
+* text=auto eol=lf
+*.sppack binary
+*.png binary
+*.ico binary
+*.icns binary
+*.mo binary
+*.wasm binary
+*.woff2 binary
+*.ttf binary

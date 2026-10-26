@@ -208,6 +208,11 @@ def fake_engine(tmp_path):
     path = tmp_path / "fakefish"
     path.write_text(FAKE_ENGINE.format(python=sys.executable), encoding="utf-8")
     path.chmod(0o755)
+    if sys.platform == "win32":  # Windows starts programs by their extension: a .cmd that runs the script
+        script = tmp_path / "fakefish.py"
+        path.rename(script)
+        path = tmp_path / "fakefish.cmd"
+        path.write_text(f'@"{sys.executable}" -u "%~dp0fakefish.py"\r\n', encoding="utf-8")
     yield path
     if engine_local._engine is not None:
         engine_local._engine.close()
@@ -232,7 +237,7 @@ def test_local_engine_through_the_app(client, fake_engine):
     assert not answer["ok"] and "is not a program" in answer["message"]
     run(client, "pref.set", f"engine.path={fake_engine}")
     answer = client.post("/engine/local/", json.dumps({"commands": ["uci", "isready"]}), content_type="application/json").json()
-    assert answer["ok"] and answer["program"] == "fakefish"
+    assert answer["ok"] and answer["program"].startswith("fakefish"), answer
     assert read_until(client, answer["after"], "readyok")[:2] == ["id name Fakefish", "uciok"]
     answer = client.post("/engine/local/", json.dumps({"commands": ["position startpos", "go depth 5"]}), content_type="application/json").json()
     assert read_until(client, answer["after"], "bestmove e2e4")[0].startswith("info depth 5")
@@ -269,3 +274,15 @@ def test_settings_app_section_and_back_up_now(client):
     after = storage()
     assert after["backups"] == min(before + 1, 5) or after["latest"]["kind"] == "now"  # at most 5 kept of a kind
     assert client.post("/beat/").json() == {"ok": True}
+
+
+def test_on_windows_a_program_is_known_by_its_extension(monkeypatch, tmp_path):
+    """Windows counts every file as executable: engine.path must name a program (stockfish.exe), else it says so."""
+    from pathlib import Path
+
+    from spaced_positions.core import engine_local
+
+    monkeypatch.setattr(engine_local.sys, "platform", "win32")
+    monkeypatch.setenv("PATHEXT", ".COM;.EXE;.BAT;.CMD")
+    assert engine_local.runnable(Path("C:/Engines/stockfish.exe")) and engine_local.runnable(Path("fakefish.CMD"))
+    assert not engine_local.runnable(Path("C:/Engines/stockfish")) and not engine_local.runnable(Path("notes.txt"))

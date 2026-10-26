@@ -19,7 +19,7 @@ APP = {"darwin": ROOT / "dist/Spaced Positions.app/Contents/MacOS/Spaced Positio
 
 def main():
     browser = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(CookieJar()))  # the token becomes a cookie
-    with tempfile.TemporaryDirectory() as data:
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as data:  # Windows: a file may still be locked
         server = subprocess.Popen([str(APP), "start", "--no-browser", "--data-dir", data])
         try:
             runtime = Path(data) / "runtime.json"

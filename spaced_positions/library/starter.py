@@ -148,9 +148,14 @@ def build(csv_path: Path, out: Path = PATH, per_band: int = 4, version: int | No
     sources = [{"title": "Lichess puzzle database", "short": "Lichess", "kind": "website", "url": "https://database.lichess.org/#puzzles"}]
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
-        z.writestr("manifest.json", json.dumps(manifest, ensure_ascii=False, indent=1))
-        z.writestr("positions.jsonl", "".join(packs._Writer.line(r) + "\n" for r in records))
-        z.writestr("sources.json", json.dumps(sources, ensure_ascii=False, separators=(",", ":")))
-        z.writestr("tags.json", "[]")
+        def put(name: str, text: str):  # a fixed time in the zip: the same database file gives the same bytes
+            info = zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
+            info.compress_type, info.external_attr = zipfile.ZIP_DEFLATED, 0o644 << 16
+            z.writestr(info, text)
+
+        put("manifest.json", json.dumps(manifest, ensure_ascii=False, indent=1))
+        put("positions.jsonl", "".join(packs._Writer.line(r) + "\n" for r in records))
+        put("sources.json", json.dumps(sources, ensure_ascii=False, separators=(",", ":")))
+        put("tags.json", "[]")
     out.write_bytes(buf.getvalue())
     return manifest

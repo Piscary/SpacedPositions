@@ -13,6 +13,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import threading
 from collections import deque
 from pathlib import Path
@@ -30,6 +31,9 @@ class Engine:
         self.program = program
         self.proc = subprocess.Popen(
             [program], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, bufsize=1,
+            encoding="utf-8", errors="replace",
+            # Windows: a console program started from the windowed app would open a console window of its own
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
         )
         self.lines: deque[tuple[int, str]] = deque(maxlen=KEEP)
         self.seq = 0
@@ -77,14 +81,23 @@ _engine: Engine | None = None
 _lock = threading.Lock()
 
 
+def runnable(path: Path) -> bool:
+    """A file the system can start: executable on macOS and Linux; on Windows (where every file counts as
+    executable) a program by its extension, stockfish.exe for instance."""
+    if sys.platform == "win32":
+        extensions = os.environ.get("PATHEXT", ".COM;.EXE;.BAT;.CMD").lower().split(";")
+        return path.suffix.lower() in extensions
+    return os.access(path, os.X_OK)
+
+
 def program() -> tuple[str | None, str]:
     """(path, problem): the configured engine, else stockfish on the PATH."""
     from . import settings
 
-    configured = str(settings.get("engine.path") or "").strip()
+    configured = str(settings.get("engine.path") or "").strip().strip('"')  # Windows' "Copy as path" adds quotes
     if configured:
         path = Path(configured).expanduser()
-        if path.is_file() and os.access(path, os.X_OK):
+        if path.is_file() and runnable(path):
             return str(path), ""
         return None, _("engine.path {path} is not a program (Settings → Engine)").format(path=configured)
     found = shutil.which("stockfish")
