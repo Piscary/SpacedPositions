@@ -23,5 +23,6 @@ urlpatterns = [
     path("lib/import/job/<str:job_id>/", importer.job_view, name="import_job"),
     path("packs/scan/", pack_views.scan_view, name="pack_scan"),
     path("packs/run/", pack_views.run_view, name="pack_run"),
+    path("packs/starter/", pack_views.starter_view, name="pack_starter"),
     path("packs/download/<str:name>", pack_views.download, name="pack_download"),
 ]

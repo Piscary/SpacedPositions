@@ -379,6 +379,7 @@ accept = ["[", "]"]
 "6" = "train.again"
 "x" = "home.dismiss"
 "I" = "pack.import"
+"s" = "pack.starter"
 
 [context."view.continue"]
 "a" = "home.analysis"

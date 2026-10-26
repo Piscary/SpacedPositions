@@ -48,8 +48,10 @@ home, with the same one-time link).
 
 ## First steps
 
-1. **Fill the library.** Home shows how while it is empty: import a puzzle pack (drop the `.sppack` file on the
-   window), collect diagrams from a book (`␣ c`), or paste positions and games anywhere (`⌘V` / `Ctrl+V`).
+1. **Fill the library.** Home shows how while it is empty: load the starter pack that comes with the app (`s`: 748
+   puzzles by motif from the public-domain lichess.org puzzle database, beginner to club level), import a puzzle pack
+   (drop the `.sppack` file on the window), collect diagrams from a book (`␣ c`), or paste positions and games
+   anywhere (`⌘V` / `Ctrl+V`).
 2. **Make puzzles.** In Analyse (`␣ a`), go to the move after which the puzzle starts, `p s` sets it up, `p r` puts
    it into training. On any board, `:puzzle` makes a puzzle from the moves played. Imported PGN files with set-up
    positions become puzzles by themselves.
@@ -114,8 +116,9 @@ GitHub once a day for the newest version. Your own piece sets go in the data fol
 Spaced Positions is free software under the GNU General Public License, version 3 or later ([LICENSE](LICENSE)):
 use it, read and change its source, and pass it on under the same licence. It bundles chessground and python-chess
 (GPL-3.0), Stockfish 17.1 (GPL-3.0), chess.js (BSD-2-Clause), htmx (0BSD), Django, waitress, WhiteNoise and
-platformdirs (BSD, ZPL, MIT) and 12 piece sets under free licences; Settings → Licences in the app lists every
-component with its licence and shows all licence texts.
+platformdirs (BSD, ZPL, MIT), 12 piece sets under free licences, and the starter pack's puzzles from the lichess.org
+puzzle database (CC0, public domain); Settings → Licences in the app lists every component with its licence and shows
+all licence texts.
 
 ## Develop
 
@@ -126,6 +129,7 @@ python3 -m venv .venv && .venv/bin/pip install -e ".[dev]"
 .venv/bin/python manage.py design check          # the design lint and the translation check (also in CI)
 .venv/bin/python manage.py i18n extract          # after changing texts: new texts into locale/*/django.po
 .venv/bin/python manage.py i18n build            # the compiled catalogues (django.mo, static/i18n/*.json)
+.venv/bin/python manage.py starter lichess_db_puzzle.csv  # the starter pack again, from https://database.lichess.org/#puzzles
 .venv/bin/python -m pytest -m "not browser"      # Python tests
 node --experimental-default-type=module --test tests/js/
 .venv/bin/python -m playwright install chromium && .venv/bin/python -m pytest -m browser

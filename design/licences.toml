@@ -17,6 +17,12 @@ source = "chessground 9.2.1 assets"
 licence = "BSD-2-Clause"
 source = "chess.js 1.4.0, https://github.com/jhlywa/chess.js · licences/chess.js.LICENSE"
 
+# Content that comes with the app (spaced_positions/library/data/).
+
+[data."starter.sppack"]
+licence = "CC0 1.0 (public domain)"
+source = "The starter pack's puzzles: the lichess.org puzzle database, https://database.lichess.org/#puzzles"
+
 # Piece sets in spaced_positions/static/pieces/ (spec 07 §6). Taken from lichess (lila/public/piece), licences as
 # listed in lila's COPYING.md. Only sets whose licence lets anyone redistribute the app are bundled.
 

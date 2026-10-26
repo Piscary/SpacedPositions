@@ -254,6 +254,11 @@ args = [{ name = "title", type = "text" }]
 handler = "both"
 undoable = false
 
+["pack.starter"]
+title = "Load the starter pack (lichess puzzles by motif)"
+group = "Library"
+aliases = ["starter-pack"]
+
 ["pack.import"]
 title = "Import a puzzle pack"
 group = "Library"

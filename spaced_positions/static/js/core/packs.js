@@ -13,8 +13,11 @@ let open = null
 
 export async function importPack(file) {
   status(tr("Reading {file}…", { file: file.name }), { timeout: 0 })
-  const data = await fetch("/packs/scan/", { method: "POST", headers: { "Content-Type": "application/zip", "X-CSRFToken": csrf() }, body: file })
-    .then((r) => r.json()).catch(() => ({ ok: false, message: tr("the app is not reachable") }))
+  return preview(fetch("/packs/scan/", { method: "POST", headers: { "Content-Type": "application/zip", "X-CSRFToken": csrf() }, body: file }))
+}
+
+async function preview(request) {
+  const data = await request.then((r) => r.json()).catch(() => ({ ok: false, message: tr("the app is not reachable") }))
   if (!data.ok) return status(data.message, { kind: "error" }) || false
   status("", { timeout: 1 })
   show(data)
@@ -93,6 +96,9 @@ function close() {
   ctx.overlay = null
   setOverlayHandler(null)
 }
+
+// The starter pack that comes with the app: the same preview, then the same import
+handle("pack.starter", () => preview(fetch("/packs/starter/", { method: "POST", headers: { "X-CSRFToken": csrf() } })))
 
 handle("pack.import", () => {
   const input = Object.assign(document.createElement("input"), { type: "file", accept: ".sppack,application/zip" })

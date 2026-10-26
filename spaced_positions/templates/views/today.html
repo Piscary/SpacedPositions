@@ -6,7 +6,8 @@
     <div class="settings__data home__welcome">
       <p>{% blocktranslate trimmed %}<b>Spaced Positions</b> trains chess patterns with spaced repetition: each puzzle comes back just before you would forget it.
         Your library is empty, so here is how to fill it:{% endblocktranslate %}</p>
-      <div class="actionbar">{% cmd "pack.import" variant="primary" label=_("Import a puzzle pack") %}{% cmd "mode.collect" label=_("Collect from a book") %}</div>
+      <div class="actionbar">{% if t.starter %}{% cmd "pack.starter" variant="primary" label=_("Load the starter pack") keys_in="view.today" %}{% endif %}{% cmd "pack.import" variant=t.starter|yesno:"secondary,primary" label=_("Import a puzzle pack") keys_in="view.today" %}{% cmd "mode.collect" label=_("Collect from a book") %}</div>
+      {% if t.starter %}<p class="muted">{% blocktranslate trimmed count n=t.starter %}The starter pack has {{ n }} puzzle by motif (forks, pins, mating patterns, endgames …) from beginner to club level, from the public-domain lichess.org puzzle database.{% plural %}The starter pack has {{ n }} puzzles by motif (forks, pins, mating patterns, endgames …) from beginner to club level, from the public-domain lichess.org puzzle database.{% endblocktranslate %}</p>{% endif %}
       <p class="muted">{% blocktranslate trimmed %}A pack is a file of positions and puzzles, for example from your coach (<span class="mono">.sppack</span>): drop it on this window, or choose it.{% endblocktranslate %}
         {% keycap "mod+v" as paste_keys %}{% blocktranslate trimmed %}Or paste a FEN, a PGN or a lichess link anywhere ({{ paste_keys }}), or import a PGN file (<span class="mono">:import</span>).{% endblocktranslate %}</p>
     </div>

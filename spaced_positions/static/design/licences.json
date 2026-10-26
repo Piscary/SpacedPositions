@@ -1,4 +1,10 @@
 {
+ "data": {
+  "starter.sppack": {
+   "licence": "CC0 1.0 (public domain)",
+   "source": "The starter pack's puzzles: the lichess.org puzzle database, https://database.lichess.org/#puzzles"
+  }
+ },
  "pieces": {
   "cburnett": {
    "author": "Colin M.L. Burnett",

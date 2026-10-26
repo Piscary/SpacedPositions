@@ -30,6 +30,7 @@ def today() -> dict:
         "accuracy": round(100 * cons["today_solved"] / cons["today"]) if cons["today"] else None,
         "banner": Achievement.objects.filter(seen=False).order_by("-reached_at").first(),
         "first_run": first_run(),
+        "starter": starter_size(),
         "again": selection.last_options(),
     }
 
@@ -60,6 +61,19 @@ def continue_() -> dict:
         "collect": {"source": (entry.get("source") or {}).get("label"), "ref": entry.get("ref"), "page": entry.get("page")} if entry else None,
         "recent_positions": recent_positions, "recent_games": Game.objects.filter(deleted_at=None).order_by("-updated_at")[:4],
     }
+
+
+def starter_size() -> int:
+    """How many puzzles the starter pack that comes with the app has (0: none in this copy)."""
+    import json
+    import zipfile
+
+    from spaced_positions.library.starter import PATH
+
+    try:
+        return int(json.loads(zipfile.ZipFile(PATH).read("manifest.json"))["puzzles"])
+    except (OSError, KeyError, ValueError, zipfile.BadZipFile):
+        return 0
 
 
 def first_run() -> bool:

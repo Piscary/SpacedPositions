@@ -1208,8 +1208,12 @@ msgid "Train, Stats and the Library."
 msgstr "Allenamento, Statistiche e la Biblioteca."
 
 #: templates/help/today.html
-msgid "When the library is empty, Home shows how to fill it: a puzzle pack, a book, or pasted games."
-msgstr "Quando la biblioteca è vuota, la Home mostra come riempirla: un pacchetto di esercizi, un libro o partite incollate."
+msgid "When the library is empty, Home shows how to fill it: the starter pack that comes with the app, a puzzle pack, a book, or pasted games."
+msgstr "Quando la biblioteca è vuota, la Home mostra come riempirla: il pacchetto iniziale incluso nell'app, un pacchetto di esercizi, un libro o partite incollate."
+
+#: templates/help/today.html
+msgid "The starter pack (:starter-pack) can be loaded any time: a newer version updates it and keeps your training."
+msgstr "Il pacchetto iniziale (:starter-pack) si può caricare in qualsiasi momento: una versione più recente lo aggiorna e mantiene il tuo allenamento."
 
 #: templates/help/vargraph.html
 msgid "The move tree as a picture: each dot a move, each branch a variation. Good for finding your way in a big analysis."
@@ -2145,6 +2149,10 @@ msgstr "Benvenuto"
 msgid "<b>Spaced Positions</b> trains chess patterns with spaced repetition: each puzzle comes back just before you would forget it. Your library is empty, so here is how to fill it:"
 msgstr "<b>Spaced Positions</b> allena gli schemi scacchistici con la ripetizione dilazionata: ogni esercizio ritorna poco prima che tu lo dimentichi. La tua biblioteca è vuota, ecco come riempirla:"
 
+#: templates/views/today.html
+msgid "Load the starter pack"
+msgstr "Caricare il pacchetto iniziale"
+
 #: templates/views/today.html design/commands/library.toml:pack.import
 msgid "Import a puzzle pack"
 msgstr "Importa un pacchetto di esercizi"
@@ -2152,6 +2160,12 @@ msgstr "Importa un pacchetto di esercizi"
 #: templates/views/today.html
 msgid "Collect from a book"
 msgstr "Inserisci da un libro"
+
+#: templates/views/today.html
+msgid "The starter pack has %(n)s puzzle by motif (forks, pins, mating patterns, endgames …) from beginner to club level, from the public-domain lichess.org puzzle database."
+msgid_plural "The starter pack has %(n)s puzzles by motif (forks, pins, mating patterns, endgames …) from beginner to club level, from the public-domain lichess.org puzzle database."
+msgstr[0] "Il pacchetto iniziale ha %(n)s esercizio per motivo (forchette, inchiodature, matti tipici, finali …) dal principiante al giocatore di club, dal database di esercizi di lichess.org, di pubblico dominio."
+msgstr[1] "Il pacchetto iniziale ha %(n)s esercizi per motivo (forchette, inchiodature, matti tipici, finali …) dal principiante al giocatore di club, dal database di esercizi di lichess.org, di pubblico dominio."
 
 #: templates/views/today.html
 msgid "A pack is a file of positions and puzzles, for example from your coach (<span class=\"mono\">.sppack</span>): drop it on this window, or choose it."
@@ -3411,7 +3425,7 @@ msgstr "tuoi"
 msgid "unknown token '{name}'"
 msgstr "impostazione sconosciuta «{name}»"
 
-#: design/lib.py:109
+#: design/lib.py:112
 msgid "{name}: use true or false"
 msgstr "{name}: true o false"
 
@@ -3419,19 +3433,19 @@ msgstr "{name}: true o false"
 msgid "{name}: '{value}' is not a hex colour"
 msgstr "{name}: «{value}» non è un colore esadecimale"
 
-#: design/lib.py:98
+#: design/lib.py:101
 msgid "{name}: {value} is outside {lo}–{hi}"
 msgstr "{name}: {value} è fuori da {lo}–{hi}"
 
-#: design/lib.py:101
+#: design/lib.py:104
 msgid "{name}: choose one of {value}"
 msgstr "{name}: scegli tra {value}"
 
-#: design/lib.py:113
+#: design/lib.py:116
 msgid "{name}: not a valid font list"
 msgstr "{name}: elenco di caratteri non valido"
 
-#: design/lib.py:95
+#: design/lib.py:98
 msgid "{name}: '{value}' is not a number"
 msgstr "{name}: «{value}» non è un numero"
 
@@ -3867,7 +3881,7 @@ msgid_plural "Imported {n} games"
 msgstr[0] "{n} partita importata"
 msgstr[1] "{n} partite importate"
 
-#: library/importer.py:213 library/pack_views.py:129 static/js/core/importer.js:56
+#: library/importer.py:213 library/pack_views.py:142 static/js/core/importer.js:56
 msgid "{n} could not be read"
 msgstr "{n} illeggibili"
 
@@ -3947,11 +3961,11 @@ msgstr "Rilevato"
 msgid "Suggested"
 msgstr "Suggerito"
 
-#: library/models.py:354 static/js/core/packs.js:48
+#: library/models.py:354 static/js/core/packs.js:51
 msgid "from {name}"
 msgstr "da {name}"
 
-#: library/models.py:355 library/pack_views.py:73 static/js/core/packs.js:48
+#: library/models.py:355 library/pack_views.py:73 static/js/core/packs.js:51
 msgid "for {name}"
 msgstr "per {name}"
 
@@ -3999,7 +4013,7 @@ msgstr "un titolo: :pack-export \"Ultima traversa\" for=Ben"
 msgid "packs hold positions and games: select positions, puzzles or games in the Library"
 msgstr "i pacchetti contengono posizioni e partite: seleziona posizioni, esercizi o partite nella Biblioteca"
 
-#: library/pack_views.py:75 library/pack_views.py:126 static/js/core/importer.js:54
+#: library/pack_views.py:75 library/pack_views.py:139 static/js/core/importer.js:54
 msgid "{n} puzzle"
 msgid_plural "{n} puzzles"
 msgstr[0] "{n} esercizio"
@@ -4009,23 +4023,27 @@ msgstr[1] "{n} esercizi"
 msgid "Pack {title} v{version}{who}: {contents}, {size} kB (exports/{name})"
 msgstr "Pacchetto {title} v{version}{who}: {contents}, {size} kB (exports/{name})"
 
-#: library/pack_views.py:117
+#: library/pack_views.py:103
+msgid "This copy of the app has no starter pack"
+msgstr "Questa copia dell'app non ha un pacchetto iniziale"
+
+#: library/pack_views.py:130
 msgid "the preview has expired: open the pack again"
 msgstr "l'anteprima è scaduta: riapri il pacchetto"
 
-#: library/pack_views.py:125 static/js/core/packs.js:42 static/js/core/packs.js:51
+#: library/pack_views.py:138 static/js/core/packs.js:45 static/js/core/packs.js:54
 msgid "{n} new"
 msgstr "{n} nuove"
 
-#: library/pack_views.py:125 static/js/core/packs.js:52
+#: library/pack_views.py:138 static/js/core/packs.js:55
 msgid "{n} updated"
 msgstr "{n} aggiornate"
 
-#: library/pack_views.py:128 static/js/core/importer.js:55
+#: library/pack_views.py:141 static/js/core/importer.js:55
 msgid "{n} already here"
 msgstr "{n} già presenti"
 
-#: library/pack_views.py:131
+#: library/pack_views.py:144
 msgid "Pack {title}: {contents}"
 msgstr "Pacchetto {title}: {contents}"
 
@@ -5493,7 +5511,7 @@ msgstr "esercizi in allenamento"
 msgid "import"
 msgstr "importa"
 
-#: static/js/core/importer.js:79 static/js/core/packs.js:58
+#: static/js/core/importer.js:79 static/js/core/packs.js:61
 msgid "cancel"
 msgstr "annulla"
 
@@ -5875,63 +5893,63 @@ msgstr[1] "{move} ha sostituito {n} mosse (l'Analisi tiene le varianti)"
 msgid "Reading {file}…"
 msgstr "Lettura di {file}…"
 
-#: static/js/core/packs.js:27
+#: static/js/core/packs.js:30
 msgid "Puzzle pack {title}"
 msgstr "Pacchetto di esercizi {title}"
 
-#: static/js/core/packs.js:42
+#: static/js/core/packs.js:45
 msgid "{n} updated (you had version {version})"
 msgstr "{n} aggiornate (avevi la versione {version})"
 
-#: static/js/core/packs.js:43
+#: static/js/core/packs.js:46
 msgid "{n} already in your library"
 msgstr "{n} già nella tua biblioteca"
 
-#: static/js/core/packs.js:43
+#: static/js/core/packs.js:46
 msgid "{n} yours already"
 msgstr "{n} già tue"
 
-#: static/js/core/packs.js:45
+#: static/js/core/packs.js:48
 msgid "Puzzle pack · {title} · version {version}"
 msgstr "Pacchetto di esercizi · {title} · versione {version}"
 
-#: static/js/core/packs.js:48
+#: static/js/core/packs.js:51
 msgid "no author given"
 msgstr "nessun autore indicato"
 
-#: static/js/core/packs.js:53
+#: static/js/core/packs.js:56
 msgid "New tags: {tags}"
 msgstr "Nuovi tag: {tags}"
 
-#: static/js/core/packs.js:54
+#: static/js/core/packs.js:57
 msgid "Licence: {licence}"
 msgstr "Licenza: {licence}"
 
-#: static/js/core/packs.js:54
+#: static/js/core/packs.js:57
 msgid "none given"
 msgstr "nessuna indicata"
 
-#: static/js/core/packs.js:55
+#: static/js/core/packs.js:58
 msgid "Puzzles go straight into training"
 msgstr "Gli esercizi vanno subito in allenamento"
 
-#: static/js/core/packs.js:55
+#: static/js/core/packs.js:58
 msgid "Puzzles come as drafts (not in training yet)"
 msgstr "Gli esercizi arrivano come bozze (non ancora in allenamento)"
 
-#: static/js/core/packs.js:58
+#: static/js/core/packs.js:61
 msgid "accept the licence and import"
 msgstr "accetta la licenza e importa"
 
-#: static/js/core/packs.js:58
+#: static/js/core/packs.js:61
 msgid "training on / off"
 msgstr "allenamento sì / no"
 
-#: static/js/core/packs.js:79
+#: static/js/core/packs.js:82
 msgid "Importing the pack…"
 msgstr "Importazione del pacchetto…"
 
-#: static/js/core/packs.js:113
+#: static/js/core/packs.js:119
 msgid "{file}: drop a puzzle pack (.sppack) or a PGN"
 msgstr "{file}: trascina qui un pacchetto di esercizi (.sppack) o un PGN"
 
@@ -6852,6 +6870,10 @@ msgstr "Comprimi o apri tutti i gruppi"
 #: design/commands/library.toml:pack.export
 msgid "Export as a puzzle pack"
 msgstr "Esporta come pacchetto di esercizi"
+
+#: design/commands/library.toml:pack.starter
+msgid "Load the starter pack (lichess puzzles by motif)"
+msgstr "Caricare il pacchetto iniziale (esercizi lichess per motivo)"
 
 #: design/commands/pane.toml:pane.focus.next
 msgid "Focus the next pane"

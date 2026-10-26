@@ -244,7 +244,8 @@ def licences() -> dict:
 
     built = Path(__file__).resolve().parents[1] / "static" / "design" / "licences.json"  # from design/licences.toml (design build)
     data = json.loads(built.read_text()) if built.exists() else {}
-    files = [{"name": name, "licence": v.get("licence", ""), "source": v.get("source", "")} for name, v in data.get("vendor", {}).items()]
+    files = [{"name": name, "licence": v.get("licence", ""), "source": v.get("source", "")}
+             for table in ("vendor", "data") for name, v in data.get(table, {}).items()]
     pieces = [{"name": v.get("label", name), "licence": v.get("licence", ""), "source": v.get("author", "")} for name, v in data.get("pieces", {}).items()]
     packages = []
     for name, role in PACKAGES.items():

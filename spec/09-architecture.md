@@ -252,6 +252,14 @@ on the next start.
 
 ## 12 · Puzzle packs (sharing between coach and students)
 
+**Starter pack.** The app comes with one pack (`library/data/starter.sppack`, about 70 kB): puzzles from the
+lichess.org puzzle database (CC0), by motif. For each of 47 motifs (mates in 1–3, tactical motifs, mating patterns,
+endgame types) four puzzles in each of four rating bands (800–2000), chosen from those played at least 1,000 times,
+liked by at least 85 % and with a settled rating; the most liked first, each puzzle once. Lichess themes become tags
+(`library/starter.py` THEMES); the position is the one before the opponent's move, the puzzle starts after it.
+`manage.py starter <lichess_db_puzzle.csv>` builds it again from a newer database file (the same file gives the same
+pack; its date is the pack's version, so importing a newer one updates the old one and keeps the training).
+
 Each person has their own database, so material moves between them as files. The app is free for everyone. **The
 packs are the coach's own material**, made for their students and not for publication.
 

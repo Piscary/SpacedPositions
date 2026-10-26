@@ -46,7 +46,8 @@ What to do now. Opens on start.
 - **Pasting anywhere** in Home (`Mod+V`, no field needed) detects FEN / PGN / lichess link / list of FENs and offers
   the matching commands in the status line: `Analyse a · Collect as position c · Import game g`.
 - **First run**: while the library is empty, Today starts with *Welcome*: a sentence on what the app does,
-  *Import a puzzle pack* (`:pack-import`), *Collect from a book* (Collect) and the paste hint.
+  *Load the starter pack* (`s`, `:starter-pack`: the pack that comes with the app, previewed like any pack),
+  *Import a puzzle pack* (`I`, `:pack-import`), *Collect from a book* (Collect) and the paste hint.
 
 ---
 

@@ -13,7 +13,7 @@ Built, with tests (pytest, Playwright journeys with the axe accessibility check,
 | Library + Collect | Positions, games, puzzles, players, sources, tags; the query language with completion; table, list and grid; filters; bulk tagging, training, trash; editing tags, sources and players; tag detection for 205 motifs; rapid entry from a book; PGN import of any size; PGN export |
 | Stats | Pattern library, card stages, retention, mastery, weak spots, robustness, records, activity, collection, achievements; every number drills down |
 | Settings | Themes and the user's own, tokens, the keymap editor, settings as one TOML file, custom CSS, languages, licences |
-| Packs | Export (selection or query, positions, puzzles and games, personal copies, versions, the export log), import with a preview, updates that keep the receiver's training (09 §12) |
+| Packs | Export (selection or query, positions, puzzles and games, personal copies, versions, the export log), import with a preview, updates that keep the receiver's training (09 §12); the starter pack: 748 lichess puzzles (CC0) by motif in four rating bands, shipped with the app and offered on the first-run screen (`manage.py starter` builds it again) |
 | Languages | English, German (Swiss spelling), French, Italian; tag names in the four languages (09 §14) |
 | Distribution | `spos` (pipx), the double-click apps for macOS and Windows built by the release workflow, daily backups, auto-stop, the opt-in update check (09 §11) |
 
@@ -22,8 +22,6 @@ position.
 
 ## Next
 
-- **Starter pack** (decision 16): a small public-domain pack by motif from the lichess puzzle database (CC0), offered
-  on the first-run screen next to *import a pack*.
 - **Signing** the apps (Apple Developer ID, a Windows certificate), so the first open needs no extra step.
 - **Third-party sources with each release**: the release workflow attaches the apps; the sources of the bundled GPL
   components (chessground, stockfish.js, python-chess) are linked from the notices. Attaching them to each release
@@ -62,7 +60,7 @@ position.
 | 13 | **Distribution** | **The app is free**, published under GPL-3.0. **Puzzle packs are content**, made and shared by their authors, not part of the app. | GPL dependencies are fine (09 §13); the licence check in CI keeps everything GPL-compatible. Packs get a licence, personalised exports and an export log (09 §12). |
 | 14 | **Ease of use** | **Jupyter-style start**: one console command, or a double click, starts the app and opens the browser | 09 §11. Nobody needs a terminal, a migration or a settings file. |
 | 15 | **GPL dependencies** | **Accepted**: python-chess and Stockfish are used freely, since the app itself is GPL-3.0 | Chess code still goes through one module for structure. |
-| 16 | **Onboarding** | **Import a pack** or collect from a book, from the first-run screen; later a public-domain starter pack | 04 · Home (first run); *Next*. |
+| 16 | **Onboarding** | **The starter pack** (public domain, by motif), **import a pack** or collect from a book, from the first-run screen | 04 · Home (first run); 09 §12 *Starter pack*. |
 | 17 | **Where the source lives** | **A public repository** | Meets the GPL for everyone who gets the app; also the update channel and issue tracker (09 §11 *Updates*, 09 §13). |
 | 18 | **Tag vocabulary** | **Built in**: 10 fields, 205 tags with German, English, French and Italian names and the motif hierarchy | 11 §1 Tags; `library/data/tags.json`. |
 | 19 | **Trash** | **Emptied by hand only** (`:trash empty`, with a confirmation); nothing disappears on its own | 11 (rules for every model). |

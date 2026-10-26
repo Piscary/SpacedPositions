@@ -1168,6 +1168,14 @@
    "handler": "both",
    "undoable": false
   },
+  "pack.starter": {
+   "title": "Load the starter pack (lichess puzzles by motif)",
+   "group": "Library",
+   "aliases": [
+    "starter-pack"
+   ],
+   "handler": "client"
+  },
   "pack.import": {
    "title": "Import a puzzle pack",
    "group": "Library",
@@ -3794,6 +3802,10 @@
    },
    "I": {
     "command": "pack.import",
+    "args": []
+   },
+   "s": {
+    "command": "pack.starter",
     "args": []
    }
   },

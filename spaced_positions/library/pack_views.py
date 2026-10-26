@@ -91,7 +91,20 @@ def download(request, name):
 @require_POST
 def scan_view(request):
     """The pack file as the request body: kept under a token (an hour at most) and previewed."""
-    data = request.body
+    return _preview(request.body)
+
+
+@require_POST
+def starter_view(request):
+    """The starter pack that comes with the app (library/starter.py), previewed like a pack file."""
+    from .starter import PATH
+
+    if not PATH.is_file():
+        return JsonResponse({"ok": False, "message": _("This copy of the app has no starter pack")}, status=404)
+    return _preview(PATH.read_bytes())
+
+
+def _preview(data: bytes):
     try:
         preview = packs.scan(data)
     except packs.PackError as e:
