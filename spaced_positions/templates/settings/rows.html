@@ -1,5 +1,6 @@
 {% load ui %}<div class="list settings__list" data-list data-settings-list>
-{% section _("Theme") key="t" summary=theme %}
+{% for s in sections %}
+{% if s.theme %}{% section s.title key=s.key summary=theme %}
   <div role="listbox" aria-label="{% translate "Theme" %}">{% for t in themes %}<div class="list__row settings__row settings__theme{% if t.name == theme %} is-on{% endif %}" role="option" aria-selected="false"
        data-row="theme:{{ t.name }}" data-theme="{{ t.name }}" data-title="{{ t.label }}">
     <span class="settings__check" aria-hidden="true">{% if t.name == theme %}●{% else %}○{% endif %}</span>
@@ -9,7 +10,7 @@
   </div>{% endfor %}</div>
   <div class="actionbar settings__actions">{% cmd "theme.save" label=_("Save as my theme") size="sm" %}{% cmd "theme.export" label=_("Copy as TOML") size="sm" %}</div>
 {% endsection %}
-{% for s in sections %}
+{% else %}
 {% blocktranslate trimmed count n=s.rows|length asvar rows_summary %}{{ n }} setting{% plural %}{{ n }} settings{% endblocktranslate %}
 {% section s.title key=s.key summary=rows_summary %}
   <div role="listbox" aria-label="{{ s.title }}">{% for r in s.rows %}<div class="list__row settings__row{% if r.changed %} is-changed{% endif %}" role="option" aria-selected="false"
@@ -40,7 +41,16 @@
   </div>{% endif %}
   {% if s.key == "k" %}<div class="actionbar settings__actions">{% cmd "settings.keymap" label=_("Edit the keymap") size="sm" %}<span class="muted">{% blocktranslate trimmed count n=overrides %}{{ n }} binding of yours{% plural %}{{ n }} bindings of yours{% endblocktranslate %}</span></div>{% endif %}
 {% endsection %}
+{% endif %}
 {% endfor %}
+{% translate "export · import" as data_summary %}{% section _("Data") key="x" summary=data_summary %}
+  <div class="settings__data">
+    <div class="actionbar">{% cmd "settings.export" label=_("Export settings (TOML)") size="sm" %}<a class="keybutton keybutton--secondary keybutton--sm" href="/lib/export/?c=positions&q=" download>{% translate "Export the library (PGN)" %}</a></div>
+    <form class="settings__import" data-settings-import>
+      <textarea class="field field--mono" name="text" aria-label="{% translate "Settings or a theme to import" %}" placeholder="{% if is_mac %}{% translate "Paste exported settings or a theme (TOML), then ⌘↵" %}{% else %}{% translate "Paste exported settings or a theme (TOML), then Ctrl+↵" %}{% endif %}"></textarea>
+    </form>
+  </div>
+{% endsection %}
 {% translate "your own CSS" as css_summary %}{% section _("Advanced") key="v" summary=css_summary %}
   <form class="settings__data" data-custom-css>
     <label class="formrow__label" for="custom-css-field">{% translate "Your own CSS, applied after the theme. If it hides the app: hold Esc while the app loads, or open it with ?safe." %}</label>
@@ -53,7 +63,7 @@
     <p>{% blocktranslate trimmed with version=licences.version %}<b>Spaced Positions {{ version }}</b> is free software under the GNU General Public License, version 3 or later:
       anyone may use it, read and change its source, and pass it on under the same licence.{% endblocktranslate %}
       {% translate "The source:" %} <a href="{{ licences.source }}" target="_blank" rel="noopener">{{ licences.source }}</a>. {% translate "Puzzle packs are content, with the licence their author gives them." %}</p>
-    <p><a href="/static/licences/GPL-3.0.txt" target="_blank" rel="noopener">{% translate "The licence (GPL-3.0)" %}</a> ·
+    <p><a href="{% static 'licences/GPL-3.0.txt' %}" target="_blank" rel="noopener">{% translate "The licence (GPL-3.0)" %}</a> ·
       <a href="/licences/notices.txt" target="_blank" rel="noopener">{% translate "All licence texts and notices" %}</a></p>
     <table class="table settings__table"><caption class="muted">{% translate "Bundled with it" %}</caption>
       <thead><tr><th scope="col">{% translate "Component" %}</th><th scope="col">{% translate "Licence" %}</th><th scope="col">{% translate "Source" %}</th></tr></thead>
@@ -63,12 +73,5 @@
     </table>
   </div>
 {% endsection %}
-{% translate "export · import" as data_summary %}{% section _("Data") key="x" summary=data_summary %}
-  <div class="settings__data">
-    <div class="actionbar">{% cmd "settings.export" label=_("Export settings (TOML)") size="sm" %}<a class="keybutton keybutton--secondary keybutton--sm" href="/lib/export/?c=positions&q=" download>{% translate "Export the library (PGN)" %}</a></div>
-    <form class="settings__import" data-settings-import>
-      <textarea class="field field--mono" name="text" aria-label="{% translate "Settings or a theme to import" %}" placeholder="{% if is_mac %}{% translate "Paste exported settings or a theme (TOML), then ⌘↵" %}{% else %}{% translate "Paste exported settings or a theme (TOML), then Ctrl+↵" %}{% endif %}"></textarea>
-    </form>
-  </div>
-{% endsection %}
+
 </div>

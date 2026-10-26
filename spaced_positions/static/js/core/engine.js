@@ -11,7 +11,7 @@ import { sanNodes } from "./san.js"
 import { addLine, current, currentKey, mainlineOf, saveEvals, treeOf } from "./analysis.js"
 import { tr, trn } from "./i18n.js"
 
-const WORKER = "/static/vendor/stockfish-17.1-lite-single-03e3232.js"
+const WORKER = new URL("../../vendor/stockfish-17.1-lite-single-03e3232.js", import.meta.url).href // under the build's static path
 const SAN_PLIES = 14
 
 let worker = null

@@ -163,12 +163,15 @@ export function escapeSelection() {
 }
 
 // Mouse: click moves the cursor, double click opens.
+// A click puts the cursor on the row, also a click on one of its buttons (a setting's choice): the cursor is where
+// you just worked, and stays there when the rows come back.
 document.addEventListener("click", (e) => {
   const row = e.target.closest("[data-list] [data-row]")
-  if (!row || e.target.closest("[data-cmd]")) return
+  if (!row) return
   const list = row.closest("[data-list]")
-  moveTo(list, rowsOf(list).indexOf(row))
-})
+  const index = rowsOf(list).indexOf(row)
+  if (index !== listState(list).cursor) moveTo(list, index)
+}, true)
 document.addEventListener("dblclick", (e) => {
   if (e.target.closest("[data-list] [data-row]")) run("list.open", [], { source: "mouse" })
 })

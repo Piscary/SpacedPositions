@@ -78,7 +78,7 @@ def test_storm_clock_bonus_and_penalty(train):
     line = train.evaluate("window.SPOS.train.puzzle().line")
     train.evaluate(
         """async (line) => { const b = document.querySelector('#ws-train [data-island=board]').board
-          const { Chess } = await import('/static/vendor/chess.js'); const c = new Chess(b.line.start)
+          const { Chess } = await import(new URL('../vendor/chess.js', document.querySelector('script[type=module]').src).href); const c = new Chess(b.line.start)
           for (let i = 0; i < line.length; i += 2) {
             b.submit(c.move({from: line[i].slice(0,2), to: line[i].slice(2,4)}))
             await new Promise(r => setTimeout(r, 400))
@@ -89,7 +89,7 @@ def test_storm_clock_bonus_and_penalty(train):
     assert train.inner_text("[data-hud-delta]") == "+6.0s"
     train.evaluate(
         """async () => { const b = document.querySelector('#ws-train [data-island=board]').board
-          const { Chess } = await import('/static/vendor/chess.js'); const c = new Chess(b.line.start)
+          const { Chess } = await import(new URL('../vendor/chess.js', document.querySelector('script[type=module]').src).href); const c = new Chess(b.line.start)
           const p = window.SPOS.train.puzzle(); const wrong = c.moves({verbose: true}).find(m => m.from + m.to !== p.line[0])
           b.submit(wrong) }"""
     )
@@ -149,7 +149,7 @@ def test_make_a_puzzle_from_a_board_line(page):
     keys(page, "Space", "3")  # the style guide's board
     page.evaluate(
         """async () => { const b = document.querySelector('[data-island=board]').board
-          const { Chess } = await import('/static/vendor/chess.js'); const c = new Chess(b.line.start)
+          const { Chess } = await import(new URL('../vendor/chess.js', document.querySelector('script[type=module]').src).href); const c = new Chess(b.line.start)
           b.submit(c.move('e4')); b.submit(c.move('e5')); b.submit(c.move('Nf3')) }"""
     )
     keys(page, ":")

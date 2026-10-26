@@ -121,3 +121,19 @@ def test_double_click_starts_in_the_background_and_reopens(tmp_path):
         assert not list((tmp_path / "backups").glob("db-before-migrate-*"))
     finally:
         _spos(tmp_path, "stop")
+
+
+def test_the_package_ships_every_file_it_reads():
+    """An installed copy (pipx, the release apps) has the translations and the tag vocabulary: every file in the
+    package that isn't Python is matched by pyproject.toml's package-data (a missing locale/ kept the app English)."""
+    import tomllib
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parent.parent
+    package = root / "spaced_positions"
+    patterns = tomllib.loads((root / "pyproject.toml").read_text())["tool"]["setuptools"]["package-data"]["spaced_positions"]
+    shipped = {p for pattern in patterns for p in package.glob(pattern) if p.is_file()}
+    needed = {p for p in package.rglob("*") if p.is_file() and p.suffix not in (".py", ".pyc") and p.name != ".DS_Store"
+              and "__pycache__" not in p.parts}
+    assert not needed - shipped, sorted(str(p.relative_to(package)) for p in needed - shipped)[:10]
+    assert package / "locale" / "de" / "LC_MESSAGES" / "django.mo" in shipped

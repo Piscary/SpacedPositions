@@ -77,6 +77,8 @@ def test_validate_token(sources):
     assert lib.validate_token(sources.schema, "main", "E2B714") == ("#e2b714", None)
     assert lib.validate_token(sources.schema, "main", "#abc") == ("#aabbcc", None)
     assert lib.validate_token(sources.schema, "font-size", "14")[1] is None
+    assert lib.validate_token(sources.schema, "board-border", "3px") == (3, None)  # a typed unit is understood
+    assert lib.validate_token(sources.schema, "board-motion", "150 ms") == (150, None)
     assert "outside" in lib.validate_token(sources.schema, "font-size", "40")[1]
     assert lib.validate_token(sources.schema, "density", "tiny")[1]
     assert lib.validate_token(sources.schema, "nope", "1")[1] == "unknown token 'nope'"

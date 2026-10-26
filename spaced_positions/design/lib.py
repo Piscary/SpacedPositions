@@ -89,8 +89,11 @@ def validate_token(schema: dict, name: str, value) -> tuple[object, str | None]:
         hexed = normalise_hex(str(value))
         return (hexed, None) if hexed else (value, _("{name}: '{value}' is not a hex colour").format(name=name, value=value))
     if kind in ("px", "number", "ms"):
+        text = str(value).strip().lower()
+        if kind != "number" and text.endswith(kind):  # `:set board-border=3px` means 3
+            text = text[: -len(kind)].strip()
         try:
-            number = float(value)
+            number = float(text)
         except (TypeError, ValueError):
             return value, _("{name}: '{value}' is not a number").format(name=name, value=value)
         lo, hi = spec.get("min"), spec.get("max")

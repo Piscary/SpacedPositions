@@ -116,7 +116,8 @@ def test_token_access(client):
     response = client.get("/home/?token=secret-token&x=1")
     assert response.status_code == 302 and response["Location"] == "/home/?x=1"
     assert client.get("/home/").status_code == 200  # the cookie was set
-    assert client.get("/static/css/app.css").status_code == 200
+    from django.conf import settings
+    assert client.get(f"{settings.STATIC_URL}css/app.css").status_code == 200  # under the build stamp
 
 
 def test_every_view_has_a_guide_with_bound_keys(client):

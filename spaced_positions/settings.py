@@ -53,7 +53,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "spaced_positions.core.context_processors.shell",
             ],
-            "builtins": ["spaced_positions.core.templatetags.ui", "django.templatetags.i18n"],
+            "builtins": ["spaced_positions.core.templatetags.ui", "django.templatetags.i18n", "django.templatetags.static"],
             "string_if_invalid": "",
         },
     },
@@ -81,11 +81,26 @@ USE_I18N = True
 TIME_ZONE = "UTC"
 USE_TZ = True
 
-STATIC_URL = "/static/"
+def _static_build(folder: Path) -> str:
+    """A stamp of the installed static files (names, sizes, times): it changes with every update."""
+    import hashlib
+
+    digest = hashlib.sha1()
+    for path in sorted(folder.rglob("*")):
+        if path.is_file():
+            stat = path.stat()
+            digest.update(f"{path.relative_to(folder)}:{stat.st_size}:{stat.st_mtime_ns}".encode())
+    return digest.hexdigest()[:10]
+
+
+# The static files live under a path with the build's stamp (/static/<stamp>/js/app.js). ES modules import each other
+# by relative names, so every module of an update has a new address: the browser can keep files for good and never
+# runs old JavaScript with a new page. In development the files change while the app runs: plain /static/, no caching.
+STATIC_URL = "/static/" if DEBUG else f"/static/{_static_build(PACKAGE_DIR / 'static')}/"
 STATICFILES_DIRS = [PACKAGE_DIR / "static"]
 WHITENOISE_USE_FINDERS = True
 WHITENOISE_AUTOREFRESH = DEBUG
-WHITENOISE_MAX_AGE = 0 if DEBUG else 3600  # @import-ed CSS isn't versioned, so keep caching short
+WHITENOISE_MAX_AGE = 0 if DEBUG else 365 * 24 * 3600
 
 CSRF_COOKIE_SAMESITE = "Strict"
 SESSION_COOKIE_SAMESITE = "Strict"

@@ -29,7 +29,7 @@
       {% for set in sets %}
       <button type="button" class="pieceset" data-cmd="board.pieces" data-args="{{ set.key }}">
         <span class="pieceset__name">{{ set.label }}</span>
-        <span class="pieceset__pieces" aria-hidden="true">{% for c in piece_codes %}<img src="/static/pieces/{{ set.key }}/{{ c }}.svg" alt="" width="28" height="28" loading="lazy">{% endfor %}</span>
+        <span class="pieceset__pieces" aria-hidden="true">{% for c in piece_codes %}<img src="{% get_static_prefix %}pieces/{{ set.key }}/{{ c }}.svg" alt="" width="28" height="28" loading="lazy">{% endfor %}</span>
         <span class="pieceset__credit">{{ set.author }} · {{ set.licence }}</span>
       </button>
       {% endfor %}

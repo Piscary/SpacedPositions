@@ -30,7 +30,8 @@ spos = "spaced_positions.launcher:main"
 include = ["spaced_positions*"]
 
 [tool.setuptools.package-data]
-spaced_positions = ["templates/**/*", "static/**/*"]
+# Every file the app reads at run time: tests/test_launcher.py checks that nothing in the package is left out
+spaced_positions = ["templates/**/*", "static/**/*", "locale/*/LC_MESSAGES/*", "library/data/*"]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.settings"

@@ -15,30 +15,54 @@ const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content ||
 const settingsPanes = () => [...document.querySelectorAll("[data-island='settings']")]
 const keymapPanes = () => [...document.querySelectorAll("[data-island='keymap']")]
 
+// The cursor stays on its row when the rows come back (after every change) and across a reload of the page (a new
+// language reloads it): the row and the search text are kept in sessionStorage per pane kind.
+const remembered = (kind) => {
+  try { return JSON.parse(sessionStorage.getItem(`spos.${kind}`) || "{}") } catch { return {} }
+}
+const remember = (kind, state) => {
+  try { sessionStorage.setItem(`spos.${kind}`, JSON.stringify({ ...remembered(kind), ...state })) } catch { /* not kept: fine */ }
+}
+const kindOf = (el) => (el.matches("[data-island='keymap']") ? "keymap" : "settings")
+
 async function load(el, url, box, list) {
   const html = await fetch(url).then((r) => r.text()).catch(() => null)
   if (html === null) return
   const target = el.querySelector(box)
   const old = target.querySelector(list)
+  const keep = old?.querySelector("[data-row].is-cursor")?.dataset.row ?? remembered(kindOf(el)).row
   const index = old ? Math.max(0, cursorIndex(old)) : 0
   target.innerHTML = html
   window.htmx?.process(target)
+  filter(el) // first: the cursor counts the rows that are shown
   const fresh = target.querySelector(list)
-  if (fresh) resetList(fresh, { index })
-  filter(el)
+  if (!fresh) return
+  const rows = [...fresh.querySelectorAll("[data-row]")].filter((r) => !r.closest("[hidden]"))
+  const at = keep ? rows.findIndex((r) => r.dataset.row === keep) : -1
+  resetList(fresh, { index: at >= 0 ? at : index })
+  rows[at]?.scrollIntoView({ block: "nearest" })
 }
 
 const loadSettings = (el) => load(el, "/settings/rows/", "[data-settings-rows]", "[data-settings-list]")
 const loadKeymap = (el) => load(el, "/settings/keymap/", "[data-keymap-rows]", "[data-keymap-list]")
 
+function mountSearch(el, selector) {
+  const field = el.querySelector(selector)
+  field.value = remembered(kindOf(el)).search || ""
+  field.addEventListener("input", () => {
+    remember(kindOf(el), { search: field.value })
+    filter(el)
+  })
+}
+
 export function mountSettings(el) {
+  mountSearch(el, "[data-settings-filter]")
   loadSettings(el)
-  el.querySelector("[data-settings-filter]").addEventListener("input", () => filter(el))
 }
 
 export function mountKeymap(el) {
+  mountSearch(el, "[data-keymap-filter]")
   loadKeymap(el)
-  el.querySelector("[data-keymap-filter]").addEventListener("input", () => filter(el))
 }
 
 /** Rows that don't contain the search text are hidden, and sections without rows. */
@@ -76,6 +100,8 @@ function restore() {
 }
 
 on("list:cursor", ({ row }) => {
+  const island = row.closest("[data-island='settings'], [data-island='keymap']")
+  if (island) remember(kindOf(island), { row: row.dataset.row })
   if (!row.closest("[data-island='settings']")) return
   if (row.dataset.theme) preview(row.dataset.theme)
   else restore()
@@ -108,7 +134,7 @@ function stepped(row, direction) {
     let next = Math.round((n + step * size) * 100) / 100
     if (low !== undefined && low !== "None") next = Math.max(Number(low), next)
     if (high !== undefined && high !== "None") next = Math.min(Number(high), next)
-    return type === "px" ? `${next}px` : type === "ms" ? `${next}ms` : String(next)
+    return String(next) // the number alone: the unit (px, ms) is the setting's, not the value's
   }
   return null
 }

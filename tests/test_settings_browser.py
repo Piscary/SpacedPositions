@@ -111,3 +111,59 @@ def test_enter_lists_the_choices_and_finds_one_by_its_meaning(page):
     keys(page, "Enter")
     page.wait_for_selector("#ws-settings [data-row='board.letters'].is-changed")
     assert Preferences.current().settings == {"board.letters": "de"}
+
+
+def test_the_cursor_stays_on_the_setting_you_change(page):
+    """h / l keep the cursor on the row, also when the new language reloads the page (with the search kept)."""
+    settings(page)
+    page.click("#ws-settings [data-row='training.storm-pace']", position={"x": 4, "y": 4})  # the row, not one of its choices
+    keys(page, "l")
+    page.wait_for_selector("#ws-settings [data-row='training.storm-pace'].is-changed")
+    page.wait_for_timeout(300)
+    assert cursor(page) == "training.storm-pace"
+    page.fill("#ws-settings [data-settings-filter]", "language")
+    keys(page, "Escape")
+    page.click("#ws-settings [data-row='ui.language']", position={"x": 4, "y": 4})
+    keys(page, "l")  # auto → en
+    page.wait_for_function("document.querySelector('#ws-settings [data-row=\\'ui.language\\']')?.dataset.value === 'en'")
+    page.wait_for_timeout(1000)  # the page reloads for a new language
+    page.wait_for_selector("#ws-settings [data-row='ui.language']")
+    keys(page, "l")  # en → de
+    page.wait_for_function("document.documentElement.lang === 'de'")
+    page.wait_for_selector("#ws-settings [data-row='ui.language']")
+    page.wait_for_function("document.querySelector('#ws-settings [data-settings-list] .is-cursor')?.dataset.row === 'ui.language'")
+    assert page.input_value("#ws-settings [data-settings-filter]") == "language"
+    assert page.evaluate("window.SPOS.ctx.pane.view") == "settings"
+    keys(page, "h")  # back to English, the cursor still there
+    page.wait_for_function("document.documentElement.lang === 'en'")
+    page.wait_for_function("document.querySelector('#ws-settings [data-settings-list] .is-cursor')?.dataset.row === 'ui.language'")
+
+
+def test_a_click_on_a_choice_keeps_the_cursor_there(page):
+    """Clicking a setting's choice puts the cursor on that setting; after the new language reloads the page it is
+    still there."""
+    settings(page)
+    page.wait_for_selector("#ws-settings [data-row='ui.language']")
+    page.click("#ws-settings [data-row='ui.language'] [data-args='ui.language=de']")
+    page.wait_for_function("document.documentElement.lang === 'de'")
+    page.wait_for_selector("#ws-settings [data-row='ui.language']")
+    page.wait_for_function("document.querySelector('#ws-settings [data-settings-list] .is-cursor')?.dataset.row === 'ui.language'")
+    keys(page, "h")  # and the keys go on from there
+    page.wait_for_function("document.documentElement.lang === 'en'")
+    page.wait_for_function("document.querySelector('#ws-settings [data-settings-list] .is-cursor')?.dataset.row === 'ui.language'")
+
+
+def test_h_and_l_step_a_number_with_a_unit(page):
+    """board-border is in pixels: l steps the number, the setting takes it (no "px" in the value)."""
+    settings(page)
+    page.fill("#ws-settings [data-settings-filter]", "frame")
+    keys(page, "Escape")
+    page.click("#ws-settings [data-row='board-border']", position={"x": 4, "y": 4})
+    before = float(page.get_attribute("#ws-settings [data-row='board-border']", "data-value"))
+    keys(page, "l")
+    page.wait_for_selector("#ws-settings [data-row='board-border'].is-changed")
+    assert Preferences.current().tokens["board-border"] == before + 1
+    keys(page, "h")
+    page.wait_for_function(f"Number(document.querySelector(\"#ws-settings [data-row='board-border']\").dataset.value) === {before}")
+    keys(page, "Backspace")  # ⌫: the theme's value again
+    page.wait_for_selector("#ws-settings [data-row='board-border']:not(.is-changed)")

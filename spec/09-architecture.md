@@ -14,7 +14,7 @@ chess data model and the query language are in 11.
 | Our JS | Vanilla ES modules, no framework, no bundler (import maps) | Target ≤ ~3,000 lines in total, split into the islands below. |
 | Engine | Stockfish WASM in a Web Worker by default; the local binary through the server when configured in Settings → Engine | No setup needed by default; the native binary is stronger and deeper when installed. |
 | Deployment | Local, one copy per person (you, each student), no login; started like Jupyter (§11) | UI-state models keep a `user` field anyway, so hosting later needs no redesign. |
-| App server | waitress (pure Python, macOS/Windows/Linux) + WhiteNoise for static files | `runserver` is for development only; the launcher needs a real server with no compiler or extra system packages. |
+| App server | waitress (pure Python, macOS/Windows/Linux) + WhiteNoise for static files | `runserver` is for development only; the launcher needs a real server with no compiler or extra system packages. Static files are served under a stamp of the installed files (`/static/<stamp>/…`, settings.py): ES modules import each other by relative names, so every file of an update has a new address, the browser caches them for good and never mixes old JavaScript with a new page. Development: plain `/static/`, no caching. |
 | Tests | pytest + Django test client, Playwright (journeys, screenshots), a small JS unit-test runner | 07 §8. |
 
 ## 2 · Page structure

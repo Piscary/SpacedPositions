@@ -1132,8 +1132,8 @@ msgid "The filter pane writes terms for you: click a facet, and see what the sea
 msgstr "Le panneau des filtres écrit des termes pour vous : cliquez une facette et voyez ce que dit la recherche."
 
 #: templates/help/settings.html
-msgid "Every setting in one list, in sections: theme and colours, board and pieces, keys, training, engine, language, data. Changes apply at once and can be undone."
-msgstr "Tous les réglages dans une liste, en sections : thème et couleurs, échiquier et pièces, touches, entraînement, moteur, langue, données. Les changements s'appliquent tout de suite et s'annulent."
+msgid "Every setting in one list, the ones you change most at the top: language, board, engine and training, then the look, and last what you set once and forget. Changes apply at once and can be undone."
+msgstr "Tous les réglages dans une liste, ceux qu'on change le plus en haut : langue, échiquier, moteur et entraînement, puis l'apparence, et à la fin ce qu'on règle une fois pour toutes. Les changements s'appliquent tout de suite et s'annulent."
 
 #: templates/help/settings.html
 msgid "Find a setting"
@@ -1347,7 +1347,7 @@ msgstr "Raccourcis"
 msgid "Unmapped:"
 msgstr "Non attribuées :"
 
-#: templates/settings/rows.html design/commands/ui.toml:theme.set
+#: templates/settings/rows.html core/settings_view.py:27 design/commands/ui.toml:theme.set
 msgid "Theme"
 msgstr "Thème"
 
@@ -1444,6 +1444,34 @@ msgstr[0] "%(n)s raccourci personnel"
 msgstr[1] "%(n)s raccourcis personnels"
 
 #: templates/settings/rows.html
+msgid "export · import"
+msgstr "export · import"
+
+#: templates/settings/rows.html
+msgid "Data"
+msgstr "Données"
+
+#: templates/settings/rows.html
+msgid "Export settings (TOML)"
+msgstr "Exporter les réglages (TOML)"
+
+#: templates/settings/rows.html
+msgid "Export the library (PGN)"
+msgstr "Exporter la bibliothèque (PGN)"
+
+#: templates/settings/rows.html
+msgid "Settings or a theme to import"
+msgstr "Réglages ou thème à importer"
+
+#: templates/settings/rows.html
+msgid "Paste exported settings or a theme (TOML), then ⌘↵"
+msgstr "Collez des réglages exportés ou un thème (TOML), puis ⌘↵"
+
+#: templates/settings/rows.html
+msgid "Paste exported settings or a theme (TOML), then Ctrl+↵"
+msgstr "Collez des réglages exportés ou un thème (TOML), puis Ctrl+↵"
+
+#: templates/settings/rows.html
 msgid "your own CSS"
 msgstr "votre propre CSS"
 
@@ -1506,34 +1534,6 @@ msgstr "Licence"
 #: templates/settings/rows.html
 msgid "Pieces: %(name)s"
 msgstr "Pièces : %(name)s"
-
-#: templates/settings/rows.html
-msgid "export · import"
-msgstr "export · import"
-
-#: templates/settings/rows.html
-msgid "Data"
-msgstr "Données"
-
-#: templates/settings/rows.html
-msgid "Export settings (TOML)"
-msgstr "Exporter les réglages (TOML)"
-
-#: templates/settings/rows.html
-msgid "Export the library (PGN)"
-msgstr "Exporter la bibliothèque (PGN)"
-
-#: templates/settings/rows.html
-msgid "Settings or a theme to import"
-msgstr "Réglages ou thème à importer"
-
-#: templates/settings/rows.html
-msgid "Paste exported settings or a theme (TOML), then ⌘↵"
-msgstr "Collez des réglages exportés ou un thème (TOML), puis ⌘↵"
-
-#: templates/settings/rows.html
-msgid "Paste exported settings or a theme (TOML), then Ctrl+↵"
-msgstr "Collez des réglages exportés ou un thème (TOML), puis Ctrl+↵"
 
 #: templates/shell.html design/commands/shell.toml:mode.home design/commands/shell.toml:mode.train
 msgid "Modes"
@@ -2695,7 +2695,7 @@ msgstr "Coups"
 msgid "The analysis as a book-style move tree."
 msgstr "L'analyse sous forme d'arbre de coups, comme dans un livre."
 
-#: core/layouts.py:92 core/settings.py:41 core/settings_view.py:29
+#: core/layouts.py:92 core/settings.py:41 core/settings_view.py:25
 msgid "Engine"
 msgstr "Moteur"
 
@@ -3101,7 +3101,7 @@ msgstr "français"
 msgid "Italian"
 msgstr "italien"
 
-#: core/settings.py:27 core/settings_view.py:20
+#: core/settings.py:27 core/settings_view.py:23
 msgid "Language"
 msgstr "Langue"
 
@@ -3307,83 +3307,87 @@ msgstr "{n} ignorés : {first}"
 msgid "layout {name}: unreadable"
 msgstr "disposition {name} : illisible"
 
-#: core/settings_view.py:208
+#: core/settings_view.py:216
 msgid "daily"
 msgstr "quotidienne"
 
-#: core/settings_view.py:208
+#: core/settings_view.py:216
 msgid "before an update"
 msgstr "avant une mise à jour"
 
-#: core/settings_view.py:208
+#: core/settings_view.py:216
 msgid "before a restore"
 msgstr "avant une restauration"
 
-#: core/settings_view.py:208
+#: core/settings_view.py:216
 msgid "by hand"
 msgstr "à la main"
 
-#: core/settings_view.py:225
+#: core/settings_view.py:233
 msgid "the web framework"
 msgstr "le framework web"
 
-#: core/settings_view.py:225
+#: core/settings_view.py:233
 msgid "part of Django"
 msgstr "partie de Django"
 
-#: core/settings_view.py:225
+#: core/settings_view.py:233
 msgid "the server"
 msgstr "le serveur"
 
-#: core/settings_view.py:226
+#: core/settings_view.py:234
 msgid "static files"
 msgstr "fichiers statiques"
 
-#: core/settings_view.py:226
+#: core/settings_view.py:234
 msgid "the data folder"
 msgstr "le dossier des données"
 
-#: core/settings_view.py:226
+#: core/settings_view.py:234
 msgid "python-chess: rules, PGN, engines"
 msgstr "python-chess : règles, PGN, moteurs"
 
-#: core/settings_view.py:21
-msgid "Colours"
-msgstr "Couleurs"
-
-#: core/settings_view.py:22
-msgid "Typography"
-msgstr "Typographie"
-
-#: core/settings_view.py:23
-msgid "Density and shape"
-msgstr "Densité et forme"
-
 #: core/settings_view.py:26
-msgid "Sound and motion"
-msgstr "Son et mouvement"
-
-#: core/settings_view.py:27 static/js/core/help.js:20
-msgid "Keys"
-msgstr "Touches"
-
-#: core/settings_view.py:28
 msgid "Training"
 msgstr "Entraînement"
 
+#: core/settings_view.py:28
+msgid "Sound and motion"
+msgstr "Son et mouvement"
+
+#: core/settings_view.py:29 static/js/core/help.js:20
+msgid "Keys"
+msgstr "Touches"
+
 #: core/settings_view.py:30
+msgid "Typography"
+msgstr "Typographie"
+
+#: core/settings_view.py:31
+msgid "Density and shape"
+msgstr "Densité et forme"
+
+#: core/settings_view.py:32
+msgid "Colours"
+msgstr "Couleurs"
+
+#: core/settings_view.py:33
+msgid "Board colours"
+msgstr "Couleurs de l'échiquier"
+
+#: core/settings_view.py:35
 msgid "Packs"
 msgstr "Packs"
 
-#: core/settings_view.py:31 design/commands/shell.toml:app.quit design/commands/ui.toml:app.backup
+#: core/settings_view.py:36 design/commands/shell.toml:app.quit design/commands/ui.toml:app.backup
 msgid "App"
 msgstr "App"
 
-#: core/settings_view.py:107
+#: core/settings_view.py:115
 msgid "Follow the system (Paper / Ink)"
 msgstr "Comme le système (Paper / Ink)"
 
-#: core/settings_view.py:99
+#: core/settings_view.py:107
 msgid "{ratio}:1, needs {minimum}:1"
 msgstr "{ratio}:1, il faut {minimum}:1"
 
@@ -5985,31 +5989,31 @@ msgstr[1] "{n} FEN"
 msgid "This pane has no text field"
 msgstr "Ce panneau n'a pas de champ de texte"
 
-#: static/js/core/settings.js:120
+#: static/js/core/settings.js:146
 msgid "↵ edits this one on the command line"
 msgstr "↵ modifie celui-ci sur la ligne de commande"
 
-#: static/js/core/settings.js:137
+#: static/js/core/settings.js:163
 msgid "Already the default"
 msgstr "Déjà la valeur par défaut"
 
-#: static/js/core/settings.js:152
+#: static/js/core/settings.js:178
 msgid "Settings exported as TOML: Settings → Data imports them on another machine"
 msgstr "Réglages exportés en TOML : Réglages → Données les importe sur un autre appareil"
 
-#: static/js/core/settings.js:161
+#: static/js/core/settings.js:187
 msgid "Import: the app is not reachable"
 msgstr "Import : l'app est injoignable"
 
-#: static/js/core/settings.js:173
+#: static/js/core/settings.js:199
 msgid "New keys for “{command}”: {keys} · ↵ keep · Esc cancel"
 msgstr "Nouvelles touches pour « {command} » : {keys} · ↵ garder · Échap annuler"
 
-#: static/js/core/settings.js:179
+#: static/js/core/settings.js:205
 msgid "Cancelled"
 msgstr "Annulé"
 
-#: static/js/core/settings.js:205
+#: static/js/core/settings.js:231
 msgid "No keys to remove here"
 msgstr "Pas de touches à retirer ici"
 

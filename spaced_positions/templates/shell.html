@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token }}">
   <title>{{ mode.label }} · Spaced Positions</title>
-  <link rel="stylesheet" href="{% static 'css/app.css' %}?v={{ app_version }}">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
   <link rel="stylesheet" href="/pieces/user.css">
   <style id="theme">{{ theme_css|safe }}</style>
   <style id="custom-css">{{ custom_css|safe }}</style>
   <script src="{% static 'vendor/htmx.min.js' %}" defer></script>
-  <script type="module" src="{% static 'js/app.js' %}?v={{ app_version }}"></script>
+  <script type="module" src="{% static 'js/app.js' %}"></script>
 </head>
 <body>
 <div class="shell" id="shell" data-layer="normal">

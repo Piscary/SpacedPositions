@@ -334,7 +334,10 @@ Sections of charts and numbers. Every number links somewhere (drill-down).
 ## Settings  `␣ ,`
 
 One long, searchable list of sections, monkeytype style. Every row: label, control, short explanation, its `:set`
-name.
+name. **The sections are ordered by how often people change them**: Language first (the first thing someone looks
+for), then Board, Engine and Training, then the look (Theme, Sound and motion, Keys, Typography, Density and shape,
+Colours, Board colours), and last what is set once (Packs, App, Data, Advanced, Licences). The cursor and the search
+stay where they are when the rows come back after a change, also across the page load a new language causes.
 
 ```
 ┌─ 1 Settings ────────────────────────────────────────────────────────────────────────────────────┐

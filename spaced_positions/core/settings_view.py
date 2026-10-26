@@ -16,17 +16,22 @@ from . import keymap, registry, settings, themes, user_pieces
 from .i18n_names import token_label
 from .models import LOCAL_USER, KeymapOverride, Preferences
 
+# The order is how often people change things: the language first (the first thing someone looks for), then what
+# changes while working (board, engine, training), then the look, and last what is set once and forgotten. "theme"
+# is the theme list (templates/settings/rows.html); Data, Advanced and Licences follow these.
 SECTIONS = [
     (_("Language"), "n", ["ui.language", "tags.language"]),
-    (_("Colours"), "c", ["bg", "bg-alt", "surface", "line", "text", "text-sub", "main", "main-text", "good", "bad", "warn", "info", "special"]),
+    (_("Board"), "b", ["piece-set", "board-coords", "board.letters", "board-border"]),
+    (_("Engine"), "e", ["engine.source", "engine.path", "engine.lines", "engine.depth", "engine.arrows", "engine.threads", "engine.hash"]),
+    (_("Training"), "r", ["training.new-per-day", "training.storm-pace"]),
+    (_("Theme"), "t", "theme"),
+    (_("Sound and motion"), "m", ["sound.on", "display.ticker", "motion", "board-motion"]),
+    (_("Keys"), "k", ["keys.keycaps", "keys.teach", "keys.whichkey"]),
     (_("Typography"), "y", ["font-ui", "font-mono", "font-moves", "font-size", "type-ratio", "figurines"]),
     (_("Density and shape"), "d", ["density", "radius", "rule"]),
-    (_("Board"), "b", ["sq-light", "sq-dark", "sq-lastmove", "sq-selected", "sq-check", "sq-hint", "arrow-green", "arrow-red",
-                    "arrow-blue", "arrow-yellow", "arrow-engine", "board-border", "board-coords", "piece-set", "board.letters"]),
-    (_("Sound and motion"), "m", ["motion", "board-motion", "sound.on", "display.ticker"]),
-    (_("Keys"), "k", ["keys.keycaps", "keys.teach", "keys.whichkey"]),
-    (_("Training"), "r", ["training.new-per-day", "training.storm-pace"]),
-    (_("Engine"), "e", ["engine.source", "engine.path", "engine.lines", "engine.depth", "engine.arrows", "engine.threads", "engine.hash"]),
+    (_("Colours"), "c", ["bg", "bg-alt", "surface", "line", "text", "text-sub", "main", "main-text", "good", "bad", "warn", "info", "special"]),
+    (_("Board colours"), "o", ["sq-light", "sq-dark", "sq-lastmove", "sq-selected", "sq-check", "sq-hint", "arrow-green", "arrow-red",
+                               "arrow-blue", "arrow-yellow", "arrow-engine"]),
     (_("Packs"), "a", ["packs.author"]),
     (_("App"), "p", ["app.updates", "app.autostop"]),
 ]
@@ -68,6 +73,9 @@ def rows() -> list[dict]:
     stored = settings.values(prefs.settings)
     out = []
     for title, key, names in SECTIONS:
+        if names == "theme":
+            out.append({"title": title, "key": key, "theme": True, "rows": []})
+            continue
         section = []
         for name in names:
             if name in settings.BY_NAME:
