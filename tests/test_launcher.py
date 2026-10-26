@@ -119,7 +119,8 @@ def test_double_click_starts_in_the_background_and_reopens(tmp_path):
     only opens the browser at it; no backup of the empty database on the first start."""
     app = os.path.join(os.path.dirname(__file__), "..", "packaging", "app.py")
     env = {k: v for k, v in os.environ.items() if not k.startswith(("SPOS_", "DJANGO_"))} | {
-        "SPOS_DATA_DIR": str(tmp_path), "BROWSER": f"{sys.executable} -c \"print('OPEN', '%s')\""}
+        # webbrowser splits BROWSER like a Unix shell: backslashes would vanish from a Windows path, slashes don't
+        "SPOS_DATA_DIR": str(tmp_path), "BROWSER": f"\"{sys.executable.replace(chr(92), '/')}\" -c \"print('OPEN', '%s')\""}
     try:
         first = subprocess.run([sys.executable, app], env=env, capture_output=True, text=True, timeout=60)
         assert first.returncode == 0, first.stderr
