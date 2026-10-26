@@ -196,8 +196,13 @@ migrations, settings files or a Python environment.
 - Everyone else: a **double-click app** per platform that bundles Python (built with PyInstaller,
   `packaging/`): macOS `Spaced-Positions-<version>-macOS.dmg` (drag the `.app` to Applications), Windows
   `Spaced-Positions-<version>-Windows.zip` (unzip, double-click `Spaced Positions.exe`). No Python install needed.
-  The release workflow (`.github/workflows/release.yml`) builds both on a version tag (`v0.2.0`), smoke-tests them
-  (`packaging/smoke.py`) and attaches them to a draft release; `packaging/build-macos.sh` builds the `.dmg` locally.
+  The release workflow (`.github/workflows/release.yml`) builds macOS for Apple Silicon and for Intel and Windows,
+  smoke-tests each built app (`packaging/smoke.py`: it starts, serves its files under the stamped static path, has
+  its translations, tags and starter pack), and publishes: a version tag (`v0.2.0`) becomes that release (a
+  pre-release with a suffix such as `-beta`), every push to `main` replaces the rolling *nightly* pre-release. One
+  platform failing doesn't cancel the others; nothing is published unless all pass. `packaging/build-macos.sh`
+  builds the `.dmg` locally. The update check reads the release list (pre-releases included, drafts and nightly
+  not).
   The apps are **not signed** (that needs paid Apple and Windows certificates): the first open is right click →
   *Open* on macOS, *More info → Run anyway* on Windows. The icon is drawn by `packaging/icons.py`.
 - **What a double click does** (`packaging/app.py`): if no instance answers, it starts the server as a background

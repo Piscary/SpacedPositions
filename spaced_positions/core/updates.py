@@ -16,7 +16,8 @@ from spaced_positions import SOURCE_URL, __version__
 
 from . import settings as user_settings
 
-LATEST = SOURCE_URL.replace("https://github.com/", "https://api.github.com/repos/") + "/releases/latest"
+# The release list, not /releases/latest: that one skips pre-releases, and test versions are pre-releases (v0.2.0-beta).
+RELEASES = SOURCE_URL.replace("https://github.com/", "https://api.github.com/repos/") + "/releases?per_page=10"
 DAY = 24 * 3600
 
 
@@ -35,10 +36,13 @@ def latest(now: float | None = None) -> dict:
     except (OSError, ValueError):
         pass
     try:
-        request = urllib.request.Request(LATEST, headers={"Accept": "application/vnd.github+json", "User-Agent": f"SpacedPositions/{__version__}"})
+        request = urllib.request.Request(RELEASES, headers={"Accept": "application/vnd.github+json", "User-Agent": f"SpacedPositions/{__version__}"})
         with urllib.request.urlopen(request, timeout=4) as r:  # noqa: S310 (a fixed https URL)
             data = json.loads(r.read())
-        release = {"version": str(data.get("tag_name", "")).lstrip("v"), "url": data.get("html_url", SOURCE_URL)}
+        # versions only (v1.2.3, v1.2.3-beta): not drafts, not the rolling "nightly" build of main
+        versions = [d for d in data if not d.get("draft") and str(d.get("tag_name", "")).startswith("v")]
+        newest = max(versions, key=lambda d: version_tuple(d["tag_name"]), default=None)
+        release = {"version": newest["tag_name"].lstrip("v"), "url": newest.get("html_url", SOURCE_URL)} if newest else {}
     except (OSError, ValueError):
         release = {}
     try:

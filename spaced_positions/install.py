@@ -19,7 +19,7 @@ from importlib import metadata
 from pathlib import Path
 
 DISTRIBUTION = "spaced-positions"
-RELEASES = "https://github.com/Piscary/SpacedPositions/releases/latest"
+RELEASES = "https://github.com/Piscary/SpacedPositions/releases"  # /latest skips pre-releases
 
 
 def _direct_url() -> dict:

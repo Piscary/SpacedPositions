@@ -30,19 +30,44 @@ five minutes with 748 hand-picked puzzles, and you can add the puzzles from your
   check.
 - **In your language.** English, Deutsch, Français, Italiano.
 
+## Make it yours
+
+Six themes come with it, from the calm default *Paper* to dark *Ink* and *Nord*, green *Forest*, warm *Sepia* and
+*High contrast*. *Automatic* follows your computer's light or dark mode.
+
+![The six themes: Paper, Ink, Nord, Forest, Sepia, High contrast](docs/images/themes.png)
+
+- **Try them live:** in Settings, move through the themes with the arrow keys and the whole app changes as you go;
+  `Enter` keeps one. `space` `u` `t` switches between a theme's light and dark version.
+- **12 piece sets** (`space` `u` `p`), board colours, fonts, sizes and spacing: every colour and size is a setting.
+  **Save as my theme** keeps your mix, and you can copy it to share it.
+- **Coordinates** inside or outside the board, **piece letters** in your language (KDTLS, RDTFC, RDTAC), figurines in
+  the move list, sounds on or off.
+
 ## Get started in five minutes
 
 ### 1. Download
 
-Get the app for your computer from the [releases page](https://github.com/Piscary/SpacedPositions/releases/latest):
+Get the app from the [releases page](https://github.com/Piscary/SpacedPositions/releases): the newest version is at
+the top, under *Assets*.
 
-- **macOS:** download the `.dmg`, open it and drag **Spaced Positions** into *Applications*.
-- **Windows:** download the `.zip`, unzip it (right click → *Extract All*), and open the folder.
+- **Mac with Apple Silicon** (M1, M2, … : Apple menu → *About This Mac* says "Chip Apple M…"): download
+  `…-macOS-AppleSilicon.dmg`.
+- **Mac with Intel** (*About This Mac* says "Processor … Intel"): download `…-macOS-Intel.dmg`.
+- **Windows:** download `…-Windows.zip`.
+
+On a Mac, open the `.dmg` and drag **Spaced Positions** into *Applications*. On Windows, unzip the file (right click →
+*Extract All*) and open the folder.
 
 The app is not signed yet (signing costs money every year), so your computer asks once whether you trust it:
 
-- **macOS:** the first time, right click the app → *Open* → *Open*. After that, a normal double click works.
+- **macOS 15 and newer:** double-click the app; macOS says it can't check it. Open *System Settings* → *Privacy &
+  Security*, scroll down, and click *Open Anyway* next to "Spaced Positions". After that, a normal double click works.
+- **Older macOS:** right click the app → *Open* → *Open*.
 - **Windows:** if a blue window says "Windows protected your PC", click *More info* → *Run anyway*.
+
+*Nightly* is a pre-release built from the newest code, for testers: it may have bugs. Your data stays when you
+switch between versions.
 
 ### 2. Start it
 
@@ -114,7 +139,7 @@ Teaching exceptions (in Switzerland Art. 19 of the Copyright Act) allow excerpts
 - **Get told about new versions:** on the Welcome screen click *Tell me about new versions* (or Settings → App →
   *Look for updates*). The app then asks GitHub once a day whether there is a newer version, and sends nothing else.
   A small notice appears at the top when there is one, and says how to update your copy.
-- **The app:** download the new version from the [releases page](https://github.com/Piscary/SpacedPositions/releases/latest)
+- **The app:** download the new version from the [releases page](https://github.com/Piscary/SpacedPositions/releases)
   and replace the old one. Your puzzles and training stay where they are: they live in their own folder, and the
   app makes a backup before it moves to a new version.
 - **Installed with Python (below):** run `spos update`. It stops the app, updates it and starts it again.
@@ -270,10 +295,21 @@ missing file. The style guide is compared with screenshots: after an intended vi
 
 ## Releases
 
-1. Bump `version` in `pyproject.toml` and `__version__` in `spaced_positions/__init__.py`.
-2. Tag and push: `git tag v0.2.0 && git push --tags`.
-3. GitHub Actions builds the macOS and Windows apps with PyInstaller (`packaging/`), smoke-tests them, and attaches
-   them to a draft release; publish it by hand.
+The apps are built by GitHub Actions (`.github/workflows/release.yml`) with PyInstaller (`packaging/`): macOS for
+Apple Silicon and for Intel (a `.dmg` each) and Windows (a `.zip`). Each one is started and checked after the build
+(`packaging/smoke.py`: it answers, serves its files, has its translations, tags and starter pack). A platform that
+fails doesn't stop the others, but nothing is published unless all of them pass.
+
+- **Every push to `main`** replaces the **nightly** pre-release with apps of the newest code.
+- **A version tag** publishes that version:
+  1. bump `version` in `pyproject.toml` and `__version__` in `spaced_positions/__init__.py`, and commit;
+  2. `git tag v0.2.0 && git push --tags` (a suffix such as `v0.2.0-beta` makes it a pre-release; give every test
+     version its own number, as the update check compares the numbers, not the suffix);
+  3. the release appears with the three apps and notes from the commits since the last tag.
+- **Run workflow** on the Actions page builds the apps without publishing them (they are on the run's page).
+
+`ci.yml` runs the design check, the Python, JavaScript and browser tests on every push; a failing test shows its
+message as an annotation on the run's page.
 
 `pyproject.toml` lists the data files that go into an install (templates, static files, translations, the tag
 vocabulary, the starter pack); a test checks that nothing in the package is left out.

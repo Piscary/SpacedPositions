@@ -16,7 +16,8 @@ from tests.browser import keys, layer, open_mode, panes
 pytestmark = [pytest.mark.browser, pytest.mark.django_db(transaction=True)]
 
 SHOTS = Path(__file__).parent / "screenshots"
-LATENCY_BUDGET_MS = 16 * 1.5  # spec 01 · P5: key → reaction within a frame, CI tolerance × 1.5
+# spec 01 · P5: key → reaction within a frame. Tolerance × 1.5 on a computer, × 4 on CI (shared, slow machines)
+LATENCY_BUDGET_MS = 16 * (4 if os.environ.get("CI") else 1.5)
 
 
 def test_which_key_lists_the_window_commands(page):

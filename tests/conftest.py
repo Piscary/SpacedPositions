@@ -1,4 +1,5 @@
 import os
+import sys
 
 import pytest
 
@@ -59,3 +60,16 @@ def fresh_training_data():
     metrics._cached.clear()
     yield
     metrics._cached.clear()
+
+
+def pytest_runtest_logreport(report):
+    """On GitHub Actions, a failing test becomes an annotation (file, line and the error) on the run's page: the reason
+    is visible without downloading the log."""
+    if not os.environ.get("GITHUB_ACTIONS") or not report.failed:
+        return
+    crash = getattr(report.longrepr, "reprcrash", None)
+    message = crash.message if crash else str(report.longrepr)
+    path, line = (crash.path, crash.lineno) if crash else (report.location[0], (report.location[1] or 0) + 1)
+    path = os.path.relpath(path) if os.path.isabs(str(path)) else path
+    text = f"{report.nodeid} ({report.when}): {message}"[:3000].replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+    sys.__stdout__.write(f"::error file={path},line={line},title=test failed::{text}\n")

@@ -1,58 +1,101 @@
-# The double-click apps (spec 09 §11) for a version tag (`git tag v0.2.0 && git push --tags`): a .dmg for macOS and a
-# .zip for Windows, attached to a draft GitHub release that is published by hand.
+# The double-click apps (spec 09 §11): macOS (Apple Silicon and Intel, a .dmg each) and Windows (a .zip).
+#
+# - A push to main builds them and replaces the rolling "nightly" pre-release: the newest state, for testers.
+# - A version tag (`git tag v0.2.0 && git push --tags`) builds them and publishes the release of that version
+#   (a pre-release when the tag has a suffix, as in v0.2.0-beta), with notes from the commits.
+# - "Run workflow" on the Actions page builds them without publishing (the apps are on the run's page).
+#
+# Every app is smoke-tested after the build (packaging/smoke.py: it starts, serves its files, has its translations,
+# tags and starter pack). A platform that fails doesn't cancel the others, but nothing is published unless all pass.
 name: release
 
 on:
   push:
+    branches: [main]
     tags: ["v*"]
+  workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref == 'refs/heads/main' }}  # a newer push to main replaces the nightly build
+
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
-        os: [macos-14, windows-latest]
+        include:
+          - os: macos-15
+            platform: macOS-AppleSilicon
+          - os: macos-15-intel
+            platform: macOS-Intel
+          - os: windows-2025
+            platform: Windows
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
       - run: pip install -e ".[dev]"
       - name: Unit tests
         run: python -m pytest -m "not browser"
+      - name: Name of the build
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then label="${GITHUB_REF_NAME#v}"; else label="nightly"; fi
+          echo "NAME=Spaced-Positions-$label-${{ matrix.platform }}" >> "$GITHUB_ENV"
       - name: macOS app and disk image
         if: runner.os == 'macOS'
-        run: sh packaging/build-macos.sh
+        run: sh packaging/build-macos.sh "$NAME"
       - name: Windows app folder as a zip
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
           python manage.py design build
           python -m PyInstaller --noconfirm --clean --distpath dist --workpath build packaging/spos.spec
-          $version = python -c "import spaced_positions; print(spaced_positions.__version__)"
-          Compress-Archive -Path "dist/Spaced Positions" -DestinationPath "dist/Spaced-Positions-$version-Windows.zip"
+          Compress-Archive -Path "dist/Spaced Positions" -DestinationPath "dist/$env:NAME.zip"
       - name: Smoke test the built app
         shell: bash
         run: python packaging/smoke.py
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
-          name: app-${{ runner.os }}
+          name: ${{ env.NAME }}
           path: |
             dist/*.dmg
             dist/*.zip
+          if-no-files-found: error
 
-  release:
+  publish:
     needs: build
-    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           path: dist
           merge-multiple: true
-      - uses: softprops/action-gh-release@v2
-        with:
-          draft: true
-          files: dist/*
+      - run: ls -la dist
+      - name: The release of a version tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          tag="$GITHUB_REF_NAME"
+          pre=""; [[ "$tag" == *-* ]] && pre="--prerelease"
+          if gh release view "$tag" > /dev/null 2>&1; then
+            gh release upload "$tag" dist/* --clobber   # a re-run, or a release made by hand: its files are replaced
+          else
+            gh release create "$tag" dist/* --verify-tag --generate-notes --title "Spaced Positions ${tag#v}" $pre
+          fi
+      - name: The nightly pre-release (main)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          gh release delete nightly --yes --cleanup-tag || true
+          gh release create nightly dist/* --prerelease --latest=false --target "$GITHUB_SHA" \
+            --title "Nightly (main, ${GITHUB_SHA::7})" \
+            --notes "The newest state of main, built $(date -u +'%Y-%m-%d %H:%M') UTC from ${GITHUB_SHA::7}. For testing: it may have bugs. The releases with a version number are the ones to use; your data stays when you switch between them."
