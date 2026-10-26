@@ -9,6 +9,7 @@ import urllib.request
 
 from django.conf import settings
 from django.http import JsonResponse
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET
 
 from spaced_positions import SOURCE_URL, __version__
@@ -54,4 +55,18 @@ def check(request):
         return JsonResponse({"available": None})
     release = latest()
     newer = release.get("version") and version_tuple(release["version"]) > version_tuple(__version__)
-    return JsonResponse({"available": release["version"] if newer else None, "url": release.get("url")})
+    return JsonResponse({"available": release["version"] if newer else None, "url": release.get("url"), "how": how_to_update()})
+
+
+def how_to_update() -> str:
+    """How this copy is updated, for the app bar's notice (install.py knows how it was installed)."""
+    from spaced_positions import install
+
+    how = install.kind()
+    if how == "app":
+        return _("Download the new version from the release page and replace the app: your data stays where it is.")
+    if how == "source":
+        return _("A development copy: git pull, then start it again.")
+    if install.update_command():
+        return _("In a terminal: spos update. It stops the app, updates it and starts it again; your data stays.")
+    return _("Install the new version the way you installed this one; your data stays where it is.")

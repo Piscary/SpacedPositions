@@ -7,6 +7,8 @@
     spos --lan           also listen on the home network (token still required)
     spos list            show where the running instance is
     spos stop            stop the running instance
+    spos update          update to the newest version (stops the app, updates it, starts it again)
+    spos restore FILE    put a backup back (the app must be stopped)
 """
 
 import argparse
@@ -30,7 +32,7 @@ RUNTIME = "runtime.json"
 
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="spos", description="Spaced Positions: chess puzzle training.")
-    parser.add_argument("action", nargs="?", default="start", choices=["start", "list", "stop", "restore"])
+    parser.add_argument("action", nargs="?", default="start", choices=["start", "list", "stop", "update", "restore"])
     parser.add_argument("path", nargs="?", help="restore: the backup to put back")
     parser.add_argument("--no-browser", action="store_true", help="don't open a browser")
     parser.add_argument("--port", type=int, help=f"port to use (default {DEFAULT_PORT} or the next free one)")
@@ -58,6 +60,24 @@ def main(argv=None):
         os.kill(running["pid"], signal.SIGTERM)
         (data / RUNTIME).unlink(missing_ok=True)
         print("Stopped.")
+        return
+
+    if args.action == "update":
+        from spaced_positions import install
+
+        if running:  # an update replaces the files the running app uses: stop it first
+            os.kill(running["pid"], signal.SIGTERM)
+            (data / RUNTIME).unlink(missing_ok=True)
+            print("Stopped the running app for the update.")
+        code = install.run_update()
+        if code != 0:
+            sys.exit(code)
+        version = install.installed_version()
+        print(f"Spaced Positions {version or 'is'} up to date (was {__version__}). Your data is unchanged.")
+        if running:
+            print("Starting it again…")
+            os.execv(sys.argv[0], [sys.argv[0], *(["--data-dir", args.data_dir] if args.data_dir else [])])
+        print("Start it with: spos")
         return
 
     if args.action == "restore":

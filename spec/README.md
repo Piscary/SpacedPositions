@@ -36,6 +36,9 @@ The UI system follows four ideas:
 | 9 | [09-architecture.md](09-architecture.md) | How the system maps onto Django + HTMX + small JS islands; Jupyter-style launch, puzzle packs, licences, languages |
 | 10 | [10-roadmap-and-questions.md](10-roadmap-and-questions.md) | Status, what comes next, what is out of scope, decisions taken |
 | 11 | [11-data-model.md](11-data-model.md) | Positions, games, tags, sources, players, saved queries; duplicates; the query language; PGN import |
+| 12 | [12-packs-as-collections.md](12-packs-as-collections.md) | Plan: where a puzzle comes from, training and stats per pack or book, pack composition, good-citizen checks |
+| 13 | [13-licensing-and-marketplace.md](13-licensing-and-marketplace.md) | Plan: licences in the pack format, author submissions, the review, the marketplace, milestones M0–M4 |
+| 14 | [14-test-programme.md](14-test-programme.md) | Plan: the test group: who, tasks, questions, data, tracking, readiness |
 
 ## Reading order
 

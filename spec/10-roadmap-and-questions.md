@@ -22,6 +22,19 @@ position.
 
 ## Next
 
+The way ahead is in milestones with goals that have to be met before the next step (13 §6): **M0** the test group
+(14), **M1** a public beta, **M2** course packs with licences, **M3** a marketplace pilot, **M4** open to coaches.
+
+**Before the test group (M0):**
+
+- `:test-report` (a usage report with counts only, written on request) and `:feedback` (opens the feedback form with
+  the version and the mode), 14 §5.
+- Release builds tested on clean macOS and Windows accounts: install, first puzzle, an update with the data kept.
+- A tester note, the surveys and the feedback log (`docs/testing/feedback-log.csv`).
+
+**For the public beta (M1):** packs and books as collections (12 §2–4: where a puzzle comes from, training one
+collection, stats per collection), what the test group asks for, and:
+
 - **Signing** the apps (Apple Developer ID, a Windows certificate), so the first open needs no extra step.
 - **Third-party sources with each release**: the release workflow attaches the apps; the sources of the bundled GPL
   components (chessground, stockfish.js, python-chess) are linked from the notices. Attaching them to each release
@@ -29,6 +42,10 @@ position.
 - **Progress reports**: a file a student can send to a coach (retention, mastery, weak motifs), no server needed.
 - **Password on pack files** (09 §12): protection in transit only; left out until someone needs it.
 - Review of the French and Italian translations by native speakers (`manage.py i18n missing` lists new texts).
+- **Publishing on PyPI**, so the Python install is `pipx install spaced-positions` (today it installs from GitHub).
+
+**Later (M2–M4):** the composition of a pack and the good-citizen checks (12 §5–6), pack format 2 with licences and
+signatures (13 §2), the review process (13 §4), the marketplace (13 §5).
 
 ## Out of scope for now
 

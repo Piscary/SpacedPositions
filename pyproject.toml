@@ -33,6 +33,9 @@ include = ["spaced_positions*"]
 # Every file the app reads at run time: tests/test_launcher.py checks that nothing in the package is left out
 spaced_positions = ["templates/**/*", "static/**/*", "locale/*/LC_MESSAGES/*", "library/data/*"]
 
+[tool.setuptools.exclude-package-data]
+spaced_positions = [".DS_Store", "**/.DS_Store", "**/Thumbs.db", "**/desktop.ini"]
+
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.settings"
 testpaths = ["tests"]

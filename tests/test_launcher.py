@@ -137,3 +137,27 @@ def test_the_package_ships_every_file_it_reads():
               and "__pycache__" not in p.parts}
     assert not needed - shipped, sorted(str(p.relative_to(package)) for p in needed - shipped)[:10]
     assert package / "locale" / "de" / "LC_MESSAGES" / "django.mo" in shipped
+
+
+def test_spos_update_knows_how_this_copy_was_installed(monkeypatch):
+    """`spos update` (and the app bar's update notice) follow the way the app was installed."""
+    from spaced_positions import install
+
+    def origin(value):
+        monkeypatch.setattr(install, "_direct_url", lambda: value)
+
+    origin({"dir_info": {"editable": True}, "url": "file:///src/spaced-positions"})
+    assert install.kind() == "source" and install.update_command() is None and "git pull" in install.instructions()
+    origin({"dir_info": {}, "url": "file:///Users/me/spaced-positions"})
+    monkeypatch.setattr(sys, "prefix", "/usr/local/venv")
+    assert install.kind() == "pip"
+    assert install.update_command()[-3:] == ["--force-reinstall", "--no-deps", "/Users/me/spaced-positions"]
+    origin({"url": "https://github.com/Piscary/SpacedPositions", "vcs_info": {"vcs": "git", "commit_id": "abc"}})
+    assert install.update_command()[-2:] == ["--upgrade", "git+https://github.com/Piscary/SpacedPositions"]
+    origin({})
+    assert install.update_command()[-1] == "spaced-positions"  # from PyPI
+    monkeypatch.setattr(sys, "prefix", "/Users/me/.local/pipx/venvs/spaced-positions")
+    monkeypatch.setattr(install.shutil, "which", lambda name: "/usr/local/bin/pipx")
+    assert install.kind() == "pipx" and install.update_command() == ["/usr/local/bin/pipx", "upgrade", "spaced-positions"]
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+    assert install.kind() == "app" and install.update_command() is None and "release" in install.instructions().lower()

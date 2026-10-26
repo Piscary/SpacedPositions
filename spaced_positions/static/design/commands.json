@@ -3807,6 +3807,12 @@
    "s": {
     "command": "pack.starter",
     "args": []
+   },
+   "N": {
+    "command": "pref.set",
+    "args": [
+     "app.updates=on"
+    ]
    }
   },
   "view.continue": {

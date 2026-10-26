@@ -424,6 +424,7 @@ reference is `spec/08-keymap.md`.
 | `x` | Dismiss the announcement | `home.dismiss` |
 | `I` | Import a puzzle pack | `pack.import` |
 | `s` | Load the starter pack (lichess puzzles by motif) | `pack.starter` |
+| `N` | Set a token (e.g. main=#e2b714, font-size=14, density=compact) app.updates=on | `pref.set` |
 
 ## view.continue
 

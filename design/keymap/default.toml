@@ -380,6 +380,7 @@ accept = ["[", "]"]
 "x" = "home.dismiss"
 "I" = "pack.import"
 "s" = "pack.starter"
+"N" = "pref.set app.updates=on"
 
 [context."view.continue"]
 "a" = "home.analysis"

@@ -2162,6 +2162,14 @@ msgid "Collect from a book"
 msgstr "Aus einem Buch erfassen"
 
 #: templates/views/today.html
+msgid "The app can tell you when a new version is out: it asks GitHub once a day, and sends nothing else."
+msgstr "Die App kann dir sagen, wenn es eine neue Version gibt: sie fragt einmal am Tag bei GitHub nach und schickt sonst nichts."
+
+#: templates/views/today.html
+msgid "Tell me about new versions"
+msgstr "Neue Versionen melden"
+
+#: templates/views/today.html
 msgid "The starter pack has %(n)s puzzle by motif (forks, pins, mating patterns, endgames …) from beginner to club level, from the public-domain lichess.org puzzle database."
 msgid_plural "The starter pack has %(n)s puzzles by motif (forks, pins, mating patterns, endgames …) from beginner to club level, from the public-domain lichess.org puzzle database."
 msgstr[0] "Das Startpaket hat %(n)s Aufgabe nach Motiven (Gabeln, Fesselungen, Mattbilder, Endspiele …) vom Anfänger- bis zum Klubniveau, aus der gemeinfreien Aufgabendatenbank von lichess.org."
@@ -3408,6 +3416,22 @@ msgstr "{ratio}:1, braucht {minimum}:1"
 #: core/templatetags/ui.py:155
 msgid "Position {fen}"
 msgstr "Stellung {fen}"
+
+#: core/updates.py:72
+msgid "Install the new version the way you installed this one; your data stays where it is."
+msgstr "Installiere die neue Version so, wie du diese installiert hast; deine Daten bleiben, wo sie sind."
+
+#: core/updates.py:67
+msgid "Download the new version from the release page and replace the app: your data stays where it is."
+msgstr "Lade die neue Version von der Release-Seite herunter und ersetze die App: deine Daten bleiben, wo sie sind."
+
+#: core/updates.py:69
+msgid "A development copy: git pull, then start it again."
+msgstr "Eine Entwicklungskopie: git pull, dann neu starten."
+
+#: core/updates.py:71
+msgid "In a terminal: spos update. It stops the app, updates it and starts it again; your data stays."
+msgstr "Im Terminal: spos update. Es stoppt die App, aktualisiert sie und startet sie wieder; deine Daten bleiben."
 
 #: core/user_pieces.py:29
 msgid "missing {value}"
@@ -4985,19 +5009,19 @@ msgstr "Keine Aufgaben im Training passen zu «{filter}»"
 msgid "Your CSS is off for this page (Esc while loading): Settings → Advanced"
 msgstr "Dein CSS ist für diese Seite aus (Esc beim Laden): Einstellungen → Erweitert"
 
-#: static/js/app.js:59
+#: static/js/app.js:60
 msgid "update {version} available"
 msgstr "Update {version} verfügbar"
 
-#: static/js/app.js:100 static/js/core/commands.js:149 static/js/core/importer.js:58
+#: static/js/app.js:102 static/js/core/commands.js:149 static/js/core/importer.js:58
 msgid "undo"
 msgstr "rückgängig"
 
-#: static/js/app.js:136 static/js/core/library.js:703 static/js/islands/train.js:640
+#: static/js/app.js:138 static/js/core/library.js:703 static/js/islands/train.js:640
 msgid "The browser didn't allow copying"
 msgstr "Der Browser hat das Kopieren nicht erlaubt"
 
-#: static/js/app.js:156
+#: static/js/app.js:158
 msgid "Spaced Positions has stopped. Start it again from its icon or with spos."
 msgstr "Spaced Positions wurde beendet. Starte es wieder über sein Symbol oder mit spos."
 

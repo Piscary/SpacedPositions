@@ -7,6 +7,7 @@ from __future__ import annotations
 from django.db.models import Max
 
 from spaced_positions.analysis.models import JournalEntry
+from spaced_positions.core import settings as user_settings
 from spaced_positions.core.models import LOCAL_USER, UIState
 from spaced_positions.library.models import Game
 from spaced_positions.training import selection, srs
@@ -31,6 +32,7 @@ def today() -> dict:
         "banner": Achievement.objects.filter(seen=False).order_by("-reached_at").first(),
         "first_run": first_run(),
         "starter": starter_size(),
+        "updates": bool(user_settings.get("app.updates")),
         "again": selection.last_options(),
     }
 

@@ -53,10 +53,12 @@ if (boot.launched) {
 
 // The opt-in update check (Settings → App): a newer version shows in the app bar
 if (boot.settings["app.updates"]) {
-  fetch("/app/update/").then((r) => r.json()).then(({ available, url }) => {
+  fetch("/app/update/").then((r) => r.json()).then(({ available, url, how }) => {
     const link = document.querySelector("[data-update]")
     if (!available || !link) return
-    Object.assign(link, { href: url, textContent: tr("update {version} available", { version: available }) })
+    // the link shows what is new (the release page); the status line says how this copy is updated
+    Object.assign(link, { href: url, title: how, textContent: tr("update {version} available", { version: available }) })
+    link.addEventListener("click", () => status(how, { timeout: 15000 }))
     link.hidden = false
   }).catch(() => null)
 }

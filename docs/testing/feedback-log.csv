@@ -1,0 +1,2 @@
+id,date,tester,group,source,area,kind,severity,description,count,status
+F001,2026-11-02,T1,beginner,observed,first run,confusion,major,"Example: didn't see the Welcome section, scrolled past it",1,new

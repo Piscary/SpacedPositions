@@ -223,7 +223,9 @@ def test_update_check_is_opt_in_and_compares_versions(client, monkeypatch, setti
     monkeypatch.setattr(updates.urllib.request, "urlopen", fake)
     assert client.get("/app/update/").json() == {"available": None} and calls == []  # off: nothing is asked
     Preferences.objects.update_or_create(pk=Preferences.current().pk, defaults={"settings": {"app.updates": True}})
-    assert client.get("/app/update/").json() == {"available": "9.0.0", "url": "https://example.test/release"}
+    answer = client.get("/app/update/").json()
+    assert {k: answer[k] for k in ("available", "url")} == {"available": "9.0.0", "url": "https://example.test/release"}
+    assert answer["how"]  # how this copy is updated (install.py): shown with the notice
     client.get("/app/update/")
     assert len(calls) == 1 and calls[0].endswith("/releases/latest")  # once a day
     assert updates.version_tuple("v0.10.0") > updates.version_tuple("0.9.3")
