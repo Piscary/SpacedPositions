@@ -26,7 +26,7 @@ def test_free_port_skips_busy_ports():
 
 
 def test_stale_runtime_file_is_ignored(tmp_path):
-    (tmp_path / "runtime.json").write_text(json.dumps({"pid": 999999, "port": 1, "url": "x"}))
+    (tmp_path / "runtime.json").write_text(json.dumps({"pid": 999999, "port": 1, "url": "x"}), encoding="utf-8")
     assert launcher._running_instance(tmp_path) is None
     assert not (tmp_path / "runtime.json").exists()
 
@@ -51,7 +51,7 @@ def test_start_open_refuse_list_stop(tmp_path):
             if runtime.exists():
                 break
             time.sleep(0.1)
-        info = json.loads(runtime.read_text())
+        info = json.loads(runtime.read_text(encoding="utf-8"))
         base = f"http://127.0.0.1:{info['port']}"
 
         with pytest.raises(urllib.error.HTTPError) as refused:
@@ -113,11 +113,11 @@ def test_double_click_starts_in_the_background_and_reopens(tmp_path):
     try:
         first = subprocess.run([sys.executable, app], env=env, capture_output=True, text=True, timeout=60)
         assert first.returncode == 0, first.stderr
-        info = json.loads((tmp_path / "runtime.json").read_text())
+        info = json.loads((tmp_path / "runtime.json").read_text(encoding="utf-8"))
         second = subprocess.run([sys.executable, app], env=env, capture_output=True, text=True, timeout=30)
-        assert json.loads((tmp_path / "runtime.json").read_text())["pid"] == info["pid"]  # the same server
+        assert json.loads((tmp_path / "runtime.json").read_text(encoding="utf-8"))["pid"] == info["pid"]  # the same server
         assert second.returncode == 0 and info["url"] in first.stdout + second.stdout
-        assert "is running" in (tmp_path / "app.log").read_text()
+        assert "is running" in (tmp_path / "app.log").read_text(encoding="utf-8")
         assert not list((tmp_path / "backups").glob("db-before-migrate-*"))
     finally:
         _spos(tmp_path, "stop")
@@ -131,7 +131,7 @@ def test_the_package_ships_every_file_it_reads():
 
     root = Path(__file__).resolve().parent.parent
     package = root / "spaced_positions"
-    patterns = tomllib.loads((root / "pyproject.toml").read_text())["tool"]["setuptools"]["package-data"]["spaced_positions"]
+    patterns = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))["tool"]["setuptools"]["package-data"]["spaced_positions"]
     shipped = {p for pattern in patterns for p in package.glob(pattern) if p.is_file()}
     needed = {p for p in package.rglob("*") if p.is_file() and p.suffix not in (".py", ".pyc") and p.name != ".DS_Store"
               and "__pycache__" not in p.parts}
@@ -161,3 +161,19 @@ def test_spos_update_knows_how_this_copy_was_installed(monkeypatch):
     assert install.kind() == "pipx" and install.update_command() == ["/usr/local/bin/pipx", "upgrade", "spaced-positions"]
     monkeypatch.setattr(sys, "frozen", True, raising=False)
     assert install.kind() == "app" and install.update_command() is None and "release" in install.instructions().lower()
+
+
+def test_text_files_are_read_and_written_as_utf8():
+    """Windows reads a text file as cp1252 unless told otherwise: the tags, the translations and the catalogues would
+    come out garbled there (or a migration fail). Every text read and write in the app names its encoding."""
+    import re
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parent.parent
+    bad = []
+    for path in [*(root / "spaced_positions").rglob("*.py"), *(root / "packaging").glob("*.py")]:
+        for n, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            if re.search(r"\.read_text\(\)|\.write_text\((?!.*encoding=)", line) or (
+                    re.search(r"(?<![\w.])open\((?![^)]*(encoding=|\"[rwa]b\"|'[rwa]b'))", line) and "urlopen" not in line):
+                bad.append(f"{path.relative_to(root)}:{n}: {line.strip()}")
+    assert not bad, "\n".join(bad)

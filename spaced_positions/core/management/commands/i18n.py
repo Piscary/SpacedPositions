@@ -36,5 +36,5 @@ class Command(BaseCommand):
         elif action == "fill":
             if not path:
                 raise CommandError("fill: which JSON file?")
-            n = catalog.fill(json.loads(open(path).read()))
+            n = catalog.fill(json.loads(open(path, encoding="utf-8").read()))
             self.stdout.write(f"filled {n} translations")

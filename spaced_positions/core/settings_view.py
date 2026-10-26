@@ -243,7 +243,7 @@ def licences() -> dict:
     from spaced_positions import SOURCE_URL, __version__
 
     built = Path(__file__).resolve().parents[1] / "static" / "design" / "licences.json"  # from design/licences.toml (design build)
-    data = json.loads(built.read_text()) if built.exists() else {}
+    data = json.loads(built.read_text(encoding="utf-8")) if built.exists() else {}
     files = [{"name": name, "licence": v.get("licence", ""), "source": v.get("source", "")}
              for table in ("vendor", "data") for name, v in data.get(table, {}).items()]
     pieces = [{"name": v.get("label", name), "licence": v.get("licence", ""), "source": v.get("author", "")} for name, v in data.get("pieces", {}).items()]
@@ -292,7 +292,7 @@ def notices_text() -> str:
         "entries say (chessground and stockfish.js at the versions named; python-chess on PyPI; the piece sets are SVG, "
         "their own source).",
     ]
-    gpl = (static / "licences" / "GPL-3.0.txt").read_text()
+    gpl = (static / "licences" / "GPL-3.0.txt").read_text(encoding="utf-8")
 
     def licence_text(text: str) -> str:
         """A licence file, unless it is the GPL version 3 again (once, at the end)."""
@@ -300,7 +300,7 @@ def notices_text() -> str:
             return "(the GNU General Public License, version 3: the full text is at the end)"
         return text
 
-    data = json.loads((static / "design" / "licences.json").read_text()) if (static / "design" / "licences.json").exists() else {}
+    data = json.loads((static / "design" / "licences.json").read_text(encoding="utf-8")) if (static / "design" / "licences.json").exists() else {}
     for name, v in data.get("vendor", {}).items():
         text = f"{name}\nLicence: {v.get('licence', '')}\nSource: {v.get('source', '')}"
         for file in re.findall(r"licences/(\S+)", v.get("source", "")):

@@ -32,6 +32,6 @@ def secret_key() -> str:
     """A per-install secret, created on first start."""
     path = data_dir() / "secret_key"
     if not path.exists():
-        path.write_text(secrets.token_urlsafe(50))
+        path.write_text(secrets.token_urlsafe(50), encoding="utf-8")
         path.chmod(0o600)
-    return path.read_text().strip()
+    return path.read_text(encoding="utf-8").strip()

@@ -239,7 +239,7 @@ def test_licence_text_and_notices(client):
     from pathlib import Path
 
     root = Path(__file__).resolve().parents[1]
-    assert (root / "LICENSE").read_text() == (root / "spaced_positions/static/licences/GPL-3.0.txt").read_text()
+    assert (root / "LICENSE").read_text(encoding="utf-8") == (root / "spaced_positions/static/licences/GPL-3.0.txt").read_text(encoding="utf-8")
     text = client.get("/licences/notices.txt").content.decode()
     for name in ("chessground.min.js", "Piece set Merida", "Django", "waitress", "python-chess" if "python-chess" in text else "chess",
                  "Python Software Foundation", "GNU GENERAL PUBLIC LICENSE"):

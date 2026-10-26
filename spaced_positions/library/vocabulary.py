@@ -24,7 +24,7 @@ def _known(model, values: dict) -> dict:
 def load(TagField, Tag) -> int:
     """Create the missing fields and tags; works with the real models and with migration models. Returns the
     number of tags created."""
-    data = json.loads(DATA.read_text())
+    data = json.loads(DATA.read_text(encoding="utf-8"))
     fields = {}
     for order, f in enumerate(data["fields"]):
         fields[f["key"]], _ = TagField.objects.get_or_create(
@@ -55,7 +55,7 @@ def load(TagField, Tag) -> int:
 def translate(TagField, Tag) -> int:
     """Fill the French and Italian names of the built-in fields and tags where they are empty, and write the German
     names the Swiss way (ss, not ß) where the user hasn't renamed them. Returns the number of tags changed."""
-    data = json.loads(DATA.read_text())
+    data = json.loads(DATA.read_text(encoding="utf-8"))
     for f in data["fields"]:
         for field in TagField.objects.filter(key=f["key"]):
             for k in ("name_fr", "name_it"):

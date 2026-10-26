@@ -100,7 +100,7 @@ def tree_extras(owner, paths: dict[int, str]) -> dict:
 
 
 def builtin_tags() -> set[str]:
-    return {t["key"] for t in json.loads(VOCABULARY.read_text())["tags"]}
+    return {t["key"] for t in json.loads(VOCABULARY.read_text(encoding="utf-8"))["tags"]}
 
 
 def exportable(rows):

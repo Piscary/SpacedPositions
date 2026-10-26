@@ -9,7 +9,7 @@ from spaced_positions.library.vocabulary import DATA
 
 def forward(apps, schema_editor):
     Tag = apps.get_model("library", "Tag")
-    for t in json.loads(DATA.read_text())["tags"]:
+    for t in json.loads(DATA.read_text(encoding="utf-8"))["tags"]:
         Tag.objects.filter(key=t["key"]).update(weight=t.get("weight", 1.0), analysis_weight=t.get("analysis_weight", 0.0))
 
 

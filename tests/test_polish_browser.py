@@ -126,7 +126,7 @@ def test_the_local_engine_in_analyse(page, tmp_path):
     from tests.test_settings import FAKE_ENGINE
 
     fake = tmp_path / "fakefish"
-    fake.write_text(FAKE_ENGINE.format(python=sys.executable))
+    fake.write_text(FAKE_ENGINE.format(python=sys.executable), encoding="utf-8")
     fake.chmod(0o755)
     Preferences.objects.update_or_create(pk=Preferences.current().pk, defaults={"settings": {"engine.source": "local", "engine.path": str(fake)}})
     try:

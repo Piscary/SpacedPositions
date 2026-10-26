@@ -155,9 +155,9 @@ def my_set():
     base = user_pieces.folder()
     mine, bad = base / "mine", base / "bad"
     shutil.copytree(PIECES_DIR / "merida", mine)
-    (mine / "about.toml").write_text('label = "My Merida"\nauthor = "me"\n')
+    (mine / "about.toml").write_text('label = "My Merida"\nauthor = "me"\n', encoding="utf-8")
     shutil.copytree(PIECES_DIR / "merida", bad)
-    (bad / "wK.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>')
+    (bad / "wK.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>', encoding="utf-8")
     yield mine
     shutil.rmtree(mine)
     shutil.rmtree(bad)
@@ -206,7 +206,7 @@ def fake_engine(tmp_path):
     from spaced_positions.core import engine_local
 
     path = tmp_path / "fakefish"
-    path.write_text(FAKE_ENGINE.format(python=sys.executable))
+    path.write_text(FAKE_ENGINE.format(python=sys.executable), encoding="utf-8")
     path.chmod(0o755)
     yield path
     if engine_local._engine is not None:

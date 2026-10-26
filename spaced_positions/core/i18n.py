@@ -79,5 +79,5 @@ def js_catalog(language: str) -> dict | None:
     if cached is None or cached[0] != mtime:
         import json
 
-        cached = _catalogs[language] = (mtime, json.loads(path.read_text()))
+        cached = _catalogs[language] = (mtime, json.loads(path.read_text(encoding="utf-8")))
     return cached[1]

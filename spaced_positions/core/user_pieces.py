@@ -47,7 +47,7 @@ def available() -> dict[str, dict]:
         about = {}
         if (set_dir / "about.toml").is_file():
             try:
-                about = tomllib.loads((set_dir / "about.toml").read_text())
+                about = tomllib.loads((set_dir / "about.toml").read_text(encoding="utf-8"))
             except (tomllib.TOMLDecodeError, UnicodeDecodeError):
                 about = {}
         out[set_dir.name] = {"label": str(about.get("label") or set_dir.name.replace("-", " ").title())[:40],

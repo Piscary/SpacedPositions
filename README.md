@@ -286,7 +286,7 @@ pipx, pip, a checkout), which `spos update` and the in-app update notice use.
 .venv/bin/python -m pytest -m "not browser"          # Python: models, commands, query language, packs …
 .venv/bin/python -m playwright install chromium       # once
 .venv/bin/python -m pytest -m browser                 # journeys in a real browser, with the axe accessibility check
-node --experimental-default-type=module --test tests/js/
+node --experimental-default-type=module --test tests/js/*.test.mjs
 ```
 
 The browser tests drive the app like a person: keys, clicks, and what appears. They fail on a console error or a

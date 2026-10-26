@@ -32,7 +32,7 @@ jobs:
       - name: Python tests
         run: python -m pytest -m "not browser"
       - name: JavaScript unit tests
-        run: node --experimental-default-type=module --test tests/js/
+        run: node --experimental-default-type=module --test tests/js/*.test.mjs
 
   browser:
     runs-on: ubuntu-24.04

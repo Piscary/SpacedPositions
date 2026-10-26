@@ -28,7 +28,7 @@ def main():
                     sys.exit(f"the app exited with {server.returncode}")
                 if runtime.exists():
                     try:
-                        info = json.loads(runtime.read_text())
+                        info = json.loads(runtime.read_text(encoding="utf-8"))
                         with browser.open(info["url"], timeout=5) as response:
                             html = response.read().decode()
                         break

@@ -35,29 +35,29 @@ class Sources:
 
 
 def load(design_dir: Path) -> Sources:
-    tokens = tomllib.loads((design_dir / "tokens.toml").read_text())
+    tokens = tomllib.loads((design_dir / "tokens.toml").read_text(encoding="utf-8"))
     themes = {}
     for path in sorted((design_dir / "themes").glob("*.toml")):
-        theme = tomllib.loads(path.read_text())
+        theme = tomllib.loads(path.read_text(encoding="utf-8"))
         theme.setdefault("name", path.stem)
         themes[theme["name"]] = theme
     commands = {}
     for path in sorted((design_dir / "commands").glob("*.toml")):
-        for cid, spec in tomllib.loads(path.read_text()).items():
+        for cid, spec in tomllib.loads(path.read_text(encoding="utf-8")).items():
             if cid in commands:
                 raise ValueError(f"command {cid} is defined twice ({path.name})")
             commands[cid] = spec | {"file": path.name}
-    keymap = tomllib.loads((design_dir / "keymap" / "default.toml").read_text())
+    keymap = tomllib.loads((design_dir / "keymap" / "default.toml").read_text(encoding="utf-8"))
     licences_path = design_dir / "licences.toml"
     return Sources(
         schema=tokens["tokens"],
         version=tokens.get("version", 1),
-        derived_css=(design_dir / "derived.css").read_text(),
+        derived_css=(design_dir / "derived.css").read_text(encoding="utf-8"),
         themes=themes,
         commands=commands,
         keymap=keymap.get("context", {}),
         prefixes=keymap.get("prefixes", {}),
-        licences=tomllib.loads(licences_path.read_text()) if licences_path.exists() else {},
+        licences=tomllib.loads(licences_path.read_text(encoding="utf-8")) if licences_path.exists() else {},
         layout_accept=set(keymap.get("layout", {}).get("accept", [])),
     )
 
@@ -415,11 +415,11 @@ def build(design_dir: Path, out_dir: Path, docs_dir: Path) -> list[Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
     docs_dir.mkdir(parents=True, exist_ok=True)
     for path, text in files.items():
-        path.write_text(text)
+        path.write_text(text, encoding="utf-8")
     return list(files)
 
 
 def generated_is_current(design_dir: Path, out_dir: Path, docs_dir: Path) -> list[str]:
     """Names of generated files that differ from what a build would write."""
     files = generated(load(design_dir), out_dir, docs_dir)
-    return [p.name for p, text in files.items() if not p.exists() or p.read_text() != text]
+    return [p.name for p, text in files.items() if not p.exists() or p.read_text(encoding="utf-8") != text]

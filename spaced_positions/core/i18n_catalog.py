@@ -147,15 +147,15 @@ def _javascript(found: Found, source: str, ref: str):
 def _design(found: Found):
     design = Path(settings.DESIGN_DIR)
     for path in sorted((design / "commands").glob("*.toml")):
-        for cid, c in tomllib.loads(path.read_text()).items():
+        for cid, c in tomllib.loads(path.read_text(encoding="utf-8")).items():
             if isinstance(c, dict):
                 for key in ("title", "group", "reason"):
                     if c.get(key):
                         found.add(c[key], f"design/commands/{path.name}:{cid}")
-    keymap = tomllib.loads((design / "keymap" / "default.toml").read_text())
+    keymap = tomllib.loads((design / "keymap" / "default.toml").read_text(encoding="utf-8"))
     for label in keymap.get("prefixes", {}).values():
         found.add(label, "design/keymap/default.toml")
-    tokens = tomllib.loads((design / "tokens.toml").read_text())["tokens"]
+    tokens = tomllib.loads((design / "tokens.toml").read_text(encoding="utf-8"))["tokens"]
     for name, spec in tokens.items():
         found.add(token_label(name), f"design/tokens.toml:{name}")
         if spec.get("description"):
@@ -175,14 +175,14 @@ def extract() -> dict[str, Entry]:
     for path in sorted((PACKAGE / "templates").rglob("*.html")):
         rel = path.relative_to(PACKAGE / "templates").as_posix()
         if rel not in SKIP_TEMPLATES:
-            _template(found, path.read_text(), f"templates/{rel}")
+            _template(found, path.read_text(encoding="utf-8"), f"templates/{rel}")
     for path in sorted(PACKAGE.rglob("*.py")):
         rel = path.relative_to(PACKAGE).as_posix()
         if "/migrations/" in rel or rel.startswith("core/i18n_catalog") or (rel.startswith("design/") and rel != "design/lib.py"):
             continue
-        _python(found, path.read_text(), rel)
+        _python(found, path.read_text(encoding="utf-8"), rel)
     for path in sorted((PACKAGE / "static" / "js").rglob("*.js")):
-        _javascript(found, path.read_text(), path.relative_to(PACKAGE).as_posix())
+        _javascript(found, path.read_text(encoding="utf-8"), path.relative_to(PACKAGE).as_posix())
     _design(found)
     return found.entries
 
@@ -220,7 +220,7 @@ def read_po(path: Path) -> dict[str, Entry]:
                       current.get("msgstr", ""), [current.get(f"msgstr[{i}]", "") for i in range(2)] if current.get("msgid_plural") else [])
             entries[e.key] = e
 
-    for raw in path.read_text().splitlines() + [""]:
+    for raw in path.read_text(encoding="utf-8").splitlines() + [""]:
         line = raw.strip()
         if not line:
             flush()
@@ -264,7 +264,7 @@ def write_po(lang: str, entries: dict[str, Entry]):
         else:
             out.append(f"msgstr {_quote(e.msgstr)}")
         out.append("")
-    path.write_text("\n".join(out))
+    path.write_text("\n".join(out), encoding="utf-8")
 
 
 def merge(lang: str, found: dict[str, Entry]) -> tuple[int, int]:

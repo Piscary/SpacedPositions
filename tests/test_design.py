@@ -110,8 +110,8 @@ def test_lint_catches_keymap_conflicts(sources):
 
 
 def test_css_literal_lint(tmp_path):
-    (tmp_path / "x.css").write_text(".a { color: #fff; width: 12px; transition: color 200ms; margin: 0; }\n")
-    (tmp_path / "y.css").write_text(".b { width: 3px; } /* lint-allow */\n.c { padding: var(--s-2); }\n")
+    (tmp_path / "x.css").write_text(".a { color: #fff; width: 12px; transition: color 200ms; margin: 0; }\n", encoding="utf-8")
+    (tmp_path / "y.css").write_text(".b { width: 3px; } /* lint-allow */\n.c { padding: var(--s-2); }\n", encoding="utf-8")
     found = [p.message for p in check.check_css_literals(tmp_path)]
     assert len(found) == 3 and all(m.startswith("x.css") for m in found)
 
@@ -120,9 +120,9 @@ def test_piece_set_lint(sources, tmp_path):
     pieces = tmp_path / "pieces"
     (pieces / "cburnett").mkdir(parents=True)
     for code in lib.PIECE_CODES:
-        (pieces / "cburnett" / f"{code}.svg").write_text('<svg viewBox="0 0 45 45"><path d="M0 0"/></svg>')
-    (pieces / "cburnett" / "LICENSE").write_text("GPL")
-    (pieces / "cburnett" / "wK.svg").write_text('<svg><script>alert(1)</script></svg>')
+        (pieces / "cburnett" / f"{code}.svg").write_text('<svg viewBox="0 0 45 45"><path d="M0 0"/></svg>', encoding="utf-8")
+    (pieces / "cburnett" / "LICENSE").write_text("GPL", encoding="utf-8")
+    (pieces / "cburnett" / "wK.svg").write_text('<svg><script>alert(1)</script></svg>', encoding="utf-8")
     (pieces / "stray").mkdir()
     one = copy.deepcopy(sources)
     one.schema["piece-set"]["values"] = ["cburnett", "merida"]

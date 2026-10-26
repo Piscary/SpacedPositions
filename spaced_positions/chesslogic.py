@@ -213,7 +213,7 @@ def piece_folder(piece_set: str) -> Path | None:
 @lru_cache(maxsize=256)
 def _piece_symbol(piece_set: str, code: str) -> str:
     """A piece as a <symbol id="ps-<set>-<code>">, its internal ids prefixed so several pieces can share one SVG."""
-    text = (piece_folder(piece_set) / f"{code}.svg").read_text()
+    text = (piece_folder(piece_set) / f"{code}.svg").read_text(encoding="utf-8")
     m = _SVG_ROOT.search(text)
     attrs, inner = m.group(1), m.group(2)
     view_box = re.search(r'viewBox="([^"]+)"', attrs)

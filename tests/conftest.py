@@ -70,6 +70,9 @@ def pytest_runtest_logreport(report):
     crash = getattr(report.longrepr, "reprcrash", None)
     message = crash.message if crash else str(report.longrepr)
     path, line = (crash.path, crash.lineno) if crash else (report.location[0], (report.location[1] or 0) + 1)
-    path = os.path.relpath(path) if os.path.isabs(str(path)) else path
+    try:
+        path = os.path.relpath(path)
+    except ValueError:  # Windows: on another drive than the repository (Python's own files)
+        pass
     text = f"{report.nodeid} ({report.when}): {message}"[:3000].replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
     sys.__stdout__.write(f"::error file={path},line={line},title=test failed::{text}\n")

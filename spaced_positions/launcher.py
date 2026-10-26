@@ -106,7 +106,7 @@ def _running_instance(data: Path):
     if not path.exists():
         return None
     try:
-        info = json.loads(path.read_text())
+        info = json.loads(path.read_text(encoding="utf-8"))
         os.kill(info["pid"], 0)
     except (OSError, ValueError, KeyError):
         path.unlink(missing_ok=True)  # the process is gone: a stale file from a crash
@@ -160,7 +160,7 @@ def _serve(data: Path, args):
     server = create_server(application, host=host, port=port, threads=8, ident="spos")
     url = f"http://127.0.0.1:{port}/?token={token}"
     runtime = data / RUNTIME
-    runtime.write_text(json.dumps({"pid": os.getpid(), "port": port, "url": url, "started": time.time()}))
+    runtime.write_text(json.dumps({"pid": os.getpid(), "port": port, "url": url, "started": time.time()}), encoding="utf-8")
     runtime.chmod(0o600)
 
     print(f"Spaced Positions {__version__} is running.")

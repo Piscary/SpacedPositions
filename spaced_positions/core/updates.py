@@ -30,7 +30,7 @@ def latest(now: float | None = None) -> dict:
     now = now or time.time()
     cache = settings.DATA_DIR / "update.json"
     try:
-        known = json.loads(cache.read_text())
+        known = json.loads(cache.read_text(encoding="utf-8"))
         if now - known.get("checked", 0) < DAY:
             return known.get("release", {})
     except (OSError, ValueError):
@@ -46,7 +46,7 @@ def latest(now: float | None = None) -> dict:
     except (OSError, ValueError):
         release = {}
     try:
-        cache.write_text(json.dumps({"checked": now, "release": release}))
+        cache.write_text(json.dumps({"checked": now, "release": release}), encoding="utf-8")
     except OSError:
         pass
     return release

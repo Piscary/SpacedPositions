@@ -44,7 +44,7 @@ def double_click():
     info = None
     if runtime.exists():
         try:
-            info = json.loads(runtime.read_text())
+            info = json.loads(runtime.read_text(encoding="utf-8"))
         except ValueError:
             info = None
     if not (info and answers(info)):
@@ -64,7 +64,7 @@ def double_click():
                 alert(f"Spaced Positions could not start. The details are in {data / LOG}.")
                 sys.exit(1)
             try:
-                info = json.loads(runtime.read_text())
+                info = json.loads(runtime.read_text(encoding="utf-8"))
                 if answers(info):
                     break
             except (OSError, ValueError):
@@ -79,9 +79,9 @@ def double_click():
 
 def main():
     if getattr(sys, "frozen", False) and sys.stdout is None:  # a windowed build: print() and logging need a stream
-        sys.stdout = sys.stderr = open(os.devnull, "w")
+        sys.stdout = sys.stderr = open(os.devnull, "w", encoding="utf-8")  # a path like C:\Users\Jürg must not crash it
     elif not sys.stdout.isatty():  # the background server writes app.log: line by line, not when it stops
-        sys.stdout.reconfigure(line_buffering=True)
+        sys.stdout.reconfigure(line_buffering=True, encoding="utf-8")  # Windows would write app.log as cp1252
     args = [a for a in sys.argv[1:] if not a.startswith("-psn_")]  # old macOS adds a process serial number
     if not args:
         return double_click()

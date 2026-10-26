@@ -297,7 +297,7 @@ def check_references(sources: lib.Sources, templates_dir: Path, js_dir: Path, se
     problems = []
     bound = {lib.parse_binding(v)[0] for b in sources.keymap.values() for v in b.values()}
     for path in sorted(templates_dir.rglob("*.html")):
-        for m in CMD_IN_TEMPLATE.finditer(path.read_text()):
+        for m in CMD_IN_TEMPLATE.finditer(path.read_text(encoding="utf-8")):
             cid = m.group(1) or m.group(2)
             if cid not in sources.commands:
                 problems.append(err("references", f"{path.relative_to(templates_dir)}: unknown command '{cid}'"))
@@ -307,7 +307,7 @@ def check_references(sources: lib.Sources, templates_dir: Path, js_dir: Path, se
                 problems.append(err("keys", f"{path.relative_to(templates_dir)}: the button '{cid}' has no key"))
     client_handlers = set()
     for path in sorted(js_dir.rglob("*.js")):
-        text = path.read_text()
+        text = path.read_text(encoding="utf-8")
         client_handlers |= set(JS_HANDLER.findall(text))
         for cid in JS_RUN.findall(text):
             if cid not in sources.commands:
@@ -329,7 +329,7 @@ CSS_LITERAL = re.compile(r"#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(|(?<![\w.-])(?
 def check_css_literals(css_dir: Path) -> list[Problem]:
     problems = []
     for path in sorted(css_dir.rglob("*.css")):
-        text = re.sub(r"/\*(?!\s*lint-allow).*?\*/", lambda m: " " * len(m.group()), path.read_text(), flags=re.S)
+        text = re.sub(r"/\*(?!\s*lint-allow).*?\*/", lambda m: " " * len(m.group()), path.read_text(encoding="utf-8"), flags=re.S)
         for number, line in enumerate(text.splitlines(), 1):
             if "lint-allow" in line:
                 continue
@@ -356,7 +356,7 @@ def _licence_of(dist: importlib.metadata.Distribution) -> str:
 
 def check_licences(sources: lib.Sources, pyproject: Path, vendor_dir: Path) -> list[Problem]:
     problems = []
-    deps = tomllib.loads(pyproject.read_text())["project"]["dependencies"]
+    deps = tomllib.loads(pyproject.read_text(encoding="utf-8"))["project"]["dependencies"]
     for dep in deps:
         name = re.split(r"[<>=!~\[ ;]", dep, maxsplit=1)[0]
         try:
@@ -396,7 +396,7 @@ def check_piece_sets(sources: lib.Sources, pieces_dir: Path) -> list[Problem]:
         elif not any(a.lower() in licence.lower() for a in ALLOWED_LICENCES):
             problems.append(err("pieces", f"{name}: licence '{licence}' doesn't allow redistributing the app"))
         for svg in folder.glob("*.svg"):
-            text = svg.read_text()
+            text = svg.read_text(encoding="utf-8")
             if re.search(r"<script|javascript:|\bon[a-z]+\s*=|<foreignObject|href=\"(?!#)", text, re.I):
                 problems.append(err("pieces", f"{name}/{svg.name}: scripts or external references are not allowed"))
     for folder in pieces_dir.iterdir() if pieces_dir.exists() else []:
