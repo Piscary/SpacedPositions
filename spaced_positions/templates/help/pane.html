@@ -1,5 +1,5 @@
 {% extends "help/base.html" %}
-{% block lead %}{% translate "The workspace is made of panes. Each pane shows one view: a board, a move tree, the Library, a chart … You choose what goes where." %}{% endblock %}
+{% block lead %}{% translate "The workspace is made of panes — like windows in a program, but arranged without overlapping. Each pane shows one view: a board, a move tree, the Library, a chart … You choose what goes where." %}{% endblock %}
 {% block how %}
   {% key "pane.view" as view_key %}{% key "pane.split.vertical" as vsplit %}{% key "pane.split.horizontal" as hsplit %}{% key "pane.close" as close %}
   {% key "pane.maximize" as maximize %}{% key "pane.group" as group %}{% key "pane.focus.next" as next_pane %}
@@ -10,7 +10,7 @@
   <dt>{% translate "Make one pane big" %}</dt><dd>{% blocktranslate trimmed %}{{ maximize }}; the same keys bring the others back.{% endblocktranslate %}</dd>
   {% key "section.next" as next_section %}{% key "section.prev" as prev_section %}<dt>{% translate "Sections" %}</dt><dd>{% blocktranslate trimmed %}{{ next_section }} and {{ prev_section }} go to the next and previous section in every pane (also g and the letter in its header): it opens, and the cursor is on its first row, so j and k go on from there.{% endblocktranslate %}</dd>
   <dt>{% translate "Move between panes" %}</dt><dd>{% blocktranslate trimmed %}{{ next_pane }}, or click into a pane. The focused pane has a coloured header.{% endblocktranslate %}</dd>
-  <dt>{% translate "Link panes" %}</dt><dd>{% blocktranslate trimmed %}Panes with the same letter in their header (A, B …) work together: a list, a board and a move tree of group A show the same thing. {{ group }} changes the letter.{% endblocktranslate %}</dd>
+  <dt>{% translate "Link panes" %}</dt><dd>{% blocktranslate trimmed %}Panes with the same letter in their header (A, B …) stay synchronized: when you step to the next move in one, the others follow. For example, the board, the move tree and the engine of group A always show the same position. {{ group }} changes the letter.{% endblocktranslate %}</dd>
 {% endblock %}
 {% block with %}{% translate "Every pane works with the panes of its link group. A new pane gets the group of the pane it was split from." %}{% endblock %}
 {% block tips %}

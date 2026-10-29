@@ -1,4 +1,4 @@
-"""Jupyter-style access control (spec 09 §11).
+"""Local-only access control (spec 09 §11).
 
 The launcher opens the browser at `/?token=<random>`. That request sets a cookie and redirects to the same URL
 without the token. Later requests without the cookie are refused, so other local programs and web pages can't read

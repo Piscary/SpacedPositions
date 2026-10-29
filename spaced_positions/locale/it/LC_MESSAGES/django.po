@@ -879,8 +879,8 @@ msgid "Every change can be undone with u, also after a reload."
 msgstr "Ogni modifica si annulla con u, anche dopo un ricaricamento."
 
 #: templates/help/pane.html
-msgid "The workspace is made of panes. Each pane shows one view: a board, a move tree, the Library, a chart … You choose what goes where."
-msgstr "L'area di lavoro è fatta di riquadri. Ognuno mostra una vista: una scacchiera, un albero delle mosse, la Biblioteca, un grafico … Decidi tu cosa va dove."
+msgid "The workspace is made of panes — like windows in a program, but arranged without overlapping. Each pane shows one view: a board, a move tree, the Library, a chart … You choose what goes where."
+msgstr "L'area di lavoro è composta da pannelli — come le finestre di un programma, ma disposti senza sovrapporsi. Ogni pannello mostra una vista: una scacchiera, un albero dei mosse, la libreria, un grafico … Tu decidi cosa va dove."
 
 #: templates/help/pane.html
 msgid "Everything a pane can do"
@@ -935,8 +935,8 @@ msgid "Link panes"
 msgstr "Collegare riquadri"
 
 #: templates/help/pane.html
-msgid "Panes with the same letter in their header (A, B …) work together: a list, a board and a move tree of group A show the same thing. %(group)s changes the letter."
-msgstr "I riquadri con la stessa lettera nell'intestazione (A, B …) lavorano insieme: una lista, una scacchiera e un albero delle mosse del gruppo A mostrano la stessa cosa. %(group)s cambia la lettera."
+msgid "Panes with the same letter in their header (A, B …) stay synchronized: when you step to the next move in one, the others follow. For example, the board, the move tree and the engine of group A always show the same position. %(group)s changes the letter."
+msgstr "I pannelli con la stessa lettera nell'intestazione (A, B …) restano sincronizzati: quando passi alla mossa successiva in uno, gli altri seguono. Ad esempio, la scacchiera, l'albero dei mosse e il motore del gruppo A mostrano sempre la stessa posizione. %(group)s cambia la lettera."
 
 #: templates/help/pane.html
 msgid "Every pane works with the panes of its link group. A new pane gets the group of the pane it was split from."
@@ -2361,12 +2361,12 @@ msgid "Getting around"
 msgstr "Primi passi"
 
 #: templates/views/today.html
-msgid "Everything works with the mouse, and every button shows its key. The keys are what make it fast: try these seven, each one ticks itself off."
-msgstr "Tutto funziona con il mouse, e ogni pulsante mostra il suo tasto. Sono i tasti a renderlo veloce: prova questi sette, ognuno si spunta da solo."
+msgid "Everything works with the mouse. The keyboard keys are there to make it fast once you learn them — and every button shows its key, so you learn by clicking. Try these seven, each one ticks itself off."
+msgstr "Tutto funziona con il mouse. I tasti della tastiera servono per andare più veloce una volta che li impari — e ogni pulsante mostra il suo tasto, quindi impari cliccando. Prova questi sette, ognuno si segna da solo."
 
 #: templates/views/today.html
-msgid "%(go_library)s goes to the Library, %(go_home)s back here. Space alone shows where else you can go."
-msgstr "%(go_library)s va alla Biblioteca, %(go_home)s torna qui. La barra spaziatrice da sola mostra le altre destinazioni."
+msgid "%(go_library)s switches to the Library, %(go_home)s back here. The app has several modes — Train, Analyse, Library — each with its own layout. Space alone shows where else you can go."
+msgstr "%(go_library)s passa alla libreria, %(go_home)s torna qui. L'app ha diverse modalità — Allenamento, Analisi, Libreria — ognuna con il proprio layout. Spazio da solo mostra dove altro puoi andare."
 
 #: templates/views/today.html
 msgid "%(help)s opens the help of the panel you are in: a guide, its keys, and how to search."

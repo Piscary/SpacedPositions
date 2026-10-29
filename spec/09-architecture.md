@@ -13,7 +13,7 @@ chess data model and the query language are in 11.
 | Board | chessground + chess.js | Exactly the lichess feel; GPL-3.0 like the app (§13); client-side legality for instant moves. |
 | Our JS | Vanilla ES modules, no framework, no bundler (import maps) | Target ≤ ~3,000 lines in total, split into the islands below. |
 | Engine | Stockfish WASM in a Web Worker by default; the local binary through the server when configured in Settings → Engine | No setup needed by default; the native binary is stronger and deeper when installed. |
-| Deployment | Local, one copy per person (you, each student), no login; started like Jupyter (§11) | UI-state models keep a `user` field anyway, so hosting later needs no redesign. |
+| Deployment | Local, one copy per person (you, each student), no login (§11) | UI-state models keep a `user` field anyway, so hosting later needs no redesign. |
 | App server | waitress (pure Python, macOS/Windows/Linux) + WhiteNoise for static files | `runserver` is for development only; the launcher needs a real server with no compiler or extra system packages. Static files are served under a stamp of the installed files (`/static/<stamp>/…`, settings.py): ES modules import each other by relative names, so every file of an update has a new address, the browser caches them for good and never mixes old JavaScript with a new page. Development: plain `/static/`, no caching. |
 | Tests | pytest + Django test client, Playwright (journeys, screenshots), a small JS unit-test runner | 07 §8. |
 
@@ -185,7 +185,7 @@ Analyse 7 ms, starting a session 40–90 ms, Home 190 ms, Train 90 ms, Stats 200
 history); a compressed backup 11 MB. No index is kept that another index already covers (a foreign key that leads a
 unique constraint or a composite index), and import-only `origin` columns have none. `VACUUM` runs after migrations.
 
-## 11 · Starting the app (Jupyter-style)
+## 11 · Starting the app
 
 The goal: a student double-clicks an icon, or types one command, and the app opens in the browser. Nobody sees
 migrations, settings files or a Python environment.
@@ -212,7 +212,7 @@ migrations, settings files or a Python environment.
 
 **`spos`** (the command, and what the double-click runs):
 1. Finds the **data folder** (below) and takes a lock. If an instance is already running, it only opens the browser
-   at that instance and exits, like a second `jupyter notebook`.
+   at that instance and exits.
 2. Backs up the database if migrations are pending, applies them, seeds what is missing (tag vocabulary, starter
    pack on first run).
 3. Starts waitress on `127.0.0.1` on a free port (default 8765, else the next free one).

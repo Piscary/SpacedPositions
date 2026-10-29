@@ -1,4 +1,4 @@
-"""`spos`: start Spaced Positions and open it in the browser, like `jupyter notebook` (spec 09 §11).
+"""`spos`: start Spaced Positions and open it in the browser (spec 09 §11).
 
     spos                 start (or, if already running, just open the browser)
     spos --no-browser    start without opening a browser

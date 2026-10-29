@@ -16,13 +16,13 @@
   {% endsection %}{% endif %}
   {% if t.intro %}{% translate "seven keys to try" as intro_summary %}{% section _("Getting around") key="k" summary=intro_summary pinned=True %}
     <div class="home__intro" data-intro>
-      <p>{% blocktranslate trimmed %}Everything works with the mouse, and every button shows its key. The keys are what make it fast: try these seven,
-        each one ticks itself off.{% endblocktranslate %} <span class="muted" data-intro-count></span></p>
+      <p>{% blocktranslate trimmed %}Everything works with the mouse. The keyboard keys are there to make it fast once you learn them — and every button shows its key,
+        so you learn by clicking. Try these seven, each one ticks itself off.{% endblocktranslate %} <span class="muted" data-intro-count></span></p>
       {% key "mode.library" as go_library %}{% key "mode.home" as go_home %}{% key "help.context" as help %}{% key "pane.focus.next" as next_pane %}
       {% key "cmdline.open" as colon %}{% key "hint.open" as hints %}{% key "undo" as undo %}{% key "list.down" as down %}{% key "list.up" as up %}
       <ol class="intro">
         <li data-step="modes" data-commands="mode.library mode.train mode.analyse mode.collect mode.stats mode.settings">
-          <span class="intro__check" aria-hidden="true"></span><span>{% blocktranslate trimmed %}{{ go_library }} goes to the Library, {{ go_home }} back here.
+          <span class="intro__check" aria-hidden="true"></span><span>{% blocktranslate trimmed %}{{ go_library }} switches to the Library, {{ go_home }} back here. The app has several modes — Train, Analyse, Library — each with its own layout.
           Space alone shows where else you can go.{% endblocktranslate %}</span></li>
         <li data-step="help" data-commands="help.context help.all help.search">
           <span class="intro__check" aria-hidden="true"></span><span>{% blocktranslate trimmed %}{{ help }} opens the help of the panel you are in: a guide,

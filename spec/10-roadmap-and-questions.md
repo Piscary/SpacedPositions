@@ -87,7 +87,7 @@ signatures (13 §2), the review process (13 §4), the marketplace (13 §5).
 | 11 | **Hints and SRS** | **A hinted puzzle counts as missed** | 04 · Train, 08 as written. |
 | 12 | **Pipeline boards** | **Dropped for now** | Status facets and saved queries in the Library cover it (see *Out of scope*). |
 | 13 | **Distribution** | **The app is free**, published under GPL-3.0. **Puzzle packs are content**, made and shared by their authors, not part of the app. | GPL dependencies are fine (09 §13); the licence check in CI keeps everything GPL-compatible. Packs get a licence, personalised exports and an export log (09 §12). |
-| 14 | **Ease of use** | **Jupyter-style start**: one console command, or a double click, starts the app and opens the browser | 09 §11. Nobody needs a terminal, a migration or a settings file. |
+| 14 | **Ease of use** | **One-command start**: one console command, or a double click, starts the app and opens the browser | 09 §11. Nobody needs a terminal, a migration or a settings file. |
 | 15 | **GPL dependencies** | **Accepted**: python-chess and Stockfish are used freely, since the app itself is GPL-3.0 | Chess code still goes through one module for structure. |
 | 16 | **Onboarding** | **The starter pack** (public domain, by motif), **import a pack** or collect from a book, from the first-run screen | 04 · Home (first run); 09 §12 *Starter pack*. |
 | 17 | **Where the source lives** | **A public repository** | Meets the GPL for everyone who gets the app; also the update channel and issue tracker (09 §11 *Updates*, 09 §13). |

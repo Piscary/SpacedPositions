@@ -96,8 +96,14 @@ already worked out which puzzles you need.
 
 ## Mouse or keyboard: both
 
-Everything works with the mouse. And every button shows its keyboard key, so you learn the fast way while you click.
-After a week you'll move through puzzles without touching the mouse. Some keys to start with:
+Everything works with the mouse. Every button shows its keyboard key, so you learn the fast way while you click.
+After a week you'll move through puzzles without touching the mouse.
+
+The app is organised into **modes**: Home (what to do now), Train (solving puzzles), Analyse (working on a position),
+Library (finding and organising), and more. Each mode has its own layout of panes. You switch modes with
+`space` then a letter, or by clicking the mode name at the top.
+
+Some keys to start with:
 
 | Press | To |
 |---|---|
@@ -198,7 +204,7 @@ pipx install git+https://github.com/Piscary/SpacedPositions
 spos
 ```
 
-`spos` starts the app and opens the browser, like `jupyter notebook`. `Ctrl+C`, `spos stop` or `:quit` in the app
+`spos` starts the app and opens the browser. `Ctrl+C`, `spos stop` or `:quit` in the app
 stops it, `spos update` updates it, `spos list` shows where it runs, and `spos restore <backup>` puts a backup back.
 Options: `--no-browser`, `--port`, `--data-dir` (for example a synced folder), and `--lan` (open it from another
 computer at home, with the same one-time link).
@@ -216,7 +222,7 @@ shows all licence texts.
 
 # For developers
 
-Spaced Positions is a Django app that runs locally, one copy per person, started like Jupyter. The interface is
+Spaced Positions is a Django app that runs locally, one copy per person. The interface is
 server-rendered HTML (with HTMX) plus a few small JavaScript modules for what has to be instant: the board, the keys,
 the lists. There is no build step for the JavaScript and no framework. The design and its reasons are written down in
 [spec/](spec/README.md); this section is the map.
