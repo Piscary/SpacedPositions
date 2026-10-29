@@ -5,7 +5,7 @@
 import { command, enabled, handle, primaryKeys, run } from "./commands.js"
 import { ctx } from "./context.js"
 import { focusPane } from "./layout.js"
-import { openMenu } from "./menu.js"
+import { chosenBy, openMenu } from "./menu.js"
 import { tr } from "./i18n.js"
 
 const PANE = [
@@ -35,7 +35,8 @@ async function openPaneMenu(paneEl, anchor) {
   }
   items.push({ heading: tr("Pane") }, ...PANE.map(([cid]) => item(cid)))
   const chosen = await openMenu({ items, anchor })
-  if (chosen) run(chosen.cid, chosen.args, { source: "mouse" }) // as a click: the status line shows its key
+  // chosen by a click: as a click, the status line shows its key; by a key: as a key
+  if (chosen) run(chosen.cid, chosen.args, { source: chosenBy })
   return true
 }
 

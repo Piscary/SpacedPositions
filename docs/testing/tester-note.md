@@ -11,18 +11,23 @@ becomes. This note explains what to expect, how to install it, and how to give f
 
 ## What it costs you
 
-- **About 15 minutes a day** of training, for 4–6 weeks
-- **Three short surveys** (2 minutes each): one per week and one at the end
+- **About 15 minutes a day** of training, for about four weeks
+- **Three short surveys**: a 2-minute one in weeks 3 and 4, and a longer one at the end
 - **One 20-minute conversation** at the end (by video call, if you agree)
-- Everything stays on your computer. Nothing is sent anywhere without your permission.
+- Everything stays on your computer. Nothing is sent anywhere unless you choose to send it.
 
 ## Installing
 
 Follow the instructions in the program's README file. In short:
 
-1. Download the program for your operating system (macOS or Windows)
-2. Install it (double-click the installer, or run one command in a terminal)
+1. Download the program for your operating system (macOS or Windows) from the releases page the README links to
+2. Open it: on macOS move the app to your Applications folder, on Windows extract the zip
 3. Start the program — it opens in your web browser
+
+The test version is not signed yet, so the first time your computer asks whether you trust it. On macOS 15 and newer:
+System Settings → Privacy & Security → *Open Anyway*; on older macOS: right-click the app → *Open*; on Windows: *More
+info* → *Run anyway*. The README's *Is it safe to install?* says why this happens. Please note how confusing this
+step was for you: it helps us.
 
 If you get stuck, write down where and ask the maintainer for help.
 
@@ -44,16 +49,29 @@ time. Just open the program and start solving.
 
 During the first two weeks, we also ask you to try these tasks:
 
+**Week 1**
 - **Enter diagrams from a book.** Open the Collect mode and enter about 10 chess positions from one of your books.
-- **Make a puzzle from a game.** Open Analyse, load one of your games, and turn a moment into a puzzle.
-- **Find unfinished work.** In the Library, look for positions from your book that still need a solution.
+- **Make a puzzle from a game.** Open Analyse, load one of your games, and turn a moment into a puzzle (the Puzzle
+  pane under the board shows each step).
+
+**Week 2**
+- **Find unfinished work.** In the Library, look for positions from your book that still need a solution, and work
+  through them.
+- **Change tags.** Remove a tag from a puzzle and add another one.
+- **Coaches:** make a pack for one student; the student imports it.
+- **Update.** When we tell you about a new version, update to it. Your puzzles and training must still be there.
+
+If you like using the keyboard: try the Collect, Library and tag tasks without the mouse, and tell us which key felt
+wrong.
+
+In weeks 3 and 4, use the program the way you want.
 
 ## Giving feedback
 
 You can give feedback at any time. Three ways:
 
-1. **The feedback form.** In the program, type `:feedback` in the command line. It opens a short form with your
-   version and mode already filled in. Use it for "this confused me", "this broke", or "I wish…".
+1. **The feedback form.** The maintainer sends you the link with this note. Use it for "this confused me", "this
+   broke", or "I wish…". Please add the version (Settings shows it) and the mode you were in.
 2. **A chat group.** If you prefer, you can write in a shared chat.
 3. **The surveys.** You'll receive three short questionnaires by email.
 
@@ -78,10 +96,12 @@ To write it:
 - No chess positions, FENs, or moves
 - No names, comments, tags, or notes
 - No personal data (your name, email, address)
-- No telemetry — the program sends nothing to any server
-- No usage tracking — the usage report is written only when you ask for it
+- No telemetry — the program sends nothing to any server. (The only exception is one you switch on yourself: *Tell
+  me about new versions* asks GitHub once a day whether there is a newer version, and sends nothing else.)
 
-Everything stays on your computer.
+To be able to write the usage report, the program counts on your computer how often you use each command and whether
+you used a key or a click. These counts stay in the program's own data folder; the file is written only when you ask
+for it, and only you can send it.
 
 ## Questions?
 

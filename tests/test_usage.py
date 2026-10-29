@@ -71,3 +71,18 @@ def test_keys_and_clicks_are_counted_and_the_report_downloads(page):
     assert download.value.suggested_filename.startswith("spaced-positions-usage-")
     found = counts()
     assert found[("mode.library", "key")] == 1 and found[("mode.settings", "mouse")] == 1
+
+
+@pytest.mark.browser
+@pytest.mark.django_db(transaction=True)
+def test_a_menu_entry_chosen_by_key_counts_as_a_key(page):
+    open_mode(page, "settings")
+    page.click("#ws-settings [data-view=settings] .pane__title")
+    keys(page, "Space", "w", "w")  # the pane menu; its first entry is the search
+    page.wait_for_selector(".menu")
+    keys(page, "Enter")
+    page.wait_for_function("document.activeElement.matches('#ws-settings [data-search]')")
+    keys(page, "Escape")
+    page.evaluate("window.SPOS.usage.flush()")
+    found = counts()
+    assert found[("search.open", "key")] == 1 and ("search.open", "mouse") not in found

@@ -164,7 +164,7 @@ msgstr "où commence le joueur"
 
 #: templates/analysis/puzzle.html
 msgid "Go to the move after which the solver moves (%(gg)s: the start position), then set the puzzle up. It starts as a draft."
-msgstr "Allez au coup après lequel joue le joueur (%(gg)s : la position de départ), puis créez l'exercice. Il commence comme brouillon."
+msgstr "Allez au coup après lequel le joueur doit jouer (%(gg)s : la position de départ), puis créez l'exercice. Il commence comme brouillon."
 
 #: templates/analysis/puzzle.html
 msgid "Set up a puzzle from here"
@@ -988,7 +988,7 @@ msgstr "1 · Départ"
 
 #: templates/help/puzzle.html
 msgid "Go to the move after which the solver moves (%(home)s: the start position) and %(start)s. The puzzle begins as a draft."
-msgstr "Allez au coup après lequel joue le joueur (%(home)s : la position de départ) et %(start)s. L'exercice commence comme brouillon."
+msgstr "Allez au coup après lequel le joueur doit jouer (%(home)s : la position de départ) et %(start)s. L'exercice commence comme brouillon."
 
 #: templates/help/puzzle.html
 msgid "2 · Solution"
@@ -2544,7 +2544,7 @@ msgstr "après {move}"
 
 #: analysis/puzzles.py:218
 msgid "No puzzle at this move. A puzzle starts after a move (or at the start position): the solver plays the moves that follow."
-msgstr "Pas d'exercice à ce coup. Un exercice commence après un coup (ou à la position de départ) : le joueur joue les coups qui suivent."
+msgstr "Pas d'exercice à ce coup. Un exercice commence après un coup (ou à la position de départ) : le joueur trouve les coups qui suivent."
 
 #: analysis/puzzles.py:220
 msgid "The puzzle starts here: the side to move finds the solution."
@@ -3900,7 +3900,7 @@ msgstr "clics"
 
 #: core/usage.py:137
 msgid "hint labels"
-msgstr "étiquettes d'indice"
+msgstr "étiquettes d'aide"
 
 #: core/usage.py:137
 msgid "command line"

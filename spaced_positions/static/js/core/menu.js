@@ -6,6 +6,9 @@ import { setOverlayHandler } from "./keys.js"
 
 let open = null
 
+/** How the last menu choice was made, "key" or "mouse": a command chosen in a menu counts as that (usage report). */
+export let chosenBy = "mouse"
+
 export function openMenu({ title, items, anchor = null, onCursor = null, start = 0 }) {
   close(null)
   return new Promise((resolve) => {
@@ -42,7 +45,7 @@ export function openMenu({ title, items, anchor = null, onCursor = null, start =
         row.append(note)
       }
       if (item.keys) row.append(keycaps(item.keys))
-      row.addEventListener("click", () => choose(rows.indexOf(row)))
+      row.addEventListener("click", () => choose(rows.indexOf(row), "mouse"))
       row.addEventListener("pointermove", () => setCursor(rows.indexOf(row)))
       rows.push(row)
       el.append(row)
@@ -57,9 +60,10 @@ export function openMenu({ title, items, anchor = null, onCursor = null, start =
       rows[cursor]?.scrollIntoView({ block: "nearest" })
       onCursor?.(items.filter((x) => !x.separator && !x.heading)[cursor]?.value) // live preview (theme, piece set)
     }
-    const choose = (i) => {
+    const choose = (i, by = "key") => {
       const item = items.filter((x) => !x.separator && !x.heading)[i]
       if (!item || item.disabled) return
+      chosenBy = by
       close(item.value)
     }
     const previousLayer = ctx.layer

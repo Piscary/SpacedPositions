@@ -187,3 +187,21 @@ These are low priority since the code is simple and well-validated, but they wou
 ## Files changed
 
 None. This is a review report only.
+
+---
+
+## Resolution (Claude, 2026-10-29)
+
+- **Missed: menu choices counted as clicks.** An entry of the pane menu chosen with j / k and ↵ (or its letter) ran
+  with source "mouse", so keyboard use showed up as clicks, the number the test wants to watch. `menu.js` now
+  records how the choice was made (`chosenBy`), `panemenu.js` passes it on. Test:
+  `test_a_menu_entry_chosen_by_key_counts_as_a_key`. Lesson for reviews: follow every place that calls `run()` with
+  an explicit source (`grep -rn 'source: "mouse"'`), not only the main paths.
+- **"No dedicated tests yet"** was not right: `tests/test_usage.py` (three tests) was in the working tree.
+- **Tester kit** (`docs/testing/`): corrected where it promised what isn't there or said what isn't so. `:feedback`
+  doesn't exist yet (the command line answers "unknown command"); `spos update` and the update notice do exist;
+  "no usage tracking" was wrong (the counts are kept on the computer, the file is written on request); the first
+  open of an unsigned app is now explained as the README does; the week 2 tasks and the timeline follow spec 14.
+  Lesson: check every statement a tester will rely on against the code or the README.
+- **Translations**: "hint labels" now uses the app's term (Hinweis-Etiketten / étiquettes d'aide / etichette); German
+  comma and wording; Italian "ti sei allenato"; three French "joueur" sentences that read "joue le joueur".

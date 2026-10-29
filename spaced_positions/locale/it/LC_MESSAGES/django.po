@@ -1316,7 +1316,7 @@ msgstr "Rapporto di utilizzo"
 
 #: templates/help/settings.html
 msgid "%(report)s (or <code>:test-report</code>) writes a file for the test group: how often you trained and which commands you used, by key or by click. Counts only, no positions or texts; the app sends nothing, you decide whether to send the file."
-msgstr "%(report)s (o <code>:test-report</code>) scrive un file per il gruppo di test: quanto spesso hai allenato e quali comandi hai usato, per tasto o per clic. Solo conteggi, nessuna posizione o testo; l'app non invia nulla, decidi tu se inviare il file."
+msgstr "%(report)s (o <code>:test-report</code>) scrive un file per il gruppo di test: quanto spesso ti sei allenato e quali comandi hai usato, con un tasto o con un clic. Solo conteggi, nessuna posizione o testo; l'app non invia nulla, decidi tu se inviare il file."
 
 #: templates/help/settings.html
 msgid "Change keys"
@@ -3900,7 +3900,7 @@ msgstr "clic"
 
 #: core/usage.py:137
 msgid "hint labels"
-msgstr "etichette suggerimento"
+msgstr "etichette"
 
 #: core/usage.py:137
 msgid "command line"
@@ -3960,7 +3960,7 @@ msgstr "comando"
 
 #: core/usage.py:157
 msgid "Errors the app caught: in the browser {js}, in the app {server}"
-msgstr "Errori catturati dall'app: nel browser {js}, nell'app {server}"
+msgstr "Errori intercettati dall'app: nel browser {js}, nell'app {server}"
 
 #: core/usage.py:117
 msgid "First solved puzzle: {n} minutes after the install"
