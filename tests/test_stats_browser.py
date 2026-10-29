@@ -115,6 +115,8 @@ def test_detect_from_the_inspector(page):
     page.click("#ws-analyse [data-inspector] [data-cmd='library.detect']")
     page.wait_for_function("document.getElementById('status-message').textContent.startsWith('Detected on 1 position')")
     page.wait_for_selector("#ws-analyse [data-inspector] .inspector__tags >> text=Back-rank mate")
+    # Wait for the inspector to re-render after the detect command completes
+    page.wait_for_function("window.SPOS.analysis.current() && document.querySelector('#ws-analyse [data-inspector]')", timeout=10000)
     assert p.tag_links.get(tag__key="back-rank-mate").origin == "auto"
 
 

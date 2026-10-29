@@ -144,10 +144,10 @@ def test_copy_fen_and_pgn(board):
     click_square(board, "d4")
     until(board, "b.line.moves.length === 1")
     keys(board, "y")
-    board.wait_for_function("document.getElementById('status-message').textContent === 'Copied FEN'")
+    board.wait_for_function("document.getElementById('status-message').textContent === 'Copied FEN'", timeout=15000)
     assert board.evaluate("navigator.clipboard.readText()") == "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1"
     keys(board, "Y")
-    board.wait_for_function("document.getElementById('status-message').textContent === 'Copied PGN'")
+    board.wait_for_function("document.getElementById('status-message').textContent === 'Copied PGN'", timeout=15000)
     assert board.evaluate("navigator.clipboard.readText()") == "1. d4 *"
 
 
@@ -157,6 +157,8 @@ def test_line_survives_a_reload(board):
     until(board, "b.line.moves.length === 1")
     board.wait_for_timeout(800)  # lines are saved 600 ms after the last change
     open_mode(board, "ui")
+    # After mode switch, wait for the board island to be ready before checking line
+    board.wait_for_selector(".workspace:not([hidden]) [data-island=board]", timeout=15000)
     assert until(board, "b.line.moves.length === 1")["moves"] == ["c4"]
 
 

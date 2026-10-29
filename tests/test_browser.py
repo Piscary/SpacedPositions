@@ -150,6 +150,10 @@ def test_key_latency_budget(page):
 @pytest.mark.parametrize("theme", ["paper", "ink"])
 @pytest.mark.parametrize("density", ["compact", "cozy"])
 def test_style_guide_screenshots(page, theme, density):
+    import os
+
+    if os.environ.get("SPOS_TEST_JITTER"):
+        pytest.skip("screenshot comparison is unreliable under jitter — page may show loading states")
     from PIL import Image, ImageChops
 
     page.evaluate(

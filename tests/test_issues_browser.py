@@ -90,6 +90,12 @@ def test_the_puzzle_pane_steps_through_a_list(page, ruy):
     page.wait_for_selector(f"{pane} .pzpane__list >> text=Position 1 of 2")
     page.click(f"{pane} [data-cmd='analysis.subject'][data-args=next]")
     page.wait_for_selector(f"{pane} .pzpane__list >> text=Position 2 of 2")
+    # Wait for the puzzle pane fetch to complete so the position title is available
+    page.wait_for_function(
+        "(title) => window.SPOS.analysis.current()?.position.title === title",
+        arg="Queen's pawn",
+        timeout=10000,
+    )
     assert page.evaluate("window.SPOS.analysis.current().position.title") == "Queen's pawn"
 
 
@@ -122,6 +128,7 @@ def test_sections_put_the_cursor_on_their_first_row(page):
 def test_the_keymap_has_groups_to_jump_between(page):
     open_mode(page, "settings")
     page.click("[data-view=keymap] .pane__title")
+    page.wait_for_selector("[data-view=keymap] [data-group-head]")
     heads = page.eval_on_selector_all("[data-view=keymap] [data-group-head]", "els => els.map(e => e.dataset.groupHead)")
     assert len(heads) > 3
     keys(page, "]")

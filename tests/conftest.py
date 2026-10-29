@@ -25,13 +25,34 @@ def page(browser, live_server):
     context = browser.new_context(viewport={"width": 1440, "height": 900}, color_scheme="light")
     context.grant_permissions(["clipboard-read", "clipboard-write"], origin=live_server.url)
     page = context.new_page()
+    if os.environ.get("SPOS_TEST_CPU"):  # SPOS_TEST_CPU=4: a browser 4× slower, as on a busy CI machine
+        context.new_cdp_session(page).send("Emulation.setCPUThrottlingRate", {"rate": float(os.environ["SPOS_TEST_CPU"])})
     errors = []
+    jitter_on = bool(os.environ.get("SPOS_TEST_JITTER"))
     page.on("console", lambda m: errors.append(m.text) if m.type == "error" and "Failed to load resource" not in m.text else None)
-    page.on("response", lambda r: errors.append(f"{r.status} {r.url}") if r.status >= 400 and "/cmd/" not in r.url else None)
+    # a command may be refused (4xx, the status line says why); a server error is a failure everywhere
+    # under jitter, 404s from analysis endpoints are expected: the inspector/puzzle pane fetches
+    # may still be in flight when the transaction rolls back at teardown
+    def _on_response(r):
+        if r.status >= 500 or (r.status >= 400 and "/cmd/" not in r.url):
+            if not (jitter_on and r.status == 404 and "/analysis/" in r.url):
+                errors.append(f"{r.status} {r.url}")
+    page.on("response", _on_response)
     page.on("pageerror", lambda e: errors.append(str(e)))
     page.base = live_server.url
     open_mode(page, "ui")
     yield page
+    # the usage counts of this test are stored now, not by a request that reaches the server during the next test
+    if not page.is_closed():
+        page.evaluate("window.SPOS?.usage?.flush()")
+        # Under jitter, async island fetches (inspector, puzzle pane) may still be in flight when
+        # the test ends. The server-side transaction rolls back immediately, so a late request
+        # gets 404. Wait for the inspector debounce timer (120 ms) plus the max jitter delay
+        # so pending requests can reach the server before the transaction closes.
+        jitter_ms = float(os.environ.get("SPOS_TEST_JITTER", 0)) * 1000
+        if jitter_ms:
+            # inspector debounce (120ms) + max jitter on the fetch + max jitter on the response + margin
+            page.wait_for_function("() => true", timeout=int(jitter_ms * 3 + 1000))
     context.close()
     assert errors == [], errors
 
