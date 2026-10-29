@@ -5,7 +5,7 @@ import json
 
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render as render_template
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
@@ -190,10 +190,23 @@ def create(request):
     return JsonResponse({"ok": True, "position": str(position.uuid)})
 
 
+def _shown_node(position, request):
+    """The move a pane shows, or None when it is gone: an undo or a delete removed it while the pane's request was on
+    its way. The browser has asked for the new cursor meanwhile and ignores the empty answer."""
+    if not request.GET.get("node"):
+        return tree.root(position)
+    try:
+        return _node(position, request.GET["node"])
+    except Http404:
+        return None
+
+
 @require_GET
 def inspector(request, pid):
     position = _position(pid)
-    node = _node(position, request.GET.get("node")) if request.GET.get("node") else tree.root(position)
+    node = _shown_node(position, request)
+    if node is None:
+        return HttpResponse(status=204)
     if tree.is_game(position):
         return render_template(request, "analysis/inspector_game.html", {
             "game": position, "node": node,
@@ -219,7 +232,9 @@ def inspector(request, pid):
 def puzzle_pane(request, pid):
     """The Puzzle pane (spec 04 · Analyse): the puzzle setup of the move at the cursor."""
     position = _position(pid)
-    node = _node(position, request.GET.get("node")) if request.GET.get("node") else tree.root(position)
+    node = _shown_node(position, request)
+    if node is None:
+        return HttpResponse(status=204)
     context = analysis_puzzles.pane(position, node)
     for line in context.get("lines", []):
         line["html"] = render.line_html(context["puzzle"].start_node.fen, line["moves"])

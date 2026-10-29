@@ -402,7 +402,7 @@ async function renderInspector(key) {
   const node = t.cursor
   const newest = ticket(key, "inspector")
   const html = await fetch(`/analysis/${t.position.id}/inspector/?node=${node}`).then((r) => r.text()).catch(() => null)
-  if (html === null || !newest() || trees.get(key)?.cursor !== node) return
+  if (!html || !newest() || trees.get(key)?.cursor !== node) return // empty: the move is gone
   for (const el of panes) {
     if (el.contains(document.activeElement) && document.activeElement.matches("textarea")) continue // don't replace a comment being written
     el.innerHTML = html
@@ -420,7 +420,7 @@ async function renderPuzzle(key) {
   const list = count ? `&list=${t.list.index}/${count}` : ""
   const newest = ticket(key, "puzzle")
   const html = await fetch(`/analysis/${t.position.id}/puzzle-pane/?node=${node}${list}`).then((r) => r.text()).catch(() => null)
-  if (html === null || !newest() || trees.get(key)?.cursor !== node) return
+  if (!html || !newest() || trees.get(key)?.cursor !== node) return // empty: the move is gone
   for (const el of panes) {
     el.innerHTML = html
     window.htmx?.process(el)

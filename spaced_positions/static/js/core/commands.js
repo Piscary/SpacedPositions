@@ -56,7 +56,17 @@ function serverContext() {
 }
 
 /** POST /cmd/<id>/ and apply the result. Returns the JSON result, or null when it failed. */
-export async function serverRun(id, args, extra = {}) {
+// Server commands run one after another, in the order they were given: two quick changes of a setting must not
+// reach the server (or come back) the other way round, which would leave the older value.
+let queue = Promise.resolve()
+
+export function serverRun(id, args, extra = {}) {
+  const result = queue.then(() => sendCommand(id, args, extra))
+  queue = result.catch(() => null)
+  return result
+}
+
+async function sendCommand(id, args, extra) {
   let response
   try {
     response = await fetch(`/cmd/${id}/`, {

@@ -2,6 +2,7 @@
 adding variations, annotations, comments, undo across a reload, the engine, puzzles set up from the analysis, and
 the ways in (paste, Train)."""
 
+import os
 from pathlib import Path
 
 import pytest
@@ -132,7 +133,7 @@ def test_comment_with_figurines_saved_by_mod_enter(page, ruy):
     assert page.get_attribute("#shell", "data-layer") == "normal"
 
 
-@pytest.mark.xfail(reason="engine evaluation is too slow under jitter — external computation, not a race")
+@pytest.mark.skipif(bool(os.environ.get("SPOS_TEST_JITTER")), reason="the engine's search is too slow to wait for under jitter")
 def test_engine_lines_eval_bar_and_best_move(page, ruy):
     analyse(page, ruy)
     keys(page, "G")  # after 3.Bb5, black to move
@@ -142,7 +143,7 @@ def test_engine_lines_eval_bar_and_best_move(page, ruy):
     assert page.evaluate("window.SPOS.engine.state().enabled")
     before = ruy.nodes.count()
     keys(page, "Enter")  # play the engine's best move
-    page.wait_for_function(f"document.querySelectorAll('#ws-analyse [data-movetree] .mt-move').length === {before + 1}", timeout=60000)
+    page.wait_for_function(f"document.querySelectorAll('#ws-analyse [data-movetree] .mt-move').length === {before}", timeout=60000)  # before counted the start position too
     assert ruy.nodes.count() == before + 1
     keys(page, "e")
     page.wait_for_selector("#ws-analyse [data-evalbar][hidden]", state="attached", timeout=15000)

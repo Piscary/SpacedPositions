@@ -11,3 +11,6 @@ from spaced_positions.settings import *  # noqa: E402,F403
 # the real app. An in-memory test database is shared between threads, and concurrent requests (many MiniBoards at
 # once) then corrupt each other.
 DATABASES["default"]["TEST"] = {"NAME": str(DATA_DIR / "test.sqlite3")}  # noqa: F405
+
+if os.environ.get("SPOS_TEST_JITTER"):
+    MIDDLEWARE = ["tests.jitter.jitter", *MIDDLEWARE]  # noqa: F405

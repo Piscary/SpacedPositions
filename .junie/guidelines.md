@@ -47,10 +47,10 @@ hold exactly the changes you made for the task, nothing else.
    `git add -u`, `git commit -a` or a folder (`git add docs/`): they take in other people's work.
 3. **Check before committing**: `git status` and `git diff --staged --stat`. Every staged file must be on your list.
    If one isn't, unstage it (`git restore --staged <path>`) and leave the file itself alone.
-4. **Files that others may have changed too** (the translation catalogues `locale/*/LC_MESSAGES/django.po` and
-   their built `.mo` and `static/i18n/*.json`, `docs/keymap.md`, `static/design/commands.json`): look at
-   `git diff <file>` before you stage it. If it holds changes that aren't yours (texts you didn't touch), don't commit
-   it: stop and say so in your report.
+4. **A file you changed that someone else changed too**: before you stage any file on your list, look at
+   `git diff <file>`. If it holds changes that aren't yours (Claude's work in progress in the same file, often the
+   translation catalogues, `docs/keymap.md`, `static/design/commands.json`, `tests/conftest.py`), don't commit it:
+   stop and say so in your report. Committing the file commits Claude's half-done changes under your message.
 5. **After committing**, `git status` must still show every change that isn't yours, untouched. List them in your
    report ("left uncommitted: …, not mine").
 6. **Never** amend, rebase, reset or revert a commit you didn't make, never delete or move files you didn't create,
@@ -70,11 +70,17 @@ Python 3.12+, a virtualenv in `.venv` (`pip install -e ".[dev]"`).
 | One file / one test | `.venv/bin/python -m pytest -q -m browser tests/test_issues_browser.py -k start_position` |
 | JavaScript unit tests | `node --experimental-default-type=module --test tests/js/*.test.mjs` |
 | Tests as on a machine without UTF-8 (Windows-like) | `LC_ALL=C LANG=C PYTHONUTF8=0 PYTHONCOERCECLOCALE=0 .venv/bin/python -m pytest -q -m "not browser"` |
+| Browser tests as on a slow CI machine (races) | `SPOS_TEST_JITTER=0.4` (every request waits up to 0.4 s, answers arrive out of order) and/or `SPOS_TEST_CPU=4` (a 4× slower browser) before the browser test command |
 | Design system: rebuild generated files | `.venv/bin/python manage.py design build` |
 | Design system: the lint CI runs | `.venv/bin/python manage.py design check` (must say `0 error(s)`) |
 
-A change is done when all four test runs pass and `design check` is clean. CI (`.github/workflows/ci.yml`) runs
-them on Linux and Windows.
+A change is done when the Python tests, the JavaScript tests and the browser tests pass and `design check` is clean.
+CI (`.github/workflows/ci.yml`) runs them on Linux and Windows. Optional:
+
+- the run without UTF-8, when you touch reading or writing files or text (CI's Windows run covers it too);
+- `SPOS_TEST_JITTER` / `SPOS_TEST_CPU`, for hunting races. A test that only fails with them gets
+  `skipif` / `xfail` *conditional on the switch* (`@pytest.mark.xfail(bool(os.environ.get("SPOS_TEST_JITTER")), …)`),
+  never an unconditional one: an unconditional xfail switches the test off in CI.
 
 ## How the code is organised
 

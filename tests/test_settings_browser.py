@@ -47,7 +47,7 @@ def test_step_a_value_and_reset_it(page):
     settings(page)
     page.fill("#ws-settings [data-settings-filter]", "storm pace")
     keys(page, "Escape")
-    page.click("#ws-settings [data-row='training.storm-pace']")
+    page.click("#ws-settings [data-row='training.storm-pace'] .list__title")
     keys(page, "l")
     page.wait_for_selector("#ws-settings [data-row='training.storm-pace'][data-value='slow'].is-changed")
     assert Preferences.current().settings == {"training.storm-pace": "slow"}
@@ -103,7 +103,7 @@ def test_enter_lists_the_choices_and_finds_one_by_its_meaning(page):
     settings(page)
     page.fill("#ws-settings [data-settings-filter]", "piece letters")
     keys(page, "Escape")
-    page.click("#ws-settings [data-row='board.letters']")
+    page.click("#ws-settings [data-row='board.letters'] .list__title")  # its name: the middle holds its choices
     keys(page, "Enter")
     page.wait_for_selector(".cmdline__row >> text=Deutsch")
     rows = page.eval_on_selector_all(".cmdline__row", "els => els.map(e => e.textContent)")

@@ -45,14 +45,11 @@ def page(browser, live_server):
     # the usage counts of this test are stored now, not by a request that reaches the server during the next test
     if not page.is_closed():
         page.evaluate("window.SPOS?.usage?.flush()")
-        # Under jitter, async island fetches (inspector, puzzle pane) may still be in flight when
-        # the test ends. The server-side transaction rolls back immediately, so a late request
-        # gets 404. Wait for the inspector debounce timer (120 ms) plus the max jitter delay
-        # so pending requests can reach the server before the transaction closes.
+        # Under jitter, the panes' requests (inspector, puzzle pane: a 120 ms debounce, then a delayed request and a
+        # delayed answer) may still be on their way: let them arrive while this test's data is still there.
         jitter_ms = float(os.environ.get("SPOS_TEST_JITTER", 0)) * 1000
         if jitter_ms:
-            # inspector debounce (120ms) + max jitter on the fetch + max jitter on the response + margin
-            page.wait_for_function("() => true", timeout=int(jitter_ms * 3 + 1000))
+            page.wait_for_timeout(int(jitter_ms * 2 + 300))
     context.close()
     assert errors == [], errors
 

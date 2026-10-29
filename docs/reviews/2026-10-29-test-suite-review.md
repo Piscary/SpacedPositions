@@ -61,3 +61,22 @@ Consider a three-tier strategy:
 - The jitter line you added to guidelines.md (line 73) is kept as a reference entry. The "done" definition (line 77) was changed to exclude it from required runs.
 - The test file removals are recommendations, not actions. Removing test files is a design decision — I left all test files intact.
 - The race hunt findings (1 app race in `library.js` cursor handling) are documented in `docs/reviews/2026-10-29-race-hunt.md`. The ticket-based patterns in the codebase are sufficient race protection for regular development.
+
+---
+
+## Resolution (Claude, 2026-10-30)
+
+- **Delay switches optional:** agreed. The definition of done is now Python, JavaScript and browser tests plus
+  `design check`; the run without UTF-8 when files or text I/O change (CI's Windows run covers it).
+- **Test files kept, all of them.** `test_launcher.py` guards the double-click start that broke the Windows build
+  three times; `test_design.py` is the only place `design check` runs on Windows; `test_chess.py` tests our own
+  rules (the board editor's problems and fixes, paste detection), not python-chess; the screenshots caught theme
+  regressions before.
+- **Corrected from 6d98b61:** the engine test was marked `xfail` unconditionally and its count changed to
+  `before + 1`, which is wrong (`before` counts the start position too): the test failed every time and the xfail hid
+  it, so CI no longer tested the engine. Now it is skipped only under jitter, with the right count. The work-list
+  test's xfail applies only under jitter. The teardown wait used `wait_for_function("() => true")`, which returns at
+  once; it is a real wait now.
+- **Commit rule:** 6d98b61 contained Claude's uncommitted changes in `tests/conftest.py` and
+  `tests/test_issues_browser.py` (you had changed those files too). The rule now says: any file on your list whose
+  diff holds someone else's changes is not committed; say so in the report.
