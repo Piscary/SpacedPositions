@@ -33,6 +33,7 @@ def test_the_session_pane_shows_the_result_after_train_was_unloaded(page):
     page.wait_for_function("window.SPOS.train.state().state === 'feedback'")
     keys(page, "Escape", "q")
     page.wait_for_function("window.SPOS.train.state().state === 'result'")
+    assert page.evaluate("document.getElementById('ws-train').dataset.keep") is None  # the session is over: unloadable
     page.evaluate("document.getElementById('ws-train').dataset.before = '1'")
     leave_train_for_long(page)
     assert page.evaluate("!document.getElementById('ws-train').dataset.before")  # rebuilt: it was unloaded
@@ -131,3 +132,10 @@ def test_the_keymap_has_groups_to_jump_between(page):
     assert page.evaluate(group, first) != page.evaluate(group, second)
     keys(page, "j", "[")
     assert cursor_row(page, "keymap") == second
+
+
+def test_a_right_click_on_a_pane_header_opens_one_menu(page, ruy):
+    analyse(page, ruy)
+    page.click("#ws-analyse [data-view=moves] .pane__title", button="right")
+    page.wait_for_selector(".menu >> text=To the start position")
+    assert page.locator(".menu").count() == 1

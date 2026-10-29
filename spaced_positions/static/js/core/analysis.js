@@ -381,6 +381,14 @@ function paintCursor(key) {
 }
 
 const inspectorTimers = new Map()
+// The newest request per analysis and pane kind: an older answer that arrives later is dropped (two quick changes
+// at the same move would otherwise show the first one's result).
+const requests = new Map()
+const ticket = (key, kind) => {
+  const n = (requests.get(`${key}:${kind}`) || 0) + 1
+  requests.set(`${key}:${kind}`, n)
+  return () => requests.get(`${key}:${kind}`) === n
+}
 function scheduleInspector(key) {
   clearTimeout(inspectorTimers.get(key))
   inspectorTimers.set(key, setTimeout(() => renderInspector(key), 120))
@@ -392,8 +400,9 @@ async function renderInspector(key) {
   const panes = panesFor(key, "inspector")
   if (!t || !panes.length) return
   const node = t.cursor
+  const newest = ticket(key, "inspector")
   const html = await fetch(`/analysis/${t.position.id}/inspector/?node=${node}`).then((r) => r.text()).catch(() => null)
-  if (html === null || trees.get(key)?.cursor !== node) return
+  if (html === null || !newest() || trees.get(key)?.cursor !== node) return
   for (const el of panes) {
     if (el.contains(document.activeElement) && document.activeElement.matches("textarea")) continue // don't replace a comment being written
     el.innerHTML = html
@@ -409,8 +418,9 @@ async function renderPuzzle(key) {
   const node = t.cursor
   const count = t.list ? t.list.count ?? t.list.ids.length : 0
   const list = count ? `&list=${t.list.index}/${count}` : ""
+  const newest = ticket(key, "puzzle")
   const html = await fetch(`/analysis/${t.position.id}/puzzle-pane/?node=${node}${list}`).then((r) => r.text()).catch(() => null)
-  if (html === null || trees.get(key)?.cursor !== node) return
+  if (html === null || !newest() || trees.get(key)?.cursor !== node) return
   for (const el of panes) {
     el.innerHTML = html
     window.htmx?.process(el)

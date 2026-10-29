@@ -149,9 +149,10 @@ msgstr "Gli esercizi nascono dalle posizioni: %(colon)s<code>new-position</code>
 msgid "Puzzles come from positions, not from games: O makes the position at this move one of its own, with its own analysis."
 msgstr "Gli esercizi nascono dalle posizioni, non dalle partite: O rende la posizione a questa mossa una posizione a sé, con la sua analisi."
 
-#: templates/analysis/puzzle.html templates/training/launcher.html analysis/render.py:72
+#: templates/analysis/puzzle.html analysis/render.py:73
+msgctxt "the start, a noun"
 msgid "Start"
-msgstr "Avvia"
+msgstr "Inizio"
 
 #: templates/analysis/puzzle.html
 msgid "%(start)s · %(side)s to move"
@@ -883,7 +884,7 @@ msgstr "L'area di lavoro è fatta di riquadri. Ognuno mostra una vista: una scac
 
 #: templates/help/pane.html
 msgid "Everything a pane can do"
-msgstr "Tutto ciò che fa un riquadro"
+msgstr "Tutto ciò che può fare un riquadro"
 
 #: templates/help/pane.html
 msgid "The ⋯ in its header (or a right click on the header, or %(menu)s) lists what the pane and its view can do, each with its key."
@@ -1965,6 +1966,10 @@ msgstr "Filtro: una ricerca della Biblioteca"
 msgid "/ motif:fork diff:<=3 · empty: all puzzles"
 msgstr "/ motif:fork diff:<=3 · vuoto: tutti gli esercizi"
 
+#: templates/training/launcher.html static/js/islands/graphs.js:77
+msgid "Start"
+msgstr "Avvia"
+
 #: templates/training/result.html templates/views/queue.html stats/views.py:81
 msgid "Solved"
 msgstr "Risolti"
@@ -2361,7 +2366,7 @@ msgstr "Tutto funziona con il mouse, e ogni pulsante mostra il suo tasto. Sono i
 
 #: templates/views/today.html
 msgid "%(go_library)s goes to the Library, %(go_home)s back here. Space alone shows where else you can go."
-msgstr "%(go_library)s va alla Biblioteca, %(go_home)s torna qui. La barra spaziatrice da sola mostra dove altro andare."
+msgstr "%(go_library)s va alla Biblioteca, %(go_home)s torna qui. La barra spaziatrice da sola mostra le altre destinazioni."
 
 #: templates/views/today.html
 msgid "%(help)s opens the help of the panel you are in: a guide, its keys, and how to search."
@@ -2609,19 +2614,19 @@ msgstr "Tutte le {n} risposte contano: {n} linee"
 msgid "On an answer: Also correct and All answers count need one of the solver's moves."
 msgstr "Su una risposta: Anche corretta e Tutte le risposte contano richiedono una mossa di chi risolve."
 
-#: analysis/render.py:82
+#: analysis/render.py:83
 msgid "No moves yet: play one on the board, paste a PGN, or let the engine suggest one."
 msgstr "Ancora nessuna mossa: giocane una sulla scacchiera, incolla un PGN o lascia che il motore ne suggerisca una."
 
-#: analysis/render.py:72
+#: analysis/render.py:73
 msgid "The start position ({keys})"
 msgstr "La posizione iniziale ({keys})"
 
-#: analysis/render.py:76
+#: analysis/render.py:77
 msgid "Puzzle from the start (draft)"
 msgstr "Esercizio dalla posizione iniziale (bozza)"
 
-#: analysis/render.py:76
+#: analysis/render.py:77
 msgid "Puzzle from the start"
 msgstr "Esercizio dalla posizione iniziale"
 
@@ -2677,7 +2682,7 @@ msgstr "senza valutazioni (:evaluate o un motore locale)"
 msgid "Moments {how}: {tags} on {moves}"
 msgstr "Momenti {how}: {tags} su {moves}"
 
-#: analysis/views.py:100 static/js/core/analysis.js:674
+#: analysis/views.py:100 static/js/core/analysis.js:684
 msgid "Annotation"
 msgstr "Annotazione"
 
@@ -2685,7 +2690,7 @@ msgstr "Annotazione"
 msgid "Mark"
 msgstr "Segno"
 
-#: analysis/views.py:100 static/js/core/analysis.js:687
+#: analysis/views.py:100 static/js/core/analysis.js:697
 msgid "Line colour"
 msgstr "Colore della linea"
 
@@ -5525,75 +5530,75 @@ msgstr "Già nell'analisi: il cursore è andato lì"
 msgid "Drop them? y / n"
 msgstr "Eliminarle? y / n"
 
-#: static/js/core/analysis.js:553
+#: static/js/core/analysis.js:563
 msgid "No position open: :analyse, or paste one (⌘V, a)"
 msgstr "Nessuna posizione aperta: :analyse o incollane una (⌘V, a)"
 
-#: static/js/core/analysis.js:574
+#: static/js/core/analysis.js:584
 msgid "No other move here"
 msgstr "Nessun'altra mossa qui"
 
-#: static/js/core/analysis.js:588
+#: static/js/core/analysis.js:598
 msgid "Looking for the key moments…"
 msgstr "Cerco i momenti chiave…"
 
-#: static/js/core/analysis.js:598
+#: static/js/core/analysis.js:608
 msgid "Open the moves pane to fold variations"
 msgstr "Apri il riquadro delle mosse per comprimere le varianti"
 
-#: static/js/core/analysis.js:612
+#: static/js/core/analysis.js:622
 msgid "No variation here"
 msgstr "Nessuna variante qui"
 
-#: static/js/core/analysis.js:623
+#: static/js/core/analysis.js:633
 msgid "No variations"
 msgstr "Nessuna variante"
 
-#: static/js/core/analysis.js:627
+#: static/js/core/analysis.js:637
 msgid "All variations open"
 msgstr "Tutte le varianti aperte"
 
-#: static/js/core/analysis.js:627
+#: static/js/core/analysis.js:637
 msgid "All variations folded · z opens one"
 msgstr "Tutte le varianti compresse · z ne apre una"
 
-#: static/js/core/analysis.js:642
+#: static/js/core/analysis.js:652
 msgid "No list here: a in the Library analyses what a search found, n goes through it"
 msgstr "Nessuna lista qui: a nella Biblioteca analizza ciò che una ricerca ha trovato, n la percorre"
 
-#: static/js/core/analysis.js:650
+#: static/js/core/analysis.js:660
 msgid "Nothing left in this list: all done"
 msgstr "Niente più in questa lista: tutto fatto"
 
-#: static/js/core/analysis.js:657
+#: static/js/core/analysis.js:667
 msgid "This is the first"
 msgstr "Questa è la prima"
 
-#: static/js/core/analysis.js:657
+#: static/js/core/analysis.js:667
 msgid "This is the last"
 msgstr "Questa è l'ultima"
 
-#: static/js/core/analysis.js:663
+#: static/js/core/analysis.js:673
 msgid "Go to a move first"
 msgstr "Vai prima a una mossa"
 
-#: static/js/core/analysis.js:700
+#: static/js/core/analysis.js:710
 msgid "Open an Inspector pane to write comments: ␣ w v, then i"
 msgstr "Apri un riquadro Ispettore per scrivere commenti: ␣ w v, poi i"
 
-#: static/js/core/analysis.js:718
+#: static/js/core/analysis.js:728
 msgid "Open a Puzzle pane: ␣ w v, then z"
 msgstr "Apri un riquadro Esercizio: ␣ w v, poi z"
 
-#: static/js/core/analysis.js:725
+#: static/js/core/analysis.js:735
 msgid "Open an Inspector pane: ␣ w v, then i"
 msgstr "Apri un riquadro Ispettore: ␣ w v, poi i"
 
-#: static/js/core/analysis.js:747
+#: static/js/core/analysis.js:757
 msgid "its own analysis, with the continuation"
 msgstr "una propria analisi, con il seguito"
 
-#: static/js/core/analysis.js:747
+#: static/js/core/analysis.js:757
 msgid "its own analysis"
 msgstr "una propria analisi"
 
@@ -5919,7 +5924,7 @@ msgstr "Non è stato possibile caricare la guida"
 msgid "Help: {name}"
 msgstr "Aiuto: {name}"
 
-#: static/js/core/help.js:119 static/js/core/help.js:123 static/js/core/layout.js:435
+#: static/js/core/help.js:119 static/js/core/help.js:123 static/js/core/panemenu.js:36
 msgid "Pane"
 msgstr "Riquadro"
 
@@ -6043,135 +6048,135 @@ msgstr "Gruppo collegato: clic per cambiare"
 msgid "layout not saved: the app is not reachable"
 msgstr "layout non salvato: l'app non è raggiungibile"
 
-#: static/js/core/layout.js:355
+#: static/js/core/layout.js:354
 msgid "no mode '{name}'"
 msgstr "nessuna modalità «{name}»"
 
-#: static/js/core/layout.js:415 static/js/core/layout.js:691
+#: static/js/core/layout.js:414 static/js/core/layout.js:666
 msgid "Resize"
 msgstr "Ridimensiona"
 
-#: static/js/core/layout.js:450
+#: static/js/core/layout.js:425
 msgid "View"
 msgstr "Vista"
 
-#: static/js/core/layout.js:460
+#: static/js/core/layout.js:435
 msgid "no view '{name}'"
 msgstr "nessuna vista «{name}»"
 
-#: static/js/core/layout.js:494
+#: static/js/core/layout.js:469
 msgid "no pane {n}"
 msgstr "nessun riquadro {n}"
 
-#: static/js/core/layout.js:513
+#: static/js/core/layout.js:488
 msgid "no pane in that direction"
 msgstr "nessun riquadro in quella direzione"
 
-#: static/js/core/layout.js:518
+#: static/js/core/layout.js:493
 msgid "Split: view of the new pane"
 msgstr "Dividi: vista del nuovo riquadro"
 
-#: static/js/core/layout.js:518
+#: static/js/core/layout.js:493
 msgid "Split below: view of the new pane"
 msgstr "Dividi sotto: vista del nuovo riquadro"
 
-#: static/js/core/layout.js:521
+#: static/js/core/layout.js:496
 msgid "Split"
 msgstr "Dividi"
 
-#: static/js/core/layout.js:543
+#: static/js/core/layout.js:518
 msgid "Open in a split"
 msgstr "Apri in una divisione"
 
-#: static/js/core/layout.js:594 design/commands/pane.toml:pane.close
+#: static/js/core/layout.js:569 design/commands/pane.toml:pane.close
 msgid "Close pane"
 msgstr "Chiudi il riquadro"
 
-#: static/js/core/layout.js:598
+#: static/js/core/layout.js:573
 msgid "Only this pane"
 msgstr "Solo questo riquadro"
 
-#: static/js/core/layout.js:609 design/commands/pane.toml:pane.buffers
+#: static/js/core/layout.js:584 design/commands/pane.toml:pane.buffers
 msgid "Hidden buffers"
 msgstr "Riquadri nascosti"
 
-#: static/js/core/layout.js:620
+#: static/js/core/layout.js:595
 msgid "no hidden buffer '{id}'"
 msgstr "nessun riquadro nascosto «{id}»"
 
-#: static/js/core/layout.js:621
+#: static/js/core/layout.js:596
 msgid "Show buffer"
 msgstr "Mostra il riquadro"
 
-#: static/js/core/layout.js:630 static/js/core/layout.js:633
+#: static/js/core/layout.js:605 static/js/core/layout.js:608
 msgid "Change view"
 msgstr "Cambia vista"
 
-#: static/js/core/layout.js:642
+#: static/js/core/layout.js:617
 msgid "Maximised · the other panes are tabs in its header"
 msgstr "Ingrandito · gli altri riquadri sono schede nella sua intestazione"
 
-#: static/js/core/layout.js:642
+#: static/js/core/layout.js:617
 msgid "Restored"
 msgstr "Ripristinato"
 
-#: static/js/core/layout.js:647
+#: static/js/core/layout.js:622
 msgid "Collapse"
 msgstr "Comprimi"
 
-#: static/js/core/layout.js:655
+#: static/js/core/layout.js:630
 msgid "Swap panes"
 msgstr "Scambia i riquadri"
 
-#: static/js/core/layout.js:667
+#: static/js/core/layout.js:642
 msgid "Rotate split"
 msgstr "Ruota la divisione"
 
-#: static/js/core/layout.js:675 design/commands/pane.toml:pane.equalize
+#: static/js/core/layout.js:650 design/commands/pane.toml:pane.equalize
 msgid "Equal sizes"
 msgstr "Dimensioni uguali"
 
-#: static/js/core/layout.js:690
+#: static/js/core/layout.js:665
 msgid "no side-by-side split to resize"
 msgstr "nessuna divisione affiancata da ridimensionare"
 
-#: static/js/core/layout.js:690
+#: static/js/core/layout.js:665
 msgid "no stacked split to resize"
 msgstr "nessuna divisione sovrapposta da ridimensionare"
 
-#: static/js/core/layout.js:705
+#: static/js/core/layout.js:680
 msgid "Link group"
 msgstr "Gruppo collegato"
 
-#: static/js/core/layout.js:709
+#: static/js/core/layout.js:684
 msgid "Link group {group}"
 msgstr "Gruppo collegato {group}"
 
-#: static/js/core/layout.js:709
+#: static/js/core/layout.js:684
 msgid "Not linked"
 msgstr "Non collegato"
 
-#: static/js/core/layout.js:715
+#: static/js/core/layout.js:690
 msgid "Pin"
 msgstr "Fissa"
 
-#: static/js/core/layout.js:718
+#: static/js/core/layout.js:693
 msgid "Pinned: this pane keeps its subject"
 msgstr "Fissato: questo riquadro tiene il suo soggetto"
 
-#: static/js/core/layout.js:718
+#: static/js/core/layout.js:693
 msgid "Unpinned"
 msgstr "Sbloccato"
 
-#: static/js/core/layout.js:725
+#: static/js/core/layout.js:700
 msgid "Reset layout"
 msgstr "Ripristina il layout"
 
-#: static/js/core/layout.js:743
+#: static/js/core/layout.js:718
 msgid "no layout '{name}'"
 msgstr "nessun layout «{name}»"
 
-#: static/js/core/layout.js:745
+#: static/js/core/layout.js:720
 msgid "Load layout {name}"
 msgstr "Carica il layout {name}"
 

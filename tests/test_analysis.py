@@ -293,3 +293,39 @@ def test_replace_create_puzzle_inspector_and_search(client, ruy):
     assert [p["id"] for p in found] == [created["position"]]
     assert post(client, "/analysis/new/", {"start": "8/8/8/8/8/8/8/8 w - - 0 1"}).status_code == 422
     assert client.get("/analysis/not-a-uuid/").status_code == 404
+
+
+# ── The Puzzle pane ───────────────────────────────────────────────────────────────────────────────────────────
+
+
+def test_puzzle_pane_black_to_move_also_correct_and_all_answers():
+    # after 1.e4: black solves, 1…e5 2.Nf3 (2.Nc3) Nc6, and 1…c5 as another solver move
+    position = tree.create_position("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", ["e7e5", "g1f3", "b8c6"])
+    tree.play(node_at(position, "e5"), "b1c3")
+    tree.add_line(node_at(position, "e5", "Nc3"), ["g8f6"])
+    tree.play(tree.root(position), "c7c5")
+    root = tree.root(position)
+    analysis_puzzles.act(root, "start")
+    pane = analysis_puzzles.pane(position, root)
+    assert pane["side"] == "Black" and pane["start_label"] == "from the start position" and pane["kind"] == "start"
+    assert [[m.san for m in line["moves"]] for line in pane["lines"]] == [["e5", "Nf3", "Nc6"]]
+    assert pane["can_also"] and pane["why"].startswith("At the start")
+    c5 = node_at(position, "c5")
+    assert analysis_puzzles.pane(position, c5)["kind"] == "outside"
+    analysis_puzzles.act(c5, "also")
+    also = analysis_puzzles.pane(position, c5)
+    assert also["kind"] == "also" and also["also_on"]
+    e5 = node_at(position, "e5")
+    analysis_puzzles.act(e5, "answers")  # 2.Nc3 counts too: a second line
+    lines = analysis_puzzles.pane(position, e5)["lines"]
+    assert [[m.san for m in line["moves"]] for line in lines] == [["e5", "Nf3", "Nc6"], ["e5", "Nc3", "Nf6"]]
+    answer = analysis_puzzles.pane(position, node_at(position, "e5", "Nf3"))
+    assert answer["kind"] == "answer" and answer["why"].startswith("On an answer") and answer["can_also"]
+
+
+def test_puzzle_pane_of_a_game_offers_a_position_of_its_own(client):
+    from spaced_positions.library import importer
+
+    game = importer.run('[White "A"]\n[Black "B"]\n\n1. e4 e5 2. Nf3 *', None, ready=True)["games"][0]
+    html = client.get(f"/analysis/{game.uuid}/puzzle-pane/").content.decode()
+    assert "Puzzles come from positions, not from games" in html and 'data-cmd="analysis.newposition"' in html

@@ -149,9 +149,10 @@ msgstr "Les exercices viennent des positions : %(colon)s<code>new-position</code
 msgid "Puzzles come from positions, not from games: O makes the position at this move one of its own, with its own analysis."
 msgstr "Les exercices viennent des positions, pas des parties : O fait de la position à ce coup une position à part, avec sa propre analyse."
 
-#: templates/analysis/puzzle.html templates/training/launcher.html analysis/render.py:72
+#: templates/analysis/puzzle.html analysis/render.py:73
+msgctxt "the start, a noun"
 msgid "Start"
-msgstr "Démarrer"
+msgstr "Départ"
 
 #: templates/analysis/puzzle.html
 msgid "%(start)s · %(side)s to move"
@@ -883,7 +884,7 @@ msgstr "L'espace de travail est fait de panneaux. Chacun montre une vue : un éc
 
 #: templates/help/pane.html
 msgid "Everything a pane can do"
-msgstr "Tout ce que peut un panneau"
+msgstr "Tout ce que peut faire un panneau"
 
 #: templates/help/pane.html
 msgid "The ⋯ in its header (or a right click on the header, or %(menu)s) lists what the pane and its view can do, each with its key."
@@ -1965,6 +1966,10 @@ msgstr "Filtre : une requête de la Bibliothèque"
 msgid "/ motif:fork diff:<=3 · empty: all puzzles"
 msgstr "/ motif:fork diff:<=3 · vide : tous les exercices"
 
+#: templates/training/launcher.html static/js/islands/graphs.js:77
+msgid "Start"
+msgstr "Démarrer"
+
 #: templates/training/result.html templates/views/queue.html stats/views.py:81
 msgid "Solved"
 msgstr "Résolus"
@@ -2361,7 +2366,7 @@ msgstr "Tout marche à la souris, et chaque bouton montre sa touche. Ce sont les
 
 #: templates/views/today.html
 msgid "%(go_library)s goes to the Library, %(go_home)s back here. Space alone shows where else you can go."
-msgstr "%(go_library)s va à la Bibliothèque, %(go_home)s revient ici. La barre d'espace seule montre où aller d'autre."
+msgstr "%(go_library)s va à la Bibliothèque, %(go_home)s revient ici. La barre d'espace seule montre les autres destinations."
 
 #: templates/views/today.html
 msgid "%(help)s opens the help of the panel you are in: a guide, its keys, and how to search."
@@ -2609,19 +2614,19 @@ msgstr "Les {n} réponses comptent : {n} lignes"
 msgid "On an answer: Also correct and All answers count need one of the solver's moves."
 msgstr "Sur une réponse : Aussi correct et Toutes les réponses comptent demandent un coup du camp qui résout."
 
-#: analysis/render.py:82
+#: analysis/render.py:83
 msgid "No moves yet: play one on the board, paste a PGN, or let the engine suggest one."
 msgstr "Pas encore de coups : jouez-en un sur l'échiquier, collez un PGN ou laissez le moteur en proposer un."
 
-#: analysis/render.py:72
+#: analysis/render.py:73
 msgid "The start position ({keys})"
 msgstr "La position de départ ({keys})"
 
-#: analysis/render.py:76
+#: analysis/render.py:77
 msgid "Puzzle from the start (draft)"
 msgstr "Exercice depuis la position de départ (brouillon)"
 
-#: analysis/render.py:76
+#: analysis/render.py:77
 msgid "Puzzle from the start"
 msgstr "Exercice depuis la position de départ"
 
@@ -2677,7 +2682,7 @@ msgstr "sans évaluations (:evaluate, ou un moteur local)"
 msgid "Moments {how}: {tags} on {moves}"
 msgstr "Moments {how} : {tags} sur {moves}"
 
-#: analysis/views.py:100 static/js/core/analysis.js:674
+#: analysis/views.py:100 static/js/core/analysis.js:684
 msgid "Annotation"
 msgstr "Annotation"
 
@@ -2685,7 +2690,7 @@ msgstr "Annotation"
 msgid "Mark"
 msgstr "Marque"
 
-#: analysis/views.py:100 static/js/core/analysis.js:687
+#: analysis/views.py:100 static/js/core/analysis.js:697
 msgid "Line colour"
 msgstr "Couleur de la ligne"
 
@@ -5525,75 +5530,75 @@ msgstr "Déjà dans l'analyse : le curseur y est allé"
 msgid "Drop them? y / n"
 msgstr "Les supprimer ? y / n"
 
-#: static/js/core/analysis.js:553
+#: static/js/core/analysis.js:563
 msgid "No position open: :analyse, or paste one (⌘V, a)"
 msgstr "Aucune position ouverte : :analyse, ou collez-en une (⌘V, a)"
 
-#: static/js/core/analysis.js:574
+#: static/js/core/analysis.js:584
 msgid "No other move here"
 msgstr "Pas d'autre coup ici"
 
-#: static/js/core/analysis.js:588
+#: static/js/core/analysis.js:598
 msgid "Looking for the key moments…"
 msgstr "Recherche des moments clés…"
 
-#: static/js/core/analysis.js:598
+#: static/js/core/analysis.js:608
 msgid "Open the moves pane to fold variations"
 msgstr "Ouvrez le panneau des coups pour replier les variantes"
 
-#: static/js/core/analysis.js:612
+#: static/js/core/analysis.js:622
 msgid "No variation here"
 msgstr "Pas de variante ici"
 
-#: static/js/core/analysis.js:623
+#: static/js/core/analysis.js:633
 msgid "No variations"
 msgstr "Pas de variantes"
 
-#: static/js/core/analysis.js:627
+#: static/js/core/analysis.js:637
 msgid "All variations open"
 msgstr "Toutes les variantes ouvertes"
 
-#: static/js/core/analysis.js:627
+#: static/js/core/analysis.js:637
 msgid "All variations folded · z opens one"
 msgstr "Toutes les variantes repliées · z en ouvre une"
 
-#: static/js/core/analysis.js:642
+#: static/js/core/analysis.js:652
 msgid "No list here: a in the Library analyses what a search found, n goes through it"
 msgstr "Pas de liste ici : a dans la Bibliothèque analyse ce qu'une recherche a trouvé, n la parcourt"
 
-#: static/js/core/analysis.js:650
+#: static/js/core/analysis.js:660
 msgid "Nothing left in this list: all done"
 msgstr "Plus rien dans cette liste : tout est fait"
 
-#: static/js/core/analysis.js:657
+#: static/js/core/analysis.js:667
 msgid "This is the first"
 msgstr "C'est la première"
 
-#: static/js/core/analysis.js:657
+#: static/js/core/analysis.js:667
 msgid "This is the last"
 msgstr "C'est la dernière"
 
-#: static/js/core/analysis.js:663
+#: static/js/core/analysis.js:673
 msgid "Go to a move first"
 msgstr "Allez d'abord à un coup"
 
-#: static/js/core/analysis.js:700
+#: static/js/core/analysis.js:710
 msgid "Open an Inspector pane to write comments: ␣ w v, then i"
 msgstr "Ouvrez un panneau Inspecteur pour écrire des commentaires : ␣ w v, puis i"
 
-#: static/js/core/analysis.js:718
+#: static/js/core/analysis.js:728
 msgid "Open a Puzzle pane: ␣ w v, then z"
 msgstr "Ouvrez un panneau Exercice : ␣ w v, puis z"
 
-#: static/js/core/analysis.js:725
+#: static/js/core/analysis.js:735
 msgid "Open an Inspector pane: ␣ w v, then i"
 msgstr "Ouvrez un panneau Inspecteur : ␣ w v, puis i"
 
-#: static/js/core/analysis.js:747
+#: static/js/core/analysis.js:757
 msgid "its own analysis, with the continuation"
 msgstr "sa propre analyse, avec la suite"
 
-#: static/js/core/analysis.js:747
+#: static/js/core/analysis.js:757
 msgid "its own analysis"
 msgstr "sa propre analyse"
 
@@ -5919,7 +5924,7 @@ msgstr "Le guide n'a pas pu être chargé"
 msgid "Help: {name}"
 msgstr "Aide : {name}"
 
-#: static/js/core/help.js:119 static/js/core/help.js:123 static/js/core/layout.js:435
+#: static/js/core/help.js:119 static/js/core/help.js:123 static/js/core/panemenu.js:36
 msgid "Pane"
 msgstr "Panneau"
 
@@ -6043,135 +6048,135 @@ msgstr "Groupe lié : cliquez pour changer"
 msgid "layout not saved: the app is not reachable"
 msgstr "disposition non enregistrée : l'app est injoignable"
 
-#: static/js/core/layout.js:355
+#: static/js/core/layout.js:354
 msgid "no mode '{name}'"
 msgstr "pas de mode « {name} »"
 
-#: static/js/core/layout.js:415 static/js/core/layout.js:691
+#: static/js/core/layout.js:414 static/js/core/layout.js:666
 msgid "Resize"
 msgstr "Redimensionner"
 
-#: static/js/core/layout.js:450
+#: static/js/core/layout.js:425
 msgid "View"
 msgstr "Vue"
 
-#: static/js/core/layout.js:460
+#: static/js/core/layout.js:435
 msgid "no view '{name}'"
 msgstr "pas de vue « {name} »"
 
-#: static/js/core/layout.js:494
+#: static/js/core/layout.js:469
 msgid "no pane {n}"
 msgstr "pas de panneau {n}"
 
-#: static/js/core/layout.js:513
+#: static/js/core/layout.js:488
 msgid "no pane in that direction"
 msgstr "pas de panneau dans cette direction"
 
-#: static/js/core/layout.js:518
+#: static/js/core/layout.js:493
 msgid "Split: view of the new pane"
 msgstr "Diviser : vue du nouveau panneau"
 
-#: static/js/core/layout.js:518
+#: static/js/core/layout.js:493
 msgid "Split below: view of the new pane"
 msgstr "Diviser en bas : vue du nouveau panneau"
 
-#: static/js/core/layout.js:521
+#: static/js/core/layout.js:496
 msgid "Split"
 msgstr "Diviser"
 
-#: static/js/core/layout.js:543
+#: static/js/core/layout.js:518
 msgid "Open in a split"
 msgstr "Ouvrir dans une division"
 
-#: static/js/core/layout.js:594 design/commands/pane.toml:pane.close
+#: static/js/core/layout.js:569 design/commands/pane.toml:pane.close
 msgid "Close pane"
 msgstr "Fermer le panneau"
 
-#: static/js/core/layout.js:598
+#: static/js/core/layout.js:573
 msgid "Only this pane"
 msgstr "Seulement ce panneau"
 
-#: static/js/core/layout.js:609 design/commands/pane.toml:pane.buffers
+#: static/js/core/layout.js:584 design/commands/pane.toml:pane.buffers
 msgid "Hidden buffers"
 msgstr "Panneaux masqués"
 
-#: static/js/core/layout.js:620
+#: static/js/core/layout.js:595
 msgid "no hidden buffer '{id}'"
 msgstr "pas de panneau masqué « {id} »"
 
-#: static/js/core/layout.js:621
+#: static/js/core/layout.js:596
 msgid "Show buffer"
 msgstr "Afficher le panneau"
 
-#: static/js/core/layout.js:630 static/js/core/layout.js:633
+#: static/js/core/layout.js:605 static/js/core/layout.js:608
 msgid "Change view"
 msgstr "Changer de vue"
 
-#: static/js/core/layout.js:642
+#: static/js/core/layout.js:617
 msgid "Maximised · the other panes are tabs in its header"
 msgstr "Agrandi · les autres panneaux sont des onglets dans son en-tête"
 
-#: static/js/core/layout.js:642
+#: static/js/core/layout.js:617
 msgid "Restored"
 msgstr "Restauré"
 
-#: static/js/core/layout.js:647
+#: static/js/core/layout.js:622
 msgid "Collapse"
 msgstr "Replier"
 
-#: static/js/core/layout.js:655
+#: static/js/core/layout.js:630
 msgid "Swap panes"
 msgstr "Échanger les panneaux"
 
-#: static/js/core/layout.js:667
+#: static/js/core/layout.js:642
 msgid "Rotate split"
 msgstr "Pivoter la division"
 
-#: static/js/core/layout.js:675 design/commands/pane.toml:pane.equalize
+#: static/js/core/layout.js:650 design/commands/pane.toml:pane.equalize
 msgid "Equal sizes"
 msgstr "Tailles égales"
 
-#: static/js/core/layout.js:690
+#: static/js/core/layout.js:665
 msgid "no side-by-side split to resize"
 msgstr "pas de division côte à côte à redimensionner"
 
-#: static/js/core/layout.js:690
+#: static/js/core/layout.js:665
 msgid "no stacked split to resize"
 msgstr "pas de division superposée à redimensionner"
 
-#: static/js/core/layout.js:705
+#: static/js/core/layout.js:680
 msgid "Link group"
 msgstr "Groupe lié"
 
-#: static/js/core/layout.js:709
+#: static/js/core/layout.js:684
 msgid "Link group {group}"
 msgstr "Groupe lié {group}"
 
-#: static/js/core/layout.js:709
+#: static/js/core/layout.js:684
 msgid "Not linked"
 msgstr "Non lié"
 
-#: static/js/core/layout.js:715
+#: static/js/core/layout.js:690
 msgid "Pin"
 msgstr "Épingler"
 
-#: static/js/core/layout.js:718
+#: static/js/core/layout.js:693
 msgid "Pinned: this pane keeps its subject"
 msgstr "Épinglé : ce panneau garde son sujet"
 
-#: static/js/core/layout.js:718
+#: static/js/core/layout.js:693
 msgid "Unpinned"
 msgstr "Désépinglé"
 
-#: static/js/core/layout.js:725
+#: static/js/core/layout.js:700
 msgid "Reset layout"
 msgstr "Réinitialiser la disposition"
 
-#: static/js/core/layout.js:743
+#: static/js/core/layout.js:718
 msgid "no layout '{name}'"
 msgstr "pas de disposition « {name} »"
 
-#: static/js/core/layout.js:745
+#: static/js/core/layout.js:720
 msgid "Load layout {name}"
 msgstr "Charger la disposition {name}"
 

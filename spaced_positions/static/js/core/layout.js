@@ -3,7 +3,7 @@
 // this module only arranges them and never renders view HTML itself.
 
 import { ctx, emit, setLayer, status, storage, updateStatus } from "./context.js"
-import { command, enabled, handle, primaryKeys, pushUndo, run, serverRun } from "./commands.js"
+import { handle, pushUndo, run, serverRun } from "./commands.js"
 import { openMenu } from "./menu.js"
 import { tr } from "./i18n.js"
 
@@ -280,7 +280,6 @@ export function initWorkspace(el) {
   workspaces.set(mode, ws)
   touch(mode)
   el.addEventListener("pointerdown", (e) => onPointerDown(ws, e))
-  el.addEventListener("contextmenu", (e) => onContextMenu(ws, e))
   emit("workspace", { mode, el })
   render(ws, { persist: false })
   return ws
@@ -419,30 +418,6 @@ function startDrag(ws, gutter, e) {
   gutter.addEventListener("pointermove", move)
   gutter.addEventListener("pointerup", up, { once: true })
   gutter.addEventListener("pointercancel", up, { once: true })
-}
-
-function onContextMenu(ws, e) {
-  const header = e.target.closest(".pane__header")
-  if (!header) return
-  e.preventDefault()
-  const pane = header.closest("[data-pane]")
-  focusPane(pane.dataset.pane)
-  const ids = [
-    "pane.view", "pane.split.vertical", "pane.split.horizontal", "pane.maximize", "pane.collapse",
-    "pane.group", "pane.pin", "pane.swap", "pane.close",
-  ]
-  openMenu({
-      title: tr("Pane"),
-      anchor: { x: e.clientX, y: e.clientY },
-      items: ids.map((id, i) => ({
-        label: command(id).title,
-        keys: primaryKeys(id),
-        key: String(i + 1),
-        note: enabled(id).ok ? "" : enabled(id).reason,
-        disabled: !enabled(id).ok,
-        value: id,
-      })),
-  }).then((choice) => choice && run(choice, [], { source: "mouse" }))
 }
 
 // ── View picker ────────────────────────────────────────────────────────────────────────────────────────────────

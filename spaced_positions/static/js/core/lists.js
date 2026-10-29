@@ -300,7 +300,7 @@ document.addEventListener("click", (e) => {
 
 addDynamicPrefix((seq) => {
   if (seq.join(" ") !== "g" || !ctx.pane?.el) return []
-  return [...ctx.pane.el.querySelectorAll("[data-section-key]")].map((section) => ({
+  return [...ctx.pane.el.querySelectorAll("[data-section-key]")].filter(isShown).map((section) => ({
     key: section.dataset.sectionKey,
     label: `Section: ${section.querySelector(".section__title")?.textContent || ""}`,
     action: () => enterSection(sectionsOf(ctx.pane.el).find((s) => s.el === section) || { el: section, items: [] }),

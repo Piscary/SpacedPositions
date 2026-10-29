@@ -7,7 +7,7 @@
 
   <ol class="pzpane__steps">
     <li class="pzpane__step{% if puzzle %} is-done{% else %} is-now{% endif %}">
-      <div class="pzpane__head"><span class="pzpane__n" aria-hidden="true">1</span><b>{% translate "Start" %}</b>
+      <div class="pzpane__head"><span class="pzpane__n" aria-hidden="true">1</span><b>{% translate "Start" context "the start, a noun" %}</b>
         <span class="muted">{% if puzzle %}{% blocktranslate trimmed with start=start_label side=side %}{{ start }} · {{ side }} to move{% endblocktranslate %}{% else %}{% translate "where the solver begins" %}{% endif %}</span></div>
       {% if not puzzle %}
       <p class="muted pzpane__text">{% keycap "g g" as gg %}{% blocktranslate trimmed %}Go to the move after which the solver moves ({{ gg }}: the start position), then set the puzzle up. It starts as a draft.{% endblocktranslate %}</p>

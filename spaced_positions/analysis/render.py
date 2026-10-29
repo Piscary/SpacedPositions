@@ -5,6 +5,7 @@ under the move it replaces, comments in place, annotation symbols, marks as a co
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
+from django.utils.translation import pgettext
 
 from spaced_positions.core import registry
 from spaced_positions.library.models import NodeTag
@@ -69,7 +70,7 @@ def render(position) -> str:
     # The start position as the first token: a click goes there, and it is highlighted while the board shows it.
     keys = " ".join(registry.primary_keys("analysis.start", None, "mode.analyse") or [])
     parts = [format_html('<button type="button" class="mt-start" data-node="{}" title="{}">{}</button>', root.id,
-                         _("The start position ({keys})").replace("{keys}", keys), _("Start"))]
+                         _("The start position ({keys})").replace("{keys}", keys), pgettext("the start, a noun", "Start"))]
     start_role = roles.get(root.id)
     if start_role:
         parts.append(format_html('<div class="mt-puzzle{}">▶ {}</div>', " is-draft" if start_role["draft"] else "",
