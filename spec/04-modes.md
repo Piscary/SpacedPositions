@@ -177,7 +177,6 @@ One position or game, board-centred. All panes in link group A.
 ├─ 5 Eval graph (games only) ──────────────┤ ▾ Comment                                   c     │
 │ ▁▂▂▃▂▂▁▁▂▅▇▆▅▃▂▁ ▁▂▃▃▂                  │   Threatens e4, but …                             │
 └──────────────────────────────────────────┤ ▾ Tags   #zwischenzug              t     │
-                                           │ ▸ Puzzle  not set up                        p     │
                                            │ ▸ Position p123 · Manual Nr. 102 · diff 3     │
                                            └───────────────────────────────────────────────────┘
 ```
@@ -200,6 +199,13 @@ One position or game, board-centred. All panes in link group A.
   move (the walker: main moves, also-correct moves, answer lines, at most 8 solver moves unless an end is
   marked); it is rebuilt after every change, one card per answer line. The move tree shows it: the start framed,
   solver moves underlined, answers dotted, ends with a small square, drafts grey.
+- **Puzzle pane** (`z` in the view picker, under the board by default): the puzzle at the cursor in three steps
+  (1 start · 2 solution · 3 training), the cursor's role in it in words (start, solver move, also correct, answer,
+  outside the solution), its lines as text (one card each; a click goes there), the puzzle buttons greyed with the
+  reason where they don't apply, the position's other puzzles, a legend of the move tree's puzzle marks, and the
+  subject list (`Position 3 of 12`, previous / next). The Inspector no longer has a puzzle section.
+- **The start position**: the move tree begins with a `⏮ Start` token; a click goes there, and it is highlighted
+  while the board shows the start (`g g` does the same).
 - **Subject list**: `n`/`N` next/previous subject when Analyse was opened from a list (library results, missed
   puzzles). The status line shows `3 / 38`.
 

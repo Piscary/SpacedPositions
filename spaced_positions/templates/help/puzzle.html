@@ -1,0 +1,16 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "The puzzle at the cursor of the analysis, in three steps: where it starts, its solution (each line a card), and whether it is in training. It says where the cursor is in the puzzle, and why a button can't be used here." %}{% endblock %}
+{% block how %}
+  {% key "analysis.puzzle" "start" as start %}{% key "analysis.puzzle" "end" as end %}{% key "analysis.puzzle" "also" as also %}
+  {% key "analysis.puzzle" "answers" as answers %}{% key "analysis.puzzle" "ready" as ready %}{% key "analysis.puzzle" "discard" as discard %}
+  {% key "analysis.start" as home %}{% key "analysis.subject" "next" as next %}{% key "analysis.subject" "prev" as prev %}
+  <dt>{% translate "1 · Start" %}</dt><dd>{% blocktranslate trimmed %}Go to the move after which the solver moves ({{ home }}: the start position) and {{ start }}. The puzzle begins as a draft.{% endblocktranslate %}</dd>
+  <dt>{% translate "2 · Solution" %}</dt><dd>{% blocktranslate trimmed %}The main line after the start is the solution; the pane lists its lines, a click goes to one. {{ end }} ends a line at the cursor, {{ also }} accepts another solver move, {{ answers }} on a solver move makes every answer to it a line of its own.{% endblocktranslate %}</dd>
+  <dt>{% translate "3 · Training" %}</dt><dd>{% blocktranslate trimmed %}{{ ready }} puts the puzzle into training (and takes it out again); {{ discard }} removes it. A puzzle trained before keeps its history.{% endblocktranslate %}</dd>
+  <dt>{% translate "The next position" %}</dt><dd>{% blocktranslate trimmed %}Opened from a list, the pane shows where you are in it: {{ next }} the next position, {{ prev }} the one before.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% translate "The moves, board and inspector of the same link group: the moves show the puzzle too (the start framed, solver moves underlined, answers dotted, the ends with a small square)." %}{% endblock %}
+{% block tips %}
+  <li>{% translate "The puzzle keys work in every pane of Analyse: p and a letter (p s, p x, p a, p o, p r, p d)." %}</li>
+  {% key "train.edit" keys_in="state.feedback" as edit %}<li>{% blocktranslate trimmed %}On Train's feedback, {{ edit }} opens the puzzle here to fix it.{% endblocktranslate %}</li>
+{% endblock %}

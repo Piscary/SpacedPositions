@@ -65,12 +65,17 @@ export function mountKeymap(el) {
   loadKeymap(el)
 }
 
-/** Rows that don't contain the search text are hidden, and sections without rows. */
+/** Rows that don't contain the search text (or their group's name) are hidden, and sections and groups without rows. */
 function filter(el) {
   const text = (el.querySelector("[data-search]")?.value || "").trim().toLowerCase()
-  for (const row of el.querySelectorAll("[data-row]")) row.hidden = Boolean(text) && !row.textContent.toLowerCase().includes(text)
+  for (const row of el.querySelectorAll("[data-row]")) {
+    row.hidden = Boolean(text) && !`${row.dataset.group || ""} ${row.textContent}`.toLowerCase().includes(text)
+  }
   for (const section of el.querySelectorAll("[data-section]")) {
     section.hidden = Boolean(text) && ![...section.querySelectorAll("[data-row]")].some((r) => !r.hidden)
+  }
+  for (const head of el.querySelectorAll("[data-group-head]")) {
+    head.hidden = Boolean(text) && ![...el.querySelectorAll("[data-row]")].some((r) => !r.hidden && r.dataset.group === head.dataset.groupHead)
   }
 }
 

@@ -195,3 +195,97 @@ def roles(position, kids) -> dict:
 
         walk(sol, p.start_node_id)
     return out
+
+
+# ── The Puzzle pane ──────────────────────────────────────────────────────────────────────────────────────────────
+
+
+def _start_label(node: Node) -> str:
+    if node.parent_id is None:
+        return _("from the start position")
+    return _("after {move}").format(move=_move_text(node))
+
+
+def _move_text(node: Node) -> str:
+    fields = node.fen.split()  # the position after the move: its side to move is the other one
+    full = int(fields[5]) if len(fields) > 5 else 1
+    return f"{full}.{node.san}" if fields[1] == "b" else f"{full - 1}…{node.san}"
+
+
+def _cursor_role(puzzle: Puzzle | None, node: Node, role: dict) -> tuple[str, str]:
+    """(kind, sentence): where the cursor is in the puzzle, in words."""
+    if puzzle is None:
+        return "none", _("No puzzle at this move. A puzzle starts after a move (or at the start position): the solver plays the moves that follow.")
+    if node.id == puzzle.start_node_id:
+        return "start", _("The puzzle starts here: the side to move finds the solution.")
+    kind = role.get("role")
+    end = " " + _("The line ends here.") if role.get("end") else ""
+    if kind == "solver":
+        return "solver", _("A solver move: the trainer expects it.") + end
+    if kind == "also":
+        return "also", _("Also correct: the trainer accepts it too, and goes on with the main line.") + end
+    if kind == "answer":
+        return "answer", _("An answer: the trainer plays it for the opponent.") + end
+    if _solver_move(puzzle, node):
+        return "outside", _("Not part of the solution: the solver's move here is another one. Also correct (p a) accepts it too.")
+    return "outside", _("Not part of the solution: an answer the trainer doesn't play. All answers count (p o) on the move before adds it.")
+
+
+def pane(position, node: Node) -> dict:
+    """What the Puzzle pane shows for the move at the cursor: the puzzles of the position, the one the cursor is in,
+    the cursor's role in it, its lines (the cards), and for every action whether it applies here and why not."""
+    if tree.is_game(position):
+        return {"game": True}
+    all_nodes = tree.nodes(position)
+    kids = tree.kids_map(all_nodes)
+    by_id = {n.id: n for n in all_nodes}
+    puzzle = puzzle_at(node)
+    the_roles = roles(position, kids)
+    kind, where = _cursor_role(puzzle, node, the_roles.get(node.id, {}))
+    puzzles = []
+    for p in position.puzzles.exclude(start_node=None).select_related("start_node").order_by("start_node__ply", "id"):
+        puzzles.append({"id": p.id, "node": p.start_node_id, "label": _start_label(p.start_node), "active": p.active,
+                        "current": puzzle is not None and p.id == puzzle.id,
+                        "cards": p.cards.filter(in_solution=True).count()})
+    out = {"game": False, "node": node, "puzzles": puzzles, "puzzle": puzzle, "kind": kind, "where": where}
+    starts_here = position.puzzles.filter(start_node=node).exists()
+    out["can_start"] = "" if not starts_here and kids.get(node.id) else (
+        _("a puzzle already starts here") if starts_here else _("play the solution first: there are no moves after this one"))
+    if puzzle is None:
+        return out
+    start = by_id[puzzle.start_node_id]
+    marks = puzzle.marks or {}
+    solver = _solver_move(puzzle, node)
+    on_start = node.id == puzzle.start_node_id
+    out.update({
+        "start_label": _start_label(start),
+        "side": _("White") if start.fen.split()[1] == "w" else _("Black"),
+        "cards": puzzle.cards.filter(in_solution=True).count(),
+        "attempts": sum(puzzle.cards.values_list("attempts", flat=True)),
+        "can_end": _("go to a move after the start") if on_start else "",
+        "end_on": node.id in marks.get("ends", []),
+        "can_also": "" if solver and not on_start else _("go to one of the solver's moves"),
+        "also_on": node.id in marks.get("also", []),
+        "can_answers": "" if solver and not on_start else _("go to one of the solver's moves"),
+        # one sentence for the buttons that don't apply here
+        "why": _("At the start: go to a move of the solution to mark it.") if on_start else (
+            "" if solver else _("On an answer: Also correct and All answers count need one of the solver's moves.")),
+    })
+    # the lines (one card each), as text, each going to its last move on a click
+    sol = solution(start, marks, kids)
+    shown = []
+    for ucis in (training_puzzles.lines(sol) if sol else []):
+        parent, moves = start, []
+        for uci in ucis:
+            child = next((k for k in kids.get(parent.id, []) if k.uci == uci), None)
+            if child is None:
+                break
+            moves.append(child)
+            parent = child
+        if moves:
+            shown.append({"node": moves[-1].id, "moves": moves, "has_cursor": node in moves})
+    out["can_ready"] = "" if shown else _("nothing to solve yet: play the solution after the start")
+    out["lines"] = shown[:12]
+    out["more_lines"] = max(0, len(shown) - 12)
+    out["solver_moves"] = sorted({training_puzzles.solver_moves([m.uci for m in line["moves"]]) for line in shown})
+    return out

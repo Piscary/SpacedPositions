@@ -38,6 +38,7 @@ const T = {
   lives: 0,
   clock: null, // Storm: {deadline, timer, started}
   paused: null,
+  resultHtml: "", // the last result screen, shown again if the pane is rebuilt
   custom: { ...DEFAULT_CUSTOM, ...(storage("train.custom") || {}) },
 }
 
@@ -65,14 +66,25 @@ function setState(state) {
     const el = $(sel)
     if (el) el.hidden = name !== state
   }
-  document.getElementById("shell").classList.toggle("is-solving", state === "solving" || state === "feedback")
+  const busy = state === "solving" || state === "feedback"
+  document.getElementById("shell").classList.toggle("is-solving", busy)
+  const ws = T.el?.closest(".workspace") // a running session's workspace is never unloaded to save memory
+  if (ws && busy) ws.dataset.keep = "1"
+  else if (ws) delete ws.dataset.keep
   updateStatus()
   renderCustom()
 }
 
 export function mountTrain(el) {
+  // Train's workspace is rebuilt when it was unloaded to save memory (or the pane was reloaded): show what was
+  // showing. A session's result comes back from T.resultHtml; without it, the launcher.
   T.el = el
-  setState(T.session && T.state !== "launcher" ? T.state : "launcher")
+  if (T.state === "result" && T.resultHtml) {
+    $("[data-train-result]").innerHTML = T.resultHtml
+    window.htmx?.process($("[data-train-result]"))
+  }
+  const restorable = T.session && (T.state === "result" ? T.resultHtml : T.state !== "launcher")
+  setState(restorable ? T.state : "launcher")
 }
 
 function lastFromLauncher() {
@@ -546,13 +558,13 @@ handle("train.retry", () => {
   nextPuzzle()
 })
 
-// Analyse the puzzle's position at the move where the puzzle starts; Edit also opens its puzzle section.
+// Analyse the puzzle's position at the move where the puzzle starts; Edit also focuses the Puzzle pane.
 async function openInAnalyse(edit) {
   if (T.state === "result") return run("list.open") // the puzzle under the result list's cursor, n / N for the others
   const p = T.current?.p
   if (!p) return false
   await window.SPOS.analysis.open(p.position, { node: p.startNode })
-  if (edit) window.SPOS.analysis.focusInspector("z")
+  if (edit) window.SPOS.analysis.focusPuzzle()
 }
 // `a`: the puzzle's analysis beside the board, in Train (closed when the next puzzle starts); `A`: in Analyse
 handle("train.analyse", async () => {
@@ -592,6 +604,7 @@ async function finish({ quiet = false } = {}) {
     return
   }
   const html = await fetch(`/train/r/${session.session}/result/`).then((r) => r.text()).catch(() => "")
+  T.resultHtml = html
   const box = $("[data-train-result]")
   box.innerHTML = html
   if (box.querySelector(".achievement")) sound("record")

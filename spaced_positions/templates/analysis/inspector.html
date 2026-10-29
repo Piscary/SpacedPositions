@@ -31,24 +31,6 @@
       {% cmd "analysis.tags" label=_("Add") size="sm" %}</span></div>{% endif %}
   {% endsection %}
 
-  {% if puzzle %}{% translate "set up" as puzzle_summary %}{% else %}{% translate "none" as puzzle_summary %}{% endif %}
-  {% section _("Puzzle") key="z" summary=puzzle_summary %}
-    {% if puzzle %}
-      <p class="inspector__puzzle">{% if puzzle.active %}<span class="chip chip--good">{% translate "in training" %}</span>{% else %}<span class="chip">{% translate "draft" %}</span>{% endif %}
-        {% blocktranslate trimmed count n=puzzle_cards %}{{ n }} card{% plural %}{{ n }} cards{% endblocktranslate %}{% if is_start %} · {% translate "it starts here" %}{% elif puzzle.start_node.san %} · {% blocktranslate trimmed with move=puzzle.start_node.san %}starts at {{ move }}{% endblocktranslate %}{% else %} · {% translate "starts at the start" %}{% endif %}</p>
-      <div class="actionbar">
-        {% cmd "analysis.puzzle" args="end" label=_("Solution ends here") size="sm" %}
-        {% cmd "analysis.puzzle" args="also" label=_("Also correct") size="sm" %}
-        {% cmd "analysis.puzzle" args="answers" label=_("All answers count") size="sm" %}
-        {% if puzzle.active %}{% cmd "analysis.puzzle" args="ready" label=_("Take out of training") size="sm" %}{% else %}{% cmd "analysis.puzzle" args="ready" label=_("Ready for training") size="sm" %}{% endif %}
-        {% cmd "analysis.puzzle" args="discard" label=_("Discard") size="sm" %}
-      </div>
-    {% else %}
-      <p class="muted">{% translate "No puzzle here. Go to the move after which the puzzle starts (or the start position) and set one up: its solution is the analysis from there." %}</p>
-      <div class="actionbar">{% cmd "analysis.puzzle" args="start" label=_("Set up a puzzle from here") size="sm" %}</div>
-    {% endif %}
-  {% endsection %}
-
   {% translate "Position" as position_word %}{% translate "source · objective · FEN" as info_summary %}
   {% section position.title|default:position_word key="i" summary=info_summary collapsed=True %}
     <div class="formrow"><span class="formrow__label">{% translate "Source" %}</span><span>{{ position.citation|default:"—" }}</span></div>

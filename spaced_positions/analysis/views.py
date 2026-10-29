@@ -194,7 +194,6 @@ def create(request):
 def inspector(request, pid):
     position = _position(pid)
     node = _node(position, request.GET.get("node")) if request.GET.get("node") else tree.root(position)
-    p = analysis_puzzles.puzzle_at(node)
     if tree.is_game(position):
         return render_template(request, "analysis/inspector_game.html", {
             "game": position, "node": node,
@@ -209,14 +208,24 @@ def inspector(request, pid):
         "position": position,
         "node": node,
         "nags": [(n, s, n in node.nags) for n, s in tree.NAGS.items() if n in tree.MOVE_NAGS],
-        "puzzle": p,
-        "puzzle_cards": p.cards.filter(in_solution=True).count() if p else 0,
-        "is_start": bool(p and p.start_node_id == node.id),
         "move_count": position.nodes.exclude(parent=None).count(),
         "position_tags": position.tag_links.select_related("tag__field").order_by("tag__field__order", "tag__order"),
         "move_tags": node.tag_links.select_related("tag__field").order_by("tag__field__order", "tag__order") if node.parent_id else [],
     }
     return render_template(request, "analysis/inspector.html", context)
+
+
+@require_GET
+def puzzle_pane(request, pid):
+    """The Puzzle pane (spec 04 · Analyse): the puzzle setup of the move at the cursor."""
+    position = _position(pid)
+    node = _node(position, request.GET.get("node")) if request.GET.get("node") else tree.root(position)
+    context = analysis_puzzles.pane(position, node)
+    for line in context.get("lines", []):
+        line["html"] = render.line_html(context["puzzle"].start_node.fen, line["moves"])
+    index, _sep, count = request.GET.get("list", "").partition("/")
+    context["list"] = {"index": int(index), "count": int(count)} if index.isdigit() and count.isdigit() else None
+    return render_template(request, "analysis/puzzle.html", context)
 
 
 @require_GET

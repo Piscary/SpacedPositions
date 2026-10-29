@@ -387,6 +387,7 @@ function scheduleInspector(key) {
 }
 
 async function renderInspector(key) {
+  renderPuzzle(key)
   const t = trees.get(key)
   const panes = panesFor(key, "inspector")
   if (!t || !panes.length) return
@@ -395,6 +396,22 @@ async function renderInspector(key) {
   if (html === null || trees.get(key)?.cursor !== node) return
   for (const el of panes) {
     if (el.contains(document.activeElement) && document.activeElement.matches("textarea")) continue // don't replace a comment being written
+    el.innerHTML = html
+    window.htmx?.process(el)
+  }
+}
+
+/** The Puzzle pane: the puzzle setup at the cursor, and where the analysis is in its list (n / N). */
+async function renderPuzzle(key) {
+  const t = trees.get(key)
+  const panes = panesFor(key, "puzzle")
+  if (!t || !panes.length) return
+  const node = t.cursor
+  const count = t.list ? t.list.count ?? t.list.ids.length : 0
+  const list = count ? `&list=${t.list.index}/${count}` : ""
+  const html = await fetch(`/analysis/${t.position.id}/puzzle-pane/?node=${node}${list}`).then((r) => r.text()).catch(() => null)
+  if (html === null || trees.get(key)?.cursor !== node) return
+  for (const el of panes) {
     el.innerHTML = html
     window.htmx?.process(el)
   }
@@ -420,6 +437,15 @@ export function mountMoves(el) {
 export function mountInspector(el) {
   const key = keyOfIsland(el)
   if (trees.has(key)) renderInspector(key)
+}
+
+export function mountPuzzle(el) {
+  const key = keyOfIsland(el)
+  if (trees.has(key)) renderPuzzle(key)
+  el.addEventListener("click", (e) => {
+    const target = e.target.closest("[data-node]:not([data-puzzlepane])") // a move of a line, a puzzle's start
+    if (target) moveTo(keyOfIsland(el), Number(target.dataset.node))
+  })
 }
 
 function keyOfIsland(el) {
@@ -686,7 +712,14 @@ async function focusComment(key) {
   area.focus()
   setLayer("insert")
 }
-/** Focus the Inspector of the current analysis and unfold one of its sections (by key: v c z i). */
+/** Focus the Puzzle pane of the current analysis (Train's `E`: edit the puzzle). */
+export function focusPuzzle() {
+  const pane = panesFor(currentKey(), "puzzle")[0]?.closest("[data-pane]")
+  if (!pane) return status(tr("Open a Puzzle pane: ␣ w v, then z"), { kind: "error" }) || false
+  focusPane(pane.dataset.pane)
+}
+
+/** Focus the Inspector of the current analysis and unfold one of its sections (by key: v c t i). */
 export function focusInspector(section) {
   const pane = panesFor(currentKey(), "inspector")[0]?.closest("[data-pane]")
   if (!pane) return status(tr("Open an Inspector pane: ␣ w v, then i"), { kind: "error" }) || false
@@ -743,11 +776,12 @@ Object.assign((window.SPOS ||= {}), {
     hasList: () => Boolean(current()?.list),
     open: openPosition,
     openGame: (id, options = {}) => openPosition(id, options), // a game opens like a position (its tree, no puzzles)
-    shownIn: (key) => panesFor(key, "moves").length > 0 || panesFor(key, "inspector").length > 0,
+    shownIn: (key) => ["moves", "inspector", "puzzle"].some((view) => panesFor(key, view).length > 0),
     preview: previewPosition,
     endPreview,
     current,
     focusInspector,
+    focusPuzzle,
     analyseNew,
   },
 })

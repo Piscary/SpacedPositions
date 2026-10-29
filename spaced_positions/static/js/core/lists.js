@@ -16,7 +16,8 @@ function listState(list) {
   return state.get(list)
 }
 
-const rowsOf = (list) => [...list.querySelectorAll("[data-row]")].filter((row) => !row.closest("[hidden]")) // folded or filtered out: skipped
+// folded (a collapsed section) or filtered out: skipped
+const rowsOf = (list) => [...list.querySelectorAll("[data-row]")].filter((row) => !row.closest("[hidden], .is-collapsed > .section__body"))
 
 function paint(list) {
   const st = listState(list)
@@ -185,9 +186,33 @@ on("focus", () => {
   }
 })
 
-// ── Sections: z / Z, click on a header, g + letter ────────────────────────────────────────────────────────────
+// ── Sections: z / Z, ] / [, click on a header, g + letter ───────────────────────────────────────────────────────
+// One rule in every pane, so it becomes muscle memory: ] and [ (and g + a section's letter) go to the next /
+// previous section, unfold it and put the pane's cursor on its first item (a list's first row, the Stats pane's
+// first chart); j / k go on from there. [ inside a section goes to its first item before the section above. The
+// section of the cursor is the current one. A list's groups (the Library sorted by source, the filter facets, the
+// keymap) are sections too.
 
-const sectionCursor = new WeakMap() // pane element → section element
+const sectionCursor = new WeakMap() // pane element → section element: where the cursor (or the last jump) is
+
+function setSectionCursor(section) {
+  const pane = section.closest("[data-pane]")
+  if (!pane) return
+  pane.querySelectorAll("[data-section].is-cursor").forEach((s) => s.classList.remove("is-cursor"))
+  section.classList.add("is-cursor")
+  sectionCursor.set(pane, section)
+}
+
+/** The cursor moved to `item` (a row, a chart): its section becomes the current one. The item shows the cursor,
+ *  so no section header is highlighted meanwhile. */
+export function noteSection(item) {
+  const section = item?.closest("[data-section]")
+  const pane = section?.closest("[data-pane]")
+  if (!pane) return
+  pane.querySelectorAll("[data-section].is-cursor").forEach((s) => s.classList.remove("is-cursor"))
+  sectionCursor.set(pane, section)
+}
+on("list:cursor", ({ row }) => noteSection(row))
 
 function currentSection() {
   const pane = ctx.pane?.el
@@ -197,13 +222,6 @@ function currentSection() {
   const body = pane.querySelector(".pane__body")
   const top = body?.getBoundingClientRect().top ?? 0
   return [...pane.querySelectorAll("[data-section]")].find((s) => s.getBoundingClientRect().bottom > top) || null
-}
-
-function setSectionCursor(section) {
-  const pane = section.closest("[data-pane]")
-  pane.querySelectorAll("[data-section].is-cursor").forEach((s) => s.classList.remove("is-cursor"))
-  section.classList.add("is-cursor")
-  sectionCursor.set(pane, section)
 }
 
 export function setCollapsed(section, collapsed) {
@@ -219,40 +237,49 @@ handle("section.toggle", () => {
   setCollapsed(section, !section.classList.contains("is-collapsed"))
 })
 
-/** The heads of a list's groups (the Library sorted by source, the filter pane's facets): its "sections". */
+/** The heads of a list's groups: its sections. */
 const GROUP_HEADS = "[data-group-head], .filters__group"
+const ITEMS = "[data-list] [data-row], figure[data-chart]"
+const isShown = (el) => !el.closest("[hidden]")
 
-/** `]` / `[` in a list with groups: the cursor to the first row of the next / previous group. */
-function moveGroup(step) {
-  const list = focusedList()
-  const heads = list ? [...list.querySelectorAll(GROUP_HEADS)] : []
-  if (!heads.length) return false
-  const rows = rowsOf(list)
-  const firstOf = (head) => rows.find((r) => head.compareDocumentPosition(r) & Node.DOCUMENT_POSITION_FOLLOWING)
-  const cursorRow = rows[listState(list).cursor]
-  const index = cursorRow ? heads.filter((h) => h.compareDocumentPosition(cursorRow) & Node.DOCUMENT_POSITION_FOLLOWING).length - 1 : -1
-  // back: to the start of this group first, when the cursor is inside it
-  const atStart = cursorRow && index >= 0 && firstOf(heads[index]) === cursorRow
-  const target = step > 0 ? index + 1 : (atStart || index < 0 ? index - 1 : index)
-  const head = heads[Math.max(0, Math.min(heads.length - 1, target))]
-  const row = firstOf(head)
-  if (!row) return false
-  moveTo(list, rows.indexOf(row))
-  head.scrollIntoView({ block: "nearest" })
+/** The pane's sections in order, each with its items: [{el, items}]. */
+function sectionsOf(pane) {
+  const sections = [...pane.querySelectorAll("[data-section]")].filter(isShown)
+  if (sections.length) return sections.map((el) => ({ el, items: [...el.querySelectorAll(ITEMS)].filter(isShown) }))
+  const list = pane.querySelector("[data-list]")
+  const heads = list ? [...list.querySelectorAll(GROUP_HEADS)].filter(isShown) : []
+  const rows = list ? rowsOf(list) : []
+  const after = (a, b) => a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING
+  return heads.map((el, i) => ({ el, items: rows.filter((r) => after(el, r) && (!heads[i + 1] || after(r, heads[i + 1]))) }))
 }
 
+const cursorItem = (pane) => pane.querySelector("[data-list] [data-row].is-cursor, figure[data-chart].is-focused")
+
 function moveSection(step) {
-  const sections = [...(ctx.pane?.el?.querySelectorAll("[data-section]") || [])]
-  if (!sections.length) return moveGroup(step)
-  const current = currentSection()
-  const index = current ? sections.indexOf(current) : -1
-  const next = sections[Math.max(0, Math.min(sections.length - 1, index + step))]
-  setSectionCursor(next)
-  next.scrollIntoView({ block: "start" })
-  // in a list made of sections (Settings), the list's cursor goes along to the section's first row
-  const list = next.closest("[data-list]")
-  const row = list && [...next.querySelectorAll("[data-row]")].find((r) => !r.closest("[hidden]"))
-  if (row) moveTo(list, rowsOf(list).indexOf(row))
+  const pane = ctx.pane?.el
+  const sections = pane ? sectionsOf(pane) : []
+  if (!sections.length) return false
+  const item = cursorItem(pane)
+  const groups = !sections[0].el.matches("[data-section]")
+  const current = groups ? sections.findIndex((s) => s.items.includes(item)) : sections.findIndex((s) => s.el === currentSection())
+  const inside = current >= 0 && sections[current].items.includes(item)
+  const target = step < 0 && inside && sections[current].items[0] !== item ? current : current + step
+  enterSection(sections[Math.max(0, Math.min(sections.length - 1, target))])
+}
+
+/** Go into a section: unfolded, in view, the cursor on its first item. */
+function enterSection({ el, items }) {
+  if (el.matches("[data-section]")) {
+    setCollapsed(el, false)
+    setSectionCursor(el)
+  }
+  el.scrollIntoView({ block: "start" })
+  const first = items[0]
+  if (first?.matches("[data-row]")) { // the row shows the cursor (noteSection)
+    const list = first.closest("[data-list]")
+    moveTo(list, rowsOf(list).indexOf(first))
+  }
+  emit("section:enter", { section: el, item: first || null })
 }
 handle("section.next", () => moveSection(1))
 handle("section.prev", () => moveSection(-1))
@@ -276,11 +303,7 @@ addDynamicPrefix((seq) => {
   return [...ctx.pane.el.querySelectorAll("[data-section-key]")].map((section) => ({
     key: section.dataset.sectionKey,
     label: `Section: ${section.querySelector(".section__title")?.textContent || ""}`,
-    action: () => {
-      setCollapsed(section, false)
-      setSectionCursor(section)
-      section.scrollIntoView({ block: "start" })
-    },
+    action: () => enterSection(sectionsOf(ctx.pane.el).find((s) => s.el === section) || { el: section, items: [] }),
   }))
 })
 

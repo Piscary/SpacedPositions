@@ -10,7 +10,8 @@
   <dt>{% translate "Tags" %}</dt><dd>{% blocktranslate trimmed %}{{ tags }} the move's tags, {{ ptags }} the position's: what it has is listed first, ↵ adds or takes one off, ⇥ does it and stays open for the next.{% endblocktranslate %}</dd>
   <dt>{% translate "Comment and annotate" %}</dt><dd>{% blocktranslate trimmed %}{{ comment }} comment on the move; {{ good }} … 7 symbols like ! and ?; {{ annotate }} all symbols; {{ mark }} marks the move as good.{% endblocktranslate %}</dd>
   <dt>{% translate "Tidy up" %}</dt><dd>{% blocktranslate trimmed %}{{ promote }} makes a variation the main line, {{ delete }} deletes from the cursor on, {{ fold }} folds a variation away.{% endblocktranslate %}</dd>
-  <dt>{% translate "Make a puzzle" %}</dt><dd>{% blocktranslate trimmed %}Go to the move after which the puzzle starts, {{ start }}; at the last move of the solution {{ end }}; {{ ready }} puts it into training.{% endblocktranslate %}</dd>
+  <dt>{% translate "Make a puzzle" %}</dt><dd>{% blocktranslate trimmed %}Go to the move after which the puzzle starts, {{ start }}; at the last move of the solution {{ end }}; {{ ready }} puts it into training. The Puzzle pane shows each step and what applies at the cursor.{% endblocktranslate %}</dd>
+  <dt>{% translate "The start position" %}</dt><dd>{% translate "Start, before the first move, goes there (or g g); it is highlighted while the board shows the start." %}</dd>
   <dt>{% translate "Next position" %}</dt><dd>{% blocktranslate trimmed %}Opened from a list (the Library, a training result), {{ next }} and {{ prev }} go through it. A list from a search stays live: what is done drops out.{% endblocktranslate %}</dd>
 {% endblock %}
 {% block with %}{% translate "The board, engine, inspector and graphs of the same link group. Next to the Library (same link group), the tree shows the row under the list's cursor." %}{% endblock %}

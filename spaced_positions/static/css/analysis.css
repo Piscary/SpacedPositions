@@ -27,6 +27,23 @@
 .mt-move.is-path { background: var(--cursor-row); }
 .mt-move.is-cursor { background: var(--main); color: var(--main-text); }
 .mt-move.is-cursor .mt-num, .mt-move.is-cursor .mt-nag { color: inherit; }
+/* The start position: a quiet token before the first move, the cursor's colour while the board shows it. */
+.mt-start {
+  margin-right: var(--s-1);
+  padding: 0 var(--s-half);
+  border: var(--rule) solid var(--line);
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  font-family: var(--font-ui);
+  font-size: var(--fs-xs);
+  vertical-align: middle;
+  cursor: pointer;
+}
+.mt-start::before { content: "⏮ "; }
+.mt-start:hover { background: var(--surface-hover); color: var(--text); }
+.mt-start.is-cursor { border-color: var(--main); background: var(--main); color: var(--main-text); }
 .mt-num { margin-right: var(--s-half); color: var(--text-muted); font-weight: 400; }
 .mt-num:empty { display: none; }
 .mt-nag { color: var(--main); }
@@ -87,6 +104,47 @@
 .inspector__marks .mark-good { border-bottom: calc(var(--rule) * 2) solid var(--mark-good); }
 .inspector__marks .mark-dubious { border-bottom: calc(var(--rule) * 2) solid var(--mark-dubious); }
 .inspector__marks .mark-bad { border-bottom: calc(var(--rule) * 2) solid var(--mark-bad); }
+
+/* ── Puzzle pane: the setup in three steps, the cursor's place in words, the lines as text ─────────────────── */
+.pzpane-view { min-height: 100%; }
+.pzpane { display: grid; gap: var(--s-1); padding: var(--s-1) var(--s-2) var(--s-2); font-size: var(--fs-sm); }
+.pzpane__none { padding: var(--s-2); }
+.pzpane p { margin: 0; }
+.pzpane__where { padding: var(--s-half) var(--s-1); border-left: calc(var(--rule) * 3) solid var(--line); background: var(--bg-alt); }
+.pzpane__where--start, .pzpane__where--solver, .pzpane__where--also, .pzpane__where--answer { border-left-color: var(--puzzle); }
+.pzpane__steps { display: grid; gap: var(--s-1); margin: 0; padding: 0; list-style: none; }
+.pzpane__step { display: grid; gap: var(--s-half); }
+.pzpane__head { display: flex; flex-wrap: wrap; gap: var(--s-1); align-items: baseline; }
+.pzpane__n {
+  display: inline-grid;
+  place-items: center;
+  width: calc(var(--font-size) * 1.3);
+  height: calc(var(--font-size) * 1.3);
+  border: var(--rule) solid var(--line);
+  border-radius: 50%;
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+}
+.pzpane__step.is-now .pzpane__n { border-color: var(--puzzle); color: var(--puzzle); }
+.pzpane__step.is-done .pzpane__n { border-color: var(--puzzle); background: var(--puzzle); color: var(--main-text); }
+.pzpane__text, .pzpane__why { font-size: var(--fs-xs); }
+.pzpane .actionbar { flex-wrap: wrap; padding: 0; }
+.pzpane .keybutton[aria-pressed="true"] { background: var(--selection); border-color: var(--main); }
+.pzpane__lines { display: grid; gap: var(--s-half); margin: 0; padding-left: var(--s-3); font-family: var(--font-moves); }
+.pzpane__line.is-here { color: var(--text); font-weight: 600; }
+.pzpane__move { padding: 0 var(--s-half); border-radius: var(--radius); cursor: pointer; }
+.pzpane__move:hover { background: var(--surface-hover); }
+.pzpane__others { display: flex; flex-wrap: wrap; gap: var(--s-half); align-items: center; }
+.pzpane__puzzle { cursor: pointer; }
+.pzpane__puzzle.is-current { border-color: var(--puzzle); }
+.pzpane__puzzle.is-draft { color: var(--text-muted); }
+.pzpane__legend { display: flex; flex-wrap: wrap; gap: var(--s-1); align-items: baseline; font-size: var(--fs-xs); }
+.pzpane__key { padding: 0 var(--s-half); color: var(--text); }
+.pzpane__key--start { outline: calc(var(--rule) * 2) solid var(--puzzle); outline-offset: calc(var(--rule) * -1); }
+.pzpane__key--solver { text-decoration: underline var(--puzzle) calc(var(--rule) * 2); text-underline-offset: calc(var(--rule) * 3); }
+.pzpane__key--answer { text-decoration: underline dotted var(--puzzle) calc(var(--rule) * 2); text-underline-offset: calc(var(--rule) * 3); }
+.pzpane__key--end::after { content: "▪"; margin-left: var(--s-half); color: var(--puzzle); }
+.pzpane__list { display: flex; flex-wrap: wrap; gap: var(--s-1); align-items: center; padding-top: var(--s-1); border-top: var(--rule) solid var(--line); }
 
 /* ── Engine ────────────────────────────────────────────────────────────────────────────────────────────────── */
 .engine { display: grid; gap: var(--s-1); padding: var(--s-1) var(--s-2); }

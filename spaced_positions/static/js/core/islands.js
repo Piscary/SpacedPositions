@@ -5,7 +5,7 @@ import { on } from "./context.js"
 import { tickIn } from "./ticker.js"
 import { mountBoard, renderLineText } from "../islands/board.js"
 import { mountTrain } from "../islands/train.js"
-import { mountInspector, mountMoves } from "./analysis.js"
+import { mountInspector, mountMoves, mountPuzzle } from "./analysis.js"
 import { mountEngine } from "./engine.js"
 import { mountFilters, mountLibrary } from "./library.js"
 import { mountEntry } from "./collect.js"
@@ -19,6 +19,7 @@ const MOUNT = {
   train: mountTrain,
   moves: mountMoves,
   inspector: mountInspector,
+  puzzle: mountPuzzle,
   engine: mountEngine,
   library: mountLibrary,
   filters: mountFilters,

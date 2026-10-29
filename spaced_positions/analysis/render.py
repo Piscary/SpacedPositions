@@ -6,6 +6,7 @@ from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 
+from spaced_positions.core import registry
 from spaced_positions.library.models import NodeTag
 
 from . import puzzles as analysis_puzzles
@@ -65,10 +66,14 @@ def render(position) -> str:
     move_tags = {}
     for link in NodeTag.objects.filter(node__in=[n.id for n in all_nodes]).order_by("tag__field__order").select_related("tag"):
         move_tags.setdefault(link.node_id, []).append(link.tag.label)
-    parts = []
+    # The start position as the first token: a click goes there, and it is highlighted while the board shows it.
+    keys = " ".join(registry.primary_keys("analysis.start", None, "mode.analyse") or [])
+    parts = [format_html('<button type="button" class="mt-start" data-node="{}" title="{}">{}</button>', root.id,
+                         _("The start position ({keys})").replace("{keys}", keys), _("Start"))]
     start_role = roles.get(root.id)
     if start_role:
-        parts.append(format_html('<div class="mt-puzzle{}">▶ Puzzle from the start{}</div>', " is-draft" if start_role["draft"] else "", " (draft)" if start_role["draft"] else ""))
+        parts.append(format_html('<div class="mt-puzzle{}">▶ {}</div>', " is-draft" if start_role["draft"] else "",
+                                 _("Puzzle from the start (draft)") if start_role["draft"] else _("Puzzle from the start")))
     if root.comment:
         parts.append(format_html('<p class="mt-comment mt-comment--root" data-comment="{}">{}</p>', root.id, root.comment))
     if kids.get(root.id):
@@ -76,6 +81,16 @@ def render(position) -> str:
     else:
         parts.append(format_html('<p class="muted mt-empty">{}</p>', _("No moves yet: play one on the board, paste a PGN, or let the engine suggest one.")))
     return format_html('<div class="movetree" data-movetree data-root="{}">{}</div>', root.id, mark_safe("".join(str(p) for p in parts)))
+
+
+def line_html(start_fen: str, moves) -> str:
+    """A line of moves as text (the Puzzle pane's lines), each move going there on a click."""
+    out, before = [], start_fen
+    for i, node in enumerate(moves):
+        out.append(str(format_html('<span class="pzpane__move" data-node="{}"><span class="mt-num">{}</span>{}</span>',
+                                   node.id, _number(before, i == 0), san_html(node.san))))
+        before = node.fen
+    return mark_safe(" ".join(out))
 
 
 def _token(node, roles, fens, force_number, tags):

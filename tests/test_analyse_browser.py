@@ -139,7 +139,7 @@ def test_engine_lines_eval_bar_and_best_move(page, ruy):
     assert page.evaluate("window.SPOS.engine.state().enabled")
     before = ruy.nodes.count()
     keys(page, "Enter")  # play the engine's best move
-    page.wait_for_function(f"document.querySelectorAll('#ws-analyse [data-movetree] [data-node]').length === {before}", timeout=5000)
+    page.wait_for_function(f"document.querySelectorAll('#ws-analyse [data-movetree] .mt-move').length === {before}", timeout=5000)
     assert ruy.nodes.count() == before + 1
     keys(page, "e")
     page.wait_for_selector("#ws-analyse [data-evalbar][hidden]", state="attached")
@@ -187,7 +187,8 @@ def test_train_feedback_opens_the_puzzle_in_analyse(page, ruy):
     keys(page, "e")  # edit the puzzle in Analyse
     page.wait_for_function("window.SPOS.ctx.mode === 'analyse'")
     page.wait_for_selector("#ws-analyse .mt-puzzle")
-    page.wait_for_selector("#ws-analyse [data-section-key=z]:not(.is-collapsed) >> text=in training")
+    page.wait_for_selector("#ws-analyse [data-island=puzzle] >> text=in training")  # the Puzzle pane, focused
+    page.wait_for_function("window.SPOS.ctx.pane.view === 'puzzle'")
 
 
 def test_result_list_opens_its_puzzles_in_analyse(page, ruy):

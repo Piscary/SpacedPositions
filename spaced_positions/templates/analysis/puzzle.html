@@ -1,0 +1,69 @@
+<div class="pzpane" data-puzzlepane data-node="{{ node.id }}">
+{% if game %}
+  <p class="muted pzpane__none">{% translate "Puzzles come from positions, not from games: O makes the position at this move one of its own, with its own analysis." %}</p>
+  <div class="actionbar">{% cmd "analysis.newposition" size="sm" %}</div>
+{% else %}
+  <p class="pzpane__where pzpane__where--{{ kind }}">{{ where }}</p>
+
+  <ol class="pzpane__steps">
+    <li class="pzpane__step{% if puzzle %} is-done{% else %} is-now{% endif %}">
+      <div class="pzpane__head"><span class="pzpane__n" aria-hidden="true">1</span><b>{% translate "Start" %}</b>
+        <span class="muted">{% if puzzle %}{% blocktranslate trimmed with start=start_label side=side %}{{ start }} · {{ side }} to move{% endblocktranslate %}{% else %}{% translate "where the solver begins" %}{% endif %}</span></div>
+      {% if not puzzle %}
+      <p class="muted pzpane__text">{% keycap "g g" as gg %}{% blocktranslate trimmed %}Go to the move after which the solver moves ({{ gg }}: the start position), then set the puzzle up. It starts as a draft.{% endblocktranslate %}</p>
+      <div class="actionbar">{% cmd "analysis.puzzle" args="start" label=_("Set up a puzzle from here") size="sm" disabled=can_start %}</div>
+      {% if can_start %}<p class="muted pzpane__why">{{ can_start }}</p>{% endif %}
+      {% endif %}
+    </li>
+
+    <li class="pzpane__step{% if lines %} is-done{% elif puzzle %} is-now{% endif %}">
+      <div class="pzpane__head"><span class="pzpane__n" aria-hidden="true">2</span><b>{% translate "Solution" %}</b>
+        {% if puzzle %}<span class="muted">{% blocktranslate trimmed count n=lines|length %}{{ n }} line, one card{% plural %}{{ n }} lines, a card each{% endblocktranslate %}</span>{% endif %}</div>
+      {% if puzzle %}
+      {% if lines %}
+      <ol class="pzpane__lines">{% for line in lines %}<li class="pzpane__line{% if line.has_cursor %} is-here{% endif %}">{{ line.html }}</li>{% endfor %}</ol>
+      {% if more_lines %}<p class="muted pzpane__text">{% blocktranslate trimmed count n=more_lines %}and {{ n }} more line{% plural %}and {{ n }} more lines{% endblocktranslate %}</p>{% endif %}
+      {% else %}
+      <p class="muted pzpane__text">{% translate "Nothing to solve yet: play the solution on the board after the start. The main line is the solution; a line stops at a move marked as its end or where the analysis ends." %}</p>
+      {% endif %}
+      <div class="actionbar">
+        {% cmd "analysis.puzzle" args="end" label=_("Solution ends here") size="sm" disabled=can_end pressed=end_on %}
+        {% cmd "analysis.puzzle" args="also" label=_("Also correct") size="sm" disabled=can_also pressed=also_on %}
+        {% cmd "analysis.puzzle" args="answers" label=_("All answers count") size="sm" disabled=can_answers %}
+      </div>
+      {% if why %}<p class="muted pzpane__why">{{ why }}</p>{% endif %}
+      {% else %}
+      <p class="muted pzpane__text">{% translate "After the start: the moves the solver must find and the answers the trainer plays." %}</p>
+      {% endif %}
+    </li>
+
+    <li class="pzpane__step{% if puzzle.active %} is-done{% elif lines %} is-now{% endif %}">
+      <div class="pzpane__head"><span class="pzpane__n" aria-hidden="true">3</span><b>{% translate "Training" %}</b>
+        {% if puzzle %}<span class="muted">{% if puzzle.active %}{% blocktranslate trimmed count n=cards %}in training · {{ n }} card{% plural %}in training · {{ n }} cards{% endblocktranslate %}{% if attempts %} · {% blocktranslate trimmed count n=attempts %}solved or missed {{ n }} time{% plural %}solved or missed {{ n }} times{% endblocktranslate %}{% endif %}{% else %}{% translate "a draft: not trained yet" %}{% endif %}</span>{% endif %}</div>
+      {% if puzzle %}
+      <div class="actionbar">
+        {% if puzzle.active %}{% cmd "analysis.puzzle" args="ready" label=_("Take out of training") size="sm" %}{% else %}{% cmd "analysis.puzzle" args="ready" label=_("Ready for training") size="sm" variant="primary" disabled=can_ready %}{% endif %}
+        {% cmd "analysis.puzzle" args="discard" label=_("Discard") size="sm" %}
+      </div>
+      {% else %}
+      <p class="muted pzpane__text">{% translate "When the solution is right, the puzzle goes into training: each line a card of its own." %}</p>
+      {% endif %}
+    </li>
+  </ol>
+
+  {% if puzzles|length > 1 or puzzles and not puzzle %}
+  <div class="pzpane__others"><span class="muted">{% translate "Puzzles of this position:" %}</span>
+    {% for p in puzzles %}<button type="button" class="chip pzpane__puzzle{% if p.current %} is-current{% endif %}{% if not p.active %} is-draft{% endif %}" data-node="{{ p.node }}" title="{% translate "Go to its start" %}">{{ p.label }}{% if not p.active %} · {% translate "draft" %}{% endif %}</button>{% endfor %}
+  </div>
+  {% endif %}
+
+  <p class="pzpane__legend muted">{% translate "In the moves:" %} <span class="pzpane__key pzpane__key--start">{% translate "start" %}</span> <span class="pzpane__key pzpane__key--solver">{% translate "solver" %}</span> <span class="pzpane__key pzpane__key--answer">{% translate "answer" %}</span> <span class="pzpane__key pzpane__key--end">{% translate "end" %}</span></p>
+
+  {% if list %}
+  <div class="pzpane__list">
+    <span class="muted">{% blocktranslate trimmed with i=list.index|add:1 n=list.count %}Position {{ i }} of {{ n }} in the list{% endblocktranslate %}</span>
+    {% cmd "analysis.subject" args="prev" label=_("Previous") size="sm" %}{% cmd "analysis.subject" args="next" label=_("Next") size="sm" %}
+  </div>
+  {% endif %}
+{% endif %}
+</div>

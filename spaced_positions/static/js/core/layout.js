@@ -291,7 +291,9 @@ function touch(mode) {
   if (i >= 0) recent.splice(i, 1)
   recent.push(mode)
   while (recent.length > KEEP_ALIVE) {
-    const index = recent.findIndex((m) => m !== ctx.mode && m !== mode) // never the one on screen
+    // never the one on screen, nor one that holds work in progress (data-keep: a running training session)
+    const index = recent.findIndex((m) => m !== ctx.mode && m !== mode && !workspaces.get(m)?.el.dataset.keep)
+    if (index < 0) break
     const [old] = recent.splice(index, 1)
     workspaces.get(old)?.el.remove()
     workspaces.delete(old)

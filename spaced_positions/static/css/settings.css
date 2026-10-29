@@ -20,7 +20,7 @@
   .settings__row .list__meta { display: none; }
 }
 
-.keymap__row { grid-template-columns: 6rem minmax(0, 1fr) auto; }
+.keymap__row { grid-template-columns: minmax(0, 1fr) auto; }
 .keymap__keys { display: flex; flex-wrap: wrap; gap: var(--s-half); }
 .keymap__binding { padding: 0 var(--s-half); border: var(--rule) solid var(--line); border-radius: var(--radius); font-family: var(--font-mono); }
 .keymap__binding.is-mine { border-color: var(--main); color: var(--main); }

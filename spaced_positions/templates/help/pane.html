@@ -8,6 +8,7 @@
   <dt>{% translate "Choose what a pane shows" %}</dt><dd>{% blocktranslate trimmed %}{{ view_key }}, then the letter of a view.{% endblocktranslate %}</dd>
   <dt>{% translate "Split a pane" %}</dt><dd>{% blocktranslate trimmed %}{{ vsplit }} side by side, {{ hsplit }} above and below; {{ close }} closes the pane again.{% endblocktranslate %}</dd>
   <dt>{% translate "Make one pane big" %}</dt><dd>{% blocktranslate trimmed %}{{ maximize }}; the same keys bring the others back.{% endblocktranslate %}</dd>
+  {% key "section.next" as next_section %}{% key "section.prev" as prev_section %}<dt>{% translate "Sections" %}</dt><dd>{% blocktranslate trimmed %}{{ next_section }} and {{ prev_section }} go to the next and previous section in every pane (also g and the letter in its header): it opens, and the cursor is on its first row, so j and k go on from there.{% endblocktranslate %}</dd>
   <dt>{% translate "Move between panes" %}</dt><dd>{% blocktranslate trimmed %}{{ next_pane }}, or click into a pane. The focused pane has a coloured header.{% endblocktranslate %}</dd>
   <dt>{% translate "Link panes" %}</dt><dd>{% blocktranslate trimmed %}Panes with the same letter in their header (A, B …) work together: a list, a board and a move tree of group A show the same thing. {{ group }} changes the letter.{% endblocktranslate %}</dd>
 {% endblock %}

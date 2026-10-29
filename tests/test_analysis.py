@@ -222,7 +222,8 @@ def test_render_is_a_book_with_variations_and_comments(ruy):
     assert '<span class="mt-num">1…</span><span class="mt-san">e5</span>' in html  # a black move after a comment gets its number
     assert 'data-variation="%d" data-more="0"><button type="button" class="mt-caret" data-fold' % c5.id in html  # a fold caret
     assert '<span class="mt-label">A</span>' in html
-    assert html.count("data-node=") == 6
+    assert html.count("data-node=") == 7  # six moves and the start position before them
+    assert 'class="mt-start" data-node="%d"' % tree.root(c5.position).id in html
     empty = tree.create_position(START, [])
     assert "No moves yet" in render.render(empty)
 
@@ -278,7 +279,12 @@ def test_replace_create_puzzle_inspector_and_search(client, ruy):
     setup = post(client, f"/analysis/{pid}/puzzle/", {"node": root, "action": "start"}).json()
     assert setup["message"].startswith("Puzzle set up") and setup["tree"]["puzzles"][0]["start"] == root
     html = client.get(f"/analysis/{pid}/inspector/", {"node": root}).content.decode()
-    assert "data-comment-form" in html and "draft" in html
+    assert "data-comment-form" in html
+    pane = client.get(f"/analysis/{pid}/puzzle-pane/", {"node": root, "list": "2/5"}).content.decode()
+    assert "a draft: not trained yet" in pane and "pzpane__where--start" in pane and "Position 3 of 5 in the list" in pane
+    assert 'data-args="also" title="Puzzle: go to one of the solver&#x27;s moves" aria-disabled="true"' in pane
+    on_d4 = client.get(f"/analysis/{pid}/puzzle-pane/", {"node": node_at(ruy, "d4").id}).content.decode()
+    assert "pzpane__where--solver" in on_d4 and "1 line, one card" in on_d4
     move = client.get(f"/analysis/{pid}/inspector/", {"node": node_at(ruy, "d4").id}).content.decode()
     assert 'data-cmd="analysis.nag"' in move
     created = post(client, "/analysis/new/", {"start": START, "moves": ["g1f3"], "title": "Réti"}).json()

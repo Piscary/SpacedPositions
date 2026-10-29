@@ -4,8 +4,9 @@
 // drill down on click too.
 
 import { handle } from "./commands.js"
-import { ctx, status } from "./context.js"
+import { ctx, on, status } from "./context.js"
 import { switchMode } from "./layout.js"
+import { noteSection } from "./lists.js"
 import { tickIn } from "./ticker.js"
 import { tr } from "./i18n.js"
 
@@ -28,7 +29,13 @@ function focusChart(figure) {
   for (const f of figures(root)) f.classList.toggle("is-focused", f === figure)
   figure.scrollIntoView({ block: "nearest" })
   if (!cursors.has(figure)) setCursor(figure, pointsOf(figure).length - 1)
+  noteSection(figure)
 }
+
+// ] / [ into a section: its first chart is the focused one, so j / k go on from there.
+on("section:enter", ({ item }) => {
+  if (item?.matches("figure[data-chart]")) focusChart(item)
+})
 
 function focused(root) {
   return root.querySelector("figure[data-chart].is-focused") || figures(root)[0] || null

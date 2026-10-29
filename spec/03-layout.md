@@ -131,6 +131,11 @@ summary, its own key and a collapse caret; the body below.
 - Sections can be *pinned open* by the view (e.g. the puzzle prompt in Train) so they can't be collapsed.
 - `␣ 1`–`␣ 9` are panes; inside a pane, sections are reached with `g` + their letter (`g t` tags, `g c` comment),
   shown in their header, and stepped through with `]` / `[` (next / previous section).
+- **One rule in every pane** (consistency over the ideal for each view, so it becomes muscle memory): going to a
+  section (`]`, `[`, `g` + letter) unfolds it and puts the pane's cursor on its first item (a list's first row,
+  the Stats pane's first chart); `j` / `k` go on from there. `[` inside a section goes to its first item before the
+  section above. The section of the cursor is the current one. A list's groups (the Library sorted by source, the
+  filter facets, the keymap's command groups) count as sections.
 
 ### Moving inside the focused pane
 

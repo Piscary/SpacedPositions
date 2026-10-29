@@ -46,9 +46,11 @@ def key(context, cid: str, args: str = "", keys_in: str = ""):
 
 
 @register.simple_tag(takes_context=True)
-def cmd(context, cid: str, display="full", variant="secondary", label="", args="", size="md", icon="", extra="", keys_in=""):
+def cmd(context, cid: str, display="full", variant="secondary", label="", args="", size="md", icon="", extra="", keys_in="",
+        disabled="", pressed=None):
     """A KeyButton. Label, keys and disabled reason come from the registry, so a button and its key can't differ.
-    keys_in: show the key of that context (e.g. "state.result") when the command has several."""
+    keys_in: show the key of that context (e.g. "state.result") when the command has several. disabled: why it can't
+    be used here (the button is greyed and says so on hover). pressed: a toggle's state (aria-pressed)."""
     spec = registry.command(cid)
     arg_list = args.split() if args else []
     keys = registry.primary_keys(cid, arg_list or None, keys_in or None) or registry.primary_keys(cid)
@@ -67,13 +69,18 @@ def cmd(context, cid: str, display="full", variant="secondary", label="", args="
         parts.append(keycaps_html(keys, _is_mac(context)))
     elif display != "full":
         parts.append(format_html('<span class="keybutton__label">{}</span>', title))
+    extra_attrs = format_html(' aria-label="{}"', gettext(spec["title"])) if display != "full" else mark_safe("")
+    if disabled:
+        extra_attrs += mark_safe(' aria-disabled="true"')
+    if pressed is not None:
+        extra_attrs += format_html(' aria-pressed="{}"', "true" if pressed else "false")
     return format_html(
         '<button type="button" class="{}" data-cmd="{}" data-args="{}" title="{}"{}>{}</button>',
         " ".join(classes),
         cid,
         " ".join(arg_list),
-        gettext(spec["title"]),
-        format_html(' aria-label="{}"', gettext(spec["title"])) if display != "full" else "",
+        f"{gettext(spec['title'])}: {disabled}" if disabled else gettext(spec["title"]),
+        extra_attrs,
         mark_safe("".join(str(p) for p in parts)),
     )
 

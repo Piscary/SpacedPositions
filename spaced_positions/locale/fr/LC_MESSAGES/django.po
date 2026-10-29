@@ -100,72 +100,6 @@ msgid "Move %(move)s"
 msgstr "Coup %(move)s"
 
 #: templates/analysis/inspector.html
-msgid "set up"
-msgstr "configuré"
-
-#: templates/analysis/inspector.html templates/training/result.html library/importer.py:60
-msgid "Puzzle"
-msgstr "Exercice"
-
-#: templates/analysis/inspector.html templates/library/results.html
-msgid "in training"
-msgstr "en entraînement"
-
-#: templates/analysis/inspector.html templates/library/results.html
-msgid "draft"
-msgstr "brouillon"
-
-#: templates/analysis/inspector.html templates/library/results.html
-msgid "%(n)s card"
-msgid_plural "%(n)s cards"
-msgstr[0] "%(n)s carte"
-msgstr[1] "%(n)s cartes"
-
-#: templates/analysis/inspector.html
-msgid "it starts here"
-msgstr "il commence ici"
-
-#: templates/analysis/inspector.html
-msgid "starts at %(move)s"
-msgstr "commence à %(move)s"
-
-#: templates/analysis/inspector.html
-msgid "starts at the start"
-msgstr "commence dans la position de départ"
-
-#: templates/analysis/inspector.html
-msgid "Solution ends here"
-msgstr "La solution s'arrête ici"
-
-#: templates/analysis/inspector.html analysis/puzzles.py:150
-msgid "Also correct"
-msgstr "Aussi correct"
-
-#: templates/analysis/inspector.html
-msgid "All answers count"
-msgstr "Toutes les réponses comptent"
-
-#: templates/analysis/inspector.html
-msgid "Take out of training"
-msgstr "Retirer de l'entraînement"
-
-#: templates/analysis/inspector.html templates/views/entry.html analysis/puzzles.py:134
-msgid "Ready for training"
-msgstr "Prêt pour l'entraînement"
-
-#: templates/analysis/inspector.html
-msgid "Discard"
-msgstr "Abandonner"
-
-#: templates/analysis/inspector.html
-msgid "No puzzle here. Go to the move after which the puzzle starts (or the start position) and set one up: its solution is the analysis from there."
-msgstr "Pas d'exercice ici. Allez au coup après lequel l'exercice commence (ou à la position de départ) et créez-le : sa solution est l'analyse à partir de là."
-
-#: templates/analysis/inspector.html
-msgid "Set up a puzzle from here"
-msgstr "Créer un exercice à partir d'ici"
-
-#: templates/analysis/inspector.html
 msgid "source · objective · FEN"
 msgstr "source · objectif · FEN"
 
@@ -210,6 +144,146 @@ msgstr "Positions"
 #: templates/analysis/inspector_game.html
 msgid "Puzzles come from positions: %(colon)s<code>new-position</code> takes the position after this move out of the game."
 msgstr "Les exercices viennent des positions : %(colon)s<code>new-position</code> sort la position après ce coup de la partie."
+
+#: templates/analysis/puzzle.html
+msgid "Puzzles come from positions, not from games: O makes the position at this move one of its own, with its own analysis."
+msgstr "Les exercices viennent des positions, pas des parties : O fait de la position à ce coup une position à part, avec sa propre analyse."
+
+#: templates/analysis/puzzle.html templates/training/launcher.html analysis/render.py:72
+msgid "Start"
+msgstr "Démarrer"
+
+#: templates/analysis/puzzle.html
+msgid "%(start)s · %(side)s to move"
+msgstr "%(start)s · %(side)s au trait"
+
+#: templates/analysis/puzzle.html
+msgid "where the solver begins"
+msgstr "où commence le camp qui résout"
+
+#: templates/analysis/puzzle.html
+msgid "Go to the move after which the solver moves (%(gg)s: the start position), then set the puzzle up. It starts as a draft."
+msgstr "Allez au coup après lequel joue le camp qui résout (%(gg)s : la position de départ), puis créez l'exercice. Il commence comme brouillon."
+
+#: templates/analysis/puzzle.html
+msgid "Set up a puzzle from here"
+msgstr "Créer un exercice à partir d'ici"
+
+#: templates/analysis/puzzle.html
+msgid "Solution"
+msgstr "Solution"
+
+#: templates/analysis/puzzle.html
+msgid "%(n)s line, one card"
+msgid_plural "%(n)s lines, a card each"
+msgstr[0] "%(n)s ligne, une carte"
+msgstr[1] "%(n)s lignes, une carte chacune"
+
+#: templates/analysis/puzzle.html
+msgid "and %(n)s more line"
+msgid_plural "and %(n)s more lines"
+msgstr[0] "et %(n)s ligne de plus"
+msgstr[1] "et %(n)s lignes de plus"
+
+#: templates/analysis/puzzle.html
+msgid "Nothing to solve yet: play the solution on the board after the start. The main line is the solution; a line stops at a move marked as its end or where the analysis ends."
+msgstr "Rien à résoudre pour l'instant : jouez la solution sur l'échiquier après le départ. La ligne principale est la solution ; une ligne s'arrête à un coup marqué comme fin ou là où l'analyse s'arrête."
+
+#: templates/analysis/puzzle.html
+msgid "Solution ends here"
+msgstr "La solution s'arrête ici"
+
+#: templates/analysis/puzzle.html analysis/puzzles.py:150
+msgid "Also correct"
+msgstr "Aussi correct"
+
+#: templates/analysis/puzzle.html
+msgid "All answers count"
+msgstr "Toutes les réponses comptent"
+
+#: templates/analysis/puzzle.html
+msgid "After the start: the moves the solver must find and the answers the trainer plays."
+msgstr "Après le départ : les coups que le camp qui résout doit trouver et les réponses que joue l'entraîneur."
+
+#: templates/analysis/puzzle.html core/settings_view.py:26
+msgid "Training"
+msgstr "Entraînement"
+
+#: templates/analysis/puzzle.html
+msgid "in training · %(n)s card"
+msgid_plural "in training · %(n)s cards"
+msgstr[0] "en entraînement · %(n)s carte"
+msgstr[1] "en entraînement · %(n)s cartes"
+
+#: templates/analysis/puzzle.html
+msgid "solved or missed %(n)s time"
+msgid_plural "solved or missed %(n)s times"
+msgstr[0] "résolu ou manqué %(n)s fois"
+msgstr[1] "résolu ou manqué %(n)s fois"
+
+#: templates/analysis/puzzle.html
+msgid "a draft: not trained yet"
+msgstr "un brouillon : pas encore entraîné"
+
+#: templates/analysis/puzzle.html
+msgid "Take out of training"
+msgstr "Retirer de l'entraînement"
+
+#: templates/analysis/puzzle.html templates/views/entry.html analysis/puzzles.py:134
+msgid "Ready for training"
+msgstr "Prêt pour l'entraînement"
+
+#: templates/analysis/puzzle.html
+msgid "Discard"
+msgstr "Abandonner"
+
+#: templates/analysis/puzzle.html
+msgid "When the solution is right, the puzzle goes into training: each line a card of its own."
+msgstr "Quand la solution est juste, l'exercice passe à l'entraînement : chaque ligne une carte à part."
+
+#: templates/analysis/puzzle.html
+msgid "Puzzles of this position:"
+msgstr "Exercices de cette position :"
+
+#: templates/analysis/puzzle.html
+msgid "Go to its start"
+msgstr "Aller à son départ"
+
+#: templates/analysis/puzzle.html templates/library/results.html
+msgid "draft"
+msgstr "brouillon"
+
+#: templates/analysis/puzzle.html
+msgid "In the moves:"
+msgstr "Dans les coups :"
+
+#: templates/analysis/puzzle.html analysis/views.py:102
+msgid "start"
+msgstr "début"
+
+#: templates/analysis/puzzle.html
+msgid "solver"
+msgstr "camp qui résout"
+
+#: templates/analysis/puzzle.html
+msgid "answer"
+msgstr "réponse"
+
+#: templates/analysis/puzzle.html core/layouts.py:104
+msgid "end"
+msgstr "fin"
+
+#: templates/analysis/puzzle.html
+msgid "Position %(i)s of %(n)s in the list"
+msgstr "Position %(i)s sur %(n)s dans la liste"
+
+#: templates/analysis/puzzle.html
+msgid "Previous"
+msgstr "Précédente"
+
+#: templates/analysis/puzzle.html
+msgid "Next"
+msgstr "Suivante"
 
 #: templates/components/pane.html
 msgid "pinned"
@@ -580,8 +654,8 @@ msgid "Facets are shown for positions (collection 1)."
 msgstr "Les facettes sont affichées pour les positions (collection 1)."
 
 #: templates/help/inspector.html
-msgid "Everything about the move at the cursor and its position, in sections: comment, symbols and marks, tags, the puzzle that starts here, the position's source and details."
-msgstr "Tout sur le coup au curseur et sa position, en sections : commentaire, symboles et marques, tags, l'exercice qui commence ici, la source et les détails de la position."
+msgid "Everything about the move at the cursor and its position, in sections: comment, symbols and marks, tags, the position's source and details. Puzzles have a pane of their own: Puzzle."
+msgstr "Tout sur le coup sous le curseur et sa position, en sections : commentaire, symboles et marques, tags, source et détails de la position. Les exercices ont leur propre panneau : Exercice."
 
 #: templates/help/inspector.html
 msgid "Go to a section"
@@ -602,14 +676,6 @@ msgstr "%(edit)s (ou un clic) vous place dans le premier champ de la section ; �
 #: templates/help/inspector.html
 msgid "%(tags)s the move's tags, %(ptags)s the position's: the picker lists what it has, ↵ adds or takes one off. %(detect)s detects the motifs and suggests tags (marked ?); ↵ in the picker confirms a suggestion."
 msgstr "%(tags)s les tags du coup, %(ptags)s ceux de la position : le sélecteur liste ce qu'il a, ↵ en ajoute un ou en retire un. %(detect)s détecte les motifs et propose des tags (marqués ?) ; ↵ dans le sélecteur confirme une suggestion."
-
-#: templates/help/inspector.html
-msgid "Set up a puzzle"
-msgstr "Préparer un exercice"
-
-#: templates/help/inspector.html
-msgid "%(puzzle)s on the move after which it starts; the puzzle section then shows its solution, its cards and whether it is in training."
-msgstr "%(puzzle)s sur le coup après lequel il commence ; la section de l'exercice montre alors sa solution, ses cartes et s'il est en entraînement."
 
 #: templates/help/inspector.html
 msgid "The move tree of the same link group: the inspector shows its cursor. Next to the Library, the row under the list's cursor."
@@ -784,8 +850,16 @@ msgid "Make a puzzle"
 msgstr "Créer un exercice"
 
 #: templates/help/moves.html
-msgid "Go to the move after which the puzzle starts, %(start)s; at the last move of the solution %(end)s; %(ready)s puts it into training."
-msgstr "Allez au coup après lequel l'exercice commence, %(start)s ; au dernier coup de la solution %(end)s ; %(ready)s le met à l'entraînement."
+msgid "Go to the move after which the puzzle starts, %(start)s; at the last move of the solution %(end)s; %(ready)s puts it into training. The Puzzle pane shows each step and what applies at the cursor."
+msgstr "Allez au coup après lequel l'exercice commence, %(start)s ; au dernier coup de la solution %(end)s ; %(ready)s le met à l'entraînement. Le panneau Exercice montre chaque étape et ce qui s'applique au curseur."
+
+#: templates/help/moves.html
+msgid "The start position"
+msgstr "La position de départ"
+
+#: templates/help/moves.html
+msgid "Start, before the first move, goes there (or g g); it is highlighted while the board shows the start."
+msgstr "Départ, avant le premier coup, y mène (ou g g) ; il est en surbrillance tant que l'échiquier montre la position de départ."
 
 #: templates/help/moves.html
 msgid "Next position"
@@ -838,6 +912,14 @@ msgstr "Agrandir un panneau"
 #: templates/help/pane.html
 msgid "%(maximize)s; the same keys bring the others back."
 msgstr "%(maximize)s ; les mêmes touches ramènent les autres."
+
+#: templates/help/pane.html design/commands/pane.toml:section.toggle design/commands/pane.toml:section.all
+msgid "Sections"
+msgstr "Sections"
+
+#: templates/help/pane.html
+msgid "%(next_section)s and %(prev_section)s go to the next and previous section in every pane (also g and the letter in its header): it opens, and the cursor is on its first row, so j and k go on from there."
+msgstr "%(next_section)s et %(prev_section)s vont à la section suivante et précédente dans chaque panneau (aussi g et la lettre de son en-tête) : elle s'ouvre, et le curseur est sur sa première ligne, donc j et k continuent de là."
 
 #: templates/help/pane.html
 msgid "Move between panes"
@@ -894,6 +976,54 @@ msgstr "L'échiquier du même groupe lié, et la session de saisie."
 #: templates/help/pgn.html
 msgid "Pasting works anywhere else too: the app asks what to do with what you pasted."
 msgstr "Le collage marche aussi partout ailleurs : l'app demande quoi faire de ce que vous avez collé."
+
+#: templates/help/puzzle.html
+msgid "The puzzle at the cursor of the analysis, in three steps: where it starts, its solution (each line a card), and whether it is in training. It says where the cursor is in the puzzle, and why a button can't be used here."
+msgstr "L'exercice au curseur de l'analyse, en trois étapes : où il commence, sa solution (chaque ligne une carte) et s'il est en entraînement. Il dit où se trouve le curseur dans l'exercice et pourquoi un bouton ne s'applique pas ici."
+
+#: templates/help/puzzle.html
+msgid "1 · Start"
+msgstr "1 · Départ"
+
+#: templates/help/puzzle.html
+msgid "Go to the move after which the solver moves (%(home)s: the start position) and %(start)s. The puzzle begins as a draft."
+msgstr "Allez au coup après lequel joue le camp qui résout (%(home)s : la position de départ) et %(start)s. L'exercice commence comme brouillon."
+
+#: templates/help/puzzle.html
+msgid "2 · Solution"
+msgstr "2 · Solution"
+
+#: templates/help/puzzle.html
+msgid "The main line after the start is the solution; the pane lists its lines, a click goes to one. %(end)s ends a line at the cursor, %(also)s accepts another solver move, %(answers)s on a solver move makes every answer to it a line of its own."
+msgstr "La ligne principale après le départ est la solution ; le panneau liste ses lignes, un clic mène à l'une d'elles. %(end)s termine une ligne au curseur, %(also)s accepte un autre coup du camp qui résout, %(answers)s sur un coup du camp qui résout fait de chaque réponse une ligne à part."
+
+#: templates/help/puzzle.html
+msgid "3 · Training"
+msgstr "3 · Entraînement"
+
+#: templates/help/puzzle.html
+msgid "%(ready)s puts the puzzle into training (and takes it out again); %(discard)s removes it. A puzzle trained before keeps its history."
+msgstr "%(ready)s met l'exercice à l'entraînement (et l'en retire) ; %(discard)s le supprime. Un exercice déjà entraîné garde son historique."
+
+#: templates/help/puzzle.html
+msgid "The next position"
+msgstr "La position suivante"
+
+#: templates/help/puzzle.html
+msgid "Opened from a list, the pane shows where you are in it: %(next)s the next position, %(prev)s the one before."
+msgstr "Ouvert depuis une liste, le panneau montre où vous en êtes : %(next)s la position suivante, %(prev)s la précédente."
+
+#: templates/help/puzzle.html
+msgid "The moves, board and inspector of the same link group: the moves show the puzzle too (the start framed, solver moves underlined, answers dotted, the ends with a small square)."
+msgstr "Les coups, l'échiquier et l'inspecteur du même groupe lié : les coups montrent aussi l'exercice (le départ encadré, les coups du camp qui résout soulignés, les réponses en pointillé, les fins avec un petit carré)."
+
+#: templates/help/puzzle.html
+msgid "The puzzle keys work in every pane of Analyse: p and a letter (p s, p x, p a, p o, p r, p d)."
+msgstr "Les touches d'exercice marchent dans chaque panneau d'Analyse : p et une lettre (p s, p x, p a, p o, p r, p d)."
+
+#: templates/help/puzzle.html
+msgid "On Train's feedback, %(edit)s opens the puzzle here to fix it."
+msgstr "Dans le retour d'Entraînement, %(edit)s ouvre l'exercice ici pour le corriger."
 
 #: templates/help/queue.html
 msgid "Train solves puzzles. Pick a session, solve on the board, see how it went. Review brings back each puzzle just before you would forget it; Storm and Streak are games against the clock and against mistakes."
@@ -1281,11 +1411,11 @@ msgstr "exclue"
 msgid "diagram"
 msgstr "diagramme"
 
-#: templates/library/results.html templates/views/library.html core/layouts.py:113
+#: templates/library/results.html templates/views/library.html core/layouts.py:119
 msgid "trash"
 msgstr "corbeille"
 
-#: templates/library/results.html
+#: templates/library/results.html core/layouts.py:105
 msgid "training"
 msgstr "entraînement"
 
@@ -1298,12 +1428,22 @@ msgid "no moves"
 msgstr "pas de coups"
 
 #: templates/library/results.html
+msgid "%(n)s card"
+msgid_plural "%(n)s cards"
+msgstr[0] "%(n)s carte"
+msgstr[1] "%(n)s cartes"
+
+#: templates/library/results.html
 msgid "%(rate)s%% of %(n)s"
 msgstr "%(rate)s%% sur %(n)s"
 
 #: templates/library/results.html
 msgid "flagged"
 msgstr "signalé"
+
+#: templates/library/results.html
+msgid "in training"
+msgstr "en entraînement"
 
 #: templates/library/results.html
 msgid "%(n)s game"
@@ -1363,7 +1503,7 @@ msgstr "Cette page ne s'ouvre que par le lien que Spaced Positions donne au dém
 msgid "Start it from its icon, or run <code>spos</code> in a terminal. If it is already running, <code>spos</code> opens the right link."
 msgstr "Lancez-le depuis son icône, ou avec <code>spos</code> dans un terminal. S'il tourne déjà, <code>spos</code> ouvre le bon lien."
 
-#: templates/settings/keymap.html core/layouts.py:145
+#: templates/settings/keymap.html core/layouts.py:151
 msgid "Keymap"
 msgstr "Raccourcis"
 
@@ -1749,7 +1889,7 @@ msgstr "rien à réviser"
 msgid "next %(when)s"
 msgstr "prochaine %(when)s"
 
-#: templates/training/launcher.html core/layouts.py:151 stats/models.py:13
+#: templates/training/launcher.html core/layouts.py:157 stats/models.py:13
 msgid "Storm"
 msgstr "Storm"
 
@@ -1825,10 +1965,6 @@ msgstr "Filtre : une requête de la Bibliothèque"
 msgid "/ motif:fork diff:<=3 · empty: all puzzles"
 msgstr "/ motif:fork diff:<=3 · vide : tous les exercices"
 
-#: templates/training/launcher.html static/js/islands/graphs.js:77
-msgid "Start"
-msgstr "Démarrer"
-
 #: templates/training/result.html templates/views/queue.html stats/views.py:81
 msgid "Solved"
 msgstr "Résolus"
@@ -1868,6 +2004,10 @@ msgstr "manqué"
 #: templates/training/result.html
 msgid "Puzzles of this session"
 msgstr "Exercices de cette session"
+
+#: templates/training/result.html core/layouts.py:102 library/importer.py:60
+msgid "Puzzle"
+msgstr "Exercice"
 
 #: templates/training/result.html
 msgid "hint"
@@ -1921,7 +2061,7 @@ msgstr "Terminé"
 msgid "analysis · collect"
 msgstr "analyse · saisie"
 
-#: templates/views/continue.html core/layouts.py:154
+#: templates/views/continue.html core/layouts.py:160
 msgid "Continue"
 msgstr "Continuer"
 
@@ -2025,7 +2165,7 @@ msgstr "Tout juste enregistrées"
 msgid "Evaluate the main line"
 msgstr "Évaluer la ligne principale"
 
-#: templates/views/filters.html core/layouts.py:116
+#: templates/views/filters.html core/layouts.py:122
 msgid "Filters"
 msgstr "Filtres"
 
@@ -2038,8 +2178,8 @@ msgid "↵ adds or removes a term, - excludes it. Without a Library in this link
 msgstr "↵ ajoute ou retire un terme, - l'exclut. Sans Bibliothèque dans ce groupe lié, ce panneau reste vide."
 
 #: templates/views/inspector.html
-msgid "The move at the cursor of this link group's analysis appears here: its annotation, mark, comment and puzzle. Open a position in a move tree of the same link group, or move the cursor in a Library list of that group."
-msgstr "Le coup au curseur de l'analyse de ce groupe lié apparaît ici : son symbole, sa marque, son commentaire et son exercice. Ouvrez une position dans un arbre des coups du même groupe lié, ou déplacez le curseur dans une liste de la Bibliothèque de ce groupe."
+msgid "The move at the cursor of this link group's analysis appears here: its annotation, mark, comment and tags. Open a position in a move tree of the same link group, or move the cursor in a Library list of that group."
+msgstr "Le coup sous le curseur de l'analyse de ce groupe lié apparaît ici : annotation, marque, commentaire et tags. Ouvrez une position dans un arbre de coups du même groupe lié, ou déplacez le curseur dans une liste de la Bibliothèque de ce groupe."
 
 #: templates/views/keymap.html
 msgid "Search commands"
@@ -2085,15 +2225,15 @@ msgstr "Sources"
 msgid "Results"
 msgstr "Résultats"
 
-#: templates/views/library.html core/layouts.py:112 core/layouts.py:126
+#: templates/views/library.html core/layouts.py:118 core/layouts.py:132
 msgid "tag"
 msgstr "taguer"
 
-#: templates/views/library.html core/layouts.py:112
+#: templates/views/library.html core/layouts.py:118
 msgid "train"
 msgstr "entraîner"
 
-#: templates/views/library.html core/layouts.py:113
+#: templates/views/library.html core/layouts.py:119
 msgid "analyse"
 msgstr "analyser"
 
@@ -2140,6 +2280,10 @@ msgstr "Ou appuyez sur Ctrl+V n'importe où hors d'un champ de texte."
 #: templates/views/pgn.html
 msgid "Show"
 msgstr "Afficher"
+
+#: templates/views/puzzle.html
+msgid "The puzzle setup of the move at the cursor of this link group's analysis appears here: where the puzzle starts, its solution lines, and whether it is in training. Open a position in a move tree of the same link group."
+msgstr "L'exercice au curseur de l'analyse de ce groupe lié apparaît ici : où il commence, ses lignes de solution et s'il est en entraînement. Ouvrez une position dans un arbre de coups du même groupe lié."
 
 #: templates/views/settings.html
 msgid "Search settings"
@@ -2293,7 +2437,7 @@ msgstr "Les plus faibles :"
 msgid "solved · accuracy · days in a row"
 msgstr "résolus · précision · jours d'affilée"
 
-#: templates/views/today.html core/layouts.py:149
+#: templates/views/today.html core/layouts.py:155
 msgid "Today"
 msgstr "Aujourd'hui"
 
@@ -2328,6 +2472,18 @@ msgstr "Exercice créé à partir d'ici (un brouillon : p r le met en entraînem
 #: analysis/puzzles.py:142
 msgid "Puzzle discarded"
 msgstr "Exercice abandonné"
+
+#: analysis/puzzles.py:205
+msgid "from the start position"
+msgstr "depuis la position de départ"
+
+#: analysis/puzzles.py:231
+msgid "Not part of the solution: an answer the trainer doesn't play. All answers count (p o) on the move before adds it."
+msgstr "Pas dans la solution : une réponse que l'entraîneur ne joue pas. Toutes les réponses comptent (p o) sur le coup d'avant l'ajoute."
+
+#: analysis/puzzles.py:287
+msgid "nothing to solve yet: play the solution after the start"
+msgstr "rien à résoudre pour l'instant : jouez la solution après le départ"
 
 #: analysis/puzzles.py:119
 msgid "puzzles come from positions: :new-position takes this move's position out of the game"
@@ -2369,6 +2525,34 @@ msgstr "Plus correct"
 msgid "Only the main answer counts"
 msgstr "Seule la réponse principale compte"
 
+#: analysis/puzzles.py:206
+msgid "after {move}"
+msgstr "après {move}"
+
+#: analysis/puzzles.py:218
+msgid "No puzzle at this move. A puzzle starts after a move (or at the start position): the solver plays the moves that follow."
+msgstr "Pas d'exercice à ce coup. Un exercice commence après un coup (ou à la position de départ) : le camp qui résout joue les coups qui suivent."
+
+#: analysis/puzzles.py:220
+msgid "The puzzle starts here: the side to move finds the solution."
+msgstr "L'exercice commence ici : le camp au trait trouve la solution."
+
+#: analysis/puzzles.py:222
+msgid "The line ends here."
+msgstr "La ligne s'arrête ici."
+
+#: analysis/puzzles.py:230
+msgid "Not part of the solution: the solver's move here is another one. Also correct (p a) accepts it too."
+msgstr "Pas dans la solution : le coup du camp qui résout est ici un autre. Aussi correct (p a) l'accepte aussi."
+
+#: analysis/puzzles.py:253
+msgid "a puzzle already starts here"
+msgstr "un exercice commence déjà ici"
+
+#: analysis/puzzles.py:253
+msgid "play the solution first: there are no moves after this one"
+msgstr "jouez d'abord la solution : il n'y a pas de coups après celui-ci"
+
 #: analysis/puzzles.py:125
 msgid "play the solution first: there are no moves after this position"
 msgstr "jouez d'abord la solution : il n'y a pas de coups après cette position"
@@ -2385,13 +2569,61 @@ msgstr "sur un coup du camp qui résout : chaque réponse continue alors l'exerc
 msgid "unknown puzzle action {action}"
 msgstr "action d'exercice inconnue {action}"
 
+#: analysis/puzzles.py:224
+msgid "A solver move: the trainer expects it."
+msgstr "Un coup du camp qui résout : l'entraîneur l'attend."
+
+#: analysis/puzzles.py:226
+msgid "Also correct: the trainer accepts it too, and goes on with the main line."
+msgstr "Aussi correct : l'entraîneur l'accepte aussi et continue avec la ligne principale."
+
+#: analysis/puzzles.py:228
+msgid "An answer: the trainer plays it for the opponent."
+msgstr "Une réponse : l'entraîneur la joue pour l'adversaire."
+
+#: analysis/puzzles.py:262 analysis/views.py:201 library/structure.py:15
+msgid "White"
+msgstr "Blancs"
+
+#: analysis/puzzles.py:262 analysis/views.py:201 library/structure.py:15
+msgid "Black"
+msgstr "Noirs"
+
+#: analysis/puzzles.py:265
+msgid "go to a move after the start"
+msgstr "allez à un coup après le départ"
+
+#: analysis/puzzles.py:267 analysis/puzzles.py:269
+msgid "go to one of the solver's moves"
+msgstr "allez à un coup du camp qui résout"
+
+#: analysis/puzzles.py:271
+msgid "At the start: go to a move of the solution to mark it."
+msgstr "Au départ : allez à un coup de la solution pour le marquer."
+
 #: analysis/puzzles.py:162
 msgid "All {n} answers count: {n} lines"
 msgstr "Les {n} réponses comptent : {n} lignes"
 
-#: analysis/render.py:77
+#: analysis/puzzles.py:272
+msgid "On an answer: Also correct and All answers count need one of the solver's moves."
+msgstr "Sur une réponse : Aussi correct et Toutes les réponses comptent demandent un coup du camp qui résout."
+
+#: analysis/render.py:82
 msgid "No moves yet: play one on the board, paste a PGN, or let the engine suggest one."
 msgstr "Pas encore de coups : jouez-en un sur l'échiquier, collez un PGN ou laissez le moteur en proposer un."
+
+#: analysis/render.py:72
+msgid "The start position ({keys})"
+msgstr "La position de départ ({keys})"
+
+#: analysis/render.py:76
+msgid "Puzzle from the start (draft)"
+msgstr "Exercice depuis la position de départ (brouillon)"
+
+#: analysis/render.py:76
+msgid "Puzzle from the start"
+msgstr "Exercice depuis la position de départ"
 
 #: analysis/tree.py:198
 msgid "the start position can't be deleted"
@@ -2429,23 +2661,23 @@ msgstr "Modifier"
 msgid "Position corrected; the analysis is kept"
 msgstr "Position corrigée ; l'analyse est conservée"
 
-#: analysis/views.py:315
+#: analysis/views.py:324
 msgid "with the local engine"
 msgstr "avec le moteur local"
 
-#: analysis/views.py:315
+#: analysis/views.py:324
 msgid "with the stored evaluations"
 msgstr "avec les évaluations enregistrées"
 
-#: analysis/views.py:316
+#: analysis/views.py:325
 msgid "without evaluations (:evaluate, or a local engine)"
 msgstr "sans évaluations (:evaluate, ou un moteur local)"
 
-#: analysis/views.py:317
+#: analysis/views.py:326
 msgid "Moments {how}: {tags} on {moves}"
 msgstr "Moments {how} : {tags} sur {moves}"
 
-#: analysis/views.py:100 static/js/core/analysis.js:648
+#: analysis/views.py:100 static/js/core/analysis.js:674
 msgid "Annotation"
 msgstr "Annotation"
 
@@ -2453,7 +2685,7 @@ msgstr "Annotation"
 msgid "Mark"
 msgstr "Marque"
 
-#: analysis/views.py:100 static/js/core/analysis.js:661
+#: analysis/views.py:100 static/js/core/analysis.js:687
 msgid "Line colour"
 msgstr "Couleur de la ligne"
 
@@ -2491,73 +2723,61 @@ msgstr "Ligne principale {move}"
 msgid "Move variation {move}"
 msgstr "Déplacer la variante {move}"
 
-#: analysis/views.py:287
+#: analysis/views.py:296
 msgid "New position {id}"
 msgstr "Nouvelle position {id}"
 
-#: analysis/views.py:305
+#: analysis/views.py:314
 msgid "Evaluated {n} move"
 msgid_plural "Evaluated {n} moves"
 msgstr[0] "{n} coup évalué"
 msgstr[1] "{n} coups évalués"
 
-#: analysis/views.py:318
+#: analysis/views.py:327
 msgid "{n} new tag"
 msgid_plural "{n} new tags"
 msgstr[0] "{n} nouveau tag"
 msgstr[1] "{n} nouveaux tags"
 
-#: analysis/views.py:319 static/js/core/paste.js:46 static/js/islands/graphs.js:127
+#: analysis/views.py:328 static/js/core/paste.js:46 static/js/islands/graphs.js:127
 msgid "{n} move"
 msgid_plural "{n} moves"
 msgstr[0] "{n} coup"
 msgstr[1] "{n} coups"
 
-#: analysis/views.py:321
+#: analysis/views.py:330
 msgid "{n} withdrawn"
 msgstr "{n} retirés"
-
-#: analysis/views.py:102
-msgid "start"
-msgstr "début"
 
 #: analysis/views.py:112
 msgid "Delete from {move}"
 msgstr "Supprimer à partir de {move}"
 
-#: analysis/views.py:202 library/structure.py:15 training/views.py:245
-msgid "White"
-msgstr "Blancs"
-
-#: analysis/views.py:202 library/structure.py:15 training/views.py:245
-msgid "Black"
-msgstr "Noirs"
-
-#: analysis/views.py:202
+#: analysis/views.py:201
 msgid "Result"
 msgstr "Résultat"
 
-#: analysis/views.py:203
+#: analysis/views.py:202
 msgid "Date"
 msgstr "Date"
 
-#: analysis/views.py:203
+#: analysis/views.py:202
 msgid "Event"
 msgstr "Événement"
 
-#: analysis/views.py:203
+#: analysis/views.py:202
 msgid "Site"
 msgstr "Lieu"
 
-#: analysis/views.py:203
+#: analysis/views.py:202
 msgid "Round"
 msgstr "Ronde"
 
-#: analysis/views.py:204
+#: analysis/views.py:203
 msgid "White Elo"
 msgstr "Elo Blancs"
 
-#: analysis/views.py:204
+#: analysis/views.py:203
 msgid "Black Elo"
 msgstr "Elo Noirs"
 
@@ -2689,7 +2909,7 @@ msgstr "Une position ou une partie : coups, variantes, commentaires, tags, moteu
 msgid "Get material in fast: board editor, paste FEN/PGN, rapid entry from a book."
 msgstr "Saisir vite du matériel : éditeur d'échiquier, coller un FEN/PGN, saisie rapide depuis un livre."
 
-#: core/layouts.py:28 core/layouts.py:110 design/commands/library.toml:library.collection
+#: core/layouts.py:28 core/layouts.py:116 design/commands/library.toml:library.collection
 msgid "Library"
 msgstr "Bibliothèque"
 
@@ -2697,7 +2917,7 @@ msgstr "Bibliothèque"
 msgid "Find and organise positions, games, puzzles, players, sources and tags."
 msgstr "Trouver et organiser positions, parties, exercices, joueurs, sources et tags."
 
-#: core/layouts.py:29 core/layouts.py:130 design/commands/shell.toml:mode.stats
+#: core/layouts.py:29 core/layouts.py:136 design/commands/shell.toml:mode.stats
 msgid "Stats"
 msgstr "Statistiques"
 
@@ -2705,7 +2925,7 @@ msgstr "Statistiques"
 msgid "Progress: collection, analysis and training statistics, records, milestones."
 msgstr "Progrès : statistiques de la collection, de l'analyse et de l'entraînement, records, paliers."
 
-#: core/layouts.py:30 core/layouts.py:139 design/commands/settings.toml:settings.step
+#: core/layouts.py:30 core/layouts.py:145 design/commands/settings.toml:settings.step
 msgid "Settings"
 msgstr "Réglages"
 
@@ -2733,11 +2953,11 @@ msgstr "diviser"
 msgid "flip"
 msgstr "retourner"
 
-#: core/layouts.py:60 core/layouts.py:70 core/layouts.py:103
+#: core/layouts.py:60 core/layouts.py:70 core/layouts.py:109
 msgid "back"
 msgstr "arrière"
 
-#: core/layouts.py:61 core/layouts.py:71 core/layouts.py:103
+#: core/layouts.py:61 core/layouts.py:71 core/layouts.py:109
 msgid "forward"
 msgstr "avant"
 
@@ -2753,7 +2973,7 @@ msgstr "mettre en place"
 msgid "square tool"
 msgstr "outil cases"
 
-#: core/layouts.py:72 core/layouts.py:107
+#: core/layouts.py:72 core/layouts.py:113
 msgid "variation"
 msgstr "variante"
 
@@ -2773,103 +2993,115 @@ msgstr "ligne principale"
 msgid "delete"
 msgstr "supprimer"
 
-#: core/layouts.py:177 core/layouts.py:192
+#: core/layouts.py:183 core/layouts.py:200
 msgid "Next variation at this move"
 msgstr "Variante suivante à ce coup"
 
-#: core/layouts.py:177
+#: core/layouts.py:183
 msgid "Previous variation at this move"
 msgstr "Variante précédente à ce coup"
 
-#: core/layouts.py:179
+#: core/layouts.py:185
 msgid "Mark as good"
 msgstr "Marquer comme bon"
 
-#: core/layouts.py:180
+#: core/layouts.py:186
 msgid "Mark as bad"
 msgstr "Marquer comme mauvais"
 
-#: core/layouts.py:180
+#: core/layouts.py:186
 msgid "Remove the mark"
 msgstr "Retirer la marque"
 
-#: core/layouts.py:182 core/layouts.py:188
+#: core/layouts.py:188 core/layouts.py:195
 msgid "Puzzle: starts after this move"
 msgstr "Exercice : commence après ce coup"
 
-#: core/layouts.py:183 core/layouts.py:189
+#: core/layouts.py:189 core/layouts.py:195
 msgid "Puzzle: the solution ends here"
 msgstr "Exercice : la solution s'arrête ici"
 
-#: core/layouts.py:183 core/layouts.py:189
+#: core/layouts.py:189 core/layouts.py:197
 msgid "Puzzle: ready for training"
 msgstr "Exercice : prêt pour l'entraînement"
 
-#: core/layouts.py:184
+#: core/layouts.py:190
 msgid "Next position of the list"
 msgstr "Position suivante de la liste"
 
-#: core/layouts.py:184
+#: core/layouts.py:190
 msgid "Previous position of the list"
 msgstr "Position précédente de la liste"
 
-#: core/layouts.py:200 core/layouts.py:214
+#: core/layouts.py:196
+msgid "Puzzle: also correct"
+msgstr "Exercice : aussi correct"
+
+#: core/layouts.py:196
+msgid "Puzzle: all answers count"
+msgstr "Exercice : toutes les réponses comptent"
+
+#: core/layouts.py:197
+msgid "Puzzle: discard"
+msgstr "Exercice : supprimer"
+
+#: core/layouts.py:208 core/layouts.py:222
 msgid "Storm, 3 minutes"
 msgstr "Storm, 3 minutes"
 
-#: core/layouts.py:202
+#: core/layouts.py:210
 msgid "Next page"
 msgstr "Page suivante"
 
-#: core/layouts.py:203
+#: core/layouts.py:211
 msgid "Previous page"
 msgstr "Page précédente"
 
-#: core/layouts.py:203
+#: core/layouts.py:211
 msgid "Next diagram number"
 msgstr "Numéro de diagramme suivant"
 
-#: core/layouts.py:204
+#: core/layouts.py:212
 msgid "Previous diagram number"
 msgstr "Numéro de diagramme précédent"
 
-#: core/layouts.py:206
+#: core/layouts.py:214
 msgid "Next chart"
 msgstr "Graphique suivant"
 
-#: core/layouts.py:206
+#: core/layouts.py:214
 msgid "Previous chart"
 msgstr "Graphique précédent"
 
-#: core/layouts.py:207
+#: core/layouts.py:215
 msgid "Period: 7 days"
 msgstr "Période : 7 jours"
 
-#: core/layouts.py:207
+#: core/layouts.py:215
 msgid "Period: 30 days"
 msgstr "Période : 30 jours"
 
-#: core/layouts.py:207
+#: core/layouts.py:215
 msgid "Period: 90 days"
 msgstr "Période : 90 jours"
 
-#: core/layouts.py:208
+#: core/layouts.py:216
 msgid "Period: a year"
 msgstr "Période : un an"
 
-#: core/layouts.py:208
+#: core/layouts.py:216
 msgid "Period: everything"
 msgstr "Période : tout"
 
-#: core/layouts.py:209
+#: core/layouts.py:217
 msgid "Show what you pasted"
 msgstr "Montrer ce que vous avez collé"
 
-#: core/layouts.py:210
+#: core/layouts.py:218
 msgid "Next value"
 msgstr "Valeur suivante"
 
-#: core/layouts.py:210
+#: core/layouts.py:218
 msgid "Previous value"
 msgstr "Valeur précédente"
 
@@ -2902,82 +3134,86 @@ msgid "Inspector"
 msgstr "Inspecteur"
 
 #: core/layouts.py:96
-msgid "The current move and position: comment, marks, puzzle setup."
-msgstr "Le coup et la position actuels : commentaire, marques, création d'exercices."
+msgid "The current move and position: comment, marks, tags, source."
+msgstr "Le coup et la position actuels : commentaire, marques, tags, source."
 
 #: core/layouts.py:102
+msgid "The puzzle at the cursor: its start, its solution lines, whether it is in training."
+msgstr "L'exercice au curseur : son départ, ses lignes de solution, s'il est en entraînement."
+
+#: core/layouts.py:108
 msgid "Eval graph"
 msgstr "Graphique d'évaluation"
 
-#: core/layouts.py:102
+#: core/layouts.py:108
 msgid "The engine's evaluation over the main line; mistakes marked."
 msgstr "L'évaluation du moteur sur la ligne principale ; erreurs marquées."
 
-#: core/layouts.py:106
+#: core/layouts.py:112
 msgid "Variation graph"
 msgstr "Graphique des variantes"
 
-#: core/layouts.py:106
+#: core/layouts.py:112
 msgid "The move tree as a graph: the shape of a big analysis."
 msgstr "L'arbre de coups en graphique : la forme d'une grande analyse."
 
-#: core/layouts.py:110
+#: core/layouts.py:116
 msgid "Positions, games, puzzles and more, with the query bar."
 msgstr "Positions, parties, exercices et plus, avec la barre de recherche."
 
-#: core/layouts.py:116
+#: core/layouts.py:122
 msgid "Facets that write into the library query."
 msgstr "Des facettes qui écrivent dans la requête de la bibliothèque."
 
-#: core/layouts.py:120
+#: core/layouts.py:126
 msgid "Session"
 msgstr "Session"
 
-#: core/layouts.py:120
+#: core/layouts.py:126
 msgid "Sessions to start, the running session (clock, combo, lives, prompt), the result."
 msgstr "Les sessions à lancer, la session en cours (horloge, combo, vies, consigne), le résultat."
 
-#: core/layouts.py:124
+#: core/layouts.py:130
 msgid "Entry session"
 msgstr "Session de saisie"
 
-#: core/layouts.py:124
+#: core/layouts.py:130
 msgid "Source, page, diagram number and presets for rapid entry."
 msgstr "Source, page, numéro de diagramme et préréglages pour la saisie rapide."
 
-#: core/layouts.py:130
+#: core/layouts.py:136
 msgid "Progress in charts and numbers: every number drills down."
 msgstr "Les progrès en graphiques et en chiffres : chaque chiffre se détaille."
 
-#: core/layouts.py:135
+#: core/layouts.py:141
 msgid "PGN / FEN"
 msgstr "PGN / FEN"
 
-#: core/layouts.py:135
+#: core/layouts.py:141
 msgid "The position or game as text; paste to load."
 msgstr "La position ou la partie en texte ; collez pour charger."
 
-#: core/layouts.py:139
+#: core/layouts.py:145
 msgid "Every setting, searchable: themes, colours, type, board, keys, training, engine, data."
 msgstr "Chaque réglage, consultable : thèmes, couleurs, police, échiquier, touches, entraînement, moteur, données."
 
-#: core/layouts.py:145
+#: core/layouts.py:151
 msgid "Every command and its keys: ↵ binds new keys."
 msgstr "Chaque commande et ses touches : ↵ attribue de nouvelles touches."
 
-#: core/layouts.py:149
+#: core/layouts.py:155
 msgid "What to do now: due cards, one-key sessions, today's numbers, the pattern library."
 msgstr "Quoi faire maintenant : cartes à réviser, sessions en une touche, les chiffres du jour, la bibliothèque de motifs."
 
-#: core/layouts.py:154
+#: core/layouts.py:160
 msgid "The open analysis, the next diagram, a paste box, recent work."
 msgstr "L'analyse ouverte, le prochain diagramme, une zone de collage, le travail récent."
 
-#: core/layouts.py:159
+#: core/layouts.py:165
 msgid "Components"
 msgstr "Composants"
 
-#: core/layouts.py:159
+#: core/layouts.py:165
 msgid "Every component in every state."
 msgstr "Chaque composant dans chaque état."
 
@@ -2997,159 +3233,171 @@ msgstr "lignes"
 msgid "annotate"
 msgstr "annoter"
 
-#: core/layouts.py:98 static/js/core/importer.js:110
-msgid "puzzle"
-msgstr "exercice"
+#: core/layouts.py:98
+msgid "tags"
+msgstr "tags"
 
-#: core/layouts.py:99 core/layouts.py:142 core/layouts.py:151
+#: core/layouts.py:99 core/layouts.py:148 core/layouts.py:157
 msgid "next section"
 msgstr "section suivante"
 
-#: core/layouts.py:99 core/layouts.py:162
+#: core/layouts.py:99 core/layouts.py:168
 msgid "fold"
 msgstr "replier"
 
-#: core/layouts.py:103
+#: core/layouts.py:104
+msgid "set up"
+msgstr "configuré"
+
+#: core/layouts.py:104
+msgid "also correct"
+msgstr "aussi correct"
+
+#: core/layouts.py:105
+msgid "next position"
+msgstr "position suivante"
+
+#: core/layouts.py:109
 msgid "evaluate"
 msgstr "évaluer"
 
-#: core/layouts.py:112
+#: core/layouts.py:118
 msgid "query"
 msgstr "recherche"
 
-#: core/layouts.py:112 static/js/core/importer.js:79
+#: core/layouts.py:118 static/js/core/importer.js:79
 msgid "select"
 msgstr "sélectionner"
 
-#: core/layouts.py:113
+#: core/layouts.py:119
 msgid "display"
 msgstr "affichage"
 
-#: core/layouts.py:117 static/js/core/importer.js:79
+#: core/layouts.py:123 static/js/core/importer.js:79
 msgid "down"
 msgstr "bas"
 
-#: core/layouts.py:117
+#: core/layouts.py:123
 msgid "add / remove"
 msgstr "ajouter / retirer"
 
-#: core/layouts.py:117
+#: core/layouts.py:123
 msgid "exclude"
 msgstr "exclure"
 
-#: core/layouts.py:125
+#: core/layouts.py:131
 msgid "save & next"
 msgstr "enregistrer & suivant"
 
-#: core/layouts.py:125
+#: core/layouts.py:131
 msgid "source"
 msgstr "source"
 
-#: core/layouts.py:125
+#: core/layouts.py:131
 msgid "diagram +1"
 msgstr "diagramme +1"
 
-#: core/layouts.py:126
+#: core/layouts.py:132
 msgid "ready"
 msgstr "prêt"
 
-#: core/layouts.py:131
+#: core/layouts.py:137
 msgid "next chart"
 msgstr "graphique suivant"
 
-#: core/layouts.py:131
+#: core/layouts.py:137
 msgid "points"
 msgstr "points"
 
-#: core/layouts.py:131
+#: core/layouts.py:137
 msgid "drill down"
 msgstr "détailler"
 
-#: core/layouts.py:132
+#: core/layouts.py:138
 msgid "table"
 msgstr "tableau"
 
-#: core/layouts.py:132
+#: core/layouts.py:138
 msgid "period"
 msgstr "période"
 
-#: core/layouts.py:136 core/layouts.py:141
+#: core/layouts.py:142 core/layouts.py:147
 msgid "edit"
 msgstr "modifier"
 
-#: core/layouts.py:136
+#: core/layouts.py:142
 msgid "copy FEN"
 msgstr "copier le FEN"
 
-#: core/layouts.py:136
+#: core/layouts.py:142
 msgid "copy PGN"
 msgstr "copier le PGN"
 
-#: core/layouts.py:136
+#: core/layouts.py:142
 msgid "show what you pasted"
 msgstr "afficher le collage"
 
-#: core/layouts.py:141 core/layouts.py:146
+#: core/layouts.py:147 core/layouts.py:152
 msgid "search"
 msgstr "chercher"
 
-#: core/layouts.py:141
+#: core/layouts.py:147
 msgid "change"
 msgstr "changer"
 
-#: core/layouts.py:141
+#: core/layouts.py:147
 msgid "reset"
 msgstr "réinitialiser"
 
-#: core/layouts.py:146
+#: core/layouts.py:152
 msgid "new keys"
 msgstr "nouvelles touches"
 
-#: core/layouts.py:146
+#: core/layouts.py:152
 msgid "remove"
 msgstr "retirer"
 
-#: core/layouts.py:151 static/js/islands/train.js:16
+#: core/layouts.py:157 static/js/islands/train.js:16
 msgid "review"
 msgstr "réviser"
 
-#: core/layouts.py:151
+#: core/layouts.py:157
 msgid "weakest"
 msgstr "les plus faibles"
 
-#: core/layouts.py:156
+#: core/layouts.py:162
 msgid "analysis"
 msgstr "analyse"
 
-#: core/layouts.py:156
+#: core/layouts.py:162
 msgid "collect"
 msgstr "saisir"
 
-#: core/layouts.py:156
+#: core/layouts.py:162
 msgid "paste box"
 msgstr "zone de collage"
 
-#: core/layouts.py:156
+#: core/layouts.py:162
 msgid "open"
 msgstr "ouvrir"
 
-#: core/layouts.py:161 static/js/core/help.js:149
+#: core/layouts.py:167 static/js/core/help.js:149
 msgid "scroll"
 msgstr "défiler"
 
-#: core/layouts.py:161
+#: core/layouts.py:167
 msgid "half page"
 msgstr "demi-page"
 
-#: core/layouts.py:162
+#: core/layouts.py:168
 msgid "fold all"
 msgstr "tout replier"
 
-#: core/layouts.py:162
+#: core/layouts.py:168
 msgid "edit a field"
 msgstr "modifier un champ"
 
-#: core/layouts.py:162
+#: core/layouts.py:168
 msgid "flash demo"
 msgstr "démo du clignotement"
 
@@ -3565,10 +3813,6 @@ msgstr "le dossier des données"
 msgid "python-chess: rules, PGN, engines"
 msgstr "python-chess : règles, PGN, moteurs"
 
-#: core/settings_view.py:26
-msgid "Training"
-msgstr "Entraînement"
-
 #: core/settings_view.py:28
 msgid "Sound and motion"
 msgstr "Son et mouvement"
@@ -3609,7 +3853,7 @@ msgstr "Comme le système (Paper / Ink)"
 msgid "{ratio}:1, needs {minimum}:1"
 msgstr "{ratio}:1, il faut {minimum}:1"
 
-#: core/templatetags/ui.py:155
+#: core/templatetags/ui.py:162
 msgid "Position {fen}"
 msgstr "Position {fen}"
 
@@ -5213,7 +5457,7 @@ msgstr "mise à jour {version} disponible"
 msgid "undo"
 msgstr "annuler"
 
-#: static/js/app.js:140 static/js/core/library.js:703 static/js/islands/train.js:640
+#: static/js/app.js:140 static/js/core/library.js:703 static/js/islands/train.js:653
 msgid "The browser didn't allow copying"
 msgstr "Le navigateur n'a pas permis la copie"
 
@@ -5281,71 +5525,75 @@ msgstr "Déjà dans l'analyse : le curseur y est allé"
 msgid "Drop them? y / n"
 msgstr "Les supprimer ? y / n"
 
-#: static/js/core/analysis.js:527
+#: static/js/core/analysis.js:553
 msgid "No position open: :analyse, or paste one (⌘V, a)"
 msgstr "Aucune position ouverte : :analyse, ou collez-en une (⌘V, a)"
 
-#: static/js/core/analysis.js:548
+#: static/js/core/analysis.js:574
 msgid "No other move here"
 msgstr "Pas d'autre coup ici"
 
-#: static/js/core/analysis.js:562
+#: static/js/core/analysis.js:588
 msgid "Looking for the key moments…"
 msgstr "Recherche des moments clés…"
 
-#: static/js/core/analysis.js:572
+#: static/js/core/analysis.js:598
 msgid "Open the moves pane to fold variations"
 msgstr "Ouvrez le panneau des coups pour replier les variantes"
 
-#: static/js/core/analysis.js:586
+#: static/js/core/analysis.js:612
 msgid "No variation here"
 msgstr "Pas de variante ici"
 
-#: static/js/core/analysis.js:597
+#: static/js/core/analysis.js:623
 msgid "No variations"
 msgstr "Pas de variantes"
 
-#: static/js/core/analysis.js:601
+#: static/js/core/analysis.js:627
 msgid "All variations open"
 msgstr "Toutes les variantes ouvertes"
 
-#: static/js/core/analysis.js:601
+#: static/js/core/analysis.js:627
 msgid "All variations folded · z opens one"
 msgstr "Toutes les variantes repliées · z en ouvre une"
 
-#: static/js/core/analysis.js:616
+#: static/js/core/analysis.js:642
 msgid "No list here: a in the Library analyses what a search found, n goes through it"
 msgstr "Pas de liste ici : a dans la Bibliothèque analyse ce qu'une recherche a trouvé, n la parcourt"
 
-#: static/js/core/analysis.js:624
+#: static/js/core/analysis.js:650
 msgid "Nothing left in this list: all done"
 msgstr "Plus rien dans cette liste : tout est fait"
 
-#: static/js/core/analysis.js:631
+#: static/js/core/analysis.js:657
 msgid "This is the first"
 msgstr "C'est la première"
 
-#: static/js/core/analysis.js:631
+#: static/js/core/analysis.js:657
 msgid "This is the last"
 msgstr "C'est la dernière"
 
-#: static/js/core/analysis.js:637
+#: static/js/core/analysis.js:663
 msgid "Go to a move first"
 msgstr "Allez d'abord à un coup"
 
-#: static/js/core/analysis.js:674
+#: static/js/core/analysis.js:700
 msgid "Open an Inspector pane to write comments: ␣ w v, then i"
 msgstr "Ouvrez un panneau Inspecteur pour écrire des commentaires : ␣ w v, puis i"
 
-#: static/js/core/analysis.js:692
+#: static/js/core/analysis.js:718
+msgid "Open a Puzzle pane: ␣ w v, then z"
+msgstr "Ouvrez un panneau Exercice : ␣ w v, puis z"
+
+#: static/js/core/analysis.js:725
 msgid "Open an Inspector pane: ␣ w v, then i"
 msgstr "Ouvrez un panneau Inspecteur : ␣ w v, puis i"
 
-#: static/js/core/analysis.js:714
+#: static/js/core/analysis.js:747
 msgid "its own analysis, with the continuation"
 msgstr "sa propre analyse, avec la suite"
 
-#: static/js/core/analysis.js:714
+#: static/js/core/analysis.js:747
 msgid "its own analysis"
 msgstr "sa propre analyse"
 
@@ -5355,19 +5603,19 @@ msgid_plural "Added {n} pasted moves to the analysis (u undoes)"
 msgstr[0] "{n} coup collé ajouté à l'analyse (u annule)"
 msgstr[1] "{n} coups collés ajoutés à l'analyse (u annule)"
 
-#: static/js/core/charts.js:64
+#: static/js/core/charts.js:71
 msgid "Stats: the app is not reachable"
 msgstr "Statistiques : l'app est injoignable"
 
-#: static/js/core/charts.js:113
+#: static/js/core/charts.js:120
 msgid "Nothing to drill into here"
 msgstr "Rien à détailler ici"
 
-#: static/js/core/charts.js:132
+#: static/js/core/charts.js:139
 msgid "Period: {period}"
 msgstr "Période : {period}"
 
-#: static/js/core/charts.js:139
+#: static/js/core/charts.js:146
 msgid "No analysis to continue: :analyse opens one"
 msgstr "Pas d'analyse à poursuivre : :analyse en ouvre une"
 
@@ -5671,7 +5919,7 @@ msgstr "Le guide n'a pas pu être chargé"
 msgid "Help: {name}"
 msgstr "Aide : {name}"
 
-#: static/js/core/help.js:119 static/js/core/help.js:123 static/js/core/layout.js:433
+#: static/js/core/help.js:119 static/js/core/help.js:123 static/js/core/layout.js:435
 msgid "Pane"
 msgstr "Panneau"
 
@@ -5743,6 +5991,10 @@ msgstr "exercices en brouillon"
 msgid "game"
 msgstr "partie"
 
+#: static/js/core/importer.js:110
+msgid "puzzle"
+msgstr "exercice"
+
 #: static/js/core/importer.js:114
 msgid "error: {error}"
 msgstr "erreur : {error}"
@@ -5791,135 +6043,135 @@ msgstr "Groupe lié : cliquez pour changer"
 msgid "layout not saved: the app is not reachable"
 msgstr "disposition non enregistrée : l'app est injoignable"
 
-#: static/js/core/layout.js:353
+#: static/js/core/layout.js:355
 msgid "no mode '{name}'"
 msgstr "pas de mode « {name} »"
 
-#: static/js/core/layout.js:413 static/js/core/layout.js:689
+#: static/js/core/layout.js:415 static/js/core/layout.js:691
 msgid "Resize"
 msgstr "Redimensionner"
 
-#: static/js/core/layout.js:448
+#: static/js/core/layout.js:450
 msgid "View"
 msgstr "Vue"
 
-#: static/js/core/layout.js:458
+#: static/js/core/layout.js:460
 msgid "no view '{name}'"
 msgstr "pas de vue « {name} »"
 
-#: static/js/core/layout.js:492
+#: static/js/core/layout.js:494
 msgid "no pane {n}"
 msgstr "pas de panneau {n}"
 
-#: static/js/core/layout.js:511
+#: static/js/core/layout.js:513
 msgid "no pane in that direction"
 msgstr "pas de panneau dans cette direction"
 
-#: static/js/core/layout.js:516
+#: static/js/core/layout.js:518
 msgid "Split: view of the new pane"
 msgstr "Diviser : vue du nouveau panneau"
 
-#: static/js/core/layout.js:516
+#: static/js/core/layout.js:518
 msgid "Split below: view of the new pane"
 msgstr "Diviser en bas : vue du nouveau panneau"
 
-#: static/js/core/layout.js:519
+#: static/js/core/layout.js:521
 msgid "Split"
 msgstr "Diviser"
 
-#: static/js/core/layout.js:541
+#: static/js/core/layout.js:543
 msgid "Open in a split"
 msgstr "Ouvrir dans une division"
 
-#: static/js/core/layout.js:592 design/commands/pane.toml:pane.close
+#: static/js/core/layout.js:594 design/commands/pane.toml:pane.close
 msgid "Close pane"
 msgstr "Fermer le panneau"
 
-#: static/js/core/layout.js:596
+#: static/js/core/layout.js:598
 msgid "Only this pane"
 msgstr "Seulement ce panneau"
 
-#: static/js/core/layout.js:607 design/commands/pane.toml:pane.buffers
+#: static/js/core/layout.js:609 design/commands/pane.toml:pane.buffers
 msgid "Hidden buffers"
 msgstr "Panneaux masqués"
 
-#: static/js/core/layout.js:618
+#: static/js/core/layout.js:620
 msgid "no hidden buffer '{id}'"
 msgstr "pas de panneau masqué « {id} »"
 
-#: static/js/core/layout.js:619
+#: static/js/core/layout.js:621
 msgid "Show buffer"
 msgstr "Afficher le panneau"
 
-#: static/js/core/layout.js:628 static/js/core/layout.js:631
+#: static/js/core/layout.js:630 static/js/core/layout.js:633
 msgid "Change view"
 msgstr "Changer de vue"
 
-#: static/js/core/layout.js:640
+#: static/js/core/layout.js:642
 msgid "Maximised · the other panes are tabs in its header"
 msgstr "Agrandi · les autres panneaux sont des onglets dans son en-tête"
 
-#: static/js/core/layout.js:640
+#: static/js/core/layout.js:642
 msgid "Restored"
 msgstr "Restauré"
 
-#: static/js/core/layout.js:645
+#: static/js/core/layout.js:647
 msgid "Collapse"
 msgstr "Replier"
 
-#: static/js/core/layout.js:653
+#: static/js/core/layout.js:655
 msgid "Swap panes"
 msgstr "Échanger les panneaux"
 
-#: static/js/core/layout.js:665
+#: static/js/core/layout.js:667
 msgid "Rotate split"
 msgstr "Pivoter la division"
 
-#: static/js/core/layout.js:673 design/commands/pane.toml:pane.equalize
+#: static/js/core/layout.js:675 design/commands/pane.toml:pane.equalize
 msgid "Equal sizes"
 msgstr "Tailles égales"
 
-#: static/js/core/layout.js:688
+#: static/js/core/layout.js:690
 msgid "no side-by-side split to resize"
 msgstr "pas de division côte à côte à redimensionner"
 
-#: static/js/core/layout.js:688
+#: static/js/core/layout.js:690
 msgid "no stacked split to resize"
 msgstr "pas de division superposée à redimensionner"
 
-#: static/js/core/layout.js:703
+#: static/js/core/layout.js:705
 msgid "Link group"
 msgstr "Groupe lié"
 
-#: static/js/core/layout.js:707
+#: static/js/core/layout.js:709
 msgid "Link group {group}"
 msgstr "Groupe lié {group}"
 
-#: static/js/core/layout.js:707
+#: static/js/core/layout.js:709
 msgid "Not linked"
 msgstr "Non lié"
 
-#: static/js/core/layout.js:713
+#: static/js/core/layout.js:715
 msgid "Pin"
 msgstr "Épingler"
 
-#: static/js/core/layout.js:716
+#: static/js/core/layout.js:718
 msgid "Pinned: this pane keeps its subject"
 msgstr "Épinglé : ce panneau garde son sujet"
 
-#: static/js/core/layout.js:716
+#: static/js/core/layout.js:718
 msgid "Unpinned"
 msgstr "Désépinglé"
 
-#: static/js/core/layout.js:723
+#: static/js/core/layout.js:725
 msgid "Reset layout"
 msgstr "Réinitialiser la disposition"
 
-#: static/js/core/layout.js:741
+#: static/js/core/layout.js:743
 msgid "no layout '{name}'"
 msgstr "pas de disposition « {name} »"
 
-#: static/js/core/layout.js:743
+#: static/js/core/layout.js:745
 msgid "Load layout {name}"
 msgstr "Charger la disposition {name}"
 
@@ -6239,31 +6491,31 @@ msgstr[1] "{n} FEN"
 msgid "This pane has no text field"
 msgstr "Ce panneau n'a pas de champ de texte"
 
-#: static/js/core/settings.js:146
+#: static/js/core/settings.js:151
 msgid "↵ edits this one on the command line"
 msgstr "↵ modifie celui-ci sur la ligne de commande"
 
-#: static/js/core/settings.js:163
+#: static/js/core/settings.js:168
 msgid "Already the default"
 msgstr "Déjà la valeur par défaut"
 
-#: static/js/core/settings.js:178
+#: static/js/core/settings.js:183
 msgid "Settings exported as TOML: Settings → Data imports them on another machine"
 msgstr "Réglages exportés en TOML : Réglages → Données les importe sur un autre appareil"
 
-#: static/js/core/settings.js:187
+#: static/js/core/settings.js:192
 msgid "Import: the app is not reachable"
 msgstr "Import : l'app est injoignable"
 
-#: static/js/core/settings.js:199
+#: static/js/core/settings.js:204
 msgid "New keys for “{command}”: {keys} · ↵ keep · Esc cancel"
 msgstr "Nouvelles touches pour « {command} » : {keys} · ↵ garder · Échap annuler"
 
-#: static/js/core/settings.js:205
+#: static/js/core/settings.js:210
 msgid "Cancelled"
 msgstr "Annulé"
 
-#: static/js/core/settings.js:231
+#: static/js/core/settings.js:236
 msgid "No keys to remove here"
 msgstr "Pas de touches à retirer ici"
 
@@ -6539,121 +6791,121 @@ msgstr "récente"
 msgid "mature"
 msgstr "acquise"
 
-#: static/js/islands/train.js:93
+#: static/js/islands/train.js:105
 msgid "Train needs a board pane: ␣ w v, then b"
 msgstr "L'entraînement a besoin d'un panneau échiquier : ␣ w v, puis b"
 
-#: static/js/islands/train.js:96
+#: static/js/islands/train.js:108
 msgid "Could not start: the app is not reachable"
 msgstr "Impossible de démarrer : l'app est injoignable"
 
-#: static/js/islands/train.js:97
+#: static/js/islands/train.js:109
 msgid "Could not start"
 msgstr "Impossible de démarrer"
 
-#: static/js/islands/train.js:323
+#: static/js/islands/train.js:335
 msgid "retry (not scored)"
 msgstr "nouvel essai (non compté)"
 
-#: static/js/islands/train.js:358
+#: static/js/islands/train.js:370
 msgid "White: {pieces}"
 msgstr "Blancs : {pieces}"
 
-#: static/js/islands/train.js:358
+#: static/js/islands/train.js:370
 msgid "Black: {pieces}"
 msgstr "Noirs : {pieces}"
 
-#: static/js/islands/train.js:372
+#: static/js/islands/train.js:384
 msgid "×{level} combo · +{seconds}s a puzzle"
 msgstr "combo ×{level} · +{seconds} s par exercice"
 
-#: static/js/islands/train.js:379
+#: static/js/islands/train.js:391
 msgid "Black to play"
 msgstr "Les Noirs jouent"
 
-#: static/js/islands/train.js:379
+#: static/js/islands/train.js:391
 msgid "White to play"
 msgstr "Les Blancs jouent"
 
-#: static/js/islands/train.js:380
+#: static/js/islands/train.js:392
 msgid "Find the first move"
 msgstr "Trouvez le premier coup"
 
-#: static/js/islands/train.js:380
+#: static/js/islands/train.js:392
 msgid "Find the best continuation"
 msgstr "Trouvez la meilleure suite"
 
-#: static/js/islands/train.js:441
+#: static/js/islands/train.js:453
 msgid "The move is on the board · this puzzle counts as missed"
 msgstr "Le coup est sur l'échiquier · cet exercice compte comme manqué"
 
-#: static/js/islands/train.js:441
+#: static/js/islands/train.js:453
 msgid "The piece to move is circled · this puzzle counts as missed"
 msgstr "La pièce à jouer est entourée · cet exercice compte comme manqué"
 
-#: static/js/islands/train.js:488
+#: static/js/islands/train.js:500
 msgid "Solution shown"
 msgstr "Solution affichée"
 
-#: static/js/islands/train.js:488
+#: static/js/islands/train.js:500
 msgid "Solved with a hint · counts as missed"
 msgstr "Résolu avec un indice · compte comme manqué"
 
-#: static/js/islands/train.js:489
+#: static/js/islands/train.js:501
 msgid "{move} was not it"
 msgstr "{move} n'était pas le bon"
 
-#: static/js/islands/train.js:495
+#: static/js/islands/train.js:507
 msgid "next {when}"
 msgstr "prochaine {when}"
 
-#: static/js/islands/train.js:496
+#: static/js/islands/train.js:508
 msgid "solved before it was due: the schedule stays (next {when})"
 msgstr "résolu avant l'échéance : le planning reste (prochaine {when})"
 
-#: static/js/islands/train.js:503
+#: static/js/islands/train.js:515
 msgid "the run is over: ↵ shows the result"
 msgstr "la série est terminée : ↵ affiche le résultat"
 
-#: static/js/islands/train.js:564
+#: static/js/islands/train.js:576
 msgid "The analysis beside the board · ↵ next puzzle closes it · A opens it in Analyse"
 msgstr "L'analyse à côté de l'échiquier · ↵ exercice suivant la ferme · A l'ouvre dans l'Analyse"
 
-#: static/js/islands/train.js:572
+#: static/js/islands/train.js:584
 msgid "Flagged as broken: is:flagged in the Library lists it"
 msgstr "Signalé comme défectueux : is:flagged dans la Bibliothèque le liste"
 
-#: static/js/islands/train.js:572
+#: static/js/islands/train.js:584
 msgid "Could not flag it"
 msgstr "Impossible de le signaler"
 
-#: static/js/islands/train.js:608
+#: static/js/islands/train.js:621
 msgid "the {n} not reached stay due"
 msgstr "les {n} non atteints restent à réviser"
 
-#: static/js/islands/train.js:638
+#: static/js/islands/train.js:651
 msgid "Copied the result"
 msgstr "Résultat copié"
 
-#: static/js/islands/train.js:650
+#: static/js/islands/train.js:663
 msgid "↵ next puzzle · q end the session and see the result"
 msgstr "↵ exercice suivant · q terminer la session et voir le résultat"
 
-#: static/js/islands/train.js:654
+#: static/js/islands/train.js:667
 msgid "Quit the Storm? y / n"
 msgstr "Quitter le Storm ? y / n"
 
-#: static/js/islands/train.js:658
+#: static/js/islands/train.js:671
 msgid "Paused · ↵ resume · q quit · r restart"
 msgstr "En pause · ↵ reprendre · q quitter · r recommencer"
 
-#: static/js/islands/train.js:158
+#: static/js/islands/train.js:170
 msgid "{n} card matches"
 msgid_plural "{n} cards match"
 msgstr[0] "{n} carte correspond"
 msgstr[1] "{n} cartes correspondent"
 
-#: static/js/islands/train.js:608
+#: static/js/islands/train.js:621
 msgid "Stopped after {n} puzzle"
 msgid_plural "Stopped after {n} puzzles"
 msgstr[0] "Arrêté après {n} exercice"
@@ -7222,10 +7474,6 @@ msgstr "Réinitialiser la disposition de ce mode"
 #: design/commands/pane.toml:section.toggle
 msgid "Fold / unfold the section"
 msgstr "Replier / déplier la section"
-
-#: design/commands/pane.toml:section.toggle design/commands/pane.toml:section.all design/commands/pane.toml:section.next
-msgid "Sections"
-msgstr "Sections"
 
 #: design/commands/pane.toml:section.toggle design/commands/pane.toml:section.all design/commands/pane.toml:section.next
 msgid "this pane has no sections"
