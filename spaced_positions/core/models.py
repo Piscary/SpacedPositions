@@ -80,3 +80,18 @@ class KeymapOverride(models.Model):
     class Meta:
         ordering = ["context", "keys"]
         constraints = [models.UniqueConstraint(fields=["user", "context", "keys"], name="keymap_override_once")]
+
+
+class UsageCount(models.Model):
+    """How often a command ran on a day, and how (spec 14 §5): the usage report's counts. Counts only, never what
+    a command worked on; kept in this database and sent nowhere. `name` is a command id or `error.js` /
+    `error.server` for the errors the app caught."""
+
+    user = models.CharField(max_length=64, default=LOCAL_USER)
+    day = models.DateField()
+    name = models.CharField(max_length=80)
+    source = models.CharField(max_length=10, help_text="key · mouse · hint · cmdline · error")
+    count = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["user", "day", "name", "source"], name="usage_user_day_name_source")]

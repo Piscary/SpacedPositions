@@ -2210,6 +2210,14 @@
    ],
    "handler": "server"
   },
+  "app.testreport": {
+   "title": "Usage report for the test group (a file, counts only)",
+   "group": "App",
+   "aliases": [
+    "test-report"
+   ],
+   "handler": "client"
+  },
   "app.folder": {
    "title": "Open the data folder",
    "group": "App",
@@ -3892,6 +3900,10 @@
    },
    "O": {
     "command": "app.folder",
+    "args": []
+   },
+   "R": {
+    "command": "app.testreport",
     "args": []
    }
   },

@@ -72,7 +72,7 @@ function onKeyDown(e) {
     const binding = keymap()["layer.insert"]?.[token]
     if (binding) {
       e.preventDefault()
-      run(binding.command, binding.args)
+      run(binding.command, binding.args, { source: "key" })
     }
     return // everything else types
   }
@@ -100,7 +100,7 @@ function onKeyDown(e) {
         cancelPending()
       }
       const started = performance.now()
-      run(binding.command, binding.args).finally(() => {
+      run(binding.command, binding.args, { source: "key" }).finally(() => {
         perf.push({ keys: text, ms: performance.now() - started })
         if (perf.length > 50) perf.shift()
       })

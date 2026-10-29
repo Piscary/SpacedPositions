@@ -400,6 +400,7 @@ accept = ["[", "]"]
 "E" = "settings.export"
 "B" = "app.backup"
 "O" = "app.folder"
+"R" = "app.testreport"
 
 [context."view.keymap"]
 "enter" = "keymap.bind"

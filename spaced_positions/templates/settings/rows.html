@@ -45,7 +45,7 @@
 {% endfor %}
 {% translate "export · import" as data_summary %}{% section _("Data") key="x" summary=data_summary %}
   <div class="settings__data">
-    <div class="actionbar">{% cmd "settings.export" label=_("Export settings (TOML)") size="sm" %}<a class="keybutton keybutton--secondary keybutton--sm" href="/lib/export/?c=positions&q=" download>{% translate "Export the library (PGN)" %}</a></div>
+    <div class="actionbar">{% cmd "settings.export" label=_("Export settings (TOML)") size="sm" %}<a class="keybutton keybutton--secondary keybutton--sm" href="/lib/export/?c=positions&q=" download>{% translate "Export the library (PGN)" %}</a>{% cmd "app.testreport" label=_("Usage report") size="sm" %}</div>
     <form class="settings__import" data-settings-import>
       <textarea class="field field--mono" name="text" aria-label="{% translate "Settings or a theme to import" %}" placeholder="{% if is_mac %}{% translate "Paste exported settings or a theme (TOML), then ⌘↵" %}{% else %}{% translate "Paste exported settings or a theme (TOML), then Ctrl+↵" %}{% endif %}"></textarea>
     </form>

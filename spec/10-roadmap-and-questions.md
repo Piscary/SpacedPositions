@@ -27,7 +27,7 @@ The way ahead is in milestones with goals that have to be met before the next st
 
 **Before the test group (M0):**
 
-- `:test-report` (a usage report with counts only, written on request) and `:feedback` (opens the feedback form with
+- ~~`:test-report`~~ (done: a usage report with counts only, written on request) and `:feedback` (opens the feedback form with
   the version and the mode), 14 §5.
 - Release builds tested on clean macOS and Windows accounts: install, first puzzle, an update with the data kept.
 - A tester note, the surveys and the feedback log (`docs/testing/feedback-log.csv`).

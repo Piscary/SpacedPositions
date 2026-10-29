@@ -74,7 +74,8 @@ Nothing is collected automatically: the app sends nothing (09 §11). Testers sen
 
 - **Surveys**: the single ease question per task (§4); a **weekly pulse** of five questions (§6); at the end the
   **System Usability Scale** (10 standard questions, scored 0–100) and the conversation.
-- **The usage report**, a file the app writes on request (`:test-report`, to be built for the test): counts only,
+- **The usage report**, a file the app writes on request (`:test-report`, Settings → Data, `R` in Settings; built:
+  `core/usage.py`, `static/js/core/usage.js`): counts only,
   never positions, names or texts. Version, platform, language; days used; puzzles trained per day; solved / missed;
   minutes per session; how often each command was run **by key, by click or by the command line** (this shows whether
   people move from clicks to keys over the weeks); time from install to the first solved puzzle; errors the app
@@ -139,7 +140,10 @@ more testers is planned whatever its severity.
 - [ ] Release builds for macOS and Windows, tested on clean machines (a fresh user account), install to first puzzle
 - [ ] An update from one test version to the next tested, data kept (also `spos update`)
 - [ ] Backups and `spos restore` tried once
-- [ ] `:test-report` and `:feedback` built (§5)
+- [x] `:test-report` built (§5): commands counted per day by key, click, hint label or command line (only what the
+  user did, not what commands run themselves), the errors caught in the browser and in the app, kept in the app's
+  database (`UsageCount`), sent nowhere
+- [ ] `:feedback` built (§5)
 - [ ] The tester note, the form, the surveys and the feedback log ready
 - [ ] A known-issues list, so testers don't report the same things
 - [ ] Dates fixed: the observed first sessions, the weekly pulses, the conversations

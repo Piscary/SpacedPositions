@@ -7,6 +7,7 @@
   <dt>{% translate "Change it" %}</dt><dd>{% blocktranslate trimmed %}{{ step }} next value, {{ back }} previous one, or click a choice.{% endblocktranslate %}</dd>
   <dt>{% translate "Type a value" %}</dt><dd>{% blocktranslate trimmed %}{{ edit }} opens the command line with the setting: the choices are listed, {{ tab }} completes, ↵ sets it.{% endblocktranslate %}</dd>
   <dt>{% translate "Back to the default" %}</dt><dd>{{ reset }}</dd>
+  {% key "app.testreport" keys_in="view.settings" as report %}<dt>{% translate "Usage report" %}</dt><dd>{% blocktranslate trimmed %}{{ report }} (or <code>:test-report</code>) writes a file for the test group: how often you trained and which commands you used, by key or by click. Counts only, no positions or texts; the app sends nothing, you decide whether to send the file.{% endblocktranslate %}</dd>
   <dt>{% translate "Change keys" %}</dt><dd>{% blocktranslate trimmed %}{{ keymap }} goes to the keymap.{% endblocktranslate %}</dd>
 {% endblock %}
 {% block with %}{% translate "Everything. A theme shows while the cursor is on it; it stays when you choose it." %}{% endblock %}

@@ -10,7 +10,7 @@
   <dt>{% translate "Make one pane big" %}</dt><dd>{% blocktranslate trimmed %}{{ maximize }}; the same keys bring the others back.{% endblocktranslate %}</dd>
   {% key "section.next" as next_section %}{% key "section.prev" as prev_section %}<dt>{% translate "Sections" %}</dt><dd>{% blocktranslate trimmed %}{{ next_section }} and {{ prev_section }} go to the next and previous section in every pane (also g and the letter in its header): it opens, and the cursor is on its first row, so j and k go on from there.{% endblocktranslate %}</dd>
   <dt>{% translate "Move between panes" %}</dt><dd>{% blocktranslate trimmed %}{{ next_pane }}, or click into a pane. The focused pane has a coloured header.{% endblocktranslate %}</dd>
-  <dt>{% translate "Link panes" %}</dt><dd>{% blocktranslate trimmed %}Panes with the same letter in their header (A, B …) stay synchronized: when you step to the next move in one, the others follow. For example, the board, the move tree and the engine of group A always show the same position. {{ group }} changes the letter.{% endblocktranslate %}</dd>
+  <dt>{% translate "Link panes" %}</dt><dd>{% blocktranslate trimmed %}Panes with the same letter in their header (A, B …) stay synchronised: when you step to the next move in one, the others follow. For example, the board, the move tree and the engine of group A always show the same position. {{ group }} changes the letter.{% endblocktranslate %}</dd>
 {% endblock %}
 {% block with %}{% translate "Every pane works with the panes of its link group. A new pane gets the group of the pane it was split from." %}{% endblock %}
 {% block tips %}

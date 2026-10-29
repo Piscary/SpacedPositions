@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import chess_views, engine_local, settings_view, updates, views
+from . import chess_views, engine_local, settings_view, updates, usage, views
 
 app_name = "core"
 
@@ -9,6 +9,8 @@ urlpatterns = [
     path("healthz", views.healthz, name="healthz"),
     path("beat/", views.beat, name="beat"),
     path("app/update/", updates.check, name="update_check"),
+    path("usage/", usage.record, name="usage"),
+    path("usage/report/", usage.report_file, name="usage_report"),
     path("m/<str:mode>/", views.workspace, name="workspace"),
     path("m/<str:mode>/default", views.default_layout, name="default_layout"),
     path("v/<str:view>/", views.view_fragment, name="view"),

@@ -79,10 +79,11 @@ export async function serverRun(id, args, extra = {}) {
 }
 
 /**
- * Run a command. source: "key" | "mouse" | "cmdline" | "undo".
+ * Run a command. source: what started it, "key" | "mouse" | "hint" | "cmdline" | "undo" | "repeat", or "code" when another
+ * command or a module runs it (the usage report counts only what the user did).
  * Returns false if it didn't run.
  */
-export async function run(id, args = [], { source = "key", silent = false } = {}) {
+export async function run(id, args = [], { source = "code", silent = false } = {}) {
   const spec = registry.commands[id]
   if (!spec) {
     status(tr("unknown command '{id}'", { id }), { kind: "error" })
@@ -205,5 +206,5 @@ document.addEventListener("click", (event) => {
   if (!el || el.closest("[aria-disabled='true']")) return
   event.preventDefault()
   const args = el.dataset.args ? el.dataset.args.split(" ") : []
-  run(el.dataset.cmd, args, { source: "mouse" })
+  run(el.dataset.cmd, args, { source: ctx.viaHint ? "hint" : "mouse" })
 })

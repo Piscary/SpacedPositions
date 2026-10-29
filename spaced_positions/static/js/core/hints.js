@@ -77,7 +77,10 @@ function onKey(e, token) {
     const { target } = matches[0]
     close()
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) target.focus()
-    else target.click()
+    else {
+      ctx.viaHint = true // the click comes from the keyboard: commands count it as "hint", not "mouse"
+      try { target.click() } finally { ctx.viaHint = false }
+    }
   } else if (!matches.length) close()
 }
 

@@ -78,9 +78,27 @@ Texts are marked with `{% translate %}` / `{% blocktranslate trimmed %}` in temp
 4. `.venv/bin/python manage.py i18n fill /tmp/fill.json`, then `.venv/bin/python manage.py i18n build`
 5. `.venv/bin/python manage.py design check` (fails on untranslated texts)
 
-Keep placeholders (`%(name)s`, `{n}`, `{keys}`) exactly. Use the terms already in the catalogues
-(`locale/*/LC_MESSAGES/django.po`): puzzle = Aufgabe / exercice / esercizio, card = Karte / carte / scheda.
-Short, plain words; the user is addressed with "du" in German, "vous" in French, "tu" in Italian.
+Keep placeholders (`%(name)s`, `{n}`, `{keys}`) exactly. Short, plain words; the user is addressed with "du" in
+German, "vous" in French, "tu" in Italian. English is British ("colour", "organised", "synchronised").
+
+**Use the terms already in the catalogues** (`locale/*/LC_MESSAGES/django.po`); before translating a word that names
+something in the app, look up how it is translated there (`grep -A1 'msgid "Library"' locale/it/LC_MESSAGES/django.po`).
+Names of modes and panes keep their capital letter in every language. The glossary:
+
+| English | German | French | Italian |
+|---|---|---|---|
+| pane | Bereich | panneau | riquadro |
+| link group | Verknüpfungsgruppe | groupe lié | gruppo collegato |
+| button / key | Knopf / Taste | bouton / touche | pulsante / tasto |
+| Space (the key) | Leertaste | barre d'espace | barra spaziatrice |
+| layout | Anordnung | disposition | disposizione |
+| modes: Home, Train, Analyse, Collect, Library, Stats, Settings | Start, Training, Analyse, Erfassen, Bibliothek, Statistik, Einstellungen | Accueil, Entraînement, Analyse, Saisie, Bibliothèque, Statistiques, Réglages | Home, Allenamento, Analisi, Inserimento, Biblioteca, Statistiche, Impostazioni |
+| board, move tree, engine | Brett, Zugbaum, Engine | échiquier, arbre des coups, moteur | scacchiera, albero delle mosse, motore |
+| puzzle, card, solver | Aufgabe, Karte, lösende Seite | exercice, carte, joueur | esercizio, scheda, chi risolve |
+| also correct (a move) | auch richtig | également correct | anche corretta (la mossa) |
+
+When you change an English text that is already translated, the old translations are lost: translate the new text
+in all three languages, and read each translation back as a native speaker would before you fill it in.
 
 ## Reports
 

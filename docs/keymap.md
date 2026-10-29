@@ -450,6 +450,7 @@ reference is `spec/08-keymap.md`.
 | `E` | Export the settings (TOML) | `settings.export` |
 | `B` | Back up now | `app.backup` |
 | `O` | Open the data folder | `app.folder` |
+| `R` | Usage report for the test group (a file, counts only) | `app.testreport` |
 
 ## view.keymap
 
