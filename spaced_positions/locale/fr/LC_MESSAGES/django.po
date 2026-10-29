@@ -160,11 +160,11 @@ msgstr "%(start)s · %(side)s au trait"
 
 #: templates/analysis/puzzle.html
 msgid "where the solver begins"
-msgstr "où commence le camp qui résout"
+msgstr "où commence le joueur"
 
 #: templates/analysis/puzzle.html
 msgid "Go to the move after which the solver moves (%(gg)s: the start position), then set the puzzle up. It starts as a draft."
-msgstr "Allez au coup après lequel joue le camp qui résout (%(gg)s : la position de départ), puis créez l'exercice. Il commence comme brouillon."
+msgstr "Allez au coup après lequel joue le joueur (%(gg)s : la position de départ), puis créez l'exercice. Il commence comme brouillon."
 
 #: templates/analysis/puzzle.html
 msgid "Set up a puzzle from here"
@@ -196,7 +196,7 @@ msgstr "La solution s'arrête ici"
 
 #: templates/analysis/puzzle.html analysis/puzzles.py:150
 msgid "Also correct"
-msgstr "Aussi correct"
+msgstr "Également correct"
 
 #: templates/analysis/puzzle.html
 msgid "All answers count"
@@ -204,7 +204,7 @@ msgstr "Toutes les réponses comptent"
 
 #: templates/analysis/puzzle.html
 msgid "After the start: the moves the solver must find and the answers the trainer plays."
-msgstr "Après le départ : les coups que le camp qui résout doit trouver et les réponses que joue l'entraîneur."
+msgstr "Après le départ : les coups que le joueur doit trouver et les réponses que joue l'entraîneur."
 
 #: templates/analysis/puzzle.html core/settings_view.py:26
 msgid "Training"
@@ -264,7 +264,7 @@ msgstr "début"
 
 #: templates/analysis/puzzle.html
 msgid "solver"
-msgstr "camp qui résout"
+msgstr "joueur"
 
 #: templates/analysis/puzzle.html
 msgid "answer"
@@ -880,7 +880,7 @@ msgstr "Chaque changement s'annule avec u, même après un rechargement."
 
 #: templates/help/pane.html
 msgid "The workspace is made of panes — like windows in a program, but arranged without overlapping. Each pane shows one view: a board, a move tree, the Library, a chart … You choose what goes where."
-msgstr "L'espace de travail est composé de panneaux — comme des fenêtres dans un programme, mais disposés sans se chevaucher. Chaque panneau affiche une vue : un échiquier, un arbre de coups, la bibliothèque, un graphique … Vous choisissez ce qui va où."
+msgstr "L'espace de travail est fait de panneaux — comme les fenêtres d'un programme, mais disposés sans se chevaucher. Chaque panneau montre une vue : un échiquier, un arbre des coups, la Bibliothèque, un graphique … Vous choisissez ce qui va où."
 
 #: templates/help/pane.html
 msgid "Everything a pane can do"
@@ -935,8 +935,8 @@ msgid "Link panes"
 msgstr "Lier des panneaux"
 
 #: templates/help/pane.html
-msgid "Panes with the same letter in their header (A, B …) stay synchronized: when you step to the next move in one, the others follow. For example, the board, the move tree and the engine of group A always show the same position. %(group)s changes the letter."
-msgstr "Les panneaux avec la même lettre dans leur en-tête (A, B …) restent synchronisés : quand vous passez au coup suivant dans l'un, les autres suivent. Par exemple, l'échiquier, l'arbre de coups et le moteur du groupe A affichent toujours la même position. %(group)s change la lettre."
+msgid "Panes with the same letter in their header (A, B …) stay synchronised: when you step to the next move in one, the others follow. For example, the board, the move tree and the engine of group A always show the same position. %(group)s changes the letter."
+msgstr "Les panneaux avec la même lettre dans leur en-tête (A, B …) restent synchronisés : quand vous passez au coup suivant dans l'un, les autres suivent. Par exemple, l'échiquier, l'arbre des coups et le moteur du groupe A montrent toujours la même position. %(group)s change la lettre."
 
 #: templates/help/pane.html
 msgid "Every pane works with the panes of its link group. A new pane gets the group of the pane it was split from."
@@ -988,7 +988,7 @@ msgstr "1 · Départ"
 
 #: templates/help/puzzle.html
 msgid "Go to the move after which the solver moves (%(home)s: the start position) and %(start)s. The puzzle begins as a draft."
-msgstr "Allez au coup après lequel joue le camp qui résout (%(home)s : la position de départ) et %(start)s. L'exercice commence comme brouillon."
+msgstr "Allez au coup après lequel joue le joueur (%(home)s : la position de départ) et %(start)s. L'exercice commence comme brouillon."
 
 #: templates/help/puzzle.html
 msgid "2 · Solution"
@@ -996,7 +996,7 @@ msgstr "2 · Solution"
 
 #: templates/help/puzzle.html
 msgid "The main line after the start is the solution; the pane lists its lines, a click goes to one. %(end)s ends a line at the cursor, %(also)s accepts another solver move, %(answers)s on a solver move makes every answer to it a line of its own."
-msgstr "La ligne principale après le départ est la solution ; le panneau liste ses lignes, un clic mène à l'une d'elles. %(end)s termine une ligne au curseur, %(also)s accepte un autre coup du camp qui résout, %(answers)s sur un coup du camp qui résout fait de chaque réponse une ligne à part."
+msgstr "La ligne principale après le départ est la solution ; le panneau liste ses lignes, un clic mène à l'une d'elles. %(end)s termine une ligne au curseur, %(also)s accepte un autre coup du joueur, %(answers)s sur un coup du joueur fait de chaque réponse une ligne à part."
 
 #: templates/help/puzzle.html
 msgid "3 · Training"
@@ -1016,7 +1016,7 @@ msgstr "Ouvert depuis une liste, le panneau montre où vous en êtes : %(next)s 
 
 #: templates/help/puzzle.html
 msgid "The moves, board and inspector of the same link group: the moves show the puzzle too (the start framed, solver moves underlined, answers dotted, the ends with a small square)."
-msgstr "Les coups, l'échiquier et l'inspecteur du même groupe lié : les coups montrent aussi l'exercice (le départ encadré, les coups du camp qui résout soulignés, les réponses en pointillé, les fins avec un petit carré)."
+msgstr "Les coups, l'échiquier et l'inspecteur du même groupe lié : les coups montrent aussi l'exercice (le départ encadré, les coups du joueur soulignés, les réponses en pointillé, les fins avec un petit carré)."
 
 #: templates/help/puzzle.html
 msgid "The puzzle keys work in every pane of Analyse: p and a letter (p s, p x, p a, p o, p r, p d)."
@@ -1309,6 +1309,14 @@ msgstr "%(edit)s ouvre la ligne de commande avec le réglage : les choix sont li
 #: templates/help/settings.html design/commands/settings.toml:settings.reset
 msgid "Back to the default"
 msgstr "Retour à la valeur par défaut"
+
+#: templates/help/settings.html templates/settings/rows.html
+msgid "Usage report"
+msgstr "Rapport d'utilisation"
+
+#: templates/help/settings.html
+msgid "%(report)s (or <code>:test-report</code>) writes a file for the test group: how often you trained and which commands you used, by key or by click. Counts only, no positions or texts; the app sends nothing, you decide whether to send the file."
+msgstr "%(report)s (ou <code>:test-report</code>) écrit un fichier pour le groupe de test : fréquence d'entraînement et commandes utilisées, par touche ou par clic. Comptages uniquement, pas de positions ni de textes ; l'application n'envoie rien, vous décidez d'envoyer le fichier."
 
 #: templates/help/settings.html
 msgid "Change keys"
@@ -1716,7 +1724,7 @@ msgstr "leader"
 msgid "commands"
 msgstr "commandes"
 
-#: templates/shell.html core/layouts.py:56
+#: templates/shell.html core/layouts.py:56 core/usage.py:137
 msgid "keys"
 msgstr "touches"
 
@@ -1998,11 +2006,11 @@ msgstr "Temps par exercice"
 msgid "Time per puzzle · solved / missed · longest %(s)ss"
 msgstr "Temps par exercice · résolus / manqués · le plus long %(s)s s"
 
-#: templates/training/result.html
+#: templates/training/result.html core/usage.py:124
 msgid "solved"
 msgstr "résolu"
 
-#: templates/training/result.html
+#: templates/training/result.html core/usage.py:124
 msgid "missed"
 msgstr "manqué"
 
@@ -2362,11 +2370,11 @@ msgstr "Premiers pas"
 
 #: templates/views/today.html
 msgid "Everything works with the mouse. The keyboard keys are there to make it fast once you learn them — and every button shows its key, so you learn by clicking. Try these seven, each one ticks itself off."
-msgstr "Tout fonctionne à la souris. Les raccourcis clavier servent à aller plus vite une fois qu'on les connaît — et chaque bouton affiche sa touche, donc vous apprenez en cliquant. Essayez ces sept touches, chacune se coche d'elle-même."
+msgstr "Tout marche à la souris. Les touches rendent l'app rapide une fois que vous les connaissez — et chaque bouton montre sa touche, vous les apprenez donc en cliquant. Essayez ces sept, chacune se coche toute seule."
 
 #: templates/views/today.html
 msgid "%(go_library)s switches to the Library, %(go_home)s back here. The app has several modes — Train, Analyse, Library — each with its own layout. Space alone shows where else you can go."
-msgstr "%(go_library)s bascule sur la bibliothèque, %(go_home)s revient ici. L'application a plusieurs modes — Entraînement, Analyse, Bibliothèque — chacun avec sa propre disposition. L'espace seul montre où aller."
+msgstr "%(go_library)s passe à la Bibliothèque, %(go_home)s revient ici. L'app a plusieurs modes — Entraînement, Analyse, Bibliothèque —, chacun avec sa propre disposition. La barre d'espace seule montre les autres destinations."
 
 #: templates/views/today.html
 msgid "%(help)s opens the help of the panel you are in: a guide, its keys, and how to search."
@@ -2536,7 +2544,7 @@ msgstr "après {move}"
 
 #: analysis/puzzles.py:218
 msgid "No puzzle at this move. A puzzle starts after a move (or at the start position): the solver plays the moves that follow."
-msgstr "Pas d'exercice à ce coup. Un exercice commence après un coup (ou à la position de départ) : le camp qui résout joue les coups qui suivent."
+msgstr "Pas d'exercice à ce coup. Un exercice commence après un coup (ou à la position de départ) : le joueur joue les coups qui suivent."
 
 #: analysis/puzzles.py:220
 msgid "The puzzle starts here: the side to move finds the solution."
@@ -2548,7 +2556,7 @@ msgstr "La ligne s'arrête ici."
 
 #: analysis/puzzles.py:230
 msgid "Not part of the solution: the solver's move here is another one. Also correct (p a) accepts it too."
-msgstr "Pas dans la solution : le coup du camp qui résout est ici un autre. Aussi correct (p a) l'accepte aussi."
+msgstr "Pas dans la solution : le coup du joueur est ici un autre. Également correct (p a) l'accepte aussi."
 
 #: analysis/puzzles.py:253
 msgid "a puzzle already starts here"
@@ -2564,11 +2572,11 @@ msgstr "jouez d'abord la solution : il n'y a pas de coups après cette position"
 
 #: analysis/puzzles.py:149
 msgid "only the solver's moves can be also correct"
-msgstr "seuls les coups du camp qui résout peuvent être aussi corrects"
+msgstr "seuls les coups du joueur peuvent être aussi corrects"
 
 #: analysis/puzzles.py:153
 msgid "on a solver move: every answer to it then continues the puzzle"
-msgstr "sur un coup du camp qui résout : chaque réponse continue alors l'exercice"
+msgstr "sur un coup du joueur : chaque réponse continue alors l'exercice"
 
 #: analysis/puzzles.py:166
 msgid "unknown puzzle action {action}"
@@ -2576,11 +2584,11 @@ msgstr "action d'exercice inconnue {action}"
 
 #: analysis/puzzles.py:224
 msgid "A solver move: the trainer expects it."
-msgstr "Un coup du camp qui résout : l'entraîneur l'attend."
+msgstr "Un coup du joueur : l'entraîneur l'attend."
 
 #: analysis/puzzles.py:226
 msgid "Also correct: the trainer accepts it too, and goes on with the main line."
-msgstr "Aussi correct : l'entraîneur l'accepte aussi et continue avec la ligne principale."
+msgstr "Également correct : l'entraîneur l'accepte aussi et continue avec la ligne principale."
 
 #: analysis/puzzles.py:228
 msgid "An answer: the trainer plays it for the opponent."
@@ -2600,7 +2608,7 @@ msgstr "allez à un coup après le départ"
 
 #: analysis/puzzles.py:267 analysis/puzzles.py:269
 msgid "go to one of the solver's moves"
-msgstr "allez à un coup du camp qui résout"
+msgstr "allez à un coup du joueur"
 
 #: analysis/puzzles.py:271
 msgid "At the start: go to a move of the solution to mark it."
@@ -2612,7 +2620,7 @@ msgstr "Les {n} réponses comptent : {n} lignes"
 
 #: analysis/puzzles.py:272
 msgid "On an answer: Also correct and All answers count need one of the solver's moves."
-msgstr "Sur une réponse : Aussi correct et Toutes les réponses comptent demandent un coup du camp qui résout."
+msgstr "Sur une réponse : Également correct et Toutes les réponses comptent demandent un coup du joueur."
 
 #: analysis/render.py:83
 msgid "No moves yet: play one on the board, paste a PGN, or let the engine suggest one."
@@ -3050,7 +3058,7 @@ msgstr "Exercice : toutes les réponses comptent"
 msgid "Puzzle: discard"
 msgstr "Exercice : supprimer"
 
-#: core/layouts.py:208 core/layouts.py:222
+#: core/layouts.py:208 core/layouts.py:223
 msgid "Storm, 3 minutes"
 msgstr "Storm, 3 minutes"
 
@@ -3877,6 +3885,98 @@ msgstr "Une copie de développement : git pull, puis redémarrez-la."
 #: core/updates.py:75
 msgid "In a terminal: spos update. It stops the app, updates it and starts it again; your data stays."
 msgstr "Dans un terminal : spos update. La commande arrête l'app, la met à jour et la redémarre ; vos données restent."
+
+#: core/usage.py:107
+msgid "Spaced Positions: usage report"
+msgstr "Spaced Positions : rapport d'utilisation"
+
+#: core/usage.py:121
+msgid "Training per day"
+msgstr "Entraînement par jour"
+
+#: core/usage.py:137
+msgid "clicks"
+msgstr "clics"
+
+#: core/usage.py:137
+msgid "hint labels"
+msgstr "étiquettes d'indice"
+
+#: core/usage.py:137
+msgid "command line"
+msgstr "ligne de commande"
+
+#: core/usage.py:148
+msgid "How commands were started, per week"
+msgstr "Comment les commandes ont été lancées, par semaine"
+
+#: core/usage.py:119
+msgid "No puzzle solved yet"
+msgstr "Aucun exercice résolu pour le moment"
+
+#: core/usage.py:126 core/usage.py:152
+msgid "none yet"
+msgstr "aucun pour le moment"
+
+#: core/usage.py:108
+msgid "Written {date}. Counts only: no positions, names, comments or other texts. Nothing has been sent: you decide whether to send this file."
+msgstr "Écrit le {date}. Comptages uniquement : pas de positions, noms, commentaires ou autres textes. Rien n'a été envoyé : vous décidez d'envoyer ce fichier."
+
+#: core/usage.py:111
+msgid "Version"
+msgstr "Version"
+
+#: core/usage.py:111
+msgid "language"
+msgstr "langue"
+
+#: core/usage.py:113
+msgid "Installed {date} · days used: {n}"
+msgstr "Installé le {date} · jours utilisés : {n}"
+
+#: core/usage.py:124
+msgid "day"
+msgstr "jour"
+
+#: core/usage.py:124
+msgid "puzzles"
+msgstr "exercices"
+
+#: core/usage.py:124
+msgid "minutes"
+msgstr "minutes"
+
+#: core/usage.py:128
+msgid "Sessions: {n}"
+msgstr "Sessions : {n}"
+
+#: core/usage.py:150
+msgid "week"
+msgstr "semaine"
+
+#: core/usage.py:156
+msgid "command"
+msgstr "commande"
+
+#: core/usage.py:157
+msgid "Errors the app caught: in the browser {js}, in the app {server}"
+msgstr "Erreurs interceptées par l'application : dans le navigateur {js}, dans l'application {server}"
+
+#: core/usage.py:117
+msgid "First solved puzzle: {n} minutes after the install"
+msgstr "Premier exercice résolu : {n} minutes après l'installation"
+
+#: core/usage.py:131
+msgid "by mode: {modes}"
+msgstr "par mode : {modes}"
+
+#: core/usage.py:155
+msgid "Commands used most ({shown} of {n} used)"
+msgstr "Commandes les plus utilisées ({shown} sur {n} utilisées)"
+
+#: core/usage.py:134
+msgid "minutes per session: median {median}, longest {longest}"
+msgstr "minutes par session : médiane {median}, plus longue {longest}"
 
 #: core/user_pieces.py:29
 msgid "missing {value}"
@@ -5376,7 +5476,7 @@ msgstr "{short_id} a déjà un exercice depuis cette position : modifiez-le dans
 
 #: training/puzzles.py:70
 msgid "illegal solver move {uci} in {value}"
-msgstr "coup de solution illégal {uci} dans {value}"
+msgstr "coup du joueur illégal {uci} dans {value}"
 
 #: training/puzzles.py:75
 msgid "illegal answer {uci} in {value}"
@@ -5450,23 +5550,23 @@ msgstr "Aucun exercice à réviser ne correspond à « {filter} »"
 msgid "No puzzles in training match “{filter}”"
 msgstr "Aucun exercice en entraînement ne correspond à « {filter} »"
 
-#: static/js/app.js:45
+#: static/js/app.js:46
 msgid "Your CSS is off for this page (Esc while loading): Settings → Advanced"
 msgstr "Votre CSS est désactivé pour cette page (Échap au chargement) : Réglages → Avancé"
 
-#: static/js/app.js:62
+#: static/js/app.js:63
 msgid "update {version} available"
 msgstr "mise à jour {version} disponible"
 
-#: static/js/app.js:104 static/js/core/commands.js:149 static/js/core/importer.js:58
+#: static/js/app.js:105 static/js/core/commands.js:150 static/js/core/importer.js:58
 msgid "undo"
 msgstr "annuler"
 
-#: static/js/app.js:140 static/js/core/library.js:703 static/js/islands/train.js:653
+#: static/js/app.js:141 static/js/core/library.js:703 static/js/islands/train.js:653
 msgid "The browser didn't allow copying"
 msgstr "Le navigateur n'a pas permis la copie"
 
-#: static/js/app.js:160
+#: static/js/app.js:161
 msgid "Spaced Positions has stopped. Start it again from its icon or with spos."
 msgstr "Spaced Positions s'est arrêté. Relancez-le depuis son icône ou avec spos."
 
@@ -5732,27 +5832,27 @@ msgstr "pas disponible ici"
 msgid "{command}: the app is not reachable"
 msgstr "{command} : l'app est injoignable"
 
-#: static/js/core/commands.js:88
+#: static/js/core/commands.js:89
 msgid "unknown command '{id}'"
 msgstr "commande inconnue « {id} »"
 
-#: static/js/core/commands.js:121
+#: static/js/core/commands.js:122
 msgid "{command}: not implemented yet"
 msgstr "{command} : pas encore disponible"
 
-#: static/js/core/commands.js:157
+#: static/js/core/commands.js:158
 msgid "Undone: {what}"
 msgstr "Annulé : {what}"
 
-#: static/js/core/commands.js:157
+#: static/js/core/commands.js:158
 msgid "redo"
 msgstr "rétablir"
 
-#: static/js/core/commands.js:166
+#: static/js/core/commands.js:167
 msgid "Redone: {what}"
 msgstr "Rétabli : {what}"
 
-#: static/js/core/commands.js:197
+#: static/js/core/commands.js:198
 msgid "tip: "
 msgstr "astuce : "
 
@@ -6551,6 +6651,10 @@ msgstr "Pas encore de tags : tapez pour en trouver un"
 #: static/js/core/tagpicker.js:136
 msgid "and stay"
 msgstr "et rester"
+
+#: static/js/core/usage.js:50
+msgid "Usage report written: look it over, then send it as the test group's note says"
+msgstr "Rapport d'utilisation écrit : vérifiez-le, puis envoyez-le comme indiqué dans la note du groupe de test"
 
 #: static/js/islands/board.js:134
 msgid "Promote to"
@@ -7843,6 +7947,10 @@ msgstr "Votre propre CSS (Réglages → Avancé)"
 #: design/commands/ui.toml:app.backup
 msgid "Back up now"
 msgstr "Sauvegarder maintenant"
+
+#: design/commands/ui.toml:app.testreport
+msgid "Usage report for the test group (a file, counts only)"
+msgstr "Rapport d'utilisation pour le groupe de test (un fichier, comptages uniquement)"
 
 #: design/commands/ui.toml:app.folder
 msgid "Open the data folder"

@@ -880,7 +880,7 @@ msgstr "Ogni modifica si annulla con u, anche dopo un ricaricamento."
 
 #: templates/help/pane.html
 msgid "The workspace is made of panes — like windows in a program, but arranged without overlapping. Each pane shows one view: a board, a move tree, the Library, a chart … You choose what goes where."
-msgstr "L'area di lavoro è composta da pannelli — come le finestre di un programma, ma disposti senza sovrapporsi. Ogni pannello mostra una vista: una scacchiera, un albero dei mosse, la libreria, un grafico … Tu decidi cosa va dove."
+msgstr "L'area di lavoro è fatta di riquadri — come le finestre di un programma, ma disposti senza sovrapporsi. Ogni riquadro mostra una vista: una scacchiera, un albero delle mosse, la Biblioteca, un grafico … Decidi tu cosa va dove."
 
 #: templates/help/pane.html
 msgid "Everything a pane can do"
@@ -935,8 +935,8 @@ msgid "Link panes"
 msgstr "Collegare riquadri"
 
 #: templates/help/pane.html
-msgid "Panes with the same letter in their header (A, B …) stay synchronized: when you step to the next move in one, the others follow. For example, the board, the move tree and the engine of group A always show the same position. %(group)s changes the letter."
-msgstr "I pannelli con la stessa lettera nell'intestazione (A, B …) restano sincronizzati: quando passi alla mossa successiva in uno, gli altri seguono. Ad esempio, la scacchiera, l'albero dei mosse e il motore del gruppo A mostrano sempre la stessa posizione. %(group)s cambia la lettera."
+msgid "Panes with the same letter in their header (A, B …) stay synchronised: when you step to the next move in one, the others follow. For example, the board, the move tree and the engine of group A always show the same position. %(group)s changes the letter."
+msgstr "I riquadri con la stessa lettera nell'intestazione (A, B …) restano sincronizzati: quando passi alla mossa successiva in uno, gli altri seguono. Ad esempio la scacchiera, l'albero delle mosse e il motore del gruppo A mostrano sempre la stessa posizione. %(group)s cambia la lettera."
 
 #: templates/help/pane.html
 msgid "Every pane works with the panes of its link group. A new pane gets the group of the pane it was split from."
@@ -1309,6 +1309,14 @@ msgstr "%(edit)s apre la riga di comando con l'impostazione: le scelte sono elen
 #: templates/help/settings.html design/commands/settings.toml:settings.reset
 msgid "Back to the default"
 msgstr "Torna al valore predefinito"
+
+#: templates/help/settings.html templates/settings/rows.html
+msgid "Usage report"
+msgstr "Rapporto di utilizzo"
+
+#: templates/help/settings.html
+msgid "%(report)s (or <code>:test-report</code>) writes a file for the test group: how often you trained and which commands you used, by key or by click. Counts only, no positions or texts; the app sends nothing, you decide whether to send the file."
+msgstr "%(report)s (o <code>:test-report</code>) scrive un file per il gruppo di test: quanto spesso hai allenato e quali comandi hai usato, per tasto o per clic. Solo conteggi, nessuna posizione o testo; l'app non invia nulla, decidi tu se inviare il file."
 
 #: templates/help/settings.html
 msgid "Change keys"
@@ -1716,7 +1724,7 @@ msgstr "leader"
 msgid "commands"
 msgstr "comandi"
 
-#: templates/shell.html core/layouts.py:56
+#: templates/shell.html core/layouts.py:56 core/usage.py:137
 msgid "keys"
 msgstr "tasti"
 
@@ -1998,11 +2006,11 @@ msgstr "Tempo per esercizio"
 msgid "Time per puzzle · solved / missed · longest %(s)ss"
 msgstr "Tempo per esercizio · risolti / mancati · il più lungo %(s)s s"
 
-#: templates/training/result.html
+#: templates/training/result.html core/usage.py:124
 msgid "solved"
 msgstr "risolto"
 
-#: templates/training/result.html
+#: templates/training/result.html core/usage.py:124
 msgid "missed"
 msgstr "mancato"
 
@@ -2362,11 +2370,11 @@ msgstr "Primi passi"
 
 #: templates/views/today.html
 msgid "Everything works with the mouse. The keyboard keys are there to make it fast once you learn them — and every button shows its key, so you learn by clicking. Try these seven, each one ticks itself off."
-msgstr "Tutto funziona con il mouse. I tasti della tastiera servono per andare più veloce una volta che li impari — e ogni pulsante mostra il suo tasto, quindi impari cliccando. Prova questi sette, ognuno si segna da solo."
+msgstr "Tutto funziona con il mouse. I tasti lo rendono veloce, una volta che li conosci — e ogni pulsante mostra il suo tasto, così li impari cliccando. Prova questi sette, ognuno si spunta da solo."
 
 #: templates/views/today.html
 msgid "%(go_library)s switches to the Library, %(go_home)s back here. The app has several modes — Train, Analyse, Library — each with its own layout. Space alone shows where else you can go."
-msgstr "%(go_library)s passa alla libreria, %(go_home)s torna qui. L'app ha diverse modalità — Allenamento, Analisi, Libreria — ognuna con il proprio layout. Spazio da solo mostra dove altro puoi andare."
+msgstr "%(go_library)s passa alla Biblioteca, %(go_home)s torna qui. L'app ha diverse modalità — Allenamento, Analisi, Biblioteca — ognuna con la propria disposizione. La barra spaziatrice da sola mostra le altre destinazioni."
 
 #: templates/views/today.html
 msgid "%(help)s opens the help of the panel you are in: a guide, its keys, and how to search."
@@ -3050,7 +3058,7 @@ msgstr "Esercizio: tutte le risposte contano"
 msgid "Puzzle: discard"
 msgstr "Esercizio: elimina"
 
-#: core/layouts.py:208 core/layouts.py:222
+#: core/layouts.py:208 core/layouts.py:223
 msgid "Storm, 3 minutes"
 msgstr "Storm, 3 minuti"
 
@@ -3877,6 +3885,98 @@ msgstr "Una copia di sviluppo: git pull, poi riavviala."
 #: core/updates.py:75
 msgid "In a terminal: spos update. It stops the app, updates it and starts it again; your data stays."
 msgstr "In un terminale: spos update. Ferma l'app, la aggiorna e la riavvia; i tuoi dati restano."
+
+#: core/usage.py:107
+msgid "Spaced Positions: usage report"
+msgstr "Spaced Positions: rapporto di utilizzo"
+
+#: core/usage.py:121
+msgid "Training per day"
+msgstr "Allenamento per giorno"
+
+#: core/usage.py:137
+msgid "clicks"
+msgstr "clic"
+
+#: core/usage.py:137
+msgid "hint labels"
+msgstr "etichette suggerimento"
+
+#: core/usage.py:137
+msgid "command line"
+msgstr "riga di comando"
+
+#: core/usage.py:148
+msgid "How commands were started, per week"
+msgstr "Come i comandi sono stati avviati, per settimana"
+
+#: core/usage.py:119
+msgid "No puzzle solved yet"
+msgstr "Nessun esercizio risolto finora"
+
+#: core/usage.py:126 core/usage.py:152
+msgid "none yet"
+msgstr "nessuno finora"
+
+#: core/usage.py:108
+msgid "Written {date}. Counts only: no positions, names, comments or other texts. Nothing has been sent: you decide whether to send this file."
+msgstr "Scritto il {date}. Solo conteggi: nessuna posizione, nome, commento o altro testo. Nulla è stato inviato: decidi tu se inviare questo file."
+
+#: core/usage.py:111
+msgid "Version"
+msgstr "Versione"
+
+#: core/usage.py:111
+msgid "language"
+msgstr "lingua"
+
+#: core/usage.py:113
+msgid "Installed {date} · days used: {n}"
+msgstr "Installato il {date} · giorni usati: {n}"
+
+#: core/usage.py:124
+msgid "day"
+msgstr "giorno"
+
+#: core/usage.py:124
+msgid "puzzles"
+msgstr "esercizi"
+
+#: core/usage.py:124
+msgid "minutes"
+msgstr "minuti"
+
+#: core/usage.py:128
+msgid "Sessions: {n}"
+msgstr "Sessioni: {n}"
+
+#: core/usage.py:150
+msgid "week"
+msgstr "settimana"
+
+#: core/usage.py:156
+msgid "command"
+msgstr "comando"
+
+#: core/usage.py:157
+msgid "Errors the app caught: in the browser {js}, in the app {server}"
+msgstr "Errori catturati dall'app: nel browser {js}, nell'app {server}"
+
+#: core/usage.py:117
+msgid "First solved puzzle: {n} minutes after the install"
+msgstr "Primo esercizio risolto: {n} minuti dopo l'installazione"
+
+#: core/usage.py:131
+msgid "by mode: {modes}"
+msgstr "per modalità: {modes}"
+
+#: core/usage.py:155
+msgid "Commands used most ({shown} of {n} used)"
+msgstr "Comandi usati di più ({shown} di {n} usati)"
+
+#: core/usage.py:134
+msgid "minutes per session: median {median}, longest {longest}"
+msgstr "minuti per sessione: mediana {median}, più lunga {longest}"
 
 #: core/user_pieces.py:29
 msgid "missing {value}"
@@ -5376,7 +5476,7 @@ msgstr "{short_id} ha già un esercizio da questa posizione: modificalo nell'Ana
 
 #: training/puzzles.py:70
 msgid "illegal solver move {uci} in {value}"
-msgstr "mossa della soluzione illegale {uci} in {value}"
+msgstr "mossa di chi risolve illegale {uci} in {value}"
 
 #: training/puzzles.py:75
 msgid "illegal answer {uci} in {value}"
@@ -5450,23 +5550,23 @@ msgstr "Nessun esercizio da ripassare corrisponde a «{filter}»"
 msgid "No puzzles in training match “{filter}”"
 msgstr "Nessun esercizio in allenamento corrisponde a «{filter}»"
 
-#: static/js/app.js:45
+#: static/js/app.js:46
 msgid "Your CSS is off for this page (Esc while loading): Settings → Advanced"
 msgstr "Il tuo CSS è disattivato per questa pagina (Esc al caricamento): Impostazioni → Avanzate"
 
-#: static/js/app.js:62
+#: static/js/app.js:63
 msgid "update {version} available"
 msgstr "aggiornamento {version} disponibile"
 
-#: static/js/app.js:104 static/js/core/commands.js:149 static/js/core/importer.js:58
+#: static/js/app.js:105 static/js/core/commands.js:150 static/js/core/importer.js:58
 msgid "undo"
 msgstr "annulla"
 
-#: static/js/app.js:140 static/js/core/library.js:703 static/js/islands/train.js:653
+#: static/js/app.js:141 static/js/core/library.js:703 static/js/islands/train.js:653
 msgid "The browser didn't allow copying"
 msgstr "Il browser non ha permesso la copia"
 
-#: static/js/app.js:160
+#: static/js/app.js:161
 msgid "Spaced Positions has stopped. Start it again from its icon or with spos."
 msgstr "Spaced Positions si è fermato. Riavvialo dalla sua icona o con spos."
 
@@ -5732,27 +5832,27 @@ msgstr "non disponibile qui"
 msgid "{command}: the app is not reachable"
 msgstr "{command}: l'app non è raggiungibile"
 
-#: static/js/core/commands.js:88
+#: static/js/core/commands.js:89
 msgid "unknown command '{id}'"
 msgstr "comando sconosciuto «{id}»"
 
-#: static/js/core/commands.js:121
+#: static/js/core/commands.js:122
 msgid "{command}: not implemented yet"
 msgstr "{command}: non ancora disponibile"
 
-#: static/js/core/commands.js:157
+#: static/js/core/commands.js:158
 msgid "Undone: {what}"
 msgstr "Annullato: {what}"
 
-#: static/js/core/commands.js:157
+#: static/js/core/commands.js:158
 msgid "redo"
 msgstr "ripristina"
 
-#: static/js/core/commands.js:166
+#: static/js/core/commands.js:167
 msgid "Redone: {what}"
 msgstr "Ripristinato: {what}"
 
-#: static/js/core/commands.js:197
+#: static/js/core/commands.js:198
 msgid "tip: "
 msgstr "suggerimento: "
 
@@ -6551,6 +6651,10 @@ msgstr "Ancora nessun tag: digita per trovarne uno"
 #: static/js/core/tagpicker.js:136
 msgid "and stay"
 msgstr "e restare"
+
+#: static/js/core/usage.js:50
+msgid "Usage report written: look it over, then send it as the test group's note says"
+msgstr "Rapporto di utilizzo scritto: controllalo, poi invialo come indicato nella nota del gruppo di test"
 
 #: static/js/islands/board.js:134
 msgid "Promote to"
@@ -7843,6 +7947,10 @@ msgstr "Il tuo CSS (Impostazioni → Avanzate)"
 #: design/commands/ui.toml:app.backup
 msgid "Back up now"
 msgstr "Fai il backup ora"
+
+#: design/commands/ui.toml:app.testreport
+msgid "Usage report for the test group (a file, counts only)"
+msgstr "Rapporto di utilizzo per il gruppo di test (un file, solo conteggi)"
 
 #: design/commands/ui.toml:app.folder
 msgid "Open the data folder"
