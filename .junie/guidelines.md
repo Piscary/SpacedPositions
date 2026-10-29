@@ -33,6 +33,30 @@ decision to the maintainer and Claude. Small, local fixes of clear bugs are fine
   the commands instead.
 - **Before you start, run `git status`.** If there are uncommitted changes you didn't make, Claude may be working on
   them: stop and ask, don't build on them or revert them.
+- **Commit only your own work** (see *Committing* below). Claude works in the same folder: files you didn't change
+  for your task are never part of your commit.
+
+## Committing
+
+Only when the maintainer asks for it in the task. Claude and you share this folder and this branch, so a commit must
+hold exactly the changes you made for the task, nothing else.
+
+1. **Keep a list** of every file you create or change while you work. That list, and nothing else, is what you
+   commit.
+2. **Stage by name**: `git add path/one path/two …` with the files from your list. Never `git add -A`, `git add .`,
+   `git add -u`, `git commit -a` or a folder (`git add docs/`): they take in other people's work.
+3. **Check before committing**: `git status` and `git diff --staged --stat`. Every staged file must be on your list.
+   If one isn't, unstage it (`git restore --staged <path>`) and leave the file itself alone.
+4. **Files that others may have changed too** (the translation catalogues `locale/*/LC_MESSAGES/django.po` and
+   their built `.mo` and `static/i18n/*.json`, `docs/keymap.md`, `static/design/commands.json`): look at
+   `git diff <file>` before you stage it. If it holds changes that aren't yours (texts you didn't touch), don't commit
+   it: stop and say so in your report.
+5. **After committing**, `git status` must still show every change that isn't yours, untouched. List them in your
+   report ("left uncommitted: …, not mine").
+6. **Never** amend, rebase, reset or revert a commit you didn't make, never delete or move files you didn't create,
+   and never push.
+7. **The message**: what changed and why, in a few lines, and the files' purpose if it isn't obvious; end it with
+   `Co-authored-by: Junie <junie@jetbrains.com>`.
 
 ## Running things
 

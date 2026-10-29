@@ -59,7 +59,8 @@ During the first two weeks, we also ask you to try these tasks:
   through them.
 - **Change tags.** Remove a tag from a puzzle and add another one.
 - **Coaches:** make a pack for one student; the student imports it.
-- **Update.** When we tell you about a new version, update to it. Your puzzles and training must still be there.
+- **Update.** When we tell you about a new version, update to it with the update instructions we send along. Your
+  puzzles and training must still be there.
 
 If you like using the keyboard: try the Collect, Library and tag tasks without the mouse, and tell us which key felt
 wrong.
