@@ -71,6 +71,7 @@ Python 3.12+, a virtualenv in `.venv` (`pip install -e ".[dev]"`).
 | JavaScript unit tests | `node --experimental-default-type=module --test tests/js/*.test.mjs` |
 | Tests as on a machine without UTF-8 (Windows-like) | `LC_ALL=C LANG=C PYTHONUTF8=0 PYTHONCOERCECLOCALE=0 .venv/bin/python -m pytest -q -m "not browser"` |
 | Browser tests as on a slow CI machine (races) | `SPOS_TEST_JITTER=0.4` (every request waits up to 0.4 s, answers arrive out of order) and/or `SPOS_TEST_CPU=4` (a 4× slower browser) before the browser test command |
+| Screenshots, after a visible change | `.venv/bin/python docs/scripts/update_screenshots.py` (every scene in every theme; `--list` shows the scenes; `scene …` and `--themes paper,ink` choose). All go to `publishing/screenshots/<scene>_<theme>.png` (not in git; don't touch the rest of `publishing/`); the README's copies to `docs/images/`. Its own temporary data folder, never `.data/`. Look at every picture you commit |
 | Design system: rebuild generated files | `.venv/bin/python manage.py design build` |
 | Design system: the lint CI runs | `.venv/bin/python manage.py design check` (must say `0 error(s)`) |
 

@@ -35,7 +35,7 @@ msgstr "Schlecht"
 msgid "Clear"
 msgstr "Entfernen"
 
-#: templates/analysis/inspector.html templates/analysis/inspector_game.html static/js/islands/board.js:676
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html static/js/islands/board.js:679
 msgid "none"
 msgstr "keine"
 
@@ -1416,7 +1416,7 @@ msgstr "Die Suche leeren"
 msgid "excluded"
 msgstr "ausgeschlossen"
 
-#: templates/library/results.html static/js/islands/board.js:438
+#: templates/library/results.html static/js/islands/board.js:441
 msgid "diagram"
 msgstr "Diagramm"
 
@@ -1777,6 +1777,14 @@ msgstr "neu · Lernphase · jung · gefestigt pro Tag"
 #: templates/stats/sections.html
 msgid "Card stages"
 msgstr "Kartenstufen"
+
+#: templates/stats/sections.html
+msgid "%(pct)s%% in the last 30 days"
+msgstr "%(pct)s%% in den letzten 30 Tagen"
+
+#: templates/stats/sections.html
+msgid "not enough reviews yet"
+msgstr "noch zu wenige Wiederholungen"
 
 #: templates/stats/sections.html stats/models.py:12
 msgid "Retention"
@@ -2594,11 +2602,11 @@ msgstr "Auch richtig: der Trainer lässt ihn ebenfalls gelten und geht mit der H
 msgid "An answer: the trainer plays it for the opponent."
 msgstr "Eine Antwort: der Trainer spielt sie für die Gegenseite."
 
-#: analysis/puzzles.py:262 analysis/views.py:201 library/structure.py:15
+#: analysis/puzzles.py:262 analysis/views.py:214 library/structure.py:15
 msgid "White"
 msgstr "Weiss"
 
-#: analysis/puzzles.py:262 analysis/views.py:201 library/structure.py:15
+#: analysis/puzzles.py:262 analysis/views.py:214 library/structure.py:15
 msgid "Black"
 msgstr "Schwarz"
 
@@ -2674,19 +2682,19 @@ msgstr "Bearbeiten"
 msgid "Position corrected; the analysis is kept"
 msgstr "Stellung korrigiert; die Analyse bleibt"
 
-#: analysis/views.py:324
+#: analysis/views.py:339
 msgid "with the local engine"
 msgstr "mit der lokalen Engine"
 
-#: analysis/views.py:324
+#: analysis/views.py:339
 msgid "with the stored evaluations"
 msgstr "mit den gespeicherten Bewertungen"
 
-#: analysis/views.py:325
+#: analysis/views.py:340
 msgid "without evaluations (:evaluate, or a local engine)"
 msgstr "ohne Bewertungen (:evaluate oder eine lokale Engine)"
 
-#: analysis/views.py:326
+#: analysis/views.py:341
 msgid "Moments {how}: {tags} on {moves}"
 msgstr "Momente {how}: {tags} bei {moves}"
 
@@ -2736,29 +2744,29 @@ msgstr "Hauptvariante {move}"
 msgid "Move variation {move}"
 msgstr "Variante verschieben {move}"
 
-#: analysis/views.py:296
+#: analysis/views.py:311
 msgid "New position {id}"
 msgstr "Neue Stellung {id}"
 
-#: analysis/views.py:314
+#: analysis/views.py:329
 msgid "Evaluated {n} move"
 msgid_plural "Evaluated {n} moves"
 msgstr[0] "{n} Zug bewertet"
 msgstr[1] "{n} Züge bewertet"
 
-#: analysis/views.py:327
+#: analysis/views.py:342
 msgid "{n} new tag"
 msgid_plural "{n} new tags"
 msgstr[0] "{n} neuer Tag"
 msgstr[1] "{n} neue Tags"
 
-#: analysis/views.py:328 static/js/core/paste.js:46 static/js/islands/graphs.js:127
+#: analysis/views.py:343 static/js/core/paste.js:46 static/js/islands/graphs.js:127
 msgid "{n} move"
 msgid_plural "{n} moves"
 msgstr[0] "{n} Zug"
 msgstr[1] "{n} Züge"
 
-#: analysis/views.py:330
+#: analysis/views.py:345
 msgid "{n} withdrawn"
 msgstr "{n} zurückgenommen"
 
@@ -2766,31 +2774,31 @@ msgstr "{n} zurückgenommen"
 msgid "Delete from {move}"
 msgstr "Löschen ab {move}"
 
-#: analysis/views.py:201
+#: analysis/views.py:214
 msgid "Result"
 msgstr "Ergebnis"
 
-#: analysis/views.py:202
+#: analysis/views.py:215
 msgid "Date"
 msgstr "Datum"
 
-#: analysis/views.py:202
+#: analysis/views.py:215
 msgid "Event"
 msgstr "Turnier"
 
-#: analysis/views.py:202
+#: analysis/views.py:215
 msgid "Site"
 msgstr "Ort"
 
-#: analysis/views.py:202
+#: analysis/views.py:215
 msgid "Round"
 msgstr "Runde"
 
-#: analysis/views.py:203
+#: analysis/views.py:216
 msgid "White Elo"
 msgstr "Elo Weiss"
 
-#: analysis/views.py:203
+#: analysis/views.py:216
 msgid "Black Elo"
 msgstr "Elo Schwarz"
 
@@ -5558,7 +5566,7 @@ msgstr "Dein CSS ist für diese Seite aus (Esc beim Laden): Einstellungen → Er
 msgid "update {version} available"
 msgstr "Update {version} verfügbar"
 
-#: static/js/app.js:105 static/js/core/commands.js:150 static/js/core/importer.js:58
+#: static/js/app.js:105 static/js/core/commands.js:160 static/js/core/importer.js:58
 msgid "undo"
 msgstr "rückgängig"
 
@@ -5828,31 +5836,31 @@ msgstr "unbekannter Befehl"
 msgid "not available here"
 msgstr "hier nicht verfügbar"
 
-#: static/js/core/commands.js:68
+#: static/js/core/commands.js:78
 msgid "{command}: the app is not reachable"
 msgstr "{command}: die App ist nicht erreichbar"
 
-#: static/js/core/commands.js:89
+#: static/js/core/commands.js:99
 msgid "unknown command '{id}'"
 msgstr "unbekannter Befehl «{id}»"
 
-#: static/js/core/commands.js:122
+#: static/js/core/commands.js:132
 msgid "{command}: not implemented yet"
 msgstr "{command}: noch nicht umgesetzt"
 
-#: static/js/core/commands.js:158
+#: static/js/core/commands.js:168
 msgid "Undone: {what}"
 msgstr "Rückgängig: {what}"
 
-#: static/js/core/commands.js:158
+#: static/js/core/commands.js:168
 msgid "redo"
 msgstr "wiederherstellen"
 
-#: static/js/core/commands.js:167
+#: static/js/core/commands.js:177
 msgid "Redone: {what}"
 msgstr "Wiederhergestellt: {what}"
 
-#: static/js/core/commands.js:198
+#: static/js/core/commands.js:208
 msgid "tip: "
 msgstr "Tipp: "
 
@@ -6596,31 +6604,31 @@ msgstr[1] "{n} FENs"
 msgid "This pane has no text field"
 msgstr "Dieser Bereich hat kein Textfeld"
 
-#: static/js/core/settings.js:151
+#: static/js/core/settings.js:155
 msgid "↵ edits this one on the command line"
 msgstr "↵ bearbeitet diese auf der Befehlszeile"
 
-#: static/js/core/settings.js:168
+#: static/js/core/settings.js:172
 msgid "Already the default"
 msgstr "Schon der Standard"
 
-#: static/js/core/settings.js:183
+#: static/js/core/settings.js:187
 msgid "Settings exported as TOML: Settings → Data imports them on another machine"
 msgstr "Einstellungen als TOML exportiert: Einstellungen → Daten importiert sie auf einem anderen Gerät"
 
-#: static/js/core/settings.js:192
+#: static/js/core/settings.js:196
 msgid "Import: the app is not reachable"
 msgstr "Import: die App ist nicht erreichbar"
 
-#: static/js/core/settings.js:204
+#: static/js/core/settings.js:208
 msgid "New keys for “{command}”: {keys} · ↵ keep · Esc cancel"
 msgstr "Neue Tasten für «{command}»: {keys} · ↵ behalten · Esc abbrechen"
 
-#: static/js/core/settings.js:210
+#: static/js/core/settings.js:214
 msgid "Cancelled"
 msgstr "Abgebrochen"
 
-#: static/js/core/settings.js:236
+#: static/js/core/settings.js:240
 msgid "No keys to remove here"
 msgstr "Hier gibt es keine Tasten zu entfernen"
 
@@ -6680,187 +6688,187 @@ msgstr "Springer"
 msgid "Evaluation {score} (white's view)"
 msgstr "Bewertung {score} (aus Sicht von Weiss)"
 
-#: static/js/islands/board.js:325
+#: static/js/islands/board.js:328
 msgid "Not a legal position: {problems}"
 msgstr "Keine legale Stellung: {problems}"
 
-#: static/js/islands/board.js:325
+#: static/js/islands/board.js:328
 msgid "a fixes it"
 msgstr "a korrigiert sie"
 
-#: static/js/islands/board.js:325
+#: static/js/islands/board.js:328
 msgid "D: keep it as a diagram"
 msgstr "D: als Diagramm behalten"
 
-#: static/js/islands/board.js:336
+#: static/js/islands/board.js:339
 msgid "Set up position"
 msgstr "Stellung aufbauen"
 
-#: static/js/islands/board.js:350
+#: static/js/islands/board.js:353
 msgid "This position can't be played (a diagram)"
 msgstr "Diese Stellung lässt sich nicht spielen (ein Diagramm)"
 
-#: static/js/islands/board.js:399
+#: static/js/islands/board.js:402
 msgid "Type the whole move (completion is off: Settings → Training)"
 msgstr "Tippe den ganzen Zug (Ergänzen ist aus: Einstellungen → Training)"
 
-#: static/js/islands/board.js:403
+#: static/js/islands/board.js:406
 msgid "Which one? {moves} · ⇥ choose, ↵ play"
 msgstr "Welcher? {moves} · ⇥ wählen, ↵ spielen"
 
-#: static/js/islands/board.js:405
+#: static/js/islands/board.js:408
 msgid "More than one move fits: type more of it"
 msgstr "Mehr als ein Zug passt: tippe mehr davon"
 
-#: static/js/islands/board.js:406
+#: static/js/islands/board.js:409
 msgid "No legal move matches “{text}”"
 msgstr "Kein legaler Zug passt zu «{text}»"
 
-#: static/js/islands/board.js:406
+#: static/js/islands/board.js:409
 msgid "Type a move, e.g. Nf3, Sf3 or g1f3"
 msgstr "Tippe einen Zug, z. B. Nf3, Sf3 oder g1f3"
 
-#: static/js/islands/board.js:428
+#: static/js/islands/board.js:431
 msgid "a: fix"
 msgstr "a: korrigieren"
 
-#: static/js/islands/board.js:431
+#: static/js/islands/board.js:434
 msgid "duplicate of {short} {title}"
 msgstr "Duplikat von {short} {title}"
 
-#: static/js/islands/board.js:433
+#: static/js/islands/board.js:436
 msgid "click: place {piece} (white) · ⇧click: black · right-click: empty"
 msgstr "Klick: {piece} setzen (weiss) · ⇧Klick: schwarz · Rechtsklick: leeren"
 
-#: static/js/islands/board.js:434
+#: static/js/islands/board.js:437
 msgid "click: place {piece} (black) · ⇧click: white · right-click: empty"
 msgstr "Klick: {piece} setzen (schwarz) · ⇧Klick: weiss · Rechtsklick: leeren"
 
-#: static/js/islands/board.js:435
+#: static/js/islands/board.js:438
 msgid "click: empty a square"
 msgstr "Klick: ein Feld leeren"
 
-#: static/js/islands/board.js:436
+#: static/js/islands/board.js:439
 msgid "drag: move pieces freely"
 msgstr "Ziehen: Figuren frei verschieben"
 
-#: static/js/islands/board.js:438 static/js/islands/board.js:461
+#: static/js/islands/board.js:441 static/js/islands/board.js:464
 msgid "White to move"
 msgstr "Weiss am Zug"
 
-#: static/js/islands/board.js:438 static/js/islands/board.js:461
+#: static/js/islands/board.js:441 static/js/islands/board.js:464
 msgid "Black to move"
 msgstr "Schwarz am Zug"
 
-#: static/js/islands/board.js:438
+#: static/js/islands/board.js:441
 msgid "castling {rights}"
 msgstr "Rochade {rights}"
 
-#: static/js/islands/board.js:438
+#: static/js/islands/board.js:441
 msgid "e.p. {square}"
 msgstr "e.p. {square}"
 
-#: static/js/islands/board.js:449
+#: static/js/islands/board.js:452
 msgid "Preview"
 msgstr "Vorschau"
 
-#: static/js/islands/board.js:449
+#: static/js/islands/board.js:452
 msgid "↵ or a opens it · leave the list to go back"
 msgstr "↵ oder a öffnet sie · Liste verlassen, um zurückzugehen"
 
-#: static/js/islands/board.js:452
+#: static/js/islands/board.js:455
 msgid "Type a move: "
 msgstr "Zug tippen: "
 
-#: static/js/islands/board.js:455
+#: static/js/islands/board.js:458
 msgid "↵ play · ⇥ next · Esc done"
 msgstr "↵ spielen · ⇥ nächster · Esc fertig"
 
-#: static/js/islands/board.js:457
+#: static/js/islands/board.js:460
 msgid "Solve as black · click/drag or i to type the move · h hint · s solution"
 msgstr "Löse mit Schwarz · klicken/ziehen oder i zum Tippen · h Hinweis · s Lösung"
 
-#: static/js/islands/board.js:458
+#: static/js/islands/board.js:461
 msgid "Solve as white · click/drag or i to type the move · h hint · s solution"
 msgstr "Löse mit Weiss · klicken/ziehen oder i zum Tippen · h Hinweis · s Lösung"
 
-#: static/js/islands/board.js:461
+#: static/js/islands/board.js:464
 msgid "Diagram: not playable"
 msgstr "Diagramm: nicht spielbar"
 
-#: static/js/islands/board.js:462
+#: static/js/islands/board.js:465
 msgid "move {n} of {total}"
 msgstr "Zug {n} von {total}"
 
-#: static/js/islands/board.js:463
+#: static/js/islands/board.js:466
 msgid "right-click: fill a square (⇧ red · ⌥ blue)"
 msgstr "Rechtsklick: Feld füllen (⇧ rot · ⌥ blau)"
 
-#: static/js/islands/board.js:463
+#: static/js/islands/board.js:466
 msgid "click/drag: move · right-drag: arrow (⇧ red · ⌥ blue · ⇧⌥ yellow)"
 msgstr "klicken/ziehen: Zug · rechts ziehen: Pfeil (⇧ rot · ⌥ blau · ⇧⌥ gelb)"
 
-#: static/js/islands/board.js:569
+#: static/js/islands/board.js:572
 msgid "Not while solving a puzzle"
 msgstr "Nicht während des Lösens einer Aufgabe"
 
-#: static/js/islands/board.js:577 design/commands/board.toml:board.squaretool
+#: static/js/islands/board.js:580 design/commands/board.toml:board.squaretool
 msgid "Square tool: right-click fills a square"
 msgstr "Feldwerkzeug: Rechtsklick füllt ein Feld"
 
-#: static/js/islands/board.js:577
+#: static/js/islands/board.js:580
 msgid "Square tool off: right-drag draws arrows"
 msgstr "Feldwerkzeug aus: rechts ziehen zeichnet Pfeile"
 
-#: static/js/islands/board.js:596
+#: static/js/islands/board.js:599
 msgid "Play the solution on the board first, then :puzzle"
 msgstr "Spiel zuerst die Lösung auf dem Brett, dann :puzzle"
 
-#: static/js/islands/board.js:611
+#: static/js/islands/board.js:614
 msgid "Copied {what}"
 msgstr "{what} kopiert"
 
-#: static/js/islands/board.js:613
+#: static/js/islands/board.js:616
 msgid "Could not copy the {what}: the browser refused"
 msgstr "{what} liess sich nicht kopieren: der Browser hat abgelehnt"
 
-#: static/js/islands/board.js:627
+#: static/js/islands/board.js:630
 msgid "Opened in lichess (a new tab)"
 msgstr "Auf Lichess geöffnet (ein neuer Tab)"
 
-#: static/js/islands/board.js:649
+#: static/js/islands/board.js:652
 msgid "Nothing to fix automatically"
 msgstr "Nichts automatisch zu korrigieren"
 
-#: static/js/islands/board.js:655 design/commands/board.toml:board.castling
+#: static/js/islands/board.js:658 design/commands/board.toml:board.castling
 msgid "Castling rights"
 msgstr "Rochaderechte"
 
-#: static/js/islands/board.js:657
+#: static/js/islands/board.js:660
 msgid "White O-O"
 msgstr "Weiss O-O"
 
-#: static/js/islands/board.js:657
+#: static/js/islands/board.js:660
 msgid "White O-O-O"
 msgstr "Weiss O-O-O"
 
-#: static/js/islands/board.js:657
+#: static/js/islands/board.js:660
 msgid "Black O-O"
 msgstr "Schwarz O-O"
 
-#: static/js/islands/board.js:657
+#: static/js/islands/board.js:660
 msgid "Black O-O-O"
 msgstr "Schwarz O-O-O"
 
-#: static/js/islands/board.js:674 design/commands/board.toml:board.ep
+#: static/js/islands/board.js:677 design/commands/board.toml:board.ep
 msgid "En passant square"
 msgstr "En-passant-Feld"
 
-#: static/js/islands/board.js:694
+#: static/js/islands/board.js:697
 msgid "Piece set · ↑↓ preview · ↵ keep · Esc back"
 msgstr "Figurensatz · ↑↓ Vorschau · ↵ behalten · Esc zurück"
 
-#: static/js/islands/board.js:705
+#: static/js/islands/board.js:708
 msgid "No piece set '{name}'"
 msgstr "Kein Figurensatz «{name}»"
 

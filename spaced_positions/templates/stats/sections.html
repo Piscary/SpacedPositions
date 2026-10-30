@@ -23,7 +23,8 @@
   {{ stages_chart }}
 {% endsection %}
 
-{% section _("Retention") key="r" summary=data.retention.d30.rate|default_if_none:"–"|stringformat:"s" %}
+{% if data.retention.d30.rate is not None %}{% widthratio data.retention.d30.rate 1 100 as retention_pct %}{% blocktranslate trimmed with pct=retention_pct asvar retention_summary %}{{ pct }}% in the last 30 days{% endblocktranslate %}{% else %}{% translate "not enough reviews yet" as retention_summary %}{% endif %}
+{% section _("Retention") key="r" summary=retention_summary %}
   <div class="stats-row">
     {% for label, w in retention_rows %}<div class="stat"><span class="stat__label">{{ label }}</span><span class="stat__value">{% if w.rate is not None %}{% widthratio w.rate 1 100 %}%{% else %}–{% endif %}</span><span class="muted">{% blocktranslate trimmed with ok=w.ok n=w.n %}{{ ok }} of {{ n }} due reviews{% endblocktranslate %}</span></div>{% endfor %}
     <div class="stat"><span class="stat__label">{% translate "Young / mature" %}</span><span class="stat__value">{% if data.retention.young.rate is not None %}{% widthratio data.retention.young.rate 1 100 %}%{% else %}–{% endif %} / {% if data.retention.mature.rate is not None %}{% widthratio data.retention.mature.rate 1 100 %}%{% else %}–{% endif %}</span><span class="muted">{% blocktranslate trimmed with young=data.retention.young.n mature=data.retention.mature.n %}{{ young }} / {{ mature }} reviews{% endblocktranslate %}</span></div>
