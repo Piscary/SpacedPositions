@@ -16,8 +16,12 @@ function listState(list) {
   return state.get(list)
 }
 
-// folded (a collapsed section) or filtered out: skipped
-const rowsOf = (list) => [...list.querySelectorAll("[data-row]")].filter((row) => !row.closest("[hidden], .is-collapsed > .section__body"))
+// folded (a collapsed section) or filtered out (hidden inside the list): skipped. A list in a mode that is not on
+// screen (its whole workspace hidden) keeps its rows and its cursor.
+const rowsOf = (list) => [...list.querySelectorAll("[data-row]")].filter((row) => {
+  const hidden = row.closest("[hidden]")
+  return !(hidden && list.contains(hidden)) && !row.closest(".is-collapsed > .section__body")
+})
 
 function paint(list) {
   const st = listState(list)

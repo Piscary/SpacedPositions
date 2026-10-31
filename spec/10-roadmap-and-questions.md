@@ -54,6 +54,12 @@ writes the guides, after Claude's work of the day is committed (one of us at a t
 | 6 | Spec 17 phase 1 §3–§5: homework export and import, the homework session, results files, the coach's table. | The whole loop with two fake students as a browser test; translations. |
 | 7 | Buffer; a nightly for the testers; this roadmap. | Screenshots (`update_screenshots.py`), README pictures, known issues. |
 
+Day 1 done: `:feedback`; Junie's sweep (36493ed); one helper `newest()` (core/context.js) for "only the newest
+answer counts", used by the board editor, Settings, the analysis panes and preview, and the Library's results and
+completion; the Library work-list race (a list in a hidden mode lost its cursor: `rowsOf` counted the hidden
+workspace as hiding the rows). Moved to when it pays: the inspector and Puzzle pane out of `analysis.js` (spec 15
+works mostly on the server and the eval bar).
+
 Out of the week: spec 17 phase 2 (Present mode, questions per puzzle, follow-ups, per-student view, lesson packs),
 and spec 12 (collections, stats per collection), which phase 2 builds on.
 

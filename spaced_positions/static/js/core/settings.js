@@ -3,7 +3,7 @@
 // Keymap: ↵ on a command records new keys (↵ keeps them, Esc cancels), ⌫ removes the binding.
 
 import { handle, pushUndo, run, serverRun } from "./commands.js"
-import { ctx, displayKey, emit, on, setLayer, status } from "./context.js"
+import { ctx, displayKey, emit, newest, on, setLayer, status } from "./context.js"
 import { setOverlayHandler } from "./keys.js"
 import { focusPane } from "./layout.js"
 import { cursorIndex, resetList, targetRows } from "./lists.js"
@@ -25,13 +25,12 @@ const remember = (kind, state) => {
 }
 const kindOf = (el) => (el.matches("[data-island='keymap']") ? "keymap" : "settings")
 
-const loads = new WeakMap() // pane element → the newest load: quick changes reload the rows several times
+const loads = newest() // per pane: quick changes reload the rows several times
 
 async function load(el, url, box, list) {
-  const ticket = (loads.get(el) || 0) + 1
-  loads.set(el, ticket)
+  const current = loads(el)
   const html = await fetch(url).then((r) => r.text()).catch(() => null)
-  if (html === null || loads.get(el) !== ticket) return // an older answer arriving late would show an old state
+  if (html === null || !current()) return // an older answer arriving late would show an old state
   const target = el.querySelector(box)
   const old = target.querySelector(list)
   const keep = old?.querySelector("[data-row].is-cursor")?.dataset.row ?? remembered(kindOf(el)).row

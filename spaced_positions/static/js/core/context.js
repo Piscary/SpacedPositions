@@ -143,3 +143,20 @@ export function storage(key, value) {
     return null
   }
 }
+
+/**
+ * Only the newest request counts: answers can arrive out of order (a busy computer, a slow request), and an older
+ * one arriving last would show an old state. `const latest = newest()` once; per request `const current =
+ * latest(key)` (key: an element, a pane, any value; optional); after the answer `if (!current()) return`.
+ * `latest.drop(key)` makes the requests on their way stale (a preview that ended).
+ */
+export function newest() {
+  const counts = new Map()
+  const latest = (key = "") => {
+    const n = (counts.get(key) || 0) + 1
+    counts.set(key, n)
+    return () => counts.get(key) === n
+  }
+  latest.drop = (key = "") => counts.set(key, (counts.get(key) || 0) + 1)
+  return latest
+}

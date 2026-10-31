@@ -5,7 +5,7 @@
 import { Chessground } from "../../vendor/chessground.min.js"
 import { Chess } from "../../vendor/chess.js"
 import { handle, run } from "../core/commands.js"
-import { ctx, emit, on, setLayer, status } from "../core/context.js"
+import { ctx, emit, newest, on, setLayer, status } from "../core/context.js"
 import { setOverlayHandler } from "../core/keys.js"
 import { nodeOf } from "../core/layout.js"
 import * as lines from "../core/lines.js"
@@ -305,7 +305,8 @@ class Board {
   async validate() {
     const fen = this.fullFen()
     const params = new URLSearchParams({ fen, diagram: this.setup.diagram ? "1" : "" })
-    const ticket = (this.validateTicket = (this.validateTicket || 0) + 1)
+    this.checks ||= newest()
+    const current = this.checks()
     let check = null
     try {
       check = await fetch(`/chess/fen/?${params}`).then((r) => r.json())
@@ -314,7 +315,7 @@ class Board {
     }
     if (!this.setup) return check // left the editor meanwhile
     // a newer check was asked for meanwhile: this answer is about a position that is no longer on the board
-    if (ticket !== this.validateTicket) return check
+    if (!current()) return check
     this.setup.check = check
     this.duplicate = check?.duplicate || null // the live duplicate check (spec 11 §2)
     emit("duplicate", { board: this, duplicate: this.duplicate })

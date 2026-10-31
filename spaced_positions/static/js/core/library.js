@@ -3,7 +3,7 @@
 // The query string is the single source of truth; each library pane keeps {q, c, display} per link group.
 
 import { handle, pushUndo, run, serverRun } from "./commands.js"
-import { ctx, emit, on, setLayer, status } from "./context.js"
+import { ctx, emit, newest, on, setLayer, status } from "./context.js"
 import { offer } from "./confirm.js"
 import { focusPane, nodeOf, openBeside, switchMode } from "./layout.js"
 import { cursorIndex, resetList, targetRows } from "./lists.js"
@@ -13,7 +13,7 @@ import { openTagPicker } from "./tagpicker.js"
 import { locale, tr, trn } from "./i18n.js"
 
 const DISPLAYS = ["table", "list", "grid"]
-const state = new WeakMap() // library element → {q, c, display, ticket}
+const state = new WeakMap() // library element → {q, c, display}
 const saved = {} // group → {q, c, display}, from the UI state
 
 const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content || ""
@@ -24,7 +24,7 @@ function groupOf(el) {
 }
 
 function stateOf(el) {
-  if (!state.has(el)) state.set(el, { q: "", c: "positions", display: "table", ticket: 0, ...(saved[groupOf(el)] || {}) })
+  if (!state.has(el)) state.set(el, { q: "", c: "positions", display: "table", ...(saved[groupOf(el)] || {}) })
   return state.get(el)
 }
 
@@ -35,15 +35,17 @@ const currentLibrary = () => focusedLibrary() || document.querySelector(".worksp
 
 // ── Results ───────────────────────────────────────────────────────────────────────────────────────────────────
 
+const refreshes = newest() // per Library pane
+
 async function refresh(el, { keep = false, clear = false } = {}) {
   const st = stateOf(el)
   const list = el.querySelector("[data-library-results]")
-  const ticket = ++st.ticket
+  const current = refreshes(el)
   const index = keep ? Math.max(0, cursorIndex(list)) : 0
   const keptRow = keep ? list.querySelector(".list__row.is-cursor")?.dataset.row : null
   const params = new URLSearchParams({ q: st.q, c: st.c, display: st.display })
   const html = await fetch(`/lib/results/?${params}`).then((r) => r.text()).catch(() => null)
-  if (html === null || ticket !== st.ticket) return // a newer query is on its way
+  if (html === null || !current()) return // a newer query is on its way
   list.innerHTML = html
   const rows = Boolean(list.querySelector("[data-row]")) // "nothing yet" is a message, not a list
   list.setAttribute("role", rows ? "listbox" : "status")
@@ -154,13 +156,13 @@ function toResults(el) {
   if (pane) focusPane(pane.dataset.pane)
 }
 
-let completeTicket = 0
+const completions = newest()
 async function complete(el, { accept: acceptOne = false } = {}) {
   const input = el.querySelector("[data-querybar]")
-  const ticket = ++completeTicket
+  const current = completions(el)
   const params = new URLSearchParams({ q: input.value, at: input.selectionStart ?? input.value.length, c: stateOf(el).c })
   const data = await fetch(`/lib/complete/?${params}`).then((r) => r.json()).catch(() => null)
-  if (!data || ticket !== completeTicket) return
+  if (!data || !current()) return
   const menu = el.querySelector("[data-query-complete]")
   menu.replaceChildren()
   menu.dataset.start = data.start

@@ -2,7 +2,6 @@
 completion, selection and bulk commands with undo, the collections, the filter pane, training from results, saved
 queries in the launcher, entering positions in Collect, PGN import, games in Analyse and tags in Analyse."""
 
-import os
 from pathlib import Path
 
 import pytest
@@ -408,7 +407,6 @@ def unsolved():
     return made
 
 
-@pytest.mark.xfail(bool(os.environ.get("SPOS_TEST_JITTER")), reason="a race under jitter (docs/reviews/2026-10-29-race-hunt.md)")
 def test_a_work_list_loses_what_is_done(page, unsolved):
     """`a` without a selection takes the query along: once a puzzle is in training, `n` skips it and the Library
     drops it, with the cursor on the one that took its place."""

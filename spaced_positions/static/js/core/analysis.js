@@ -3,7 +3,7 @@
 // with the whole tree, the move tree HTML and a journal entry for undo (spec 09 §5).
 
 import { handle, pushUndo } from "./commands.js"
-import { ctx, emit, on, setLayer, status } from "./context.js"
+import { ctx, emit, newest, on, setLayer, status } from "./context.js"
 import { offer, suggest } from "./confirm.js"
 import { focusPane, nodeOf, switchMode } from "./layout.js"
 import * as lines from "./lines.js"
@@ -140,13 +140,13 @@ export async function openPosition(pid, { node = null, key = "analyse:A", list =
 // ── Preview: the row under a list's cursor, shown in the move trees of its group without opening it ─────────
 
 const previewing = new Map() // key → the position id shown as a preview
-let previewTicket = 0
+const previews = newest()
 
 export async function previewPosition(key, pid, { title = "" } = {}) {
-  const ticket = ++previewTicket
+  const current = previews()
   previewing.set(key, pid)
   const data = await fetch(`/analysis/${pid}/`).then((r) => r.json()).catch(() => null)
-  if (!data?.ok || ticket !== previewTicket || previewing.get(key) !== pid) return
+  if (!data?.ok || !current() || previewing.get(key) !== pid) return
   for (const el of panesFor(key, "moves")) {
     if (!el.dataset.previewing) originals.set(el, el.innerHTML)
     el.dataset.previewing = "1"
@@ -162,7 +162,7 @@ const originals = new WeakMap() // a Moves pane → what it showed before the pr
 
 function endPreview(key) {
   if (!previewing.delete(key)) return
-  previewTicket++
+  previews.drop()
   for (const el of panesFor(key, "moves")) {
     if (!el.dataset.previewing) continue
     delete el.dataset.previewing
@@ -381,14 +381,8 @@ function paintCursor(key) {
 }
 
 const inspectorTimers = new Map()
-// The newest request per analysis and pane kind: an older answer that arrives later is dropped (two quick changes
-// at the same move would otherwise show the first one's result).
-const requests = new Map()
-const ticket = (key, kind) => {
-  const n = (requests.get(`${key}:${kind}`) || 0) + 1
-  requests.set(`${key}:${kind}`, n)
-  return () => requests.get(`${key}:${kind}`) === n
-}
+// The newest request per analysis and pane kind (two quick changes at the same move: the first answer is dropped).
+const paneRequests = newest()
 function scheduleInspector(key) {
   clearTimeout(inspectorTimers.get(key))
   inspectorTimers.set(key, setTimeout(() => renderInspector(key), 120))
@@ -400,9 +394,9 @@ async function renderInspector(key) {
   const panes = panesFor(key, "inspector")
   if (!t || !panes.length) return
   const node = t.cursor
-  const newest = ticket(key, "inspector")
+  const current = paneRequests(`${key}:inspector`)
   const html = await fetch(`/analysis/${t.position.id}/inspector/?node=${node}`).then((r) => r.text()).catch(() => null)
-  if (!html || !newest() || trees.get(key)?.cursor !== node) return // empty: the move is gone
+  if (!html || !current() || trees.get(key)?.cursor !== node) return // empty: the move is gone
   for (const el of panes) {
     if (el.contains(document.activeElement) && document.activeElement.matches("textarea")) continue // don't replace a comment being written
     el.innerHTML = html
@@ -418,9 +412,9 @@ async function renderPuzzle(key) {
   const node = t.cursor
   const count = t.list ? t.list.count ?? t.list.ids.length : 0
   const list = count ? `&list=${t.list.index}/${count}` : ""
-  const newest = ticket(key, "puzzle")
+  const current = paneRequests(`${key}:puzzle`)
   const html = await fetch(`/analysis/${t.position.id}/puzzle-pane/?node=${node}${list}`).then((r) => r.text()).catch(() => null)
-  if (!html || !newest() || trees.get(key)?.cursor !== node) return // empty: the move is gone
+  if (!html || !current() || trees.get(key)?.cursor !== node) return // empty: the move is gone
   for (const el of panes) {
     el.innerHTML = html
     window.htmx?.process(el)
