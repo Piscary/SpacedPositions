@@ -40,6 +40,9 @@ The UI system follows four ideas:
 | 12 | [12-packs-as-collections.md](12-packs-as-collections.md) | Plan: where a puzzle comes from, training and stats per pack or book, pack composition, good-citizen checks |
 | 13 | [13-licensing-and-marketplace.md](13-licensing-and-marketplace.md) | Plan: licences in the pack format, author submissions, the review, the marketplace, milestones M0–M4 |
 | 14 | [14-test-programme.md](14-test-programme.md) | Plan: the test group: who, tasks, questions, data, tracking, readiness |
+| 15 | [15-pgn-annotations.md](15-pgn-annotations.md) | Plan: evaluations, clocks and lichess's other PGN details; the eval bar with the file's and the engine's evaluation |
+| 16 | [16-collect-and-edit.md](16-collect-and-edit.md) | Plan: the Details pane; making and correcting games, players and sources in Collect |
+| 17 | [17-coaching.md](17-coaching.md) | Plan: lessons, homework packs, results sent back to the coach |
 
 ## Reading order
 

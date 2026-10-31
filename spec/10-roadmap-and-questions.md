@@ -27,10 +27,34 @@ The way ahead is in milestones with goals that have to be met before the next st
 
 **Before the test group (M0):**
 
-- ~~`:test-report`~~ (done: a usage report with counts only, written on request) and `:feedback` (opens the feedback form with
-  the version and the mode), 14 §5.
-- Release builds tested on clean macOS and Windows accounts: install, first puzzle, an update with the data kept.
-- A tester note, the surveys and the feedback log (`docs/testing/feedback-log.csv`).
+- Done: `:test-report` (14 §5); release builds installed by a tester without problems; an update with the data kept;
+  the tester note, known issues and update guide (`docs/testing/`); the screenshot script for README and publishing.
+- **`:feedback`** (14 §5): a small form in the app (kind: broke · confused · wish · other, a message), version,
+  system, language and mode added; it opens the feedback page on piscarys.com with the text in the link *and* copies
+  it to the clipboard. Waiting for: the page's address, and whether it is the theme's contact form (the text arrives
+  filled in, with a small script in the theme) or the Forms app (testers paste it).
+- **Backup and restore** tried by a person once (`spos restore`), before testers rely on it.
+- The surveys and the feedback log (`docs/testing/feedback-log.csv`).
+
+### The week of 2026-10-31
+
+Specs: [15](15-pgn-annotations.md) PGN annotations and the two-source eval bar · [16](16-collect-and-edit.md)
+Collect and edit · [17](17-coaching.md) coaching (phase 1). Each day ships on its own (a commit that passes CI), so
+whatever the week leaves undone waits without breaking anything. Claude builds; Junie tests, reviews, translates and
+writes the guides, after Claude's work of the day is committed (one of us at a time in the folder).
+
+| Day | Claude | Junie |
+|---|---|---|
+| 1 | `:feedback` (as soon as the form exists). **Cleanup**: one helper for "only the newest answer counts" (it is copied in five places: board editor, settings, analysis panes, Library, tag picker); the inspector and Puzzle pane out of `analysis.js` into their own module (it is at 800 lines and spec 15 adds to it); the Library work-list race (the xfail under jitter). | **Cleanup sweep**: unused CSS (e.g. `.inspector__puzzle`), unused imports and functions, obsolete texts; the JS size rule in spec 09 (≤ 3,000 lines, now 8,150) rewritten as "no module over ~800 lines"; collect the PGN fixtures of spec 15 §6 from games the maintainer exports from lichess. |
+| 2 | Spec 15 §1–§3: parsing, storage, round trip, the clean tree, the Inspector. | Tests on the fixtures; the computer-comment setting's guide and texts. |
+| 3 | Spec 15 §4–§5: the two-source eval bar and graph, headers. Spec 16 §2: the Details view for games, `I`. | Review of 15; screenshots of the eval bar in all themes (contrast of the hatching). |
+| 4 | Spec 16 §2–§4: players and sources in Details, `␣ n`, the source picker with *+ New*, incomplete facet, merge, *Who you are*. | Journeys of 16 §6, guides, translations. |
+| 5 | Spec 17 phase 1 §1–2: lessons, `L`, Coach mode. | Review of 16; the coach's how-to (`docs/coaching.md`) from spec 17. |
+| 6 | Spec 17 phase 1 §3–§5: homework export and import, the homework session, results files, the coach's table. | The whole loop with two fake students as a browser test; translations. |
+| 7 | Buffer; a nightly for the testers; this roadmap. | Screenshots (`update_screenshots.py`), README pictures, known issues. |
+
+Out of the week: spec 17 phase 2 (Present mode, questions per puzzle, follow-ups, per-student view, lesson packs),
+and spec 12 (collections, stats per collection), which phase 2 builds on.
 
 **For the public beta (M1):** packs and books as collections (12 §2–4: where a puzzle comes from, training one
 collection, stats per collection), what the test group asks for, and:
@@ -51,7 +75,8 @@ collection, stats per collection), what the test group asks for, and:
 - **Third-party sources with each release**: the release workflow attaches the apps; the sources of the bundled GPL
   components (chessground, stockfish.js, python-chess) are linked from the notices. Attaching them to each release
   as an archive would make the release self-contained (GPL-3.0 §6).
-- **Progress reports**: a file a student can send to a coach (retention, mastery, weak motifs), no server needed.
+- **Progress reports**: a file a student can send to a coach (retention, mastery, weak motifs), no server needed;
+  built on spec 17's results files (17 §4, per student).
 - **Password on pack files** (09 §12): protection in transit only; left out until someone needs it.
 - Review of the French and Italian translations by native speakers (`manage.py i18n missing` lists new texts).
 - **Publishing on PyPI**, so the Python install is `pipx install spaced-positions` (today it installs from GitHub).
