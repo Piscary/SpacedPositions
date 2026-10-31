@@ -2898,7 +2898,7 @@ msgstr "König nicht auf {square}"
 msgid "rook not on {square}"
 msgstr "Turm nicht auf {square}"
 
-#: core/chess_views.py:52
+#: core/chess_views.py:51
 msgid "too large to paste: import it as a file (:import)"
 msgstr "zu gross zum Einfügen: als Datei importieren (:import)"
 
@@ -3430,129 +3430,129 @@ msgstr "ein Feld bearbeiten"
 msgid "flash demo"
 msgstr "Aufblitzen zeigen"
 
-#: core/server_commands.py:69
+#: core/server_commands.py:67
 msgid "follow the system"
 msgstr "wie das System"
 
-#: core/server_commands.py:239
+#: core/server_commands.py:237
 msgid "Stopping Spaced Positions …"
 msgstr "Spaced Positions wird beendet …"
 
-#: core/server_commands.py:299
+#: core/server_commands.py:297
 msgid "Theme copied as TOML: paste it into Settings → Data to import it elsewhere"
 msgstr "Design als TOML kopiert: in Einstellungen → Daten einfügen, um es anderswo zu importieren"
 
-#: core/server_commands.py:60
+#: core/server_commands.py:58
 msgid "which theme? e.g. :theme ink"
 msgstr "welches Design? z. B. :theme ink"
 
-#: core/server_commands.py:90
+#: core/server_commands.py:88
 msgid "write token=value, e.g. :set main=#e2b714"
 msgstr "schreibe token=Wert, z. B. :set main=#e2b714"
 
-#: core/server_commands.py:154
+#: core/server_commands.py:152
 msgid "Nothing to reset"
 msgstr "Nichts zurückzusetzen"
 
-#: core/server_commands.py:180
+#: core/server_commands.py:178
 msgid "Your CSS is applied (hold Esc while the app loads, or open it with ?safe, to start without it)"
 msgstr "Dein CSS ist angewendet (Esc beim Laden gedrückt halten oder mit ?safe öffnen, um ohne es zu starten)"
 
-#: core/server_commands.py:180
+#: core/server_commands.py:178
 msgid "Your CSS is off"
 msgstr "Dein CSS ist aus"
 
-#: core/server_commands.py:191
+#: core/server_commands.py:189
 msgid "name the layout: :layout-save <name>"
 msgstr "benenne das Layout: :layout-save <Name>"
 
-#: core/server_commands.py:194
+#: core/server_commands.py:192
 msgid "no layout to save"
 msgstr "kein Layout zum Speichern"
 
-#: core/server_commands.py:235 design/commands/shell.toml:app.quit
+#: core/server_commands.py:233 design/commands/shell.toml:app.quit
 msgid "only when started with spos"
 msgstr "nur wenn mit spos gestartet"
 
-#: core/server_commands.py:254
+#: core/server_commands.py:252
 msgid "a name, e.g. :theme-save my nord"
 msgstr "ein Name, z. B. :theme-save mein nord"
 
-#: core/server_commands.py:322
+#: core/server_commands.py:320
 msgid "write the keys, then the command: :map space o train.storm 5"
 msgstr "schreibe die Tasten, dann den Befehl: :map space o train.storm 5"
 
-#: core/server_commands.py:71
+#: core/server_commands.py:69
 msgid "Theme: {label}"
 msgstr "Design: {label}"
 
-#: core/server_commands.py:198
+#: core/server_commands.py:196
 msgid "Saved layout '{name}'"
 msgstr "Layout «{name}» gespeichert"
 
-#: core/server_commands.py:211
+#: core/server_commands.py:209
 msgid "Backed up: {name} ({size} MB)"
 msgstr "Gesichert: {name} ({size} MB)"
 
-#: core/server_commands.py:229
+#: core/server_commands.py:227
 msgid "Opened {folder}"
 msgstr "{folder} geöffnet"
 
-#: core/server_commands.py:268
+#: core/server_commands.py:266
 msgid "Theme {label} saved and chosen"
 msgstr "Design {label} gespeichert und gewählt"
 
-#: core/server_commands.py:285
+#: core/server_commands.py:283
 msgid "Theme {label} deleted"
 msgstr "Design {label} gelöscht"
 
-#: core/server_commands.py:355
+#: core/server_commands.py:353
 msgid "{keys} unmapped (was {title})"
 msgstr "{keys} freigegeben (war {title})"
 
-#: core/server_commands.py:372
+#: core/server_commands.py:370
 msgid "Reset {n} key binding to the defaults"
 msgid_plural "Reset {n} key bindings to the defaults"
 msgstr[0] "{n} Tastenbelegung zurückgesetzt"
 msgstr[1] "{n} Tastenbelegungen zurückgesetzt"
 
-#: core/server_commands.py:64 core/settings_io.py:111
+#: core/server_commands.py:62 core/settings_io.py:109
 msgid "no theme '{name}'"
 msgstr "kein Design «{name}»"
 
-#: core/server_commands.py:140 core/server_commands.py:154
+#: core/server_commands.py:138 core/server_commands.py:152
 msgid "Reset {names}"
 msgstr "Zurückgesetzt: {names}"
 
-#: core/server_commands.py:150
+#: core/server_commands.py:148
 msgid "not set: {names}"
 msgstr "nicht gesetzt: {names}"
 
-#: core/server_commands.py:172
+#: core/server_commands.py:170
 msgid "at most {n} characters"
 msgstr "höchstens {n} Zeichen"
 
-#: core/server_commands.py:263
+#: core/server_commands.py:261
 msgid "'{name}' is a built-in theme: choose another name"
 msgstr "«{name}» ist ein eingebautes Design: wähle einen anderen Namen"
 
-#: core/server_commands.py:279
+#: core/server_commands.py:277
 msgid "no theme of yours called '{name}' (built-in themes stay)"
 msgstr "kein eigenes Design namens «{name}» (eingebaute Designs bleiben)"
 
-#: core/server_commands.py:298
+#: core/server_commands.py:296
 msgid "{label} (mine)"
 msgstr "{label} (meins)"
 
-#: core/server_commands.py:353
+#: core/server_commands.py:351
 msgid "'{keys}' isn't bound in {where}"
 msgstr "«{keys}» ist in {where} nicht belegt"
 
-#: core/server_commands.py:228
+#: core/server_commands.py:226
 msgid "could not open {folder}: {error}"
 msgstr "{folder} konnte nicht geöffnet werden: {error}"
 
-#: core/server_commands.py:268 core/settings_io.py:184
+#: core/server_commands.py:266 core/settings_io.py:182
 msgid "check contrast: {problems}"
 msgstr "Kontrast prüfen: {problems}"
 
@@ -3768,37 +3768,37 @@ msgstr "{name}: eines von {values}"
 msgid "{name}: a number"
 msgstr "{name}: eine Zahl"
 
-#: core/settings_io.py:98
+#: core/settings_io.py:96
 msgid "engine.path is set by hand in Settings → Engine, not imported"
 msgstr "engine.path wird von Hand in Einstellungen → Engine gesetzt, nicht importiert"
 
-#: core/settings_io.py:153
+#: core/settings_io.py:151
 msgid "Imported {n} setting"
 msgid_plural "Imported {n} settings"
 msgstr[0] "{n} Einstellung importiert"
 msgstr[1] "{n} Einstellungen importiert"
 
-#: core/settings_io.py:183
+#: core/settings_io.py:181
 msgid "Theme {label} imported (:theme {name})"
 msgstr "Design {label} importiert (:theme {name})"
 
-#: core/settings_io.py:167
+#: core/settings_io.py:165
 msgid "a theme extends a built-in theme ({themes}), not '{name}'"
 msgstr "ein Design erweitert ein eingebautes Design ({themes}), nicht «{name}»"
 
-#: core/settings_io.py:73
+#: core/settings_io.py:71
 msgid "not TOML: {error}"
 msgstr "kein TOML: {error}"
 
-#: core/settings_io.py:129
+#: core/settings_io.py:127
 msgid "{keys}: no command '{command}'"
 msgstr "{keys}: kein Befehl «{command}»"
 
-#: core/settings_io.py:154
+#: core/settings_io.py:152
 msgid "{n} skipped: {first}"
 msgstr "{n} übersprungen: {first}"
 
-#: core/settings_io.py:149
+#: core/settings_io.py:147
 msgid "layout {name}: unreadable"
 msgstr "Layout {name}: unlesbar"
 
@@ -4554,39 +4554,39 @@ msgstr "von {name}"
 msgid "for {name}"
 msgstr "für {name}"
 
-#: library/moments.py:87
+#: library/moments.py:86
 msgid "The advantage changes sides"
 msgstr "Der Vorteil wechselt die Seite"
 
-#: library/moments.py:85
+#: library/moments.py:84
 msgid "A won position given away ({best:+.2f} → {played:+.2f})"
 msgstr "Eine gewonnene Stellung verschenkt ({best:+.2f} → {played:+.2f})"
 
-#: library/moments.py:92
+#: library/moments.py:91
 msgid "The only move, and a sacrifice"
 msgstr "Der einzige Zug, und ein Opfer"
 
-#: library/moments.py:82
+#: library/moments.py:81
 msgid "Winning chances {best:+.2f} → {played:+.2f}"
 msgstr "Gewinnchancen {best:+.2f} → {played:+.2f}"
 
-#: library/moments.py:90
+#: library/moments.py:89
 msgid "The only good move (the next best is {value:.2f} behind)"
 msgstr "Der einzige gute Zug (der nächstbeste liegt {value:.2f} zurück)"
 
-#: library/moments.py:94
+#: library/moments.py:93
 msgid "One good move, not found: {value}"
 msgstr "Ein guter Zug, nicht gefunden: {value}"
 
-#: library/moments.py:159
+#: library/moments.py:158
 msgid "Mate in one was there: {value}"
 msgstr "Matt in einem Zug war möglich: {value}"
 
-#: library/moments.py:163
+#: library/moments.py:162
 msgid "Allows mate in one; {value} would have prevented it"
 msgstr "Erlaubt Matt in einem Zug; {value} hätte es verhindert"
 
-#: library/moments.py:173
+#: library/moments.py:172
 msgid "{captures} captures in {EXPLOSION_PLIES} plies"
 msgstr "{captures} Schlagzüge in {EXPLOSION_PLIES} Halbzügen"
 
@@ -4704,51 +4704,51 @@ msgstr "sort: nicht «{value}» hier ({value2})"
 msgid " in {field_key}"
 msgstr " in {field_key}"
 
-#: library/sequences.py:95
+#: library/sequences.py:94
 msgid "Liquidation into a pawn ending"
 msgstr "Abwicklung ins Bauernendspiel"
 
-#: library/sequences.py:91
+#: library/sequences.py:90
 msgid "Two bishop sacrifices: {value} …"
 msgstr "Zwei Läuferopfer: {value} …"
 
-#: library/sequences.py:105
+#: library/sequences.py:104
 msgid "Exchange sacrifice {text}"
 msgstr "Qualitätsopfer {text}"
 
-#: library/sequences.py:169
+#: library/sequences.py:168
 msgid "Breakthrough with {text}"
 msgstr "Durchbruch mit {text}"
 
-#: library/sequences.py:186
+#: library/sequences.py:185
 msgid "Perpetual check from {text}"
 msgstr "Dauerschach ab {text}"
 
-#: library/sequences.py:199
+#: library/sequences.py:198
 msgid "Self-block on {value}"
 msgstr "Selbstblockade auf {value}"
 
-#: library/sequences.py:113
+#: library/sequences.py:112
 msgid "Intermezzo {text} before taking back"
 msgstr "Zwischenzug {text} vor dem Zurückschlagen"
 
-#: library/sequences.py:140
+#: library/sequences.py:139
 msgid "{text} traps the {value} on {value2}"
 msgstr "{text} fängt: {value} auf {value2}"
 
-#: library/sequences.py:157
+#: library/sequences.py:156
 msgid "{text} builds a battery"
 msgstr "{text} baut eine Batterie"
 
-#: library/sequences.py:183
+#: library/sequences.py:182
 msgid "Windmill: discovered check {text} and again"
 msgstr "Zwickmühle: Abzugsschach {text} und nochmals"
 
-#: library/sequences.py:192
+#: library/sequences.py:191
 msgid "Mad rook: {text}, taking it stalemates"
 msgstr "Rasender Turm: {text}, Schlagen führt zum Patt"
 
-#: library/sequences.py:151
+#: library/sequences.py:150
 msgid "{text} blocks the {value} on {value2}"
 msgstr "{text} verstellt: {value} auf {value2}"
 

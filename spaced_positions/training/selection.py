@@ -11,7 +11,7 @@ import random
 from django.db.models import Q
 from django.utils import timezone
 
-from . import puzzles, srs
+from . import puzzles
 from .models import Card, Session
 
 QUEUE_SIZE = 150

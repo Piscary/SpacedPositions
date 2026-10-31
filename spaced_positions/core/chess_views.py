@@ -9,7 +9,6 @@ from django.views.decorators.http import require_GET, require_POST
 
 from spaced_positions import chesslogic
 
-from . import registry
 from .models import Preferences
 
 MAX_PASTE = 2_000_000  # characters: a large PGN file, not a database

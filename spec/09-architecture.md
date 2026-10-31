@@ -11,7 +11,7 @@ chess data model and the query language are in 11.
 | Server ↔ client | HTMX 2 | Panes, sections and command results are server-rendered HTML partials. |
 | Styling | Plain CSS with cascade layers (`@layer tokens, base, components, views, utilities`) | Components map 1:1 onto classes; tokens are custom properties; no build step. (Tailwind is the alternative, see 10.) |
 | Board | chessground + chess.js | Exactly the lichess feel; GPL-3.0 like the app (§13); client-side legality for instant moves. |
-| Our JS | Vanilla ES modules, no framework, no bundler (import maps) | Target ≤ ~3,000 lines in total, split into the islands below. |
+| Our JS | Vanilla ES modules, no framework, no bundler (import maps) | No module over ~800 lines; split into the islands below. |
 | Engine | Stockfish WASM in a Web Worker by default; the local binary through the server when configured in Settings → Engine | No setup needed by default; the native binary is stronger and deeper when installed. |
 | Deployment | Local, one copy per person (you, each student), no login (§11) | UI-state models keep a `user` field anyway, so hosting later needs no redesign. |
 | App server | waitress (pure Python, macOS/Windows/Linux) + WhiteNoise for static files | `runserver` is for development only; the launcher needs a real server with no compiler or extra system packages. Static files are served under a stamp of the installed files (`/static/<stamp>/…`, settings.py): ES modules import each other by relative names, so every file of an update has a new address, the browser caches them for good and never mixes old JavaScript with a new page. Development: plain `/static/`, no caching. |

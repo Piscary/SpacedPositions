@@ -8,7 +8,6 @@ moves of the side that plays moves[only] (default: the side to move at the start
 
 import chess
 from django.utils.translation import gettext as _
-from django.utils.translation import gettext_noop
 
 from .detect import NAMES, VALUE, balance, label, mates_in_one
 

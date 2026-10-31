@@ -11,8 +11,6 @@ import tomllib
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
 
-from spaced_positions.design import lib
-
 from . import keymap, registry, settings, themes, user_pieces
 from .models import LOCAL_USER, KeymapOverride, NamedLayout, Preferences, UserTheme
 from .themes import toml_value

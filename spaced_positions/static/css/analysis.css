@@ -99,7 +99,6 @@
 .inspector__comment textarea { width: 100%; min-height: calc(var(--row-md) * 4); resize: vertical; font-family: var(--font-ui); }
 .inspector__tags { display: flex; flex-wrap: wrap; gap: var(--s-half); align-items: center; }
 .inspector__tags .chip { cursor: pointer; }
-.inspector__puzzle { display: flex; flex-wrap: wrap; gap: var(--s-1); align-items: center; margin: 0 0 var(--s-1); }
 .inspector .keybutton[aria-pressed="true"] { background: var(--selection); border-color: var(--main); }
 .inspector__marks .mark-good { border-bottom: calc(var(--rule) * 2) solid var(--mark-good); }
 .inspector__marks .mark-dubious { border-bottom: calc(var(--rule) * 2) solid var(--mark-dubious); }

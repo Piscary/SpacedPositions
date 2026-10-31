@@ -8,8 +8,6 @@ from django.conf import settings
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
 
-from spaced_positions.design import lib
-
 from . import registry, themes
 from . import settings as user_settings
 from .models import LOCAL_USER, NamedLayout, Preferences

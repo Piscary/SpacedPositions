@@ -20,7 +20,6 @@ import math
 import chess
 import chess.engine
 from django.utils.translation import gettext as _
-from django.utils.translation import gettext_noop
 
 from .detect import Finding, label, mates_in_one, move_findings
 
