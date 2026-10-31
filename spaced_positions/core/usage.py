@@ -70,7 +70,7 @@ def _installed():
     return timezone.localtime(first) if first else None
 
 
-def _system() -> str:
+def system() -> str:
     if platform.system() == "Darwin":
         return f"macOS {platform.mac_ver()[0]} {platform.machine()}"
     if platform.system() == "Windows":
@@ -108,7 +108,7 @@ def report() -> str:
         _("Written {date}. Counts only: no positions, names, comments or other texts. Nothing has been sent: you decide "
           "whether to send this file.").format(date=timezone.localdate().isoformat()),
         "",
-        f"{_('Version')} {__version__} · {_system()} · {_('language')} {user_settings.get('ui.language') or 'auto'}"
+        f"{_('Version')} {__version__} · {system()} · {_('language')} {user_settings.get('ui.language') or 'auto'}"
         f" ({translation.get_language()})",
         _("Installed {date} · days used: {n}").format(date=installed.date().isoformat() if installed else "?", n=len(days_used)),
     ]

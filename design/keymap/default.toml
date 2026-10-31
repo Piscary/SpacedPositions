@@ -401,6 +401,7 @@ accept = ["[", "]"]
 "B" = "app.backup"
 "O" = "app.folder"
 "R" = "app.testreport"
+"M" = "app.feedback"
 
 [context."view.keymap"]
 "enter" = "keymap.bind"

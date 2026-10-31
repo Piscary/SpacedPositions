@@ -71,8 +71,10 @@ In weeks 3 and 4, use the program the way you want.
 
 You can give feedback at any time. Three ways:
 
-1. **The feedback form.** The maintainer sends you the link with this note. Use it for "this confused me", "this
-   broke", or "I wish…". Please add the version (Settings shows it) and the mode you were in.
+1. **The feedback form.** Type `:feedback` anywhere in the program (or Settings → Data → *Feedback*), choose what
+   it is about, and the feedback page on piscarys.com opens with a message already started: the version, your
+   system and where you were in the program are filled in. Write what happened and send it. If the message field is
+   empty, paste: the text is in your clipboard. Use it for "this confused me", "this broke", or "I wish…".
 2. **A chat group.** If you prefer, you can write in a shared chat.
 3. **The surveys.** You'll receive three short questionnaires by email.
 

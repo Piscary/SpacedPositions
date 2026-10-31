@@ -11,6 +11,7 @@ import "./core/help.js"
 import "./core/intro.js"
 import "./core/panemenu.js"
 import "./core/usage.js"
+import "./core/feedback.js"
 import "./core/hints.js"
 import "./core/islands.js"
 import "./core/scroll.js"
@@ -23,7 +24,7 @@ import { tr } from "./core/i18n.js"
 const boot = JSON.parse(document.getElementById("boot").textContent)
 // Modules may have added to window.SPOS while they loaded (imports run first): add, don't replace.
 Object.assign((window.SPOS ||= {}), {
-  views: boot.views, modes: boot.modes, themes: boot.themes, tokens: boot.tokens, settings: boot.settings,
+  views: boot.views, modes: boot.modes, themes: boot.themes, tokens: boot.tokens, settings: boot.settings, app: boot.app,
   settingsSchema: boot.settingsSchema, keyPerf, ctx,
 })
 

@@ -8,7 +8,9 @@ from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
 from django.views.decorators.http import require_GET, require_POST
 
-from . import i18n, keymap, layouts, registry, server_commands, themes, user_pieces
+from spaced_positions import FEEDBACK_URL, __version__
+
+from . import i18n, keymap, layouts, registry, server_commands, themes, usage, user_pieces
 from . import settings as user_settings
 from .models import LOCAL_USER, NamedLayout, Preferences, UIState
 
@@ -100,6 +102,7 @@ def mode_page(request, mode):
                 for k, v in layouts.VIEWS.items()
             },
             "modes": {m.key: {"label": m.label, "leader": m.leader} for m in layouts.MODES},
+            "app": {"version": __version__, "system": usage.system(), "feedback": FEEDBACK_URL},
         },
     }
     return render(request, "shell.html", context)

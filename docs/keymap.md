@@ -451,6 +451,7 @@ reference is `spec/08-keymap.md`.
 | `B` | Back up now | `app.backup` |
 | `O` | Open the data folder | `app.folder` |
 | `R` | Usage report for the test group (a file, counts only) | `app.testreport` |
+| `M` | Feedback: something broke, confused you, or a wish | `app.feedback` |
 
 ## view.keymap
 

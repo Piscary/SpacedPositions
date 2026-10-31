@@ -86,3 +86,22 @@ def test_a_menu_entry_chosen_by_key_counts_as_a_key(page):
     page.evaluate("window.SPOS.usage.flush()")
     found = counts()
     assert found[("search.open", "key")] == 1 and ("search.open", "mouse") not in found
+
+
+@pytest.mark.browser
+@pytest.mark.django_db(transaction=True)
+def test_feedback_opens_the_page_with_a_message_started(page):
+    page.add_init_script("""window.__opened = []; window.open = (url) => { window.__opened.push(url); return null }
+      navigator.clipboard.writeText = async (text) => { window.__copied = text }""")
+    open_mode(page, "analyse")
+    keys(page, ":")
+    page.keyboard.type("feedback")
+    keys(page, "Enter")
+    page.wait_for_selector(".menu >> text=Something confused me")
+    keys(page, "c")
+    page.wait_for_function("window.__opened.length === 1")
+    opened = page.evaluate("(() => { const u = new URL(window.__opened[0]); return [u.origin + u.pathname, u.searchParams.get('kind'), u.searchParams.get('message')] })()")
+    assert opened[0] == "https://piscarys.com/pages/spaced-positions" and opened[1] == "confused"
+    message = opened[2]
+    assert message.startswith("Something confused me:") and "Spaced Positions 0.1.0" in message and "Analyse" in message
+    assert page.evaluate("window.__copied") == message  # the same text in the clipboard, for a form that ignores the link

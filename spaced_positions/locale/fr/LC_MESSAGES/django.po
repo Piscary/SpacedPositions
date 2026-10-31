@@ -1318,6 +1318,14 @@ msgstr "Rapport d'utilisation"
 msgid "%(report)s (or <code>:test-report</code>) writes a file for the test group: how often you trained and which commands you used, by key or by click. Counts only, no positions or texts; the app sends nothing, you decide whether to send the file."
 msgstr "%(report)s (ou <code>:test-report</code>) écrit un fichier pour le groupe de test : fréquence d'entraînement et commandes utilisées, par touche ou par clic. Comptages uniquement, pas de positions ni de textes ; l'application n'envoie rien, vous décidez d'envoyer le fichier."
 
+#: templates/help/settings.html templates/settings/rows.html
+msgid "Feedback"
+msgstr "Retour"
+
+#: templates/help/settings.html
+msgid "%(feedback)s (or <code>:feedback</code>, anywhere) opens the feedback page with a message started for you: what it is about, and the version, system and where you were. Write what happened and send it there; the app sends nothing itself."
+msgstr "%(feedback)s (ou <code>:feedback</code>, partout) ouvre la page de retour avec un message déjà commencé : de quoi il s'agit, la version, le système et où vous étiez. Écrivez ce qui s'est passé et envoyez-le là-bas ; l'application n'envoie rien elle-même."
+
 #: templates/help/settings.html
 msgid "Change keys"
 msgstr "Changer les touches"
@@ -5558,23 +5566,23 @@ msgstr "Aucun exercice à réviser ne correspond à « {filter} »"
 msgid "No puzzles in training match “{filter}”"
 msgstr "Aucun exercice en entraînement ne correspond à « {filter} »"
 
-#: static/js/app.js:46
+#: static/js/app.js:47
 msgid "Your CSS is off for this page (Esc while loading): Settings → Advanced"
 msgstr "Votre CSS est désactivé pour cette page (Échap au chargement) : Réglages → Avancé"
 
-#: static/js/app.js:63
+#: static/js/app.js:64
 msgid "update {version} available"
 msgstr "mise à jour {version} disponible"
 
-#: static/js/app.js:105 static/js/core/commands.js:160 static/js/core/importer.js:58
+#: static/js/app.js:106 static/js/core/commands.js:160 static/js/core/importer.js:58
 msgid "undo"
 msgstr "annuler"
 
-#: static/js/app.js:141 static/js/core/library.js:703 static/js/islands/train.js:653
+#: static/js/app.js:142 static/js/core/library.js:703 static/js/islands/train.js:653
 msgid "The browser didn't allow copying"
 msgstr "Le navigateur n'a pas permis la copie"
 
-#: static/js/app.js:161
+#: static/js/app.js:162
 msgid "Spaced Positions has stopped. Start it again from its icon or with spos."
 msgstr "Spaced Positions s'est arrêté. Relancez-le depuis son icône ou avec spos."
 
@@ -5983,6 +5991,38 @@ msgid "Engine: {n} line"
 msgid_plural "Engine: {n} lines"
 msgstr[0] "Moteur : {n} ligne"
 msgstr[1] "Moteur : {n} lignes"
+
+#: static/js/core/feedback.js:11
+msgid "Something broke"
+msgstr "Quelque chose ne marche pas"
+
+#: static/js/core/feedback.js:12
+msgid "Something confused me"
+msgstr "Quelque chose m'a dérouté"
+
+#: static/js/core/feedback.js:13
+msgid "I wish …"
+msgstr "J'aimerais …"
+
+#: static/js/core/feedback.js:14
+msgid "Something else"
+msgstr "Autre chose"
+
+#: static/js/core/feedback.js:27
+msgid "added by the app"
+msgstr "ajouté par l'application"
+
+#: static/js/core/feedback.js:36
+msgid "Feedback: what is it about?"
+msgstr "Retour : de quoi s'agit-il ?"
+
+#: static/js/core/feedback.js:52
+msgid "The feedback page is open; if its message field is empty, paste (the text is in the clipboard)"
+msgstr "La page de retour est ouverte ; si son champ de message est vide, collez le texte (il est dans le presse-papiers)"
+
+#: static/js/core/feedback.js:53
+msgid "The feedback page is open: write your message there"
+msgstr "La page de retour est ouverte : écrivez votre message là-bas"
 
 #: static/js/core/help.js:13
 msgid "Everywhere"
@@ -7955,6 +7995,10 @@ msgstr "Votre propre CSS (Réglages → Avancé)"
 #: design/commands/ui.toml:app.backup
 msgid "Back up now"
 msgstr "Sauvegarder maintenant"
+
+#: design/commands/ui.toml:app.feedback
+msgid "Feedback: something broke, confused you, or a wish"
+msgstr "Retour : quelque chose ne marche pas, vous a dérouté, ou un souhait"
 
 #: design/commands/ui.toml:app.testreport
 msgid "Usage report for the test group (a file, counts only)"

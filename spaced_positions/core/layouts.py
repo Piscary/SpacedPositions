@@ -218,7 +218,7 @@ VIEW_MENUS = {
     "settings": [("search.open", None), ("settings.step next", _("Next value")), ("settings.step prev", _("Previous value")),
                  ("settings.edit", None), ("settings.reset", None), ("settings.keymap", None), ("settings.export", None),
                  ("theme.save", None), ("theme.export", None), ("app.backup", None), ("app.folder", None),
-                 ("app.testreport", None)],
+                 ("app.testreport", None), ("app.feedback", None)],
     "keymap": [("search.open", None), ("keymap.bind", None), ("keymap.unbind", None)],
     "today": [("train.review", None), ("train.storm 3", _("Storm, 3 minutes")), ("train.streak 0", _("Streak")), ("train.weakest", None),
               ("train.again", None), ("pack.starter", None), ("pack.import", None), ("home.dismiss", None)],

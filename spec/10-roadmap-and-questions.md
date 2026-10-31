@@ -29,10 +29,11 @@ The way ahead is in milestones with goals that have to be met before the next st
 
 - Done: `:test-report` (14 §5); release builds installed by a tester without problems; an update with the data kept;
   the tester note, known issues and update guide (`docs/testing/`); the screenshot script for README and publishing.
-- **`:feedback`** (14 §5): a small form in the app (kind: broke · confused · wish · other, a message), version,
-  system, language and mode added; it opens the feedback page on piscarys.com with the text in the link *and* copies
-  it to the clipboard. Waiting for: the page's address, and whether it is the theme's contact form (the text arrives
-  filled in, with a small script in the theme) or the Forms app (testers paste it).
+- Done: **`:feedback`** (14 §5, Settings → Data, `M` in Settings): the kind (broke · confused · wish · other), then
+  https://piscarys.com/pages/spaced-positions opens with the message started (`?kind=…&message=…`: the kind, room to
+  write, version, system, language, mode and pane) and the same text in the clipboard. Whether the form fills itself
+  from the link depends on the form: the theme's contact form needs a few lines of script in the page; the Forms
+  app needs the paste. The address is `FEEDBACK_URL` in `spaced_positions/__init__.py`.
 - **Backup and restore** tried by a person once (`spos restore`), before testers rely on it.
 - The surveys and the feedback log (`docs/testing/feedback-log.csv`).
 

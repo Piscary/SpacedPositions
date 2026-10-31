@@ -136,4 +136,5 @@ def test_every_view_has_a_guide_with_bound_keys(client):
         assert (folder / f"{view}.html").exists(), f"no guide for the view '{view}'"
         html = client.get(f"/help/{view}/").content.decode()
         assert 'class="guide' in html
-        assert not re.findall(r">:[\w.]+<", html), f"{view}: a key in the guide has no binding"
+        # {% key %} writes `:command` into its span when the command has no key (a typed `:command` in the text is fine)
+        assert not re.findall(r'data-keys-for="[^"]*"[^>]*>:[\w.]+<', html), f"{view}: a key in the guide has no binding"

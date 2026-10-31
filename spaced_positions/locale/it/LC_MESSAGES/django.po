@@ -1318,6 +1318,14 @@ msgstr "Rapporto di utilizzo"
 msgid "%(report)s (or <code>:test-report</code>) writes a file for the test group: how often you trained and which commands you used, by key or by click. Counts only, no positions or texts; the app sends nothing, you decide whether to send the file."
 msgstr "%(report)s (o <code>:test-report</code>) scrive un file per il gruppo di test: quanto spesso ti sei allenato e quali comandi hai usato, con un tasto o con un clic. Solo conteggi, nessuna posizione o testo; l'app non invia nulla, decidi tu se inviare il file."
 
+#: templates/help/settings.html templates/settings/rows.html
+msgid "Feedback"
+msgstr "Feedback"
+
+#: templates/help/settings.html
+msgid "%(feedback)s (or <code>:feedback</code>, anywhere) opens the feedback page with a message started for you: what it is about, and the version, system and where you were. Write what happened and send it there; the app sends nothing itself."
+msgstr "%(feedback)s (o <code>:feedback</code>, ovunque) apre la pagina di feedback con un messaggio già iniziato: di cosa si tratta, la versione, il sistema e dove eri. Scrivi cosa è successo e invialo da lì; l'app da sola non invia nulla."
+
 #: templates/help/settings.html
 msgid "Change keys"
 msgstr "Cambiare i tasti"
@@ -5558,23 +5566,23 @@ msgstr "Nessun esercizio da ripassare corrisponde a «{filter}»"
 msgid "No puzzles in training match “{filter}”"
 msgstr "Nessun esercizio in allenamento corrisponde a «{filter}»"
 
-#: static/js/app.js:46
+#: static/js/app.js:47
 msgid "Your CSS is off for this page (Esc while loading): Settings → Advanced"
 msgstr "Il tuo CSS è disattivato per questa pagina (Esc al caricamento): Impostazioni → Avanzate"
 
-#: static/js/app.js:63
+#: static/js/app.js:64
 msgid "update {version} available"
 msgstr "aggiornamento {version} disponibile"
 
-#: static/js/app.js:105 static/js/core/commands.js:160 static/js/core/importer.js:58
+#: static/js/app.js:106 static/js/core/commands.js:160 static/js/core/importer.js:58
 msgid "undo"
 msgstr "annulla"
 
-#: static/js/app.js:141 static/js/core/library.js:703 static/js/islands/train.js:653
+#: static/js/app.js:142 static/js/core/library.js:703 static/js/islands/train.js:653
 msgid "The browser didn't allow copying"
 msgstr "Il browser non ha permesso la copia"
 
-#: static/js/app.js:161
+#: static/js/app.js:162
 msgid "Spaced Positions has stopped. Start it again from its icon or with spos."
 msgstr "Spaced Positions si è fermato. Riavvialo dalla sua icona o con spos."
 
@@ -5983,6 +5991,38 @@ msgid "Engine: {n} line"
 msgid_plural "Engine: {n} lines"
 msgstr[0] "Motore: {n} linea"
 msgstr[1] "Motore: {n} linee"
+
+#: static/js/core/feedback.js:11
+msgid "Something broke"
+msgstr "Qualcosa non funziona"
+
+#: static/js/core/feedback.js:12
+msgid "Something confused me"
+msgstr "Qualcosa mi ha confuso"
+
+#: static/js/core/feedback.js:13
+msgid "I wish …"
+msgstr "Vorrei …"
+
+#: static/js/core/feedback.js:14
+msgid "Something else"
+msgstr "Altro"
+
+#: static/js/core/feedback.js:27
+msgid "added by the app"
+msgstr "aggiunto dall'app"
+
+#: static/js/core/feedback.js:36
+msgid "Feedback: what is it about?"
+msgstr "Feedback: di cosa si tratta?"
+
+#: static/js/core/feedback.js:52
+msgid "The feedback page is open; if its message field is empty, paste (the text is in the clipboard)"
+msgstr "La pagina di feedback è aperta; se il campo del messaggio è vuoto, incolla il testo (è negli appunti)"
+
+#: static/js/core/feedback.js:53
+msgid "The feedback page is open: write your message there"
+msgstr "La pagina di feedback è aperta: scrivi lì il tuo messaggio"
 
 #: static/js/core/help.js:13
 msgid "Everywhere"
@@ -7955,6 +7995,10 @@ msgstr "Il tuo CSS (Impostazioni → Avanzate)"
 #: design/commands/ui.toml:app.backup
 msgid "Back up now"
 msgstr "Fai il backup ora"
+
+#: design/commands/ui.toml:app.feedback
+msgid "Feedback: something broke, confused you, or a wish"
+msgstr "Feedback: qualcosa non funziona, ti ha confuso, o un desiderio"
 
 #: design/commands/ui.toml:app.testreport
 msgid "Usage report for the test group (a file, counts only)"

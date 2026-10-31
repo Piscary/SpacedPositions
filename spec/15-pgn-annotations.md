@@ -21,6 +21,19 @@ analysis board shows these things well.
 A comment keeps its words; only the commands (`[%…]`) leave the text. A comment that held nothing but commands
 disappears from the tree.
 
+From a real lichess study export (`tests/fixtures/pgn/lichess-study-analysed.pgn`, names made up):
+
+- lichess writes the judgement as a **suffix** (`27. c3?!`), not as `$6`; both forms are read, the tree shows the
+  symbol.
+- The computer comment and the evaluation are **two comments** after the move (`{ [%eval -0.8] } { Inaccuracy. Nf5
+  was best. }`), followed by the best line as a variation.
+- `[%eval #-1]`: mate in one for Black; `[%eval #0]`: the side to move is mated (the bar is full, the label `#`).
+- The last comment can carry the outcome (`{ 0-1 Black wins by checkmate. }`) while the header says `Result "*"`
+  (a study): the game's result is taken from that comment when the header has none; the comment is shown as the
+  end of the game, not as a move comment.
+- A study has no clocks; `Annotator` is a lichess profile link, `ChapterURL` the study chapter (both shown as links
+  in the Inspector, nothing more is fetched).
+
 ## 2 · Data
 
 `Node` gains (migration, all nullable): `pgn_eval_cp`, `pgn_eval_mate`, `pgn_eval_depth` (the evaluation from the

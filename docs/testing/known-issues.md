@@ -16,11 +16,6 @@ its builds are made on GitHub, where anyone can check them. The README's *Is it 
 **Why:** Code signing costs money (Apple: 99 USD/year, Windows: certificate fees). We plan to add signing before
 the public release, but the test version is unsigned.
 
-## There is no `:feedback` command yet
-
-Give feedback with the form the maintainer sent you, by email or in the chat group. A command that opens the form
-from inside the program comes later.
-
 ## Updating the app
 
 The program doesn't update itself. If you switch on *Tell me about new versions* (on the Welcome screen, or Settings →

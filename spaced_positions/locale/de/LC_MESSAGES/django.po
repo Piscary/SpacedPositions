@@ -1318,6 +1318,14 @@ msgstr "Nutzungsbericht"
 msgid "%(report)s (or <code>:test-report</code>) writes a file for the test group: how often you trained and which commands you used, by key or by click. Counts only, no positions or texts; the app sends nothing, you decide whether to send the file."
 msgstr "%(report)s (oder <code>:test-report</code>) erstellt eine Datei für die Testgruppe: wie oft du trainiert hast und welche Befehle du verwendet hast, per Taste oder per Klick. Nur Zählungen, keine Stellungen oder Texte; die App sendet nichts, du entscheidest, ob du die Datei sendest."
 
+#: templates/help/settings.html templates/settings/rows.html
+msgid "Feedback"
+msgstr "Rückmeldung"
+
+#: templates/help/settings.html
+msgid "%(feedback)s (or <code>:feedback</code>, anywhere) opens the feedback page with a message started for you: what it is about, and the version, system and where you were. Write what happened and send it there; the app sends nothing itself."
+msgstr "%(feedback)s (oder <code>:feedback</code>, überall) öffnet die Rückmeldeseite mit einer angefangenen Nachricht: worum es geht, dazu Version, System und wo du warst. Schreib, was passiert ist, und sende es dort ab; die App selbst sendet nichts."
+
 #: templates/help/settings.html
 msgid "Change keys"
 msgstr "Tasten ändern"
@@ -5558,23 +5566,23 @@ msgstr "Keine fälligen Aufgaben passen zu «{filter}»"
 msgid "No puzzles in training match “{filter}”"
 msgstr "Keine Aufgaben im Training passen zu «{filter}»"
 
-#: static/js/app.js:46
+#: static/js/app.js:47
 msgid "Your CSS is off for this page (Esc while loading): Settings → Advanced"
 msgstr "Dein CSS ist für diese Seite aus (Esc beim Laden): Einstellungen → Erweitert"
 
-#: static/js/app.js:63
+#: static/js/app.js:64
 msgid "update {version} available"
 msgstr "Update {version} verfügbar"
 
-#: static/js/app.js:105 static/js/core/commands.js:160 static/js/core/importer.js:58
+#: static/js/app.js:106 static/js/core/commands.js:160 static/js/core/importer.js:58
 msgid "undo"
 msgstr "rückgängig"
 
-#: static/js/app.js:141 static/js/core/library.js:703 static/js/islands/train.js:653
+#: static/js/app.js:142 static/js/core/library.js:703 static/js/islands/train.js:653
 msgid "The browser didn't allow copying"
 msgstr "Der Browser hat das Kopieren nicht erlaubt"
 
-#: static/js/app.js:161
+#: static/js/app.js:162
 msgid "Spaced Positions has stopped. Start it again from its icon or with spos."
 msgstr "Spaced Positions wurde beendet. Starte es wieder über sein Symbol oder mit spos."
 
@@ -5983,6 +5991,38 @@ msgid "Engine: {n} line"
 msgid_plural "Engine: {n} lines"
 msgstr[0] "Engine: {n} Variante"
 msgstr[1] "Engine: {n} Varianten"
+
+#: static/js/core/feedback.js:11
+msgid "Something broke"
+msgstr "Etwas ging kaputt"
+
+#: static/js/core/feedback.js:12
+msgid "Something confused me"
+msgstr "Etwas hat mich verwirrt"
+
+#: static/js/core/feedback.js:13
+msgid "I wish …"
+msgstr "Ich wünsche mir …"
+
+#: static/js/core/feedback.js:14
+msgid "Something else"
+msgstr "Etwas anderes"
+
+#: static/js/core/feedback.js:27
+msgid "added by the app"
+msgstr "von der App ergänzt"
+
+#: static/js/core/feedback.js:36
+msgid "Feedback: what is it about?"
+msgstr "Rückmeldung: worum geht es?"
+
+#: static/js/core/feedback.js:52
+msgid "The feedback page is open; if its message field is empty, paste (the text is in the clipboard)"
+msgstr "Die Rückmeldeseite ist offen; ist ihr Nachrichtenfeld leer, füge den Text ein (er ist in der Zwischenablage)"
+
+#: static/js/core/feedback.js:53
+msgid "The feedback page is open: write your message there"
+msgstr "Die Rückmeldeseite ist offen: schreib deine Nachricht dort"
 
 #: static/js/core/help.js:13
 msgid "Everywhere"
@@ -7955,6 +7995,10 @@ msgstr "Dein eigenes CSS (Einstellungen → Erweitert)"
 #: design/commands/ui.toml:app.backup
 msgid "Back up now"
 msgstr "Jetzt sichern"
+
+#: design/commands/ui.toml:app.feedback
+msgid "Feedback: something broke, confused you, or a wish"
+msgstr "Rückmeldung: etwas ging kaputt, hat verwirrt, oder ein Wunsch"
 
 #: design/commands/ui.toml:app.testreport
 msgid "Usage report for the test group (a file, counts only)"

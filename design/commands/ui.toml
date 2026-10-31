@@ -137,6 +137,12 @@ group = "App"
 aliases = ["backup"]
 handler = "server"
 
+["app.feedback"]
+title = "Feedback: something broke, confused you, or a wish"
+group = "App"
+aliases = ["feedback"]
+args = [{ name = "kind", type = "enum", values = ["broke", "confused", "wish", "other"], optional = true }]
+
 ["app.testreport"]
 title = "Usage report for the test group (a file, counts only)"
 group = "App"
