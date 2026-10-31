@@ -1,0 +1,17 @@
+[Event "Club Tournament"]
+[Site "Zurich"]
+[Date "2026.10.15"]
+[Round "3"]
+[White "Schwarz"]
+[Black "Weiss"]
+[Result "1-0"]
+[ECO "C65"]
+[Opening "Ruy Lopez, Berlin Defense"]
+[PlyCount "41"]
+
+1. e4 { [%eval 0.25,23] [%emt 0:00:05] } e5 { [%eval 0.18,22] [%emt 0:00:04] }
+2. Nf3 { [%eval 0.30,24] [%emt 0:00:07] } Nc6 { [%eval 0.22,23] [%emt 0:00:06] }
+3. Bb5 { [%eval 0.15,21] [%emt 0:00:12] } Nf6 { [%eval 0.10,20] [%emt 0:00:08] }
+4. O-O { [%eval 0.20,22] [%emt 0:00:09] } Nxe4 { [%eval 0.05,19] [%emt 0:00:15] }
+5. d4 { [%eval 0.35,25] [%emt 0:00:11] } exd4 { [%eval 0.28,24] [%emt 0:00:10] }
+6. Re1 { [%eval 0.40,26] } d6 { [%eval 0.32,25] } 1-0

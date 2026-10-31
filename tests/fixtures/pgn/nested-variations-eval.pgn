@@ -1,0 +1,23 @@
+[Event "Analysis Game"]
+[Site "Local"]
+[Date "2026.10.25"]
+[White "Annotator"]
+[Black "Opponent"]
+[Result "*"]
+[Annotator "Test"]
+[ECO "D60"]
+[Opening "Queen's Gambit Declined"]
+
+1. d4 { [%eval 0.10] } d5 { [%eval 0.05] }
+2. c4 { [%eval 0.15] } dxc4 { [%eval 0.10] }
+3. e3 { [%eval 0.20] } ( { [%eval 0.05] }
+   3. Nf3 { [%eval 0.12] } Nf6 { [%eval 0.08] }
+   4. d5 { [%eval 0.18] } Bd7 { [%eval 0.14] } )
+   a6 { [%eval 0.12] }
+4. Bxc4 { [%eval 0.25] } ( { [%eval 0.10] }
+   4. a4 { [%eval 0.15] } Nf6 { [%eval 0.12] }
+   5. Nc3 { [%eval 0.20] } ( { [%eval 0.08] }
+      5. Ne2 { [%eval 0.12] } e5 { [%eval 0.10] } )
+      e5 { [%eval 0.16] } )
+   e6 { [%eval 0.18] }
+5. Nf3 { [%eval 0.30] } *

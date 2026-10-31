@@ -1,0 +1,16 @@
+[Event "Online Blitz"]
+[Site "https://lichess.org/AbCdEfGh"]
+[Date "2026.10.20"]
+[White "PlayerOne"]
+[Black "PlayerTwo"]
+[Result "0-1"]
+[UTCDate "2026.10.20"]
+[UTCTime "14:30:00"]
+[WhiteElo "1850"]
+[BlackElo "1920"]
+[TimeControl "180+2"]
+[ECO "B23"]
+[Opening "Sicilian Defense: Closed"]
+[ChapterURL "https://lichess.org/study/AbCdEfGh"]
+
+1. e4 { [%clk 0:02:59] } c5 { [%clk 0:02:58] } 2. Nc3 { [%clk 0:02:58] } g6 { [%clk 0:02:56] } 3. f4 { [%clk 0:02:57] } Bg7 { [%clk 0:02:54] } 4. Nf3 { [%clk 0:02:56] } Nc6 { [%clk 0:02:52] } 5. d3 { [%clk 0:02:55] } d6 { [%clk 0:02:50] } 6. Bd2 { [%clk 0:02:54] } Nf6 { [%clk 0:02:48] } 7. Qe2 { [%clk 0:02:53] } O-O { [%clk 0:02:46] } 8. O-O-O { [%clk 0:02:52] } e6 { [%clk 0:02:44] } 9. Kb1 { [%clk 0:02:51] } b6 { [%clk 0:02:42] } 10. g3 { [%clk 0:02:50] } Bb7 { [%clk 0:02:40] } 0-1

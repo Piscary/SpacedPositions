@@ -1,0 +1,15 @@
+[Event "Rated Classical game"]
+[Site "https://www.chess.com/game/live/12345678"]
+[Date "2026.10.28"]
+[White "GrandMaster"]
+[Black "ChessFan"]
+[Result "1-0"]
+[WhiteElo "2100"]
+[BlackElo "1950"]
+[TimeControl "15+10"]
+[ECO "C65"]
+[Opening "Ruy Lopez, Berlin Defense"]
+[Termination "Normal"]
+[Url "https://www.chess.com/game/live/12345678"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Nxe4 5. d4 exd4 6. Re1 d6 7. Nxd4 Bd7 8. Nxc6 bxc6 9. Be3 Qf6 10. Qd2 O-O-O 1-0
