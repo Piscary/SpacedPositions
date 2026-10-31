@@ -22,7 +22,7 @@ from .models import LOCAL_USER, KeymapOverride, Preferences
 SECTIONS = [
     (_("Language"), "n", ["ui.language", "tags.language"]),
     (_("Board"), "b", ["piece-set", "board-coords", "board.letters", "board-border"]),
-    (_("Engine"), "e", ["engine.source", "engine.path", "engine.lines", "engine.depth", "engine.arrows", "engine.threads", "engine.hash"]),
+    (_("Engine"), "e", ["engine.source", "engine.path", "analysis.computer-comments", "engine.lines", "engine.depth", "engine.arrows", "engine.threads", "engine.hash"]),
     (_("Training"), "r", ["training.new-per-day", "training.storm-pace", "training.move-hints", "training.move-complete"]),
     (_("Theme"), "t", "theme"),
     (_("Sound and motion"), "m", ["sound.on", "display.ticker", "motion", "board-motion"]),

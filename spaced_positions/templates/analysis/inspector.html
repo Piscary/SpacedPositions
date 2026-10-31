@@ -1,6 +1,7 @@
 <div class="inspector" data-inspector data-node="{{ node.id }}">
   {% if node.parent_id %}
   {% translate "move · annotation · mark" as move_summary %}{% section node.san key="v" summary=move_summary %}
+    {% if facts %}<p class="inspector__facts mono">{{ facts }}</p>{% endif %}
     <div class="actionbar" aria-label="{% translate "Annotation symbols" %}">
       {% for n, symbol, on in nags %}<button type="button" class="keybutton keybutton--secondary keybutton--sm keybutton--full" data-cmd="analysis.nag" data-args="{{ n }}" aria-pressed="{% if on %}true{% else %}false{% endif %}"><span class="keybutton__label">{{ symbol }}</span>{% keycap n|stringformat:"s" %}</button>{% endfor %}
       {% cmd "analysis.annotate" label=_("More…") size="sm" %}

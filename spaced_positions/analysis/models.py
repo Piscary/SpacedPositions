@@ -42,6 +42,13 @@ class Node(models.Model):
     eval_cp = models.IntegerField(null=True, blank=True)
     eval_mate = models.SmallIntegerField(null=True, blank=True)
     eval_depth = models.PositiveSmallIntegerField(null=True, blank=True)
+    # what the PGN said (spec 15): its evaluation ([%eval], from white's side; lichess's or the annotator's engine,
+    # kept apart from ours) and the clocks ([%clk] time left after the move, [%emt] time used), in milliseconds
+    pgn_eval_cp = models.IntegerField(null=True, blank=True)
+    pgn_eval_mate = models.SmallIntegerField(null=True, blank=True)
+    pgn_eval_depth = models.PositiveSmallIntegerField(null=True, blank=True)
+    clock_ms = models.PositiveIntegerField(null=True, blank=True)
+    emt_ms = models.PositiveIntegerField(null=True, blank=True)
 
     class Meta:
         ordering = ["order", "id"]

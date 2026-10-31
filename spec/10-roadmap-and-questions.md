@@ -60,6 +60,13 @@ completion; the Library work-list race (a list in a hidden mode lost its cursor:
 workspace as hiding the rows). Moved to when it pays: the inspector and Puzzle pane out of `analysis.js` (spec 15
 works mostly on the server and the eval bar).
 
+Day 2 done: spec 15 §1–§3. `[%eval]`, `[%clk]`, `[%emt]` read into the moves (`Node.pgn_eval_*`, `clock_ms`,
+`emt_ms`), out of the comment text, written back on export (round trip tested on the lichess study); lichess's
+symbols ($22 … $146); computer comments with their own style and Settings → Engine → *Computer comments* (show ·
+fold · hide); the Inspector's line `lichess -0.80 · engine +0.31 d24 · clock 4:52 · used 0:09`; the tree JSON
+carries `fileEval`, `clock`, `emt` and `evalsFrom` for day 3's eval bar. Not yet: the outcome in the last comment
+of a study (§1).
+
 Out of the week: spec 17 phase 2 (Present mode, questions per puzzle, follow-ups, per-student view, lesson packs),
 and spec 12 (collections, stats per collection), which phase 2 builds on.
 

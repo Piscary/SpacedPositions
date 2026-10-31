@@ -44,6 +44,10 @@
 .mt-start::before { content: "⏮ "; }
 .mt-start:hover { background: var(--surface-hover); color: var(--text); }
 .mt-start.is-cursor { border-color: var(--main); background: var(--main); color: var(--main-text); }
+/* lichess's computer comments: quieter, folded to the judgement or hidden (Settings → Engine) */
+.mt-comment--engine { color: var(--text-muted); font-size: var(--fs-sm); }
+html[data-computer-comments="fold"] .mt-comment__more { display: none; }
+html[data-computer-comments="hide"] .mt-comment--engine { display: none; }
 .mt-num { margin-right: var(--s-half); color: var(--text-muted); font-weight: 400; }
 .mt-num:empty { display: none; }
 .mt-nag { color: var(--main); }
@@ -96,6 +100,7 @@
 .inspector-pane { min-height: 100%; }
 .inspector__none { padding: var(--s-2); }
 .inspector .actionbar { flex-wrap: wrap; padding: var(--s-half) 0; }
+.inspector__facts { margin: 0 0 var(--s-half); color: var(--text-sub); font-size: var(--fs-sm); }
 .inspector__comment textarea { width: 100%; min-height: calc(var(--row-md) * 4); resize: vertical; font-family: var(--font-ui); }
 .inspector__tags { display: flex; flex-wrap: wrap; gap: var(--s-half); align-items: center; }
 .inspector__tags .chip { cursor: pointer; }

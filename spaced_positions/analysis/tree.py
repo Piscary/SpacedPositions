@@ -21,7 +21,8 @@ from spaced_positions.training.models import Position, Puzzle
 from .models import JournalEntry, Node
 
 NODE_FIELDS = ("parent_id", "order", "uci", "san", "ply", "fen", "comment", "nags", "mark", "color", "shapes", "squares")
-NAGS = {1: "!", 2: "?", 3: "!!", 4: "??", 5: "!?", 6: "?!", 7: "□", 10: "=", 13: "∞", 14: "⩲", 15: "⩱", 16: "±", 17: "∓", 18: "+−", 19: "−+"}
+NAGS = {1: "!", 2: "?", 3: "!!", 4: "??", 5: "!?", 6: "?!", 7: "□", 10: "=", 13: "∞", 14: "⩲", 15: "⩱", 16: "±", 17: "∓", 18: "+−", 19: "−+",
+        22: "⨀", 32: "⟳", 36: "↑", 40: "→", 132: "⇆", 138: "⊕", 146: "N"}  # lichess's set (spec 15 §1)
 MOVE_NAGS = (1, 2, 3, 4, 5, 6, 7)
 
 
@@ -69,11 +70,20 @@ def kids_map(all_nodes) -> dict[int | None, list[Node]]:
 # ── JSON for the client ───────────────────────────────────────────────────────────────────────────────────────
 
 
+def evals_from(owner) -> str:
+    """Whose evaluations a PGN carried (spec 15): lichess's analysis, chess.com's, or a PGN's."""
+    headers = getattr(owner, "headers", None) or {}
+    where = " ".join(str(headers.get(k, "")) for k in ("Annotator", "Site", "ChapterURL"))
+    return "lichess" if "lichess.org" in where else "chess.com" if "chess.com" in where else "PGN"
+
+
 def node_json(n: Node) -> dict:
     return {
         "id": n.id, "parent": n.parent_id, "order": n.order, "uci": n.uci, "san": n.san, "ply": n.ply, "fen": n.fen,
         "comment": n.comment, "nags": n.nags, "mark": n.mark, "color": n.color, "shapes": n.shapes, "squares": n.squares,
         "eval": None if n.eval_cp is None and n.eval_mate is None else {"cp": n.eval_cp, "mate": n.eval_mate, "depth": n.eval_depth},
+        "fileEval": None if n.pgn_eval_cp is None and n.pgn_eval_mate is None else {"cp": n.pgn_eval_cp, "mate": n.pgn_eval_mate, "depth": n.pgn_eval_depth},
+        "clock": n.clock_ms, "emt": n.emt_ms,
     }
 
 
@@ -91,6 +101,7 @@ def tree_json(position) -> dict:
         about = {"id": str(position.uuid), "kind": "position", "title": position.title, "fen": position.fen,
                  "source": position.citation, "objective": position.task, "difficulty": position.difficulty,
                  "tags": position.tag_names}
+    about["evalsFrom"] = evals_from(position)
     return {
         "position": about,
         "root": r.id,

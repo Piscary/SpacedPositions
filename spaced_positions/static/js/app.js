@@ -33,6 +33,7 @@ function applySettings(values) {
   window.SPOS.settings = values
   document.documentElement.dataset.keycaps = values["keys.keycaps"]
   document.documentElement.dataset.letters = values["board.letters"]
+  document.documentElement.dataset.computerComments = values["analysis.computer-comments"] || "fold"
   setTeachKeys(values["keys.teach"] !== false)
   emit("settings", values)
 }

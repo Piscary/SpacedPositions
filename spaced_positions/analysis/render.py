@@ -2,6 +2,8 @@
 under the move it replaces, comments in place, annotation symbols, marks as a coloured edge, and the puzzles' roles
 (start framed, solver moves underlined, answers dotted, ends with a small square)."""
 
+import re
+
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
@@ -94,6 +96,20 @@ def line_html(start_fen: str, moves) -> str:
     return mark_safe(" ".join(out))
 
 
+# lichess's computer analysis writes its judgement as a comment ("Inaccuracy. Nf5 was best."): its own style, folded
+# to the judgement or hidden by Settings → Engine (spec 15 §3)
+COMPUTER = re.compile(r"^(Inaccuracy|Mistake|Blunder|Checkmate is now unavoidable|Lost forced checkmate sequence|Mate lost)\.(.*)$", re.S)
+
+
+def comment_html(node_id, text: str) -> str:
+    found = COMPUTER.match(text)
+    if not found:
+        return format_html('<span class="mt-comment" data-comment="{}">{}</span>', node_id, text)
+    return format_html('<span class="mt-comment mt-comment--engine" data-comment="{}" title="{}"><span class="mt-comment__judgement">'
+                       '⚙ {}</span><span class="mt-comment__more">{}</span></span>', node_id, _("lichess's computer analysis"),
+                       found.group(1), found.group(2))
+
+
 def _token(node, roles, fens, force_number, tags):
     role = roles.get(node.id, {})
     classes = ["mt-move"]
@@ -121,7 +137,7 @@ def _line(start, kids, roles, fens, force_number, siblings, depth, tags):
         out.append(str(_token(node, roles, fens, force, tags)))
         force = False
         if node.comment:
-            out.append(str(format_html('<span class="mt-comment" data-comment="{}">{}</span>', node.id, node.comment)))
+            out.append(str(comment_html(node.id, node.comment)))
             force = True
         if alternatives:
             blocks = []

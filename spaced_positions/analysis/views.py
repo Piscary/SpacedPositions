@@ -201,6 +201,35 @@ def _shown_node(position, request):
         return None
 
 
+def _eval_text(cp, mate) -> str:
+    return f"#{mate}" if mate is not None else f"{cp / 100:+.2f}"
+
+
+def _clock_text(ms: int) -> str:
+    s = round(ms / 1000)
+    return f"{s // 3600}:{s % 3600 // 60:02d}:{s % 60:02d}" if s >= 3600 else f"{s // 60}:{s % 60:02d}"
+
+
+def move_facts(owner, node) -> str:
+    """The Inspector's line about a move (spec 15 §3): the PGN's and the engine's evaluation, the clock, the time used."""
+    parts = []
+    if node.pgn_eval_cp is not None or node.pgn_eval_mate is not None:
+        depth = f" d{node.pgn_eval_depth}" if node.pgn_eval_depth else ""
+        parts.append(f"{tree.evals_from(owner)} {_eval_text(node.pgn_eval_cp, node.pgn_eval_mate)}{depth}")
+    if node.eval_cp is not None or node.eval_mate is not None:
+        depth = f" d{node.eval_depth}" if node.eval_depth else ""
+        parts.append(_("engine {value}").format(value=f"{_eval_text(node.eval_cp, node.eval_mate)}{depth}"))
+    if node.clock_ms is not None:
+        used = node.emt_ms
+        before = node.parent.parent if node.parent_id and node.parent.parent_id else None  # the same side's last move
+        if used is None and before is not None and before.clock_ms is not None:
+            increment = (getattr(owner, "headers", None) or {}).get("TimeControl", "").partition("+")[2]
+            used = before.clock_ms - node.clock_ms + (int(increment) * 1000 if increment.isdigit() else 0)
+        clock = _("clock {time}").format(time=_clock_text(node.clock_ms))
+        parts.append(clock + (" · " + _("used {time}").format(time=_clock_text(used)) if used is not None and used >= 0 else ""))
+    return " · ".join(parts)
+
+
 @require_GET
 def inspector(request, pid):
     position = _position(pid)
@@ -209,7 +238,7 @@ def inspector(request, pid):
         return HttpResponse(status=204)
     if tree.is_game(position):
         return render_template(request, "analysis/inspector_game.html", {
-            "game": position, "node": node,
+            "game": position, "node": node, "facts": move_facts(position, node) if node.parent_id else "",
             "nags": [(n, s, n in node.nags) for n, s in tree.NAGS.items() if n in tree.MOVE_NAGS],
             "headers": [(k, v) for k, v in [(_("White"), position.white_name), (_("Black"), position.black_name), (_("Result"), position.result),
                         (_("Date"), position.date), (_("Event"), position.event), (_("Site"), position.site), (_("Round"), position.round),
@@ -220,6 +249,7 @@ def inspector(request, pid):
     context = {
         "position": position,
         "node": node,
+        "facts": move_facts(position, node) if node.parent_id else "",
         "nags": [(n, s, n in node.nags) for n, s in tree.NAGS.items() if n in tree.MOVE_NAGS],
         "move_count": position.nodes.exclude(parent=None).count(),
         "position_tags": position.tag_links.select_related("tag__field").order_by("tag__field__order", "tag__order"),

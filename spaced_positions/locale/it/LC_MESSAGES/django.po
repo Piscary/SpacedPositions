@@ -35,7 +35,7 @@ msgstr "Cattiva"
 msgid "Clear"
 msgstr "Rimuovi"
 
-#: templates/analysis/inspector.html templates/analysis/inspector_game.html static/js/islands/board.js:679
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html static/js/islands/board.js:680
 msgid "none"
 msgstr "nessuno"
 
@@ -149,7 +149,7 @@ msgstr "Gli esercizi nascono dalle posizioni: %(colon)s<code>new-position</code>
 msgid "Puzzles come from positions, not from games: O makes the position at this move one of its own, with its own analysis."
 msgstr "Gli esercizi nascono dalle posizioni, non dalle partite: O rende la posizione a questa mossa una posizione a sé, con la sua analisi."
 
-#: templates/analysis/puzzle.html analysis/render.py:73
+#: templates/analysis/puzzle.html analysis/render.py:75
 msgctxt "the start, a noun"
 msgid "Start"
 msgstr "Inizio"
@@ -650,7 +650,7 @@ msgstr "Il riquadro Biblioteca dello stesso gruppo collegato: mostra i risultati
 msgid "Facets are counted for the current results: the numbers show what you get when you add one."
 msgstr "Le faccette sono contate sui risultati attuali: i numeri mostrano cosa ottieni aggiungendone una."
 
-#: templates/help/filters.html static/js/core/library.js:319
+#: templates/help/filters.html static/js/core/library.js:321
 msgid "Facets are shown for positions (collection 1)."
 msgstr "Le faccette sono mostrate per le posizioni (raccolta 1)."
 
@@ -877,6 +877,10 @@ msgstr "La scacchiera, il motore, l'ispettore e i grafici dello stesso gruppo co
 #: templates/help/moves.html
 msgid "Every change can be undone with u, also after a reload."
 msgstr "Ogni modifica si annulla con u, anche dopo un ricaricamento."
+
+#: templates/help/moves.html
+msgid "A game from lichess brings its evaluations and clocks: the inspector shows them for the move at the cursor, the moves stay clean. lichess's computer comments (⚙ Inaccuracy …) are folded to the judgement; Settings → Engine shows them in full or hides them."
+msgstr "Una partita da lichess porta le sue valutazioni e i suoi orologi: l'ispettore li mostra per la mossa al cursore, le mosse restano pulite. I commenti del computer di lichess (⚙ Inaccuracy …) sono ridotti al giudizio; Impostazioni → Motore li mostra per intero o li nasconde."
 
 #: templates/help/pane.html
 msgid "The workspace is made of panes — like windows in a program, but arranged without overlapping. Each pane shows one view: a board, a move tree, the Library, a chart … You choose what goes where."
@@ -1416,7 +1420,7 @@ msgstr "↵ ne toglie uno"
 msgid "↵ takes it out of the search"
 msgstr "↵ lo toglie dalla ricerca"
 
-#: templates/library/facets.html static/js/core/library.js:391 design/commands/library.toml:library.clear
+#: templates/library/facets.html static/js/core/library.js:393 design/commands/library.toml:library.clear
 msgid "Clear the search"
 msgstr "Svuotare la ricerca"
 
@@ -1424,7 +1428,7 @@ msgstr "Svuotare la ricerca"
 msgid "excluded"
 msgstr "esclusa"
 
-#: templates/library/results.html static/js/islands/board.js:441
+#: templates/library/results.html static/js/islands/board.js:442
 msgid "diagram"
 msgstr "diagramma"
 
@@ -2146,7 +2150,7 @@ msgstr "Recenti"
 msgid "On / off"
 msgstr "Acceso / spento"
 
-#: templates/views/engine.html core/settings.py:49
+#: templates/views/engine.html core/settings.py:52
 msgid "Lines"
 msgstr "Linee"
 
@@ -2610,11 +2614,11 @@ msgstr "Anche corretta: l'allenatore la accetta e continua con la linea principa
 msgid "An answer: the trainer plays it for the opponent."
 msgstr "Una risposta: l'allenatore la gioca per l'avversario."
 
-#: analysis/puzzles.py:262 analysis/views.py:214 library/structure.py:15
+#: analysis/puzzles.py:262 analysis/views.py:243 library/structure.py:15
 msgid "White"
 msgstr "Bianco"
 
-#: analysis/puzzles.py:262 analysis/views.py:214 library/structure.py:15
+#: analysis/puzzles.py:262 analysis/views.py:243 library/structure.py:15
 msgid "Black"
 msgstr "Nero"
 
@@ -2638,47 +2642,51 @@ msgstr "Tutte le {n} risposte contano: {n} linee"
 msgid "On an answer: Also correct and All answers count need one of the solver's moves."
 msgstr "Su una risposta: Anche corretta e Tutte le risposte contano richiedono una mossa di chi risolve."
 
-#: analysis/render.py:83
+#: analysis/render.py:109
+msgid "lichess's computer analysis"
+msgstr "analisi del computer di lichess"
+
+#: analysis/render.py:85
 msgid "No moves yet: play one on the board, paste a PGN, or let the engine suggest one."
 msgstr "Ancora nessuna mossa: giocane una sulla scacchiera, incolla un PGN o lascia che il motore ne suggerisca una."
 
-#: analysis/render.py:73
+#: analysis/render.py:75
 msgid "The start position ({keys})"
 msgstr "La posizione iniziale ({keys})"
 
-#: analysis/render.py:77
+#: analysis/render.py:79
 msgid "Puzzle from the start (draft)"
 msgstr "Esercizio dalla posizione iniziale (bozza)"
 
-#: analysis/render.py:77
+#: analysis/render.py:79
 msgid "Puzzle from the start"
 msgstr "Esercizio dalla posizione iniziale"
 
-#: analysis/tree.py:198
+#: analysis/tree.py:209
 msgid "the start position can't be deleted"
 msgstr "la posizione iniziale non può essere eliminata"
 
-#: analysis/tree.py:275
+#: analysis/tree.py:286
 msgid "a game's start position can't be changed"
 msgstr "la posizione iniziale di una partita non può essere cambiata"
 
-#: analysis/tree.py:278
+#: analysis/tree.py:289
 msgid "not a FEN"
 msgstr "non è un FEN"
 
-#: analysis/tree.py:170
+#: analysis/tree.py:181
 msgid "{move} is not legal here"
 msgstr "{move} non è legale qui"
 
-#: analysis/tree.py:311
+#: analysis/tree.py:322
 msgid "the analysis has moves that aren't legal in the corrected position ({n} moves would go)"
 msgstr "l'analisi ha mosse non legali nella posizione corretta ({n} mosse verrebbero eliminate)"
 
-#: analysis/tree.py:333
+#: analysis/tree.py:344
 msgid "not a legal position: {problems}"
 msgstr "non è una posizione legale: {problems}"
 
-#: analysis/tree.py:168
+#: analysis/tree.py:179
 msgid "not a move: {move}"
 msgstr "non è una mossa: {move}"
 
@@ -2690,23 +2698,23 @@ msgstr "Modifica"
 msgid "Position corrected; the analysis is kept"
 msgstr "Posizione corretta; l'analisi resta"
 
-#: analysis/views.py:339
+#: analysis/views.py:369
 msgid "with the local engine"
 msgstr "con il motore locale"
 
-#: analysis/views.py:339
+#: analysis/views.py:369
 msgid "with the stored evaluations"
 msgstr "con le valutazioni salvate"
 
-#: analysis/views.py:340
+#: analysis/views.py:370
 msgid "without evaluations (:evaluate, or a local engine)"
 msgstr "senza valutazioni (:evaluate o un motore locale)"
 
-#: analysis/views.py:341
+#: analysis/views.py:371
 msgid "Moments {how}: {tags} on {moves}"
 msgstr "Momenti {how}: {tags} su {moves}"
 
-#: analysis/views.py:100 static/js/core/analysis.js:684
+#: analysis/views.py:100 static/js/core/analysis.js:678
 msgid "Annotation"
 msgstr "Annotazione"
 
@@ -2714,7 +2722,7 @@ msgstr "Annotazione"
 msgid "Mark"
 msgstr "Segno"
 
-#: analysis/views.py:100 static/js/core/analysis.js:697
+#: analysis/views.py:100 static/js/core/analysis.js:691
 msgid "Line colour"
 msgstr "Colore della linea"
 
@@ -2736,6 +2744,10 @@ msgstr[1] "Posizione corretta; {n} mosse dell'analisi sono state eliminate"
 msgid "Replace the moves"
 msgstr "Sostituisci le mosse"
 
+#: analysis/views.py:228
+msgid "clock {time}"
+msgstr "orologio {time}"
+
 #: analysis/views.py:88
 msgid "Add pasted moves"
 msgstr "Aggiungere le mosse incollate"
@@ -2752,29 +2764,33 @@ msgstr "Linea principale {move}"
 msgid "Move variation {move}"
 msgstr "Sposta la variante {move}"
 
-#: analysis/views.py:311
+#: analysis/views.py:221
+msgid "engine {value}"
+msgstr "motore {value}"
+
+#: analysis/views.py:341
 msgid "New position {id}"
 msgstr "Nuova posizione {id}"
 
-#: analysis/views.py:329
+#: analysis/views.py:359
 msgid "Evaluated {n} move"
 msgid_plural "Evaluated {n} moves"
 msgstr[0] "{n} mossa valutata"
 msgstr[1] "{n} mosse valutate"
 
-#: analysis/views.py:342
+#: analysis/views.py:372
 msgid "{n} new tag"
 msgid_plural "{n} new tags"
 msgstr[0] "{n} nuovo tag"
 msgstr[1] "{n} nuovi tag"
 
-#: analysis/views.py:343 static/js/core/paste.js:46 static/js/islands/graphs.js:127
+#: analysis/views.py:373 static/js/core/paste.js:46 static/js/islands/graphs.js:127
 msgid "{n} move"
 msgid_plural "{n} moves"
 msgstr[0] "{n} mossa"
 msgstr[1] "{n} mosse"
 
-#: analysis/views.py:345
+#: analysis/views.py:375
 msgid "{n} withdrawn"
 msgstr "{n} ritirati"
 
@@ -2782,31 +2798,35 @@ msgstr "{n} ritirati"
 msgid "Delete from {move}"
 msgstr "Elimina da {move}"
 
-#: analysis/views.py:214
+#: analysis/views.py:229
+msgid "used {time}"
+msgstr "usato {time}"
+
+#: analysis/views.py:243
 msgid "Result"
 msgstr "Risultato"
 
-#: analysis/views.py:215
+#: analysis/views.py:244
 msgid "Date"
 msgstr "Data"
 
-#: analysis/views.py:215
+#: analysis/views.py:244
 msgid "Event"
 msgstr "Evento"
 
-#: analysis/views.py:215
+#: analysis/views.py:244
 msgid "Site"
 msgstr "Luogo"
 
-#: analysis/views.py:215
+#: analysis/views.py:244
 msgid "Round"
 msgstr "Turno"
 
-#: analysis/views.py:216
+#: analysis/views.py:245
 msgid "White Elo"
 msgstr "Elo Bianco"
 
-#: analysis/views.py:216
+#: analysis/views.py:245
 msgid "Black Elo"
 msgstr "Elo Nero"
 
@@ -3556,19 +3576,19 @@ msgstr "impossibile aprire {folder}: {error}"
 msgid "check contrast: {problems}"
 msgstr "controlla il contrasto: {problems}"
 
-#: core/settings.py:89
+#: core/settings.py:92
 msgid "English"
 msgstr "inglese"
 
-#: core/settings.py:89
+#: core/settings.py:92
 msgid "German"
 msgstr "tedesco"
 
-#: core/settings.py:89
+#: core/settings.py:92
 msgid "French"
 msgstr "francese"
 
-#: core/settings.py:89
+#: core/settings.py:92
 msgid "Italian"
 msgstr "italiano"
 
@@ -3669,102 +3689,110 @@ msgid "Path of a UCI engine program (empty: stockfish on the PATH)"
 msgstr "Percorso di un programma motore UCI (vuoto: stockfish nel PATH)"
 
 #: core/settings.py:49
+msgid "Computer comments"
+msgstr "Commenti del computer"
+
+#: core/settings.py:50
+msgid "lichess's judgements in an analysed game (\"Inaccuracy. Nf5 was best.\"): in full, folded to the judgement, or hidden"
+msgstr "I giudizi di lichess in una partita analizzata («Inaccuracy. Nf5 was best.»): per intero, ridotti al giudizio o nascosti"
+
+#: core/settings.py:52
 msgid "How many best lines the engine shows"
 msgstr "Quante linee migliori mostra il motore"
 
-#: core/settings.py:50
+#: core/settings.py:53
 msgid "Depth"
 msgstr "Profondità"
 
-#: core/settings.py:50
+#: core/settings.py:53
 msgid "How deep the engine searches"
 msgstr "Quanto in profondità cerca il motore"
 
-#: core/settings.py:51
+#: core/settings.py:54
 msgid "Threads"
 msgstr "Thread"
 
-#: core/settings.py:51
+#: core/settings.py:54
 msgid "Threads of the local engine"
 msgstr "Thread del motore locale"
 
-#: core/settings.py:52
+#: core/settings.py:55
 msgid "Hash (MB)"
 msgstr "Hash (MB)"
 
-#: core/settings.py:52
+#: core/settings.py:55
 msgid "Hash table of the local engine"
 msgstr "Tabella hash del motore locale"
 
-#: core/settings.py:53
+#: core/settings.py:56
 msgid "Arrows"
 msgstr "Frecce"
 
-#: core/settings.py:53
+#: core/settings.py:56
 msgid "The engine's best moves as arrows on the board"
 msgstr "Le mosse migliori del motore come frecce sulla scacchiera"
 
-#: core/settings.py:54
+#: core/settings.py:57
 msgid "Sounds"
 msgstr "Suoni"
 
-#: core/settings.py:54
+#: core/settings.py:57
 msgid "A click on a move, a tone on right and wrong, a chord on a record"
 msgstr "Un clic a ogni mossa, un suono per giusto e sbagliato, un accordo per un record"
 
-#: core/settings.py:55
+#: core/settings.py:58
 msgid "Counting numbers"
 msgstr "Numeri che contano"
 
-#: core/settings.py:55
+#: core/settings.py:58
 msgid "Numbers count up on the result screen and in Stats"
 msgstr "I numeri salgono nella schermata dei risultati e nelle Statistiche"
 
-#: core/settings.py:56
+#: core/settings.py:59
 msgid "Your name in packs"
 msgstr "Il tuo nome nei pacchetti"
 
-#: core/settings.py:56
+#: core/settings.py:59
 msgid "Shown to students with the packs you make (else the player marked as you)"
 msgstr "Mostrato con i pacchetti che crei (altrimenti il giocatore segnato come te)"
 
-#: core/settings.py:57
+#: core/settings.py:60
 msgid "Look for updates"
 msgstr "Cerca aggiornamenti"
 
-#: core/settings.py:57
+#: core/settings.py:60
 msgid "At most once a day, ask GitHub whether there is a newer version (nothing else is sent)"
 msgstr "Al massimo una volta al giorno, chiede a GitHub se c'è una versione più recente (non viene inviato altro)"
 
-#: core/settings.py:58
+#: core/settings.py:61
 msgid "Stop by itself"
 msgstr "Fermati da solo"
 
-#: core/settings.py:58
+#: core/settings.py:61
 msgid "The app stops 10 minutes after the last tab was closed (started without a console: on)"
 msgstr "L'app si ferma 10 minuti dopo la chiusura dell'ultima scheda (avviata senza console: sì)"
 
-#: core/settings.py:105
+#: core/settings.py:108
 msgid "automatic"
 msgstr "automatico"
 
-#: core/settings.py:107
+#: core/settings.py:110
 msgid "as the app"
 msgstr "come l'app"
 
-#: core/settings.py:67
+#: core/settings.py:70
 msgid "no setting '{name}'"
 msgstr "nessuna impostazione «{name}»"
 
-#: core/settings.py:74
+#: core/settings.py:77
 msgid "{name}: on or off"
 msgstr "{name}: on o off"
 
-#: core/settings.py:76
+#: core/settings.py:79
 msgid "{name}: one of {values}"
 msgstr "{name}: uno di {values}"
 
-#: core/settings.py:81
+#: core/settings.py:84
 msgid "{name}: a number"
 msgstr "{name}: un numero"
 
@@ -4430,7 +4458,7 @@ msgstr "{name} è un numero"
 msgid "{name} is below {name2}: that would make a loop"
 msgstr "{name} è sotto {name2}: sarebbe un ciclo"
 
-#: library/edit.py:276 library/pack_views.py:74 static/js/core/library.js:437
+#: library/edit.py:276 library/pack_views.py:74 static/js/core/library.js:439
 msgid "{n} position"
 msgid_plural "{n} positions"
 msgstr[0] "{n} posizione"
@@ -4502,7 +4530,7 @@ msgstr "Pubblico dominio"
 msgid "Course"
 msgstr "Corso"
 
-#: library/models.py:20 library/packs.py:316 static/js/core/library.js:713
+#: library/models.py:20 library/packs.py:316 static/js/core/library.js:715
 msgid "Puzzle pack"
 msgstr "Pacchetto di esercizi"
 
@@ -5566,23 +5594,23 @@ msgstr "Nessun esercizio da ripassare corrisponde a «{filter}»"
 msgid "No puzzles in training match “{filter}”"
 msgstr "Nessun esercizio in allenamento corrisponde a «{filter}»"
 
-#: static/js/app.js:47
+#: static/js/app.js:48
 msgid "Your CSS is off for this page (Esc while loading): Settings → Advanced"
 msgstr "Il tuo CSS è disattivato per questa pagina (Esc al caricamento): Impostazioni → Avanzate"
 
-#: static/js/app.js:64
+#: static/js/app.js:65
 msgid "update {version} available"
 msgstr "aggiornamento {version} disponibile"
 
-#: static/js/app.js:106 static/js/core/commands.js:160 static/js/core/importer.js:58
+#: static/js/app.js:107 static/js/core/commands.js:160 static/js/core/importer.js:58
 msgid "undo"
 msgstr "annulla"
 
-#: static/js/app.js:142 static/js/core/library.js:703 static/js/islands/train.js:653
+#: static/js/app.js:143 static/js/core/library.js:705 static/js/islands/train.js:653
 msgid "The browser didn't allow copying"
 msgstr "Il browser non ha permesso la copia"
 
-#: static/js/app.js:162
+#: static/js/app.js:163
 msgid "Spaced Positions has stopped. Start it again from its icon or with spos."
 msgstr "Spaced Positions si è fermato. Riavvialo dalla sua icona o con spos."
 
@@ -5646,75 +5674,75 @@ msgstr "Già nell'analisi: il cursore è andato lì"
 msgid "Drop them? y / n"
 msgstr "Eliminarle? y / n"
 
-#: static/js/core/analysis.js:563
+#: static/js/core/analysis.js:557
 msgid "No position open: :analyse, or paste one (⌘V, a)"
 msgstr "Nessuna posizione aperta: :analyse o incollane una (⌘V, a)"
 
-#: static/js/core/analysis.js:584
+#: static/js/core/analysis.js:578
 msgid "No other move here"
 msgstr "Nessun'altra mossa qui"
 
-#: static/js/core/analysis.js:598
+#: static/js/core/analysis.js:592
 msgid "Looking for the key moments…"
 msgstr "Cerco i momenti chiave…"
 
-#: static/js/core/analysis.js:608
+#: static/js/core/analysis.js:602
 msgid "Open the moves pane to fold variations"
 msgstr "Apri il riquadro delle mosse per comprimere le varianti"
 
-#: static/js/core/analysis.js:622
+#: static/js/core/analysis.js:616
 msgid "No variation here"
 msgstr "Nessuna variante qui"
 
-#: static/js/core/analysis.js:633
+#: static/js/core/analysis.js:627
 msgid "No variations"
 msgstr "Nessuna variante"
 
-#: static/js/core/analysis.js:637
+#: static/js/core/analysis.js:631
 msgid "All variations open"
 msgstr "Tutte le varianti aperte"
 
-#: static/js/core/analysis.js:637
+#: static/js/core/analysis.js:631
 msgid "All variations folded · z opens one"
 msgstr "Tutte le varianti compresse · z ne apre una"
 
-#: static/js/core/analysis.js:652
+#: static/js/core/analysis.js:646
 msgid "No list here: a in the Library analyses what a search found, n goes through it"
 msgstr "Nessuna lista qui: a nella Biblioteca analizza ciò che una ricerca ha trovato, n la percorre"
 
-#: static/js/core/analysis.js:660
+#: static/js/core/analysis.js:654
 msgid "Nothing left in this list: all done"
 msgstr "Niente più in questa lista: tutto fatto"
 
-#: static/js/core/analysis.js:667
+#: static/js/core/analysis.js:661
 msgid "This is the first"
 msgstr "Questa è la prima"
 
-#: static/js/core/analysis.js:667
+#: static/js/core/analysis.js:661
 msgid "This is the last"
 msgstr "Questa è l'ultima"
 
-#: static/js/core/analysis.js:673
+#: static/js/core/analysis.js:667
 msgid "Go to a move first"
 msgstr "Vai prima a una mossa"
 
-#: static/js/core/analysis.js:710
+#: static/js/core/analysis.js:704
 msgid "Open an Inspector pane to write comments: ␣ w v, then i"
 msgstr "Apri un riquadro Ispettore per scrivere commenti: ␣ w v, poi i"
 
-#: static/js/core/analysis.js:728
+#: static/js/core/analysis.js:722
 msgid "Open a Puzzle pane: ␣ w v, then z"
 msgstr "Apri un riquadro Esercizio: ␣ w v, poi z"
 
-#: static/js/core/analysis.js:735
+#: static/js/core/analysis.js:729
 msgid "Open an Inspector pane: ␣ w v, then i"
 msgstr "Apri un riquadro Ispettore: ␣ w v, poi i"
 
-#: static/js/core/analysis.js:757
+#: static/js/core/analysis.js:751
 msgid "its own analysis, with the continuation"
 msgstr "una propria analisi, con il seguito"
 
-#: static/js/core/analysis.js:757
+#: static/js/core/analysis.js:751
 msgid "its own analysis"
 msgstr "una propria analisi"
 
@@ -5888,7 +5916,7 @@ msgstr "Visuale"
 msgid "Hint"
 msgstr "Suggerimento"
 
-#: static/js/core/context.js:100 static/js/core/importer.js:100 static/js/core/library.js:232
+#: static/js/core/context.js:100 static/js/core/importer.js:100 static/js/core/library.js:234
 msgid "{n} selected"
 msgstr "{n} selezionati"
 
@@ -6160,7 +6188,7 @@ msgstr "duplicato di {id}"
 msgid "{n} plies"
 msgstr "{n} semimosse"
 
-#: static/js/core/importer.js:146 static/js/core/library.js:606
+#: static/js/core/importer.js:146 static/js/core/library.js:608
 msgid "Nothing selected"
 msgstr "Niente selezionato"
 
@@ -6328,185 +6356,185 @@ msgstr "nessun layout «{name}»"
 msgid "Load layout {name}"
 msgstr "Carica il layout {name}"
 
-#: static/js/core/library.js:255
+#: static/js/core/library.js:257
 msgid "Done: it left the list ({n} to go) · n opens the next"
 msgstr "Fatto: ha lasciato la lista (ne restano {n}) · n apre la prossima"
 
-#: static/js/core/library.js:366 static/js/core/library.js:378
+#: static/js/core/library.js:368 static/js/core/library.js:380
 msgid "Filter removed"
 msgstr "Filtro tolto"
 
-#: static/js/core/library.js:368
+#: static/js/core/library.js:370
 msgid "Filter added"
 msgstr "Filtro aggiunto"
 
-#: static/js/core/library.js:389 static/js/core/library.js:397
+#: static/js/core/library.js:391 static/js/core/library.js:399
 msgid "The search is already empty"
 msgstr "La ricerca è già vuota"
 
-#: static/js/core/library.js:390
+#: static/js/core/library.js:392
 msgid "Search cleared · u brings it back"
 msgstr "Ricerca svuotata · u la ripristina"
 
-#: static/js/core/library.js:398
+#: static/js/core/library.js:400
 msgid "Took out {term} · u puts it back"
 msgstr "{term} tolto · u lo rimette"
 
-#: static/js/core/library.js:399 design/commands/library.toml:library.unfilter
+#: static/js/core/library.js:401 design/commands/library.toml:library.unfilter
 msgid "Take the last term out of the search"
 msgstr "Togliere l'ultimo termine dalla ricerca"
 
-#: static/js/core/library.js:417
+#: static/js/core/library.js:419
 msgid "The Library has no results pane: ␣ w v, then l"
 msgstr "La Biblioteca non ha un riquadro dei risultati: ␣ w v, poi l"
 
-#: static/js/core/library.js:451
+#: static/js/core/library.js:453
 msgid "Sort by · the same again reverses · ▤ groups"
 msgstr "Ordina per · lo stesso di nuovo inverte · ▤ gruppi"
 
-#: static/js/core/library.js:456
+#: static/js/core/library.js:458
 msgid "↑ now"
 msgstr "↑ ora"
 
-#: static/js/core/library.js:456
+#: static/js/core/library.js:458
 msgid "↓ now"
 msgstr "↓ ora"
 
-#: static/js/core/library.js:501 static/js/core/library.js:507
+#: static/js/core/library.js:503 static/js/core/library.js:509
 msgid "Groups come with a sort by difficulty, source, year …: s"
 msgstr "I gruppi arrivano ordinando per difficoltà, fonte, anno …: s"
 
-#: static/js/core/library.js:510
+#: static/js/core/library.js:512
 msgid "All groups open"
 msgstr "Tutti i gruppi aperti"
 
-#: static/js/core/library.js:510
+#: static/js/core/library.js:512
 msgid "All groups folded · z opens the one at the cursor"
 msgstr "Tutti i gruppi compressi · z apre quello al cursore"
 
-#: static/js/core/library.js:529
+#: static/js/core/library.js:531
 msgid "Results as a table"
 msgstr "Risultati come tabella"
 
-#: static/js/core/library.js:529
+#: static/js/core/library.js:531
 msgid "Results as a list"
 msgstr "Risultati come lista"
 
-#: static/js/core/library.js:529
+#: static/js/core/library.js:531
 msgid "Results as a grid"
 msgstr "Risultati come griglia"
 
-#: static/js/core/library.js:584 static/js/core/library.js:598
+#: static/js/core/library.js:586 static/js/core/library.js:600
 msgid "Nothing to tag here"
 msgstr "Niente da taggare qui"
 
-#: static/js/core/library.js:588
+#: static/js/core/library.js:590
 msgid "Tags of {n} selected"
 msgstr "Tag di {n} selezionate"
 
-#: static/js/core/library.js:613
+#: static/js/core/library.js:615
 msgid "Nothing here"
 msgstr "Niente qui"
 
-#: static/js/core/library.js:619
+#: static/js/core/library.js:621
 msgid "Select positions, or open one in Analyse"
 msgstr "Seleziona posizioni o aprine una nell'Analisi"
 
-#: static/js/core/library.js:620
+#: static/js/core/library.js:622
 msgid "Detecting…"
 msgstr "Rilevamento…"
 
-#: static/js/core/library.js:630
+#: static/js/core/library.js:632
 msgid "o opens positions, puzzles and games beside the list"
 msgstr "o apre posizioni, esercizi e partite accanto alla lista"
 
-#: static/js/core/library.js:634
+#: static/js/core/library.js:636
 msgid "{title} beside the list · ↵ opens it in Analyse"
 msgstr "{title} accanto alla lista · ↵ la apre nell'Analisi"
 
-#: static/js/core/library.js:652
+#: static/js/core/library.js:654
 msgid "Select players, sources or tags in the Library (4 5 6)"
 msgstr "Seleziona giocatori, fonti o tag nella Biblioteca (4 5 6)"
 
-#: static/js/core/library.js:658
+#: static/js/core/library.js:660
 msgid "Empty the trash? Its positions and games are deleted for good (trained ones stay). y / n"
 msgstr "Svuotare il cestino? Le sue posizioni e partite vengono eliminate definitivamente (quelle allenate restano). y / n"
 
-#: static/js/core/library.js:677
+#: static/js/core/library.js:679
 msgid "No puzzles in training among these (p r in Analyse puts one into training)"
 msgstr "Nessun esercizio in allenamento tra queste (p r nell'Analisi ne mette uno in allenamento)"
 
-#: static/js/core/library.js:686
+#: static/js/core/library.js:688
 msgid "Positions, puzzles and games can be analysed"
 msgstr "Si possono analizzare posizioni, esercizi e partite"
 
-#: static/js/core/library.js:690
+#: static/js/core/library.js:692
 msgid "Nothing to analyse here"
 msgstr "Niente da analizzare qui"
 
-#: static/js/core/library.js:711
+#: static/js/core/library.js:713
 msgid "Export"
 msgstr "Esporta"
 
-#: static/js/core/library.js:712
+#: static/js/core/library.js:714
 msgid "for any chess program"
 msgstr "per qualsiasi programma di scacchi"
 
-#: static/js/core/library.js:718
+#: static/js/core/library.js:720
 msgid "Positions and games export as PGN"
 msgstr "Solo posizioni e partite si esportano in PGN"
 
-#: static/js/core/library.js:726
+#: static/js/core/library.js:728
 msgid "Exporting everything the query found"
 msgstr "Esporto tutto ciò che la ricerca ha trovato"
 
-#: static/js/core/library.js:726
+#: static/js/core/library.js:728
 msgid "Exporting {n}"
 msgstr "Esporto {n}"
 
-#: static/js/core/library.js:733
+#: static/js/core/library.js:735
 msgid "Packs are made in the Library: search, select, then :pack-export"
 msgstr "I pacchetti si creano nella Biblioteca: cerca, seleziona, poi :pack-export"
 
-#: static/js/core/library.js:735
+#: static/js/core/library.js:737
 msgid "Packs hold positions and games: collection 1, 2 or 3"
 msgstr "I pacchetti contengono posizioni e partite: collezione 1, 2 o 3"
 
-#: static/js/core/library.js:737
+#: static/js/core/library.js:739
 msgid "Making the pack…"
 msgstr "Creo il pacchetto…"
 
-#: static/js/core/library.js:747 static/js/core/library.js:752
+#: static/js/core/library.js:749 static/js/core/library.js:754
 msgid "Go to a move first (T tags the position)"
 msgstr "Vai prima a una mossa (T tagga la posizione)"
 
-#: static/js/core/library.js:748 static/js/core/library.js:753
+#: static/js/core/library.js:750 static/js/core/library.js:755
 msgid "Tags of the move {move}"
 msgstr "Tag della mossa {move}"
 
-#: static/js/core/library.js:759 static/js/core/library.js:761
+#: static/js/core/library.js:761 static/js/core/library.js:763
 msgid "Tags of the position"
 msgstr "Tag della posizione"
 
-#: static/js/core/library.js:438
+#: static/js/core/library.js:440
 msgid "{n} player"
 msgid_plural "{n} players"
 msgstr[0] "{n} giocatore"
 msgstr[1] "{n} giocatori"
 
-#: static/js/core/library.js:438
+#: static/js/core/library.js:440
 msgid "{n} source"
 msgid_plural "{n} sources"
 msgstr[0] "{n} fonte"
 msgstr[1] "{n} fonti"
 
-#: static/js/core/library.js:438
+#: static/js/core/library.js:440
 msgid "{n} tag"
 msgid_plural "{n} tags"
 msgstr[0] "{n} tag"
 msgstr[1] "{n} tag"
 
-#: static/js/core/library.js:701
+#: static/js/core/library.js:703
 msgid "Copied {n} FEN"
 msgid_plural "Copied {n} FENs"
 msgstr[0] "{n} FEN copiato"
@@ -6644,31 +6672,31 @@ msgstr[1] "{n} FEN"
 msgid "This pane has no text field"
 msgstr "Questo riquadro non ha un campo di testo"
 
-#: static/js/core/settings.js:155
+#: static/js/core/settings.js:154
 msgid "↵ edits this one on the command line"
 msgstr "↵ modifica questa sulla riga di comando"
 
-#: static/js/core/settings.js:172
+#: static/js/core/settings.js:171
 msgid "Already the default"
 msgstr "Già il valore predefinito"
 
-#: static/js/core/settings.js:187
+#: static/js/core/settings.js:186
 msgid "Settings exported as TOML: Settings → Data imports them on another machine"
 msgstr "Impostazioni esportate come TOML: Impostazioni → Dati le importa su un altro dispositivo"
 
-#: static/js/core/settings.js:196
+#: static/js/core/settings.js:195
 msgid "Import: the app is not reachable"
 msgstr "Importazione: l'app non è raggiungibile"
 
-#: static/js/core/settings.js:208
+#: static/js/core/settings.js:207
 msgid "New keys for “{command}”: {keys} · ↵ keep · Esc cancel"
 msgstr "Nuovi tasti per «{command}»: {keys} · ↵ tieni · Esc annulla"
 
-#: static/js/core/settings.js:214
+#: static/js/core/settings.js:213
 msgid "Cancelled"
 msgstr "Annullato"
 
-#: static/js/core/settings.js:240
+#: static/js/core/settings.js:239
 msgid "No keys to remove here"
 msgstr "Nessun tasto da rimuovere qui"
 
@@ -6728,187 +6756,187 @@ msgstr "Cavallo"
 msgid "Evaluation {score} (white's view)"
 msgstr "Valutazione {score} (dal punto di vista del Bianco)"
 
-#: static/js/islands/board.js:328
+#: static/js/islands/board.js:329
 msgid "Not a legal position: {problems}"
 msgstr "Non è una posizione legale: {problems}"
 
-#: static/js/islands/board.js:328
+#: static/js/islands/board.js:329
 msgid "a fixes it"
 msgstr "a la corregge"
 
-#: static/js/islands/board.js:328
+#: static/js/islands/board.js:329
 msgid "D: keep it as a diagram"
 msgstr "D: tienila come diagramma"
 
-#: static/js/islands/board.js:339
+#: static/js/islands/board.js:340
 msgid "Set up position"
 msgstr "Imposta la posizione"
 
-#: static/js/islands/board.js:353
+#: static/js/islands/board.js:354
 msgid "This position can't be played (a diagram)"
 msgstr "Questa posizione non si può giocare (un diagramma)"
 
-#: static/js/islands/board.js:402
+#: static/js/islands/board.js:403
 msgid "Type the whole move (completion is off: Settings → Training)"
 msgstr "Digita la mossa intera (il completamento è spento: Impostazioni → Allenamento)"
 
-#: static/js/islands/board.js:406
+#: static/js/islands/board.js:407
 msgid "Which one? {moves} · ⇥ choose, ↵ play"
 msgstr "Quale? {moves} · ⇥ scegli, ↵ gioca"
 
-#: static/js/islands/board.js:408
+#: static/js/islands/board.js:409
 msgid "More than one move fits: type more of it"
 msgstr "Più di una mossa corrisponde: digitane di più"
 
-#: static/js/islands/board.js:409
+#: static/js/islands/board.js:410
 msgid "No legal move matches “{text}”"
 msgstr "Nessuna mossa legale corrisponde a «{text}»"
 
-#: static/js/islands/board.js:409
+#: static/js/islands/board.js:410
 msgid "Type a move, e.g. Nf3, Sf3 or g1f3"
 msgstr "Digita una mossa, ad es. Nf3, Cf3 o g1f3"
 
-#: static/js/islands/board.js:431
+#: static/js/islands/board.js:432
 msgid "a: fix"
 msgstr "a: correggi"
 
-#: static/js/islands/board.js:434
+#: static/js/islands/board.js:435
 msgid "duplicate of {short} {title}"
 msgstr "duplicato di {short} {title}"
 
-#: static/js/islands/board.js:436
+#: static/js/islands/board.js:437
 msgid "click: place {piece} (white) · ⇧click: black · right-click: empty"
 msgstr "clic: metti {piece} (bianco) · ⇧clic: nero · clic destro: svuota"
 
-#: static/js/islands/board.js:437
+#: static/js/islands/board.js:438
 msgid "click: place {piece} (black) · ⇧click: white · right-click: empty"
 msgstr "clic: metti {piece} (nero) · ⇧clic: bianco · clic destro: svuota"
 
-#: static/js/islands/board.js:438
+#: static/js/islands/board.js:439
 msgid "click: empty a square"
 msgstr "clic: svuota una casa"
 
-#: static/js/islands/board.js:439
+#: static/js/islands/board.js:440
 msgid "drag: move pieces freely"
 msgstr "trascina: sposta i pezzi liberamente"
 
-#: static/js/islands/board.js:441 static/js/islands/board.js:464
+#: static/js/islands/board.js:442 static/js/islands/board.js:465
 msgid "White to move"
 msgstr "Muove il Bianco"
 
-#: static/js/islands/board.js:441 static/js/islands/board.js:464
+#: static/js/islands/board.js:442 static/js/islands/board.js:465
 msgid "Black to move"
 msgstr "Muove il Nero"
 
-#: static/js/islands/board.js:441
+#: static/js/islands/board.js:442
 msgid "castling {rights}"
 msgstr "arrocco {rights}"
 
-#: static/js/islands/board.js:441
+#: static/js/islands/board.js:442
 msgid "e.p. {square}"
 msgstr "e.p. {square}"
 
-#: static/js/islands/board.js:452
+#: static/js/islands/board.js:453
 msgid "Preview"
 msgstr "Anteprima"
 
-#: static/js/islands/board.js:452
+#: static/js/islands/board.js:453
 msgid "↵ or a opens it · leave the list to go back"
 msgstr "↵ o a la apre · lascia la lista per tornare"
 
-#: static/js/islands/board.js:455
+#: static/js/islands/board.js:456
 msgid "Type a move: "
 msgstr "Digita una mossa: "
 
-#: static/js/islands/board.js:458
+#: static/js/islands/board.js:459
 msgid "↵ play · ⇥ next · Esc done"
 msgstr "↵ gioca · ⇥ successiva · Esc fatto"
 
-#: static/js/islands/board.js:460
+#: static/js/islands/board.js:461
 msgid "Solve as black · click/drag or i to type the move · h hint · s solution"
 msgstr "Risolvi col Nero · clic/trascina o i per digitare la mossa · h suggerimento · s soluzione"
 
-#: static/js/islands/board.js:461
+#: static/js/islands/board.js:462
 msgid "Solve as white · click/drag or i to type the move · h hint · s solution"
 msgstr "Risolvi col Bianco · clic/trascina o i per digitare la mossa · h suggerimento · s soluzione"
 
-#: static/js/islands/board.js:464
+#: static/js/islands/board.js:465
 msgid "Diagram: not playable"
 msgstr "Diagramma: non giocabile"
 
-#: static/js/islands/board.js:465
+#: static/js/islands/board.js:466
 msgid "move {n} of {total}"
 msgstr "mossa {n} di {total}"
 
-#: static/js/islands/board.js:466
+#: static/js/islands/board.js:467
 msgid "right-click: fill a square (⇧ red · ⌥ blue)"
 msgstr "clic destro: riempi una casa (⇧ rosso · ⌥ blu)"
 
-#: static/js/islands/board.js:466
+#: static/js/islands/board.js:467
 msgid "click/drag: move · right-drag: arrow (⇧ red · ⌥ blue · ⇧⌥ yellow)"
 msgstr "clic/trascina: mossa · trascina col destro: freccia (⇧ rosso · ⌥ blu · ⇧⌥ giallo)"
 
-#: static/js/islands/board.js:572
+#: static/js/islands/board.js:573
 msgid "Not while solving a puzzle"
 msgstr "Non mentre risolvi un esercizio"
 
-#: static/js/islands/board.js:580 design/commands/board.toml:board.squaretool
+#: static/js/islands/board.js:581 design/commands/board.toml:board.squaretool
 msgid "Square tool: right-click fills a square"
 msgstr "Strumento case: il clic destro riempie una casa"
 
-#: static/js/islands/board.js:580
+#: static/js/islands/board.js:581
 msgid "Square tool off: right-drag draws arrows"
 msgstr "Strumento case spento: trascinare col destro disegna frecce"
 
-#: static/js/islands/board.js:599
+#: static/js/islands/board.js:600
 msgid "Play the solution on the board first, then :puzzle"
 msgstr "Gioca prima la soluzione sulla scacchiera, poi :puzzle"
 
-#: static/js/islands/board.js:614
+#: static/js/islands/board.js:615
 msgid "Copied {what}"
 msgstr "{what} copiato"
 
-#: static/js/islands/board.js:616
+#: static/js/islands/board.js:617
 msgid "Could not copy the {what}: the browser refused"
 msgstr "Impossibile copiare il {what}: il browser ha rifiutato"
 
-#: static/js/islands/board.js:630
+#: static/js/islands/board.js:631
 msgid "Opened in lichess (a new tab)"
 msgstr "Aperto su lichess (una nuova scheda)"
 
-#: static/js/islands/board.js:652
+#: static/js/islands/board.js:653
 msgid "Nothing to fix automatically"
 msgstr "Niente da correggere automaticamente"
 
-#: static/js/islands/board.js:658 design/commands/board.toml:board.castling
+#: static/js/islands/board.js:659 design/commands/board.toml:board.castling
 msgid "Castling rights"
 msgstr "Diritti di arrocco"
 
-#: static/js/islands/board.js:660
+#: static/js/islands/board.js:661
 msgid "White O-O"
 msgstr "Bianco O-O"
 
-#: static/js/islands/board.js:660
+#: static/js/islands/board.js:661
 msgid "White O-O-O"
 msgstr "Bianco O-O-O"
 
-#: static/js/islands/board.js:660
+#: static/js/islands/board.js:661
 msgid "Black O-O"
 msgstr "Nero O-O"
 
-#: static/js/islands/board.js:660
+#: static/js/islands/board.js:661
 msgid "Black O-O-O"
 msgstr "Nero O-O-O"
 
-#: static/js/islands/board.js:677 design/commands/board.toml:board.ep
+#: static/js/islands/board.js:678 design/commands/board.toml:board.ep
 msgid "En passant square"
 msgstr "Casa en passant"
 
-#: static/js/islands/board.js:697
+#: static/js/islands/board.js:698
 msgid "Piece set · ↑↓ preview · ↵ keep · Esc back"
 msgstr "Set di pezzi · ↑↓ anteprima · ↵ tieni · Esc indietro"
 
-#: static/js/islands/board.js:708
+#: static/js/islands/board.js:709
 msgid "No piece set '{name}'"
 msgstr "Nessun set di pezzi «{name}»"
 
@@ -8457,3 +8485,18 @@ msgstr "browser"
 msgctxt "setting value"
 msgid "local"
 msgstr "locale"
+
+#: core/settings.py:analysis.computer-comments
+msgctxt "setting value"
+msgid "show"
+msgstr "mostra"
+
+#: core/settings.py:analysis.computer-comments
+msgctxt "setting value"
+msgid "fold"
+msgstr "riduci"
+
+#: core/settings.py:analysis.computer-comments
+msgctxt "setting value"
+msgid "hide"
+msgstr "nascondi"
