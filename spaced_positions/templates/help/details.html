@@ -1,0 +1,11 @@
+{% extends "help/base.html" %}
+{% block lead %}{% translate "Every field of one game, position, player or source: the one under the cursor of this pane's link group (a Library row, the open analysis). Here a pasted game gets its players, a position its source." %}{% endblock %}
+{% block how %}
+  {% key "details.edit" as edit %}{% key "details.clear" as clear %}{% key "library.details" as details %}
+  {% key "player.new" as new_player %}{% key "source.new" as new_source %}{% key "undo" as undo %}
+  <dt>{% translate "Change a field" %}</dt><dd>{% blocktranslate trimmed %}{{ edit }} on its row: the command line opens with the value, type the new one, ↵. {{ clear }} empties it. {{ undo }} takes a change back.{% endblocktranslate %}</dd>
+  <dt>{% translate "Players and sources" %}</dt><dd>{% blocktranslate trimmed %}White, Black and Source take a name: one that exists is found (also by another spelling), a name nobody has makes a new player or source, which you can then fill in here.{% endblocktranslate %}</dd>
+  <dt>{% translate "Make one first" %}</dt><dd>{% blocktranslate trimmed %}{{ new_player }} a new player, {{ new_source }} a new source (a book before its first position): the command line asks for the name, and the Details pane shows it.{% endblocktranslate %}</dd>
+  <dt>{% translate "From anywhere" %}</dt><dd>{% blocktranslate trimmed %}{{ details }} in the Library or in Analyse shows the details of what is selected, in a pane beside it.{% endblocktranslate %}</dd>
+{% endblock %}
+{% block with %}{% translate "The Library and the analysis of the same link group: the pane shows their cursor." %}{% endblock %}

@@ -21,7 +21,13 @@ from spaced_positions.core.server_commands import CommandError, command
 from .models import Game, Player, Source, Tag, TagField
 from .text import fold, slug
 
-MODELS = {"players": Player, "sources": Source, "tags": Tag}
+def _position_model():
+    from spaced_positions.training.models import Position
+
+    return Position
+
+
+MODELS = {"players": Player, "sources": Source, "tags": Tag, "games": Game}  # positions: added below (import order)
 
 # name in `:edit` → (model field, kind); kinds: text, list (comma-separated), int, float, choice, tag, field
 FIELDS = {
@@ -36,7 +42,17 @@ FIELDS = {
              "analysis-weight": ("analysis_weight", "float"), "description": ("description", "text"), "task": ("task", "text"),
              "task-en": ("task_en", "text")},
 }
-RANGES = {"base_difficulty": (1, 5), "weight": (0, 10), "analysis_weight": (0, 10), "born": (1000, 2100), "year": (1000, 2100)}
+# A game's and a position's details (spec 16, the Details pane): `:edit g12 white="Carlsen, Magnus" result=1-0`.
+# player and source take a key (@carlsen, s12) or a name; a name nobody has makes a new player or source.
+FIELDS["games"] = {"white": ("white", "player"), "black": ("black", "player"), "white-elo": ("white_elo", "int"),
+                   "black-elo": ("black_elo", "int"), "result": ("result", "result"), "date": ("date", "text"),
+                   "event": ("event", "text"), "site": ("site", "text"), "round": ("round", "text"), "eco": ("eco", "text"),
+                   "annotator": ("annotator", "text"), "source": ("source", "source"), "notes": ("notes", "text")}
+FIELDS["positions"] = {"title": ("title", "text"), "source": ("source", "source"), "page": ("source_page", "text"),
+                       "diagram": ("source_ref", "text"), "objective": ("objective", "text"),
+                       "difficulty": ("difficulty_override", "int"), "notes": ("notes", "text")}
+RESULTS = ("1-0", "0-1", "1/2-1/2", "*")
+RANGES = {"white_elo": (0, 4000), "black_elo": (0, 4000), "difficulty_override": (1, 5), "base_difficulty": (1, 5), "weight": (0, 10), "analysis_weight": (0, 10), "born": (1000, 2100), "year": (1000, 2100)}
 
 
 def _words(args) -> list[str]:
@@ -52,6 +68,8 @@ def find(collection: str, ref: str):
     ref = ref.strip()
     if collection == "players":
         found = Player.objects.filter(key=ref.lstrip("@")).first()
+    elif collection in ("games", "positions"):
+        found = MODELS[collection].objects.filter(pk=int(ref[1:])).first() if ref[1:].isdigit() else None
     elif collection == "sources":
         found = Source.objects.filter(pk=int(ref[1:])).first() if ref[:1] == "s" and ref[1:].isdigit() else None
     else:
@@ -68,7 +86,8 @@ def _targets(body, words: list[str]) -> tuple[str, list, list[str]]:
     refs = [w for w in words if "=" not in w]
     if refs:
         first = refs[0]
-        collection = "players" if first.startswith("@") else "sources" if first[:1] == "s" and first[1:].isdigit() else "tags"
+        numbered = {"s": "sources", "g": "games", "p": "positions"}.get(first[:1]) if first[1:].isdigit() else None
+        collection = "players" if first.startswith("@") else numbered or "tags"
         return collection, [find(collection, r) for r in refs], [w for w in words if "=" in w]
     collection = body.get("c", "")
     if collection not in MODELS:
@@ -112,6 +131,12 @@ def _value(collection: str, obj, name: str, raw: str):
             shown = ", ".join(c or "none" for c in choices)
             raise CommandError(_("{name} is one of {shown}").format(name=name, shown=shown))
         return attr, raw
+    if kind == "result":
+        if raw not in RESULTS:
+            raise CommandError(_("{name} is one of {shown}").format(name=name, shown=", ".join(RESULTS)))
+        return attr, raw
+    if kind in ("player", "source"):
+        return attr, None if raw in ("", "none", "-") else _found_or_new(kind, raw)
     if kind == "tag":
         if raw in ("", "none", "-"):
             return attr, None
@@ -130,13 +155,25 @@ def _value(collection: str, obj, name: str, raw: str):
     return attr, field
 
 
+def _found_or_new(kind: str, raw: str):
+    """A player or source by its key (@tal, s12) or its name; a name nobody has makes a new one (spec 16: + New)."""
+    if kind == "player":
+        found = Player.objects.filter(key=raw.lstrip("@")).first() if raw.startswith("@") else None
+        found = found or Player.objects.filter(name__iexact=raw).first() or next(
+            (p for p in Player.objects.filter(aliases__icontains=raw) if raw.lower() in (a.lower() for a in p.aliases)), None)
+        return found or _make_player(raw, [])
+    found = Source.objects.filter(pk=int(raw[1:])).first() if raw[:1] == "s" and raw[1:].isdigit() else None
+    found = found or Source.objects.filter(Q(title__iexact=raw) | Q(short__iexact=raw)).first()
+    return found or Source.objects.create(title=raw[:300])
+
+
 def _stored(obj, attr: str):
     value = getattr(obj, attr)
     return value.pk if hasattr(value, "pk") else value
 
 
 def _assign(obj, attr: str, value) -> None:
-    if attr in ("parent", "field") and not hasattr(value, "pk"):
+    if attr in ("parent", "field", "white", "black", "source") and not hasattr(value, "pk"):
         setattr(obj, f"{attr}_id", value)
     else:
         setattr(obj, attr, value)
@@ -160,7 +197,8 @@ def edit(args, context, body):
             attr, value = _value(collection, obj, name.strip().lower(), raw.strip())
             values[obj.pk][attr] = value.pk if hasattr(value, "pk") else value
     names = ", ".join(pair.partition("=")[0] for pair in pairs)
-    label = objs[0].name if len(objs) == 1 and hasattr(objs[0], "name") else f"{len(objs)} {collection}" if len(objs) > 1 else str(objs[0])
+    one = objs[0]
+    label = getattr(one, "name", None) or getattr(one, "title", None) or str(one) if len(objs) == 1 else f"{len(objs)} {collection}"
     return _write(collection, values, _("Changed {names} of {label}").format(names=names, label=label))
 
 
@@ -172,6 +210,13 @@ def _write(collection: str, values: dict, message: str) -> dict:
             before[obj.pk] = {attr: _stored(obj, attr) for attr in values[obj.pk]}
             for attr, value in values[obj.pk].items():
                 _assign(obj, attr, value)
+            if collection == "games":  # the names written into the PGN follow the players; the year the date
+                for side in ("white", "black"):
+                    if side in values[obj.pk]:
+                        player = getattr(obj, side)
+                        setattr(obj, f"{side}_name", player.name if player else "")
+                if "date" in values[obj.pk]:
+                    obj.year = int(obj.date[:4]) if obj.date[:4].isdigit() else None
             obj.save()
     if collection == "tags":
         _refresh_tagged(list(values))
@@ -214,7 +259,7 @@ def _fill(collection: str, obj, pairs: list[str]) -> None:
 def _new_result(collection: str, obj, noun: str) -> dict:
     return {
         "message": f"New {noun}: {obj}",
-        "effects": {"library": "changed"},
+        "effects": {"library": "changed", "details": f"@{obj.key}" if collection == "players" else f"s{obj.pk}" if collection == "sources" else ""},
         "undo": {"command": "library.delete", "args": [json.dumps({"c": collection, "pks": [obj.pk]})]},
         "redo": {"command": "library.recreate", "args": [json.dumps({"c": collection, "objects": [_snapshot(obj)]})]},
     }
@@ -405,3 +450,6 @@ def _unlink(change: dict) -> dict:
             player.aliases = [a for a in player.aliases if a != change["alias"]]
             player.save()
     return {"message": _('Link undone'), "effects": {"library": "changed"}}
+
+
+MODELS["positions"] = _position_model()

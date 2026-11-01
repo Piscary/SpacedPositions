@@ -67,6 +67,8 @@ reference is `spec/08-keymap.md`.
 | `␣` `u` `p` | Piece set | `board.pieces` |
 | `␣` `u` `v` | Results as table · list · grid | `library.display` |
 | `␣` `o` | Analyse a position | `analysis.open` |
+| `␣` `n` `p` | New player | `player.new` |
+| `␣` `n` `s` | New source | `source.new` |
 
 ## pane
 
@@ -267,6 +269,7 @@ reference is `spec/08-keymap.md`.
 
 | Keys | Command | Id |
 |---|---|---|
+| `I` | Details: every field of what is selected, editable | `library.details` |
 | `h` | Back one move | `analysis.back` |
 | `l` | Forward (main continuation) | `analysis.forward` |
 | `←` | Back one move | `analysis.back` |
@@ -327,6 +330,7 @@ reference is `spec/08-keymap.md`.
 
 | Keys | Command | Id |
 |---|---|---|
+| `I` | Details: every field of what is selected, editable | `library.details` |
 | `g` `?` | How to search: the query language | `help.search` |
 | `1` | Collection positions | `library.collection` |
 | `2` | Collection games | `library.collection` |
@@ -452,6 +456,13 @@ reference is `spec/08-keymap.md`.
 | `O` | Open the data folder | `app.folder` |
 | `R` | Usage report for the test group (a file, counts only) | `app.testreport` |
 | `M` | Feedback: something broke, confused you, or a wish | `app.feedback` |
+
+## view.details
+
+| Keys | Command | Id |
+|---|---|---|
+| `↵` | Change this field (the command line, with its value) | `details.edit` |
+| `⌫` | Empty this field | `details.clear` |
 
 ## view.keymap
 

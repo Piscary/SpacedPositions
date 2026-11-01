@@ -1,11 +1,12 @@
 from django.urls import path
 
-from . import collect, commands, edit, importer, pack_views, views  # noqa: F401 (commands, edit, pack_views register commands)
+from . import details, collect, commands, edit, importer, pack_views, views  # noqa: F401 (commands, edit, pack_views register commands)
 
 app_name = "library"
 
 urlpatterns = [
     path("lib/results/", views.results, name="results"),
+    path("lib/details/", details.details, name="details"),
     path("lib/complete/", views.complete, name="complete"),
     path("lib/facets/", views.facets, name="facets"),
     path("lib/tags-of/", commands.tags_of, name="tags_of"),

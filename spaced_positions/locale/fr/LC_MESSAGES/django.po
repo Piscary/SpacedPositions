@@ -75,7 +75,7 @@ msgstr "Ctrl+↵ enregistre"
 msgid "Tags"
 msgstr "Tags"
 
-#: templates/analysis/inspector.html static/js/core/analysis.js:137 static/js/core/analysis.js:155
+#: templates/analysis/inspector.html library/details.py:48 static/js/core/analysis.js:137
 msgid "Position"
 msgstr "Position"
 
@@ -107,7 +107,7 @@ msgstr "source · objectif · FEN"
 msgid "Source"
 msgstr "Source"
 
-#: templates/analysis/inspector.html
+#: templates/analysis/inspector.html library/details.py:43
 msgid "Objective"
 msgstr "Objectif"
 
@@ -133,7 +133,7 @@ msgstr "Commentaire sur la partie"
 msgid "About the game"
 msgstr "À propos de la partie"
 
-#: templates/analysis/inspector_game.html
+#: templates/analysis/inspector_game.html library/details.py:48
 msgid "Game"
 msgstr "Partie"
 
@@ -270,7 +270,7 @@ msgstr "joueur"
 msgid "answer"
 msgstr "réponse"
 
-#: templates/analysis/puzzle.html core/layouts.py:104
+#: templates/analysis/puzzle.html core/layouts.py:109
 msgid "end"
 msgstr "fin"
 
@@ -469,6 +469,46 @@ msgstr "Analyse et Saisie."
 #: templates/help/continue.html
 msgid "Pasting works anywhere, not only here."
 msgstr "Le collage marche partout, pas seulement ici."
+
+#: templates/help/details.html
+msgid "Every field of one game, position, player or source: the one under the cursor of this pane's link group (a Library row, the open analysis). Here a pasted game gets its players, a position its source."
+msgstr ""
+
+#: templates/help/details.html
+msgid "Change a field"
+msgstr ""
+
+#: templates/help/details.html
+msgid "%(edit)s on its row: the command line opens with the value, type the new one, ↵. %(clear)s empties it. %(undo)s takes a change back."
+msgstr ""
+
+#: templates/help/details.html
+msgid "Players and sources"
+msgstr ""
+
+#: templates/help/details.html
+msgid "White, Black and Source take a name: one that exists is found (also by another spelling), a name nobody has makes a new player or source, which you can then fill in here."
+msgstr ""
+
+#: templates/help/details.html
+msgid "Make one first"
+msgstr ""
+
+#: templates/help/details.html
+msgid "%(new_player)s a new player, %(new_source)s a new source (a book before its first position): the command line asks for the name, and the Details pane shows it."
+msgstr ""
+
+#: templates/help/details.html
+msgid "From anywhere"
+msgstr ""
+
+#: templates/help/details.html
+msgid "%(details)s in the Library or in Analyse shows the details of what is selected, in a pane beside it."
+msgstr ""
+
+#: templates/help/details.html
+msgid "The Library and the analysis of the same link group: the pane shows their cursor."
+msgstr ""
 
 #: templates/help/engine.html
 msgid "Stockfish looks at the position on the board of the link group: its best lines, the evaluation and an arrow for the best move."
@@ -1402,6 +1442,14 @@ msgstr "L'arbre des coups et l'échiquier du même groupe lié : le curseur est 
 msgid "A wide picture means many variations: %(fold)s in the move tree folds one away."
 msgstr "Une image large veut dire beaucoup de variantes : %(fold)s dans l'arbre des coups en replie une."
 
+#: templates/library/details.html
+msgid "White and Black unknown: ↵ on their row adds them (a name nobody has makes a new player)."
+msgstr ""
+
+#: templates/library/details.html templates/views/details.html
+msgid "Nothing to show: the Details pane shows the game, position, player or source under the cursor of its link group (a Library row, the open analysis)."
+msgstr ""
+
 #: templates/library/facets.html templates/stats/sections.html
 msgid "%(n)s position"
 msgid_plural "%(n)s positions"
@@ -1432,11 +1480,11 @@ msgstr "exclue"
 msgid "diagram"
 msgstr "diagramme"
 
-#: templates/library/results.html templates/views/library.html core/layouts.py:119
+#: templates/library/results.html templates/views/library.html core/layouts.py:124
 msgid "trash"
 msgstr "corbeille"
 
-#: templates/library/results.html core/layouts.py:105
+#: templates/library/results.html core/layouts.py:110
 msgid "training"
 msgstr "entraînement"
 
@@ -1524,7 +1572,7 @@ msgstr "Cette page ne s'ouvre que par le lien que Spaced Positions donne au dém
 msgid "Start it from its icon, or run <code>spos</code> in a terminal. If it is already running, <code>spos</code> opens the right link."
 msgstr "Lancez-le depuis son icône, ou avec <code>spos</code> dans un terminal. S'il tourne déjà, <code>spos</code> ouvre le bon lien."
 
-#: templates/settings/keymap.html core/layouts.py:151
+#: templates/settings/keymap.html core/layouts.py:156
 msgid "Keymap"
 msgstr "Raccourcis"
 
@@ -1918,7 +1966,7 @@ msgstr "rien à réviser"
 msgid "next %(when)s"
 msgstr "prochaine %(when)s"
 
-#: templates/training/launcher.html core/layouts.py:157 stats/models.py:13
+#: templates/training/launcher.html core/layouts.py:162 stats/models.py:13
 msgid "Storm"
 msgstr "Storm"
 
@@ -2038,7 +2086,7 @@ msgstr "manqué"
 msgid "Puzzles of this session"
 msgstr "Exercices de cette session"
 
-#: templates/training/result.html core/layouts.py:102 library/importer.py:60
+#: templates/training/result.html core/layouts.py:107 library/importer.py:60
 msgid "Puzzle"
 msgstr "Exercice"
 
@@ -2078,7 +2126,7 @@ msgstr "Miroir"
 msgid "Initial"
 msgstr "Position initiale"
 
-#: templates/views/board.html templates/views/entry.html
+#: templates/views/board.html templates/views/entry.html library/details.py:42
 msgid "Diagram"
 msgstr "Diagramme"
 
@@ -2094,7 +2142,7 @@ msgstr "Terminé"
 msgid "analysis · collect"
 msgstr "analyse · saisie"
 
-#: templates/views/continue.html core/layouts.py:160
+#: templates/views/continue.html core/layouts.py:165
 msgid "Continue"
 msgstr "Continuer"
 
@@ -2162,7 +2210,7 @@ msgstr "— aucune —"
 msgid "Choose"
 msgstr "Choisir"
 
-#: templates/views/entry.html
+#: templates/views/entry.html library/details.py:42
 msgid "Page"
 msgstr "Page"
 
@@ -2170,7 +2218,7 @@ msgstr "Page"
 msgid "Diagram number"
 msgstr "Numéro du diagramme"
 
-#: templates/views/entry.html templates/views/pgn.html
+#: templates/views/entry.html templates/views/pgn.html library/details.py:42
 msgid "Title"
 msgstr "Titre"
 
@@ -2198,7 +2246,7 @@ msgstr "Tout juste enregistrées"
 msgid "Evaluate the main line"
 msgstr "Évaluer la ligne principale"
 
-#: templates/views/filters.html core/layouts.py:122
+#: templates/views/filters.html core/layouts.py:127
 msgid "Filters"
 msgstr "Filtres"
 
@@ -2258,15 +2306,15 @@ msgstr "Sources"
 msgid "Results"
 msgstr "Résultats"
 
-#: templates/views/library.html core/layouts.py:118 core/layouts.py:132
+#: templates/views/library.html core/layouts.py:123 core/layouts.py:137
 msgid "tag"
 msgstr "taguer"
 
-#: templates/views/library.html core/layouts.py:118
+#: templates/views/library.html core/layouts.py:123
 msgid "train"
 msgstr "entraîner"
 
-#: templates/views/library.html core/layouts.py:119
+#: templates/views/library.html core/layouts.py:124
 msgid "analyse"
 msgstr "analyser"
 
@@ -2274,7 +2322,7 @@ msgstr "analyser"
 msgid "export"
 msgstr "exporter"
 
-#: templates/views/library.html
+#: templates/views/library.html core/layouts.py:104
 msgid "clear"
 msgstr "effacer"
 
@@ -2470,7 +2518,7 @@ msgstr "Les plus faibles :"
 msgid "solved · accuracy · days in a row"
 msgstr "résolus · précision · jours d'affilée"
 
-#: templates/views/today.html core/layouts.py:155
+#: templates/views/today.html core/layouts.py:160
 msgid "Today"
 msgstr "Aujourd'hui"
 
@@ -2618,11 +2666,11 @@ msgstr "Également correct : l'entraîneur l'accepte aussi et continue avec la l
 msgid "An answer: the trainer plays it for the opponent."
 msgstr "Une réponse : l'entraîneur la joue pour l'adversaire."
 
-#: analysis/puzzles.py:262 analysis/views.py:243 library/structure.py:15
+#: analysis/puzzles.py:262 analysis/views.py:243 library/details.py:40
 msgid "White"
 msgstr "Blancs"
 
-#: analysis/puzzles.py:262 analysis/views.py:243 library/structure.py:15
+#: analysis/puzzles.py:262 analysis/views.py:243 library/details.py:40
 msgid "Black"
 msgstr "Noirs"
 
@@ -2806,31 +2854,31 @@ msgstr "Supprimer à partir de {move}"
 msgid "used {time}"
 msgstr "utilisé {time}"
 
-#: analysis/views.py:243
+#: analysis/views.py:243 library/details.py:40
 msgid "Result"
 msgstr "Résultat"
 
-#: analysis/views.py:244
+#: analysis/views.py:244 library/details.py:41
 msgid "Date"
 msgstr "Date"
 
-#: analysis/views.py:244
+#: analysis/views.py:244 library/details.py:41
 msgid "Event"
 msgstr "Événement"
 
-#: analysis/views.py:244
+#: analysis/views.py:244 library/details.py:41
 msgid "Site"
 msgstr "Lieu"
 
-#: analysis/views.py:244
+#: analysis/views.py:244 library/details.py:41
 msgid "Round"
 msgstr "Ronde"
 
-#: analysis/views.py:245
+#: analysis/views.py:245 library/details.py:40
 msgid "White Elo"
 msgstr "Elo Blancs"
 
-#: analysis/views.py:245
+#: analysis/views.py:245 library/details.py:40
 msgid "Black Elo"
 msgstr "Elo Noirs"
 
@@ -2962,7 +3010,7 @@ msgstr "Une position ou une partie : coups, variantes, commentaires, tags, moteu
 msgid "Get material in fast: board editor, paste FEN/PGN, rapid entry from a book."
 msgstr "Saisir vite du matériel : éditeur d'échiquier, coller un FEN/PGN, saisie rapide depuis un livre."
 
-#: core/layouts.py:28 core/layouts.py:116 design/commands/library.toml:library.collection
+#: core/layouts.py:28 core/layouts.py:121 design/commands/library.toml:library.collection
 msgid "Library"
 msgstr "Bibliothèque"
 
@@ -2970,7 +3018,7 @@ msgstr "Bibliothèque"
 msgid "Find and organise positions, games, puzzles, players, sources and tags."
 msgstr "Trouver et organiser positions, parties, exercices, joueurs, sources et tags."
 
-#: core/layouts.py:29 core/layouts.py:136 design/commands/shell.toml:mode.stats
+#: core/layouts.py:29 core/layouts.py:141 design/commands/shell.toml:mode.stats
 msgid "Stats"
 msgstr "Statistiques"
 
@@ -2978,7 +3026,7 @@ msgstr "Statistiques"
 msgid "Progress: collection, analysis and training statistics, records, milestones."
 msgstr "Progrès : statistiques de la collection, de l'analyse et de l'entraînement, records, paliers."
 
-#: core/layouts.py:30 core/layouts.py:145 design/commands/settings.toml:settings.step
+#: core/layouts.py:30 core/layouts.py:150 design/commands/settings.toml:settings.step
 msgid "Settings"
 msgstr "Réglages"
 
@@ -3006,11 +3054,11 @@ msgstr "diviser"
 msgid "flip"
 msgstr "retourner"
 
-#: core/layouts.py:60 core/layouts.py:70 core/layouts.py:109
+#: core/layouts.py:60 core/layouts.py:70 core/layouts.py:114
 msgid "back"
 msgstr "arrière"
 
-#: core/layouts.py:61 core/layouts.py:71 core/layouts.py:109
+#: core/layouts.py:61 core/layouts.py:71 core/layouts.py:114
 msgid "forward"
 msgstr "avant"
 
@@ -3026,7 +3074,7 @@ msgstr "mettre en place"
 msgid "square tool"
 msgstr "outil cases"
 
-#: core/layouts.py:72 core/layouts.py:113
+#: core/layouts.py:72 core/layouts.py:118
 msgid "variation"
 msgstr "variante"
 
@@ -3046,115 +3094,115 @@ msgstr "ligne principale"
 msgid "delete"
 msgstr "supprimer"
 
-#: core/layouts.py:183 core/layouts.py:200
+#: core/layouts.py:188 core/layouts.py:206
 msgid "Next variation at this move"
 msgstr "Variante suivante à ce coup"
 
-#: core/layouts.py:183
+#: core/layouts.py:188
 msgid "Previous variation at this move"
 msgstr "Variante précédente à ce coup"
 
-#: core/layouts.py:185
+#: core/layouts.py:190
 msgid "Mark as good"
 msgstr "Marquer comme bon"
 
-#: core/layouts.py:186
+#: core/layouts.py:191
 msgid "Mark as bad"
 msgstr "Marquer comme mauvais"
 
-#: core/layouts.py:186
+#: core/layouts.py:191
 msgid "Remove the mark"
 msgstr "Retirer la marque"
 
-#: core/layouts.py:188 core/layouts.py:195
+#: core/layouts.py:193 core/layouts.py:201
 msgid "Puzzle: starts after this move"
 msgstr "Exercice : commence après ce coup"
 
-#: core/layouts.py:189 core/layouts.py:195
+#: core/layouts.py:194 core/layouts.py:201
 msgid "Puzzle: the solution ends here"
 msgstr "Exercice : la solution s'arrête ici"
 
-#: core/layouts.py:189 core/layouts.py:197
+#: core/layouts.py:194 core/layouts.py:203
 msgid "Puzzle: ready for training"
 msgstr "Exercice : prêt pour l'entraînement"
 
-#: core/layouts.py:190
+#: core/layouts.py:195
 msgid "Next position of the list"
 msgstr "Position suivante de la liste"
 
-#: core/layouts.py:190
+#: core/layouts.py:195
 msgid "Previous position of the list"
 msgstr "Position précédente de la liste"
 
-#: core/layouts.py:196
+#: core/layouts.py:202
 msgid "Puzzle: also correct"
 msgstr "Exercice : aussi correct"
 
-#: core/layouts.py:196
+#: core/layouts.py:202
 msgid "Puzzle: all answers count"
 msgstr "Exercice : toutes les réponses comptent"
 
-#: core/layouts.py:197
+#: core/layouts.py:203
 msgid "Puzzle: discard"
 msgstr "Exercice : supprimer"
 
-#: core/layouts.py:208 core/layouts.py:223
+#: core/layouts.py:214 core/layouts.py:229
 msgid "Storm, 3 minutes"
 msgstr "Storm, 3 minutes"
 
-#: core/layouts.py:210
+#: core/layouts.py:216
 msgid "Next page"
 msgstr "Page suivante"
 
-#: core/layouts.py:211
+#: core/layouts.py:217
 msgid "Previous page"
 msgstr "Page précédente"
 
-#: core/layouts.py:211
+#: core/layouts.py:217
 msgid "Next diagram number"
 msgstr "Numéro de diagramme suivant"
 
-#: core/layouts.py:212
+#: core/layouts.py:218
 msgid "Previous diagram number"
 msgstr "Numéro de diagramme précédent"
 
-#: core/layouts.py:214
+#: core/layouts.py:220
 msgid "Next chart"
 msgstr "Graphique suivant"
 
-#: core/layouts.py:214
+#: core/layouts.py:220
 msgid "Previous chart"
 msgstr "Graphique précédent"
 
-#: core/layouts.py:215
+#: core/layouts.py:221
 msgid "Period: 7 days"
 msgstr "Période : 7 jours"
 
-#: core/layouts.py:215
+#: core/layouts.py:221
 msgid "Period: 30 days"
 msgstr "Période : 30 jours"
 
-#: core/layouts.py:215
+#: core/layouts.py:221
 msgid "Period: 90 days"
 msgstr "Période : 90 jours"
 
-#: core/layouts.py:216
+#: core/layouts.py:222
 msgid "Period: a year"
 msgstr "Période : un an"
 
-#: core/layouts.py:216
+#: core/layouts.py:222
 msgid "Period: everything"
 msgstr "Période : tout"
 
-#: core/layouts.py:217
+#: core/layouts.py:223
 msgid "Show what you pasted"
 msgstr "Montrer ce que vous avez collé"
 
-#: core/layouts.py:218
+#: core/layouts.py:224
 msgid "Next value"
 msgstr "Valeur suivante"
 
-#: core/layouts.py:218
+#: core/layouts.py:224
 msgid "Previous value"
 msgstr "Valeur précédente"
 
@@ -3190,83 +3238,91 @@ msgstr "Inspecteur"
 msgid "The current move and position: comment, marks, tags, source."
 msgstr "Le coup et la position actuels : commentaire, marques, tags, source."
 
+#: core/layouts.py:102 design/commands/library.toml:details.edit design/commands/library.toml:details.clear
+msgid "Details"
+msgstr ""
+
 #: core/layouts.py:102
+msgid "The game, position, player or source under the cursor: every field, editable."
+msgstr ""
+
+#: core/layouts.py:107
 msgid "The puzzle at the cursor: its start, its solution lines, whether it is in training."
 msgstr "L'exercice au curseur : son départ, ses lignes de solution, s'il est en entraînement."
 
-#: core/layouts.py:108
+#: core/layouts.py:113
 msgid "Eval graph"
 msgstr "Graphique d'évaluation"
 
-#: core/layouts.py:108
+#: core/layouts.py:113
 msgid "The engine's evaluation over the main line; mistakes marked."
 msgstr "L'évaluation du moteur sur la ligne principale ; erreurs marquées."
 
-#: core/layouts.py:112
+#: core/layouts.py:117
 msgid "Variation graph"
 msgstr "Graphique des variantes"
 
-#: core/layouts.py:112
+#: core/layouts.py:117
 msgid "The move tree as a graph: the shape of a big analysis."
 msgstr "L'arbre de coups en graphique : la forme d'une grande analyse."
 
-#: core/layouts.py:116
+#: core/layouts.py:121
 msgid "Positions, games, puzzles and more, with the query bar."
 msgstr "Positions, parties, exercices et plus, avec la barre de recherche."
 
-#: core/layouts.py:122
+#: core/layouts.py:127
 msgid "Facets that write into the library query."
 msgstr "Des facettes qui écrivent dans la requête de la bibliothèque."
 
-#: core/layouts.py:126
+#: core/layouts.py:131
 msgid "Session"
 msgstr "Session"
 
-#: core/layouts.py:126
+#: core/layouts.py:131
 msgid "Sessions to start, the running session (clock, combo, lives, prompt), the result."
 msgstr "Les sessions à lancer, la session en cours (horloge, combo, vies, consigne), le résultat."
 
-#: core/layouts.py:130
+#: core/layouts.py:135
 msgid "Entry session"
 msgstr "Session de saisie"
 
-#: core/layouts.py:130
+#: core/layouts.py:135
 msgid "Source, page, diagram number and presets for rapid entry."
 msgstr "Source, page, numéro de diagramme et préréglages pour la saisie rapide."
 
-#: core/layouts.py:136
+#: core/layouts.py:141
 msgid "Progress in charts and numbers: every number drills down."
 msgstr "Les progrès en graphiques et en chiffres : chaque chiffre se détaille."
 
-#: core/layouts.py:141
+#: core/layouts.py:146
 msgid "PGN / FEN"
 msgstr "PGN / FEN"
 
-#: core/layouts.py:141
+#: core/layouts.py:146
 msgid "The position or game as text; paste to load."
 msgstr "La position ou la partie en texte ; collez pour charger."
 
-#: core/layouts.py:145
+#: core/layouts.py:150
 msgid "Every setting, searchable: themes, colours, type, board, keys, training, engine, data."
 msgstr "Chaque réglage, consultable : thèmes, couleurs, police, échiquier, touches, entraînement, moteur, données."
 
-#: core/layouts.py:151
+#: core/layouts.py:156
 msgid "Every command and its keys: ↵ binds new keys."
 msgstr "Chaque commande et ses touches : ↵ attribue de nouvelles touches."
 
-#: core/layouts.py:155
+#: core/layouts.py:160
 msgid "What to do now: due cards, one-key sessions, today's numbers, the pattern library."
 msgstr "Quoi faire maintenant : cartes à réviser, sessions en une touche, les chiffres du jour, la bibliothèque de motifs."
 
-#: core/layouts.py:160
+#: core/layouts.py:165
 msgid "The open analysis, the next diagram, a paste box, recent work."
 msgstr "L'analyse ouverte, le prochain diagramme, une zone de collage, le travail récent."
 
-#: core/layouts.py:165
+#: core/layouts.py:170
 msgid "Components"
 msgstr "Composants"
 
-#: core/layouts.py:165
+#: core/layouts.py:170
 msgid "Every component in every state."
 msgstr "Chaque composant dans chaque état."
 
@@ -3290,167 +3346,175 @@ msgstr "annoter"
 msgid "tags"
 msgstr "tags"
 
-#: core/layouts.py:99 core/layouts.py:148 core/layouts.py:157
+#: core/layouts.py:99 core/layouts.py:153 core/layouts.py:162
 msgid "next section"
 msgstr "section suivante"
 
-#: core/layouts.py:99 core/layouts.py:168
+#: core/layouts.py:99 core/layouts.py:173
 msgid "fold"
 msgstr "replier"
 
-#: core/layouts.py:104
-msgid "set up"
-msgstr "configuré"
-
-#: core/layouts.py:104
-msgid "also correct"
-msgstr "aussi correct"
-
-#: core/layouts.py:105
-msgid "next position"
-msgstr "position suivante"
-
-#: core/layouts.py:109
-msgid "evaluate"
-msgstr "évaluer"
-
-#: core/layouts.py:118
-msgid "query"
-msgstr "recherche"
-
-#: core/layouts.py:118 static/js/core/importer.js:79
-msgid "select"
-msgstr "sélectionner"
-
-#: core/layouts.py:119
-msgid "display"
-msgstr "affichage"
-
-#: core/layouts.py:123 static/js/core/importer.js:79
-msgid "down"
-msgstr "bas"
-
-#: core/layouts.py:123
-msgid "add / remove"
-msgstr "ajouter / retirer"
-
-#: core/layouts.py:123
-msgid "exclude"
-msgstr "exclure"
-
-#: core/layouts.py:131
-msgid "save & next"
-msgstr "enregistrer & suivant"
-
-#: core/layouts.py:131
-msgid "source"
-msgstr "source"
-
-#: core/layouts.py:131
-msgid "diagram +1"
-msgstr "diagramme +1"
-
-#: core/layouts.py:132
-msgid "ready"
-msgstr "prêt"
-
-#: core/layouts.py:137
-msgid "next chart"
-msgstr "graphique suivant"
-
-#: core/layouts.py:137
-msgid "points"
-msgstr "points"
-
-#: core/layouts.py:137
-msgid "drill down"
-msgstr "détailler"
-
-#: core/layouts.py:138
-msgid "table"
-msgstr "tableau"
-
-#: core/layouts.py:138
-msgid "period"
-msgstr "période"
-
-#: core/layouts.py:142 core/layouts.py:147
+#: core/layouts.py:104 core/layouts.py:147 core/layouts.py:152
 msgid "edit"
 msgstr "modifier"
 
+#: core/layouts.py:104
+msgid "new player"
+msgstr ""
+
+#: core/layouts.py:104
+msgid "new source"
+msgstr ""
+
+#: core/layouts.py:109
+msgid "set up"
+msgstr "configuré"
+
+#: core/layouts.py:109
+msgid "also correct"
+msgstr "aussi correct"
+
+#: core/layouts.py:110
+msgid "next position"
+msgstr "position suivante"
+
+#: core/layouts.py:114
+msgid "evaluate"
+msgstr "évaluer"
+
+#: core/layouts.py:123
+msgid "query"
+msgstr "recherche"
+
+#: core/layouts.py:123 static/js/core/importer.js:79
+msgid "select"
+msgstr "sélectionner"
+
+#: core/layouts.py:124
+msgid "display"
+msgstr "affichage"
+
+#: core/layouts.py:128 static/js/core/importer.js:79
+msgid "down"
+msgstr "bas"
+
+#: core/layouts.py:128
+msgid "add / remove"
+msgstr "ajouter / retirer"
+
+#: core/layouts.py:128
+msgid "exclude"
+msgstr "exclure"
+
+#: core/layouts.py:136
+msgid "save & next"
+msgstr "enregistrer & suivant"
+
+#: core/layouts.py:136
+msgid "source"
+msgstr "source"
+
+#: core/layouts.py:136
+msgid "diagram +1"
+msgstr "diagramme +1"
+
+#: core/layouts.py:137
+msgid "ready"
+msgstr "prêt"
+
 #: core/layouts.py:142
+msgid "next chart"
+msgstr "graphique suivant"
+
+#: core/layouts.py:142
+msgid "points"
+msgstr "points"
+
+#: core/layouts.py:142
+msgid "drill down"
+msgstr "détailler"
+
+#: core/layouts.py:143
+msgid "table"
+msgstr "tableau"
+
+#: core/layouts.py:143
+msgid "period"
+msgstr "période"
+
+#: core/layouts.py:147
 msgid "copy FEN"
 msgstr "copier le FEN"
 
-#: core/layouts.py:142
+#: core/layouts.py:147
 msgid "copy PGN"
 msgstr "copier le PGN"
 
-#: core/layouts.py:142
+#: core/layouts.py:147
 msgid "show what you pasted"
 msgstr "afficher le collage"
 
-#: core/layouts.py:147 core/layouts.py:152
+#: core/layouts.py:152 core/layouts.py:157
 msgid "search"
 msgstr "chercher"
 
-#: core/layouts.py:147
+#: core/layouts.py:152
 msgid "change"
 msgstr "changer"
 
-#: core/layouts.py:147
+#: core/layouts.py:152
 msgid "reset"
 msgstr "réinitialiser"
 
-#: core/layouts.py:152
+#: core/layouts.py:157
 msgid "new keys"
 msgstr "nouvelles touches"
 
-#: core/layouts.py:152
+#: core/layouts.py:157
 msgid "remove"
 msgstr "retirer"
 
-#: core/layouts.py:157 static/js/islands/train.js:16
+#: core/layouts.py:162 static/js/islands/train.js:16
 msgid "review"
 msgstr "réviser"
 
-#: core/layouts.py:157
+#: core/layouts.py:162
 msgid "weakest"
 msgstr "les plus faibles"
 
-#: core/layouts.py:162
+#: core/layouts.py:167
 msgid "analysis"
 msgstr "analyse"
 
-#: core/layouts.py:162
+#: core/layouts.py:167
 msgid "collect"
 msgstr "saisir"
 
-#: core/layouts.py:162
+#: core/layouts.py:167
 msgid "paste box"
 msgstr "zone de collage"
 
-#: core/layouts.py:162
+#: core/layouts.py:167
 msgid "open"
 msgstr "ouvrir"
 
-#: core/layouts.py:167 static/js/core/help.js:149
+#: core/layouts.py:172 static/js/core/help.js:149
 msgid "scroll"
 msgstr "défiler"
 
-#: core/layouts.py:167
+#: core/layouts.py:172
 msgid "half page"
 msgstr "demi-page"
 
-#: core/layouts.py:168
+#: core/layouts.py:173
 msgid "fold all"
 msgstr "tout replier"
 
-#: core/layouts.py:168
+#: core/layouts.py:173
 msgid "edit a field"
 msgstr "modifier un champ"
 
-#: core/layouts.py:168
+#: core/layouts.py:173
 msgid "flash demo"
 msgstr "démo du clignotement"
 
@@ -4136,7 +4200,7 @@ msgstr "Tags restaurés"
 msgid "which tag? e.g. :tag fork"
 msgstr "quel tag ? par ex. :tag fork"
 
-#: library/commands.py:99 library/commands.py:134 library/edit.py:78
+#: library/commands.py:99 library/commands.py:134 library/edit.py:97
 msgid "nothing selected"
 msgstr "rien de sélectionné"
 
@@ -4225,6 +4289,74 @@ msgstr "Mis à la corbeille : {n} importés"
 #: library/commands.py:110
 msgid "({n} had it)"
 msgstr "({n} l'avaient déjà)"
+
+#: library/details.py:41
+msgid "Annotator"
+msgstr ""
+
+#: library/details.py:42
+msgid "Notes"
+msgstr ""
+
+#: library/details.py:43
+msgid "Difficulty (1–5)"
+msgstr ""
+
+#: library/details.py:43
+msgid "Name"
+msgstr ""
+
+#: library/details.py:43
+msgid "Key (@ in queries)"
+msgstr ""
+
+#: library/details.py:44
+msgid "Other names and handles"
+msgstr ""
+
+#: library/details.py:44
+msgid "Role"
+msgstr ""
+
+#: library/details.py:44
+msgid "Federation"
+msgstr ""
+
+#: library/details.py:44
+msgid "FIDE id"
+msgstr ""
+
+#: library/details.py:45
+msgid "Born"
+msgstr ""
+
+#: library/details.py:45
+msgid "Short citation"
+msgstr ""
+
+#: library/details.py:45
+msgid "Kind"
+msgstr ""
+
+#: library/details.py:45
+msgid "Authors"
+msgstr ""
+
+#: library/details.py:45
+msgid "Year"
+msgstr ""
+
+#: library/details.py:46
+msgid "Publisher"
+msgstr ""
+
+#: library/details.py:46
+msgid "Web address"
+msgstr ""
+
+#: library/details.py:48
+msgid "Player"
+msgstr ""
 
 #: library/detect.py:29 library/structure.py:17
 msgid "pawn"
@@ -4358,119 +4490,119 @@ msgstr "{text} dégage la ligne"
 msgid "Skewer with {text}"
 msgstr "Enfilade avec {text}"
 
-#: library/edit.py:286
+#: library/edit.py:331
 msgid "a Collect preset"
 msgstr "un préréglage de Saisie"
 
-#: library/edit.py:407
+#: library/edit.py:452
 msgid "Link undone"
 msgstr "Lien annulé"
 
-#: library/edit.py:75
+#: library/edit.py:94
 msgid "select players, sources or tags in the Library (4 5 6), or name one: :edit @tal role=model"
 msgstr "sélectionnez des joueurs, des sources ou des tags dans la Bibliothèque (4 5 6), ou nommez-en un : :edit @tal role=model"
 
-#: library/edit.py:150
+#: library/edit.py:187
 msgid "Edit undone"
 msgstr "Modification annulée"
 
-#: library/edit.py:203
+#: library/edit.py:248
 msgid "a name first, then any field=value"
 msgstr "d'abord un nom, puis des champ=valeur"
 
-#: library/edit.py:370
+#: library/edit.py:415
 msgid "the name as it is on the games: :player-link \"Tal, M.\" @tal"
 msgstr "le nom tel qu'il figure dans les parties : :player-link \"Tal, M.\" @tal"
 
-#: library/edit.py:164
+#: library/edit.py:202
 msgid "Changed {names} of {label}"
 msgstr "{names} de {label} modifiés"
 
-#: library/edit.py:276 library/structure.py:188 stats/metrics.py:338
+#: library/edit.py:321 library/structure.py:188 stats/metrics.py:338
 msgid " and "
 msgstr " et "
 
-#: library/edit.py:282
+#: library/edit.py:327
 msgid "{n} position or move"
 msgid_plural "{n} positions or moves"
 msgstr[0] "{n} position ou coup"
 msgstr[1] "{n} positions ou coups"
 
-#: library/edit.py:284
+#: library/edit.py:329
 msgid "the tags below it ({value})"
 msgstr "les tags en dessous ({value})"
 
-#: library/edit.py:307
+#: library/edit.py:352
 msgid ":delete takes no values"
 msgstr ":delete ne prend pas de valeurs"
 
-#: library/edit.py:317
+#: library/edit.py:362
 msgid "Deleted {value}"
 msgstr "Supprimé : {value}"
 
-#: library/edit.py:390
+#: library/edit.py:435
 msgid " (new player)"
 msgstr " (nouveau joueur)"
 
-#: library/edit.py:84
+#: library/edit.py:103
 msgid "{value}s have {value2}; not '{name}'"
 msgstr "les {value}s ont {value2} ; pas « {name} »"
 
-#: library/edit.py:129
+#: library/edit.py:154
 msgid "no field '{raw}' ({value})"
 msgstr "pas de champ « {raw} » ({value})"
 
-#: library/edit.py:154
+#: library/edit.py:191
 msgid "what to change? {value}"
 msgstr "que changer ? {value}"
 
-#: library/edit.py:232
+#: library/edit.py:277
 msgid "there is a tag '{key}' already (#{key})"
 msgstr "il existe déjà un tag « {key} » (#{key})"
 
-#: library/edit.py:273 library/edit.py:390 library/edit.py:277
+#: library/edit.py:318 library/edit.py:435 library/edit.py:322
 msgid "{n} game"
 msgid_plural "{n} games"
 msgstr[0] "{n} partie"
 msgstr[1] "{n} parties"
 
-#: library/edit.py:313
+#: library/edit.py:358
 msgid " (:player-link moves games to another player)"
 msgstr " (:player-link déplace les parties vers un autre joueur)"
 
-#: library/edit.py:317
+#: library/edit.py:362
 msgid " · {n} in use stay"
 msgstr " · {n} utilisés restent"
 
-#: library/edit.py:375
+#: library/edit.py:420
 msgid "no game has '{name}' without a player (is:unlinked in Games lists them)"
 msgstr "aucune partie n'a « {name} » sans joueur (is:unlinked dans Parties les liste)"
 
-#: library/edit.py:47
+#: library/edit.py:63
 msgid "unbalanced quotes: {e}"
 msgstr "guillemets non fermés : {e}"
 
-#: library/edit.py:93
+#: library/edit.py:112
 msgid "'{raw}' is taken (or empty)"
 msgstr "« {raw} » est déjà pris (ou vide)"
 
-#: library/edit.py:113
+#: library/edit.py:132 library/edit.py:136
 msgid "{name} is one of {shown}"
 msgstr "{name} est l'un de {shown}"
 
-#: library/edit.py:313
+#: library/edit.py:358
 msgid "{o} is used by {why}: it stays"
 msgstr "{o} est utilisé par {why} : il reste"
 
-#: library/edit.py:103
+#: library/edit.py:122
 msgid "{name} is a number"
 msgstr "{name} est un nombre"
 
-#: library/edit.py:124
+#: library/edit.py:149
 msgid "{name} is below {name2}: that would make a loop"
 msgstr "{name} est sous {name2} : cela ferait une boucle"
 
-#: library/edit.py:276 library/pack_views.py:74 static/js/core/library.js:439
+#: library/edit.py:321 library/pack_views.py:74 static/js/core/library.js:439
 msgid "{n} position"
 msgid_plural "{n} positions"
 msgstr[0] "{n} position"
@@ -5458,7 +5590,7 @@ msgstr "Cartes par étape, {n} derniers jours"
 msgid "Young"
 msgstr "Récentes"
 
-#: stats/views.py:71 training/models.py:176
+#: stats/views.py:71 training/models.py:176 design/keymap/default.toml
 msgid "New"
 msgstr "Nouvelles"
 
@@ -7531,6 +7663,22 @@ msgstr "Nouveau joueur"
 #: design/commands/library.toml:source.new
 msgid "New source"
 msgstr "Nouvelle source"
+
+#: design/commands/library.toml:details.edit
+msgid "Change this field (the command line, with its value)"
+msgstr ""
+
+#: design/commands/library.toml:details.edit design/commands/library.toml:details.clear
+msgid "in the Details pane"
+msgstr ""
+
+#: design/commands/library.toml:details.clear
+msgid "Empty this field"
+msgstr ""
+
+#: design/commands/library.toml:library.details
+msgid "Details: every field of what is selected, editable"
+msgstr ""
 
 #: design/commands/library.toml:library.delete
 msgid "Delete the selected players, sources or tags nothing uses"

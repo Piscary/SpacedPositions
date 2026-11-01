@@ -13,6 +13,7 @@ accept = ["[", "]"]
 "space" = "Leader"
 "space w" = "Window"
 "space u" = "UI toggles"
+"space n" = "New"
 "g" = "Go"
 "m" = "Mark"
 "p" = "Puzzle"
@@ -82,6 +83,8 @@ accept = ["[", "]"]
 "space u p" = "board.pieces"
 "space u v" = "library.display"
 "space o" = "analysis.open"
+"space n p" = "player.new"
+"space n s" = "source.new"
 
 [context.pane]
 "z" = "section.toggle"
@@ -241,6 +244,7 @@ accept = ["[", "]"]
 "enter" = "train.analyse"
 
 [context."mode.analyse"]
+"I" = "library.details"
 "h" = "analysis.back"
 "l" = "analysis.forward"
 "left" = "analysis.back"
@@ -298,6 +302,7 @@ accept = ["[", "]"]
 "g m" = "analysis.moments"
 
 [context."view.library"]
+"I" = "library.details"
 "g ?" = "help.search"
 "1" = "library.collection positions"
 "2" = "library.collection games"
@@ -402,6 +407,10 @@ accept = ["[", "]"]
 "O" = "app.folder"
 "R" = "app.testreport"
 "M" = "app.feedback"
+
+[context."view.details"]
+"enter" = "details.edit"
+"backspace" = "details.clear"
 
 [context."view.keymap"]
 "enter" = "keymap.bind"

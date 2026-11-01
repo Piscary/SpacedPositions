@@ -1,0 +1,8 @@
+{% if obj %}<div class="details__head"><span class="chip">{{ noun }} · {{ ref }}</span> <b>{{ title }}</b></div>
+{% if missing %}<p class="details__hint muted">{% translate "White and Black unknown: ↵ on their row adds them (a name nobody has makes a new player)." %}</p>{% endif %}
+<div class="list details__list" data-list data-details-list data-ref="{{ ref }}" role="listbox" aria-label="{{ noun }}">
+  {% for r in rows %}<div class="list__row details__row" role="option" aria-selected="false" data-row="{{ r.field }}" data-title="{{ r.label }}" data-raw="{{ r.raw }}" data-kind="{{ r.kind }}">
+    <span class="list__title details__label">{{ r.label }}</span><span class="details__value{% if not r.value %} muted{% endif %}">{{ r.value|default:"—" }}</span>
+  </div>{% endfor %}
+</div>
+{% else %}<p class="muted details__none">{% translate "Nothing to show: the Details pane shows the game, position, player or source under the cursor of its link group (a Library row, the open analysis)." %}</p>{% endif %}

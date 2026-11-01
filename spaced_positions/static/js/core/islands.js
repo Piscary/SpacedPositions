@@ -12,6 +12,7 @@ import { mountEntry } from "./collect.js"
 import { mountStats } from "./charts.js"
 import { mountGraph } from "../islands/graphs.js"
 import { mountKeymap, mountSettings } from "./settings.js"
+import { mountDetails } from "./details.js"
 
 const MOUNT = {
   board: mountBoard,
@@ -29,6 +30,7 @@ const MOUNT = {
   vargraph: mountGraph,
   settings: mountSettings,
   keymap: mountKeymap,
+  details: mountDetails,
 }
 
 export function mountIslands(root = document) {

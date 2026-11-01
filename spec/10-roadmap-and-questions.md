@@ -73,6 +73,15 @@ draws the file's evaluations dashed, mistakes from the engine's where there is o
 refused with the reason; header links in the Inspector; Junie's finding fixed (the label read headers only, Site and
 Annotator are fields). Moved to day 4: spec 16 §2 (the Details pane), as the first thing.
 
+Day 4 (first half) done: spec 16 §2. The Details view (`d`; `library/details.py`, `core/details.js`) shows the fields
+of the game, position, player or source of its link group, `↵` edits on the command line (`:edit g12 white=…`, so
+undo works), `⌫` empties; `:edit` now knows games (players, Elo, result, date → year, event, site, round, ECO,
+annotator, source) and positions (title, source, page, diagram, objective, difficulty); a player or source given by
+a name nobody has is made; `I` (Library, Analyse) shows the details beside; `␣ n p` / `␣ n s` make a player or source
+and show it; Collect's default layout has the Details pane. Still open from 16: new game and position as commands
+(§3), the source picker in the entry session, the *incomplete* facet, merging players, *Who you are* (§4). The 37
+new texts: Junie.
+
 Out of the week: spec 17 phase 2 (Present mode, questions per puzzle, follow-ups, per-student view, lesson packs),
 and spec 12 (collections, stats per collection), which phase 2 builds on.
 

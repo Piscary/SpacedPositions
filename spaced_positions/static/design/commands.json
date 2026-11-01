@@ -1071,6 +1071,29 @@
    "handler": "server",
    "undoable": true
   },
+  "details.edit": {
+   "title": "Change this field (the command line, with its value)",
+   "group": "Details",
+   "when": "view.details",
+   "reason": "in the Details pane",
+   "handler": "client"
+  },
+  "details.clear": {
+   "title": "Empty this field",
+   "group": "Details",
+   "when": "view.details",
+   "reason": "in the Details pane",
+   "undoable": true,
+   "handler": "client"
+  },
+  "library.details": {
+   "title": "Details: every field of what is selected, editable",
+   "group": "Details",
+   "aliases": [
+    "details"
+   ],
+   "handler": "client"
+  },
   "library.delete": {
    "title": "Delete the selected players, sources or tags nothing uses",
    "group": "Library",
@@ -2523,6 +2546,14 @@
    "space o": {
     "command": "analysis.open",
     "args": []
+   },
+   "space n p": {
+    "command": "player.new",
+    "args": []
+   },
+   "space n s": {
+    "command": "source.new",
+    "args": []
    }
   },
   "pane": {
@@ -3197,6 +3228,10 @@
    }
   },
   "mode.analyse": {
+   "I": {
+    "command": "library.details",
+    "args": []
+   },
    "h": {
     "command": "analysis.back",
     "args": []
@@ -3471,6 +3506,10 @@
    }
   },
   "view.library": {
+   "I": {
+    "command": "library.details",
+    "args": []
+   },
    "g ?": {
     "command": "help.search",
     "args": []
@@ -3932,6 +3971,16 @@
     "args": []
    }
   },
+  "view.details": {
+   "enter": {
+    "command": "details.edit",
+    "args": []
+   },
+   "backspace": {
+    "command": "details.clear",
+    "args": []
+   }
+  },
   "view.keymap": {
    "enter": {
     "command": "keymap.bind",
@@ -3947,6 +3996,7 @@
   "space": "Leader",
   "space w": "Window",
   "space u": "UI toggles",
+  "space n": "New",
   "g": "Go",
   "m": "Mark",
   "p": "Puzzle"

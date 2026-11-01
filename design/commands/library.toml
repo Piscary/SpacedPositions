@@ -196,6 +196,24 @@ args = [{ name = "title", type = "text" }]
 handler = "server"
 undoable = true
 
+["details.edit"]
+title = "Change this field (the command line, with its value)"
+group = "Details"
+when = "view.details"
+reason = "in the Details pane"
+
+["details.clear"]
+title = "Empty this field"
+group = "Details"
+when = "view.details"
+reason = "in the Details pane"
+undoable = true
+
+["library.details"]
+title = "Details: every field of what is selected, editable"
+group = "Details"
+aliases = ["details"]
+
 ["library.delete"]
 title = "Delete the selected players, sources or tags nothing uses"
 group = "Library"
