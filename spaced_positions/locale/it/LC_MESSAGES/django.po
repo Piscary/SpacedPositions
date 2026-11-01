@@ -288,21 +288,21 @@ msgstr "Successiva"
 
 #: templates/coaching/lesson.html templates/help/lesson.html templates/help/lessons.html
 msgid "Homework"
-msgstr ""
+msgstr "Compito"
 
 #: templates/coaching/lesson.html
 msgid "Homework of %(date)s: %(n)s result back"
 msgid_plural "Homework of %(date)s: %(n)s results back"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Compito del %(date)s: %(n)s risultato restituito"
+msgstr[1] "Compito del %(date)s: %(n)s risultati restituiti"
 
 #: templates/coaching/lesson.html
 msgid "drop the results files your students send on this window"
-msgstr ""
+msgstr "trascina i file dei risultati che i tuoi allievi inviano su questa finestra"
 
 #: templates/coaching/lessons.html core/layouts.py:103
 msgid "Lessons"
-msgstr ""
+msgstr "Lezioni"
 
 #: templates/coaching/lessons.html templates/settings/rows.html
 msgid "%(n)s item"
@@ -313,18 +313,18 @@ msgstr[1] "%(n)s elementi"
 #: templates/coaching/lessons.html
 msgid "%(n)s puzzle"
 msgid_plural "%(n)s puzzles"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s esercizio"
+msgstr[1] "%(n)s esercizi"
 
 #: templates/coaching/lessons.html
 msgid "%(n)s result back"
 msgid_plural "%(n)s results back"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s risultato restituito"
+msgstr[1] "%(n)s risultati restituiti"
 
 #: templates/coaching/lessons.html
 msgid "No lessons yet. In the Library, select positions and press %(add)s (or <code>:lesson-add Forks</code>): a lesson with that title is made, and they are its first items."
-msgstr ""
+msgstr "Nessuna lezione ancora. Nella Biblioteca, seleziona posizioni e premi %(add)s (o <code>:lesson-add Forchette</code>): una lezione con quel titolo viene creata, e sono i suoi primi elementi."
 
 #: templates/components/pane.html
 msgid "pinned"
@@ -804,7 +804,7 @@ msgstr "I tasti appartengono a un contesto: lo stesso tasto può fare cose diver
 
 #: templates/help/lesson.html
 msgid "One lesson: its positions and games in order with your notes, and below them the results of its last homework (students × puzzles, ✓ solved at the first try, ✗ missed, · not done)."
-msgstr ""
+msgstr "Una lezione: le sue posizioni e partite in ordine con le tue note, e sotto i risultati dell'ultimo compito (allievi × esercizi, ✓ risolto al primo tentativo, ✗ mancato, · non fatto)."
 
 #: templates/help/lesson.html library/details.py:42
 msgid "Notes"
@@ -812,7 +812,7 @@ msgstr "Note"
 
 #: templates/help/lesson.html
 msgid "%(note)s writes what to ask or show with the item under the cursor."
-msgstr ""
+msgstr "%(note)s scrive cosa chiedere o mostrare con l'elemento sotto il cursore."
 
 #: templates/help/lesson.html templates/help/moves.html
 msgid "Tidy up"
@@ -820,31 +820,31 @@ msgstr "Riordinare"
 
 #: templates/help/lesson.html
 msgid "%(remove)s takes the item out of the lesson (u brings it back); %(open)s opens it in Analyse."
-msgstr ""
+msgstr "%(remove)s rimuove l'elemento dalla lezione (u lo riporta); %(open)s lo apre in Analisi."
 
 #: templates/help/lesson.html
 msgid "%(homework)s: the lesson's puzzles as a pack for your students."
-msgstr ""
+msgstr "%(homework)s: gli esercizi della lezione come pacchetto per i tuoi allievi."
 
 #: templates/help/lesson.html
 msgid "The Lessons pane (its cursor picks the lesson) and the board, which shows the item under the cursor."
-msgstr ""
+msgstr "Il riquadro Lezioni (il suo cursore sceglie la lezione) e la scacchiera, che mostra l'elemento sotto il cursore."
 
 #: templates/help/lessons.html
 msgid "Your lessons: material for your students in the order you teach it, with notes. The lesson under the cursor shows in the Lesson pane beside it; its homework goes out from here."
-msgstr ""
+msgstr "Le tue lezioni: materiale per i tuoi allievi nell'ordine in cui lo insegni, con note. La lezione sotto il cursore si mostra nel riquadro Lezione accanto; il compito parte da qui."
 
 #: templates/help/lessons.html
 msgid "Make a lesson"
-msgstr ""
+msgstr "Creare una lezione"
 
 #: templates/help/lessons.html
 msgid "In the Library select positions or games and press %(add)s, or press it in Analyse for the open one: type the lesson's title; a title nobody has makes a new lesson."
-msgstr ""
+msgstr "Nella Biblioteca seleziona posizioni o partite e premi %(add)s, o premilo in Analisi per quella aperta: digita il titolo della lezione; un titolo sconosciuto crea una nuova lezione."
 
 #: templates/help/lessons.html
 msgid "%(homework)s writes the lesson's puzzles as a pack for your students, with your instructions (and <code>due=2026-11-14</code>). Each student imports it and finds it on Home."
-msgstr ""
+msgstr "%(homework)s scrive gli esercizi della lezione come pacchetto per i tuoi allievi, con le tue istruzioni (e <code>due=2026-11-14</code>). Ogni allievo lo importa e lo trova su Home."
 
 #: templates/help/lessons.html templates/views/library.html
 msgid "Results"
@@ -852,19 +852,19 @@ msgstr "Risultati"
 
 #: templates/help/lessons.html
 msgid "Your students send back a results file: drop it on this window. The Lesson pane shows who solved what at the first try."
-msgstr ""
+msgstr "I tuoi allievi restituiscono un file dei risultati: trascinalo su questa finestra. Il riquadro Lezione mostra chi ha risolto cosa al primo tentativo."
 
 #: templates/help/lessons.html
 msgid "The Coach mode"
-msgstr ""
+msgstr "La modalità Coach"
 
 #: templates/help/lessons.html
 msgid "%(coach)s; its tab shows when Settings → Packs → I teach is on."
-msgstr ""
+msgstr "%(coach)s; la scheda si mostra quando Impostazioni → Pacchetti → Insegno è attivo."
 
 #: templates/help/lessons.html
 msgid "The Lesson pane and the board of the same link group."
-msgstr ""
+msgstr "Il riquadro Lezione e la scacchiera dello stesso gruppo collegato."
 
 #: templates/help/library.html
 msgid "Everything you collected, searchable: positions, games, puzzles, players, sources and tags. Search, select, then act on the selection, or on everything the search found when nothing is selected."
@@ -2370,7 +2370,7 @@ msgstr "Caricamento…"
 
 #: templates/views/lesson.html
 msgid "The lesson under the cursor of the Lessons pane (same link group) shows here: its items, your notes, its homework's results."
-msgstr ""
+msgstr "La lezione sotto il cursore del riquadro Lezioni (stesso gruppo collegato) si mostra qui: i suoi elementi, le tue note, i risultati del suo compito."
 
 #: templates/views/library.html
 msgid "Query"
@@ -2582,23 +2582,23 @@ msgstr[1] "%(n)s da ripassare"
 
 #: templates/views/today.html
 msgid "from your coach"
-msgstr ""
+msgstr "dal tuo coach"
 
 #: templates/views/today.html
 msgid "from %(coach)s · %(tried)s of %(total)s tried"
-msgstr ""
+msgstr "da %(coach)s · %(tried)s di %(total)s tentati"
 
 #: templates/views/today.html
 msgid "due %(due)s"
-msgstr ""
+msgstr "scade il %(due)s"
 
 #: templates/views/today.html
 msgid "results sent"
-msgstr ""
+msgstr "risultati inviati"
 
 #: templates/views/today.html
 msgid "Send results"
-msgstr ""
+msgstr "Invia i risultati"
 
 #: templates/views/today.html
 msgid "Due now"
@@ -3086,61 +3086,61 @@ msgstr "torre non in {square}"
 
 #: coaching/commands.py:77
 msgid "Note saved"
-msgstr ""
+msgstr "Nota salvata"
 
 #: coaching/commands.py:21
 msgid "which lesson? :lesson-add Forks"
-msgstr ""
+msgstr "quale lezione? :lesson-add Forchette"
 
 #: coaching/commands.py:29
 msgid "nothing selected to add"
-msgstr ""
+msgstr "niente selezionato da aggiungere"
 
 #: coaching/commands.py:59 coaching/commands.py:74
 msgid "no such item"
-msgstr ""
+msgstr "nessun tale elemento"
 
 #: coaching/commands.py:71
 msgid "which item?"
-msgstr ""
+msgstr "quale elemento?"
 
 #: coaching/commands.py:46
 msgid "{n} added to the lesson {title}"
 msgid_plural "{n} added to the lesson {title}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} aggiunto alla lezione {title}"
+msgstr[1] "{n} aggiunti alla lezione {title}"
 
 #: coaching/commands.py:63
 msgid "Taken out of the lesson {title}"
-msgstr ""
+msgstr "Rimosso dalla lezione {title}"
 
 #: coaching/commands.py:43
 msgid "already in the lesson {title} (or nothing to add)"
-msgstr ""
+msgstr "già nella lezione {title} (o niente da aggiungere)"
 
 #: coaching/homework.py:42
 msgid "this lesson has no puzzles: add positions with a puzzle (L in the Library)"
-msgstr ""
+msgstr "questa lezione non ha esercizi: aggiungi posizioni con un esercizio (L nella Biblioteca)"
 
 #: coaching/homework.py:113
 msgid "not a results file (no homework or no student)"
-msgstr ""
+msgstr "non un file dei risultati (nessun compito o nessun allievo)"
 
 #: coaching/homework.py:115
 msgid "these results were written by a newer version of Spaced Positions: update the app"
-msgstr ""
+msgstr "questi risultati sono stati scritti da una versione più recente di Spaced Positions: aggiorna l'app"
 
 #: coaching/homework.py:111
 msgid "not a results file"
-msgstr ""
+msgstr "non un file dei risultati"
 
 #: coaching/views.py:84
 msgid "a student"
-msgstr ""
+msgstr "un allievo"
 
 #: coaching/views.py:100
 msgid "Results of {student} for {title}"
-msgstr ""
+msgstr "Risultati di {student} per {title}"
 
 #: core/chess_views.py:51
 msgid "too large to paste: import it as a file (:import)"
@@ -3208,11 +3208,11 @@ msgstr "Tema, scacchiera, pezzi, scorciatoie, regole di allenamento e dati."
 
 #: core/layouts.py:31 design/commands/coaching.toml:lesson.add design/commands/coaching.toml:lesson.addto
 msgid "Coach"
-msgstr ""
+msgstr "Coach"
 
 #: core/layouts.py:31
 msgid "Lessons for your students: material in an order with notes, homework, the results that come back."
-msgstr ""
+msgstr "Lezioni per i tuoi allievi: materiale in ordine con note, compiti, i risultati che tornano."
 
 #: core/layouts.py:32 design/commands/shell.toml:mode.ui design/commands/ui.toml:demo.flash
 msgid "Style guide"
@@ -3420,15 +3420,15 @@ msgstr "La mossa e la posizione attuali: commento, segni, tag, fonte."
 
 #: core/layouts.py:103
 msgid "Your lessons: material for your students in an order; homework goes out from here."
-msgstr ""
+msgstr "Le tue lezioni: materiale per i tuoi allievi in ordine; il compito parte da qui."
 
 #: core/layouts.py:108
 msgid "Lesson"
-msgstr ""
+msgstr "Lezione"
 
 #: core/layouts.py:108
 msgid "The lesson's positions and games with your notes, and its homework's results."
-msgstr ""
+msgstr "Le posizioni e partite della lezione con le tue note, e i risultati del suo compito."
 
 #: core/layouts.py:113 design/commands/library.toml:details.edit design/commands/library.toml:details.clear
 msgid "Details"
@@ -3548,19 +3548,19 @@ msgstr "comprimi"
 
 #: core/layouts.py:105 core/layouts.py:110
 msgid "homework"
-msgstr ""
+msgstr "compito"
 
 #: core/layouts.py:105
 msgid "next lesson"
-msgstr ""
+msgstr "prossima lezione"
 
 #: core/layouts.py:110
 msgid "note"
-msgstr ""
+msgstr "nota"
 
 #: core/layouts.py:110
 msgid "take out"
-msgstr ""
+msgstr "rimuovere"
 
 #: core/layouts.py:115 core/layouts.py:158 core/layouts.py:163
 msgid "edit"
@@ -4034,11 +4034,11 @@ msgstr "I numeri salgono nella schermata dei risultati e nelle Statistiche"
 
 #: core/settings.py:62
 msgid "I teach"
-msgstr ""
+msgstr "Insegno"
 
 #: core/settings.py:62
 msgid "Shows the Coach mode: lessons, homework for your students, their results"
-msgstr ""
+msgstr "Mostra la modalità Coach: lezioni, compiti per i tuoi allievi, i loro risultati"
 
 #: core/settings.py:63
 msgid "Your name in packs"
@@ -6162,35 +6162,35 @@ msgstr "nessun comando «{name}»"
 
 #: static/js/core/coach.js:62
 msgid "Select positions or games in the Library, or open one in Analyse"
-msgstr ""
+msgstr "Seleziona posizioni o partite nella Biblioteca, o apri una in Analisi"
 
 #: static/js/core/coach.js:90
 msgid "Could not write the file"
-msgstr ""
+msgstr "Impossibile scrivere il file"
 
 #: static/js/core/coach.js:102
 msgid "Choose a lesson in the Lessons pane first"
-msgstr ""
+msgstr "Scegli prima una lezione nel riquadro Lezioni"
 
 #: static/js/core/coach.js:108
 msgid "{file} written: send it to your students; their results files come back here (drop them on this window)"
-msgstr ""
+msgstr "{file} scritto: invialo ai tuoi allievi; i loro file dei risultati tornano qui (trascinali su questa finestra)"
 
 #: static/js/core/coach.js:115
 msgid "No homework: it comes as a pack from your coach"
-msgstr ""
+msgstr "Nessun compito: arriva come pacchetto dal tuo coach"
 
 #: static/js/core/coach.js:117
 msgid "The homework's puzzles are not here: import the pack again"
-msgstr ""
+msgstr "Gli esercizi del compito non sono qui: importa di nuovo il pacchetto"
 
 #: static/js/core/coach.js:125
 msgid "{file} written: look at it, then send it to your coach (it holds only this homework's results)"
-msgstr ""
+msgstr "{file} scritto: guardalo, poi invialo al tuo coach (contiene solo i risultati di questo compito)"
 
 #: static/js/core/coach.js:132
 msgid "Could not read the results"
-msgstr ""
+msgstr "Impossibile leggere i risultati"
 
 #: static/js/core/collect.js:64
 msgid "(none)"
@@ -7746,43 +7746,43 @@ msgstr "Set di pezzi"
 
 #: design/commands/coaching.toml:lesson.add
 msgid "To a lesson: the selection, or the open position"
-msgstr ""
+msgstr "A una lezione: la selezione o la posizione aperta"
 
 #: design/commands/coaching.toml:lesson.addto
 msgid "Add to a lesson (the lesson's title, then what)"
-msgstr ""
+msgstr "Aggiungi a una lezione (il titolo della lezione, poi cosa)"
 
 #: design/commands/coaching.toml:lesson.remove
 msgid "Take out of the lesson"
-msgstr ""
+msgstr "Rimuovi dalla lezione"
 
 #: design/commands/coaching.toml:lesson.note
 msgid "The note of a lesson item"
-msgstr ""
+msgstr "La nota di un elemento della lezione"
 
 #: design/commands/coaching.toml:lesson.removeitem
 msgid "Take this out of the lesson"
-msgstr ""
+msgstr "Rimuovi questo dalla lezione"
 
 #: design/commands/coaching.toml:lesson.removeitem design/commands/coaching.toml:lesson.noteitem
 msgid "in a Lesson pane"
-msgstr ""
+msgstr "in un riquadro Lezione"
 
 #: design/commands/coaching.toml:lesson.noteitem
 msgid "Your note on this item (what to ask, what to show)"
-msgstr ""
+msgstr "La tua nota su questo elemento (cosa chiedere, cosa mostrare)"
 
 #: design/commands/coaching.toml:lesson.homework
 msgid "Homework: the lesson's puzzles as a pack for your students"
-msgstr ""
+msgstr "Compito: gli esercizi della lezione come pacchetto per i tuoi allievi"
 
 #: design/commands/coaching.toml:homework.start
 msgid "Start the homework"
-msgstr ""
+msgstr "Inizia il compito"
 
 #: design/commands/coaching.toml:homework.send
 msgid "Results of the homework: the file to send to your coach"
-msgstr ""
+msgstr "Risultati del compito: il file da inviare al tuo coach"
 
 #: design/commands/collect.toml:collect.save
 msgid "Save & next"

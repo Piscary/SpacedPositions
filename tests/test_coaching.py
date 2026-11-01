@@ -71,3 +71,51 @@ def test_l_adds_to_a_lesson_and_the_coach_mode_shows_it(page):
     keys(page, "j")
     page.wait_for_selector("#ws-coach [data-lesson-list] [data-row]")
     assert page.locator("#ws-coach [data-lesson-list] [data-row]").count() == 1
+
+
+@pytest.mark.django_db
+def test_student_side_full_loop():
+    """Student side: import a homework pack (made with coaching.homework.export),
+    the homework is received, cards are found, attempts are made, results are written."""
+    from spaced_positions.coaching.commands import add_to
+    from spaced_positions.coaching.models import Homework
+    from spaced_positions.training.models import Attempt
+    from tests.factories import back_rank
+
+    # Coach creates a lesson with one puzzle and exports homework
+    puzzle = puzzles.create_from_line(back_rank(1), ["d1d8"], title="Back rank")
+    add_to(["Back ranks", f"p{puzzle.position.pk}"], {}, {})
+    lesson = Lesson.objects.get(title="Back ranks")
+    data, name = hw.export(lesson, "Solve it")
+
+    # Student imports the pack
+    manifest = packs.read(data).manifest
+    homework = hw.receive_homework(manifest, None)
+    assert Homework.objects.count() == 1
+    assert homework.title == "Back ranks"
+    assert homework.instructions == "Solve it"
+    assert len(homework.positions) == 1
+    assert str(puzzle.position.uuid) in homework.positions
+
+    # Cards are found for the homework
+    cards = hw.cards_of(homework)
+    assert len(cards) == 1
+
+    # Student solves the puzzle
+    card = puzzle.cards.get()
+    Attempt.objects.create(card=card, success=True, ms=4000)
+    assert hw.progress(homework) == (1, 1)
+
+    # Results are written
+    sent = hw.results(homework, "Lena")
+    assert sent["kind"] == "results"
+    assert sent["student"] == "Lena"
+    assert len(sent["items"]) == 1
+    assert sent["items"][0]["first"] is True
+    assert sent["items"][0]["tries"] == 1
+    assert sent["items"][0]["wrong"] == ""
+
+    # Coach receives the results
+    result = hw.store_results(json.dumps(sent).encode())
+    assert result.student == "Lena"
+    assert result.data["items"][0]["first"] is True

@@ -127,6 +127,7 @@ Names of modes and panes keep their capital letter in every language. The glossa
 | board, move tree, engine | Brett, Zugbaum, Engine | échiquier, arbre des coups, moteur | scacchiera, albero delle mosse, motore |
 | puzzle, card, solver | Aufgabe, Karte, lösende Seite | exercice, carte, joueur | esercizio, scheda, chi risolve |
 | also correct (a move) | auch richtig | également correct | anche corretta (la mossa) |
+| lesson, homework, coach | Lektion, Hausaufgabe, Coach | leçon, devoirs, coach | lezione, compito, coach |
 
 When you change an English text that is already translated, the old translations are lost: translate the new text
 in all three languages, and read each translation back as a native speaker would before you fill it in.
