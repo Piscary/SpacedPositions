@@ -3134,11 +3134,11 @@ msgstr "Diese Ergebnisse wurden von einer neueren Version von Spaced Positions g
 msgid "not a results file"
 msgstr "Keine Ergebnisdatei"
 
-#: coaching/views.py:84
+#: coaching/views.py:91
 msgid "a student"
 msgstr "eine Schüler/in"
 
-#: coaching/views.py:100
+#: coaching/views.py:107
 msgid "Results of {student} for {title}"
 msgstr "Ergebnisse von {student} für {title}"
 
@@ -6164,31 +6164,27 @@ msgstr "kein Befehl «{name}»"
 msgid "Select positions or games in the Library, or open one in Analyse"
 msgstr "Stellungen oder Partien in der Bibliothek auswählen, oder eine in Analyse öffnen"
 
-#: static/js/core/coach.js:90
-msgid "Could not write the file"
-msgstr "Datei konnte nicht geschrieben werden"
-
-#: static/js/core/coach.js:102
+#: static/js/core/coach.js:88
 msgid "Choose a lesson in the Lessons pane first"
 msgstr "Wähle zuerst eine Lektion im Lektionen-Bereich"
 
-#: static/js/core/coach.js:108
+#: static/js/core/coach.js:94
 msgid "{file} written: send it to your students; their results files come back here (drop them on this window)"
 msgstr "{file} geschrieben: schicke es an deine Schüler/innen; ihre Ergebnisdateien kommen hier zurück (ziehe sie auf dieses Fenster)"
 
-#: static/js/core/coach.js:115
+#: static/js/core/coach.js:101
 msgid "No homework: it comes as a pack from your coach"
 msgstr "Keine Hausaufgabe: sie kommt als Paket von deinem Coach"
 
-#: static/js/core/coach.js:117
+#: static/js/core/coach.js:103
 msgid "The homework's puzzles are not here: import the pack again"
 msgstr "Die Aufgaben der Hausaufgabe sind nicht hier: importiere das Paket erneut"
 
-#: static/js/core/coach.js:125
+#: static/js/core/coach.js:111
 msgid "{file} written: look at it, then send it to your coach (it holds only this homework's results)"
 msgstr "{file} geschrieben: schau es dir an, dann schicke es an deinen Coach (es enthält nur die Ergebnisse dieser Hausaufgabe)"
 
-#: static/js/core/coach.js:132
+#: static/js/core/coach.js:118
 msgid "Could not read the results"
 msgstr "Ergebnisse konnten nicht gelesen werden"
 
@@ -6307,6 +6303,10 @@ msgstr "Hinweis"
 #: static/js/core/context.js:100 static/js/core/importer.js:100 static/js/core/library.js:234
 msgid "{n} selected"
 msgstr "{n} ausgewählt"
+
+#: static/js/core/context.js:172
+msgid "Could not write the file"
+msgstr "Datei konnte nicht geschrieben werden"
 
 #: static/js/core/engine.js:82
 msgid "local engine"
@@ -7068,23 +7068,23 @@ msgstr "↵ bearbeitet diese auf der Befehlszeile"
 msgid "Already the default"
 msgstr "Schon der Standard"
 
-#: static/js/core/settings.js:186
+#: static/js/core/settings.js:183
 msgid "Settings exported as TOML: Settings → Data imports them on another machine"
 msgstr "Einstellungen als TOML exportiert: Einstellungen → Daten importiert sie auf einem anderen Gerät"
 
-#: static/js/core/settings.js:195
+#: static/js/core/settings.js:192
 msgid "Import: the app is not reachable"
 msgstr "Import: die App ist nicht erreichbar"
 
-#: static/js/core/settings.js:207
+#: static/js/core/settings.js:204
 msgid "New keys for “{command}”: {keys} · ↵ keep · Esc cancel"
 msgstr "Neue Tasten für «{command}»: {keys} · ↵ behalten · Esc abbrechen"
 
-#: static/js/core/settings.js:213
+#: static/js/core/settings.js:210
 msgid "Cancelled"
 msgstr "Abgebrochen"
 
-#: static/js/core/settings.js:239
+#: static/js/core/settings.js:236
 msgid "No keys to remove here"
 msgstr "Hier gibt es keine Tasten zu entfernen"
 
@@ -7116,7 +7116,7 @@ msgstr "Noch keine Tags: tippen, um einen zu finden"
 msgid "and stay"
 msgstr "und bleiben"
 
-#: static/js/core/usage.js:50
+#: static/js/core/usage.js:47
 msgid "Usage report written: look it over, then send it as the test group's note says"
 msgstr "Nutzungsbericht erstellt: überprüfe ihn, dann sende ihn wie in der Notiz der Testgruppe angegeben"
 

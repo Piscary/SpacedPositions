@@ -3134,11 +3134,11 @@ msgstr "questi risultati sono stati scritti da una versione più recente di Spac
 msgid "not a results file"
 msgstr "non un file dei risultati"
 
-#: coaching/views.py:84
+#: coaching/views.py:91
 msgid "a student"
 msgstr "un allievo"
 
-#: coaching/views.py:100
+#: coaching/views.py:107
 msgid "Results of {student} for {title}"
 msgstr "Risultati di {student} per {title}"
 
@@ -6164,31 +6164,27 @@ msgstr "nessun comando «{name}»"
 msgid "Select positions or games in the Library, or open one in Analyse"
 msgstr "Seleziona posizioni o partite nella Biblioteca, o apri una in Analisi"
 
-#: static/js/core/coach.js:90
-msgid "Could not write the file"
-msgstr "Impossibile scrivere il file"
-
-#: static/js/core/coach.js:102
+#: static/js/core/coach.js:88
 msgid "Choose a lesson in the Lessons pane first"
 msgstr "Scegli prima una lezione nel riquadro Lezioni"
 
-#: static/js/core/coach.js:108
+#: static/js/core/coach.js:94
 msgid "{file} written: send it to your students; their results files come back here (drop them on this window)"
 msgstr "{file} scritto: invialo ai tuoi allievi; i loro file dei risultati tornano qui (trascinali su questa finestra)"
 
-#: static/js/core/coach.js:115
+#: static/js/core/coach.js:101
 msgid "No homework: it comes as a pack from your coach"
 msgstr "Nessun compito: arriva come pacchetto dal tuo coach"
 
-#: static/js/core/coach.js:117
+#: static/js/core/coach.js:103
 msgid "The homework's puzzles are not here: import the pack again"
 msgstr "Gli esercizi del compito non sono qui: importa di nuovo il pacchetto"
 
-#: static/js/core/coach.js:125
+#: static/js/core/coach.js:111
 msgid "{file} written: look at it, then send it to your coach (it holds only this homework's results)"
 msgstr "{file} scritto: guardalo, poi invialo al tuo coach (contiene solo i risultati di questo compito)"
 
-#: static/js/core/coach.js:132
+#: static/js/core/coach.js:118
 msgid "Could not read the results"
 msgstr "Impossibile leggere i risultati"
 
@@ -6307,6 +6303,10 @@ msgstr "Suggerimento"
 #: static/js/core/context.js:100 static/js/core/importer.js:100 static/js/core/library.js:234
 msgid "{n} selected"
 msgstr "{n} selezionati"
+
+#: static/js/core/context.js:172
+msgid "Could not write the file"
+msgstr "Impossibile scrivere il file"
 
 #: static/js/core/engine.js:82
 msgid "local engine"
@@ -7068,23 +7068,23 @@ msgstr "↵ modifica questa sulla riga di comando"
 msgid "Already the default"
 msgstr "Già il valore predefinito"
 
-#: static/js/core/settings.js:186
+#: static/js/core/settings.js:183
 msgid "Settings exported as TOML: Settings → Data imports them on another machine"
 msgstr "Impostazioni esportate come TOML: Impostazioni → Dati le importa su un altro dispositivo"
 
-#: static/js/core/settings.js:195
+#: static/js/core/settings.js:192
 msgid "Import: the app is not reachable"
 msgstr "Importazione: l'app non è raggiungibile"
 
-#: static/js/core/settings.js:207
+#: static/js/core/settings.js:204
 msgid "New keys for “{command}”: {keys} · ↵ keep · Esc cancel"
 msgstr "Nuovi tasti per «{command}»: {keys} · ↵ tieni · Esc annulla"
 
-#: static/js/core/settings.js:213
+#: static/js/core/settings.js:210
 msgid "Cancelled"
 msgstr "Annullato"
 
-#: static/js/core/settings.js:239
+#: static/js/core/settings.js:236
 msgid "No keys to remove here"
 msgstr "Nessun tasto da rimuovere qui"
 
@@ -7116,7 +7116,7 @@ msgstr "Ancora nessun tag: digita per trovarne uno"
 msgid "and stay"
 msgstr "e restare"
 
-#: static/js/core/usage.js:50
+#: static/js/core/usage.js:47
 msgid "Usage report written: look it over, then send it as the test group's note says"
 msgstr "Rapporto di utilizzo scritto: controllalo, poi invialo come indicato nella nota del gruppo di test"
 
