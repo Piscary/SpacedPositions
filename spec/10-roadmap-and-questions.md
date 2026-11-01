@@ -82,6 +82,14 @@ and show it; Collect's default layout has the Details pane. Still open from 16: 
 (§3), the source picker in the entry session, the *incomplete* facet, merging players, *Who you are* (§4). The 37
 new texts: Junie.
 
+Days 5–6 done: spec 17 phase 1 (`spaced_positions/coaching/`). Lessons (`L` in the Library and Analyse:
+`:lesson-add <title>`, a title nobody has makes one; undo); the Coach mode `␣ k` (its tab when Settings → Packs →
+*I teach* is on) with Lessons, Lesson (notes `c`, take out `⌫`) and the board; `H` writes the homework pack (the
+lesson's puzzles, instructions, `due=`); the student's import keeps it, Home shows *Homework* (`H` starts its
+session, `S` writes the results file: first try, tries, time, hint, wrong move per puzzle, nothing else); a results
+file dropped on the coach's app fills the table under the lesson (students × puzzles, most missed first). Tested
+as one loop. Open: the texts (Junie), Present mode and the rest of phase 2.
+
 Out of the week: spec 17 phase 2 (Present mode, questions per puzzle, follow-ups, per-student view, lesson packs),
 and spec 12 (collections, stats per collection), which phase 2 builds on.
 

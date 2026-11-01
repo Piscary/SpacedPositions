@@ -1,0 +1,7 @@
+{% if rows %}<div class="list" data-list data-lessons-list role="listbox" aria-label="{% translate "Lessons" %}">
+  {% for r in rows %}<div class="list__row lessons__row" role="option" aria-selected="false" data-row="L{{ r.lesson.pk }}" data-lesson="{{ r.lesson.pk }}" data-title="{{ r.lesson.title }}">
+    <span class="list__title">{{ r.lesson.title }}</span>
+    <span class="list__meta muted">{% blocktranslate trimmed count n=r.items %}{{ n }} item{% plural %}{{ n }} items{% endblocktranslate %} · {% blocktranslate trimmed count n=r.puzzles %}{{ n }} puzzle{% plural %}{{ n }} puzzles{% endblocktranslate %}{% if r.sent %} · {% blocktranslate trimmed count n=r.results %}{{ n }} result back{% plural %}{{ n }} results back{% endblocktranslate %}{% endif %}</span>
+  </div>{% endfor %}
+</div>
+{% else %}{% key "lesson.add" keys_in="view.library" as add %}<p class="muted coach__none">{% blocktranslate trimmed %}No lessons yet. In the Library, select positions and press {{ add }} (or <code>:lesson-add Forks</code>): a lesson with that title is made, and they are its first items.{% endblocktranslate %}</p>{% endif %}

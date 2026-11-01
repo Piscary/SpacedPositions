@@ -11,4 +11,11 @@ def shell(request):
         "app_launched": settings.SPOS_LAUNCHED,
         "lang": translation.get_language() or "en",
         "debug": settings.DEBUG,
+        "coach_on": _coach_on,  # a callable: only asked by the page that shows the mode tabs
     }
+
+
+def _coach_on() -> bool:
+    from . import settings as user_settings
+
+    return user_settings.get("coach.on") is True

@@ -32,7 +32,7 @@ SECTIONS = [
     (_("Colours"), "c", ["bg", "bg-alt", "surface", "line", "text", "text-sub", "main", "main-text", "good", "bad", "warn", "info", "special"]),
     (_("Board colours"), "o", ["sq-light", "sq-dark", "sq-lastmove", "sq-selected", "sq-check", "sq-hint", "arrow-green", "arrow-red",
                                "arrow-blue", "arrow-yellow", "arrow-engine"]),
-    (_("Packs"), "a", ["packs.author"]),
+    (_("Packs"), "a", ["coach.on", "packs.author"]),
     (_("App"), "p", ["app.updates", "app.autostop"]),
 ]
 

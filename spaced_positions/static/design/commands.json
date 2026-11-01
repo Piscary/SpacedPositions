@@ -614,6 +614,118 @@
    "undoable": true,
    "handler": "client"
   },
+  "lesson.add": {
+   "title": "To a lesson: the selection, or the open position",
+   "group": "Coach",
+   "aliases": [
+    "lesson-add"
+   ],
+   "args": [
+    {
+     "name": "lesson",
+     "type": "text",
+     "optional": true
+    }
+   ],
+   "handler": "client"
+  },
+  "lesson.addto": {
+   "title": "Add to a lesson (the lesson's title, then what)",
+   "group": "Coach",
+   "hidden": true,
+   "internal": true,
+   "args": [
+    {
+     "name": "what",
+     "type": "text"
+    }
+   ],
+   "handler": "server",
+   "undoable": true
+  },
+  "lesson.remove": {
+   "title": "Take out of the lesson",
+   "group": "Coach",
+   "hidden": true,
+   "internal": true,
+   "args": [
+    {
+     "name": "item",
+     "type": "text"
+    }
+   ],
+   "handler": "server",
+   "undoable": true
+  },
+  "lesson.note": {
+   "title": "The note of a lesson item",
+   "group": "Coach",
+   "hidden": true,
+   "aliases": [
+    "lesson-note"
+   ],
+   "args": [
+    {
+     "name": "item",
+     "type": "text"
+    }
+   ],
+   "handler": "server",
+   "undoable": true
+  },
+  "lesson.removeitem": {
+   "title": "Take this out of the lesson",
+   "group": "Coach",
+   "when": "view.lesson",
+   "reason": "in a Lesson pane",
+   "handler": "client"
+  },
+  "lesson.noteitem": {
+   "title": "Your note on this item (what to ask, what to show)",
+   "group": "Coach",
+   "when": "view.lesson",
+   "reason": "in a Lesson pane",
+   "handler": "client"
+  },
+  "lesson.homework": {
+   "title": "Homework: the lesson's puzzles as a pack for your students",
+   "group": "Coach",
+   "aliases": [
+    "homework"
+   ],
+   "args": [
+    {
+     "name": "instructions",
+     "type": "text",
+     "optional": true
+    }
+   ],
+   "handler": "client"
+  },
+  "homework.start": {
+   "title": "Start the homework",
+   "group": "Train",
+   "args": [
+    {
+     "name": "homework",
+     "type": "text",
+     "optional": true
+    }
+   ],
+   "handler": "client"
+  },
+  "homework.send": {
+   "title": "Results of the homework: the file to send to your coach",
+   "group": "Train",
+   "args": [
+    {
+     "name": "homework",
+     "type": "text",
+     "optional": true
+    }
+   ],
+   "handler": "client"
+  },
   "collect.save": {
    "title": "Save & next",
    "group": "Collect",
@@ -1689,6 +1801,11 @@
    "group": "Modes",
    "handler": "client"
   },
+  "mode.coach": {
+   "title": "Coach",
+   "group": "Modes",
+   "handler": "client"
+  },
   "mode.settings": {
    "title": "Settings",
    "group": "Modes",
@@ -2347,6 +2464,10 @@
    },
    "space ,": {
     "command": "mode.settings",
+    "args": []
+   },
+   "space k": {
+    "command": "mode.coach",
     "args": []
    },
    "space r": {
@@ -3232,6 +3353,10 @@
     "command": "library.details",
     "args": []
    },
+   "L": {
+    "command": "lesson.add",
+    "args": []
+   },
    "h": {
     "command": "analysis.back",
     "args": []
@@ -3508,6 +3633,10 @@
   "view.library": {
    "I": {
     "command": "library.details",
+    "args": []
+   },
+   "L": {
+    "command": "lesson.add",
     "args": []
    },
    "g ?": {
@@ -3893,6 +4022,14 @@
     "args": [
      "app.updates=on"
     ]
+   },
+   "H": {
+    "command": "homework.start",
+    "args": []
+   },
+   "S": {
+    "command": "homework.send",
+    "args": []
    }
   },
   "view.continue": {
@@ -3978,6 +4115,26 @@
    },
    "backspace": {
     "command": "details.clear",
+    "args": []
+   }
+  },
+  "view.lessons": {
+   "H": {
+    "command": "lesson.homework",
+    "args": []
+   }
+  },
+  "view.lesson": {
+   "H": {
+    "command": "lesson.homework",
+    "args": []
+   },
+   "c": {
+    "command": "lesson.noteitem",
+    "args": []
+   },
+   "backspace": {
+    "command": "lesson.removeitem",
     "args": []
    }
   },

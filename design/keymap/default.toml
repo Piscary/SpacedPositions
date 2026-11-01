@@ -39,6 +39,7 @@ accept = ["[", "]"]
 "space l" = "mode.library"
 "space s" = "mode.stats"
 "space ," = "mode.settings"
+"space k" = "mode.coach"
 "space r" = "train.review"
 "space space" = "mode.previous"
 
@@ -245,6 +246,7 @@ accept = ["[", "]"]
 
 [context."mode.analyse"]
 "I" = "library.details"
+"L" = "lesson.add"
 "h" = "analysis.back"
 "l" = "analysis.forward"
 "left" = "analysis.back"
@@ -303,6 +305,7 @@ accept = ["[", "]"]
 
 [context."view.library"]
 "I" = "library.details"
+"L" = "lesson.add"
 "g ?" = "help.search"
 "1" = "library.collection positions"
 "2" = "library.collection games"
@@ -387,6 +390,8 @@ accept = ["[", "]"]
 "I" = "pack.import"
 "s" = "pack.starter"
 "N" = "pref.set app.updates=on"
+"H" = "homework.start"
+"S" = "homework.send"
 
 [context."view.continue"]
 "a" = "home.analysis"
@@ -411,6 +416,14 @@ accept = ["[", "]"]
 [context."view.details"]
 "enter" = "details.edit"
 "backspace" = "details.clear"
+
+[context."view.lessons"]
+"H" = "lesson.homework"
+
+[context."view.lesson"]
+"H" = "lesson.homework"
+"c" = "lesson.noteitem"
+"backspace" = "lesson.removeitem"
 
 [context."view.keymap"]
 "enter" = "keymap.bind"

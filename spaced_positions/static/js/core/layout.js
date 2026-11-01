@@ -443,6 +443,7 @@ async function viewArg(args, title) {
 // ── Commands ───────────────────────────────────────────────────────────────────────────────────────────────────
 
 handle("mode.home", () => switchMode("home"))
+handle("mode.coach", () => switchMode("coach"))
 handle("mode.train", () => switchMode("train"))
 handle("mode.analyse", () => switchMode("analyse"))
 handle("mode.collect", () => switchMode("collect"))

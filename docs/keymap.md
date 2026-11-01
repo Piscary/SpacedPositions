@@ -26,6 +26,7 @@ reference is `spec/08-keymap.md`.
 | `␣` `l` | Library | `mode.library` |
 | `␣` `s` | Stats | `mode.stats` |
 | `␣` `,` | Settings | `mode.settings` |
+| `␣` `k` | Coach | `mode.coach` |
 | `␣` `r` | Review: due and new cards | `train.review` |
 | `␣` `␣` | Previous mode | `mode.previous` |
 | `␣` `1` | Focus pane N 1 | `pane.focus` |
@@ -270,6 +271,7 @@ reference is `spec/08-keymap.md`.
 | Keys | Command | Id |
 |---|---|---|
 | `I` | Details: every field of what is selected, editable | `library.details` |
+| `L` | To a lesson: the selection, or the open position | `lesson.add` |
 | `h` | Back one move | `analysis.back` |
 | `l` | Forward (main continuation) | `analysis.forward` |
 | `←` | Back one move | `analysis.back` |
@@ -331,6 +333,7 @@ reference is `spec/08-keymap.md`.
 | Keys | Command | Id |
 |---|---|---|
 | `I` | Details: every field of what is selected, editable | `library.details` |
+| `L` | To a lesson: the selection, or the open position | `lesson.add` |
 | `g` `?` | How to search: the query language | `help.search` |
 | `1` | Collection positions | `library.collection` |
 | `2` | Collection games | `library.collection` |
@@ -430,6 +433,8 @@ reference is `spec/08-keymap.md`.
 | `I` | Import a puzzle pack | `pack.import` |
 | `s` | Load the starter pack (lichess puzzles by motif) | `pack.starter` |
 | `N` | Set a token (e.g. main=#e2b714, font-size=14, density=compact) app.updates=on | `pref.set` |
+| `H` | Start the homework | `homework.start` |
+| `S` | Results of the homework: the file to send to your coach | `homework.send` |
 
 ## view.continue
 
@@ -463,6 +468,20 @@ reference is `spec/08-keymap.md`.
 |---|---|---|
 | `↵` | Change this field (the command line, with its value) | `details.edit` |
 | `⌫` | Empty this field | `details.clear` |
+
+## view.lessons
+
+| Keys | Command | Id |
+|---|---|---|
+| `H` | Homework: the lesson's puzzles as a pack for your students | `lesson.homework` |
+
+## view.lesson
+
+| Keys | Command | Id |
+|---|---|---|
+| `H` | Homework: the lesson's puzzles as a pack for your students | `lesson.homework` |
+| `c` | Your note on this item (what to ask, what to show) | `lesson.noteitem` |
+| `⌫` | Take this out of the lesson | `lesson.removeitem` |
 
 ## view.keymap
 

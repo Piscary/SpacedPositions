@@ -49,6 +49,14 @@
     </div>
   {% endsection %}{% endif %}
   {% blocktranslate trimmed count n=t.due asvar due_summary %}{{ n }} due{% plural %}{{ n }} due{% endblocktranslate %}
+  {% if t.homework %}{% translate "from your coach" as homework_summary %}{% section _("Homework") key="o" summary=homework_summary pinned=True %}
+    {% for w in t.homework %}<div class="train__session" data-homework="{{ w.h.assignment }}">
+      {% cmd "homework.start" args=w.h.assignment label=w.h.title variant="primary" %}
+      <span class="train__session-info">{% blocktranslate trimmed with coach=w.h.coach|default:"?" tried=w.tried total=w.total %}from {{ coach }} · {{ tried }} of {{ total }} tried{% endblocktranslate %}{% if w.h.due %} · {% blocktranslate trimmed with due=w.h.due|date:"D j M" %}due {{ due }}{% endblocktranslate %}{% endif %}{% if w.h.sent_at %} · {% translate "results sent" %}{% endif %}</span>
+      {% cmd "homework.send" args=w.h.assignment label=_("Send results") size="sm" %}
+    </div>{% if w.h.instructions %}<p class="muted home__instructions">{{ w.h.instructions }}</p>{% endif %}{% endfor %}
+  {% endsection %}{% endif %}
+
   {% section _("Due now") key="d" summary=due_summary pinned=True %}
     <div class="train__session">
       {% cmd "train.review" variant="primary" label=_("Review") keys_in="view.today" %}

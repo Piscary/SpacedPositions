@@ -82,6 +82,10 @@ group = "Modes"
 title = "Stats"
 group = "Modes"
 
+["mode.coach"]
+title = "Coach"
+group = "Modes"
+
 ["mode.settings"]
 title = "Settings"
 group = "Modes"

@@ -115,6 +115,7 @@ document.addEventListener("drop", async (e) => {
   if (!file) return
   e.preventDefault()
   if (file.name.endsWith(".sppack")) return importPack(file)
+  if (file.name.endsWith(".spresult")) return (await import("./coach.js")).importResults(file) // a student's homework results
   if (/\.(pgn|txt)$/i.test(file.name)) return openImport(await file.text())
   status(tr("{file}: drop a puzzle pack (.sppack) or a PGN", { file: file.name }), { kind: "error" })
 })

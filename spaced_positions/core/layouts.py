@@ -28,6 +28,7 @@ MODES = [
     Mode("library", _("Library"), "l", _("Find and organise positions, games, puzzles, players, sources and tags.")),
     Mode("stats", _("Stats"), "s", _("Progress: collection, analysis and training statistics, records, milestones.")),
     Mode("settings", _("Settings"), ",", _("Theme, board, pieces, keymap, training rules and data.")),
+    Mode("coach", _("Coach"), "k", _("Lessons for your students: material in an order with notes, homework, the results that come back.")),
     Mode("ui", _("Style guide"), "", _("Every component in every state, and a playground for panes."), in_appbar=False),
 ]
 MODES_BY_KEY = {m.key: m for m in MODES}
@@ -97,6 +98,16 @@ VIEWS = {
             "views/inspector.html",
             hints=(("analysis.comment", _("comment")), ("analysis.annotate", _("annotate")), ("analysis.tags", _("tags")),
                    ("section.next", _("next section")), ("section.toggle", _("fold"))),
+        ),
+        View(
+            "lessons", _("Lessons"), "n", _("Your lessons: material for your students in an order; homework goes out from here."),
+            "views/lessons.html", list_view=True, lives_in="coach",
+            hints=(("lesson.homework", _("homework")), ("list.down", _("next lesson"))),
+        ),
+        View(
+            "lesson", _("Lesson"), "u", _("The lesson's positions and games with your notes, and its homework's results."),
+            "views/lesson.html", list_view=True, lives_in="coach",
+            hints=(("lesson.noteitem", _("note")), ("lesson.removeitem", _("take out")), ("lesson.homework", _("homework")), ("list.open", _("analyse"))),
         ),
         View(
             "details", _("Details"), "d", _("The game, position, player or source under the cursor: every field, editable."),
@@ -197,6 +208,8 @@ VIEW_MENUS = {
     "engine": [("engine.toggle", None), ("engine.best", None), ("engine.lines", None), ("engine.evaluate", None)],
     "inspector": [("analysis.comment", None), ("analysis.annotate", None), ("analysis.tags", None), ("analysis.positiontags", None),
                   ("library.detect", None), ("section.next", None), ("section.all", None)],
+    "lessons": [("lesson.homework", None)],
+    "lesson": [("lesson.noteitem", None), ("lesson.removeitem", None), ("lesson.homework", None)],
     "details": [("details.edit", None), ("details.clear", None), ("player.new", None), ("source.new", None)],
     "puzzle": [("analysis.puzzle start", _("Puzzle: starts after this move")), ("analysis.puzzle end", _("Puzzle: the solution ends here")),
                ("analysis.puzzle also", _("Puzzle: also correct")), ("analysis.puzzle answers", _("Puzzle: all answers count")),
@@ -261,6 +274,7 @@ DEFAULTS = {
     "collect": split("row", [55, 45], pane("board", "A"), split("col", [45, 35, 20], pane("entry"), pane("details", "A"), pane("pgn", "A"))),
     "library": split("row", [20, 50, 30], pane("filters", "A"), pane("library", "A"), pane("board", "A")),
     "stats": pane("chart"),
+    "coach": split("row", [24, 40, 36], pane("lessons", "A"), pane("lesson", "A"), pane("board", "A")),
     "settings": split("row", [62, 38], pane("settings"), pane("keymap")),
     "ui": split("row", [56, 44], pane("components"), split("col", [42, 58], pane("library", "A"), pane("board", "A"))),
 }

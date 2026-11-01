@@ -270,7 +270,7 @@ msgstr "chi risolve"
 msgid "answer"
 msgstr "risposta"
 
-#: templates/analysis/puzzle.html core/layouts.py:109
+#: templates/analysis/puzzle.html core/layouts.py:120
 msgid "end"
 msgstr "fine"
 
@@ -285,6 +285,46 @@ msgstr "Precedente"
 #: templates/analysis/puzzle.html
 msgid "Next"
 msgstr "Successiva"
+
+#: templates/coaching/lesson.html templates/help/lesson.html templates/help/lessons.html
+msgid "Homework"
+msgstr ""
+
+#: templates/coaching/lesson.html
+msgid "Homework of %(date)s: %(n)s result back"
+msgid_plural "Homework of %(date)s: %(n)s results back"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/coaching/lesson.html
+msgid "drop the results files your students send on this window"
+msgstr ""
+
+#: templates/coaching/lessons.html core/layouts.py:103
+msgid "Lessons"
+msgstr ""
+
+#: templates/coaching/lessons.html templates/settings/rows.html
+msgid "%(n)s item"
+msgid_plural "%(n)s items"
+msgstr[0] "%(n)s elemento"
+msgstr[1] "%(n)s elementi"
+
+#: templates/coaching/lessons.html
+msgid "%(n)s puzzle"
+msgid_plural "%(n)s puzzles"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/coaching/lessons.html
+msgid "%(n)s result back"
+msgid_plural "%(n)s results back"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/coaching/lessons.html
+msgid "No lessons yet. In the Library, select positions and press %(add)s (or <code>:lesson-add Forks</code>): a lesson with that title is made, and they are its first items."
+msgstr ""
 
 #: templates/components/pane.html
 msgid "pinned"
@@ -762,6 +802,70 @@ msgstr "Ogni riquadro: i tasti impostati qui sono quelli di ogni pulsante."
 msgid "Keys belong to a context: the same key can do different things in a list and on the board."
 msgstr "I tasti appartengono a un contesto: lo stesso tasto può fare cose diverse in una lista e sulla scacchiera."
 
+#: templates/help/lesson.html
+msgid "One lesson: its positions and games in order with your notes, and below them the results of its last homework (students × puzzles, ✓ solved at the first try, ✗ missed, · not done)."
+msgstr ""
+
+#: templates/help/lesson.html library/details.py:42
+msgid "Notes"
+msgstr "Note"
+
+#: templates/help/lesson.html
+msgid "%(note)s writes what to ask or show with the item under the cursor."
+msgstr ""
+
+#: templates/help/lesson.html templates/help/moves.html
+msgid "Tidy up"
+msgstr "Riordinare"
+
+#: templates/help/lesson.html
+msgid "%(remove)s takes the item out of the lesson (u brings it back); %(open)s opens it in Analyse."
+msgstr ""
+
+#: templates/help/lesson.html
+msgid "%(homework)s: the lesson's puzzles as a pack for your students."
+msgstr ""
+
+#: templates/help/lesson.html
+msgid "The Lessons pane (its cursor picks the lesson) and the board, which shows the item under the cursor."
+msgstr ""
+
+#: templates/help/lessons.html
+msgid "Your lessons: material for your students in the order you teach it, with notes. The lesson under the cursor shows in the Lesson pane beside it; its homework goes out from here."
+msgstr ""
+
+#: templates/help/lessons.html
+msgid "Make a lesson"
+msgstr ""
+
+#: templates/help/lessons.html
+msgid "In the Library select positions or games and press %(add)s, or press it in Analyse for the open one: type the lesson's title; a title nobody has makes a new lesson."
+msgstr ""
+
+#: templates/help/lessons.html
+msgid "%(homework)s writes the lesson's puzzles as a pack for your students, with your instructions (and <code>due=2026-11-14</code>). Each student imports it and finds it on Home."
+msgstr ""
+
+#: templates/help/lessons.html templates/views/library.html
+msgid "Results"
+msgstr "Risultati"
+
+#: templates/help/lessons.html
+msgid "Your students send back a results file: drop it on this window. The Lesson pane shows who solved what at the first try."
+msgstr ""
+
+#: templates/help/lessons.html
+msgid "The Coach mode"
+msgstr ""
+
+#: templates/help/lessons.html
+msgid "%(coach)s; its tab shows when Settings → Packs → I teach is on."
+msgstr ""
+
+#: templates/help/lessons.html
+msgid "The Lesson pane and the board of the same link group."
+msgstr ""
+
 #: templates/help/library.html
 msgid "Everything you collected, searchable: positions, games, puzzles, players, sources and tags. Search, select, then act on the selection, or on everything the search found when nothing is selected."
 msgstr "Tutto ciò che hai raccolto, consultabile: posizioni, partite, esercizi, giocatori, fonti e tag. Cerca, seleziona, poi agisci sulla selezione, o su tutto ciò che la ricerca ha trovato se non è selezionato nulla."
@@ -877,10 +981,6 @@ msgstr "Commentare e annotare"
 #: templates/help/moves.html
 msgid "%(comment)s comment on the move; %(good)s … 7 symbols like ! and ?; %(annotate)s all symbols; %(mark)s marks the move as good."
 msgstr "%(comment)s commenta la mossa; %(good)s … 7 simboli come ! e ?; %(annotate)s tutti i simboli; %(mark)s segna la mossa come buona."
-
-#: templates/help/moves.html
-msgid "Tidy up"
-msgstr "Riordinare"
 
 #: templates/help/moves.html
 msgid "%(promote)s makes a variation the main line, %(delete)s deletes from the cursor on, %(fold)s folds a variation away."
@@ -1394,7 +1494,7 @@ msgstr "Impostazioni → Licenze elenca ogni parte dell'app con la sua licenza."
 msgid "What to do now: the puzzles due today, sessions that start with one key, today's numbers and your pattern library."
 msgstr "Cosa fare ora: gli esercizi in scadenza oggi, sessioni che partono con un tasto, i numeri di oggi e la tua biblioteca di schemi."
 
-#: templates/help/today.html core/layouts.py:25 design/commands/shell.toml:mode.train
+#: templates/help/today.html core/layouts.py:25 design/commands/coaching.toml:homework.start
 msgid "Train"
 msgstr "Allenamento"
 
@@ -1480,11 +1580,11 @@ msgstr "esclusa"
 msgid "diagram"
 msgstr "diagramma"
 
-#: templates/library/results.html templates/views/library.html core/layouts.py:124
+#: templates/library/results.html templates/views/library.html core/layouts.py:135
 msgid "trash"
 msgstr "cestino"
 
-#: templates/library/results.html core/layouts.py:110
+#: templates/library/results.html core/layouts.py:121
 msgid "training"
 msgstr "allenamento"
 
@@ -1572,7 +1672,7 @@ msgstr "Questa pagina si apre solo dal link che Spaced Positions fornisce all'av
 msgid "Start it from its icon, or run <code>spos</code> in a terminal. If it is already running, <code>spos</code> opens the right link."
 msgstr "Avvialo dalla sua icona o con <code>spos</code> in un terminale. Se è già in esecuzione, <code>spos</code> apre il link giusto."
 
-#: templates/settings/keymap.html core/layouts.py:156
+#: templates/settings/keymap.html core/layouts.py:167
 msgid "Keymap"
 msgstr "Scorciatoie"
 
@@ -1633,12 +1733,6 @@ msgstr "per %(name)s"
 #: templates/settings/rows.html
 msgid "for anyone"
 msgstr "per tutti"
-
-#: templates/settings/rows.html
-msgid "%(n)s item"
-msgid_plural "%(n)s items"
-msgstr[0] "%(n)s elemento"
-msgstr[1] "%(n)s elementi"
 
 #: templates/settings/rows.html
 msgid "No packs made yet."
@@ -1784,7 +1878,7 @@ msgstr "leader"
 msgid "commands"
 msgstr "comandi"
 
-#: templates/shell.html core/layouts.py:56 core/usage.py:137
+#: templates/shell.html core/layouts.py:57 core/usage.py:137
 msgid "keys"
 msgstr "tasti"
 
@@ -1966,7 +2060,7 @@ msgstr "niente da ripassare"
 msgid "next %(when)s"
 msgstr "prossima %(when)s"
 
-#: templates/training/launcher.html core/layouts.py:162 stats/models.py:13
+#: templates/training/launcher.html core/layouts.py:173 stats/models.py:13
 msgid "Storm"
 msgstr "Storm"
 
@@ -2086,7 +2180,7 @@ msgstr "mancato"
 msgid "Puzzles of this session"
 msgstr "Esercizi di questa sessione"
 
-#: templates/training/result.html core/layouts.py:107 library/importer.py:60
+#: templates/training/result.html core/layouts.py:118 library/importer.py:60
 msgid "Puzzle"
 msgstr "Esercizio"
 
@@ -2142,7 +2236,7 @@ msgstr "Fatto"
 msgid "analysis · collect"
 msgstr "analisi · inserimento"
 
-#: templates/views/continue.html core/layouts.py:165
+#: templates/views/continue.html core/layouts.py:176
 msgid "Continue"
 msgstr "Continua"
 
@@ -2246,7 +2340,7 @@ msgstr "Appena salvate"
 msgid "Evaluate the main line"
 msgstr "Valuta la linea principale"
 
-#: templates/views/filters.html core/layouts.py:127
+#: templates/views/filters.html core/layouts.py:138
 msgid "Filters"
 msgstr "Filtri"
 
@@ -2270,9 +2364,13 @@ msgstr "Cerca comandi"
 msgid "search commands · ↵ new keys · ⌫ remove your binding"
 msgstr "cerca comandi · ↵ nuovi tasti · ⌫ rimuovi la tua scorciatoia"
 
-#: templates/views/keymap.html templates/views/settings.html static/js/core/help.js:83
+#: templates/views/keymap.html templates/views/lessons.html templates/views/settings.html
 msgid "Loading…"
 msgstr "Caricamento…"
+
+#: templates/views/lesson.html
+msgid "The lesson under the cursor of the Lessons pane (same link group) shows here: its items, your notes, its homework's results."
+msgstr ""
 
 #: templates/views/library.html
 msgid "Query"
@@ -2302,19 +2400,15 @@ msgstr "Giocatori"
 msgid "Sources"
 msgstr "Fonti"
 
-#: templates/views/library.html
-msgid "Results"
-msgstr "Risultati"
-
-#: templates/views/library.html core/layouts.py:123 core/layouts.py:137
+#: templates/views/library.html core/layouts.py:134 core/layouts.py:148
 msgid "tag"
 msgstr "tagga"
 
-#: templates/views/library.html core/layouts.py:123
+#: templates/views/library.html core/layouts.py:134
 msgid "train"
 msgstr "allena"
 
-#: templates/views/library.html core/layouts.py:124
+#: templates/views/library.html core/layouts.py:110 core/layouts.py:135
 msgid "analyse"
 msgstr "analizza"
 
@@ -2322,7 +2416,7 @@ msgstr "analizza"
 msgid "export"
 msgstr "esporta"
 
-#: templates/views/library.html core/layouts.py:104
+#: templates/views/library.html core/layouts.py:115
 msgid "clear"
 msgstr "svuota"
 
@@ -2487,6 +2581,26 @@ msgstr[0] "%(n)s da ripassare"
 msgstr[1] "%(n)s da ripassare"
 
 #: templates/views/today.html
+msgid "from your coach"
+msgstr ""
+
+#: templates/views/today.html
+msgid "from %(coach)s · %(tried)s of %(total)s tried"
+msgstr ""
+
+#: templates/views/today.html
+msgid "due %(due)s"
+msgstr ""
+
+#: templates/views/today.html
+msgid "results sent"
+msgstr ""
+
+#: templates/views/today.html
+msgid "Send results"
+msgstr ""
+
+#: templates/views/today.html
 msgid "Due now"
 msgstr "Da ripassare ora"
 
@@ -2518,7 +2632,7 @@ msgstr "I più deboli:"
 msgid "solved · accuracy · days in a row"
 msgstr "risolti · precisione · giorni di fila"
 
-#: templates/views/today.html core/layouts.py:160
+#: templates/views/today.html core/layouts.py:171
 msgid "Today"
 msgstr "Oggi"
 
@@ -2970,6 +3084,64 @@ msgstr "re non in {square}"
 msgid "rook not on {square}"
 msgstr "torre non in {square}"
 
+#: coaching/commands.py:77
+msgid "Note saved"
+msgstr ""
+
+#: coaching/commands.py:21
+msgid "which lesson? :lesson-add Forks"
+msgstr ""
+
+#: coaching/commands.py:29
+msgid "nothing selected to add"
+msgstr ""
+
+#: coaching/commands.py:59 coaching/commands.py:74
+msgid "no such item"
+msgstr ""
+
+#: coaching/commands.py:71
+msgid "which item?"
+msgstr ""
+
+#: coaching/commands.py:46
+msgid "{n} added to the lesson {title}"
+msgid_plural "{n} added to the lesson {title}"
+msgstr[0] ""
+msgstr[1] ""
+
+#: coaching/commands.py:63
+msgid "Taken out of the lesson {title}"
+msgstr ""
+
+#: coaching/commands.py:43
+msgid "already in the lesson {title} (or nothing to add)"
+msgstr ""
+
+#: coaching/homework.py:42
+msgid "this lesson has no puzzles: add positions with a puzzle (L in the Library)"
+msgstr ""
+
+#: coaching/homework.py:113
+msgid "not a results file (no homework or no student)"
+msgstr ""
+
+#: coaching/homework.py:115
+msgid "these results were written by a newer version of Spaced Positions: update the app"
+msgstr ""
+
+#: coaching/homework.py:111
+msgid "not a results file"
+msgstr ""
+
+#: coaching/views.py:84
+msgid "a student"
+msgstr ""
+
+#: coaching/views.py:100
+msgid "Results of {student} for {title}"
+msgstr ""
+
 #: core/chess_views.py:51
 msgid "too large to paste: import it as a file (:import)"
 msgstr "troppo grande da incollare: importalo come file (:import)"
@@ -3010,7 +3182,7 @@ msgstr "Una posizione o una partita: mosse, varianti, commenti, tag, motore, ese
 msgid "Get material in fast: board editor, paste FEN/PGN, rapid entry from a book."
 msgstr "Inserire materiale in fretta: editor della scacchiera, incolla FEN/PGN, inserimento rapido da un libro."
 
-#: core/layouts.py:28 core/layouts.py:121 design/commands/library.toml:library.collection
+#: core/layouts.py:28 core/layouts.py:132 design/commands/library.toml:library.collection
 msgid "Library"
 msgstr "Biblioteca"
 
@@ -3018,7 +3190,7 @@ msgstr "Biblioteca"
 msgid "Find and organise positions, games, puzzles, players, sources and tags."
 msgstr "Trovare e organizzare posizioni, partite, esercizi, giocatori, fonti e tag."
 
-#: core/layouts.py:29 core/layouts.py:141 design/commands/shell.toml:mode.stats
+#: core/layouts.py:29 core/layouts.py:152 design/commands/shell.toml:mode.stats
 msgid "Stats"
 msgstr "Statistiche"
 
@@ -3026,7 +3198,7 @@ msgstr "Statistiche"
 msgid "Progress: collection, analysis and training statistics, records, milestones."
 msgstr "Progressi: statistiche di collezione, analisi e allenamento, record, traguardi."
 
-#: core/layouts.py:30 core/layouts.py:150 design/commands/settings.toml:settings.step
+#: core/layouts.py:30 core/layouts.py:161 design/commands/settings.toml:settings.step
 msgid "Settings"
 msgstr "Impostazioni"
 
@@ -3034,629 +3206,665 @@ msgstr "Impostazioni"
 msgid "Theme, board, pieces, keymap, training rules and data."
 msgstr "Tema, scacchiera, pezzi, scorciatoie, regole di allenamento e dati."
 
-#: core/layouts.py:31 design/commands/shell.toml:mode.ui design/commands/ui.toml:demo.flash
+#: core/layouts.py:31 design/commands/coaching.toml:lesson.add design/commands/coaching.toml:lesson.addto
+msgid "Coach"
+msgstr ""
+
+#: core/layouts.py:31
+msgid "Lessons for your students: material in an order with notes, homework, the results that come back."
+msgstr ""
+
+#: core/layouts.py:32 design/commands/shell.toml:mode.ui design/commands/ui.toml:demo.flash
 msgid "Style guide"
 msgstr "Guida di stile"
 
-#: core/layouts.py:31
+#: core/layouts.py:32
 msgid "Every component in every state, and a playground for panes."
 msgstr "Ogni componente in ogni stato, e un campo prova per i riquadri."
 
-#: core/layouts.py:56
+#: core/layouts.py:57
 msgid "change view"
 msgstr "cambia vista"
 
-#: core/layouts.py:56
+#: core/layouts.py:57
 msgid "split"
 msgstr "dividi"
 
-#: core/layouts.py:59
+#: core/layouts.py:60
 msgid "flip"
 msgstr "gira"
 
-#: core/layouts.py:60 core/layouts.py:70 core/layouts.py:114
+#: core/layouts.py:61 core/layouts.py:71 core/layouts.py:125
 msgid "back"
 msgstr "indietro"
 
-#: core/layouts.py:61 core/layouts.py:71 core/layouts.py:114
+#: core/layouts.py:62 core/layouts.py:72 core/layouts.py:125
 msgid "forward"
 msgstr "avanti"
 
-#: core/layouts.py:62
+#: core/layouts.py:63
 msgid "type a move"
 msgstr "digita una mossa"
 
-#: core/layouts.py:63
+#: core/layouts.py:64
 msgid "set up the position"
 msgstr "imposta la posizione"
 
-#: core/layouts.py:64
+#: core/layouts.py:65
 msgid "square tool"
 msgstr "strumento case"
 
-#: core/layouts.py:72 core/layouts.py:118
+#: core/layouts.py:73 core/layouts.py:129
 msgid "variation"
 msgstr "variante"
 
-#: core/layouts.py:74
+#: core/layouts.py:75
 msgid "mark"
 msgstr "segna"
 
-#: core/layouts.py:75 core/layouts.py:98
+#: core/layouts.py:76 core/layouts.py:99
 msgid "comment"
 msgstr "commenta"
 
-#: core/layouts.py:76
+#: core/layouts.py:77
 msgid "main line"
 msgstr "linea principale"
 
-#: core/layouts.py:77
+#: core/layouts.py:78
 msgid "delete"
 msgstr "elimina"
 
-#: core/layouts.py:188 core/layouts.py:206
+#: core/layouts.py:199 core/layouts.py:219
 msgid "Next variation at this move"
 msgstr "Variante successiva a questa mossa"
 
-#: core/layouts.py:188
+#: core/layouts.py:199
 msgid "Previous variation at this move"
 msgstr "Variante precedente a questa mossa"
 
-#: core/layouts.py:190
+#: core/layouts.py:201
 msgid "Mark as good"
 msgstr "Segna come buona"
 
-#: core/layouts.py:191
+#: core/layouts.py:202
 msgid "Mark as bad"
 msgstr "Segna come cattiva"
 
-#: core/layouts.py:191
+#: core/layouts.py:202
 msgid "Remove the mark"
 msgstr "Togli il segno"
 
-#: core/layouts.py:193 core/layouts.py:201
+#: core/layouts.py:204 core/layouts.py:214
 msgid "Puzzle: starts after this move"
 msgstr "Esercizio: inizia dopo questa mossa"
 
-#: core/layouts.py:194 core/layouts.py:201
+#: core/layouts.py:205 core/layouts.py:214
 msgid "Puzzle: the solution ends here"
 msgstr "Esercizio: la soluzione finisce qui"
 
-#: core/layouts.py:194 core/layouts.py:203
+#: core/layouts.py:205 core/layouts.py:216
 msgid "Puzzle: ready for training"
 msgstr "Esercizio: pronto per l'allenamento"
 
-#: core/layouts.py:195
+#: core/layouts.py:206
 msgid "Next position of the list"
 msgstr "Posizione successiva della lista"
 
-#: core/layouts.py:195
+#: core/layouts.py:206
 msgid "Previous position of the list"
 msgstr "Posizione precedente della lista"
 
-#: core/layouts.py:202
+#: core/layouts.py:215
 msgid "Puzzle: also correct"
 msgstr "Esercizio: anche corretta"
 
-#: core/layouts.py:202
+#: core/layouts.py:215
 msgid "Puzzle: all answers count"
 msgstr "Esercizio: tutte le risposte contano"
 
-#: core/layouts.py:203
+#: core/layouts.py:216
 msgid "Puzzle: discard"
 msgstr "Esercizio: elimina"
 
-#: core/layouts.py:214 core/layouts.py:229
+#: core/layouts.py:227 core/layouts.py:242
 msgid "Storm, 3 minutes"
 msgstr "Storm, 3 minuti"
 
-#: core/layouts.py:216
+#: core/layouts.py:229
 msgid "Next page"
 msgstr "Pagina successiva"
 
-#: core/layouts.py:217
+#: core/layouts.py:230
 msgid "Previous page"
 msgstr "Pagina precedente"
 
-#: core/layouts.py:217
+#: core/layouts.py:230
 msgid "Next diagram number"
 msgstr "Numero di diagramma successivo"
 
-#: core/layouts.py:218
+#: core/layouts.py:231
 msgid "Previous diagram number"
 msgstr "Numero di diagramma precedente"
 
-#: core/layouts.py:220
+#: core/layouts.py:233
 msgid "Next chart"
 msgstr "Grafico successivo"
 
-#: core/layouts.py:220
+#: core/layouts.py:233
 msgid "Previous chart"
 msgstr "Grafico precedente"
 
-#: core/layouts.py:221
+#: core/layouts.py:234
 msgid "Period: 7 days"
 msgstr "Periodo: 7 giorni"
 
-#: core/layouts.py:221
+#: core/layouts.py:234
 msgid "Period: 30 days"
 msgstr "Periodo: 30 giorni"
 
-#: core/layouts.py:221
+#: core/layouts.py:234
 msgid "Period: 90 days"
 msgstr "Periodo: 90 giorni"
 
-#: core/layouts.py:222
+#: core/layouts.py:235
 msgid "Period: a year"
 msgstr "Periodo: un anno"
 
-#: core/layouts.py:222
+#: core/layouts.py:235
 msgid "Period: everything"
 msgstr "Periodo: tutto"
 
-#: core/layouts.py:223
+#: core/layouts.py:236
 msgid "Show what you pasted"
 msgstr "Mostra ciò che hai incollato"
 
-#: core/layouts.py:224
+#: core/layouts.py:237
 msgid "Next value"
 msgstr "Valore successivo"
 
-#: core/layouts.py:224
+#: core/layouts.py:237
 msgid "Previous value"
 msgstr "Valore precedente"
 
-#: core/layouts.py:84 core/settings_view.py:24 stats/metrics.py:522
+#: core/layouts.py:85 core/settings_view.py:24 stats/metrics.py:522
 msgid "Board"
 msgstr "Scacchiera"
 
-#: core/layouts.py:84
+#: core/layouts.py:85
 msgid "The interactive board: moves, drawings, setup, typed moves."
 msgstr "La scacchiera interattiva: mosse, disegni, impostazione, mosse digitate."
 
-#: core/layouts.py:88
+#: core/layouts.py:89
 msgid "Moves"
 msgstr "Mosse"
 
-#: core/layouts.py:88
+#: core/layouts.py:89
 msgid "The analysis as a book-style move tree."
 msgstr "L'analisi come albero delle mosse, come in un libro."
 
-#: core/layouts.py:92 core/settings.py:49 core/settings_view.py:25
+#: core/layouts.py:93 core/settings.py:49 core/settings_view.py:25
 msgid "Engine"
 msgstr "Motore"
 
-#: core/layouts.py:92
+#: core/layouts.py:93
 msgid "Stockfish lines and evaluation."
 msgstr "Linee e valutazione di Stockfish."
 
-#: core/layouts.py:96
+#: core/layouts.py:97
 msgid "Inspector"
 msgstr "Ispettore"
 
-#: core/layouts.py:96
+#: core/layouts.py:97
 msgid "The current move and position: comment, marks, tags, source."
 msgstr "La mossa e la posizione attuali: commento, segni, tag, fonte."
 
-#: core/layouts.py:102 design/commands/library.toml:details.edit design/commands/library.toml:details.clear
+#: core/layouts.py:103
+msgid "Your lessons: material for your students in an order; homework goes out from here."
+msgstr ""
+
+#: core/layouts.py:108
+msgid "Lesson"
+msgstr ""
+
+#: core/layouts.py:108
+msgid "The lesson's positions and games with your notes, and its homework's results."
+msgstr ""
+
+#: core/layouts.py:113 design/commands/library.toml:details.edit design/commands/library.toml:details.clear
 msgid "Details"
 msgstr "Dettagli"
 
-#: core/layouts.py:102
+#: core/layouts.py:113
 msgid "The game, position, player or source under the cursor: every field, editable."
 msgstr "La partita, posizione, giocatore o fonte sotto il cursore: ogni campo, modificabile."
 
-#: core/layouts.py:107
+#: core/layouts.py:118
 msgid "The puzzle at the cursor: its start, its solution lines, whether it is in training."
 msgstr "L'esercizio al cursore: il suo inizio, le sue linee di soluzione, se è in allenamento."
 
-#: core/layouts.py:113
+#: core/layouts.py:124
 msgid "Eval graph"
 msgstr "Grafico di valutazione"
 
-#: core/layouts.py:113
+#: core/layouts.py:124
 msgid "The engine's evaluation over the main line; mistakes marked."
 msgstr "La valutazione del motore lungo la linea principale; errori segnati."
 
-#: core/layouts.py:117
+#: core/layouts.py:128
 msgid "Variation graph"
 msgstr "Grafico delle varianti"
 
-#: core/layouts.py:117
+#: core/layouts.py:128
 msgid "The move tree as a graph: the shape of a big analysis."
 msgstr "L'albero delle mosse come grafico: la forma di una grande analisi."
 
-#: core/layouts.py:121
+#: core/layouts.py:132
 msgid "Positions, games, puzzles and more, with the query bar."
 msgstr "Posizioni, partite, esercizi e altro, con la barra di ricerca."
 
-#: core/layouts.py:127
+#: core/layouts.py:138
 msgid "Facets that write into the library query."
 msgstr "Faccette che scrivono nella ricerca della biblioteca."
 
-#: core/layouts.py:131
+#: core/layouts.py:142
 msgid "Session"
 msgstr "Sessione"
 
-#: core/layouts.py:131
+#: core/layouts.py:142
 msgid "Sessions to start, the running session (clock, combo, lives, prompt), the result."
 msgstr "Le sessioni da avviare, la sessione in corso (orologio, combo, vite, consegna), il risultato."
 
-#: core/layouts.py:135
+#: core/layouts.py:146
 msgid "Entry session"
 msgstr "Sessione di inserimento"
 
-#: core/layouts.py:135
+#: core/layouts.py:146
 msgid "Source, page, diagram number and presets for rapid entry."
 msgstr "Fonte, pagina, numero del diagramma e preimpostazioni per l'inserimento rapido."
 
-#: core/layouts.py:141
+#: core/layouts.py:152
 msgid "Progress in charts and numbers: every number drills down."
 msgstr "Progressi in grafici e numeri: ogni numero si può approfondire."
 
-#: core/layouts.py:146
+#: core/layouts.py:157
 msgid "PGN / FEN"
 msgstr "PGN / FEN"
 
-#: core/layouts.py:146
+#: core/layouts.py:157
 msgid "The position or game as text; paste to load."
 msgstr "La posizione o la partita come testo; incolla per caricare."
 
-#: core/layouts.py:150
+#: core/layouts.py:161
 msgid "Every setting, searchable: themes, colours, type, board, keys, training, engine, data."
 msgstr "Ogni impostazione, ricercabile: temi, colori, caratteri, scacchiera, tasti, allenamento, motore, dati."
 
-#: core/layouts.py:156
+#: core/layouts.py:167
 msgid "Every command and its keys: ↵ binds new keys."
 msgstr "Ogni comando e i suoi tasti: ↵ assegna nuovi tasti."
 
-#: core/layouts.py:160
+#: core/layouts.py:171
 msgid "What to do now: due cards, one-key sessions, today's numbers, the pattern library."
 msgstr "Cosa fare ora: schede da ripassare, sessioni con un tasto, i numeri di oggi, la biblioteca di schemi."
 
-#: core/layouts.py:165
+#: core/layouts.py:176
 msgid "The open analysis, the next diagram, a paste box, recent work."
 msgstr "L'analisi aperta, il prossimo diagramma, un riquadro per incollare, il lavoro recente."
 
-#: core/layouts.py:170
+#: core/layouts.py:181
 msgid "Components"
 msgstr "Componenti"
 
-#: core/layouts.py:170
+#: core/layouts.py:181
 msgid "Every component in every state."
 msgstr "Ogni componente in ogni stato."
 
-#: core/layouts.py:93 static/js/core/tagpicker.js:136
+#: core/layouts.py:94 static/js/core/tagpicker.js:136
 msgid "on / off"
 msgstr "acceso / spento"
 
-#: core/layouts.py:93
+#: core/layouts.py:94
 msgid "play best"
 msgstr "gioca la migliore"
 
-#: core/layouts.py:93
+#: core/layouts.py:94
 msgid "lines"
 msgstr "linee"
 
-#: core/layouts.py:98
+#: core/layouts.py:99
 msgid "annotate"
 msgstr "annota"
 
-#: core/layouts.py:98
+#: core/layouts.py:99
 msgid "tags"
 msgstr "tag"
 
-#: core/layouts.py:99 core/layouts.py:153 core/layouts.py:162
+#: core/layouts.py:100 core/layouts.py:164 core/layouts.py:173
 msgid "next section"
 msgstr "sezione successiva"
 
-#: core/layouts.py:99 core/layouts.py:173
+#: core/layouts.py:100 core/layouts.py:184
 msgid "fold"
 msgstr "comprimi"
 
-#: core/layouts.py:104 core/layouts.py:147 core/layouts.py:152
+#: core/layouts.py:105 core/layouts.py:110
+msgid "homework"
+msgstr ""
+
+#: core/layouts.py:105
+msgid "next lesson"
+msgstr ""
+
+#: core/layouts.py:110
+msgid "note"
+msgstr ""
+
+#: core/layouts.py:110
+msgid "take out"
+msgstr ""
+
+#: core/layouts.py:115 core/layouts.py:158 core/layouts.py:163
 msgid "edit"
 msgstr "modifica"
 
-#: core/layouts.py:104
+#: core/layouts.py:115
 msgid "new player"
 msgstr "nuovo giocatore"
 
-#: core/layouts.py:104
+#: core/layouts.py:115
 msgid "new source"
 msgstr "nuova fonte"
 
-#: core/layouts.py:109
+#: core/layouts.py:120
 msgid "set up"
 msgstr "impostato"
 
-#: core/layouts.py:109
+#: core/layouts.py:120
 msgid "also correct"
 msgstr "anche corretta"
 
-#: core/layouts.py:110
+#: core/layouts.py:121
 msgid "next position"
 msgstr "posizione successiva"
 
-#: core/layouts.py:114
+#: core/layouts.py:125
 msgid "evaluate"
 msgstr "valuta"
 
-#: core/layouts.py:123
+#: core/layouts.py:134
 msgid "query"
 msgstr "ricerca"
 
-#: core/layouts.py:123 static/js/core/importer.js:79
+#: core/layouts.py:134 static/js/core/importer.js:79
 msgid "select"
 msgstr "seleziona"
 
-#: core/layouts.py:124
+#: core/layouts.py:135
 msgid "display"
 msgstr "visualizzazione"
 
-#: core/layouts.py:128 static/js/core/importer.js:79
+#: core/layouts.py:139 static/js/core/importer.js:79
 msgid "down"
 msgstr "giù"
 
-#: core/layouts.py:128
+#: core/layouts.py:139
 msgid "add / remove"
 msgstr "aggiungi / togli"
 
-#: core/layouts.py:128
+#: core/layouts.py:139
 msgid "exclude"
 msgstr "escludi"
 
-#: core/layouts.py:136
+#: core/layouts.py:147
 msgid "save & next"
 msgstr "salva & avanti"
 
-#: core/layouts.py:136
+#: core/layouts.py:147
 msgid "source"
 msgstr "fonte"
 
-#: core/layouts.py:136
+#: core/layouts.py:147
 msgid "diagram +1"
 msgstr "diagramma +1"
 
-#: core/layouts.py:137
+#: core/layouts.py:148
 msgid "ready"
 msgstr "pronto"
 
-#: core/layouts.py:142
+#: core/layouts.py:153
 msgid "next chart"
 msgstr "grafico successivo"
 
-#: core/layouts.py:142
+#: core/layouts.py:153
 msgid "points"
 msgstr "punti"
 
-#: core/layouts.py:142
+#: core/layouts.py:153
 msgid "drill down"
 msgstr "approfondisci"
 
-#: core/layouts.py:143
+#: core/layouts.py:154
 msgid "table"
 msgstr "tabella"
 
-#: core/layouts.py:143
+#: core/layouts.py:154
 msgid "period"
 msgstr "periodo"
 
-#: core/layouts.py:147
+#: core/layouts.py:158
 msgid "copy FEN"
 msgstr "copia FEN"
 
-#: core/layouts.py:147
+#: core/layouts.py:158
 msgid "copy PGN"
 msgstr "copia PGN"
 
-#: core/layouts.py:147
+#: core/layouts.py:158
 msgid "show what you pasted"
 msgstr "mostra ciò che hai incollato"
 
-#: core/layouts.py:152 core/layouts.py:157
+#: core/layouts.py:163 core/layouts.py:168
 msgid "search"
 msgstr "cerca"
 
-#: core/layouts.py:152
+#: core/layouts.py:163
 msgid "change"
 msgstr "cambia"
 
-#: core/layouts.py:152
+#: core/layouts.py:163
 msgid "reset"
 msgstr "ripristina"
 
-#: core/layouts.py:157
+#: core/layouts.py:168
 msgid "new keys"
 msgstr "nuovi tasti"
 
-#: core/layouts.py:157
+#: core/layouts.py:168
 msgid "remove"
 msgstr "rimuovi"
 
-#: core/layouts.py:162 static/js/islands/train.js:16
+#: core/layouts.py:173 static/js/islands/train.js:16
 msgid "review"
 msgstr "ripassa"
 
-#: core/layouts.py:162
+#: core/layouts.py:173
 msgid "weakest"
 msgstr "i più deboli"
 
-#: core/layouts.py:167
+#: core/layouts.py:178
 msgid "analysis"
 msgstr "analisi"
 
-#: core/layouts.py:167
+#: core/layouts.py:178
 msgid "collect"
 msgstr "inserisci"
 
-#: core/layouts.py:167
+#: core/layouts.py:178
 msgid "paste box"
 msgstr "riquadro per incollare"
 
-#: core/layouts.py:167
+#: core/layouts.py:178
 msgid "open"
 msgstr "apri"
 
-#: core/layouts.py:172 static/js/core/help.js:149
+#: core/layouts.py:183 static/js/core/help.js:149
 msgid "scroll"
 msgstr "scorri"
 
-#: core/layouts.py:172
+#: core/layouts.py:183
 msgid "half page"
 msgstr "mezza pagina"
 
-#: core/layouts.py:173
+#: core/layouts.py:184
 msgid "fold all"
 msgstr "comprimi tutto"
 
-#: core/layouts.py:173
+#: core/layouts.py:184
 msgid "edit a field"
 msgstr "modifica un campo"
 
-#: core/layouts.py:173
+#: core/layouts.py:184
 msgid "flash demo"
 msgstr "demo del lampeggio"
 
-#: core/server_commands.py:67
+#: core/server_commands.py:68
 msgid "follow the system"
 msgstr "come il sistema"
 
-#: core/server_commands.py:237
+#: core/server_commands.py:238
 msgid "Stopping Spaced Positions …"
 msgstr "Spaced Positions si sta chiudendo …"
 
-#: core/server_commands.py:297
+#: core/server_commands.py:298
 msgid "Theme copied as TOML: paste it into Settings → Data to import it elsewhere"
 msgstr "Tema copiato come TOML: incollalo in Impostazioni → Dati per importarlo altrove"
 
-#: core/server_commands.py:58
+#: core/server_commands.py:59
 msgid "which theme? e.g. :theme ink"
 msgstr "quale tema? ad es. :theme ink"
 
-#: core/server_commands.py:88
+#: core/server_commands.py:89
 msgid "write token=value, e.g. :set main=#e2b714"
 msgstr "scrivi token=valore, ad es. :set main=#e2b714"
 
-#: core/server_commands.py:152
+#: core/server_commands.py:153
 msgid "Nothing to reset"
 msgstr "Niente da ripristinare"
 
-#: core/server_commands.py:178
+#: core/server_commands.py:179
 msgid "Your CSS is applied (hold Esc while the app loads, or open it with ?safe, to start without it)"
 msgstr "Il tuo CSS è applicato (tieni premuto Esc durante il caricamento o apri con ?safe per avviare senza)"
 
-#: core/server_commands.py:178
+#: core/server_commands.py:179
 msgid "Your CSS is off"
 msgstr "Il tuo CSS è disattivato"
 
-#: core/server_commands.py:189
+#: core/server_commands.py:190
 msgid "name the layout: :layout-save <name>"
 msgstr "dai un nome al layout: :layout-save <nome>"
 
-#: core/server_commands.py:192
+#: core/server_commands.py:193
 msgid "no layout to save"
 msgstr "nessun layout da salvare"
 
-#: core/server_commands.py:233 design/commands/shell.toml:app.quit
+#: core/server_commands.py:234 design/commands/shell.toml:app.quit
 msgid "only when started with spos"
 msgstr "solo se avviato con spos"
 
-#: core/server_commands.py:252
+#: core/server_commands.py:253
 msgid "a name, e.g. :theme-save my nord"
 msgstr "un nome, ad es. :theme-save mio nord"
 
-#: core/server_commands.py:320
+#: core/server_commands.py:321
 msgid "write the keys, then the command: :map space o train.storm 5"
 msgstr "scrivi i tasti, poi il comando: :map space o train.storm 5"
 
-#: core/server_commands.py:69
+#: core/server_commands.py:70
 msgid "Theme: {label}"
 msgstr "Tema: {label}"
 
-#: core/server_commands.py:196
+#: core/server_commands.py:197
 msgid "Saved layout '{name}'"
 msgstr "Layout «{name}» salvato"
 
-#: core/server_commands.py:209
+#: core/server_commands.py:210
 msgid "Backed up: {name} ({size} MB)"
 msgstr "Backup fatto: {name} ({size} MB)"
 
-#: core/server_commands.py:227
+#: core/server_commands.py:228
 msgid "Opened {folder}"
 msgstr "{folder} aperta"
 
-#: core/server_commands.py:266
+#: core/server_commands.py:267
 msgid "Theme {label} saved and chosen"
 msgstr "Tema {label} salvato e scelto"
 
-#: core/server_commands.py:283
+#: core/server_commands.py:284
 msgid "Theme {label} deleted"
 msgstr "Tema {label} eliminato"
 
-#: core/server_commands.py:353
+#: core/server_commands.py:354
 msgid "{keys} unmapped (was {title})"
 msgstr "{keys} liberato (era {title})"
 
-#: core/server_commands.py:370
+#: core/server_commands.py:371
 msgid "Reset {n} key binding to the defaults"
 msgid_plural "Reset {n} key bindings to the defaults"
 msgstr[0] "{n} scorciatoia ripristinata"
 msgstr[1] "{n} scorciatoie ripristinate"
 
-#: core/server_commands.py:62 core/settings_io.py:109
+#: core/server_commands.py:63 core/settings_io.py:109
 msgid "no theme '{name}'"
 msgstr "nessun tema «{name}»"
 
-#: core/server_commands.py:138 core/server_commands.py:152
+#: core/server_commands.py:139 core/server_commands.py:153
 msgid "Reset {names}"
 msgstr "Ripristinato: {names}"
 
-#: core/server_commands.py:148
+#: core/server_commands.py:149
 msgid "not set: {names}"
 msgstr "non impostato: {names}"
 
-#: core/server_commands.py:170
+#: core/server_commands.py:171
 msgid "at most {n} characters"
 msgstr "al massimo {n} caratteri"
 
-#: core/server_commands.py:261
+#: core/server_commands.py:262
 msgid "'{name}' is a built-in theme: choose another name"
 msgstr "«{name}» è un tema incluso: scegli un altro nome"
 
-#: core/server_commands.py:277
+#: core/server_commands.py:278
 msgid "no theme of yours called '{name}' (built-in themes stay)"
 msgstr "nessun tuo tema si chiama «{name}» (i temi inclusi restano)"
 
-#: core/server_commands.py:296
+#: core/server_commands.py:297
 msgid "{label} (mine)"
 msgstr "{label} (mio)"
 
-#: core/server_commands.py:351
+#: core/server_commands.py:352
 msgid "'{keys}' isn't bound in {where}"
 msgstr "«{keys}» non è assegnato in {where}"
 
-#: core/server_commands.py:226
+#: core/server_commands.py:227
 msgid "could not open {folder}: {error}"
 msgstr "impossibile aprire {folder}: {error}"
 
-#: core/server_commands.py:266 core/settings_io.py:182
+#: core/server_commands.py:267 core/settings_io.py:182
 msgid "check contrast: {problems}"
 msgstr "controlla il contrasto: {problems}"
 
-#: core/settings.py:95
+#: core/settings.py:96
 msgid "English"
 msgstr "inglese"
 
-#: core/settings.py:95
+#: core/settings.py:96
 msgid "German"
 msgstr "tedesco"
 
-#: core/settings.py:95
+#: core/settings.py:96
 msgid "French"
 msgstr "francese"
 
-#: core/settings.py:95
+#: core/settings.py:96
 msgid "Italian"
 msgstr "italiano"
 
@@ -3825,50 +4033,58 @@ msgid "Numbers count up on the result screen and in Stats"
 msgstr "I numeri salgono nella schermata dei risultati e nelle Statistiche"
 
 #: core/settings.py:62
+msgid "I teach"
+msgstr ""
+
+#: core/settings.py:62
+msgid "Shows the Coach mode: lessons, homework for your students, their results"
+msgstr ""
+
+#: core/settings.py:63
 msgid "Your name in packs"
 msgstr "Il tuo nome nei pacchetti"
 
-#: core/settings.py:62
+#: core/settings.py:63
 msgid "Shown to students with the packs you make (else the player marked as you)"
 msgstr "Mostrato con i pacchetti che crei (altrimenti il giocatore segnato come te)"
 
-#: core/settings.py:63
+#: core/settings.py:64
 msgid "Look for updates"
 msgstr "Cerca aggiornamenti"
 
-#: core/settings.py:63
+#: core/settings.py:64
 msgid "At most once a day, ask GitHub whether there is a newer version (nothing else is sent)"
 msgstr "Al massimo una volta al giorno, chiede a GitHub se c'è una versione più recente (non viene inviato altro)"
 
-#: core/settings.py:64
+#: core/settings.py:65
 msgid "Stop by itself"
 msgstr "Fermati da solo"
 
-#: core/settings.py:64
+#: core/settings.py:65
 msgid "The app stops 10 minutes after the last tab was closed (started without a console: on)"
 msgstr "L'app si ferma 10 minuti dopo la chiusura dell'ultima scheda (avviata senza console: sì)"
 
-#: core/settings.py:111
+#: core/settings.py:112
 msgid "automatic"
 msgstr "automatico"
 
-#: core/settings.py:113
+#: core/settings.py:114
 msgid "as the app"
 msgstr "come l'app"
 
-#: core/settings.py:73
+#: core/settings.py:74
 msgid "no setting '{name}'"
 msgstr "nessuna impostazione «{name}»"
 
-#: core/settings.py:80
+#: core/settings.py:81
 msgid "{name}: on or off"
 msgstr "{name}: on o off"
 
-#: core/settings.py:82
+#: core/settings.py:83
 msgid "{name}: one of {values}"
 msgstr "{name}: uno di {values}"
 
-#: core/settings.py:87
+#: core/settings.py:88
 msgid "{name}: a number"
 msgstr "{name}: un numero"
 
@@ -4294,10 +4510,6 @@ msgstr "({n} lo avevano già)"
 msgid "Annotator"
 msgstr "Commentatore"
 
-#: library/details.py:42
-msgid "Notes"
-msgstr "Note"
-
 #: library/details.py:43
 msgid "Difficulty (1–5)"
 msgstr "Difficoltà (1–5)"
@@ -4674,7 +4886,7 @@ msgstr "Pubblico dominio"
 msgid "Course"
 msgstr "Corso"
 
-#: library/models.py:20 library/packs.py:316 static/js/core/library.js:715
+#: library/models.py:20 library/packs.py:322 static/js/core/library.js:715
 msgid "Puzzle pack"
 msgstr "Pacchetto di esercizi"
 
@@ -4812,35 +5024,35 @@ msgstr "virgolette non chiuse: {error}"
 msgid "For the personal use of the student it was made for. Please don't pass it on."
 msgstr "Per l'uso personale dell'allievo a cui è destinato. Per favore non passarlo ad altri."
 
-#: library/packs.py:182
+#: library/packs.py:183
 msgid "no positions or games to put in a pack"
 msgstr "nessuna posizione o partita da mettere in un pacchetto"
 
-#: library/packs.py:218
+#: library/packs.py:220
 msgid "this file is too large for a pack"
 msgstr "questo file è troppo grande per un pacchetto"
 
-#: library/packs.py:235
+#: library/packs.py:237
 msgid "this pack was made by a newer version of Spaced Positions: update the app"
 msgstr "questo pacchetto è stato creato da una versione più recente di Spaced Positions: aggiorna l'app"
 
-#: library/packs.py:237
+#: library/packs.py:239
 msgid "not a puzzle pack (no pack id)"
 msgstr "non è un pacchetto di esercizi (nessun id)"
 
-#: library/packs.py:485
+#: library/packs.py:491
 msgid "no game"
 msgstr "nessuna partita"
 
-#: library/packs.py:223
+#: library/packs.py:225
 msgid "not a puzzle pack (no manifest)"
 msgstr "non è un pacchetto di esercizi (nessun manifest)"
 
-#: library/packs.py:233
+#: library/packs.py:235
 msgid "not a puzzle pack ({error})"
 msgstr "non è un pacchetto di esercizi ({error})"
 
-#: library/packs.py:357
+#: library/packs.py:363
 msgid "p. {page}"
 msgstr "p. {page}"
 
@@ -5948,6 +6160,38 @@ msgstr "digita un comando · Tab completa · ↑ cronologia"
 msgid "no command '{name}'"
 msgstr "nessun comando «{name}»"
 
+#: static/js/core/coach.js:62
+msgid "Select positions or games in the Library, or open one in Analyse"
+msgstr ""
+
+#: static/js/core/coach.js:90
+msgid "Could not write the file"
+msgstr ""
+
+#: static/js/core/coach.js:102
+msgid "Choose a lesson in the Lessons pane first"
+msgstr ""
+
+#: static/js/core/coach.js:108
+msgid "{file} written: send it to your students; their results files come back here (drop them on this window)"
+msgstr ""
+
+#: static/js/core/coach.js:115
+msgid "No homework: it comes as a pack from your coach"
+msgstr ""
+
+#: static/js/core/coach.js:117
+msgid "The homework's puzzles are not here: import the pack again"
+msgstr ""
+
+#: static/js/core/coach.js:125
+msgid "{file} written: look at it, then send it to your coach (it holds only this homework's results)"
+msgstr ""
+
+#: static/js/core/coach.js:132
+msgid "Could not read the results"
+msgstr ""
+
 #: static/js/core/collect.js:64
 msgid "(none)"
 msgstr "(nessuno)"
@@ -6372,7 +6616,7 @@ msgstr "layout non salvato: l'app non è raggiungibile"
 msgid "no mode '{name}'"
 msgstr "nessuna modalità «{name}»"
 
-#: static/js/core/layout.js:414 static/js/core/layout.js:666
+#: static/js/core/layout.js:414 static/js/core/layout.js:667
 msgid "Resize"
 msgstr "Ridimensiona"
 
@@ -6384,119 +6628,119 @@ msgstr "Vista"
 msgid "no view '{name}'"
 msgstr "nessuna vista «{name}»"
 
-#: static/js/core/layout.js:469
+#: static/js/core/layout.js:470
 msgid "no pane {n}"
 msgstr "nessun riquadro {n}"
 
-#: static/js/core/layout.js:488
+#: static/js/core/layout.js:489
 msgid "no pane in that direction"
 msgstr "nessun riquadro in quella direzione"
 
-#: static/js/core/layout.js:493
+#: static/js/core/layout.js:494
 msgid "Split: view of the new pane"
 msgstr "Dividi: vista del nuovo riquadro"
 
-#: static/js/core/layout.js:493
+#: static/js/core/layout.js:494
 msgid "Split below: view of the new pane"
 msgstr "Dividi sotto: vista del nuovo riquadro"
 
-#: static/js/core/layout.js:496
+#: static/js/core/layout.js:497
 msgid "Split"
 msgstr "Dividi"
 
-#: static/js/core/layout.js:518
+#: static/js/core/layout.js:519
 msgid "Open in a split"
 msgstr "Apri in una divisione"
 
-#: static/js/core/layout.js:569 design/commands/pane.toml:pane.close
+#: static/js/core/layout.js:570 design/commands/pane.toml:pane.close
 msgid "Close pane"
 msgstr "Chiudi il riquadro"
 
-#: static/js/core/layout.js:573
+#: static/js/core/layout.js:574
 msgid "Only this pane"
 msgstr "Solo questo riquadro"
 
-#: static/js/core/layout.js:584 design/commands/pane.toml:pane.buffers
+#: static/js/core/layout.js:585 design/commands/pane.toml:pane.buffers
 msgid "Hidden buffers"
 msgstr "Riquadri nascosti"
 
-#: static/js/core/layout.js:595
+#: static/js/core/layout.js:596
 msgid "no hidden buffer '{id}'"
 msgstr "nessun riquadro nascosto «{id}»"
 
-#: static/js/core/layout.js:596
+#: static/js/core/layout.js:597
 msgid "Show buffer"
 msgstr "Mostra il riquadro"
 
-#: static/js/core/layout.js:605 static/js/core/layout.js:608
+#: static/js/core/layout.js:606 static/js/core/layout.js:609
 msgid "Change view"
 msgstr "Cambia vista"
 
-#: static/js/core/layout.js:617
+#: static/js/core/layout.js:618
 msgid "Maximised · the other panes are tabs in its header"
 msgstr "Ingrandito · gli altri riquadri sono schede nella sua intestazione"
 
-#: static/js/core/layout.js:617
+#: static/js/core/layout.js:618
 msgid "Restored"
 msgstr "Ripristinato"
 
-#: static/js/core/layout.js:622
+#: static/js/core/layout.js:623
 msgid "Collapse"
 msgstr "Comprimi"
 
-#: static/js/core/layout.js:630
+#: static/js/core/layout.js:631
 msgid "Swap panes"
 msgstr "Scambia i riquadri"
 
-#: static/js/core/layout.js:642
+#: static/js/core/layout.js:643
 msgid "Rotate split"
 msgstr "Ruota la divisione"
 
-#: static/js/core/layout.js:650 design/commands/pane.toml:pane.equalize
+#: static/js/core/layout.js:651 design/commands/pane.toml:pane.equalize
 msgid "Equal sizes"
 msgstr "Dimensioni uguali"
 
-#: static/js/core/layout.js:665
+#: static/js/core/layout.js:666
 msgid "no side-by-side split to resize"
 msgstr "nessuna divisione affiancata da ridimensionare"
 
-#: static/js/core/layout.js:665
+#: static/js/core/layout.js:666
 msgid "no stacked split to resize"
 msgstr "nessuna divisione sovrapposta da ridimensionare"
 
-#: static/js/core/layout.js:680
+#: static/js/core/layout.js:681
 msgid "Link group"
 msgstr "Gruppo collegato"
 
-#: static/js/core/layout.js:684
+#: static/js/core/layout.js:685
 msgid "Link group {group}"
 msgstr "Gruppo collegato {group}"
 
-#: static/js/core/layout.js:684
+#: static/js/core/layout.js:685
 msgid "Not linked"
 msgstr "Non collegato"
 
-#: static/js/core/layout.js:690
+#: static/js/core/layout.js:691
 msgid "Pin"
 msgstr "Fissa"
 
-#: static/js/core/layout.js:693
+#: static/js/core/layout.js:694
 msgid "Pinned: this pane keeps its subject"
 msgstr "Fissato: questo riquadro tiene il suo soggetto"
 
-#: static/js/core/layout.js:693
+#: static/js/core/layout.js:694
 msgid "Unpinned"
 msgstr "Sbloccato"
 
-#: static/js/core/layout.js:700
+#: static/js/core/layout.js:701
 msgid "Reset layout"
 msgstr "Ripristina il layout"
 
-#: static/js/core/layout.js:718
+#: static/js/core/layout.js:719
 msgid "no layout '{name}'"
 msgstr "nessun layout «{name}»"
 
-#: static/js/core/layout.js:720
+#: static/js/core/layout.js:721
 msgid "Load layout {name}"
 msgstr "Carica il layout {name}"
 
@@ -6758,7 +7002,7 @@ msgstr "allenamento sì / no"
 msgid "Importing the pack…"
 msgstr "Importazione del pacchetto…"
 
-#: static/js/core/packs.js:119
+#: static/js/core/packs.js:120
 msgid "{file}: drop a puzzle pack (.sppack) or a PGN"
 msgstr "{file}: trascina qui un pacchetto di esercizi (.sppack) o un PGN"
 
@@ -7499,6 +7743,46 @@ msgstr "Incolla: importa le partite"
 #: design/commands/board.toml:board.pieces design/tokens.toml:piece-set
 msgid "Piece set"
 msgstr "Set di pezzi"
+
+#: design/commands/coaching.toml:lesson.add
+msgid "To a lesson: the selection, or the open position"
+msgstr ""
+
+#: design/commands/coaching.toml:lesson.addto
+msgid "Add to a lesson (the lesson's title, then what)"
+msgstr ""
+
+#: design/commands/coaching.toml:lesson.remove
+msgid "Take out of the lesson"
+msgstr ""
+
+#: design/commands/coaching.toml:lesson.note
+msgid "The note of a lesson item"
+msgstr ""
+
+#: design/commands/coaching.toml:lesson.removeitem
+msgid "Take this out of the lesson"
+msgstr ""
+
+#: design/commands/coaching.toml:lesson.removeitem design/commands/coaching.toml:lesson.noteitem
+msgid "in a Lesson pane"
+msgstr ""
+
+#: design/commands/coaching.toml:lesson.noteitem
+msgid "Your note on this item (what to ask, what to show)"
+msgstr ""
+
+#: design/commands/coaching.toml:lesson.homework
+msgid "Homework: the lesson's puzzles as a pack for your students"
+msgstr ""
+
+#: design/commands/coaching.toml:homework.start
+msgid "Start the homework"
+msgstr ""
+
+#: design/commands/coaching.toml:homework.send
+msgid "Results of the homework: the file to send to your coach"
+msgstr ""
 
 #: design/commands/collect.toml:collect.save
 msgid "Save & next"

@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "spaced_positions.analysis",
     "spaced_positions.library",
     "spaced_positions.stats",
+    "spaced_positions.coaching",
 ]
 
 MIDDLEWARE = [

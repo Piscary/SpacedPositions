@@ -91,7 +91,7 @@ def test_make_source_and_give_position_that_source(page):
     position = tree.create_position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", [], title="Start position")
     # Open the position in Analyse and show its Details
     open_mode(page, "analyse")
-    page.evaluate("(id) => window.SPOS.analysis.openPosition(id)", str(position.uuid))
+    page.evaluate("(id) => window.SPOS.analysis.open(id)", str(position.uuid))
     page.wait_for_selector("#ws-analyse [data-movetree] .mt-move")
     keys(page, "I")  # open Details pane
     page.wait_for_selector("#ws-analyse [data-details-list] [data-row=source]")
@@ -136,8 +136,8 @@ def test_edit_source_year_and_kind_in_details(page):
     open_mode(page, "library")
     page.wait_for_selector("#ws-library [data-list]")
     # Switch to Sources tab
-    page.click("#ws-library [data-tab=sources]")
-    page.wait_for_function("!!document.querySelector('#ws-library [data-tab=sources].is-active')")
+    page.click("#ws-library .library__tabs [data-args=sources]")
+    page.wait_for_selector("#ws-library .library__tabs [data-args=sources][aria-checked=true]")
     # Click the source row to select it
     page.click("#ws-library [data-list] [data-row]")
     keys(page, "I")  # open Details pane
@@ -186,8 +186,8 @@ def test_library_details_with_game_row(page):
     open_mode(page, "library")
     page.wait_for_selector("#ws-library [data-list]")
     # Switch to Games tab
-    page.click("#ws-library [data-tab=games]")
-    page.wait_for_function("!!document.querySelector('#ws-library [data-tab=games].is-active')")
+    page.click("#ws-library .library__tabs [data-args=games]")
+    page.wait_for_selector("#ws-library .library__tabs [data-args=games][aria-checked=true]")
     # Wait for the game row to appear
     page.wait_for_selector("#ws-library [data-list] [data-row]")
     # Click the first game row to select it

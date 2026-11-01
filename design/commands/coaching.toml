@@ -1,0 +1,62 @@
+# Coaching (spec 17): lessons, homework, results.
+
+["lesson.add"]
+title = "To a lesson: the selection, or the open position"
+group = "Coach"
+aliases = ["lesson-add"]
+args = [{ name = "lesson", type = "text", optional = true }]
+
+["lesson.addto"]
+title = "Add to a lesson (the lesson's title, then what)"
+group = "Coach"
+hidden = true
+internal = true
+args = [{ name = "what", type = "text" }]
+handler = "server"
+undoable = true
+
+["lesson.remove"]
+title = "Take out of the lesson"
+group = "Coach"
+hidden = true
+internal = true
+args = [{ name = "item", type = "text" }]
+handler = "server"
+undoable = true
+
+["lesson.note"]
+title = "The note of a lesson item"
+group = "Coach"
+hidden = true
+aliases = ["lesson-note"]
+args = [{ name = "item", type = "text" }]
+handler = "server"
+undoable = true
+
+["lesson.removeitem"]
+title = "Take this out of the lesson"
+group = "Coach"
+when = "view.lesson"
+reason = "in a Lesson pane"
+
+["lesson.noteitem"]
+title = "Your note on this item (what to ask, what to show)"
+group = "Coach"
+when = "view.lesson"
+reason = "in a Lesson pane"
+
+["lesson.homework"]
+title = "Homework: the lesson's puzzles as a pack for your students"
+group = "Coach"
+aliases = ["homework"]
+args = [{ name = "instructions", type = "text", optional = true }]
+
+["homework.start"]
+title = "Start the homework"
+group = "Train"
+args = [{ name = "homework", type = "text", optional = true }]
+
+["homework.send"]
+title = "Results of the homework: the file to send to your coach"
+group = "Train"
+args = [{ name = "homework", type = "text", optional = true }]

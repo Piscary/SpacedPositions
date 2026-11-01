@@ -59,6 +59,7 @@ SETTINGS = [
     Setting("engine.arrows", "Engine", _("Arrows"), "bool", True, _("The engine's best moves as arrows on the board")),
     Setting("sound.on", "Sound and motion", _("Sounds"), "bool", False, _("A click on a move, a tone on right and wrong, a chord on a record")),
     Setting("display.ticker", "Sound and motion", _("Counting numbers"), "bool", True, _("Numbers count up on the result screen and in Stats")),
+    Setting("coach.on", "Packs", _("I teach"), "bool", False, _("Shows the Coach mode: lessons, homework for your students, their results")),
     Setting("packs.author", "Packs", _("Your name in packs"), "text", "", _("Shown to students with the packs you make (else the player marked as you)")),
     Setting("app.updates", "App", _("Look for updates"), "bool", False, _("At most once a day, ask GitHub whether there is a newer version (nothing else is sent)")),
     Setting("app.autostop", "App", _("Stop by itself"), "bool", False, _("The app stops 10 minutes after the last tab was closed (started without a console: on)")),

@@ -200,6 +200,19 @@
 .packview__body { display: grid; gap: var(--s-1); padding: var(--s-2) var(--s-3); overflow: auto; }
 .packview__licence { padding: var(--s-1) var(--s-2); border-left: calc(var(--rule) * 3) solid var(--warn); background: var(--bg-alt); }
 
+/* ── Coach (spec 17): lessons, their items with notes, the homework table ──────────────────────────────────────── */
+.coach { min-height: 100%; }
+.coach__head { display: flex; gap: var(--s-1); align-items: center; justify-content: space-between; padding: var(--s-1) var(--s-2); }
+.coach__none { padding: var(--s-2); }
+.lesson__note { display: block; color: var(--text-sub); font-size: var(--fs-sm); white-space: normal; }
+.coach__results { padding: var(--s-1) var(--s-2); }
+.coach__table { border-collapse: collapse; font-family: var(--font-mono); font-size: var(--fs-sm); }
+.coach__table :is(th, td) { padding: 0 var(--s-1); border: var(--rule) solid var(--line); text-align: center; }
+.coach__table th:first-child { text-align: left; }
+.coach__table .is-good { color: var(--good); }
+.coach__table .is-bad { color: var(--bad); }
+.coach__table .is-open { color: var(--text-muted); }
+
 /* ── Details (spec 16): one thing's fields as rows ────────────────────────────────────────────────────────────── */
 .details { min-height: 100%; }
 .details__head { display: flex; flex-wrap: wrap; gap: var(--s-1); align-items: center; padding: var(--s-1) var(--s-2); }

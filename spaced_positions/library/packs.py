@@ -165,7 +165,8 @@ def game_record(g, w: _Writer) -> dict:
     return rec | tree_extras(g, paths)
 
 
-def build(positions, pack: Pack, author: str = "", student: str = "", include_received: bool = False, games=None) -> tuple[bytes, dict]:
+def build(positions, pack: Pack, author: str = "", student: str = "", include_received: bool = False, games=None,
+          extra: dict | None = None) -> tuple[bytes, dict]:
     """The pack file of these positions (and games), and its manifest. Each build is a new version, logged."""
     positions = positions if include_received else exportable(positions)
     positions = positions.filter(deleted_at=None).select_related("source").prefetch_related("tag_links__tag__field", "tag_links__tag__parent", "puzzles")
@@ -189,6 +190,7 @@ def build(positions, pack: Pack, author: str = "", student: str = "", include_re
                 "positions": len(lines), "puzzles": n_puzzles, "games": len(game_lines)}
     if student:
         manifest |= {"for": student, "copy": copy}
+    manifest |= extra or {}  # e.g. a homework (spec 17): older apps import its puzzles and ignore the rest
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         z.writestr("manifest.json", json.dumps(manifest, ensure_ascii=False, indent=1))
@@ -291,6 +293,10 @@ def run(data: bytes, ready: bool = True) -> Report:
         received = receive(c.manifest)
         report.source = received.source
         tags = ensure_tags(c.tags, report)
+        if c.manifest.get("homework"):
+            from spaced_positions.coaching.homework import receive_homework
+
+            receive_homework(c.manifest, report)
         books = Books(c.sources)
         for rec in c.positions:
             try:

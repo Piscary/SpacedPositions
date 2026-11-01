@@ -17,6 +17,18 @@ from . import metrics
 from .models import Achievement
 
 
+def _homework() -> list[dict]:
+    """Homework from a coach (spec 17 §3): the open ones first, each with how far it is."""
+    from spaced_positions.coaching.homework import progress
+    from spaced_positions.coaching.models import Homework
+
+    out = []
+    for h in Homework.objects.all()[:10]:
+        tried, total = progress(h)
+        out.append({"h": h, "tried": tried, "total": total})
+    return out
+
+
 def today() -> dict:
     counts = selection.counts()
     d = metrics.load()
@@ -34,6 +46,7 @@ def today() -> dict:
         "starter": starter_size(),
         "updates": bool(user_settings.get("app.updates")),
         "intro": user_settings.get("keys.intro") is not False,
+        "homework": _homework(),
         "again": selection.last_options(),
     }
 

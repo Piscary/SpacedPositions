@@ -17,7 +17,7 @@
   <header class="appbar">
     <div class="appbar__logo"><span class="appbar__logo-mark" aria-hidden="true">♞</span><span>Spaced Positions</span></div>
     <nav class="appbar__modes" aria-label="{% translate "Modes" %}">
-      {% for m in modes %}{% if m.in_appbar %}
+      {% for m in modes %}{% if m.in_appbar and m.key != "coach" or m.key == "coach" and coach_on %}
       <button type="button" class="modetab{% if m.key == mode.key %} is-active{% endif %}" data-cmd="mode.{{ m.key }}" data-mode-tab="{{ m.key }}">
         <span class="modetab__label">{{ m.label }}</span>{% keycap "space "|add:m.leader %}
       </button>

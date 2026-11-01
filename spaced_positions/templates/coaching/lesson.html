@@ -1,0 +1,15 @@
+<div class="coach__head"><b>{{ lesson.title }}</b> {% cmd "lesson.homework" size="sm" label=_("Homework") %}</div>
+<div class="list" data-list data-lesson-list data-lesson="{{ lesson.pk }}" role="listbox" aria-label="{{ lesson.title }}">
+  {% for i in items %}{% if i.position %}<div class="list__row lesson__row" role="option" aria-selected="false" data-row="p{{ i.position.pk }}" data-item="{{ i.pk }}" data-position="{{ i.position.uuid }}" data-fen="{{ i.position.fen }}" data-title="{{ i.position.title }}">
+    <span class="list__id">p{{ i.position.pk }}</span><span class="list__title">{{ i.position.title|default:i.position.fen }}{% if i.note %}<span class="lesson__note">{{ i.note }}</span>{% endif %}</span>
+  </div>{% else %}<div class="list__row lesson__row" role="option" aria-selected="false" data-row="g{{ i.game.pk }}" data-item="{{ i.pk }}" data-game="{{ i.game.uuid }}" data-fen="{{ i.game.fen }}" data-title="{{ i.game.title }}">
+    <span class="list__id">g{{ i.game.pk }}</span><span class="list__title">{{ i.game.title }}{% if i.note %}<span class="lesson__note">{{ i.note }}</span>{% endif %}</span>
+  </div>{% endif %}{% endfor %}
+</div>
+{% if table %}<div class="coach__results">
+  <p class="muted">{% blocktranslate trimmed with date=table.assignment.created_at|date:"j M" count n=table.students|length %}Homework of {{ date }}: {{ n }} result back{% plural %}Homework of {{ date }}: {{ n }} results back{% endblocktranslate %}{% if not table.students %} · {% translate "drop the results files your students send on this window" %}{% endif %}</p>
+  {% if table.students %}<table class="coach__table">
+    <tr><th></th>{% for c in table.columns %}<th title="{{ c.title }}">{{ c.n }}</th>{% endfor %}</tr>
+    {% for s in table.students %}<tr><th>{{ s.name }}</th>{% for cell in s.cells %}<td class="{% if not cell.done %}is-open{% elif cell.first %}is-good{% else %}is-bad{% endif %}" title="{% if cell.done %}{% if cell.first %}✓{% else %}✗ {{ cell.wrong }}{% endif %} · {{ cell.tries }}{% endif %}">{% if not cell.done %}·{% elif cell.first %}✓{% else %}✗{% endif %}</td>{% endfor %}</tr>{% endfor %}
+  </table>{% endif %}
+</div>{% endif %}
