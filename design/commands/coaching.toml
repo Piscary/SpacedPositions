@@ -4,7 +4,34 @@
 title = "To a lesson: the selection, or the open position"
 group = "Coach"
 aliases = ["lesson-add"]
-args = [{ name = "lesson", type = "text", optional = true }]
+args = [{ name = "lesson", type = "lesson", optional = true }]
+when = "!library.vocabulary"
+reason = "on positions or games"
+
+["lesson.new"]
+title = "New lesson"
+group = "Coach"
+aliases = ["lesson-new"]
+args = [{ name = "title", type = "text" }]
+handler = "server"
+undoable = true
+
+["lesson.discard"]
+title = "Delete an empty lesson (the undo of a new one)"
+group = "Coach"
+hidden = true
+internal = true
+args = [{ name = "lesson", type = "text" }]
+handler = "server"
+undoable = true
+
+["lesson.find"]
+title = "Add a position to this lesson: search the Library"
+group = "Coach"
+aliases = ["lesson-find"]
+args = [{ name = "position", type = "position", optional = true }]
+when = "view.lesson"
+reason = "in a Lesson pane with a lesson"
 
 ["lesson.addto"]
 title = "Add to a lesson (the lesson's title, then what)"

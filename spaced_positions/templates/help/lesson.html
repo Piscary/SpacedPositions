@@ -2,7 +2,9 @@
 {% block lead %}{% translate "One lesson: its positions and games in order with your notes, and below them the results of its last homework (students × puzzles, ✓ solved at the first try, ✗ missed, · not done)." %}{% endblock %}
 {% block how %}
   {% key "lesson.noteitem" keys_in="view.lesson" as note %}{% key "lesson.removeitem" keys_in="view.lesson" as remove %}
-  {% key "list.open" as open %}{% key "lesson.homework" keys_in="view.lesson" as homework %}
+  {% key "list.open" as open %}{% key "lesson.homework" keys_in="view.lesson" as homework %}{% key "lesson.find" keys_in="view.lesson" as find %}
+  {% key "lesson.add" keys_in="view.library" as add %}
+  <dt>{% translate "Add positions" %}</dt><dd>{% blocktranslate trimmed %}{{ find }} (or + Add a position) searches the Library as you type: a title, a source, <code>motif:fork</code>, <code>p529</code>; a click or ↵ adds it. From the Library: select rows and press {{ add }}.{% endblocktranslate %}</dd>
   <dt>{% translate "Notes" %}</dt><dd>{% blocktranslate trimmed %}{{ note }} writes what to ask or show with the item under the cursor.{% endblocktranslate %}</dd>
   <dt>{% translate "Tidy up" %}</dt><dd>{% blocktranslate trimmed %}{{ remove }} takes the item out of the lesson (u brings it back); {{ open }} opens it in Analyse.{% endblocktranslate %}</dd>
   <dt>{% translate "Homework" %}</dt><dd>{% blocktranslate trimmed %}{{ homework }}: the lesson's puzzles as a pack for your students.{% endblocktranslate %}</dd>

@@ -162,6 +162,28 @@ handler = "both"
 when = "library.hasTarget"
 reason = "select positions in the Library, or open one in Analyse"
 
+# Marks (GitHub #5, #6): a diagram is shown, never trained; a flagged puzzle is broken. Both switch on and off.
+
+["library.diagram"]
+title = "Diagram on / off: shown, never trained"
+group = "Library"
+aliases = ["diagram"]
+args = [{ name = "mode", type = "enum", values = ["toggle", "on", "off"], optional = true }]
+handler = "both"
+when = "library.hasTarget && !library.vocabulary"
+reason = "select positions in the Library, or open one in Analyse"
+undoable = true
+
+["library.flag"]
+title = "Flag on / off: the puzzle is broken"
+group = "Library"
+aliases = ["flag"]
+args = [{ name = "mode", type = "enum", values = ["toggle", "on", "off"], optional = true }]
+handler = "both"
+when = "library.hasTarget && !library.vocabulary"
+reason = "select positions or puzzles in the Library, open one in Analyse, or train"
+undoable = true
+
 # Editing the vocabulary, sources and players (spec 04 · Library, 11 §1).
 
 ["library.edit"]

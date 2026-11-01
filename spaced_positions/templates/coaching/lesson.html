@@ -1,4 +1,5 @@
-<div class="coach__head"><b>{{ lesson.title }}</b> {% cmd "lesson.homework" size="sm" label=_("Homework") %}</div>
+<div class="coach__head"><b>{{ lesson.title }}</b> {% cmd "lesson.find" size="sm" icon="+" label=_("Add a position") %}{% cmd "lesson.homework" size="sm" label=_("Homework") %}</div>
+{% if not items %}{% key "lesson.add" keys_in="view.library" as add %}{% key "lesson.find" keys_in="view.lesson" as find %}<p class="muted coach__none">{% blocktranslate trimmed %}Empty so far. {{ find }} here finds a position by its title, source or motif; in the Library, select rows and press {{ add }}, or right-click them.{% endblocktranslate %}</p>{% endif %}
 <div class="list" data-list data-lesson-list data-lesson="{{ lesson.pk }}" role="listbox" aria-label="{{ lesson.title }}">
   {% for i in items %}{% if i.position %}<div class="list__row lesson__row" role="option" aria-selected="false" data-row="p{{ i.position.pk }}" data-item="{{ i.pk }}" data-position="{{ i.position.uuid }}" data-fen="{{ i.position.fen }}" data-title="{{ i.position.title }}">
     <span class="list__id">p{{ i.position.pk }}</span><span class="list__title">{{ i.position.title|default:i.position.fen }}{% if i.note %}<span class="lesson__note">{{ i.note }}</span>{% endif %}</span>

@@ -2,7 +2,8 @@
 {% block lead %}{% translate "Your lessons: material for your students in the order you teach it, with notes. The lesson under the cursor shows in the Lesson pane beside it; its homework goes out from here." %}{% endblock %}
 {% block how %}
   {% key "lesson.add" keys_in="view.library" as add %}{% key "lesson.homework" keys_in="view.lessons" as homework %}{% key "mode.coach" as coach %}
-  <dt>{% translate "Make a lesson" %}</dt><dd>{% blocktranslate trimmed %}In the Library select positions or games and press {{ add }}, or press it in Analyse for the open one: type the lesson's title; a title nobody has makes a new lesson.{% endblocktranslate %}</dd>
+  {% key "lesson.new" keys_in="view.lessons" as new %}
+  <dt>{% translate "Make a lesson" %}</dt><dd>{% blocktranslate trimmed %}{{ new }} (or + New lesson) makes an empty one. Or in the Library select positions or games and press {{ add }}, or press it in Analyse for the open one: pick a lesson as you type, or type the title of a new one.{% endblocktranslate %}</dd>
   <dt>{% translate "Homework" %}</dt><dd>{% blocktranslate trimmed %}{{ homework }} writes the lesson's puzzles as a pack for your students, with your instructions (and <code>due=2026-11-14</code>). Each student imports it and finds it on Home.{% endblocktranslate %}</dd>
   <dt>{% translate "Results" %}</dt><dd>{% translate "Your students send back a results file: drop it on this window. The Lesson pane shows who solved what at the first try." %}</dd>
   <dt>{% translate "The Coach mode" %}</dt><dd>{% blocktranslate trimmed %}{{ coach }}; its tab shows when Settings → Packs → I teach is on.{% endblocktranslate %}</dd>

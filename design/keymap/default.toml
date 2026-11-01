@@ -86,6 +86,7 @@ accept = ["[", "]"]
 "space o" = "analysis.open"
 "space n p" = "player.new"
 "space n s" = "source.new"
+"space n l" = "lesson.new"
 
 [context.pane]
 "z" = "section.toggle"
@@ -246,6 +247,8 @@ accept = ["[", "]"]
 
 [context."mode.analyse"]
 "I" = "library.details"
+"p D" = "library.diagram"
+"!" = "library.flag"
 "L" = "lesson.add"
 "h" = "analysis.back"
 "l" = "analysis.forward"
@@ -305,6 +308,8 @@ accept = ["[", "]"]
 
 [context."view.library"]
 "I" = "library.details"
+"p D" = "library.diagram"
+"!" = "library.flag"
 "L" = "lesson.add"
 "g ?" = "help.search"
 "1" = "library.collection positions"
@@ -419,9 +424,12 @@ accept = ["[", "]"]
 
 [context."view.lessons"]
 "H" = "lesson.homework"
+"n" = "lesson.new"
 
 [context."view.lesson"]
 "H" = "lesson.homework"
+"a" = "lesson.find"
+"n" = "lesson.new"
 "c" = "lesson.noteitem"
 "backspace" = "lesson.removeitem"
 

@@ -70,6 +70,7 @@ reference is `spec/08-keymap.md`.
 | `␣` `o` | Analyse a position | `analysis.open` |
 | `␣` `n` `p` | New player | `player.new` |
 | `␣` `n` `s` | New source | `source.new` |
+| `␣` `n` `l` | New lesson | `lesson.new` |
 
 ## pane
 
@@ -245,7 +246,7 @@ reference is `spec/08-keymap.md`.
 | `h` | Replay the solution back | `train.replay` |
 | `l` | Replay the solution forward | `train.replay` |
 | `r` | Retry this puzzle (not scored) | `train.retry` |
-| `!` | Flag the puzzle as broken | `train.flag` |
+| `!` | Flag on / off: this puzzle is broken | `train.flag` |
 | `a` | Analyse this puzzle beside the board | `train.analyse` |
 | `A` | Analyse this puzzle in Analyse | `train.analysemode` |
 | `t` | Tags of the position: add and remove | `train.tag` |
@@ -271,6 +272,8 @@ reference is `spec/08-keymap.md`.
 | Keys | Command | Id |
 |---|---|---|
 | `I` | Details: every field of what is selected, editable | `library.details` |
+| `p` `D` | Diagram on / off: shown, never trained | `library.diagram` |
+| `!` | Flag on / off: the puzzle is broken | `library.flag` |
 | `L` | To a lesson: the selection, or the open position | `lesson.add` |
 | `h` | Back one move | `analysis.back` |
 | `l` | Forward (main continuation) | `analysis.forward` |
@@ -333,6 +336,8 @@ reference is `spec/08-keymap.md`.
 | Keys | Command | Id |
 |---|---|---|
 | `I` | Details: every field of what is selected, editable | `library.details` |
+| `p` `D` | Diagram on / off: shown, never trained | `library.diagram` |
+| `!` | Flag on / off: the puzzle is broken | `library.flag` |
 | `L` | To a lesson: the selection, or the open position | `lesson.add` |
 | `g` `?` | How to search: the query language | `help.search` |
 | `1` | Collection positions | `library.collection` |
@@ -474,12 +479,15 @@ reference is `spec/08-keymap.md`.
 | Keys | Command | Id |
 |---|---|---|
 | `H` | Homework: the lesson's puzzles as a pack for your students | `lesson.homework` |
+| `n` | New lesson | `lesson.new` |
 
 ## view.lesson
 
 | Keys | Command | Id |
 |---|---|---|
 | `H` | Homework: the lesson's puzzles as a pack for your students | `lesson.homework` |
+| `a` | Add a position to this lesson: search the Library | `lesson.find` |
+| `n` | New lesson | `lesson.new` |
 | `c` | Your note on this item (what to ask, what to show) | `lesson.noteitem` |
 | `⌫` | Take this out of the lesson | `lesson.removeitem` |
 

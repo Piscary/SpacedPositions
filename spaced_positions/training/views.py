@@ -278,10 +278,3 @@ def from_line(request):
     cards = puzzle.cards.filter(in_solution=True).count()
     return JsonResponse({"ok": True, "puzzle": str(puzzle.uuid), "cards": cards,
                          "message": ngettext("Puzzle saved: {n} card in training", "Puzzle saved: {n} cards in training", cards).format(n=cards)})
-
-
-@require_POST
-def flag(request):
-    data = _json(request)
-    updated = Puzzle.objects.filter(uuid=data.get("puzzle")).update(flagged=True) if data.get("puzzle") else 0
-    return JsonResponse({"ok": bool(updated)})

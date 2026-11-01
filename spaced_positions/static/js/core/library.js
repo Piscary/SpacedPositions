@@ -544,7 +544,9 @@ handle("library.query", async ([text]) => {
 
 /** What a bulk command acts on: in the Library the selection (or cursor row), in Analyse the open position (or,
  *  for move tags, the move), in Train the puzzle's position. */
-function target({ moves = false } = {}) {
+function target({ moves = false, puzzle = false } = {}) {
+  const details = ctx.pane?.el?.querySelector("[data-details-list]") // the Details pane: the position it shows
+  if (details && /^p\d+$/.test(details.dataset.ref || "")) return { c: "positions", ids: [details.dataset.ref] }
   const el = focusedLibrary()
   if (el) {
     const { ids } = targetRows(el.querySelector("[data-library-results]"))
@@ -558,6 +560,7 @@ function target({ moves = false } = {}) {
   }
   if (ctx.mode === "train") {
     const p = window.SPOS.train?.puzzle()
+    if (puzzle && p?.puzzle) return { c: "puzzles", ids: [p.puzzle] } // `!`: this puzzle, not every puzzle of its position
     return p ? { c: "positions", ids: [p.position] } : null
   }
   return null
@@ -622,6 +625,15 @@ handle("library.detect", async () => {
   status(tr("Detecting…"), { timeout: 0 })
   return bulk("library.detect", [], t)
 })
+
+// `p D` and `!` (GitHub #5, #6): a diagram (shown, never trained) and a broken puzzle's flag, on and off again
+const mark = (id, puzzle) => ([mode = "toggle"] = []) => {
+  const t = target({ puzzle })
+  if (!t?.ids.length || !["positions", "puzzles"].includes(t.c)) return status(tr("Select positions in the Library, or open one in Analyse"), { kind: "error" }) || false
+  return bulk(id, [mode], t)
+}
+handle("library.diagram", mark("library.diagram", false))
+handle("library.flag", mark("library.flag", true))
 
 // `o`: the cursor row's position or game to the right, with a board and its move tree (linked to each other)
 handle("library.beside", async () => {

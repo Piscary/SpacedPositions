@@ -94,6 +94,7 @@ rect[class^="f-"] { fill: var(--c); }
 /* The key intro ("Getting around"): seven keys to try, each ticked off when used */
 .home__intro { display: grid; gap: var(--s-1); padding: var(--s-1) var(--s-2) var(--s-2); }
 .intro { display: grid; gap: var(--s-half); margin: 0; padding: 0; list-style: none; }
+.intro__mouse { margin: 0 0 var(--s-2); }
 .intro li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s-1); align-items: baseline; color: var(--text-sub); }
 .intro__check {
   width: 1em;

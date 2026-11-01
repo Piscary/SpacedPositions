@@ -2,6 +2,7 @@
 through it without requests) and the move tree as HTML (the Moves pane swaps it in), plus the journal entry for undo."""
 
 import json
+import re
 
 from django.core.exceptions import ValidationError
 from django.db.models import Q
@@ -275,13 +276,26 @@ def puzzle_pane(request, pid):
 
 @require_GET
 def search(request):
-    """Positions for `:analyse <text>` (searched like the Library's query)."""
+    """Positions for `:analyse <text>` and `:lesson-find <text>`: `p529`, a FEN, or the Library's query (a title,
+    a source, motif:fork, src:reti …)."""
+    from spaced_positions.library import query as library_query
+
     q = request.GET.get("q", "").strip()
     rows = Position.alive.all()
-    if q:
-        rows = rows.filter(Q(title__icontains=q) | Q(source_text__icontains=q) | Q(source__search__contains=fold(q)) | Q(fen__startswith=q))
-    rows = rows.select_related("source").order_by("-created_at")[:20]
-    return JsonResponse({"positions": [{"id": str(p.uuid), "title": p.title or p.fen, "source": p.citation} for p in rows]})
+    if re.fullmatch(r"p\d+", q):
+        rows = rows.filter(pk=int(q[1:]))
+    elif "/" in q:
+        rows = rows.filter(fen__startswith=q)
+    elif q:
+        try:
+            rows = library_query.run(q, "positions").queryset
+        except Exception:  # a query the parser refuses: the plain words
+            rows = rows.filter(Q(title__icontains=q) | Q(source_text__icontains=q) | Q(source__search__contains=fold(q)))
+    if not q or not rows.query.order_by:
+        rows = rows.order_by("-created_at")
+    rows = rows.select_related("source")[:20]
+    return JsonResponse({"positions": [{"id": str(p.uuid), "title": p.title or p.fen, "source": f"p{p.pk} · {p.citation}".rstrip(" ·")}
+                                       for p in rows]})
 
 
 @require_GET

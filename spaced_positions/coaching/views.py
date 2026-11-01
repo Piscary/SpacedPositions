@@ -59,8 +59,8 @@ def lesson(request, pk):
 @require_GET
 def complete(request):
     q = request.GET.get("q", "").strip()
-    rows = Lesson.objects.filter(title__icontains=q) if q else Lesson.objects.all()
-    return JsonResponse({"items": [{"value": lesson.title, "label": lesson.title} for lesson in rows[:20]]})
+    rows = (Lesson.objects.filter(title__icontains=q) if q else Lesson.objects.all()).annotate(n=Count("items"))
+    return JsonResponse({"items": [{"value": lesson.title, "label": lesson.title, "count": lesson.n} for lesson in rows[:20]]})
 
 
 @require_GET

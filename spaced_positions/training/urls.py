@@ -7,7 +7,6 @@ app_name = "training"
 urlpatterns = [
     path("train/start/", views.start, name="start"),
     path("train/launcher/", views.launcher, name="launcher"),
-    path("train/flag/", views.flag, name="flag"),
     path("train/r/<str:sid>/batch/", views.batch, name="batch"),
     path("train/r/<str:sid>/attempt/", views.attempt, name="attempt"),
     path("train/r/<str:sid>/end/", views.end, name="end"),

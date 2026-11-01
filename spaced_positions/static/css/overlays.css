@@ -53,6 +53,8 @@
 .cmdline__prompt { font-family: var(--font-mono); color: var(--main); font-weight: 700; }
 .cmdline__input { flex: 1 1 auto; border: 0; outline: 0; background: transparent; font-family: var(--font-mono); }
 .cmdline__hint { color: var(--text-sub); font-size: var(--fs-xs); }
+.cmdline__button { border: 0; background: transparent; color: var(--text-sub); cursor: pointer; font-size: var(--fs-md); padding: 0 var(--s-1); }
+.cmdline__button:hover { color: var(--main); }
 
 /* ── Hint labels ─────────────────────────────────────────────────────────────────────────────────────────────── */
 .hint-layer { position: fixed; inset: 0; pointer-events: none; z-index: var(--z-hint); }

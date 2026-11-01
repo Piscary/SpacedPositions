@@ -623,10 +623,58 @@
    "args": [
     {
      "name": "lesson",
-     "type": "text",
+     "type": "lesson",
      "optional": true
     }
    ],
+   "when": "!library.vocabulary",
+   "reason": "on positions or games",
+   "handler": "client"
+  },
+  "lesson.new": {
+   "title": "New lesson",
+   "group": "Coach",
+   "aliases": [
+    "lesson-new"
+   ],
+   "args": [
+    {
+     "name": "title",
+     "type": "text"
+    }
+   ],
+   "handler": "server",
+   "undoable": true
+  },
+  "lesson.discard": {
+   "title": "Delete an empty lesson (the undo of a new one)",
+   "group": "Coach",
+   "hidden": true,
+   "internal": true,
+   "args": [
+    {
+     "name": "lesson",
+     "type": "text"
+    }
+   ],
+   "handler": "server",
+   "undoable": true
+  },
+  "lesson.find": {
+   "title": "Add a position to this lesson: search the Library",
+   "group": "Coach",
+   "aliases": [
+    "lesson-find"
+   ],
+   "args": [
+    {
+     "name": "position",
+     "type": "position",
+     "optional": true
+    }
+   ],
+   "when": "view.lesson",
+   "reason": "in a Lesson pane with a lesson",
    "handler": "client"
   },
   "lesson.addto": {
@@ -1122,6 +1170,52 @@
    "handler": "both",
    "when": "library.hasTarget",
    "reason": "select positions in the Library, or open one in Analyse"
+  },
+  "library.diagram": {
+   "title": "Diagram on / off: shown, never trained",
+   "group": "Library",
+   "aliases": [
+    "diagram"
+   ],
+   "args": [
+    {
+     "name": "mode",
+     "type": "enum",
+     "values": [
+      "toggle",
+      "on",
+      "off"
+     ],
+     "optional": true
+    }
+   ],
+   "handler": "both",
+   "when": "library.hasTarget && !library.vocabulary",
+   "reason": "select positions in the Library, or open one in Analyse",
+   "undoable": true
+  },
+  "library.flag": {
+   "title": "Flag on / off: the puzzle is broken",
+   "group": "Library",
+   "aliases": [
+    "flag"
+   ],
+   "args": [
+    {
+     "name": "mode",
+     "type": "enum",
+     "values": [
+      "toggle",
+      "on",
+      "off"
+     ],
+     "optional": true
+    }
+   ],
+   "handler": "both",
+   "when": "library.hasTarget && !library.vocabulary",
+   "reason": "select positions or puzzles in the Library, open one in Analyse, or train",
+   "undoable": true
   },
   "library.edit": {
    "title": "Edit the selected players, sources or tags",
@@ -2064,7 +2158,7 @@
    "handler": "client"
   },
   "train.flag": {
-   "title": "Flag the puzzle as broken",
+   "title": "Flag on / off: this puzzle is broken",
    "group": "Train",
    "handler": "client"
   },
@@ -2674,6 +2768,10 @@
    },
    "space n s": {
     "command": "source.new",
+    "args": []
+   },
+   "space n l": {
+    "command": "lesson.new",
     "args": []
    }
   },
@@ -3353,6 +3451,14 @@
     "command": "library.details",
     "args": []
    },
+   "p D": {
+    "command": "library.diagram",
+    "args": []
+   },
+   "!": {
+    "command": "library.flag",
+    "args": []
+   },
    "L": {
     "command": "lesson.add",
     "args": []
@@ -3633,6 +3739,14 @@
   "view.library": {
    "I": {
     "command": "library.details",
+    "args": []
+   },
+   "p D": {
+    "command": "library.diagram",
+    "args": []
+   },
+   "!": {
+    "command": "library.flag",
     "args": []
    },
    "L": {
@@ -4122,11 +4236,23 @@
    "H": {
     "command": "lesson.homework",
     "args": []
+   },
+   "n": {
+    "command": "lesson.new",
+    "args": []
    }
   },
   "view.lesson": {
    "H": {
     "command": "lesson.homework",
+    "args": []
+   },
+   "a": {
+    "command": "lesson.find",
+    "args": []
+   },
+   "n": {
+    "command": "lesson.new",
     "args": []
    },
    "c": {

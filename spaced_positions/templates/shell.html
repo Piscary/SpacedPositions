@@ -26,6 +26,8 @@
     <div class="appbar__pulse"><a class="appbar__update" data-update hidden target="_blank" rel="noopener"></a><span title="Spaced Positions {{ app_version }}">v{{ app_version }}</span></div>
     <div class="appbar__end">
       {% if debug %}{% cmd "mode.ui" display="compact" variant="ghost" icon="◧" %}{% endif %}
+      {% cmd "undo" display="compact" variant="ghost" icon="↶" %}
+      {% cmd "redo" display="compact" variant="ghost" icon="↷" %}
       {% cmd "cmdline.open" display="compact" variant="ghost" icon="⌘" %}
       {% cmd "help.context" display="compact" variant="ghost" icon="?" %}
     </div>
@@ -42,7 +44,7 @@
     <span class="status__pane" id="status-pane"></span>
     <span class="status__subject" id="status-subject"></span>
     <span class="status__message" id="status-message"></span>
-    <span class="status__help">{% keycap "space" %}<span>{% translate "leader" %}</span>{% keycap ":" %}<span>{% translate "commands" %}</span>{% keycap "?" %}<span>{% translate "keys" %}</span></span>
+    <span class="status__help"><button type="button" class="status__helpbutton" data-feed="space">{% keycap "space" %}<span>{% translate "leader" %}</span></button><button type="button" class="status__helpbutton" data-cmd="cmdline.open">{% keycap ":" %}<span>{% translate "commands" %}</span></button><button type="button" class="status__helpbutton" data-cmd="help.context">{% keycap "?" %}<span>{% translate "keys" %}</span></button></span>
   </footer>
 </div>
 <div class="toasts" id="toasts"></div>

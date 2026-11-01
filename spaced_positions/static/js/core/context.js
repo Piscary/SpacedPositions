@@ -42,6 +42,8 @@ const derived = {
   "analysis.hasList": () => Boolean(window.SPOS?.analysis?.hasList()),
   "collect.hasDuplicate": () => ctx.mode === "collect" && Boolean(window.SPOS?.collect?.hasDuplicate()),
   "library.hasTarget": () => Boolean(window.SPOS?.library?.hasTarget()),
+  // the Library pane shows players, sources or tags (not positions, games, puzzles)
+  "library.vocabulary": () => ctx.pane?.view === "library" && ["players", "sources", "tags"].includes(window.SPOS?.library?.state()?.c),
   "engine.ready": () => ctx.mode !== "train" && Boolean(window.SPOS?.engine?.ready()),
 }
 

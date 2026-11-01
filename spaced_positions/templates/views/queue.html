@@ -31,7 +31,7 @@
     <div class="muted" data-fb-source></div>
     <div class="actionbar">
       {% cmd "train.next" variant="primary" keys_in="state.feedback" %}{% cmd "train.replay" args="back" display="compact" icon="←" keys_in="state.feedback" %}{% cmd "train.replay" args="forward" display="compact" icon="→" keys_in="state.feedback" %}
-      {% cmd "train.retry" keys_in="state.feedback" %}{% cmd "train.flag" keys_in="state.feedback" %}{% cmd "train.analyse" keys_in="state.feedback" %}{% cmd "train.tag" keys_in="state.feedback" %}{% cmd "train.quit" label=_("Stop") variant="ghost" keys_in="state.feedback" %}
+      {% cmd "train.retry" keys_in="state.feedback" %}{% cmd "train.flag" label=_("Broken?") keys_in="state.feedback" %}{% cmd "train.analyse" keys_in="state.feedback" %}{% cmd "train.edit" label=_("Edit") keys_in="state.feedback" %}{% cmd "train.tag" keys_in="state.feedback" %}{% cmd "train.quit" label=_("Stop") variant="ghost" keys_in="state.feedback" %}
     </div>
   </div>
 

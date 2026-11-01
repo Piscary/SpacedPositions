@@ -84,6 +84,7 @@ def _rows(collection, qs):
         return qs.select_related("source").prefetch_related("tag_links__tag__field").annotate(
             in_training=Exists(Puzzle.objects.filter(position=OuterRef("pk"), active=True)),
             has_puzzle=Exists(Puzzle.objects.filter(position=OuterRef("pk"))),
+            flagged=Exists(Puzzle.objects.filter(position=OuterRef("pk"), flagged=True)),
             has_analysis=Exists(Node.objects.filter(position=OuterRef("pk"), parent__isnull=False)),
         )
     if collection == "puzzles":

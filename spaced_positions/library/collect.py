@@ -16,6 +16,7 @@ from spaced_positions.analysis import tree
 from spaced_positions.training.models import Position
 
 from .detect import run as run_detection
+from .marks import set_diagram
 from .models import PositionTag, Source, Tag, TagPreset
 
 
@@ -82,6 +83,8 @@ def save(request):
                 position.source, position.source_page, position.source_ref = source, str(data.get("page", ""))[:40], str(data.get("ref", ""))[:300]
                 position.save()
             message = _("Merged into {id}").format(id=position.short_id)
+            if position.diagram != diagram and set_diagram(position, diagram):  # D on a saved position (GitHub #6)
+                message += " · " + (_("now a diagram") if diagram else _("no longer a diagram"))
         else:
             fen = check.get("fen") or start
             if diagram and not check["ok"]:

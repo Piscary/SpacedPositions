@@ -66,6 +66,7 @@ function cursorRow() {
 handle("details.edit", () => {
   const [ref, row] = cursorRow()
   if (!row) return false
+  if (row.dataset.toggleCmd) return run(row.dataset.toggleCmd) // a switch: on / off
   const raw = (row.dataset.raw || "").replace(/"/g, "'")
   const start = `edit ${ref} ${row.dataset.row}="`
   openCmdline(`${start}${raw}"`)
@@ -75,6 +76,7 @@ handle("details.edit", () => {
 handle("details.clear", () => {
   const [ref, row] = cursorRow()
   if (!row) return false
+  if (row.dataset.toggleCmd) return run(row.dataset.toggleCmd, ["off"])
   return run("library.edit", [ref, `${row.dataset.row}=`])
 })
 

@@ -93,6 +93,32 @@ as one loop. Open: the texts (Junie), Present mode and the rest of phase 2.
 Out of the week: spec 17 phase 2 (Present mode, questions per puzzle, follow-ups, per-student view, lesson packs),
 and spec 12 (collections, stats per collection), which phase 2 builds on.
 
+2026-11-01, the mouse and GitHub #5, #6: a diagram and a broken puzzle's flag go on and off again (`library/marks.py`:
+`p D` and `!` in the Library and Analyse, `!` in training, switches in the Details pane, undo; Collect's merge sets
+the diagram mark, the bug behind #6). Everything the keys do has a mouse way, found where the user looks: a right
+click on a row or a move lists what can be done with it (the cursor on it first); ⌘ / Ctrl + click and the box ▢
+select, Shift + click a range; ↶ ↷ in the app bar; ✎ and a double click change a Details field; the command line
+runs a clicked suggestion and has ↵ and × buttons; `␣ leader`, `: commands` and `? keys` in the status line are
+buttons; the pane menu gained what was missing (to a lesson, Details, the marks, import, pack export, new tag,
+layouts and the Zen way back under *Screen*). Lessons: the lesson is picked as you type (or a new one), `+ New
+lesson` (`n`), `+ Add a position` (`a`) searches the Library with its query language (`motif:fork`, `p529`). Home's
+key intro starts with the mouse.
+
+### The next days (from 2026-11-02)
+
+Each day ships on its own. Junie's part starts when Claude's day is committed.
+
+| Day | Claude | Junie |
+|---|---|---|
+| 1 | After the push: CI and release runs. Lessons finished for the mouse and keys: order of items (`J` / `K`, drag), rename and delete a lesson, a lesson's items as small boards. Spec 15 §1: a study's outcome from the last comment. | Review of 2026-11-01 (marks, menus, mouse selection, the lesson picker); a mouse-only journey per mode as browser tests (nothing typed but text); the new screenshots looked at in every theme. |
+| 2 | Spec 16 §3–§4: new game and new position as commands (`␣ n g`, `␣ n o`), the entry session's source picked as you type (the lesson picker's way) with *+ New*, the *incomplete* facet. | Guides and translations of day 1–2; the tester kit: a "with the mouse" page. |
+| 3 | Spec 16 §4: merging players, *Who you are*. A nightly build for the testers (the release workflow on a schedule, marked pre-release). | Review of 16 §3–§4; known issues brought up to date. |
+| 4 | M0 closed: what testers will touch first, checked once more by mouse only; the first testers invited. | The maintainer: backup and restore tried once (`spos restore`). Junie: the surveys and the feedback log ready. |
+
+After that, for M1: spec 12 (collections: packs and books, training one collection, stats per collection), then
+spec 17 phase 2 on top of it (Present mode, questions per puzzle, follow-ups, per-student view, lesson packs), and
+the signing of the apps.
+
 **For the public beta (M1):** packs and books as collections (12 §2–4: where a puzzle comes from, training one
 collection, stats per collection), what the test group asks for, and:
 

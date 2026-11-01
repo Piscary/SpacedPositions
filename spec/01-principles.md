@@ -7,9 +7,12 @@
   only as a click handler.
 - **Every button shows its key** as a keycap, in the button itself: `Flip  f`, never in a tooltip. A button without a
   key is allowed only for commands that have none (rare, and the keymap lint reports them, see 07).
-- The mouse can do everything the keys can. The **board is the exception the other way round**: moving pieces,
-  drawing arrows and painting squares are mouse-first. They still have keyboard paths (typed moves, `:arrow e2e4`),
-  but those are secondary.
+- The mouse can do everything the keys can (typing text aside), where a mouse user looks for it: `⋯` in a pane's
+  header lists everything the pane can do; a **right click on a row or a move** lists what can be done with it; the
+  key strips are buttons; a suggestion of the command line is clicked. A command that is only on the command line
+  is a gap: it belongs in its pane's menu (`core/layouts.py` `VIEW_MENUS`). The **board is the exception the
+  other way round**: moving pieces, drawing arrows and painting squares are mouse-first. They still have keyboard
+  paths (typed moves, `:arrow e2e4`), but those are secondary.
 - Keys are **learnable**. The command line shows each command's key, the which-key panel shows what comes next after
   a prefix, and the optional *teach keys* setting says "`f` flips the board" when you click a button that has a key.
 

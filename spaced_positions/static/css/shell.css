@@ -101,4 +101,6 @@
 .status__message[data-kind="good"] { color: var(--good); }
 .status__message[data-kind="tip"] { color: var(--info); }
 .status__help { color: var(--text-sub); gap: var(--s-2); border-left: var(--rule) solid var(--line); }
+.status__helpbutton { display: inline-flex; align-items: center; gap: var(--s-1); border: 0; background: transparent; color: inherit; font: inherit; padding: 0; cursor: pointer; }
+.status__helpbutton:hover { color: var(--main); }
 .appbar__update { color: var(--main); font-weight: 600; }

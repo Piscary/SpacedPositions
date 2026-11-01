@@ -407,12 +407,46 @@ def command_line(page, base):
     settle(page, 300)
 
 
+def library_menu(page, base):
+    """With the mouse: a right click on a row lists what can be done with it, each with its key."""
+    library(page, base)
+    row = page.locator("#ws-library [data-library-results] [data-row].is-cursor")
+    box = row.bounding_box()
+    page.mouse.click(box["x"] + box["width"] * 0.4, box["y"] + box["height"] / 2, button="right")
+    page.wait_for_selector(".menu", timeout=10000)
+    settle(page, 300)
+
+
+def details(page, base):
+    """The Details pane beside the Library: every field of the row, ✎ to change, the diagram and flag switches."""
+    library(page, base)
+    page.keyboard.press("I")
+    page.wait_for_selector("#ws-library [data-details-list] [data-row=is-diagram]", timeout=10000)
+    settle(page, 500)
+
+
+def lesson_pick(page, base):
+    """`L` on a selection: the lessons as you type, or a new one."""
+    library(page, base)
+    for title in ("Back-rank mates", "Forks for beginners"):
+        post(page, "/cmd/lesson.new/", {"args": [title]})
+    page.keyboard.press("x")
+    page.keyboard.press("j")
+    page.keyboard.press("x")
+    page.keyboard.press("L")
+    page.wait_for_selector(".cmdline__input")
+    page.keyboard.type("f")
+    page.wait_for_selector(".cmdline__row >> text=a new lesson", timeout=10000)
+    settle(page, 300)
+
+
 EMPTY = {"welcome": welcome, "starter": starter}  # only while the library is empty
 FULL = {
     "home": home, "train": train, "train-feedback": train_feedback, "train-result": train_result,
     "train-silhouette": train_silhouette, "library": library, "library-grid": library_grid, "analyse": analyse,
     "analyse-engine": analyse_engine, "analyse-file-eval": analyse_file_eval, "collect": collect, "stats": stats,
-    "settings": settings, "help": help_guide, "keys": keys, "command-line": command_line,
+    "settings": settings, "help": help_guide, "keys": keys, "command-line": command_line, "library-menu": library_menu,
+    "details": details, "lesson-pick": lesson_pick,
 }
 SCENES = {**EMPTY, **FULL}
 

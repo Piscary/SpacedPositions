@@ -63,7 +63,7 @@ title = "Retry this puzzle (not scored)"
 group = "Train"
 
 ["train.flag"]
-title = "Flag the puzzle as broken"
+title = "Flag on / off: this puzzle is broken"
 group = "Train"
 
 ["train.analyse"]

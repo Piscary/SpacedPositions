@@ -218,5 +218,8 @@
 .details__head { display: flex; flex-wrap: wrap; gap: var(--s-1); align-items: center; padding: var(--s-1) var(--s-2); }
 .details__hint { margin: 0; padding: 0 var(--s-2) var(--s-1); font-size: var(--fs-sm); }
 .details__none { padding: var(--s-2); }
-.details__row { grid-template-columns: minmax(8rem, 1fr) minmax(0, 2fr); }
+.details__row { grid-template-columns: minmax(8rem, 1fr) minmax(0, 2fr) auto; }
+.details__toggle { grid-column: 2 / span 2; justify-self: start; }
+.details__edit { border: 0; background: transparent; color: var(--text-muted); cursor: pointer; padding: 0 var(--s-1); opacity: 0; }
+.details__row:hover .details__edit, .details__row.is-cursor .details__edit, .details__edit:focus-visible { opacity: 1; }
 .details__value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

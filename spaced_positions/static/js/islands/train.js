@@ -578,11 +578,7 @@ handle("train.analyse", async () => {
 handle("train.analysemode", () => openInAnalyse(false))
 handle("train.edit", () => openInAnalyse(true))
 
-handle("train.flag", async () => {
-  if (!T.current) return false
-  const r = await post("/train/flag/", { puzzle: T.current.p.puzzle }).then((x) => x.json()).catch(() => null)
-  status(r?.ok ? tr("Flagged as broken: is:flagged in the Library lists it") : tr("Could not flag it"), { kind: r?.ok ? "good" : "error" })
-})
+handle("train.flag", () => (T.current ? run("library.flag") : false)) // on and off again (GitHub #5), with its undo
 
 // ── Ending, result ─────────────────────────────────────────────────────────────────────────────────────────────
 

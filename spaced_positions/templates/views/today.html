@@ -20,6 +20,9 @@
         so you learn by clicking. Try these seven, each one ticks itself off.{% endblocktranslate %} <span class="muted" data-intro-count></span></p>
       {% key "mode.library" as go_library %}{% key "mode.home" as go_home %}{% key "help.context" as help %}{% key "pane.focus.next" as next_pane %}
       {% key "cmdline.open" as colon %}{% key "hint.open" as hints %}{% key "undo" as undo %}{% key "list.down" as down %}{% key "list.up" as up %}
+      <p class="intro__mouse">{% blocktranslate trimmed %}<b>With the mouse:</b> ⋯ in a panel's header lists everything the panel can do, with its keys;
+        a right click on a row or a move shows what can be done with it. The keys at the bottom of each panel are buttons,
+        and ↶ ↷ at the top undo and redo.{% endblocktranslate %}</p>
       <ol class="intro">
         <li data-step="modes" data-commands="mode.library mode.train mode.analyse mode.collect mode.stats mode.settings">
           <span class="intro__check" aria-hidden="true"></span><span>{% blocktranslate trimmed %}{{ go_library }} switches to the Library, {{ go_home }} back here. The app has several modes — Train, Analyse, Library — each with its own layout.

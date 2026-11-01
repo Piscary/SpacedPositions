@@ -192,7 +192,8 @@ class TestApi:
         p = puzzles.create_from_line(MATE_IN_2, ["d1d8"])
         html = client.get("/train/launcher/").content.decode()
         assert "1 cards in 1 puzzles" in html and 'data-cmd="train.storm"' in html
-        assert post(client, "/train/flag/", {"puzzle": str(p.uuid)}).json()["ok"]
-        assert Puzzle.objects.get().flagged
+        flag = lambda: post(client, "/cmd/library.flag/", {"args": [], "context": {}, "c": "puzzles", "ids": [str(p.uuid)]}).json()
+        assert flag()["ok"] and Puzzle.objects.get().flagged
+        assert flag()["ok"] and not Puzzle.objects.get().flagged  # `!` again: the flag comes off (GitHub #5)
 
 

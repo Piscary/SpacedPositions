@@ -39,7 +39,7 @@ def ref_of(collection: str, obj) -> str:
 LABELS = {
     "white": _("White"), "black": _("Black"), "white-elo": _("White Elo"), "black-elo": _("Black Elo"), "result": _("Result"),
     "date": _("Date"), "event": _("Event"), "site": _("Site"), "round": _("Round"), "eco": "ECO", "annotator": _("Annotator"),
-    "source": _("Source"), "notes": _("Notes"), "title": _("Title"), "page": _("Page"), "diagram": _("Diagram"),
+    "source": _("Source"), "notes": _("Notes"), "title": _("Title"), "page": _("Page"), "diagram": _("Diagram number"),
     "objective": _("Objective"), "difficulty": _("Difficulty (1–5)"), "name": _("Name"), "key": _("Key (@ in queries)"),
     "aliases": _("Other names and handles"), "role": _("Role"), "federation": _("Federation"), "fide": _("FIDE id"),
     "born": _("Born"), "short": _("Short citation"), "kind": _("Kind"), "authors": _("Authors"), "year": _("Year"),
@@ -82,6 +82,12 @@ def details(request):
         return render(request, "library/details.html", {"obj": None})
     rows = [{"field": name, "label": LABELS.get(name, name), "value": _shown(obj, attr, kind), "raw": _raw(obj, attr, kind),
              "kind": kind} for name, (attr, kind) in FIELDS[collection].items() if not (collection == "players" and name == "key")]
+    if collection == "positions":  # the marks (GitHub #5, #6): switches, ↵ or a click turns them on and off
+        rows.append({"field": "is-diagram", "label": _("Only a diagram (not trained)"), "on": obj.diagram, "kind": "toggle",
+                     "cmd": "library.diagram"})
+        if obj.puzzles.exists():
+            rows.append({"field": "is-flagged", "label": _("Flagged as broken"), "on": obj.puzzles.filter(flagged=True).exists(),
+                         "kind": "toggle", "cmd": "library.flag"})
     missing = collection == "games" and not (obj.white_id or obj.black_id)
     return render(request, "library/details.html", {
         "obj": obj, "ref": ref_of(collection, obj), "noun": NOUNS[collection], "title": getattr(obj, "title", "") or str(obj),

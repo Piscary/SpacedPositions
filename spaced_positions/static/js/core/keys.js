@@ -147,6 +147,11 @@ export function cancelPending() {
 export function feed(token) {
   onKeyDown(new KeyboardEvent("keydown", { key: token === "space" ? " " : token, bubbles: true }))
 }
+// `␣ leader` in the status line: a click opens the which-key panel of Space, whose entries are buttons too
+document.addEventListener("click", (e) => {
+  const button = e.target.closest("[data-feed]")
+  if (button) feed(button.dataset.feed)
+})
 
 // ── Which-key ──────────────────────────────────────────────────────────────────────────────────────────────────
 

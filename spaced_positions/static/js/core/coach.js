@@ -42,7 +42,7 @@ on("cursor", ({ group, id }) => {
   }
 })
 on("effects", (effects) => {
-  if (!effects.lessons) return
+  if (!("lessons" in effects)) return // 0: a lesson was deleted
   islands("lessons").forEach(showLessons)
   islands("lesson").forEach((el) => showLesson(el, el.dataset.lesson || effects.lessons))
 })
@@ -61,6 +61,14 @@ handle("lesson.add", ([name] = [], { source } = {}) => {
   const refs = selection()
   if (!refs.length) return status(tr("Select positions or games in the Library, or open one in Analyse"), { kind: "error" }) || false
   return run("lesson.addto", [name, ...refs], { source })
+})
+
+// `a` in a Lesson pane: any position of the Library, found by typing (title, source, motif:…, p529), joins this lesson
+handle("lesson.find", ([position] = [], { source } = {}) => {
+  const lesson = ctx.pane?.el?.querySelector("[data-lesson-list]")?.dataset.lesson
+  if (!lesson) return status(tr("Open a lesson first: the Lessons pane, ↵ or a click"), { kind: "error" }) || false
+  if (!position) return openCmdline("lesson-find ")
+  return run("lesson.addto", [`L${lesson}`, position], { source })
 })
 
 function lessonRow() {

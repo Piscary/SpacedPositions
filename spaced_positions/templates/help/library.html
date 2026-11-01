@@ -5,12 +5,16 @@
   {% key "list.select" as select %}{% key "list.visual" as visual %}{% key "library.tag" as tag %}{% key "library.train" as train %}
   {% key "library.analyse" as analyse %}{% key "list.open" as enter %}{% key "library.beside" as beside %}{% key "library.export" as export %}
   {% key "library.trash" as trash %}{% key "library.sort" as sort %}{% key "library.fold" as fold %}{% key "library.clear" as clear %}
-  {% key "library.unfilter" as unfilter %}{% key "library.display" as display %}
+  {% key "library.unfilter" as unfilter %}{% key "library.display" as display %}{% key "lesson.add" as lesson %}{% key "library.details" as details %}
+  {% key "library.diagram" as diagram %}{% key "library.flag" as flag %}
   <dt>{% translate "Search" %}</dt><dd>{% blocktranslate trimmed %}{{ slash }}, type, {{ enter }} to the results. {{ search_help }} explains the search language.{% endblocktranslate %}</dd>
   <dt>{% translate "Remove a filter" %}</dt><dd>{% blocktranslate trimmed %}{{ unfilter }} takes the last term out, {{ clear }} clears the search (also the ✕ in the bar). The filter pane shows every term, each with a way out.{% endblocktranslate %}</dd>
   <dt>{% translate "Switch the collection" %}</dt><dd>{% blocktranslate trimmed %}{{ one }} positions … {{ six }} tags, or click the tabs. {{ enter }} on a player, a source or a tag shows its positions or games.{% endblocktranslate %}</dd>
   <dt>{% translate "Select" %}</dt><dd>{% blocktranslate trimmed %}{{ select }} selects a row, {{ visual }} a range as you move. Without a selection, a command acts on everything the search found.{% endblocktranslate %}</dd>
+  <dt>{% translate "With the mouse" %}</dt><dd>{% translate "A click on ▢ or ⌘ / Ctrl + click selects a row, Shift + click the rows up to it. A right click on a row lists what can be done with it (or with the selection), each with its key." %}</dd>
   <dt>{% translate "Work on them" %}</dt><dd>{% blocktranslate trimmed %}{{ tag }} tags: the picker shows the tags they have, ↵ adds or takes one off. {{ train }} train, {{ analyse }} analyse, {{ export }} export as PGN or puzzle pack, {{ trash }} to the trash.{% endblocktranslate %}</dd>
+  <dt>{% translate "Marks" %}</dt><dd>{% blocktranslate trimmed %}{{ diagram }} makes a position a diagram (shown, never trained) and back; {{ flag }} flags a broken puzzle and takes the flag off again. <code>is:diagram</code> and <code>is:flagged</code> find them.{% endblocktranslate %}</dd>
+  <dt>{% translate "Lessons and details" %}</dt><dd>{% blocktranslate trimmed %}{{ lesson }} adds the selection to a lesson: pick one from the list as you type, or type the title of a new one. {{ details }} shows every field of the row, to change.{% endblocktranslate %}</dd>
   <dt>{% translate "Look at one" %}</dt><dd>{% blocktranslate trimmed %}Moving the cursor shows the row on the board of the same link group, and its moves in a Moves pane there, as a preview: what you are working on stays open. {{ enter }} or {{ analyse }} opens the row (right here when this mode shows an analysis, else in Analyse), {{ beside }} beside the list.{% endblocktranslate %}</dd>
   <dt>{% translate "Order and groups" %}</dt><dd>{% blocktranslate trimmed %}{{ sort }} sorts by a column (again: reversed). Sorted by source or difficulty, the rows come in groups: {{ fold }} folds one. {{ display }} switches between table, list and grid.{% endblocktranslate %}</dd>
 {% endblock %}

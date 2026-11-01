@@ -135,6 +135,7 @@ handle("list.open", withList((list, st) => {
   if (row.dataset.term) return window.SPOS.library.toggleTerm(row.dataset.term, row) // a facet of the filter pane
   if (row.dataset.span) return window.SPOS.library.removeSpan(row.dataset.span, row) // a term of the search: out
   if (row.hasAttribute("data-clear")) return run("library.clear")
+  if (list.matches("[data-details-list]")) return run("details.edit") // a double click on a field changes it
   if (row.dataset.query) return window.SPOS.library.setQuery(row.dataset.query, row.dataset.queryCollection) // a player, source or tag
   // a row of the Library's results: opened right here when this mode shows its group's analysis, else in Analyse
   if ((row.dataset.game || row.dataset.position) && list.matches("[data-library-results]")) return window.SPOS.library.openRow(row)
@@ -167,15 +168,34 @@ export function escapeSelection() {
   return false
 }
 
-// Mouse: click moves the cursor, double click opens.
+/** The cursor on this row (a right click): a row outside the selection drops the selection, as in a file manager. */
+export function cursorOn(row) {
+  const list = row.closest("[data-list]")
+  const st = listState(list)
+  if (st.selected.size && !st.selected.has(row.dataset.row)) st.selected.clear()
+  const index = rowsOf(list).indexOf(row)
+  if (index >= 0 && index !== st.cursor) moveTo(list, index)
+  else paint(list)
+}
+
+// Mouse: click moves the cursor, double click opens; ⌘ / Ctrl + click or a click on the box ▢ selects the row,
+// Shift + click the rows from the cursor to it.
 // A click puts the cursor on the row, also a click on one of its buttons (a setting's choice): the cursor is where
 // you just worked, and stays there when the rows come back.
 document.addEventListener("click", (e) => {
   const row = e.target.closest("[data-list] [data-row]")
   if (!row) return
   const list = row.closest("[data-list]")
-  const index = rowsOf(list).indexOf(row)
-  if (index !== listState(list).cursor) moveTo(list, index)
+  const st = listState(list)
+  const rows = rowsOf(list)
+  const index = rows.indexOf(row)
+  if (e.shiftKey && st.cursor >= 0) {
+    rows.slice(Math.min(st.cursor, index), Math.max(st.cursor, index) + 1).forEach((r) => st.selected.add(r.dataset.row))
+  } else if (e.metaKey || e.ctrlKey || e.target.closest(".list__mark")) {
+    st.selected.has(row.dataset.row) ? st.selected.delete(row.dataset.row) : st.selected.add(row.dataset.row)
+  }
+  if (index !== st.cursor) moveTo(list, index)
+  else paint(list)
 }, true)
 document.addEventListener("dblclick", (e) => {
   if (e.target.closest("[data-list] [data-row]")) run("list.open", [], { source: "mouse" })

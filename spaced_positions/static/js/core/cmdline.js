@@ -5,7 +5,7 @@ import { commands, enabled, handle, primaryKeys, run } from "./commands.js"
 import { ctx, keycaps, setLayer, status, storage } from "./context.js"
 import { setOverlayHandler } from "./keys.js"
 import { bufferIds, layoutNames } from "./layout.js"
-import { tr } from "./i18n.js"
+import { tr, trn } from "./i18n.js"
 
 const MAX_ROWS = 12
 let el, input, results, hint
@@ -33,7 +33,12 @@ function build() {
   input.spellcheck = false
   hint = document.createElement("span")
   hint.className = "cmdline__hint"
-  row.append(prompt, input, hint)
+  // for the mouse: ↵ and Esc as buttons
+  const go = Object.assign(document.createElement("button"), { type: "button", className: "cmdline__button", textContent: "↵", title: tr("Run") })
+  const cancel = Object.assign(document.createElement("button"), { type: "button", className: "cmdline__button", textContent: "×", title: tr("Close") })
+  go.addEventListener("click", () => accept())
+  cancel.addEventListener("click", () => close())
+  row.append(prompt, input, hint, go, cancel)
   el.append(results, row)
   document.getElementById("statusline").append(el)
   input.addEventListener("input", refresh)
@@ -110,6 +115,7 @@ function completions(type) {
     case "position":
     case "tag":
     case "source":
+    case "lesson":
       return fromServer(type, parse().rest || "")
     default:
       return []
@@ -153,7 +159,15 @@ const SERVER = {
     .then((data) => data.items.map((t) => ({ value: t.value, title: t.label, label: `${t.value} · ${t.note}`, server: true }))),
   source: (q) => fetch(`/lib/complete/?kind=source&q=${encodeURIComponent(q)}`).then((r) => r.json())
     .then((data) => data.items.map((s) => ({ value: s.value, title: s.label, label: s.note || "", server: true }))),
+  // the lessons that match, then (for a title nobody has) a new one
+  lesson: (q) => fetch(`/coach/complete/?q=${encodeURIComponent(q.trim())}`).then((r) => r.json()).then((data) => {
+    const rows = data.items.map((l) => ({ value: l.value, title: l.label, label: trn("{n} item", "{n} items", l.count), server: true }))
+    const typed = q.trim()
+    if (typed && !rows.some((r) => r.value.toLowerCase() === typed.toLowerCase())) rows.push({ value: typed, title: typed, label: tr("a new lesson"), server: true })
+    return rows
+  }),
 }
+const CLOSED = ["enum", "theme", "view", "tokenname", "layout", "buffer", "pieceset", "position", "tag", "source", "lesson"]
 let serverRows = []
 let serverQuery = null
 let serverTimer
@@ -255,7 +269,14 @@ function completionRow(c, i) {
   label.textContent = c.label
   title.append(label)
   row.append(title, document.createElement("span"), document.createElement("span"))
-  row.addEventListener("click", () => { cursor = i; complete(); input.focus() })
+  // a click on a finished value runs the command (the mouse needs no ↵); on `name=` it only completes
+  row.addEventListener("click", () => {
+    cursor = i
+    const arg = commands()[parse().id]?.args?.[0]
+    if (arg && CLOSED.includes(arg.type) && !String(c.value).endsWith("=")) return accept()
+    complete()
+    input.focus()
+  })
   return row
 }
 
@@ -270,7 +291,7 @@ function argsFor(id, rest) {
   const spec = commands()[id]
   const text = (rest || "").trim()
   if (!text) return []
-  if (spec.args?.length === 1 && ["text", "token", "layout", "source"].includes(spec.args[0].type)) return [text]
+  if (spec.args?.length === 1 && ["text", "token", "layout", "source", "lesson"].includes(spec.args[0].type)) return [text]
   return text.split(/\s+/)
 }
 
@@ -309,7 +330,12 @@ async function accept() {
   } else {
     // A closed argument type (a theme, a view …) takes the highlighted completion unless the typed word is exact.
     const arg = commands()[id].args?.[0]
-    const closed = arg && ["enum", "theme", "view", "tokenname", "layout", "buffer", "pieceset", "position", "tag", "source"].includes(arg.type)
+    if (SERVER[arg?.type] && serverQuery !== `${arg.type}:${rest || ""}`) { // typed faster than the answers came: ask now
+      serverQuery = `${arg.type}:${rest || ""}`
+      serverRows = await SERVER[arg.type](rest || "").catch(() => [])
+      refresh()
+    }
+    const closed = arg && CLOSED.includes(arg.type)
     const choice = rows[cursor]
     if (closed && choice && "value" in choice && !rows.some((r) => r.value === args[0])) args = [choice.value]
     // `:set name=ger`: a value found by its meaning is the highlighted choice
