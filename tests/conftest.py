@@ -1,9 +1,41 @@
+import faulthandler
 import os
 import sys
+import threading
+import time
 
 import pytest
 
 os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")  # Playwright's sync API runs an event loop
+
+
+# A test that runs longer than this ends the whole run, with its name and where every thread was: a test run never
+# waits forever without saying why (SPOS_TEST_TIMEOUT=0 switches it off, e.g. in a debugger).
+TIMEOUT = float(os.environ.get("SPOS_TEST_TIMEOUT", 240))
+
+
+@pytest.fixture(autouse=True)
+def watchdog(request):
+    if not TIMEOUT:
+        yield
+        return
+
+    def stuck():
+        capture = request.config.pluginmanager.getplugin("capturemanager")
+        if capture:  # pytest holds stderr; what is written now must reach the terminal before the run stops
+            capture.suspend_global_capture(in_=False)
+        err = sys.stderr
+        err.write(f"\n\nTIMEOUT: {request.node.nodeid} still running after {TIMEOUT:.0f} s. Where every thread was:\n\n")
+        faulthandler.dump_traceback(file=err, all_threads=True)
+        err.write(f"\nTIMEOUT: {request.node.nodeid}: the run stops here (exit code 3).\n")
+        err.flush()
+        os._exit(3)
+
+    timer = threading.Timer(TIMEOUT, stuck)
+    timer.daemon = True
+    timer.start()
+    yield
+    timer.cancel()
 
 
 @pytest.fixture(scope="session")
@@ -44,7 +76,7 @@ def page(browser, live_server):
     yield page
     # the usage counts of this test are stored now, not by a request that reaches the server during the next test
     if not page.is_closed():
-        page.evaluate("window.SPOS?.usage?.flush()")
+        page.evaluate("Promise.race([window.SPOS?.usage?.flush(), new Promise((done) => setTimeout(done, 5000))])")
         # Under jitter, the panes' requests (inspector, puzzle pane: a 120 ms debounce, then a delayed request and a
         # delayed answer) may still be on their way: let them arrive while this test's data is still there.
         jitter_ms = float(os.environ.get("SPOS_TEST_JITTER", 0)) * 1000

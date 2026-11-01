@@ -75,6 +75,26 @@ Python 3.12+, a virtualenv in `.venv` (`pip install -e ".[dev]"`).
 | Design system: rebuild generated files | `.venv/bin/python manage.py design build` |
 | Design system: the lint CI runs | `.venv/bin/python manage.py design check` (must say `0 error(s)`) |
 
+**How to run the whole suite so you always get a result.** Run the parts one after the other, each writing to a log
+file, and read the end of the file (the terminal may cut long output or stop waiting before a long command ends):
+
+```
+.venv/bin/python -m pytest -m "not browser" > /tmp/spos-fast.log 2>&1; echo "exit $?"; tail -25 /tmp/spos-fast.log
+.venv/bin/python -m pytest -m browser > /tmp/spos-browser.log 2>&1; echo "exit $?"; tail -25 /tmp/spos-browser.log
+```
+
+The fast part takes about a minute, the browser part two to three. If your terminal gives up on commands that long,
+run the browser tests in groups of files instead (`-m browser tests/test_a*.py tests/test_b*.py`, then
+`tests/test_[c-k]*.py`, then `tests/test_[l-z]*.py`) and look at each log. While a part runs, `tail` on its log shows
+how far it got.
+
+- **A test never waits forever.** One that runs longer than 240 s stops the whole run with exit code 3 and a block
+  that starts with `TIMEOUT: tests/…::test_name` and shows where every thread was. Put that block in your report
+  (`grep -A40 TIMEOUT /tmp/spos-browser.log`); don't retry blindly. `SPOS_TEST_TIMEOUT=600` gives slow machines
+  more time, `SPOS_TEST_TIMEOUT=0` switches the limit off (for a debugger).
+- Browser tests that say *skipped* mean Chromium is missing for Playwright: say so, don't install it (a download).
+- Exit code 0: all passed; 1: some failed (the summary at the end of the log names them); 3: a TIMEOUT.
+
 A change is done when the Python tests, the JavaScript tests and the browser tests pass and `design check` is clean.
 CI (`.github/workflows/ci.yml`) runs them on Linux and Windows. Optional:
 

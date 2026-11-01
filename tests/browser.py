@@ -33,6 +33,11 @@ def square(page, name, orientation="white"):
     board = page.locator(".workspace:not([hidden]) [data-view=board] cg-board")
     board.wait_for(state="visible")
     box = board.bounding_box()
+    for _ in range(20):  # the board may still be moving (the board editor's palette appears, a pane resizes)
+        page.wait_for_timeout(50)
+        settled, box = box, board.bounding_box()
+        if box == settled:
+            break
     file, rank = "abcdefgh".index(name[0]), int(name[1])
     if orientation == "black":
         file, rank = 7 - file, 9 - rank
