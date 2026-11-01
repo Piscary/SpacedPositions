@@ -321,6 +321,45 @@ def analyse_engine(page, base):
     page.wait_for_timeout(2500)  # a few more plies of depth
 
 
+def analyse_file_eval(page, base):
+    """The eval bar with two sources: a lichess game with file evals, engine on — both halves of the bar show."""
+    # Import the analysed lichess study fixture (has [%eval] on moves)
+    pgn = (Path(__file__).resolve().parents[2] / "tests" / "fixtures" / "pgn"
+            / "lichess-study-analysed.pgn").read_text(encoding="utf-8")
+    result = post(page, "/lib/import/run/", {"text": pgn, "ready": True})
+    if not result.get("ok"):
+        fail(f"couldn't import the analysed game: {result}")
+    uuid = result["first"]
+    # Open it in Analyse
+    page.goto(f"{base}/analysis/{uuid}/")
+    page.wait_for_function("window.SPOS.ctx.mode === 'analyse'")
+    page.wait_for_selector("#ws-analyse [data-movetree] .mt-move", timeout=15000)
+    page.add_style_tag(content=STILL)
+    # Navigate to a move that has a file eval (move 27 c3 has [%eval -0.8])
+    focus(page, "analyse", "moves")
+    # Click a later move in the tree that carries an eval
+    page.wait_for_selector("#ws-analyse .mt-move", timeout=10000)
+    # Move forward in the tree to reach a move with evals
+    for _ in range(20):
+        page.keyboard.press("l")
+    page.wait_for_timeout(300)
+    # Turn the engine on
+    if not page.evaluate("window.SPOS.engine.state().enabled"):
+        page.keyboard.press("e")
+    # Wait for the engine to produce at least one line
+    page.wait_for_selector("#ws-analyse .engine__line .engine__move", timeout=60000)
+    page.wait_for_timeout(2000)  # let depth grow a bit
+    # Wait for both halves of the eval bar to show (engine solid + file hatched)
+    page.wait_for_function("""() => {
+        const bar = document.querySelector('#ws-analyse .evalbar');
+        if (!bar || bar.hidden) return false;
+        const engine = bar.querySelector('[data-eval=engine]');
+        const file = bar.querySelector('[data-eval=file]');
+        return !engine.hidden && !file.hidden;
+    }""", timeout=30000)
+    settle(page, 800)
+
+
 def collect(page, base):
     """Collect: the board editor and the entry session for diagrams from a book."""
     open_mode(page, base, "collect")
@@ -372,8 +411,8 @@ EMPTY = {"welcome": welcome, "starter": starter}  # only while the library is em
 FULL = {
     "home": home, "train": train, "train-feedback": train_feedback, "train-result": train_result,
     "train-silhouette": train_silhouette, "library": library, "library-grid": library_grid, "analyse": analyse,
-    "analyse-engine": analyse_engine, "collect": collect, "stats": stats, "settings": settings, "help": help_guide,
-    "keys": keys, "command-line": command_line,
+    "analyse-engine": analyse_engine, "analyse-file-eval": analyse_file_eval, "collect": collect, "stats": stats,
+    "settings": settings, "help": help_guide, "keys": keys, "command-line": command_line,
 }
 SCENES = {**EMPTY, **FULL}
 
