@@ -160,3 +160,24 @@ export function newest() {
   latest.drop = (key = "") => counts.set(key, (counts.get(key) || 0) + 1)
   return latest
 }
+
+/**
+ * Save a file the app writes (settings, the usage report, homework, results): fetched first, so a refusal shows its
+ * reason on the status line instead of an empty download. Returns the file's name, or null.
+ */
+export async function saveFile(url) {
+  const response = await fetch(url).catch(() => null)
+  if (!response?.ok) {
+    const data = await response?.json().catch(() => null)
+    status(data?.message || tr("Could not write the file"), { kind: "error" })
+    return null
+  }
+  const name = /filename="([^"]+)"/.exec(response.headers.get("Content-Disposition") || "")?.[1] || "file"
+  const href = URL.createObjectURL(await response.blob())
+  const link = Object.assign(document.createElement("a"), { href, download: name })
+  document.body.append(link)
+  link.click()
+  link.remove()
+  setTimeout(() => URL.revokeObjectURL(href), 10_000)
+  return name
+}

@@ -3,7 +3,7 @@
 // Keymap: ↵ on a command records new keys (↵ keeps them, Esc cancels), ⌫ removes the binding.
 
 import { handle, pushUndo, run, serverRun } from "./commands.js"
-import { ctx, displayKey, emit, newest, on, setLayer, status } from "./context.js"
+import { ctx, displayKey, emit, newest, on, saveFile, setLayer, status } from "./context.js"
 import { setOverlayHandler } from "./keys.js"
 import { focusPane } from "./layout.js"
 import { cursorIndex, resetList, targetRows } from "./lists.js"
@@ -178,11 +178,8 @@ handle("settings.keymap", async () => {
   return run("pane.split.vertical", ["keymap"])
 })
 
-handle("settings.export", () => {
-  const link = Object.assign(document.createElement("a"), { href: "/settings/export/", download: "" })
-  document.body.append(link)
-  link.click()
-  link.remove()
+handle("settings.export", async () => {
+  if (!(await saveFile("/settings/export/"))) return false
   status(tr("Settings exported as TOML: Settings → Data imports them on another machine"), { timeout: 4000 })
 })
 

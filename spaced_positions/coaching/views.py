@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 from datetime import date
 
+from django.db.models import Count
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
@@ -15,7 +16,7 @@ from django.views.decorators.http import require_GET, require_POST
 from spaced_positions.library.packs import PackError
 
 from . import homework as hw
-from .models import Assignment, Homework, Lesson
+from .models import Assignment, Homework, HomeworkResult, Lesson, LessonItem
 
 
 def _lesson(pk) -> Lesson:
@@ -33,10 +34,16 @@ def _file(data: bytes, name: str, content_type: str) -> HttpResponse:
 
 @require_GET
 def lessons(request):
-    rows = [{"lesson": lesson, "items": lesson.items.count(), "puzzles": len(hw.homework_positions(lesson)),
-             "sent": lesson.assignments.count(), "results": sum(hw.HomeworkResult.objects.filter(assignment=str(a.uuid)).count()
-                                                                for a in lesson.assignments.all())}
-            for lesson in Lesson.objects.all()[:200]]
+    # a few grouped queries for the whole list, not several per lesson
+    lessons = list(Lesson.objects.annotate(n_items=Count("items", distinct=True), n_sent=Count("assignments", distinct=True))[:200])
+    puzzles = dict(LessonItem.objects.filter(lesson__in=lessons, position__puzzles__isnull=False, position__deleted_at=None)
+                   .values_list("lesson").annotate(n=Count("position", distinct=True)))
+    results = dict(HomeworkResult.objects.values_list("assignment").annotate(n=Count("pk")))
+    sent = {}
+    for lesson_id, uid in Assignment.objects.filter(lesson__in=lessons).values_list("lesson", "uuid"):
+        sent[lesson_id] = sent.get(lesson_id, 0) + results.get(str(uid), 0)
+    rows = [{"lesson": lesson, "items": lesson.n_items, "puzzles": puzzles.get(lesson.pk, 0), "sent": lesson.n_sent,
+             "results": sent.get(lesson.pk, 0)} for lesson in lessons]
     return render(request, "coaching/lessons.html", {"rows": rows})
 
 

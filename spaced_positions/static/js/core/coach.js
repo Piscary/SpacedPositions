@@ -2,7 +2,7 @@
 // homework session and the results file; results files dropped on the coach's app.
 
 import { handle, run } from "./commands.js"
-import { ctx, emit, newest, on, status } from "./context.js"
+import { ctx, emit, newest, on, saveFile, status } from "./context.js"
 import { nodeOf } from "./layout.js"
 import { openCmdline } from "./cmdline.js"
 import { resetList, targetRows } from "./lists.js"
@@ -83,20 +83,6 @@ function currentLesson() {
   return el?.querySelector("[data-lesson-list]")?.dataset.lesson || el?.querySelector("[data-lessons-list] [data-row].is-cursor")?.dataset.lesson || null
 }
 
-async function download(url) {
-  const response = await fetch(url).catch(() => null)
-  if (!response?.ok) {
-    const data = await response?.json().catch(() => null)
-    return status(data?.message || tr("Could not write the file"), { kind: "error" }) || false
-  }
-  const name = /filename="([^"]+)"/.exec(response.headers.get("Content-Disposition") || "")?.[1] || "file"
-  const link = Object.assign(document.createElement("a"), { href: URL.createObjectURL(await response.blob()), download: name })
-  document.body.append(link)
-  link.click()
-  link.remove()
-  return name
-}
-
 handle("lesson.homework", async (args, { source } = {}) => {
   const lesson = currentLesson()
   if (!lesson) return status(tr("Choose a lesson in the Lessons pane first"), { kind: "error" }) || false
@@ -104,7 +90,7 @@ handle("lesson.homework", async (args, { source } = {}) => {
   const words = args.join(" ").split(/\s+/)
   const due = words.find((w) => /^due=\d{4}-\d{2}-\d{2}$/.test(w))?.slice(4) || ""
   const text = words.filter((w) => !w.startsWith("due=")).join(" ")
-  const name = await download(`/coach/lessons/${lesson}/homework/?${new URLSearchParams({ text, due })}`)
+  const name = await saveFile(`/coach/lessons/${lesson}/homework/?${new URLSearchParams({ text, due })}`)
   if (name) status(tr("{file} written: send it to your students; their results files come back here (drop them on this window)", { file: name }), { kind: "good", timeout: 8000 })
 })
 
@@ -121,7 +107,7 @@ handle("homework.start", async ([id] = []) => {
 handle("homework.send", async ([id] = []) => {
   id ||= firstHomework()
   if (!id) return false
-  const name = await download(`/coach/homework/${id}/results/`)
+  const name = await saveFile(`/coach/homework/${id}/results/`)
   if (name) status(tr("{file} written: look at it, then send it to your coach (it holds only this homework's results)", { file: name }), { kind: "good", timeout: 8000 })
 })
 

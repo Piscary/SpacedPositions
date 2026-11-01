@@ -3,7 +3,7 @@
 // database every half minute; nothing leaves the computer. `:test-report` writes them into a file.
 
 import { handle } from "./commands.js"
-import { on, status } from "./context.js"
+import { on, saveFile, status } from "./context.js"
 import { tr } from "./i18n.js"
 
 const COUNTED = new Set(["key", "mouse", "hint", "cmdline"]) // what the user did; not "code", "undo" or "repeat"
@@ -43,10 +43,7 @@ document.addEventListener("visibilitychange", () => {
 
 handle("app.testreport", async () => {
   await flush()
-  const link = Object.assign(document.createElement("a"), { href: "/usage/report/", download: "" })
-  document.body.append(link)
-  link.click()
-  link.remove()
+  if (!(await saveFile("/usage/report/"))) return false
   status(tr("Usage report written: look it over, then send it as the test group's note says"), { timeout: 5000 })
 })
 

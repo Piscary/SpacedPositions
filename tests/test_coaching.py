@@ -119,3 +119,14 @@ def test_student_side_full_loop():
     result = hw.store_results(json.dumps(sent).encode())
     assert result.student == "Lena"
     assert result.data["items"][0]["first"] is True
+
+
+@pytest.mark.django_db
+def test_the_lessons_list_asks_the_database_a_few_times_not_per_lesson(client, django_assert_max_num_queries):
+    one, two = two_puzzles()
+    for i in range(12):
+        add_to([f"Lesson {i}", f"p{one.position.pk}", f"p{two.position.pk}"], {}, {})
+    hw.export(Lesson.objects.get(title="Lesson 0"))
+    with django_assert_max_num_queries(12):
+        html = client.get("/coach/lessons/").content.decode()
+    assert html.count('data-row="L') == 12 and "2 puzzles" in html
