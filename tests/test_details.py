@@ -92,7 +92,8 @@ def test_make_source_and_give_position_that_source(page):
     # Open the position in Analyse and show its Details
     open_mode(page, "analyse")
     page.evaluate("(id) => window.SPOS.analysis.open(id)", str(position.uuid))
-    page.wait_for_selector("#ws-analyse [data-movetree] .mt-move")
+    # A position without moves has no .mt-move; wait for the board instead
+    page.wait_for_selector("#ws-analyse [data-island=board]")
     keys(page, "I")  # open Details pane
     page.wait_for_selector("#ws-analyse [data-details-list] [data-row=source]")
     # Edit the source field
@@ -138,9 +139,11 @@ def test_edit_source_year_and_kind_in_details(page):
     # Switch to Sources tab
     page.click("#ws-library .library__tabs [data-args=sources]")
     page.wait_for_selector("#ws-library .library__tabs [data-args=sources][aria-checked=true]")
-    # Click the source row to select it
-    page.click("#ws-library [data-list] [data-row]")
-    keys(page, "I")  # open Details pane
+    # Wait for the source row to appear, then use arrow key to set the cursor
+    page.wait_for_selector("#ws-library [data-list] [data-row]")
+    keys(page, "ArrowDown")  # ensures .is-cursor is set on the first row
+    page.wait_for_selector("#ws-library [data-list] [data-row].is-cursor")
+    keys(page, "I")  # open Details pane for the source under the cursor
     page.wait_for_selector("[data-details-list] [data-row=year]")
     # Edit the year field
     page.click("[data-details-list] [data-row=year]")
@@ -188,11 +191,11 @@ def test_library_details_with_game_row(page):
     # Switch to Games tab
     page.click("#ws-library .library__tabs [data-args=games]")
     page.wait_for_selector("#ws-library .library__tabs [data-args=games][aria-checked=true]")
-    # Wait for the game row to appear
+    # Wait for the game row to appear, then use arrow key to set the cursor
     page.wait_for_selector("#ws-library [data-list] [data-row]")
-    # Click the first game row to select it
-    page.click("#ws-library [data-list] [data-row]")
-    keys(page, "I")  # open Details pane for the selected game
+    keys(page, "ArrowDown")  # ensures .is-cursor is set on the first row
+    page.wait_for_selector("#ws-library [data-list] [data-row].is-cursor")
+    keys(page, "I")  # open Details pane for the game under the cursor
     page.wait_for_selector("[data-details-list] [data-row=white]")
     # The Details pane should show the game's fields
     page.wait_for_function("!!document.querySelector('[data-details-list] [data-row=white]')")
