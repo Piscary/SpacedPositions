@@ -112,6 +112,7 @@ rect[class^="f-"] { fill: var(--c); }
 .graph__plot svg.evalgraph__svg { display: block; width: 100%; height: calc(var(--row-lg) * 3); }
 .graph__plot--scroll { overflow: auto; max-height: 100%; }
 .evalgraph__area { fill: color-mix(in oklab, var(--text) 10%, transparent); }
+.evalgraph__file { stroke: var(--text-sub); stroke-dasharray: calc(var(--rule) * 4) calc(var(--rule) * 3); } /* the game file's evaluation */
 .evalgraph__hit { fill: transparent; cursor: pointer; }
 .evalgraph__hit:hover { fill: var(--cursor-row); }
 .evalgraph__cursor { stroke: var(--main); stroke-width: 2; vector-effect: non-scaling-stroke; }

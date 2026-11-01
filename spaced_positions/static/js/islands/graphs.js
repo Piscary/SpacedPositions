@@ -26,16 +26,23 @@ function keyOf(island) {
 
 const islands = () => [...document.querySelectorAll("[data-island='evalgraph'], [data-island='vargraph']")]
 
-function value(n) {
-  if (!n?.eval) return null
-  if (n.eval.mate !== null && n.eval.mate !== undefined) return n.eval.mate > 0 || (n.eval.mate === 0 && n.eval.cp > 0) ? CLIP : -CLIP
-  return Math.max(-CLIP, Math.min(CLIP, n.eval.cp))
+// Two sources (spec 15 §4): the engine's evaluation (`eval`) and the game file's (`fileEval`, lichess's analysis).
+function value(n, source = "eval") {
+  const e = n?.[source]
+  if (!e) return null
+  if (e.mate !== null && e.mate !== undefined) {
+    if (e.mate === 0) return n.fen.split(" ")[1] === "w" ? -CLIP : CLIP // the side to move is mated
+    return e.mate > 0 ? CLIP : -CLIP
+  }
+  return Math.max(-CLIP, Math.min(CLIP, e.cp))
 }
+const best = (n) => value(n) ?? value(n, "fileEval") // mistakes and the area: the engine's where there is one
 
-function evalText(n) {
-  if (!n?.eval) return tr("not evaluated")
-  if (n.eval.mate !== null && n.eval.mate !== undefined) return n.eval.mate === 0 ? "#" : `${n.eval.mate > 0 ? "+" : "−"}M${Math.abs(n.eval.mate)}`
-  return `${n.eval.cp > 0 ? "+" : n.eval.cp < 0 ? "−" : ""}${Math.abs(n.eval.cp / 100).toFixed(2)}`
+function evalText(n, source = "eval") {
+  const e = n?.[source]
+  if (!e) return null
+  if (e.mate !== null && e.mate !== undefined) return e.mate === 0 ? "#" : `${e.mate > 0 ? "+" : "−"}M${Math.abs(e.mate)}`
+  return `${e.cp > 0 ? "+" : e.cp < 0 ? "−" : ""}${Math.abs(e.cp / 100).toFixed(2)}`
 }
 
 function drawEval(island) {
@@ -54,19 +61,23 @@ function drawEval(island) {
   const y = (v) => H / 2 - (v / CLIP) * (H / 2 - 4)
   const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: "none", class: "evalgraph__svg" })
   svg.append(el("line", { x1: 0, y1: H / 2, x2: W, y2: H / 2, class: "chart__base" }))
-  const known = line.map((n, i) => [i, value(n)]).filter(([, v]) => v !== null)
+  const points = (f) => line.map((n, i) => [i, f(n)]).filter(([, v]) => v !== null)
+  const polyline = (pts) => pts.map(([i, v]) => `${(i * step).toFixed(1)},${y(v).toFixed(1)}`).join(" ")
+  const known = points(best)
   if (known.length > 1) {
-    const top = known.map(([i, v]) => `${(i * step).toFixed(1)},${y(v).toFixed(1)}`).join(" ")
-    svg.append(el("polygon", { points: `0,${H / 2} ${top} ${(known.at(-1)[0] * step).toFixed(1)},${H / 2}`, class: "evalgraph__area" }))
-    svg.append(el("polyline", { points: top, class: "chart__line s-chart-1" }))
+    svg.append(el("polygon", { points: `0,${H / 2} ${polyline(known)} ${(known.at(-1)[0] * step).toFixed(1)},${H / 2}`, class: "evalgraph__area" }))
   }
+  const file = points((n) => value(n, "fileEval"))
+  if (file.length > 1) svg.append(el("polyline", { points: polyline(file), class: "chart__line evalgraph__file" })) // dashed
+  const engine = points((n) => value(n))
+  if (engine.length > 1) svg.append(el("polyline", { points: polyline(engine), class: "chart__line s-chart-1" }))
   // the cursor: the move itself on the main line, else the last main-line move on its path (a variation's branch point)
   const onPath = new Set(path(t, t.cursor).map((n) => n.id))
   const at = line.reduce((best, n, i) => (onPath.has(n.id) ? i : best), 0)
   const whiteStarts = line[0].fen.split(" ")[1] === "w"
   line.forEach((n, i) => {
-    const v = value(n)
-    const prev = i ? value(line[i - 1]) : null
+    const v = best(n)
+    const prev = i ? best(line[i - 1]) : null
     const white = whiteStarts === (i % 2 === 1) // the move into ply i was white's
     const drop = v !== null && prev !== null ? (white ? prev - v : v - prev) : 0
     const mistake = (n.nags || []).some((x) => x === 2 || x === 4) || drop >= 150
@@ -74,7 +85,8 @@ function drawEval(island) {
     if (mistake && i) svg.append(el("circle", { cx: (i * step).toFixed(1), cy: y(v ?? 0).toFixed(1), r: 3, class: "evalgraph__mistake" }))
     if (i === at) {
       svg.append(el("line", { x1: (i * step).toFixed(1), y1: 0, x2: (i * step).toFixed(1), y2: H, class: "evalgraph__cursor" }))
-      readout.textContent = `${i ? `${Math.ceil(i / 2)}${white ? "." : "…"}${n.san}` : tr("Start")} · ${evalText(n)}`
+      const said = [evalText(n) && tr("engine {score}", { score: evalText(n) }), evalText(n, "fileEval") && `${t.position.evalsFrom} ${evalText(n, "fileEval")}`]
+      readout.textContent = `${i ? `${Math.ceil(i / 2)}${white ? "." : "…"}${n.san}` : tr("Start")} · ${said.filter(Boolean).join(" · ") || tr("not evaluated")}`
     }
   })
   if (!known.length) readout.textContent = tr("No evaluations yet: :evaluate runs the engine over the main line.")

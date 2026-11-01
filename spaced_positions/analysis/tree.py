@@ -73,7 +73,8 @@ def kids_map(all_nodes) -> dict[int | None, list[Node]]:
 def evals_from(owner) -> str:
     """Whose evaluations a PGN carried (spec 15): lichess's analysis, chess.com's, or a PGN's."""
     headers = getattr(owner, "headers", None) or {}
-    where = " ".join(str(headers.get(k, "")) for k in ("Annotator", "Site", "ChapterURL"))
+    fields = [str(getattr(owner, name, "") or "") for name in ("site", "annotator")]  # fields of a game, not headers
+    where = " ".join(fields + [str(headers.get(k, "")) for k in ("Annotator", "Site", "ChapterURL")]).lower()
     return "lichess" if "lichess.org" in where else "chess.com" if "chess.com" in where else "PGN"
 
 

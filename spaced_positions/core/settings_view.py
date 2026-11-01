@@ -21,7 +21,7 @@ from .models import LOCAL_USER, KeymapOverride, Preferences
 # is the theme list (templates/settings/rows.html); Data, Advanced and Licences follow these.
 SECTIONS = [
     (_("Language"), "n", ["ui.language", "tags.language"]),
-    (_("Board"), "b", ["piece-set", "board-coords", "board.letters", "board-border"]),
+    (_("Board"), "b", ["piece-set", "board-coords", "board.letters", "board.evalbar", "board-border"]),
     (_("Engine"), "e", ["engine.source", "engine.path", "analysis.computer-comments", "engine.lines", "engine.depth", "engine.arrows", "engine.threads", "engine.hash"]),
     (_("Training"), "r", ["training.new-per-day", "training.storm-pace", "training.move-hints", "training.move-complete"]),
     (_("Theme"), "t", "theme"),

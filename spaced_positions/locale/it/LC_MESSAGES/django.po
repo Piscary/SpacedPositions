@@ -35,7 +35,7 @@ msgstr "Cattiva"
 msgid "Clear"
 msgstr "Rimuovi"
 
-#: templates/analysis/inspector.html templates/analysis/inspector_game.html static/js/islands/board.js:680
+#: templates/analysis/inspector.html templates/analysis/inspector_game.html static/js/islands/board.js:727
 msgid "none"
 msgstr "nessuno"
 
@@ -1428,7 +1428,7 @@ msgstr "Svuotare la ricerca"
 msgid "excluded"
 msgstr "esclusa"
 
-#: templates/library/results.html static/js/islands/board.js:442
+#: templates/library/results.html static/js/islands/board.js:453
 msgid "diagram"
 msgstr "diagramma"
 
@@ -1994,7 +1994,7 @@ msgstr "Filtro: una ricerca della Biblioteca"
 msgid "/ motif:fork diff:<=3 · empty: all puzzles"
 msgstr "/ motif:fork diff:<=3 · vuoto: tutti gli esercizi"
 
-#: templates/training/launcher.html static/js/islands/graphs.js:77
+#: templates/training/launcher.html static/js/islands/graphs.js:89
 msgid "Start"
 msgstr "Avvia"
 
@@ -2150,7 +2150,7 @@ msgstr "Recenti"
 msgid "On / off"
 msgstr "Acceso / spento"
 
-#: templates/views/engine.html core/settings.py:52
+#: templates/views/engine.html core/settings.py:55
 msgid "Lines"
 msgstr "Linee"
 
@@ -2498,6 +2498,10 @@ msgstr "%(n)s schede consolidate"
 msgid "None"
 msgstr "Nessuna"
 
+#: analysis/pgn.py:104
+msgid "{variant} isn't supported: only standard chess"
+msgstr "{variant} non è supportato: solo gli scacchi classici"
+
 #: analysis/puzzles.py:127
 msgid "Puzzle set up from here (a draft: p r puts it into training)"
 msgstr "Esercizio impostato da qui (una bozza: p r lo mette in allenamento)"
@@ -2662,31 +2666,31 @@ msgstr "Esercizio dalla posizione iniziale (bozza)"
 msgid "Puzzle from the start"
 msgstr "Esercizio dalla posizione iniziale"
 
-#: analysis/tree.py:209
+#: analysis/tree.py:210
 msgid "the start position can't be deleted"
 msgstr "la posizione iniziale non può essere eliminata"
 
-#: analysis/tree.py:286
+#: analysis/tree.py:287
 msgid "a game's start position can't be changed"
 msgstr "la posizione iniziale di una partita non può essere cambiata"
 
-#: analysis/tree.py:289
+#: analysis/tree.py:290
 msgid "not a FEN"
 msgstr "non è un FEN"
 
-#: analysis/tree.py:181
+#: analysis/tree.py:182
 msgid "{move} is not legal here"
 msgstr "{move} non è legale qui"
 
-#: analysis/tree.py:322
+#: analysis/tree.py:323
 msgid "the analysis has moves that aren't legal in the corrected position ({n} moves would go)"
 msgstr "l'analisi ha mosse non legali nella posizione corretta ({n} mosse verrebbero eliminate)"
 
-#: analysis/tree.py:344
+#: analysis/tree.py:345
 msgid "not a legal position: {problems}"
 msgstr "non è una posizione legale: {problems}"
 
-#: analysis/tree.py:179
+#: analysis/tree.py:180
 msgid "not a move: {move}"
 msgstr "non è una mossa: {move}"
 
@@ -2784,7 +2788,7 @@ msgid_plural "{n} new tags"
 msgstr[0] "{n} nuovo tag"
 msgstr[1] "{n} nuovi tag"
 
-#: analysis/views.py:373 static/js/core/paste.js:46 static/js/islands/graphs.js:127
+#: analysis/views.py:373 static/js/core/paste.js:46 static/js/islands/graphs.js:139
 msgid "{n} move"
 msgid_plural "{n} moves"
 msgstr[0] "{n} mossa"
@@ -3170,7 +3174,7 @@ msgstr "Mosse"
 msgid "The analysis as a book-style move tree."
 msgstr "L'analisi come albero delle mosse, come in un libro."
 
-#: core/layouts.py:92 core/settings.py:46 core/settings_view.py:25
+#: core/layouts.py:92 core/settings.py:49 core/settings_view.py:25
 msgid "Engine"
 msgstr "Motore"
 
@@ -3576,19 +3580,19 @@ msgstr "impossibile aprire {folder}: {error}"
 msgid "check contrast: {problems}"
 msgstr "controlla il contrasto: {problems}"
 
-#: core/settings.py:92
+#: core/settings.py:95
 msgid "English"
 msgstr "inglese"
 
-#: core/settings.py:92
+#: core/settings.py:95
 msgid "German"
 msgstr "tedesco"
 
-#: core/settings.py:92
+#: core/settings.py:95
 msgid "French"
 msgstr "francese"
 
-#: core/settings.py:92
+#: core/settings.py:95
 msgid "Italian"
 msgstr "italiano"
 
@@ -3669,130 +3673,138 @@ msgid "The panel that lists what can follow a prefix (␣, g …)"
 msgstr "Il pannello che elenca cosa può seguire un prefisso (␣, g …)"
 
 #: core/settings.py:43
+msgid "Eval bar"
+msgstr "Barra di valutazione"
+
+#: core/settings.py:44
+msgid "The engine's evaluation (solid), the game file's (hatched, L for lichess), both side by side, or none"
+msgstr "La valutazione del motore (piena), quella del file della partita (tratteggiata, L per lichess), entrambe affiancate, o nessuna"
+
+#: core/settings.py:46
 msgid "Piece letters"
 msgstr "Lettere dei pezzi"
 
-#: core/settings.py:44
+#: core/settings.py:47
 msgid "Letters of the pieces in moves, typed and shown: English (KQRBN), German (KDTLS), French (RDTFC) or Italian (RDTAC)"
 msgstr "Lettere dei pezzi nelle mosse, digitate e mostrate: inglese (KQRBN), tedesco (KDTLS), francese (RDTFC) o italiano (RDTAC)"
 
-#: core/settings.py:46
+#: core/settings.py:49
 msgid "Stockfish in the browser (WASM), or a local Stockfish program through the app"
 msgstr "Stockfish nel browser (WASM) o un programma Stockfish locale tramite l'app"
 
-#: core/settings.py:48
+#: core/settings.py:51
 msgid "Local engine"
 msgstr "Motore locale"
 
-#: core/settings.py:48
+#: core/settings.py:51
 msgid "Path of a UCI engine program (empty: stockfish on the PATH)"
 msgstr "Percorso di un programma motore UCI (vuoto: stockfish nel PATH)"
 
-#: core/settings.py:49
+#: core/settings.py:52
 msgid "Computer comments"
 msgstr "Commenti del computer"
 
-#: core/settings.py:50
+#: core/settings.py:53
 msgid "lichess's judgements in an analysed game (\"Inaccuracy. Nf5 was best.\"): in full, folded to the judgement, or hidden"
 msgstr "I giudizi di lichess in una partita analizzata («Inaccuracy. Nf5 was best.»): per intero, ridotti al giudizio o nascosti"
 
-#: core/settings.py:52
+#: core/settings.py:55
 msgid "How many best lines the engine shows"
 msgstr "Quante linee migliori mostra il motore"
 
-#: core/settings.py:53
+#: core/settings.py:56
 msgid "Depth"
 msgstr "Profondità"
 
-#: core/settings.py:53
+#: core/settings.py:56
 msgid "How deep the engine searches"
 msgstr "Quanto in profondità cerca il motore"
 
-#: core/settings.py:54
+#: core/settings.py:57
 msgid "Threads"
 msgstr "Thread"
 
-#: core/settings.py:54
+#: core/settings.py:57
 msgid "Threads of the local engine"
 msgstr "Thread del motore locale"
 
-#: core/settings.py:55
+#: core/settings.py:58
 msgid "Hash (MB)"
 msgstr "Hash (MB)"
 
-#: core/settings.py:55
+#: core/settings.py:58
 msgid "Hash table of the local engine"
 msgstr "Tabella hash del motore locale"
 
-#: core/settings.py:56
+#: core/settings.py:59
 msgid "Arrows"
 msgstr "Frecce"
 
-#: core/settings.py:56
+#: core/settings.py:59
 msgid "The engine's best moves as arrows on the board"
 msgstr "Le mosse migliori del motore come frecce sulla scacchiera"
 
-#: core/settings.py:57
+#: core/settings.py:60
 msgid "Sounds"
 msgstr "Suoni"
 
-#: core/settings.py:57
+#: core/settings.py:60
 msgid "A click on a move, a tone on right and wrong, a chord on a record"
 msgstr "Un clic a ogni mossa, un suono per giusto e sbagliato, un accordo per un record"
 
-#: core/settings.py:58
+#: core/settings.py:61
 msgid "Counting numbers"
 msgstr "Numeri che contano"
 
-#: core/settings.py:58
+#: core/settings.py:61
 msgid "Numbers count up on the result screen and in Stats"
 msgstr "I numeri salgono nella schermata dei risultati e nelle Statistiche"
 
-#: core/settings.py:59
+#: core/settings.py:62
 msgid "Your name in packs"
 msgstr "Il tuo nome nei pacchetti"
 
-#: core/settings.py:59
+#: core/settings.py:62
 msgid "Shown to students with the packs you make (else the player marked as you)"
 msgstr "Mostrato con i pacchetti che crei (altrimenti il giocatore segnato come te)"
 
-#: core/settings.py:60
+#: core/settings.py:63
 msgid "Look for updates"
 msgstr "Cerca aggiornamenti"
 
-#: core/settings.py:60
+#: core/settings.py:63
 msgid "At most once a day, ask GitHub whether there is a newer version (nothing else is sent)"
 msgstr "Al massimo una volta al giorno, chiede a GitHub se c'è una versione più recente (non viene inviato altro)"
 
-#: core/settings.py:61
+#: core/settings.py:64
 msgid "Stop by itself"
 msgstr "Fermati da solo"
 
-#: core/settings.py:61
+#: core/settings.py:64
 msgid "The app stops 10 minutes after the last tab was closed (started without a console: on)"
 msgstr "L'app si ferma 10 minuti dopo la chiusura dell'ultima scheda (avviata senza console: sì)"
 
-#: core/settings.py:108
+#: core/settings.py:111
 msgid "automatic"
 msgstr "automatico"
 
-#: core/settings.py:110
+#: core/settings.py:113
 msgid "as the app"
 msgstr "come l'app"
 
-#: core/settings.py:70
+#: core/settings.py:73
 msgid "no setting '{name}'"
 msgstr "nessuna impostazione «{name}»"
 
-#: core/settings.py:77
+#: core/settings.py:80
 msgid "{name}: on or off"
 msgstr "{name}: on o off"
 
-#: core/settings.py:79
+#: core/settings.py:82
 msgid "{name}: one of {values}"
 msgstr "{name}: uno di {values}"
 
-#: core/settings.py:84
+#: core/settings.py:87
 msgid "{name}: a number"
 msgstr "{name}: un numero"
 
@@ -4464,47 +4476,47 @@ msgid_plural "{n} positions"
 msgstr[0] "{n} posizione"
 msgstr[1] "{n} posizioni"
 
-#: library/importer.py:192
+#: library/importer.py:196
 msgid "the file is larger than 20 MB: split it"
 msgstr "il file supera 20 MB: dividilo"
 
-#: library/importer.py:195
+#: library/importer.py:199
 msgid "no games in this text"
 msgstr "nessuna partita in questo testo"
 
-#: library/importer.py:204
+#: library/importer.py:208
 msgid "the file is larger than 20 MB"
 msgstr "il file supera 20 MB"
 
-#: library/importer.py:216
+#: library/importer.py:220
 msgid "Nothing imported"
 msgstr "Niente importato"
 
-#: library/importer.py:330
+#: library/importer.py:334
 msgid "an empty file"
 msgstr "un file vuoto"
 
-#: library/importer.py:339
+#: library/importer.py:343
 msgid "no such import (the app was restarted?)"
 msgstr "importazione non trovata (l'app è stata riavviata?)"
 
-#: library/importer.py:208 static/js/core/importer.js:53
+#: library/importer.py:212 static/js/core/importer.js:53
 msgid "Imported {n} game"
 msgid_plural "Imported {n} games"
 msgstr[0] "{n} partita importata"
 msgstr[1] "{n} partite importate"
 
-#: library/importer.py:213 library/pack_views.py:142 static/js/core/importer.js:56
+#: library/importer.py:217 library/pack_views.py:142 static/js/core/importer.js:56
 msgid "{n} could not be read"
 msgstr "{n} illeggibili"
 
-#: library/importer.py:210
+#: library/importer.py:214
 msgid "{n} puzzle in training"
 msgid_plural "{n} puzzles in training"
 msgstr[0] "{n} esercizio in allenamento"
 msgstr[1] "{n} esercizi in allenamento"
 
-#: library/importer.py:211
+#: library/importer.py:215
 msgid "{n} puzzle as a draft"
 msgid_plural "{n} puzzles as drafts"
 msgstr[0] "{n} esercizio come bozza"
@@ -6008,7 +6020,7 @@ msgstr "Apri prima una posizione o una partita"
 msgid "Already evaluating"
 msgstr "Valutazione già in corso"
 
-#: static/js/core/engine.js:308 static/js/islands/graphs.js:127
+#: static/js/core/engine.js:308 static/js/islands/graphs.js:139
 msgid "{n} line"
 msgid_plural "{n} lines"
 msgstr[0] "{n} linea"
@@ -6752,207 +6764,211 @@ msgstr "Alfiere"
 msgid "Knight"
 msgstr "Cavallo"
 
-#: static/js/islands/board.js:224
+#: static/js/islands/board.js:234 static/js/islands/graphs.js:88
+msgid "engine {score}"
+msgstr "motore {score}"
+
+#: static/js/islands/board.js:235
 msgid "Evaluation {score} (white's view)"
 msgstr "Valutazione {score} (dal punto di vista del Bianco)"
 
-#: static/js/islands/board.js:329
+#: static/js/islands/board.js:340
 msgid "Not a legal position: {problems}"
 msgstr "Non è una posizione legale: {problems}"
 
-#: static/js/islands/board.js:329
+#: static/js/islands/board.js:340
 msgid "a fixes it"
 msgstr "a la corregge"
 
-#: static/js/islands/board.js:329
+#: static/js/islands/board.js:340
 msgid "D: keep it as a diagram"
 msgstr "D: tienila come diagramma"
 
-#: static/js/islands/board.js:340
+#: static/js/islands/board.js:351
 msgid "Set up position"
 msgstr "Imposta la posizione"
 
-#: static/js/islands/board.js:354
+#: static/js/islands/board.js:365
 msgid "This position can't be played (a diagram)"
 msgstr "Questa posizione non si può giocare (un diagramma)"
 
-#: static/js/islands/board.js:403
+#: static/js/islands/board.js:414
 msgid "Type the whole move (completion is off: Settings → Training)"
 msgstr "Digita la mossa intera (il completamento è spento: Impostazioni → Allenamento)"
 
-#: static/js/islands/board.js:407
+#: static/js/islands/board.js:418
 msgid "Which one? {moves} · ⇥ choose, ↵ play"
 msgstr "Quale? {moves} · ⇥ scegli, ↵ gioca"
 
-#: static/js/islands/board.js:409
+#: static/js/islands/board.js:420
 msgid "More than one move fits: type more of it"
 msgstr "Più di una mossa corrisponde: digitane di più"
 
-#: static/js/islands/board.js:410
+#: static/js/islands/board.js:421
 msgid "No legal move matches “{text}”"
 msgstr "Nessuna mossa legale corrisponde a «{text}»"
 
-#: static/js/islands/board.js:410
+#: static/js/islands/board.js:421
 msgid "Type a move, e.g. Nf3, Sf3 or g1f3"
 msgstr "Digita una mossa, ad es. Nf3, Cf3 o g1f3"
 
-#: static/js/islands/board.js:432
+#: static/js/islands/board.js:443
 msgid "a: fix"
 msgstr "a: correggi"
 
-#: static/js/islands/board.js:435
+#: static/js/islands/board.js:446
 msgid "duplicate of {short} {title}"
 msgstr "duplicato di {short} {title}"
 
-#: static/js/islands/board.js:437
+#: static/js/islands/board.js:448
 msgid "click: place {piece} (white) · ⇧click: black · right-click: empty"
 msgstr "clic: metti {piece} (bianco) · ⇧clic: nero · clic destro: svuota"
 
-#: static/js/islands/board.js:438
+#: static/js/islands/board.js:449
 msgid "click: place {piece} (black) · ⇧click: white · right-click: empty"
 msgstr "clic: metti {piece} (nero) · ⇧clic: bianco · clic destro: svuota"
 
-#: static/js/islands/board.js:439
+#: static/js/islands/board.js:450
 msgid "click: empty a square"
 msgstr "clic: svuota una casa"
 
-#: static/js/islands/board.js:440
+#: static/js/islands/board.js:451
 msgid "drag: move pieces freely"
 msgstr "trascina: sposta i pezzi liberamente"
 
-#: static/js/islands/board.js:442 static/js/islands/board.js:465
+#: static/js/islands/board.js:453 static/js/islands/board.js:476
 msgid "White to move"
 msgstr "Muove il Bianco"
 
-#: static/js/islands/board.js:442 static/js/islands/board.js:465
+#: static/js/islands/board.js:453 static/js/islands/board.js:476
 msgid "Black to move"
 msgstr "Muove il Nero"
 
-#: static/js/islands/board.js:442
+#: static/js/islands/board.js:453
 msgid "castling {rights}"
 msgstr "arrocco {rights}"
 
-#: static/js/islands/board.js:442
+#: static/js/islands/board.js:453
 msgid "e.p. {square}"
 msgstr "e.p. {square}"
 
-#: static/js/islands/board.js:453
+#: static/js/islands/board.js:464
 msgid "Preview"
 msgstr "Anteprima"
 
-#: static/js/islands/board.js:453
+#: static/js/islands/board.js:464
 msgid "↵ or a opens it · leave the list to go back"
 msgstr "↵ o a la apre · lascia la lista per tornare"
 
-#: static/js/islands/board.js:456
+#: static/js/islands/board.js:467
 msgid "Type a move: "
 msgstr "Digita una mossa: "
 
-#: static/js/islands/board.js:459
+#: static/js/islands/board.js:470
 msgid "↵ play · ⇥ next · Esc done"
 msgstr "↵ gioca · ⇥ successiva · Esc fatto"
 
-#: static/js/islands/board.js:461
+#: static/js/islands/board.js:472
 msgid "Solve as black · click/drag or i to type the move · h hint · s solution"
 msgstr "Risolvi col Nero · clic/trascina o i per digitare la mossa · h suggerimento · s soluzione"
 
-#: static/js/islands/board.js:462
+#: static/js/islands/board.js:473
 msgid "Solve as white · click/drag or i to type the move · h hint · s solution"
 msgstr "Risolvi col Bianco · clic/trascina o i per digitare la mossa · h suggerimento · s soluzione"
 
-#: static/js/islands/board.js:465
+#: static/js/islands/board.js:476
 msgid "Diagram: not playable"
 msgstr "Diagramma: non giocabile"
 
-#: static/js/islands/board.js:466
+#: static/js/islands/board.js:477
 msgid "move {n} of {total}"
 msgstr "mossa {n} di {total}"
 
-#: static/js/islands/board.js:467
+#: static/js/islands/board.js:478
 msgid "right-click: fill a square (⇧ red · ⌥ blue)"
 msgstr "clic destro: riempi una casa (⇧ rosso · ⌥ blu)"
 
-#: static/js/islands/board.js:467
+#: static/js/islands/board.js:478
 msgid "click/drag: move · right-drag: arrow (⇧ red · ⌥ blue · ⇧⌥ yellow)"
 msgstr "clic/trascina: mossa · trascina col destro: freccia (⇧ rosso · ⌥ blu · ⇧⌥ giallo)"
 
-#: static/js/islands/board.js:573
+#: static/js/islands/board.js:620
 msgid "Not while solving a puzzle"
 msgstr "Non mentre risolvi un esercizio"
 
-#: static/js/islands/board.js:581 design/commands/board.toml:board.squaretool
+#: static/js/islands/board.js:628 design/commands/board.toml:board.squaretool
 msgid "Square tool: right-click fills a square"
 msgstr "Strumento case: il clic destro riempie una casa"
 
-#: static/js/islands/board.js:581
+#: static/js/islands/board.js:628
 msgid "Square tool off: right-drag draws arrows"
 msgstr "Strumento case spento: trascinare col destro disegna frecce"
 
-#: static/js/islands/board.js:600
+#: static/js/islands/board.js:647
 msgid "Play the solution on the board first, then :puzzle"
 msgstr "Gioca prima la soluzione sulla scacchiera, poi :puzzle"
 
-#: static/js/islands/board.js:615
+#: static/js/islands/board.js:662
 msgid "Copied {what}"
 msgstr "{what} copiato"
 
-#: static/js/islands/board.js:617
+#: static/js/islands/board.js:664
 msgid "Could not copy the {what}: the browser refused"
 msgstr "Impossibile copiare il {what}: il browser ha rifiutato"
 
-#: static/js/islands/board.js:631
+#: static/js/islands/board.js:678
 msgid "Opened in lichess (a new tab)"
 msgstr "Aperto su lichess (una nuova scheda)"
 
-#: static/js/islands/board.js:653
+#: static/js/islands/board.js:700
 msgid "Nothing to fix automatically"
 msgstr "Niente da correggere automaticamente"
 
-#: static/js/islands/board.js:659 design/commands/board.toml:board.castling
+#: static/js/islands/board.js:706 design/commands/board.toml:board.castling
 msgid "Castling rights"
 msgstr "Diritti di arrocco"
 
-#: static/js/islands/board.js:661
+#: static/js/islands/board.js:708
 msgid "White O-O"
 msgstr "Bianco O-O"
 
-#: static/js/islands/board.js:661
+#: static/js/islands/board.js:708
 msgid "White O-O-O"
 msgstr "Bianco O-O-O"
 
-#: static/js/islands/board.js:661
+#: static/js/islands/board.js:708
 msgid "Black O-O"
 msgstr "Nero O-O"
 
-#: static/js/islands/board.js:661
+#: static/js/islands/board.js:708
 msgid "Black O-O-O"
 msgstr "Nero O-O-O"
 
-#: static/js/islands/board.js:678 design/commands/board.toml:board.ep
+#: static/js/islands/board.js:725 design/commands/board.toml:board.ep
 msgid "En passant square"
 msgstr "Casa en passant"
 
-#: static/js/islands/board.js:698
+#: static/js/islands/board.js:745
 msgid "Piece set · ↑↓ preview · ↵ keep · Esc back"
 msgstr "Set di pezzi · ↑↓ anteprima · ↵ tieni · Esc indietro"
 
-#: static/js/islands/board.js:709
+#: static/js/islands/board.js:756
 msgid "No piece set '{name}'"
 msgstr "Nessun set di pezzi «{name}»"
 
-#: static/js/islands/graphs.js:36
-msgid "not evaluated"
-msgstr "non valutato"
-
-#: static/js/islands/graphs.js:47 static/js/islands/graphs.js:89
+#: static/js/islands/graphs.js:54 static/js/islands/graphs.js:101
 msgid "Open a game or a position in this link group."
 msgstr "Apri una partita o una posizione in questo gruppo collegato."
 
-#: static/js/islands/graphs.js:80
+#: static/js/islands/graphs.js:89
+msgid "not evaluated"
+msgstr "non valutato"
+
+#: static/js/islands/graphs.js:92
 msgid "No evaluations yet: :evaluate runs the engine over the main line."
 msgstr "Ancora nessuna valutazione: :evaluate fa girare il motore lungo la linea principale."
 
-#: static/js/islands/graphs.js:127
+#: static/js/islands/graphs.js:139
 msgid "at {move}"
 msgstr "a {move}"
 
@@ -8258,7 +8274,7 @@ msgctxt "setting value"
 msgid "outside"
 msgstr "fuori"
 
-#: design/tokens.toml:board-coords core/settings.py:keys.keycaps
+#: design/tokens.toml:board-coords core/settings.py:keys.keycaps core/settings.py:board.evalbar
 msgctxt "setting value"
 msgid "off"
 msgstr "nessuna"
@@ -8426,7 +8442,7 @@ msgstr "Figurine"
 msgid "Moves as figurines (♘f3) instead of letters (Nf3)"
 msgstr "Mosse con figurine (♘f3) invece di lettere (Cf3)"
 
-#: core/settings.py:ui.language
+#: core/settings.py:ui.language core/settings.py:board.evalbar
 msgctxt "setting value"
 msgid "auto"
 msgstr "automatico"
@@ -8475,6 +8491,16 @@ msgstr "lento"
 msgctxt "setting value"
 msgid "full"
 msgstr "completo"
+
+#: core/settings.py:board.evalbar
+msgctxt "setting value"
+msgid "engine"
+msgstr "motore"
+
+#: core/settings.py:board.evalbar
+msgctxt "setting value"
+msgid "file"
+msgstr "file"
 
 #: core/settings.py:engine.source
 msgctxt "setting value"

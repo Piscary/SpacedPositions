@@ -137,13 +137,10 @@ def test_nested_variations_carry_evals():
 
 
 def test_chesscom_export_imports_correctly():
-    """Chess.com export: game imports correctly; evalsFrom is "PGN" because evals_from() only checks
-    headers dict (not model fields like site), so Site "chess.com" is not detected.
-    (Known limitation: evals_from should also check game.site and game.annotator.)"""
+    """Chess.com export: the game imports correctly and its evaluations are labelled chess.com (Site "Chess.com" is a
+    field of the game, not a header; the check ignores case)."""
     game = importer.run(CHESSCOM, None, ready=True)["games"][0]
-    # evals_from checks headers dict only; Site is in ROSTER → stored in game.site, not game.headers
-    # so the chess.com domain is not detected. This is a known gap (review finding).
-    assert tree.tree_json(game)["position"]["evalsFrom"] == "PGN"
+    assert tree.tree_json(game)["position"]["evalsFrom"] == "chess.com"
     # But the game data is correct
     assert game.white_name == "GrandMaster"
     assert game.black_name == "ChessFan"
@@ -153,3 +150,10 @@ def test_chesscom_export_imports_correctly():
     by = moves(game)
     assert (1, "e4") in by
     assert (20, "O-O-O") in by  # last move
+
+
+def test_a_variant_the_app_cant_play_is_refused_with_a_reason():
+    atomic = '[Event "x"]\n[Variant "Atomic"]\n[White "A"]\n[Black "B"]\n\n1. e4 e5 *\n'
+    assert importer.scan(atomic)[0]["error"] == "Atomic isn't supported: only standard chess"
+    assert importer.run(atomic, None, ready=True) == {"games": [], "positions": [], "failed": 1}
+    assert importer.run(atomic.replace("Atomic", "Standard"), None, ready=True)["games"]

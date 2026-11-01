@@ -18,7 +18,7 @@
   {% endsection %}
 
   {% section _("Game") key="i" summary=game.title %}
-    {% for k, v in headers %}<div class="formrow"><span class="formrow__label">{{ k }}</span><span>{{ v }}</span></div>{% endfor %}
+    {% for k, v in headers %}<div class="formrow"><span class="formrow__label">{{ k }}</span><span>{% if v|slice:":8" == "https://" %}<a href="{{ v }}" target="_blank" rel="noopener">{{ v }}</a>{% else %}{{ v }}{% endif %}</span></div>{% endfor %}
     {% if positions %}<div class="formrow"><span class="formrow__label">{% translate "Positions" %}</span><span class="inspector__tags">{% for p in positions %}<span class="chip">{{ p.short_id }} {{ p.title|truncatechars:30 }}</span>{% endfor %}</span></div>{% endif %}
     {% keycap ":" as colon %}<p class="muted">{% blocktranslate trimmed %}Puzzles come from positions: {{ colon }}<code>new-position</code> takes the position after this move out of the game.{% endblocktranslate %}</p>
   {% endsection %}

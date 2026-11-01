@@ -83,7 +83,7 @@ function showCursor(key) {
   paintCursor(key)
   scheduleInspector(key)
   saveSubject()
-  emit("analysis:cursor", { key, node: t.nodes.get(t.cursor) })
+  emit("analysis:cursor", { key, node: t.nodes.get(t.cursor), evalsFrom: t.position.evalsFrom })
 }
 
 function moveTo(key, id) {

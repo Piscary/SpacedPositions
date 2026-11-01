@@ -82,7 +82,7 @@ def scan(text: str) -> list[dict]:
     items = []
     for i, game in enumerate(pgn_io.read_games(text, MAX_GAMES)):
         kind = kind_of(game)
-        error = "; ".join(str(e) for e in game.errors[:2]) if game.errors else ""
+        error = pgn_io.variant_problem(game) or ("; ".join(str(e) for e in game.errors[:2]) if game.errors else "")
         items.append({
             "i": i, "kind": kind, "title": title_of(game, kind), "plies": len(_mainline(game)),
             "duplicate": _duplicate(game, kind), "error": error,
@@ -127,6 +127,8 @@ def _int(value) -> int | None:
 
 
 def import_game(game, players: Players, source=None) -> Game:
+    if problem := pgn_io.variant_problem(game):
+        raise ValueError(problem)
     h = game.headers
     g = Game.objects.create(
         white=players.match(h.get("White", "")), black=players.match(h.get("Black", "")),
@@ -144,6 +146,8 @@ def import_game(game, players: Players, source=None) -> Game:
 
 
 def import_puzzle(game, ready: bool, source=None) -> Position:
+    if problem := pgn_io.variant_problem(game):
+        raise ValueError(problem)
     board = game.board()
     position = tree.create_position(board.fen(), [], title=title_of(game, "puzzle")[:200], origin="import")
     if source:

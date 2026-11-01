@@ -10,6 +10,7 @@ import chess
 import chess.engine
 import chess.pgn
 import chess.svg
+from django.utils.translation import gettext as _
 
 from . import tree
 
@@ -90,6 +91,17 @@ def export_game(g) -> str:
 
 
 # ── In ────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+PLAYABLE = {"", "standard", "from position"}  # the app plays standard chess (Chess960 needs its own castling: later)
+
+
+def variant_problem(game) -> str:
+    """Why a game can't be imported because of its variant (Atomic, Crazyhouse, Chess960 …), or ""."""
+    variant = game.headers.get("Variant", "")
+    if variant.strip().lower() in PLAYABLE:
+        return ""
+    return _("{variant} isn't supported: only standard chess").format(variant=variant)
 
 
 def read_games(text: str, limit: int = 20000):

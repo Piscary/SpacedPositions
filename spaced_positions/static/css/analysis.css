@@ -171,22 +171,39 @@ html[data-computer-comments="hide"] .mt-comment--engine { display: none; }
 /* ── Eval bar: left of the board, white from the bottom (from the top when the board is flipped) ───────────── */
 /* Its room is kept on every board, shown or not (board.css: --eval-space), so the board doesn't change size. */
 .evalbar {
+  --eval-dir: to top;
   position: absolute;
   top: 0;
   right: calc(100% + var(--s-1));
   bottom: 0;
+  display: flex;
+  gap: var(--rule);
   width: var(--evalbar-w);
   overflow: hidden;
   border-radius: var(--radius);
-  background: linear-gradient(to top, var(--eval-white) var(--white, 50%), var(--eval-black) var(--white, 50%));
+  background: var(--line);
   box-shadow: 0 0 0 var(--rule) var(--line);
   cursor: pointer; /* a click turns the engine off */
+}
+.evalbar.is-flipped { --eval-dir: to bottom; }
+.evalbar[hidden] { display: flex; visibility: hidden; } /* absolutely placed: hidden or not, nothing moves */
+/* One fill per source (spec 15 §4): the engine's solid, the PGN's hatched and labelled (never colour alone); both
+   share the bar's width when both are there. */
+.evalbar__fill {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  background: linear-gradient(var(--eval-dir), var(--eval-white) var(--white, 50%), var(--eval-black) var(--white, 50%));
   transition: --white var(--dur-slow);
 }
-.evalbar.is-flipped { background: linear-gradient(to bottom, var(--eval-white) var(--white, 50%), var(--eval-black) var(--white, 50%)); }
-.evalbar[hidden] { display: block; visibility: hidden; } /* absolutely placed: hidden or not, nothing moves */
-/* The number sits at the end of the side that is better, in the other side's colour. */
-.evalbar__text {
+.evalbar__fill[hidden] { display: none; }
+.evalbar__fill--file {
+  background:
+    repeating-linear-gradient(135deg, transparent 0 calc(var(--rule) * 3), color-mix(in oklab, var(--eval-white) 50%, var(--eval-black)) calc(var(--rule) * 3) calc(var(--rule) * 4.5)),
+    linear-gradient(var(--eval-dir), var(--eval-white) var(--white, 50%), var(--eval-black) var(--white, 50%));
+}
+/* The number sits at the end of the side that is better, in the other side's colour; the label at the other end. */
+.evalbar__text, .evalbar__label {
   position: absolute;
   inset: auto 0 var(--s-half);
   color: var(--eval-black);
@@ -197,8 +214,10 @@ html[data-computer-comments="hide"] .mt-comment--engine { display: none; }
   text-align: center;
   writing-mode: vertical-rl;
 }
-.evalbar.is-top .evalbar__text { inset: var(--s-half) 0 auto; }
-.evalbar.is-black .evalbar__text { color: var(--eval-white); }
+.evalbar__label { inset: 0 0 auto; background: var(--surface); color: var(--text); font-weight: 700; writing-mode: horizontal-tb; }
+.evalbar__fill.is-top .evalbar__text { inset: var(--s-half) 0 auto; }
+.evalbar__fill.is-top .evalbar__label { inset: auto 0 0; }
+.evalbar__fill.is-black .evalbar__text { color: var(--eval-white); }
 
 /* Piece letters (07 · figurines, board.letters): the text is the SAN; German, French or Italian letters and figurines
    are drawn */

@@ -62,7 +62,7 @@ which one the bar shows.
 | What is there | The bar |
 |---|---|
 | engine only | as today: solid fill |
-| file only | the same bar, **hatched** fill (a diagonal stripe pattern in the same colours) and a small label at its foot: `L` for lichess, `F` for any other file |
+| file only | the same bar, **hatched** fill (a diagonal stripe pattern in the same colours) and a small label at the end away from the number: `L` for lichess, `F` for any other file |
 | both | **split lengthwise**: left half the engine (solid), right half the file (hatched), each with its own height; the full bar width is unchanged (spec 06: the board keeps its size) |
 
 - The difference is never colour alone: pattern and label (accessibility, 07 · contrast).
@@ -74,10 +74,11 @@ which one the bar shows.
 
 ## 5 · Headers in their own fields
 
-`Game` already has white, black, Elo, event, site, date, round, result, ECO. Planned: `time_control`, `termination`,
-`variant` (only *Standard* and *From Position*/Chess960 are imported; other variants are refused with a clear
-message), `white_title`/`black_title`, `opening`, `url` (from `Site` when it is a lichess or chess.com link: the
-Inspector shows it as a link). Everything else stays in `headers` and goes out again on export.
+`Game` already has white, black, Elo, event, site, date, round, result, ECO, annotator; every other header stays in
+`headers`, shown in the Inspector and written again on export. Decided on day 3: no new fields until the Details pane
+(spec 16) needs them to edit; the Inspector links a header that is a web address (`ChapterURL`, a lichess `Site`).
+**Variants**: only standard chess and *From Position* are imported; any other `Variant` (Atomic, Crazyhouse …, and
+Chess960 for now: its castling is written differently) is refused with the reason in the import preview.
 
 ## 6 · Tests (Junie)
 

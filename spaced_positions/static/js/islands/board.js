@@ -207,21 +207,32 @@ class Board {
     this.cg.setAutoShapes([])
   }
 
-  /** The eval bar (Analyse with the engine on): {cp} or {mate} from white's side, or null to hide it. */
+  /** The eval bar (spec 15 §4): the engine's evaluation, solid, and the PGN's for the move at the cursor, hatched
+   *  and labelled; half a bar each when both are there. Each {cp} or {mate} from white's side with its text, or null.
+   *  Settings → Board → Eval bar picks one, both (auto) or none. */
   setEval(score) {
     this.score = score
+    this.paintEval()
+  }
+
+  setFileEval(score) {
+    this.fileScore = score
+    this.paintEval()
+  }
+
+  paintEval() {
     if (!this.evalBar) return
-    this.el.classList.toggle("has-eval", Boolean(score))
-    this.evalBar.hidden = !score
-    if (!score) return
-    const white = score.mate !== undefined ? (score.mate > 0 ? 100 : score.mate < 0 ? 0 : 50) : 50 + 50 * (2 / (1 + Math.exp(-0.00368208 * score.cp)) - 1)
-    this.evalBar.style.setProperty("--white", `${white.toFixed(1)}%`)
+    const show = window.SPOS.settings?.["board.evalbar"] || "auto"
+    const engine = ["auto", "engine"].includes(show) ? this.score : null
+    const file = ["auto", "file"].includes(show) ? this.fileScore : null
+    this.el.classList.toggle("has-eval", Boolean(engine || file))
+    this.evalBar.hidden = !(engine || file)
     const flipped = this.orientation === "black"
     this.evalBar.classList.toggle("is-flipped", flipped)
-    this.evalBar.classList.toggle("is-black", white < 50)
-    this.evalBar.classList.toggle("is-top", (white < 50) !== flipped)
-    this.evalBar.querySelector("[data-evaltext]").textContent = score.text
-    this.evalBar.title = tr("Evaluation {score} (white's view)", { score: score.text })
+    paintFill(this.evalBar.querySelector("[data-eval=engine]"), engine, flipped)
+    paintFill(this.evalBar.querySelector("[data-eval=file]"), file, flipped)
+    const parts = [engine && tr("engine {score}", { score: engine.text }), file && `${file.from} ${file.text}`].filter(Boolean)
+    this.evalBar.title = tr("Evaluation {score} (white's view)", { score: parts.join(" · ") })
   }
 
   onShapes(shapes) {
@@ -512,6 +523,42 @@ on("focus", () => {
   else if (board && board.layer !== "setup" && ctx.layer === "setup") setLayer("normal")
 })
 
+/** How much of the bar is white's: an evaluation in centipawns through the same curve as lichess, a mate all or
+ *  nothing (mate 0: the side to move is mated). */
+function whiteShare(s) {
+  if (s.mate === undefined || s.mate === null) return 50 + 50 * (2 / (1 + Math.exp(-0.00368208 * s.cp)) - 1)
+  if (s.mate === 0) return s.mated === "w" ? 0 : 100
+  return s.mate > 0 ? 100 : 0
+}
+
+function paintFill(el, score, flipped) {
+  el.hidden = !score
+  if (!score) return
+  const white = whiteShare(score)
+  el.style.setProperty("--white", `${white.toFixed(1)}%`)
+  el.classList.toggle("is-black", white < 50)
+  el.classList.toggle("is-top", (white < 50) !== flipped)
+  el.querySelector(".evalbar__text").textContent = score.text
+  const label = el.querySelector(".evalbar__label")
+  if (label) label.textContent = score.from === "lichess" ? "L" : "F"
+}
+
+/** An evaluation from the PGN as the bar wants it: text and, for a mate on the board, who is mated. */
+function fileScore(node, from) {
+  const e = node?.fileEval
+  if (!e) return null
+  const text = e.mate !== null && e.mate !== undefined ? (e.mate === 0 ? "#" : `#${e.mate}`) : `${e.cp >= 0 ? "+" : ""}${(e.cp / 100).toFixed(2)}`
+  return { cp: e.cp, mate: e.mate, text, from, mated: node.fen.split(" ")[1] }
+}
+
+// The analysis's cursor moved: the PGN's evaluation of that move (if the game brought one) on the boards of its line.
+on("analysis:cursor", ({ key, node, evalsFrom }) => {
+  for (const board of boards) {
+    if (board.alive && board.key === key) board.setFileEval(fileScore(node, evalsFrom))
+  }
+})
+on("settings", () => boards.forEach((b) => b.alive && b.paintEval()))
+
 // The engine (core/engine.js) draws its best moves and fills the eval bar of the boards showing its line.
 on("engine", ({ key, shapes, score }) => {
   for (const board of boards) {
@@ -568,7 +615,7 @@ const withBoard = (fn) => (args) => {
 handle("board.flip", withBoard((b) => {
   b.orientation = b.orientation === "white" ? "black" : "white"
   b.cg.set({ orientation: b.orientation })
-  if (b.score) b.setEval(b.score)
+  b.paintEval() // the bar turns with the board
 }))
 const notSolving = (fn) => withBoard((b, args) => (b.solving ? status(tr("Not while solving a puzzle"), { timeout: 2000 }) || false : fn(b, args)))
 handle("board.back", notSolving((b) => lines.goTo(b.key, b.line.ply - 1)))

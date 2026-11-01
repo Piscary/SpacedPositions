@@ -67,6 +67,12 @@ fold · hide); the Inspector's line `lichess -0.80 · engine +0.31 d24 · clock 
 carries `fileEval`, `clock`, `emt` and `evalsFrom` for day 3's eval bar. Not yet: the outcome in the last comment
 of a study (§1).
 
+Day 3 done: spec 15 §4–§5. The eval bar with two fills (`board.js` `paintEval`: the engine's solid, the file's
+hatched with `L`/`F`, half a bar each), Settings → Board → *Eval bar* (auto · engine · file · off); the eval graph
+draws the file's evaluations dashed, mistakes from the engine's where there is one; variants other than standard
+refused with the reason; header links in the Inspector; Junie's finding fixed (the label read headers only, Site and
+Annotator are fields). Moved to day 4: spec 16 §2 (the Details pane), as the first thing.
+
 Out of the week: spec 17 phase 2 (Present mode, questions per puzzle, follow-ups, per-student view, lesson packs),
 and spec 12 (collections, stats per collection), which phase 2 builds on.
 

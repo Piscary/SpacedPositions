@@ -1,6 +1,6 @@
 <div class="board" data-island="board" data-layer="play"{% if mode.key == "collect" %} data-start-layer="setup"{% endif %}>
   <div class="board__area"><div class="board__frame">
-    {% if mode.key == "analyse" %}<div class="evalbar" data-evalbar data-cmd="engine.toggle" hidden aria-hidden="true"><span class="evalbar__text" data-evaltext></span></div>{% endif %}
+    {% if mode.key == "analyse" %}<div class="evalbar" data-evalbar data-cmd="engine.toggle" hidden aria-hidden="true"><div class="evalbar__fill" data-eval="engine" hidden><span class="evalbar__text"></span></div><div class="evalbar__fill evalbar__fill--file" data-eval="file" hidden><span class="evalbar__text"></span><span class="evalbar__label"></span></div></div>{% endif %}
     <div class="board__cg"></div>
   </div></div>
   <div class="board__palette" data-palette hidden>
