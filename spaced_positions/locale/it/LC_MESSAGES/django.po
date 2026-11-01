@@ -472,43 +472,43 @@ msgstr "Incollare funziona ovunque, non solo qui."
 
 #: templates/help/details.html
 msgid "Every field of one game, position, player or source: the one under the cursor of this pane's link group (a Library row, the open analysis). Here a pasted game gets its players, a position its source."
-msgstr ""
+msgstr "Ogni campo di una partita, posizione, giocatore o fonte: quello sotto il cursore del gruppo collegato di questo riquadro (una riga della Biblioteca, l'analisi aperta). Qui una partita incollata riceve i suoi giocatori, una posizione la sua fonte."
 
 #: templates/help/details.html
 msgid "Change a field"
-msgstr ""
+msgstr "Cambiare un campo"
 
 #: templates/help/details.html
 msgid "%(edit)s on its row: the command line opens with the value, type the new one, ↵. %(clear)s empties it. %(undo)s takes a change back."
-msgstr ""
+msgstr "%(edit)s sulla sua riga: la riga di comando si apre con il valore, digita il nuovo, ↵. %(clear)s lo svuota. %(undo)s annulla un cambiamento."
 
 #: templates/help/details.html
 msgid "Players and sources"
-msgstr ""
+msgstr "Giocatori e fonti"
 
 #: templates/help/details.html
 msgid "White, Black and Source take a name: one that exists is found (also by another spelling), a name nobody has makes a new player or source, which you can then fill in here."
-msgstr ""
+msgstr "Bianco, Nero e Fonte prendono un nome: uno esistente viene trovato (anche con un'ortografia diversa), un nome sconosciuto crea un nuovo giocatore o una nuova fonte, che puoi poi compilare qui."
 
 #: templates/help/details.html
 msgid "Make one first"
-msgstr ""
+msgstr "Creare prima"
 
 #: templates/help/details.html
 msgid "%(new_player)s a new player, %(new_source)s a new source (a book before its first position): the command line asks for the name, and the Details pane shows it."
-msgstr ""
+msgstr "%(new_player)s un nuovo giocatore, %(new_source)s una nuova fonte (un libro prima della sua prima posizione): la riga di comando chiede il nome, e il riquadro Dettagli lo mostra."
 
 #: templates/help/details.html
 msgid "From anywhere"
-msgstr ""
+msgstr "Da ovunque"
 
 #: templates/help/details.html
 msgid "%(details)s in the Library or in Analyse shows the details of what is selected, in a pane beside it."
-msgstr ""
+msgstr "%(details)s nella Biblioteca o in Analisi mostra i dettagli di ciò che è selezionato, in un riquadro accanto."
 
 #: templates/help/details.html
 msgid "The Library and the analysis of the same link group: the pane shows their cursor."
-msgstr ""
+msgstr "La Biblioteca e l'analisi dello stesso gruppo collegato: il riquadro mostra il loro cursore."
 
 #: templates/help/engine.html
 msgid "Stockfish looks at the position on the board of the link group: its best lines, the evaluation and an arrow for the best move."
@@ -1444,11 +1444,11 @@ msgstr "Un'immagine larga vuol dire molte varianti: %(fold)s nell'albero delle m
 
 #: templates/library/details.html
 msgid "White and Black unknown: ↵ on their row adds them (a name nobody has makes a new player)."
-msgstr ""
+msgstr "Bianco e Nero sconosciuti: ↵ sulla loro riga li aggiunge (un nome sconosciuto crea un nuovo giocatore)."
 
 #: templates/library/details.html templates/views/details.html
 msgid "Nothing to show: the Details pane shows the game, position, player or source under the cursor of its link group (a Library row, the open analysis)."
-msgstr ""
+msgstr "Niente da mostrare: il riquadro Dettagli mostra la partita, posizione, giocatore o fonte sotto il cursore del suo gruppo collegato (una riga della Biblioteca, l'analisi aperta)."
 
 #: templates/library/facets.html templates/stats/sections.html
 msgid "%(n)s position"
@@ -3240,11 +3240,11 @@ msgstr "La mossa e la posizione attuali: commento, segni, tag, fonte."
 
 #: core/layouts.py:102 design/commands/library.toml:details.edit design/commands/library.toml:details.clear
 msgid "Details"
-msgstr ""
+msgstr "Dettagli"
 
 #: core/layouts.py:102
 msgid "The game, position, player or source under the cursor: every field, editable."
-msgstr ""
+msgstr "La partita, posizione, giocatore o fonte sotto il cursore: ogni campo, modificabile."
 
 #: core/layouts.py:107
 msgid "The puzzle at the cursor: its start, its solution lines, whether it is in training."
@@ -3360,11 +3360,11 @@ msgstr "modifica"
 
 #: core/layouts.py:104
 msgid "new player"
-msgstr ""
+msgstr "nuovo giocatore"
 
 #: core/layouts.py:104
 msgid "new source"
-msgstr ""
+msgstr "nuova fonte"
 
 #: core/layouts.py:109
 msgid "set up"
@@ -4292,71 +4292,71 @@ msgstr "({n} lo avevano già)"
 
 #: library/details.py:41
 msgid "Annotator"
-msgstr ""
+msgstr "Commentatore"
 
 #: library/details.py:42
 msgid "Notes"
-msgstr ""
+msgstr "Note"
 
 #: library/details.py:43
 msgid "Difficulty (1–5)"
-msgstr ""
+msgstr "Difficoltà (1–5)"
 
 #: library/details.py:43
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: library/details.py:43
 msgid "Key (@ in queries)"
-msgstr ""
+msgstr "Chiave (@ nelle query)"
 
 #: library/details.py:44
 msgid "Other names and handles"
-msgstr ""
+msgstr "Altri nomi e handle"
 
 #: library/details.py:44
 msgid "Role"
-msgstr ""
+msgstr "Ruolo"
 
 #: library/details.py:44
 msgid "Federation"
-msgstr ""
+msgstr "Federazione"
 
 #: library/details.py:44
 msgid "FIDE id"
-msgstr ""
+msgstr "Id FIDE"
 
 #: library/details.py:45
 msgid "Born"
-msgstr ""
+msgstr "Nato"
 
 #: library/details.py:45
 msgid "Short citation"
-msgstr ""
+msgstr "Citazione breve"
 
 #: library/details.py:45
 msgid "Kind"
-msgstr ""
+msgstr "Tipo"
 
 #: library/details.py:45
 msgid "Authors"
-msgstr ""
+msgstr "Autori"
 
 #: library/details.py:45
 msgid "Year"
-msgstr ""
+msgstr "Anno"
 
 #: library/details.py:46
 msgid "Publisher"
-msgstr ""
+msgstr "Editore"
 
 #: library/details.py:46
 msgid "Web address"
-msgstr ""
+msgstr "Indirizzo web"
 
 #: library/details.py:48
 msgid "Player"
-msgstr ""
+msgstr "Giocatore"
 
 #: library/detect.py:29 library/structure.py:17
 msgid "pawn"
@@ -7666,19 +7666,19 @@ msgstr "Nuova fonte"
 
 #: design/commands/library.toml:details.edit
 msgid "Change this field (the command line, with its value)"
-msgstr ""
+msgstr "Cambiare questo campo (la riga di comando, con il suo valore)"
 
 #: design/commands/library.toml:details.edit design/commands/library.toml:details.clear
 msgid "in the Details pane"
-msgstr ""
+msgstr "nel riquadro Dettagli"
 
 #: design/commands/library.toml:details.clear
 msgid "Empty this field"
-msgstr ""
+msgstr "Svuotare questo campo"
 
 #: design/commands/library.toml:library.details
 msgid "Details: every field of what is selected, editable"
-msgstr ""
+msgstr "Dettagli: ogni campo di ciò che è selezionato, modificabile"
 
 #: design/commands/library.toml:library.delete
 msgid "Delete the selected players, sources or tags nothing uses"
